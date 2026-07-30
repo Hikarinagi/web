@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import './theme.css';
+@import './hikari-content.css';
+@import './scrollbar.css';
+
+@source '../../**/*.{vue,ts}';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --app-header-height: 4rem;
+  --app-bottombar-height: 3.5rem;
+}
+
+html {
+  color-scheme: light;
+  touch-action: manipulation;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  touch-action: manipulation;
+  background: var(--p-surface-0);
+  color: var(--p-surface-950);
+  font-family: var(--font-sans);
+}
+
+html.dark body {
+  background: var(--p-surface-950);
+  color: var(--p-surface-0);
+}
+
+.app-mobile-sheet {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.popover-no-arrow::before,
+.popover-no-arrow::after {
+  display: none !important;
+}
+.popover-no-arrow {
+  margin-block-start: 4px;
+}
+.popover-no-arrow.p-popover-flipped {
+  margin-block-start: -4px;
+  margin-block-end: 4px;
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 767px) {
+    input:not([type='button']):not([type='checkbox']):not([type='color']):not([type='file']):not(
+        [type='hidden']
+      ):not([type='image']):not([type='radio']):not([type='range']):not([type='reset']):not(
+        [type='submit']
+      ),
+    select,
+    textarea,
+    [contenteditable='true'],
+    .p-inputtext,
+    .p-textarea,
+    .p-password-input,
+    .p-inputnumber-input,
+    .p-autocomplete-input,
+    .p-datepicker-input,
+    .p-select-label,
+    .p-select-filter,
+    .p-multiselect-label,
+    .p-multiselect-filter,
+    .p-treeselect-label,
+    .p-treeselect-filter,
+    .p-cascadeselect-label {
+      font-size: 16px;
+    }
+  }
+}

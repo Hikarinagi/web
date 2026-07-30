@@ -1,0 +1,28 @@
+{
+  "name": "@hikarinagi/api-contract",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./v3": {
+      "types": "./dist/v3.d.ts",
+      "default": "./dist/v3.js"
+    },
+    "./openapi/open.json": "./openapi/open.json",
+    "./openapi/v3.json": "./openapi/v3.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "generate": "openapi-typescript openapi/v3.json -o src/generated/v3.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.8.0"
+  }
+}

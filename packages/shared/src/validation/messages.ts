@@ -1,0 +1,18 @@
+export const VALIDATION_MESSAGES = {
+  required: '不可为空',
+  invalidString: '请输入文本',
+  invalidNumber: '请输入数字',
+  invalidInt: '请输入整数',
+  invalidBoolean: '请选择一个值',
+  invalidDate: '请选择有效的日期',
+  invalidArray: '请提供列表',
+  invalidEnum: '不是有效的取值',
+  invalidMedia: '请上传图片',
+  pattern: '格式不正确',
+  minLength: (n: number) => `至少需要 ${n} 个字符`,
+  maxLength: (n: number) => `不能超过 ${n} 个字符`,
+  minItems: (n: number) => `至少需要 ${n} 项`,
+  maxItems: (n: number) => `不能超过 ${n} 项`,
+  minValue: (n: number) => `不能小于 ${n}`,
+  maxValue: (n: number) => `不能大于 ${n}`,
+} as const

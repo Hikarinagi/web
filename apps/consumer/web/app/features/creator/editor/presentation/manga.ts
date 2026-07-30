@@ -1,0 +1,41 @@
+import type { EditorPresentation } from './types'
+
+export const mangaPresentation: EditorPresentation = {
+  fields: {
+    name: { label: '名称' },
+    name_cn: { label: '中文名' },
+    other_names: { label: '别名' },
+    serial_status: { label: '连载状态' },
+    reading_mode: { label: '阅读方式' },
+    origin_country: { label: '原产地' },
+    audience: { label: '读者向' },
+    publication_date: { label: '开始时间' },
+    publication_end_date: { label: '完结时间' },
+    homepage: { label: '官方网站' },
+    isbn: { label: 'ISBN' },
+    price_amount: { label: '价格' },
+    price_currency: {
+      label: '货币',
+      control: 'select',
+      options: [
+        { value: 'JPY', label: 'JPY' },
+        { value: 'CNY', label: 'CNY' },
+        { value: 'USD', label: 'USD' },
+        { value: 'TWD', label: 'TWD' },
+        { value: 'HKD', label: 'HKD' },
+        { value: 'KRW', label: 'KRW' },
+      ],
+    },
+    pages: { label: '页数' },
+    summary: { label: '简介', control: 'textarea' },
+    summary_cn: { label: '中文简介', control: 'textarea' },
+    nsfw: { label: 'NSFW' },
+    bangumi_subject_id: { label: 'Bangumi 条目 ID' },
+    tags: { label: '标签' },
+    producers: { label: '出版 / 杂志 / 书系' },
+    staff: { label: 'STAFF' },
+    characters: { label: '角色' },
+    covers: { label: '封面' },
+    source_relations: { label: '相关作品' },
+  },
+}

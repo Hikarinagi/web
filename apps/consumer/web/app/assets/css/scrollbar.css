@@ -1,0 +1,21 @@
+@import 'overlayscrollbars/overlayscrollbars.css';
+
+.os-theme-hikari {
+  --os-size: 10px;
+  --os-padding-perpendicular: 2px;
+  --os-padding-axis: 2px;
+  --os-track-border-radius: 999px;
+  --os-track-bg: transparent;
+  --os-track-bg-hover: transparent;
+  --os-track-bg-active: transparent;
+  --os-handle-border-radius: 999px;
+  --os-handle-bg: color-mix(in oklab, var(--p-surface-500) 35%, transparent);
+  --os-handle-bg-hover: color-mix(in oklab, var(--p-surface-500) 55%, transparent);
+  --os-handle-bg-active: color-mix(in oklab, var(--p-surface-500) 70%, transparent);
+  --os-handle-min-size: 28px;
+}
+html.dark .os-theme-hikari {
+  --os-handle-bg: color-mix(in oklab, var(--p-surface-400) 30%, transparent);
+  --os-handle-bg-hover: color-mix(in oklab, var(--p-surface-300) 45%, transparent);
+  --os-handle-bg-active: color-mix(in oklab, var(--p-surface-300) 60%, transparent);
+}

@@ -1,0 +1,26 @@
+<script setup lang="ts">
+  import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
+  import HikariContentNodesEmoji from '~/components/hikari-content/nodes/Emoji.vue'
+
+  defineOptions({ name: 'HikariEditorPluginsEmojiInlineNodeView' })
+
+  const props = defineProps(nodeViewProps)
+
+  const adaptedNode = computed(() => ({
+    type: props.node.type.name,
+    attrs: props.node.attrs,
+  }))
+</script>
+
+<template>
+  <NodeViewWrapper
+    as="span"
+    :class="[
+      'inline-flex align-middle',
+      selected &&
+        'rounded-(--editor-chip-radius) outline outline-2 -outline-offset-1 outline-(--editor-focus-ring)',
+    ]"
+  >
+    <HikariContentNodesEmoji :node="adaptedNode" />
+  </NodeViewWrapper>
+</template>

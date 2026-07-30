@@ -1,0 +1,6 @@
+# Compiled output belongs in dist/, never alongside sources.
+src/**/*.js
+src/**/*.d.ts
+src/**/*.js.map
+src/**/*.d.ts.map
+*.tsbuildinfo

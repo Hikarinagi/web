@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`hikari-content/nodes/Image.vue > renders figcaption sibling when caption is non-empty 1`] = `
+"<figure class="group relative mx-auto my-[0.8em] overflow-hidden rounded-(--editor-panel-radius) border-[1.5px] bg-(--editor-toolbar-bg) transition-[border-color,box-shadow] duration-120 ease-out border-transparent" data-card-type="image" data-media-asset-id="1" style="width: 100%; aspect-ratio: 800 / 600;"><img src="media/b.webp" alt="" data-preset="large" class="block size-full" preview=""></figure>
+<figcaption class="mt-1.5 text-center text-sm text-(--editor-text-muted) italic">图注内容</figcaption>"
+`;
+
+exports[`hikari-content/nodes/Image.vue > renders figure with width/height aspect-ratio + width_percent + media-asset-id 1`] = `
+"<figure class="group relative mx-auto my-[0.8em] overflow-hidden rounded-(--editor-panel-radius) border-[1.5px] bg-(--editor-toolbar-bg) transition-[border-color,box-shadow] duration-120 ease-out border-transparent" data-card-type="image" data-media-asset-id="42" style="width: 75%; aspect-ratio: 1280 / 720;"><img src="media/a.webp" alt="示例" data-preset="large" class="block size-full" preview=""></figure>
+<!--v-if-->"
+`;
+
+exports[`hikari-content/nodes/Image.vue > renders selected ring via box-shadow inline style when selected=true 1`] = `
+"<figure class="group relative mx-auto my-[0.8em] overflow-hidden rounded-(--editor-panel-radius) border-[1.5px] bg-(--editor-toolbar-bg) transition-[border-color,box-shadow] duration-120 ease-out border-(--editor-focus-ring)" data-card-type="image" data-media-asset-id="" style="width: 100%; aspect-ratio: 100 / 100; box-shadow: 0 0 0 4px color-mix(in srgb, var(--editor-focus-ring) 25%, transparent);"><img src="media/c.webp" alt="" data-preset="large" class="block size-full" preview=""></figure>
+<!--v-if-->"
+`;

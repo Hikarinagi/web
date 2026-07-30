@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hikarinagi/db": ["packages/db/src/index.ts"],
+      "@hikarinagi/shared": ["packages/shared/src/index.ts"],
+      "@hikarinagi/config": ["packages/config/src/index.ts"],
+      "@hikarinagi/api-contract": ["packages/api-contract/src/index.ts"],
+      "@hikarinagi/api-contract/v3": ["packages/api-contract/src/v3.ts"],
+      "@hikarinagi/editor-schema": ["packages/editor-schema/src/index.ts"],
+      "@hikarinagi/editor-pipeline": ["packages/editor-pipeline/src/index.ts"],
+      "@hikarinagi/admin-contract": ["packages/admin-contract/src/index.ts"]
+    }
+  }
+}

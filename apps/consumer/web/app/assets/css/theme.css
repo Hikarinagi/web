@@ -1,0 +1,214 @@
+@theme static {
+  --font-sans: 'Noto Sans SC', 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-hikari-primary-50: #effdfb;
+  --color-hikari-primary-100: #d7faf6;
+  --color-hikari-primary-200: #aff4ed;
+  --color-hikari-primary-300: #7cebe0;
+  --color-hikari-primary-400: #4ed9cf;
+  --color-hikari-primary-500: #39c5bb;
+  --color-hikari-primary-600: #34b0a8;
+  --color-hikari-primary-700: #287f7b;
+  --color-hikari-primary-800: #236562;
+  --color-hikari-primary-900: #214f4d;
+  --color-hikari-primary-950: #0f302e;
+
+  --color-hikari-primary: var(--color-hikari-primary-500);
+  --color-hikari-primary-hover: var(--color-hikari-primary-600);
+  --color-hikari-primary-active: var(--color-hikari-primary-700);
+  --color-hikari-primary-loading: #4eb1ac;
+  --color-hikari-primary-soft: #39c5bb29;
+  --color-hikari-primary-soft-hover: #39c5bb40;
+
+  --color-hikari-blue: #66ccff;
+  --color-hikari-blue-hover: #4fc1fa;
+  --color-hikari-red: #ff6666;
+  --color-hikari-red-hover: #fa4949;
+  --color-hikari-yellow: #ffcc00;
+  --color-hikari-yellow-hover: #e6b800;
+  --color-hikari-gray: #a0a0a0;
+  --color-hikari-gray-hover: #8f8f8f;
+  --color-hikari-purple: #aa66ff;
+  --color-hikari-purple-hover: #914de2;
+  --color-hikari-orange: #ff9966;
+  --color-hikari-orange-hover: #e6733d;
+  --color-hikari-cyan: #00cccc;
+  --color-hikari-cyan-hover: #009999;
+
+  --color-hikari-surface-0: #ffffff;
+  --color-hikari-surface-50: #f8fafc;
+  --color-hikari-surface-100: #f1f5f9;
+  --color-hikari-surface-200: #e2e8f0;
+  --color-hikari-surface-300: #cbd5e1;
+  --color-hikari-surface-400: #94a3b8;
+  --color-hikari-surface-500: #64748b;
+  --color-hikari-surface-600: #475569;
+  --color-hikari-surface-700: #334155;
+  --color-hikari-surface-800: #1e293b;
+  --color-hikari-surface-900: #0f172a;
+  --color-hikari-surface-950: #020617;
+
+  --color-hikari-editor-dark-800: #27272a;
+  --color-hikari-editor-dark-900: #18181b;
+  --color-hikari-editor-dark-950: #09090b;
+
+  --color-hikari-red-50: #fff1f1;
+  --color-hikari-red-100: #ffd6d6;
+  --color-hikari-red-300: #ff9999;
+  --color-hikari-red-500: #ff6666;
+  --color-hikari-red-700: #cc4d4d;
+
+  --color-hikari-blue-50: #f0f9ff;
+  --color-hikari-blue-100: #d6efff;
+  --color-hikari-blue-300: #94d6ff;
+  --color-hikari-blue-500: #66ccff;
+  --color-hikari-blue-700: #3a9fcc;
+
+  --color-hikari-yellow-50: #fffae6;
+  --color-hikari-yellow-100: #fff2b3;
+  --color-hikari-yellow-300: #ffdf66;
+  --color-hikari-yellow-500: #ffcc00;
+  --color-hikari-yellow-700: #cc9900;
+
+  --color-hikari-green-50: #f0fdf4;
+  --color-hikari-green-100: #dcfce7;
+  --color-hikari-green-300: #86efac;
+  --color-hikari-green-500: #22c55e;
+  --color-hikari-green-700: #15803d;
+
+  --color-hikari-purple-50: #f5edff;
+  --color-hikari-purple-100: #e3ccff;
+  --color-hikari-purple-300: #c499ff;
+  --color-hikari-purple-500: #aa66ff;
+  --color-hikari-purple-700: #8033cc;
+
+  --color-hikari-orange-50: #fff4ed;
+  --color-hikari-orange-100: #ffe1cc;
+  --color-hikari-orange-300: #ffbf99;
+  --color-hikari-orange-500: #ff9966;
+  --color-hikari-orange-700: #cc6633;
+
+  --color-hikari-cyan-50: #e6ffff;
+  --color-hikari-cyan-100: #b3ffff;
+  --color-hikari-cyan-300: #66e6e6;
+  --color-hikari-cyan-500: #00cccc;
+  --color-hikari-cyan-700: #009999;
+
+  --animate-mobile-nav-in: mobile-nav-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-mobile-nav-out: mobile-nav-out 0.12s cubic-bezier(0.4, 0, 1, 1);
+
+  @keyframes mobile-nav-in {
+    0% {
+      opacity: 0;
+      transform: scaleY(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes mobile-nav-out {
+    0% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scaleY(0.95);
+    }
+  }
+}
+
+@theme inline {
+  --container-app: var(--container-6xl);
+  --container-header: 90rem;
+}
+
+:root {
+  --bprogress-color: var(--p-primary-color);
+  --bprogress-height: 2px;
+
+  --editor-page-bg: var(--color-hikari-surface-50);
+  --editor-surface-bg: var(--color-hikari-surface-0);
+  --editor-surface-border: var(--color-hikari-surface-200);
+
+  --editor-toolbar-bg: var(--color-hikari-surface-50);
+  --editor-toolbar-border: var(--color-hikari-surface-200);
+  --editor-toolbar-divider: var(--color-hikari-surface-200);
+  --editor-toolbar-item-hover: var(--color-hikari-surface-100);
+  --editor-toolbar-item-active: var(--color-hikari-primary-500);
+  --editor-toolbar-item-active-bg: var(--color-hikari-primary-50);
+
+  --editor-popover-bg: var(--color-hikari-surface-0);
+  --editor-popover-border: var(--color-hikari-surface-200);
+  --editor-popover-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.18);
+
+  --editor-text-color: var(--color-hikari-surface-900);
+  --editor-text-muted: var(--color-hikari-surface-500);
+  --editor-placeholder-color: var(--color-hikari-surface-400);
+
+  --editor-focus-ring: var(--color-hikari-primary-500);
+  --editor-selection-bg: var(--color-hikari-primary-soft);
+
+  --editor-chrome-radius: 12px;
+  --editor-panel-radius: 8px;
+  --editor-chip-radius: 4px;
+
+  --editor-status-success-bg: var(--color-hikari-green-100);
+  --editor-status-success-text: var(--color-hikari-green-700);
+  --editor-status-success-border: var(--color-hikari-green-300);
+  --editor-status-warning-bg: var(--color-hikari-yellow-100);
+  --editor-status-warning-text: var(--color-hikari-yellow-700);
+  --editor-status-warning-border: var(--color-hikari-yellow-300);
+  --editor-status-error-bg: var(--color-hikari-red-100);
+  --editor-status-error-text: var(--color-hikari-red-700);
+  --editor-status-error-border: var(--color-hikari-red-300);
+  --editor-status-info-bg: var(--color-hikari-blue-100);
+  --editor-status-info-text: var(--color-hikari-blue-700);
+  --editor-status-info-border: var(--color-hikari-blue-300);
+}
+
+html.dark {
+  --editor-page-bg: var(--color-hikari-editor-dark-950);
+  --editor-surface-bg: var(--color-hikari-editor-dark-900);
+  --editor-surface-border: var(--color-hikari-editor-dark-800);
+
+  --editor-toolbar-bg: var(--color-hikari-editor-dark-900);
+  --editor-toolbar-border: var(--color-hikari-editor-dark-800);
+  --editor-toolbar-divider: var(--color-hikari-editor-dark-800);
+  --editor-toolbar-item-hover: var(--color-hikari-editor-dark-800);
+  --editor-toolbar-item-active: var(--color-hikari-primary-400);
+  --editor-toolbar-item-active-bg: var(--color-hikari-primary-950);
+
+  --editor-popover-bg: var(--color-hikari-editor-dark-900);
+  --editor-popover-border: var(--color-hikari-editor-dark-800);
+  --editor-popover-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+
+  --editor-text-color: var(--color-hikari-surface-100);
+  --editor-text-muted: var(--color-hikari-surface-400);
+  --editor-placeholder-color: var(--color-hikari-surface-500);
+
+  --editor-focus-ring: var(--color-hikari-primary-400);
+
+  --editor-status-success-bg: var(--color-hikari-green-700);
+  --editor-status-success-text: var(--color-hikari-green-300);
+  --editor-status-success-border: var(--color-hikari-green-500);
+  --editor-status-warning-bg: var(--color-hikari-yellow-700);
+  --editor-status-warning-text: var(--color-hikari-yellow-300);
+  --editor-status-warning-border: var(--color-hikari-yellow-500);
+  --editor-status-error-bg: var(--color-hikari-red-700);
+  --editor-status-error-text: var(--color-hikari-red-300);
+  --editor-status-error-border: var(--color-hikari-red-500);
+  --editor-status-info-bg: var(--color-hikari-blue-700);
+  --editor-status-info-text: var(--color-hikari-blue-300);
+  --editor-status-info-border: var(--color-hikari-blue-500);
+}
+
+.bprogress {
+  position: fixed;
+  inset: 0;
+}

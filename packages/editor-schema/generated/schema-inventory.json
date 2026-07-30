@@ -1,0 +1,312 @@
+{
+  "$generated": "packages/editor-schema/scripts/generate-inventory.mjs — do not edit by hand",
+  "mark_attrs": {
+    "bold": [],
+    "code": [],
+    "italic": [],
+    "link": [
+      "class",
+      "href",
+      "rel",
+      "target",
+      "title"
+    ],
+    "spoiler": [],
+    "strike": [],
+    "text_style": [
+      "color"
+    ]
+  },
+  "node_attrs": {
+    "article_card": [
+      "article_id"
+    ],
+    "blockquote": [],
+    "bullet_list": [],
+    "character_card": [
+      "character_id"
+    ],
+    "code_block": [
+      "language"
+    ],
+    "comment_card": [
+      "comment_id"
+    ],
+    "doc": [],
+    "emoji_inline": [
+      "emoji_code"
+    ],
+    "galgame_card": [
+      "galgame_id"
+    ],
+    "galgame_rate_card": [
+      "galgame_rate_id"
+    ],
+    "hard_break": [],
+    "heading": [
+      "level",
+      "text_align"
+    ],
+    "horizontal_rule": [],
+    "image_block": [
+      "alt",
+      "caption",
+      "height",
+      "media_asset_id",
+      "src",
+      "width",
+      "width_percent"
+    ],
+    "light_novel_card": [
+      "light_novel_id"
+    ],
+    "light_novel_rate_card": [
+      "light_novel_rate_id"
+    ],
+    "light_novel_volume_card": [
+      "light_novel_volume_id"
+    ],
+    "list_item": [],
+    "manga_card": [
+      "manga_id"
+    ],
+    "manga_rate_card": [
+      "manga_rate_id"
+    ],
+    "mention_user": [
+      "mention_user_id"
+    ],
+    "ordered_list": [
+      "start",
+      "type"
+    ],
+    "paragraph": [
+      "text_align"
+    ],
+    "person_card": [
+      "person_id"
+    ],
+    "poll": [
+      "allow_change",
+      "allow_multiple",
+      "anonymous",
+      "closes_at",
+      "max_choices",
+      "options",
+      "poll_key",
+      "question"
+    ],
+    "post_card": [
+      "post_id"
+    ],
+    "producer_card": [
+      "producer_id"
+    ],
+    "text": []
+  },
+  "presets": {
+    "article": {
+      "allowed_mark_types": [
+        "bold",
+        "code",
+        "italic",
+        "link",
+        "spoiler",
+        "strike",
+        "text_style"
+      ],
+      "allowed_node_types": [
+        "article_card",
+        "blockquote",
+        "bullet_list",
+        "character_card",
+        "code_block",
+        "doc",
+        "emoji_inline",
+        "galgame_card",
+        "galgame_rate_card",
+        "hard_break",
+        "heading",
+        "horizontal_rule",
+        "image_block",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "list_item",
+        "manga_card",
+        "manga_rate_card",
+        "mention_user",
+        "ordered_list",
+        "paragraph",
+        "person_card",
+        "poll",
+        "post_card",
+        "producer_card",
+        "text"
+      ],
+      "allowed_top_level_nodes": [
+        "article_card",
+        "blockquote",
+        "bullet_list",
+        "character_card",
+        "code_block",
+        "galgame_card",
+        "galgame_rate_card",
+        "heading",
+        "horizontal_rule",
+        "image_block",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "manga_rate_card",
+        "ordered_list",
+        "paragraph",
+        "person_card",
+        "poll",
+        "post_card",
+        "producer_card"
+      ]
+    },
+    "post": {
+      "allowed_mark_types": [
+        "bold",
+        "code",
+        "italic",
+        "link",
+        "spoiler",
+        "strike",
+        "text_style"
+      ],
+      "allowed_node_types": [
+        "article_card",
+        "blockquote",
+        "bullet_list",
+        "character_card",
+        "code_block",
+        "doc",
+        "emoji_inline",
+        "galgame_card",
+        "galgame_rate_card",
+        "hard_break",
+        "heading",
+        "horizontal_rule",
+        "image_block",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "list_item",
+        "manga_card",
+        "manga_rate_card",
+        "mention_user",
+        "ordered_list",
+        "paragraph",
+        "person_card",
+        "poll",
+        "post_card",
+        "producer_card",
+        "text"
+      ],
+      "allowed_top_level_nodes": [
+        "article_card",
+        "blockquote",
+        "bullet_list",
+        "character_card",
+        "code_block",
+        "galgame_card",
+        "galgame_rate_card",
+        "heading",
+        "horizontal_rule",
+        "image_block",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "manga_rate_card",
+        "ordered_list",
+        "paragraph",
+        "person_card",
+        "poll",
+        "post_card",
+        "producer_card"
+      ]
+    },
+    "comment": {
+      "allowed_mark_types": [
+        "link",
+        "spoiler"
+      ],
+      "allowed_node_types": [
+        "doc",
+        "emoji_inline",
+        "galgame_card",
+        "hard_break",
+        "light_novel_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "mention_user",
+        "paragraph",
+        "text"
+      ],
+      "allowed_top_level_nodes": [
+        "galgame_card",
+        "light_novel_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "paragraph"
+      ]
+    },
+    "notification": {
+      "allowed_mark_types": [],
+      "allowed_node_types": [
+        "article_card",
+        "character_card",
+        "comment_card",
+        "doc",
+        "galgame_card",
+        "galgame_rate_card",
+        "hard_break",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "manga_rate_card",
+        "paragraph",
+        "person_card",
+        "post_card",
+        "producer_card",
+        "text"
+      ],
+      "allowed_top_level_nodes": [
+        "article_card",
+        "character_card",
+        "comment_card",
+        "galgame_card",
+        "galgame_rate_card",
+        "light_novel_card",
+        "light_novel_rate_card",
+        "light_novel_volume_card",
+        "manga_card",
+        "manga_rate_card",
+        "paragraph",
+        "person_card",
+        "post_card",
+        "producer_card"
+      ]
+    },
+    "private_message": {
+      "allowed_mark_types": [],
+      "allowed_node_types": [
+        "doc",
+        "emoji_inline",
+        "hard_break",
+        "paragraph",
+        "text"
+      ],
+      "allowed_top_level_nodes": [
+        "paragraph"
+      ]
+    }
+  },
+  "schema_version": 5
+}

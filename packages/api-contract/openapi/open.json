@@ -1,0 +1,2328 @@
+{
+  "components": {
+    "schemas": {
+      "CharacterRole": {
+        "enum": [
+          "MAIN",
+          "SUPPORTING",
+          "GUEST"
+        ],
+        "type": "string"
+      },
+      "CreateDeveloperAppDto": {
+        "properties": {
+          "client_name": {
+            "description": "应用名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_name"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppDto": {
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "redirect_uris": {
+            "description": "回调地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "该应用可请求的 scope",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_name",
+          "scope",
+          "client_uri",
+          "redirect_uris",
+          "enabled",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppSecretDto": {
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "仅在创建/轮换时返回一次，请立即妥善保存",
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "redirect_uris": {
+            "description": "回调地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "该应用可请求的 scope",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_name",
+          "scope",
+          "client_uri",
+          "redirect_uris",
+          "enabled",
+          "created_at",
+          "client_secret"
+        ],
+        "type": "object"
+      },
+      "GalgameDevStatus": {
+        "enum": [
+          "RELEASED",
+          "IN_DEVELOPMENT",
+          "CANCELLED"
+        ],
+        "type": "string"
+      },
+      "GalgameStaffRole": {
+        "enum": [
+          "GAME_DESIGNER",
+          "DIRECTOR",
+          "PRODUCER",
+          "SUPERVISOR",
+          "EXECUTIVE_PRODUCER",
+          "ORIGINAL_WORK",
+          "CHARACTER_DESIGN",
+          "MECHANICAL_DESIGN",
+          "LEVEL_DESIGN",
+          "PLANNING",
+          "PROGRAM",
+          "QC",
+          "SCENARIO",
+          "SERIES_COMPOSITION",
+          "ANIMATION_SUPERVISOR",
+          "ART",
+          "GRAPHICS",
+          "CG_SUPERVISOR",
+          "SD_ART",
+          "BACKGROUND",
+          "COVER_ART",
+          "SOUND_DIRECTOR",
+          "MUSIC",
+          "THEME_COMPOSITION",
+          "THEME_LYRICS",
+          "THEME_PERFORMANCE",
+          "INSERT_PERFORMANCE",
+          "ANIMATION_PRODUCTION",
+          "ANIMATION_DIRECTOR",
+          "ANIMATION_SCRIPT",
+          "COOPERATION",
+          "TRANSLATOR",
+          "EDITOR"
+        ],
+        "type": "string"
+      },
+      "MangaAudience": {
+        "enum": [
+          "SHONEN",
+          "SEINEN",
+          "SHOJO",
+          "JOSEI"
+        ],
+        "type": "string"
+      },
+      "MangaProducerRole": {
+        "enum": [
+          "PUBLISHER",
+          "MAGAZINE",
+          "LABEL"
+        ],
+        "type": "string"
+      },
+      "MangaReadingMode": {
+        "enum": [
+          "PAGED_RTL",
+          "PAGED_LTR",
+          "WEBTOON"
+        ],
+        "type": "string"
+      },
+      "MangaSerialStatus": {
+        "enum": [
+          "SERIALIZING",
+          "FINISHED",
+          "PAUSED",
+          "ABANDONED"
+        ],
+        "type": "string"
+      },
+      "MangaStaffRole": {
+        "enum": [
+          "AUTHOR",
+          "ART",
+          "ORIGINAL_CREATOR",
+          "SCRIPT",
+          "ILLUSTRATION",
+          "CHARACTER_DESIGN"
+        ],
+        "type": "string"
+      },
+      "NovelStatus": {
+        "enum": [
+          "SERIALIZING",
+          "FINISHED",
+          "PAUSED",
+          "ABANDONED"
+        ],
+        "type": "string"
+      },
+      "OpenCharacterDetailDto": {
+        "properties": {
+          "age": {
+            "nullable": true,
+            "type": "number"
+          },
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "birthday_day": {
+            "nullable": true,
+            "type": "number"
+          },
+          "birthday_month": {
+            "nullable": true,
+            "type": "number"
+          },
+          "blood_type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "bust": {
+            "nullable": true,
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "cup": {
+            "nullable": true,
+            "type": "string"
+          },
+          "gender": {
+            "nullable": true,
+            "type": "string"
+          },
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "hips": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenMediaDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "intro": {
+            "type": "string"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/OpenEntityLabelDto"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "waist": {
+            "nullable": true,
+            "type": "number"
+          },
+          "weight": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "trans_name",
+          "aliases",
+          "intro",
+          "trans_intro",
+          "image",
+          "gender",
+          "blood_type",
+          "birthday_month",
+          "birthday_day",
+          "height",
+          "weight",
+          "bust",
+          "waist",
+          "hips",
+          "cup",
+          "age",
+          "labels",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenCoverDto": {
+        "properties": {
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "sexual": {
+            "description": "色情内容分级，0 为安全",
+            "type": "number"
+          },
+          "url": {
+            "description": "完整图片 URL",
+            "type": "string"
+          },
+          "violence": {
+            "description": "暴力内容分级，0 为安全",
+            "type": "number"
+          },
+          "votes": {
+            "description": "封面得票数",
+            "type": "number"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "url",
+          "width",
+          "height",
+          "sexual",
+          "violence",
+          "votes"
+        ],
+        "type": "object"
+      },
+      "OpenEntityLabelDto": {
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
+      "OpenEntityRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenMediaDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "trans_name": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "trans_name",
+          "image"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameCharacterDto": {
+        "properties": {
+          "actors": {
+            "items": {
+              "$ref": "#/components/schemas/OpenEntityRefDto"
+            },
+            "type": "array"
+          },
+          "character": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterRole"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "actors",
+          "character"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameDetailDto": {
+        "properties": {
+          "adv_type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/OpenCoverDto"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dev_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameDevStatus"
+              }
+            ],
+            "nullable": true
+          },
+          "engine": {
+            "nullable": true,
+            "type": "string"
+          },
+          "homepage": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/OpenMediaDto"
+            },
+            "type": "array"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "origin_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "origin_lang": {
+            "nullable": true,
+            "type": "string"
+          },
+          "origin_title": {
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "prices": {
+            "items": {
+              "$ref": "#/components/schemas/OpenGalgamePriceDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_tbd": {
+            "type": "boolean"
+          },
+          "release_date_tbd_note": {
+            "type": "string"
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/OpenTagDto"
+            },
+            "type": "array"
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "aliases",
+          "covers",
+          "images",
+          "release_date",
+          "release_date_tbd",
+          "release_date_tbd_note",
+          "origin_intro",
+          "trans_intro",
+          "adv_type",
+          "platforms",
+          "homepage",
+          "engine",
+          "origin_lang",
+          "dev_status",
+          "prices",
+          "nsfw",
+          "tags",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenGalgamePriceDto": {
+        "properties": {
+          "amount": {
+            "nullable": true,
+            "type": "number"
+          },
+          "currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tax_included": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "version": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "amount",
+          "currency",
+          "tax_included"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameStaffDto": {
+        "properties": {
+          "person": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameStaffRole"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "role",
+          "person"
+        ],
+        "type": "object"
+      },
+      "OpenLightNovelDetailDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/OpenCoverDto"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NovelStatus"
+              }
+            ]
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "other_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "summary": {
+            "nullable": true,
+            "type": "string"
+          },
+          "summary_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/OpenTagDto"
+            },
+            "type": "array"
+          },
+          "total_volumes": {
+            "type": "number"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "other_names",
+          "covers",
+          "publication_date",
+          "novel_status",
+          "total_volumes",
+          "summary",
+          "summary_cn",
+          "nsfw",
+          "tags",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenLightNovelPersonDto": {
+        "properties": {
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "person": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "relation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "relation",
+          "note",
+          "person"
+        ],
+        "type": "object"
+      },
+      "OpenLightNovelProducerDto": {
+        "properties": {
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "producer": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "relation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "relation",
+          "note",
+          "producer"
+        ],
+        "type": "object"
+      },
+      "OpenLightNovelVolumeDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/OpenCoverDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "relation": {
+            "type": "string"
+          },
+          "volume_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/VolumeType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "volume_type",
+          "volume_number",
+          "volume_label",
+          "name",
+          "name_cn",
+          "covers",
+          "publication_date",
+          "relation"
+        ],
+        "type": "object"
+      },
+      "OpenMangaDetailDto": {
+        "properties": {
+          "audience": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaAudience"
+              }
+            ],
+            "nullable": true
+          },
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/OpenCoverDto"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editions": {
+            "items": {
+              "$ref": "#/components/schemas/OpenMangaEditionDto"
+            },
+            "type": "array"
+          },
+          "homepage": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "isbn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "latest_chapter_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "origin_country": {
+            "nullable": true,
+            "type": "string"
+          },
+          "other_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "pages": {
+            "nullable": true,
+            "type": "number"
+          },
+          "price_amount": {
+            "nullable": true,
+            "type": "number"
+          },
+          "price_currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_end_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reading_mode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaReadingMode"
+              }
+            ]
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ]
+          },
+          "summary": {
+            "nullable": true,
+            "type": "string"
+          },
+          "summary_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/OpenTagDto"
+            },
+            "type": "array"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "other_names",
+          "covers",
+          "serial_status",
+          "reading_mode",
+          "origin_country",
+          "audience",
+          "latest_chapter_at",
+          "publication_date",
+          "publication_end_date",
+          "homepage",
+          "isbn",
+          "price_amount",
+          "price_currency",
+          "pages",
+          "editions",
+          "summary",
+          "summary_cn",
+          "nsfw",
+          "tags",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenMangaEditionDto": {
+        "properties": {
+          "fields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "fields"
+        ],
+        "type": "object"
+      },
+      "OpenMangaProducerDto": {
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "producer": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProducerRole"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "note",
+          "producer"
+        ],
+        "type": "object"
+      },
+      "OpenMangaStaffDto": {
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "person": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaStaffRole"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "note",
+          "person"
+        ],
+        "type": "object"
+      },
+      "OpenMangaVolumeDto": {
+        "properties": {
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenMediaDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "isbn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "page_count": {
+            "nullable": true,
+            "type": "number"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "volume_number",
+          "name",
+          "name_cn",
+          "cover",
+          "isbn",
+          "publication_date",
+          "page_count"
+        ],
+        "type": "object"
+      },
+      "OpenMediaDto": {
+        "properties": {
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "sexual": {
+            "description": "色情内容分级，0 为安全",
+            "type": "number"
+          },
+          "url": {
+            "description": "完整图片 URL",
+            "type": "string"
+          },
+          "violence": {
+            "description": "暴力内容分级，0 为安全",
+            "type": "number"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "url",
+          "width",
+          "height",
+          "sexual",
+          "violence"
+        ],
+        "type": "object"
+      },
+      "OpenPersonDetailDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gender": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenMediaDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "intro": {
+            "type": "string"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/OpenEntityLabelDto"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "trans_name",
+          "aliases",
+          "intro",
+          "trans_intro",
+          "image",
+          "gender",
+          "labels",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenProducerDetailDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "country": {
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "established": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/OpenEntityLabelDto"
+            },
+            "type": "array"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenMediaDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "revised_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "website": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "aliases",
+          "intro",
+          "trans_intro",
+          "country",
+          "established",
+          "website",
+          "logo",
+          "labels",
+          "created_at",
+          "updated_at",
+          "revised_at"
+        ],
+        "type": "object"
+      },
+      "OpenSearchHitDto": {
+        "properties": {
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenCoverDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "developer": {
+            "description": "开发厂商，仅 galgame 命中携带",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "subtitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga",
+              "character",
+              "person",
+              "producer"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "title",
+          "subtitle",
+          "developer",
+          "cover"
+        ],
+        "type": "object"
+      },
+      "OpenTagDto": {
+        "properties": {
+          "likes": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "likes"
+        ],
+        "type": "object"
+      },
+      "OpenWorkCharacterDto": {
+        "properties": {
+          "character": {
+            "$ref": "#/components/schemas/OpenEntityRefDto"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterRole"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "character"
+        ],
+        "type": "object"
+      },
+      "PageMetaDto": {
+        "properties": {
+          "item_count": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "page_size": {
+            "type": "number"
+          },
+          "total_items": {
+            "type": "number"
+          },
+          "total_pages": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "page_size",
+          "total_items",
+          "item_count",
+          "total_pages"
+        ],
+        "type": "object"
+      },
+      "UpdateDeveloperAppDto": {
+        "properties": {
+          "client_name": {
+            "description": "应用名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页，https 地址",
+            "nullable": true,
+            "pattern": "^https:\\/\\/[^#\\s]+$",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "停用后该应用无法再获取 token",
+            "type": "boolean"
+          },
+          "redirect_uris": {
+            "description": "回调地址，最多 5 条",
+            "items": {
+              "pattern": "^https:\\/\\/[^#\\s]+$|^http:\\/\\/localhost(:\\d+)?(\\/[^#\\s]*)?$",
+              "type": "string"
+            },
+            "maxItems": 5,
+            "type": "array"
+          },
+          "scopes": {
+            "description": "应用可请求的 scope 集合",
+            "items": {
+              "enum": [
+                "catalog:read",
+                "catalog:full"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "VolumeType": {
+        "enum": [
+          "MAIN",
+          "EXTRA"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "bearerFormat": "JWT",
+        "scheme": "bearer",
+        "type": "http"
+      },
+      "cookie": {
+        "in": "cookie",
+        "name": "hikari_access_token",
+        "type": "apiKey"
+      }
+    }
+  },
+  "info": {
+    "contact": {},
+    "description": "面向第三方应用的公开数据 API。",
+    "title": "Hikarinagi Open API",
+    "version": "3.0.0"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v3/open/characters/{id}": {
+      "get": {
+        "operationId": "OpenCharacterController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenCharacterDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "角色详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/galgames/{id}": {
+      "get": {
+        "operationId": "OpenGalgameController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenGalgameDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/galgames/{id}/characters": {
+      "get": {
+        "operationId": "OpenGalgameController_getCharacters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterRole"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenGalgameCharacterDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 角色",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/galgames/{id}/staff": {
+      "get": {
+        "operationId": "OpenGalgameController_getStaff",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GalgameStaffRole"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenGalgameStaffDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame Staff",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/light-novels/{id}": {
+      "get": {
+        "operationId": "OpenLightNovelController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenLightNovelDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/light-novels/{id}/characters": {
+      "get": {
+        "operationId": "OpenLightNovelController_getCharacters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterRole"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenWorkCharacterDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说角色",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/light-novels/{id}/people": {
+      "get": {
+        "operationId": "OpenLightNovelController_getPeople",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "relation",
+            "required": false,
+            "schema": {
+              "enum": [
+                "author",
+                "illustrator"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenLightNovelPersonDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说人物",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/light-novels/{id}/producers": {
+      "get": {
+        "operationId": "OpenLightNovelController_getProducers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "relation",
+            "required": false,
+            "schema": {
+              "enum": [
+                "bunko",
+                "publisher"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenLightNovelProducerDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说厂商",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/light-novels/{id}/volumes": {
+      "get": {
+        "operationId": "OpenLightNovelController_getVolumes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "volume_number",
+              "enum": [
+                "volume_number",
+                "recent"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenLightNovelVolumeDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说分卷",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/mangas/{id}": {
+      "get": {
+        "operationId": "OpenMangaController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMangaDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/mangas/{id}/characters": {
+      "get": {
+        "operationId": "OpenMangaController_getCharacters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterRole"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenWorkCharacterDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画角色",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/mangas/{id}/people": {
+      "get": {
+        "operationId": "OpenMangaController_getPeople",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenMangaStaffDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画人物",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/mangas/{id}/producers": {
+      "get": {
+        "operationId": "OpenMangaController_getProducers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenMangaProducerDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画厂商",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/mangas/{id}/volumes": {
+      "get": {
+        "operationId": "OpenMangaController_getVolumes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenMangaVolumeDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画单行本",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/people/{id}": {
+      "get": {
+        "operationId": "OpenPersonController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenPersonDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "人物详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/producers/{id}": {
+      "get": {
+        "operationId": "OpenProducerController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenProducerDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "厂商详情",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/open/search": {
+      "get": {
+        "operationId": "OpenSearchController_search",
+        "parameters": [
+          {
+            "description": "搜索关键词",
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "types",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "galgame",
+                  "light_novel",
+                  "manga",
+                  "character",
+                  "person",
+                  "producer"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/OpenSearchHitDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "条目搜索",
+        "tags": [
+          "open"
+        ]
+      }
+    },
+    "/api/v3/user/me/developer/apps": {
+      "get": {
+        "operationId": "DeveloperAppController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeveloperAppDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "我的应用列表",
+        "tags": [
+          "developer"
+        ]
+      },
+      "post": {
+        "description": "client_secret 仅在本次响应中返回一次，请立即妥善保存",
+        "operationId": "DeveloperAppController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeveloperAppDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperAppSecretDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "创建应用",
+        "tags": [
+          "developer"
+        ]
+      }
+    },
+    "/api/v3/user/me/developer/apps/{client_id}": {
+      "delete": {
+        "operationId": "DeveloperAppController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "client_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "删除应用",
+        "tags": [
+          "developer"
+        ]
+      },
+      "get": {
+        "operationId": "DeveloperAppController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "client_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperAppDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "应用详情",
+        "tags": [
+          "developer"
+        ]
+      },
+      "patch": {
+        "operationId": "DeveloperAppController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "client_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDeveloperAppDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperAppDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "更新应用",
+        "tags": [
+          "developer"
+        ]
+      }
+    },
+    "/api/v3/user/me/developer/apps/{client_id}/secret": {
+      "post": {
+        "description": "生成新的 client_secret 并立即使旧密钥失效，新密钥仅在本次响应中返回一次",
+        "operationId": "DeveloperAppController_rotateSecret",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "client_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeveloperAppSecretDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轮换应用密钥",
+        "tags": [
+          "developer"
+        ]
+      }
+    }
+  },
+  "servers": [],
+  "tags": [
+    {
+      "description": "client_credentials 访问令牌鉴权的只读条目数据。",
+      "name": "open"
+    },
+    {
+      "description": "开发者自助应用管理：登录用户创建/管理自己的 OAuth 客户端。",
+      "name": "developer"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "hikarinagi-web-source",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "packageManager": "pnpm@10.10.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build:frontend-deps": "pnpm --filter @hikarinagi/consumer-web^... --if-present build",
+    "build": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web build",
+    "dev": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web dev",
+    "lint": "pnpm --filter @hikarinagi/consumer-web lint:check",
+    "test": "pnpm --filter @hikarinagi/consumer-web test",
+    "typecheck": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web typecheck"
+  }
+}
