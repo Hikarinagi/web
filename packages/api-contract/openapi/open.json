@@ -4396,6 +4396,10 @@
     {
       "description": "读写授权用户的观看游玩状态与评分，需 status:read 或 status:write。",
       "name": "open-user-rate"
+    },
+    {
+      "description": "读写授权用户的收藏夹，需 collection:read 或 collection:write。",
+      "name": "open-user-collection"
     }
   ]
 }

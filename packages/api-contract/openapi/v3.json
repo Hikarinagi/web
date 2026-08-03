@@ -59442,6 +59442,10 @@
       "name": "open-user-rate"
     },
     {
+      "description": "读写授权用户的收藏夹，需 collection:read 或 collection:write。",
+      "name": "open-user-collection"
+    },
+    {
       "description": "开发者自助应用管理：登录用户创建/管理自己的 OAuth 客户端。",
       "name": "developer"
     }
