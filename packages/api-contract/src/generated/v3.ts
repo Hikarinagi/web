@@ -20,6 +20,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/backup/downloads/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 获取各数据库最近一次成功定时备份的临时下载地址 */
+        get: operations["AdminBackupController_getLatest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/backup/runs": {
         parameters: {
             query?: never;
@@ -11349,6 +11366,12 @@ export interface components {
         };
         /** @enum {string} */
         BackupDatabase: "MAIN" | "IDENTITY";
+        BackupDownloadItemDto: {
+            /** @enum {string} */
+            database: "MAIN" | "IDENTITY";
+            /** @description 对象存储临时下载地址 */
+            download_url: string;
+        };
         BackupRunItemDto: {
             actor: components["schemas"]["UserRefDto"] | null;
             byte_size: number | null;
@@ -17124,6 +17147,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BackupRunItemDto"][];
+                };
+            };
+        };
+    };
+    AdminBackupController_getLatest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BackupDownloadItemDto"][];
                 };
             };
         };

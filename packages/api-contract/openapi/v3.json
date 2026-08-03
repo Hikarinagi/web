@@ -2830,6 +2830,26 @@
         ],
         "type": "string"
       },
+      "BackupDownloadItemDto": {
+        "properties": {
+          "database": {
+            "enum": [
+              "MAIN",
+              "IDENTITY"
+            ],
+            "type": "string"
+          },
+          "download_url": {
+            "description": "对象存储临时下载地址",
+            "type": "string"
+          }
+        },
+        "required": [
+          "database",
+          "download_url"
+        ],
+        "type": "object"
+      },
       "BackupRunItemDto": {
         "properties": {
           "actor": {
@@ -26860,6 +26880,31 @@
             "description": ""
           }
         },
+        "tags": [
+          "admin/backup"
+        ]
+      }
+    },
+    "/api/v3/admin/backup/downloads/latest": {
+      "get": {
+        "operationId": "AdminBackupController_getLatest",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BackupDownloadItemDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "获取各数据库最近一次成功定时备份的临时下载地址",
         "tags": [
           "admin/backup"
         ]
