@@ -1,4 +1,7 @@
+import type { components } from '@hikarinagi/api-contract/v3'
 import type { InjectionKey, Ref } from 'vue'
+
+type Schemas = components['schemas']
 
 export const IN_ENTITY_DRAWER_KEY: InjectionKey<boolean> = Symbol('hikari-in-entity-drawer')
 
@@ -6,23 +9,9 @@ export const ENTITY_DRAWER_FOOTER_KEY: InjectionKey<Ref<HTMLElement | null>> = S
   'hikari-entity-drawer-footer',
 )
 
-export interface RelationTargetSummary {
-  name: string
-  cover: string | null
-}
-
-export interface RelationRefValue {
-  id: number
-  name: string
-  cover: string | null
-}
-
-export interface EditorRelationRow {
-  target_id: number
-  target: RelationTargetSummary
-  attributes: Record<string, unknown>
-  ref_attributes?: Record<string, RelationRefValue[]>
-}
+export type RelationTargetSummary = Schemas['EntityRefSummaryDto']
+export type RelationRefValue = Schemas['EditorRelationRefValueDto']
+export type EditorRelationRow = Schemas['EditorRelationRowDto']
 
 export function toRelationRows(value: unknown): EditorRelationRow[] {
   if (!Array.isArray(value)) return []

@@ -37,7 +37,13 @@ export const AUTHORIZE_PARAMS: ParamRow[] = [
     name: 'scope',
     requirement: '必填',
     detail:
-      '空格分隔。openid 表示同时签发 ID token；offline_access 才会签发 refresh token；其余见「权限范围」，且不得超出控制台已勾选的集合',
+      '空格分隔。openid 表示同时签发 ID token；offline_access 需与 prompt=consent 同时出现才会签发 refresh token；其余见「权限范围」，且不得超出控制台已勾选的集合',
+  },
+  {
+    name: 'prompt',
+    requirement: '申请 offline_access 时必填',
+    detail:
+      '取 consent。按 OIDC 规范，prompt 不含 consent 时 offline_access 会被静默忽略，授权仍然成功但不会签发 refresh token',
   },
   { name: 'state', requirement: '必填', detail: '随机值，回调时原样返回，须逐字比对后再继续' },
   {
@@ -90,7 +96,7 @@ export const OPEN_ERRORS: OpenErrorRow[] = [
   {
     status: 401,
     code: 'AUTH_UNAUTHENTICATED',
-    when: '缺少 Authorization 请求头，或该端点要求用户级令牌而请求使用了应用级令牌',
+    when: '缺少 Authorization 请求头，或该端点要求令牌代表某个用户而所用令牌只代表应用自身',
   },
   {
     status: 401,

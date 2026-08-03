@@ -68,6 +68,7 @@ export function applyChangeset(
       field?: unknown
       to?: unknown
       relation?: unknown
+      relation_id?: unknown
       target_id?: unknown
       target_name?: unknown
       target_cover?: unknown
@@ -82,7 +83,7 @@ export function applyChangeset(
 
     if (typeof entry.relation !== 'string' || typeof entry.target_id !== 'number') continue
     const rows = toRelationRows(result[entry.relation])
-    const without = rows.filter(row => row.target_id !== entry.target_id)
+    const relationId = typeof entry.relation_id === 'number' ? entry.relation_id : undefined
 
     if (entry.kind === 'relation_add') {
       const row: EditorRelationRow = {
@@ -95,14 +96,34 @@ export function applyChangeset(
       }
       const refAttributes = toRowRefAttributes(entry.ref_attributes)
       if (refAttributes) row.ref_attributes = refAttributes
-      result[entry.relation] = [...without, row]
+      result[entry.relation] = [...rows, row]
     } else if (entry.kind === 'relation_remove') {
-      result[entry.relation] = without
+      result[entry.relation] = rows.filter(row =>
+        relationId !== undefined
+          ? row.relation_id !== relationId || row.target_id !== entry.target_id
+          : row.target_id !== entry.target_id,
+      )
     } else if (entry.kind === 'relation_update') {
-      result[entry.relation] = rows.map(row =>
-        row.target_id === entry.target_id
-          ? applyRelationUpdate(row, entry.attributes, entry.ref_attributes)
-          : row,
+      let index =
+        relationId !== undefined
+          ? rows.findIndex(
+              row => row.relation_id === relationId && row.target_id === entry.target_id,
+            )
+          : rows.findIndex(row => {
+              if (row.target_id !== entry.target_id || !isRecord(entry.attributes)) return false
+              return Object.entries(entry.attributes).every(
+                ([key, change]) =>
+                  isRecord(change) &&
+                  'from' in change &&
+                  JSON.stringify(row.attributes[key] ?? null) ===
+                    JSON.stringify(change.from ?? null),
+              )
+            })
+      if (index < 0 && relationId === undefined) {
+        index = rows.findIndex(row => row.target_id === entry.target_id)
+      }
+      result[entry.relation] = rows.map((row, rowIndex) =>
+        rowIndex === index ? applyRelationUpdate(row, entry.attributes, entry.ref_attributes) : row,
       )
     }
   }

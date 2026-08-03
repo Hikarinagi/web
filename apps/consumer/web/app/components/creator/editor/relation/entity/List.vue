@@ -19,6 +19,7 @@
   const attributes = computed(() => props.field.attributes ?? [])
   const refAttributes = computed(() => props.field.ref_attributes ?? [])
   const target = computed(() => (props.field.target ?? '') as EntityTarget)
+  const rowIdentity = computed(() => props.field.row_identity === true)
 
   const pickerOpen = ref(false)
 
@@ -37,15 +38,28 @@
   }
 
   const selectedEntities = computed<BackendEntitySummary[]>(() =>
-    rows.value.map(row => ({
-      id: row.target_id,
-      name: row.target.name,
-      cover: row.target.cover,
-      status: 'PUBLISHED' as const,
-    })),
+    rowIdentity.value
+      ? []
+      : rows.value.map(row => ({
+          id: row.target_id,
+          name: row.target.name,
+          cover: row.target.cover,
+          status: 'PUBLISHED' as const,
+        })),
   )
 
   function onPick(items: BackendEntitySummary[]) {
+    if (rowIdentity.value) {
+      model.value = [
+        ...rows.value,
+        ...items.map(item => ({
+          target_id: item.id,
+          target: { name: item.name, cover: item.cover },
+          attributes: {},
+        })),
+      ]
+      return
+    }
     const existing = new Map(rows.value.map(row => [row.target_id, row]))
     model.value = items.map(item => {
       const prev = existing.get(item.id)
@@ -72,7 +86,7 @@
   <div class="flex flex-col gap-2">
     <CreatorEditorRelationEntityRow
       v-for="(row, index) in rows"
-      :key="row.target_id"
+      :key="row.relation_id ?? `draft-${index}-${row.target_id}`"
       :row="row"
       :attributes="attributes"
       :ref-attributes="refAttributes"
@@ -95,7 +109,7 @@
     <CreatorEditorRelationPickerDialog
       v-model:visible="pickerOpen"
       :target="target"
-      mode="multi"
+      :mode="rowIdentity ? 'single' : 'multi'"
       :selected-entities="selectedEntities"
       :title="`添加 ${target}`"
       @select="onPick"

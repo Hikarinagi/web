@@ -6866,11 +6866,20 @@
           "required": {
             "type": "boolean"
           },
+          "row_identity": {
+            "type": "boolean"
+          },
           "scope": {
             "type": "string"
           },
           "target": {
             "type": "string"
+          },
+          "unique_attributes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "value_type": {
             "enum": [
@@ -6995,6 +7004,58 @@
           "name",
           "ref_target",
           "multiple"
+        ],
+        "type": "object"
+      },
+      "EditorRelationRefValueDto": {
+        "properties": {
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "cover"
+        ],
+        "type": "object"
+      },
+      "EditorRelationRowDto": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "ref_attributes": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/EditorRelationRefValueDto"
+              },
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "relation_id": {
+            "type": "number"
+          },
+          "target": {
+            "$ref": "#/components/schemas/EntityRefSummaryDto"
+          },
+          "target_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "target_id",
+          "target",
+          "attributes"
         ],
         "type": "object"
       },
@@ -59430,7 +59491,7 @@
   "servers": [],
   "tags": [
     {
-      "description": "应用级令牌即可读取的公开条目数据，无需用户在场。",
+      "description": "公开条目数据，需 catalog:read 或 catalog:full；令牌无需代表任何用户。",
       "name": "open"
     },
     {

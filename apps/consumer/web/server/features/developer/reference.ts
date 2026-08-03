@@ -100,8 +100,8 @@ const TAG_AUTH: Record<string, ReferenceAuth> = {
 }
 
 const TOKEN_VARIABLE: Record<ReferenceAuth, string> = {
-  app: '$APP_TOKEN',
-  user: '$USER_TOKEN',
+  app: '$ACCESS_TOKEN',
+  user: '$ACCESS_TOKEN',
 }
 
 const STATUS_LABEL: Record<string, string> = {

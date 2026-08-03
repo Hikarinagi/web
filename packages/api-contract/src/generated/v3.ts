@@ -12352,8 +12352,10 @@ export interface components {
             ref_attributes?: components["schemas"]["EditorRelationRefAttributeDto"][];
             ref_target?: string;
             required?: boolean;
+            row_identity?: boolean;
             scope: string;
             target?: string;
+            unique_attributes?: string[];
             /** @enum {string} */
             value_type?: "string" | "string[]" | "int" | "float" | "boolean" | "date" | "media" | "object" | "object[]" | "enum" | "enum[]" | "ref";
         };
@@ -12385,6 +12387,22 @@ export interface components {
             multiple: boolean;
             name: string;
             ref_target: string;
+        };
+        EditorRelationRefValueDto: {
+            cover: string | null;
+            id: number;
+            name: string;
+        };
+        EditorRelationRowDto: {
+            attributes: {
+                [key: string]: unknown;
+            };
+            ref_attributes?: {
+                [key: string]: components["schemas"]["EditorRelationRefValueDto"][];
+            };
+            relation_id?: number;
+            target: components["schemas"]["EntityRefSummaryDto"];
+            target_id: number;
         };
         EditorSchemaDto: {
             fields: components["schemas"]["EditorFieldDto"][];

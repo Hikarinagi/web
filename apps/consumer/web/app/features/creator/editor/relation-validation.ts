@@ -19,6 +19,19 @@ function missingRelationType(field: BackendEditorField, rows: EditorRelationRow[
   })
 }
 
+function hasDuplicate(field: BackendEditorField, rows: EditorRelationRow[]): boolean {
+  if (!field.unique_attributes?.length) return false
+  const keys = new Set<string>()
+  for (const row of rows) {
+    const values = field.unique_attributes.map(attribute => row.attributes[attribute])
+    if (values.some(value => value === null || value === undefined)) continue
+    const key = JSON.stringify([row.target_id, ...values])
+    if (keys.has(key)) return true
+    keys.add(key)
+  }
+  return false
+}
+
 export function validateRelations(
   fields: readonly BackendEditorField[],
   relations: Record<string, EditorRelationRow[]>,
@@ -40,6 +53,10 @@ export function validateRelations(
 
     if (missingRelationType(field, rows)) {
       errors[field.field] = '有关联作品未选择「关系类型」,请补全后再提交'
+      continue
+    }
+    if (hasDuplicate(field, rows)) {
+      errors[field.field] = '同一人物不能重复添加相同职责'
     }
   }
   return errors

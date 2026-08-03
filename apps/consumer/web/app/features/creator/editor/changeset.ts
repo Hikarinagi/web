@@ -31,6 +31,7 @@ export interface RelationAddOp {
 export interface RelationRemoveOp {
   kind: 'relation_remove'
   relation: string
+  relation_id?: number
   target_id: number
   target_name?: string
   target_cover?: string
@@ -39,6 +40,7 @@ export interface RelationRemoveOp {
 export interface RelationUpdateOp {
   kind: 'relation_update'
   relation: string
+  relation_id?: number
   target_id: number
   target_name?: string
   target_cover?: string

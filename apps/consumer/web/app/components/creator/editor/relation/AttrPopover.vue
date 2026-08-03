@@ -16,6 +16,7 @@
   }>()
   const row = defineModel<EditorRelationRow>('row', { required: true })
   const emit = defineEmits<{ remove: [] }>()
+  const fieldId = useId()
 
   const imageClass = computed(() =>
     cn('size-full', props.target === 'producer' ? 'object-contain' : 'object-cover object-top'),
@@ -131,13 +132,13 @@
       </div>
 
       <div v-for="attr in attributes" :key="attr.name" class="flex flex-col gap-1.5">
-        <label :for="`attr-${attr.name}-${row.target_id}`" class="text-xs font-medium">
+        <label :for="`${fieldId}-${attr.name}`" class="text-xs font-medium">
           {{ ATTR_LABEL[attr.name] ?? attr.name }}
           <span v-if="attr.name === 'relation'" class="text-red-500">*</span>
         </label>
         <Select
           v-if="attr.value_type === 'enum'"
-          :input-id="`attr-${attr.name}-${row.target_id}`"
+          :input-id="`${fieldId}-${attr.name}`"
           :model-value="asString(attr.name)"
           :options="enumOptions(attr.enum_name, attr.enum_values ?? [])"
           option-label="label"
@@ -149,7 +150,7 @@
         />
         <InputNumber
           v-else-if="attr.value_type === 'int' || attr.value_type === 'float'"
-          :input-id="`attr-${attr.name}-${row.target_id}`"
+          :input-id="`${fieldId}-${attr.name}`"
           :model-value="asNumber(attr.name)"
           :max-fraction-digits="attr.value_type === 'float' ? 2 : 0"
           :use-grouping="false"
@@ -160,13 +161,13 @@
         />
         <ToggleSwitch
           v-else-if="attr.value_type === 'boolean'"
-          :input-id="`attr-${attr.name}-${row.target_id}`"
+          :input-id="`${fieldId}-${attr.name}`"
           :model-value="asBoolean(attr.name)"
           @update:model-value="v => setAttr(attr.name, v === true)"
         />
         <InputText
           v-else
-          :id="`attr-${attr.name}-${row.target_id}`"
+          :id="`${fieldId}-${attr.name}`"
           :model-value="asString(attr.name)"
           fluid
           size="small"

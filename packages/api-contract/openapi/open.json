@@ -4386,7 +4386,7 @@
   "servers": [],
   "tags": [
     {
-      "description": "应用级令牌即可读取的公开条目数据，无需用户在场。",
+      "description": "公开条目数据，需 catalog:read 或 catalog:full；令牌无需代表任何用户。",
       "name": "open"
     },
     {

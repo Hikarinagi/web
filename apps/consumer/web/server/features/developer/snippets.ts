@@ -15,6 +15,7 @@ const PKCE = [
 const TOKEN_RESPONSE = [
   '{',
   '  "access_token": "eyJhbGciOiJSUzI1NiIs…",',
+  '  "id_token": "eyJhbGciOiJSUzI1NiIs…",',
   '  "refresh_token": "…",',
   '  "expires_in": 3600,',
   '  "token_type": "Bearer",',
@@ -68,6 +69,7 @@ function authorizeUrl(authorizationEndpoint: string): string {
     '  &client_id=$CLIENT_ID',
     '  &redirect_uri=https%3A%2F%2Fyour.app%2Fcallback',
     '  &scope=openid%20status%3Aread%20status%3Awrite%20offline_access',
+    '  &prompt=consent',
     '  &state=$RANDOM_STATE',
     '  &nonce=$RANDOM_NONCE',
     '  &code_challenge=$CHALLENGE',

@@ -10,8 +10,8 @@
   })
 
   const AUTH_BADGE: Record<ReferenceAuth, { label: string; severity: string }> = {
-    app: { label: '应用级令牌', severity: 'secondary' },
-    user: { label: '用户级令牌', severity: 'warn' },
+    app: { label: '无需用户授权', severity: 'secondary' },
+    user: { label: '需用户授权', severity: 'warn' },
   }
 
   useHikariSeoMeta({
