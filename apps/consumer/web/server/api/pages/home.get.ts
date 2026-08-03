@@ -1,7 +1,7 @@
 import type { H3Event } from 'h3'
 import { FEED_PAGE_SIZE } from '~/features/feed/feed'
 import { fetchBackendData } from '../../utils/backend-api'
-import { loadFeedSidebar } from '../../utils/feed-sidebar'
+import { loadFeedSidebar } from '../../features/feed/sidebar'
 import { definePageBffHandler } from '../../utils/page-bff'
 
 async function handler(event: H3Event) {

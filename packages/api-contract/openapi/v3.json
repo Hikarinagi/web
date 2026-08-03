@@ -5576,10 +5576,34 @@
       },
       "CreateDeveloperAppDto": {
         "properties": {
+          "application_type": {
+            "description": "默认 web。native 允许私有 scheme 与环回地址回调",
+            "enum": [
+              "web",
+              "native"
+            ],
+            "type": "string"
+          },
           "client_name": {
             "description": "应用名称",
             "maxLength": 64,
             "minLength": 1,
+            "type": "string"
+          },
+          "client_type": {
+            "description": "默认 confidential。public 不签发密钥，仅支持 PKCE 授权码流程",
+            "enum": [
+              "confidential",
+              "public"
+            ],
+            "type": "string"
+          },
+          "token_endpoint_auth_method": {
+            "description": "机密客户端的令牌端点认证方式，默认 client_secret_basic",
+            "enum": [
+              "client_secret_basic",
+              "client_secret_post"
+            ],
             "type": "string"
           }
         },
@@ -6362,52 +6386,16 @@
         ],
         "type": "object"
       },
-      "DeveloperAppDto": {
+      "DeveloperAppCreatedDto": {
         "properties": {
-          "client_id": {
+          "application_type": {
+            "description": "web 只接受 https 与环回回调；native 额外接受私有 scheme 回调",
+            "enum": [
+              "web",
+              "native"
+            ],
             "type": "string"
           },
-          "client_name": {
-            "type": "string"
-          },
-          "client_uri": {
-            "description": "应用主页",
-            "nullable": true,
-            "type": "string"
-          },
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "redirect_uris": {
-            "description": "回调地址",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "scope": {
-            "description": "该应用可请求的 scope",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "client_id",
-          "client_name",
-          "scope",
-          "client_uri",
-          "redirect_uris",
-          "enabled",
-          "created_at"
-        ],
-        "type": "object"
-      },
-      "DeveloperAppSecretDto": {
-        "properties": {
           "client_id": {
             "type": "string"
           },
@@ -6415,7 +6403,16 @@
             "type": "string"
           },
           "client_secret": {
-            "description": "仅在创建/轮换时返回一次，请立即妥善保存",
+            "description": "仅在本次响应中返回一次，请立即妥善保存；公共客户端不签发密钥，为 null",
+            "nullable": true,
+            "type": "string"
+          },
+          "client_type": {
+            "description": "机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程",
+            "enum": [
+              "confidential",
+              "public"
+            ],
             "type": "string"
           },
           "client_uri": {
@@ -6430,6 +6427,13 @@
           "enabled": {
             "type": "boolean"
           },
+          "grant_types": {
+            "description": "由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "redirect_uris": {
             "description": "回调地址",
             "items": {
@@ -6441,6 +6445,10 @@
             "description": "该应用可请求的 scope",
             "nullable": true,
             "type": "string"
+          },
+          "token_endpoint_auth_method": {
+            "description": "令牌端点认证方式，公共客户端为 none",
+            "type": "string"
           }
         },
         "required": [
@@ -6449,6 +6457,246 @@
           "scope",
           "client_uri",
           "redirect_uris",
+          "client_type",
+          "application_type",
+          "token_endpoint_auth_method",
+          "grant_types",
+          "enabled",
+          "created_at",
+          "client_secret"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppDto": {
+        "properties": {
+          "application_type": {
+            "description": "web 只接受 https 与环回回调；native 额外接受私有 scheme 回调",
+            "enum": [
+              "web",
+              "native"
+            ],
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "client_type": {
+            "description": "机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程",
+            "enum": [
+              "confidential",
+              "public"
+            ],
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "grant_types": {
+            "description": "由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "redirect_uris": {
+            "description": "回调地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "该应用可请求的 scope",
+            "nullable": true,
+            "type": "string"
+          },
+          "token_endpoint_auth_method": {
+            "description": "令牌端点认证方式，公共客户端为 none",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_name",
+          "scope",
+          "client_uri",
+          "redirect_uris",
+          "client_type",
+          "application_type",
+          "token_endpoint_auth_method",
+          "grant_types",
+          "enabled",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppSecretDto": {
+        "properties": {
+          "application_type": {
+            "description": "web 只接受 https 与环回回调；native 额外接受私有 scheme 回调",
+            "enum": [
+              "web",
+              "native"
+            ],
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "仅在本次响应中返回一次，请立即妥善保存",
+            "type": "string"
+          },
+          "client_type": {
+            "description": "机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程",
+            "enum": [
+              "confidential",
+              "public"
+            ],
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "grant_types": {
+            "description": "由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "redirect_uris": {
+            "description": "回调地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "该应用可请求的 scope",
+            "nullable": true,
+            "type": "string"
+          },
+          "token_endpoint_auth_method": {
+            "description": "令牌端点认证方式，公共客户端为 none",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_name",
+          "scope",
+          "client_uri",
+          "redirect_uris",
+          "client_type",
+          "application_type",
+          "token_endpoint_auth_method",
+          "grant_types",
+          "enabled",
+          "created_at",
+          "client_secret"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppUpdatedDto": {
+        "properties": {
+          "application_type": {
+            "description": "web 只接受 https 与环回回调；native 额外接受私有 scheme 回调",
+            "enum": [
+              "web",
+              "native"
+            ],
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "client_name": {
+            "type": "string"
+          },
+          "client_secret": {
+            "description": "仅在由公共客户端切回机密客户端时返回一次的新密钥，请立即妥善保存",
+            "nullable": true,
+            "type": "string"
+          },
+          "client_type": {
+            "description": "机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程",
+            "enum": [
+              "confidential",
+              "public"
+            ],
+            "type": "string"
+          },
+          "client_uri": {
+            "description": "应用主页",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "grant_types": {
+            "description": "由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "redirect_uris": {
+            "description": "回调地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "description": "该应用可请求的 scope",
+            "nullable": true,
+            "type": "string"
+          },
+          "token_endpoint_auth_method": {
+            "description": "令牌端点认证方式，公共客户端为 none",
+            "type": "string"
+          }
+        },
+        "required": [
+          "client_id",
+          "client_name",
+          "scope",
+          "client_uri",
+          "redirect_uris",
+          "client_type",
+          "application_type",
+          "token_endpoint_auth_method",
+          "grant_types",
           "enabled",
           "created_at",
           "client_secret"
@@ -10010,6 +10258,39 @@
         ],
         "type": "object"
       },
+      "GalgamePopularProducerDto": {
+        "properties": {
+          "galgame_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "popularity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "logo",
+          "popularity",
+          "galgame_count"
+        ],
+        "type": "object"
+      },
       "GalgamePriceDto": {
         "properties": {
           "amount": {
@@ -10626,6 +10907,81 @@
           "on_hold",
           "dropped",
           "plan"
+        ],
+        "type": "object"
+      },
+      "GalgameRecommendBatchDto": {
+        "properties": {
+          "modules": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameRecommendModuleDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "modules",
+          "next_cursor"
+        ],
+        "type": "object"
+      },
+      "GalgameRecommendModuleDto": {
+        "properties": {
+          "intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryDto"
+            },
+            "type": "array"
+          },
+          "key": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "GRID",
+              "RAIL",
+              "FEATURE"
+            ],
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "DISCOVERY",
+              "PLAYING",
+              "COMPLETED",
+              "SCENARIO",
+              "VISUAL",
+              "MUSIC",
+              "SPOTLIGHT",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "tag": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagPreviewDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "key",
+          "kind",
+          "reason",
+          "intro",
+          "tag",
+          "items"
         ],
         "type": "object"
       },
@@ -20369,8 +20725,44 @@
         ],
         "type": "object"
       },
+      "ReaderFontDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sha256",
+          "bytes",
+          "url",
+          "expires_at"
+        ],
+        "type": "object"
+      },
       "ReaderSessionDto": {
         "properties": {
+          "epub_sha": {
+            "nullable": true,
+            "type": "string"
+          },
           "expires_at": {
             "format": "date-time",
             "type": "string"
@@ -20381,6 +20773,7 @@
         },
         "required": [
           "url",
+          "epub_sha",
           "expires_at"
         ],
         "type": "object"
@@ -24134,10 +24527,26 @@
       },
       "UpdateDeveloperAppDto": {
         "properties": {
+          "application_type": {
+            "description": "切换后会按新类型重新校验已配置的回调地址",
+            "enum": [
+              "web",
+              "native"
+            ],
+            "type": "string"
+          },
           "client_name": {
             "description": "应用名称",
             "maxLength": 64,
             "minLength": 1,
+            "type": "string"
+          },
+          "client_type": {
+            "description": "切到 public 会清除密钥；切回 confidential 会签发一次性新密钥",
+            "enum": [
+              "confidential",
+              "public"
+            ],
             "type": "string"
           },
           "client_uri": {
@@ -24151,9 +24560,8 @@
             "type": "boolean"
           },
           "redirect_uris": {
-            "description": "回调地址，最多 5 条",
+            "description": "回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type",
             "items": {
-              "pattern": "^https:\\/\\/[^#\\s]+$|^http:\\/\\/localhost(:\\d+)?(\\/[^#\\s]*)?$",
               "type": "string"
             },
             "maxItems": 5,
@@ -24164,11 +24572,24 @@
             "items": {
               "enum": [
                 "catalog:read",
-                "catalog:full"
+                "catalog:full",
+                "user:read",
+                "status:read",
+                "status:write",
+                "collection:read",
+                "collection:write"
               ],
               "type": "string"
             },
             "type": "array"
+          },
+          "token_endpoint_auth_method": {
+            "description": "机密客户端的令牌端点认证方式，对 public 客户端无效",
+            "enum": [
+              "client_secret_basic",
+              "client_secret_post"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -43642,6 +44063,64 @@
         ]
       }
     },
+    "/api/v3/galgames/producers/popular": {
+      "get": {
+        "operationId": "GalgameController_getPopularProducers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/GalgamePopularProducerDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Galgame"
+        ]
+      }
+    },
     "/api/v3/galgames/random": {
       "get": {
         "operationId": "GalgameController_getRandom",
@@ -43686,6 +44165,39 @@
         },
         "tags": [
           "rates"
+        ]
+      }
+    },
+    "/api/v3/galgames/recommendations": {
+      "get": {
+        "operationId": "GalgameController_getRecommendations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRecommendBatchDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Galgame"
         ]
       }
     },
@@ -48602,6 +49114,9 @@
         "summary": "角色详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48633,6 +49148,9 @@
         "summary": "Galgame 详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48675,6 +49193,9 @@
         "summary": "Galgame 角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48717,6 +49238,9 @@
         "summary": "Galgame Staff",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48748,6 +49272,9 @@
         "summary": "轻小说详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48790,6 +49317,9 @@
         "summary": "轻小说角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48836,6 +49366,9 @@
         "summary": "轻小说人物",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48882,6 +49415,9 @@
         "summary": "轻小说厂商",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48929,6 +49465,9 @@
         "summary": "轻小说分卷",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -48960,6 +49499,9 @@
         "summary": "漫画详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49002,6 +49544,9 @@
         "summary": "漫画角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49036,6 +49581,9 @@
         "summary": "漫画人物",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49070,6 +49618,9 @@
         "summary": "漫画厂商",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49104,6 +49655,9 @@
         "summary": "漫画单行本",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49135,6 +49689,9 @@
         "summary": "人物详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49166,6 +49723,9 @@
         "summary": "厂商详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -49254,6 +49814,922 @@
         "summary": "条目搜索",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me": {
+      "get": {
+        "operationId": "OpenUserController_getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicUserDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "公开资料",
+        "tags": [
+          "open-user-profile"
+        ],
+        "x-hikari-scopes": [
+          "user:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections": {
+      "get": {
+        "operationId": "OpenUserCollectionController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "收藏夹列表",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
+        ]
+      },
+      "post": {
+        "operationId": "OpenUserCollectionController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFavoriteCollectionDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "创建收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "删除收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserCollectionController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "收藏夹详情",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
+        ]
+      },
+      "patch": {
+        "operationId": "OpenUserCollectionController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFavoriteCollectionDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "修改收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/galgames/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除 Galgame",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将 Galgame 收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/items": {
+      "get": {
+        "operationId": "OpenUserCollectionController_items",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light_novel",
+                "manga",
+                "article",
+                "post"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteCollectionItemsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "收藏夹内的条目",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/light-novels/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除轻小说",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将轻小说收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/mangas/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除漫画",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将漫画收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates": {
+      "get": {
+        "operationId": "OpenUserRateController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "GOING",
+                "COMPLETED",
+                "ON_HOLD",
+                "DROPPED",
+                "PLAN"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "work_type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "GALGAME",
+                "LIGHT_NOVEL",
+                "MANGA"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only rates that carry a score.",
+            "in": "query",
+            "name": "scored",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/RateWorkDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "状态与评分记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/galgames/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回 Galgame 的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertGalgameRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录 Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/light-novels/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回轻小说的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertLightNovelRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录轻小说的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/mangas/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回漫画的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertMangaRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录漫画的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
         ]
       }
     },
@@ -51295,6 +52771,30 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReadingBookmarkDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Reader"
+        ]
+      }
+    },
+    "/api/v3/reader/fonts": {
+      "get": {
+        "operationId": "ReaderController_listFonts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReaderFontDto"
+                  },
+                  "type": "array"
                 }
               }
             },
@@ -54365,7 +55865,7 @@
         ]
       },
       "post": {
-        "description": "client_secret 仅在本次响应中返回一次，请立即妥善保存",
+        "description": "client_secret 仅在本次响应中返回一次，请立即妥善保存；公共客户端不签发密钥",
         "operationId": "DeveloperAppController_create",
         "parameters": [],
         "requestBody": {
@@ -54383,7 +55883,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppSecretDto"
+                  "$ref": "#/components/schemas/DeveloperAppCreatedDto"
                 }
               }
             },
@@ -54449,6 +55949,7 @@
         ]
       },
       "patch": {
+        "description": "授权方式由 scope 与回调地址推导：配置回调地址即开通用户授权码流程",
         "operationId": "DeveloperAppController_update",
         "parameters": [
           {
@@ -54475,7 +55976,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppDto"
+                  "$ref": "#/components/schemas/DeveloperAppUpdatedDto"
                 }
               }
             },
@@ -57929,8 +59430,16 @@
   "servers": [],
   "tags": [
     {
-      "description": "client_credentials 访问令牌鉴权的只读条目数据。",
+      "description": "应用级令牌即可读取的公开条目数据，无需用户在场。",
       "name": "open"
+    },
+    {
+      "description": "读取授权用户的公开资料，需 user:read。",
+      "name": "open-user-profile"
+    },
+    {
+      "description": "读写授权用户的观看游玩状态与评分，需 status:read 或 status:write。",
+      "name": "open-user-rate"
     },
     {
       "description": "开发者自助应用管理：登录用户创建/管理自己的 OAuth 客户端。",

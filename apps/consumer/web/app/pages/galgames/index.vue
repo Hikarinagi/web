@@ -16,9 +16,14 @@
     <GalgameExploreHero :mosaic="data.mosaic" :total="data.total_items" />
 
     <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-12">
-      <GalgameExploreBrowseEntry />
       <GalgameExploreReleaseRow :release="data.release" />
-      <GalgameExploreReviewCloud :reviews="data.reviews" />
+      <GalgameExploreReleaseRow
+        title="上月发售"
+        :release="data.last_month"
+        :to="data.last_month.browse_to"
+      />
+      <GalgameExploreBrowseEntry />
+      <GalgameExploreRecommendStream />
     </div>
   </div>
 </template>

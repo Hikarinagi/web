@@ -22,7 +22,7 @@
         :alt="item.title"
         class="size-full"
         image-class="object-cover object-top"
-        preset="medium"
+        :processing="{ quality: 82 }"
       />
       <span
         v-if="item.rolePill"

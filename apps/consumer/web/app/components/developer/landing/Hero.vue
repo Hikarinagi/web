@@ -49,7 +49,8 @@
           class="font-mono text-5xl font-extrabold tracking-tight text-color lg:text-6xl"
           :aria-label="TITLE"
         >
-          <span aria-hidden="true" v-text="typed" /><span
+          <span aria-hidden="true" v-text="typed" />
+          <span
             aria-hidden="true"
             class="text-hikari-primary-500"
             :class="{ 'hero-caret': !typing }"
@@ -60,7 +61,7 @@
         <p class="text-lg text-muted-color">使用 Hikarinagi 的公开数据构建你的应用。</p>
 
         <div class="flex flex-wrap items-center gap-3">
-          <Button label="查看 API 文档" as="router-link" to="/developers/reference" />
+          <Button label="查看文档" as="router-link" to="/developers/docs" />
           <Button
             label="进入控制台"
             severity="secondary"

@@ -13,8 +13,8 @@
   <div class="-mt-(--app-header-height)">
     <DeveloperLandingHero />
 
-    <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-12">
-      <DeveloperLandingSteps />
+    <div class="mx-auto box-content max-w-app px-6 py-14">
+      <DeveloperLandingFlow />
     </div>
   </div>
 </template>

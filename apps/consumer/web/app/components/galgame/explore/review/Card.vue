@@ -1,9 +1,10 @@
 <script setup lang="ts">
+  import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { Star } from '@lucide/vue'
-  import type { GalgamesPageData } from '~~/server/api/pages/galgames.get'
 
   defineOptions({ name: 'GalgameExploreReviewCard' })
-  defineProps<{ item: GalgamesPageData['reviews']['items'][number] }>()
+  type ReviewCloud = ApiData<'/api/v3/galgames/rates/cloud', 'get'>
+  defineProps<{ item: ReviewCloud['items'][number] }>()
 </script>
 
 <template>

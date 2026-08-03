@@ -11,10 +11,12 @@
   const secret = ref<{ client_id: string; client_secret: string } | null>(null)
   const secretOpen = ref(false)
 
-  function onCreated(created: { client_id: string; client_secret: string }) {
+  function onCreated(created: { client_id: string; client_secret: string | null }) {
     createOpen.value = false
-    secret.value = created
-    secretOpen.value = true
+    if (created.client_secret) {
+      secret.value = { client_id: created.client_id, client_secret: created.client_secret }
+      secretOpen.value = true
+    }
     emit('changed')
   }
 </script>

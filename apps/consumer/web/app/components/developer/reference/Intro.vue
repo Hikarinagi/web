@@ -1,59 +1,55 @@
 <script setup lang="ts">
   defineOptions({ name: 'DeveloperReferenceIntro' })
-  const props = defineProps<{ issuer: string }>()
+  defineProps<{ issuer: string }>()
 
-  const tokenCurl = computed(() =>
-    [
-      `curl -X POST "${props.issuer}/token" \\`,
-      '  -u "$CLIENT_ID:$CLIENT_SECRET" \\',
-      '  -d "grant_type=client_credentials&scope=$SCOPES"',
-    ].join('\n'),
-  )
-
-  const envelopeExample = [
-    '{',
-    '  "success": true,',
-    '  "data": { … },',
-    '  "request_id": "req-x",',
-    '  "timestamp": "2026-07-10T00:00:00.000Z"',
-    '}',
-  ].join('\n')
+  const TOKENS = [
+    {
+      variable: '$APP_TOKEN',
+      title: '应用级令牌',
+      detail: '由 client_credentials 换取，代表应用自身，用于条目数据端点。',
+    },
+    {
+      variable: '$USER_TOKEN',
+      title: '用户级令牌',
+      detail: '由授权码流程换取，代表完成授权的用户，用于用户数据端点。',
+    },
+  ]
 </script>
 
 <template>
-  <header class="flex flex-col gap-6">
-    <div class="flex flex-col gap-3">
-      <h1 class="font-mono text-4xl font-extrabold tracking-tight text-color">
-        Hikarinagi Public API
-      </h1>
-      <p class="text-muted-color">
-        Hikarinagi 公开数据 API。所有端点要求携带 client_credentials 访问令牌，默认 throttle 60
-        次/分钟/应用。
-      </p>
+  <section
+    id="reference"
+    class="flex scroll-mt-[calc(var(--app-header-height)+16px)] flex-col gap-4"
+  >
+    <h2 class="text-2xl font-bold text-color">端点参考</h2>
+    <p class="text-sm leading-relaxed text-muted-color">
+      每个端点均标注所需 scope
+      与响应状态码。两组端点要求的令牌类型不同，示例中的令牌变量名已相应区分。响应示例展示的是信封内
+      <code class="font-mono">data</code>
+      字段的内容，完整信封见
+      <NuxtLink to="/developers/docs#conventions" class="text-primary hover:text-primary-600">
+        响应约定
+      </NuxtLink>
+      。
+    </p>
+
+    <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
+      <div
+        v-for="token in TOKENS"
+        :key="token.variable"
+        class="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[minmax(0,13rem)_1fr] sm:gap-4"
+      >
+        <code class="font-mono text-sm break-words text-color">{{ token.variable }}</code>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-sm text-color">{{ token.title }}</span>
+          <span class="text-xs leading-relaxed text-muted-color">{{ token.detail }}</span>
+        </div>
+      </div>
     </div>
 
-    <section class="flex flex-col gap-3">
-      <h2 class="text-xl font-bold text-color">获取访问令牌</h2>
-      <p class="text-sm text-muted-color">
-        在
-        <NuxtLink
-          href="/developers/console"
-          class="text-primary transition-colors hover:text-primary-600"
-        >
-          开发者控制台
-        </NuxtLink>
-        创建应用后，用 client_id 与 client_secret 通过 Basic 认证请求令牌，令牌有效期 1
-        小时；scope 为本次申请的权限集合，不能超出应用已被授予的范围。
-      </p>
-      <DeveloperCodeBlock :code="tokenCurl" />
-    </section>
-
-    <section class="flex flex-col gap-3">
-      <h2 class="text-xl font-bold text-color">响应格式</h2>
-      <p class="text-sm text-muted-color">
-        所有响应都包裹在统一信封中，文档里各端点描述的是信封内 data 字段的结构。
-      </p>
-      <DeveloperCodeBlock :code="envelopeExample" />
-    </section>
-  </header>
+    <p class="text-xs text-muted-color">
+      Hikarinagi ID issuer：
+      <code class="font-mono break-all">{{ issuer }}</code>
+    </p>
+  </section>
 </template>

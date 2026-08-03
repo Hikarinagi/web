@@ -12,7 +12,7 @@
         severity="secondary"
         outlined
         as="router-link"
-        to="/developers/reference"
+        to="/developers/docs"
       />
     </div>
     <NuxtPage />

@@ -11,6 +11,9 @@
   const groups = developerScopeGroups()
   const busy = ref(false)
   const granted = computed(() => new Set((props.app.scope ?? '').split(' ').filter(Boolean)))
+  const hasRedirect = computed(() => props.app.redirect_uris.length > 0)
+  const lockedByRedirect = (group: { requires_user: boolean }) =>
+    group.requires_user && !hasRedirect.value
 
   const { copy, copied } = useClipboard()
   const lastCopied = ref('')
@@ -45,6 +48,9 @@
       <p class="font-mono text-xs font-semibold tracking-widest text-muted-color uppercase">
         {{ group.label }}
       </p>
+      <p v-if="lockedByRedirect(group)" class="text-xs text-muted-color">
+        该组权限代表用户执行操作，需通过授权码流程取得。请先在下方「回调地址」中添加至少一条地址。
+      </p>
       <div class="grid gap-2 sm:grid-cols-2">
         <div
           v-for="entry in group.entries"
@@ -55,7 +61,7 @@
             <Checkbox
               binary
               :model-value="granted.has(entry.scope)"
-              :disabled="busy"
+              :disabled="busy || (lockedByRedirect(group) && !granted.has(entry.scope))"
               :aria-label="entry.label"
               @update:model-value="(value: boolean) => toggle(entry.scope, value)"
             />

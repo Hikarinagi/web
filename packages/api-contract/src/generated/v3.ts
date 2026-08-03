@@ -5828,6 +5828,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/producers/popular": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameController_getPopularProducers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/random": {
         parameters: {
             query?: never;
@@ -5852,6 +5868,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["GalgameRateCloudController_cloud"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameController_getRecommendations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7861,6 +7893,205 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/user/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 公开资料 */
+        get: operations["OpenUserController_getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 收藏夹列表 */
+        get: operations["OpenUserCollectionController_list"];
+        put?: never;
+        /** 创建收藏夹 */
+        post: operations["OpenUserCollectionController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 收藏夹详情 */
+        get: operations["OpenUserCollectionController_get"];
+        put?: never;
+        post?: never;
+        /** 删除收藏夹 */
+        delete: operations["OpenUserCollectionController_remove"];
+        options?: never;
+        head?: never;
+        /** 修改收藏夹 */
+        patch: operations["OpenUserCollectionController_update"];
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections/{id}/galgames/{work_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 将 Galgame 收入收藏夹 */
+        put: operations["OpenUserCollectionController_addGalgame"];
+        post?: never;
+        /** 从收藏夹移除 Galgame */
+        delete: operations["OpenUserCollectionController_removeGalgame"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections/{id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 收藏夹内的条目 */
+        get: operations["OpenUserCollectionController_items"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections/{id}/light-novels/{work_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 将轻小说收入收藏夹 */
+        put: operations["OpenUserCollectionController_addLightNovel"];
+        post?: never;
+        /** 从收藏夹移除轻小说 */
+        delete: operations["OpenUserCollectionController_removeLightNovel"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/collections/{id}/mangas/{work_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** 将漫画收入收藏夹 */
+        put: operations["OpenUserCollectionController_addManga"];
+        post?: never;
+        /** 从收藏夹移除漫画 */
+        delete: operations["OpenUserCollectionController_removeManga"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 状态与评分记录 */
+        get: operations["OpenUserRateController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates/galgames/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 的状态与评分 */
+        get: operations["OpenUserRateController_getGalgame"];
+        /** 记录 Galgame 的状态与评分 */
+        put: operations["OpenUserRateController_upsertGalgame"];
+        post?: never;
+        /** 撤回 Galgame 的记录 */
+        delete: operations["OpenUserRateController_withdrawGalgame"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates/light-novels/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 轻小说的状态与评分 */
+        get: operations["OpenUserRateController_getLightNovel"];
+        /** 记录轻小说的状态与评分 */
+        put: operations["OpenUserRateController_upsertLightNovel"];
+        post?: never;
+        /** 撤回轻小说的记录 */
+        delete: operations["OpenUserRateController_withdrawLightNovel"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates/mangas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 漫画的状态与评分 */
+        get: operations["OpenUserRateController_getManga"];
+        /** 记录漫画的状态与评分 */
+        put: operations["OpenUserRateController_upsertManga"];
+        post?: never;
+        /** 撤回漫画的记录 */
+        delete: operations["OpenUserRateController_withdrawManga"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/people": {
         parameters: {
             query?: never;
@@ -8435,6 +8666,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["ReaderController_updateBookmark"];
+        trace?: never;
+    };
+    "/api/v3/reader/fonts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReaderController_listFonts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v3/reader/light-novels/{light_novel_id}/progress": {
@@ -9473,7 +9720,7 @@ export interface paths {
         put?: never;
         /**
          * 创建应用
-         * @description client_secret 仅在本次响应中返回一次，请立即妥善保存
+         * @description client_secret 仅在本次响应中返回一次，请立即妥善保存；公共客户端不签发密钥
          */
         post: operations["DeveloperAppController_create"];
         delete?: never;
@@ -9497,7 +9744,10 @@ export interface paths {
         delete: operations["DeveloperAppController_remove"];
         options?: never;
         head?: never;
-        /** 更新应用 */
+        /**
+         * 更新应用
+         * @description 授权方式由 scope 与回调地址推导：配置回调地址即开通用户授权码流程
+         */
         patch: operations["DeveloperAppController_update"];
         trace?: never;
     };
@@ -11719,8 +11969,23 @@ export interface components {
             type: "AVATAR_FRAME" | "BADGE";
         };
         CreateDeveloperAppDto: {
+            /**
+             * @description 默认 web。native 允许私有 scheme 与环回地址回调
+             * @enum {string}
+             */
+            application_type?: "web" | "native";
             /** @description 应用名称 */
             client_name: string;
+            /**
+             * @description 默认 confidential。public 不签发密钥，仅支持 PKCE 授权码流程
+             * @enum {string}
+             */
+            client_type?: "confidential" | "public";
+            /**
+             * @description 机密客户端的令牌端点认证方式，默认 client_secret_basic
+             * @enum {string}
+             */
+            token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
         CreateFavoriteCollectionDto: {
             description?: string;
@@ -11932,33 +12197,119 @@ export interface components {
             type: "AVATAR_FRAME" | "BADGE";
             unlock_description: string | null;
         };
-        DeveloperAppDto: {
+        DeveloperAppCreatedDto: {
+            /**
+             * @description web 只接受 https 与环回回调；native 额外接受私有 scheme 回调
+             * @enum {string}
+             */
+            application_type: "web" | "native";
             client_id: string;
             client_name: string;
+            /** @description 仅在本次响应中返回一次，请立即妥善保存；公共客户端不签发密钥，为 null */
+            client_secret: string | null;
+            /**
+             * @description 机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程
+             * @enum {string}
+             */
+            client_type: "confidential" | "public";
             /** @description 应用主页 */
             client_uri: string | null;
             /** Format: date-time */
             created_at: string;
             enabled: boolean;
+            /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
+            grant_types: string[];
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
             scope: string | null;
+            /** @description 令牌端点认证方式，公共客户端为 none */
+            token_endpoint_auth_method: string;
+        };
+        DeveloperAppDto: {
+            /**
+             * @description web 只接受 https 与环回回调；native 额外接受私有 scheme 回调
+             * @enum {string}
+             */
+            application_type: "web" | "native";
+            client_id: string;
+            client_name: string;
+            /**
+             * @description 机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程
+             * @enum {string}
+             */
+            client_type: "confidential" | "public";
+            /** @description 应用主页 */
+            client_uri: string | null;
+            /** Format: date-time */
+            created_at: string;
+            enabled: boolean;
+            /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
+            grant_types: string[];
+            /** @description 回调地址 */
+            redirect_uris: string[];
+            /** @description 该应用可请求的 scope */
+            scope: string | null;
+            /** @description 令牌端点认证方式，公共客户端为 none */
+            token_endpoint_auth_method: string;
         };
         DeveloperAppSecretDto: {
+            /**
+             * @description web 只接受 https 与环回回调；native 额外接受私有 scheme 回调
+             * @enum {string}
+             */
+            application_type: "web" | "native";
             client_id: string;
             client_name: string;
-            /** @description 仅在创建/轮换时返回一次，请立即妥善保存 */
+            /** @description 仅在本次响应中返回一次，请立即妥善保存 */
             client_secret: string;
+            /**
+             * @description 机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程
+             * @enum {string}
+             */
+            client_type: "confidential" | "public";
             /** @description 应用主页 */
             client_uri: string | null;
             /** Format: date-time */
             created_at: string;
             enabled: boolean;
+            /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
+            grant_types: string[];
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
             scope: string | null;
+            /** @description 令牌端点认证方式，公共客户端为 none */
+            token_endpoint_auth_method: string;
+        };
+        DeveloperAppUpdatedDto: {
+            /**
+             * @description web 只接受 https 与环回回调；native 额外接受私有 scheme 回调
+             * @enum {string}
+             */
+            application_type: "web" | "native";
+            client_id: string;
+            client_name: string;
+            /** @description 仅在由公共客户端切回机密客户端时返回一次的新密钥，请立即妥善保存 */
+            client_secret: string | null;
+            /**
+             * @description 机密客户端持有密钥；公共客户端(SPA/移动端)不持有密钥，仅能走 PKCE 授权码流程
+             * @enum {string}
+             */
+            client_type: "confidential" | "public";
+            /** @description 应用主页 */
+            client_uri: string | null;
+            /** Format: date-time */
+            created_at: string;
+            enabled: boolean;
+            /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
+            grant_types: string[];
+            /** @description 回调地址 */
+            redirect_uris: string[];
+            /** @description 该应用可请求的 scope */
+            scope: string | null;
+            /** @description 令牌端点认证方式，公共客户端为 none */
+            token_endpoint_auth_method: string;
         };
         DirectEditDto: {
             resource_id: number;
@@ -12808,6 +13159,13 @@ export interface components {
             month: number;
             year: number;
         };
+        GalgamePopularProducerDto: {
+            galgame_count: number;
+            id: number;
+            logo: components["schemas"]["MediaAssetDto"] | null;
+            name: string;
+            popularity: number;
+        };
         GalgamePriceDto: {
             amount: number | null;
             currency: string | null;
@@ -12954,6 +13312,20 @@ export interface components {
             going: number;
             on_hold: number;
             plan: number;
+        };
+        GalgameRecommendBatchDto: {
+            modules: components["schemas"]["GalgameRecommendModuleDto"][];
+            next_cursor: number | null;
+        };
+        GalgameRecommendModuleDto: {
+            intro: string | null;
+            items: components["schemas"]["GalgameSummaryDto"][];
+            key: string;
+            /** @enum {string} */
+            kind: "GRID" | "RAIL" | "FEATURE";
+            /** @enum {string} */
+            reason: "DISCOVERY" | "PLAYING" | "COMPLETED" | "SCENARIO" | "VISUAL" | "MUSIC" | "SPOTLIGHT" | "TAG";
+            tag: components["schemas"]["TagPreviewDto"] | null;
         };
         GalgameRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
@@ -15245,7 +15617,17 @@ export interface components {
         ReadAllResDto: {
             read_count: number;
         };
+        ReaderFontDto: {
+            bytes: number;
+            /** Format: date-time */
+            expires_at: string;
+            id: string;
+            name: string;
+            sha256: string;
+            url: string;
+        };
         ReaderSessionDto: {
+            epub_sha: string | null;
             /** Format: date-time */
             expires_at: string;
             url: string;
@@ -16127,16 +16509,31 @@ export interface components {
             type?: "AVATAR_FRAME" | "BADGE";
         };
         UpdateDeveloperAppDto: {
+            /**
+             * @description 切换后会按新类型重新校验已配置的回调地址
+             * @enum {string}
+             */
+            application_type?: "web" | "native";
             /** @description 应用名称 */
             client_name?: string;
+            /**
+             * @description 切到 public 会清除密钥；切回 confidential 会签发一次性新密钥
+             * @enum {string}
+             */
+            client_type?: "confidential" | "public";
             /** @description 应用主页，https 地址 */
             client_uri?: string | null;
             /** @description 停用后该应用无法再获取 token */
             enabled?: boolean;
-            /** @description 回调地址，最多 5 条 */
+            /** @description 回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type */
             redirect_uris?: string[];
             /** @description 应用可请求的 scope 集合 */
-            scopes?: ("catalog:read" | "catalog:full")[];
+            scopes?: ("catalog:read" | "catalog:full" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
+            /**
+             * @description 机密客户端的令牌端点认证方式，对 public 客户端无效
+             * @enum {string}
+             */
+            token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
         UpdateFavoriteCollectionDto: {
             description?: string;
@@ -26797,6 +27194,31 @@ export interface operations {
             };
         };
     };
+    GalgameController_getPopularProducers: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["GalgamePopularProducerDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     GalgameController_getRandom: {
         parameters: {
             query?: never;
@@ -26831,6 +27253,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameRateCloudDto"];
+                };
+            };
+        };
+    };
+    GalgameController_getRecommendations: {
+        parameters: {
+            query?: {
+                cursor?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameRecommendBatchDto"];
                 };
             };
         };
@@ -29996,6 +30439,518 @@ export interface operations {
             };
         };
     };
+    OpenUserController_getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicUserDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserCollectionController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFavoriteCollectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteCollectionDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteCollectionDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserCollectionController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateFavoriteCollectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteCollectionDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_addGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFavoriteItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteStateDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_removeGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserCollectionController_items: {
+        parameters: {
+            query: {
+                type?: "galgame" | "light_novel" | "manga" | "article" | "post";
+                keyword?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteCollectionItemsDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_addLightNovel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFavoriteItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteStateDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_removeLightNovel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserCollectionController_addManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFavoriteItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FavoriteStateDto"];
+                };
+            };
+        };
+    };
+    OpenUserCollectionController_removeManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                work_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserRateController_list: {
+        parameters: {
+            query: {
+                status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
+                work_type?: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
+                /** @description Only rates that carry a score. */
+                scored?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["RateWorkDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    OpenUserRateController_getGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_upsertGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertGalgameRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_withdrawGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserRateController_getLightNovel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_upsertLightNovel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertLightNovelRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_withdrawLightNovel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpenUserRateController_getManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_upsertManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertMangaRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRateDetailDto"];
+                };
+            };
+        };
+    };
+    OpenUserRateController_withdrawManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PersonController_list: {
         parameters: {
             query: {
@@ -31082,6 +32037,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReadingBookmarkDto"];
+                };
+            };
+        };
+    };
+    ReaderController_listFonts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReaderFontDto"][];
                 };
             };
         };
@@ -32826,7 +33800,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeveloperAppSecretDto"];
+                    "application/json": components["schemas"]["DeveloperAppCreatedDto"];
                 };
             };
         };
@@ -32891,7 +33865,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeveloperAppDto"];
+                    "application/json": components["schemas"]["DeveloperAppUpdatedDto"];
                 };
             };
         };

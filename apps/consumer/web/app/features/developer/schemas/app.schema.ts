@@ -8,6 +8,7 @@ export const developerAppSchema = v.object({
     v.nonEmpty('请输入应用名称'),
     v.maxLength(64, '名称不能超过 64 字符'),
   ),
+  form: v.picklist(['server', 'spa', 'native'], '请选择应用形态'),
 })
 export type DeveloperAppValues = v.InferOutput<typeof developerAppSchema>
 export const developerAppResolver = valibotResolver(developerAppSchema)
@@ -36,10 +37,8 @@ export const developerAppRedirectSchema = v.object({
     v.string('请输入回调地址'),
     v.trim(),
     v.nonEmpty('请输入回调地址'),
-    v.check(
-      value => /^https:\/\/[^#\s]+$|^http:\/\/localhost(:\d+)?(\/[^#\s]*)?$/i.test(value),
-      '必须是合法的 https:// 地址且不含 #fragment（本地调试可用 http://localhost）',
-    ),
+    v.check(value => !value.includes('#'), '回调地址不能包含 #fragment'),
+    v.check(value => /^[a-z][a-z0-9+.-]*:/i.test(value), '回调地址必须包含协议'),
   ),
 })
 export type DeveloperAppRedirectValues = v.InferOutput<typeof developerAppRedirectSchema>

@@ -22,7 +22,7 @@
         :alt="title"
         class="size-full"
         image-class="size-full object-cover object-top"
-        :processing="{ width: 400, height: 600, fit: 'cover', quality: 82 }"
+        :processing="{ quality: 82 }"
         :lazy="true"
       />
       <div v-else class="size-full" />

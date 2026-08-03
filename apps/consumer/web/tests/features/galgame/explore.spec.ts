@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { browseRoute, encodeTagGroup, readBrowseQuery } from '../../../app/features/galgame/explore'
+import {
+  browseRoute,
+  encodeTagGroup,
+  GALGAME_SORT_OPTIONS,
+  readBrowseQuery,
+} from '../../../app/features/galgame/explore'
 
 describe('galgame browse query', () => {
   it('reads tag filter groups from repeated query values', () => {
@@ -32,5 +37,18 @@ describe('galgame browse query', () => {
 
   it('keeps tag group encoding stable', () => {
     expect(encodeTagGroup({ op: 'exclude', match: 'and', tag_ids: [5, 6] })).toBe('exclude.and.5.6')
+  })
+
+  it('keeps popularity sorting selectable on the browse page', () => {
+    expect(readBrowseQuery({ sort: 'views:desc' })).toMatchObject({
+      sort_field: 'views',
+      sort_order: 'desc',
+    })
+    expect(GALGAME_SORT_OPTIONS).toContainEqual({
+      label: '最热门',
+      sort_field: 'views',
+      sort_order: 'desc',
+      value: 'views:desc',
+    })
   })
 })

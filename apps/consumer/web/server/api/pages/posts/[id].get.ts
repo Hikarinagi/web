@@ -1,7 +1,7 @@
 import { getQuery, getRouterParam, type H3Event } from 'h3'
 import { COMMENT_PAGE_SIZE, commentFocusId } from '~/features/comment/comment'
 import { fetchBackendData } from '../../../utils/backend-api'
-import { loadFeedSidebar } from '../../../utils/feed-sidebar'
+import { loadFeedSidebar } from '../../../features/feed/sidebar'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
 async function loadAuthorStats(event: H3Event, authorId: number) {

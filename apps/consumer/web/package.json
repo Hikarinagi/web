@@ -80,6 +80,7 @@
     "primelocale": "^2.3.2",
     "primevue": "^4.5.5",
     "reka-ui": "^2.9.7",
+    "shiki": "4.0.2",
     "socket.io-client": "^4.8.3",
     "sortablejs": "^1.15.7",
     "tailwind-merge": "^3.6.0",

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import type { GalgamesBrowsePageData } from '~~/server/api/pages/galgames/browse.get'
-  import { producerText, titleOf } from '~/features/galgame/explore'
+  import { producerText, titleOf, type GalgameSummary } from '~/features/galgame/explore'
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'GalgameBrowseCard' })
-  const props = defineProps<{ item: GalgamesBrowsePageData['list']['items'][number] }>()
+  const props = defineProps<{ item: GalgameSummary }>()
 
   const title = computed(() => titleOf(props.item))
   const cover = computed(() => topVotedMedia(props.item.covers))
@@ -20,7 +19,7 @@
         :alt="title"
         class="size-full"
         image-class="size-full object-cover object-top"
-        :processing="{ width: 600, height: 480, fit: 'cover', quality: 82 }"
+        :processing="{ quality: 82 }"
         :lazy="true"
       />
     </div>

@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { fetchBackendData } from './backend-api'
+import { fetchBackendData } from '../../utils/backend-api'
 
 export async function loadFeedSidebar(event: H3Event) {
   const [me, hot, feedCarousel] = await Promise.all([

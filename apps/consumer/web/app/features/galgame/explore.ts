@@ -55,6 +55,7 @@ export const GALGAME_SORT_OPTIONS: {
     sort_order: 'asc',
     value: 'release_date:asc',
   },
+  { label: '最热门', sort_field: 'views', sort_order: 'desc', value: 'views:desc' },
   { label: '标题', sort_field: 'title', sort_order: 'asc', value: 'title:asc' },
   { label: '最近更新', sort_field: 'revised_at', sort_order: 'desc', value: 'revised_at:desc' },
 ]

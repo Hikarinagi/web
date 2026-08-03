@@ -21,7 +21,11 @@
     try {
       await hikariRequest<'/api/v3/user/me/developer/apps/{client_id}', 'patch'>(
         '/api/v3/user/me/developer/apps/{client_id}',
-        { method: 'patch', path: { client_id: props.app.client_id }, body: { redirect_uris: uris } },
+        {
+          method: 'patch',
+          path: { client_id: props.app.client_id },
+          body: { redirect_uris: uris },
+        },
       )
       emit('changed')
     } finally {
@@ -52,6 +56,14 @@
 <template>
   <section class="flex flex-col gap-4 py-6 first:pt-0 last:pb-0">
     <h3 class="text-sm font-semibold text-color">回调地址</h3>
+    <p class="text-xs leading-relaxed text-muted-color">
+      {{
+        app.application_type === 'native'
+          ? '原生应用可用私有 scheme（com.example.app:/callback）、环回地址（http://127.0.0.1:端口、http://[::1]:端口、http://localhost:端口）或非环回的 https:// 地址。'
+          : 'Web 应用需使用 https:// 地址；本地调试可用 http://localhost、http://127.0.0.1、http://[::1]。'
+      }}
+      地址不能包含 #fragment。
+    </p>
     <div class="flex flex-col gap-3">
       <div
         v-if="app.redirect_uris.length"

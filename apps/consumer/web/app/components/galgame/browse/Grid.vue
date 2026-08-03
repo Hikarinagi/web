@@ -15,16 +15,9 @@
   >
     <GalgameBrowseCard v-for="item in list.items" :key="item.id" :item="item" />
   </LoadingOverlay>
-  <div
+  <CreatorEmpty
     v-else
-    class="flex min-h-60 flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-surface-200 px-6 py-12 text-center dark:border-surface-800"
-  >
-    <GamepadDirectional class="size-7 text-surface-400 dark:text-surface-500" />
-    <div class="flex flex-col gap-1">
-      <p class="text-sm font-semibold text-surface-700 dark:text-surface-200">
-        没有找到符合条件的作品
-      </p>
-      <p class="text-xs text-surface-500 dark:text-surface-400">换一个关键词再试试</p>
-    </div>
-  </div>
+    :icon="GamepadDirectional"
+    text="没有找到符合条件的作品，换一个关键词再试试"
+  />
 </template>

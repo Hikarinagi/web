@@ -1,6 +1,71 @@
 {
   "components": {
     "schemas": {
+      "ArticleSummaryDto": {
+        "properties": {
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "creator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "like_count": {
+            "type": "number"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/SectionRelationDto"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          },
+          "topics": {
+            "items": {
+              "$ref": "#/components/schemas/TopicRelationDto"
+            },
+            "type": "array"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "view_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "cover",
+          "view_count",
+          "like_count",
+          "creator",
+          "sections",
+          "topics",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
       "CharacterRole": {
         "enum": [
           "MAIN",
@@ -9,110 +74,216 @@
         ],
         "type": "string"
       },
-      "CreateDeveloperAppDto": {
+      "CreateFavoriteCollectionDto": {
         "properties": {
-          "client_name": {
-            "description": "应用名称",
-            "maxLength": 64,
-            "minLength": 1,
+          "description": {
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 255,
             "type": "string"
           }
         },
         "required": [
-          "client_name"
+          "name"
         ],
         "type": "object"
       },
-      "DeveloperAppDto": {
+      "EquippedBadgeDto": {
         "properties": {
-          "client_id": {
+          "decoration": {
+            "$ref": "#/components/schemas/EquippedFrameDto"
+          }
+        },
+        "required": [
+          "decoration"
+        ],
+        "type": "object"
+      },
+      "EquippedFrameDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "$ref": "#/components/schemas/MediaAssetDto"
+          },
+          "key": {
             "type": "string"
           },
-          "client_name": {
+          "name": {
             "type": "string"
           },
-          "client_uri": {
-            "description": "应用主页",
+          "scale": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "name",
+          "scale",
+          "image"
+        ],
+        "type": "object"
+      },
+      "FavoriteCollectionDto": {
+        "properties": {
+          "description": {
             "nullable": true,
             "type": "string"
           },
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
+          "id": {
+            "type": "number"
           },
-          "enabled": {
+          "is_default": {
             "type": "boolean"
           },
-          "redirect_uris": {
-            "description": "回调地址",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+          "is_private": {
+            "type": "boolean"
           },
-          "scope": {
-            "description": "该应用可请求的 scope",
-            "nullable": true,
+          "name": {
+            "type": "string"
+          },
+          "owner_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "owner_id",
+          "name",
+          "description",
+          "is_private",
+          "is_default"
+        ],
+        "type": "object"
+      },
+      "FavoriteCollectionItemCountsDto": {
+        "properties": {
+          "article": {
+            "type": "number"
+          },
+          "galgame": {
+            "type": "number"
+          },
+          "light_novel": {
+            "type": "number"
+          },
+          "manga": {
+            "type": "number"
+          },
+          "post": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "galgame",
+          "light_novel",
+          "manga",
+          "article",
+          "post"
+        ],
+        "type": "object"
+      },
+      "FavoriteCollectionItemDto": {
+        "properties": {
+          "article": {
+            "$ref": "#/components/schemas/ArticleSummaryDto"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "galgame": {
+            "$ref": "#/components/schemas/GalgameSummaryDto"
+          },
+          "id": {
+            "type": "number"
+          },
+          "light_novel": {
+            "$ref": "#/components/schemas/LightNovelSummaryDto"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/MangaSummaryDto"
+          },
+          "note": {
+            "type": "string"
+          },
+          "post": {
+            "$ref": "#/components/schemas/PostSummaryDto"
+          },
+          "type": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga",
+              "article",
+              "post"
+            ],
             "type": "string"
           }
         },
         "required": [
-          "client_id",
-          "client_name",
-          "scope",
-          "client_uri",
-          "redirect_uris",
-          "enabled",
+          "type",
+          "id",
+          "note",
           "created_at"
         ],
         "type": "object"
       },
-      "DeveloperAppSecretDto": {
+      "FavoriteCollectionItemsDto": {
         "properties": {
-          "client_id": {
-            "type": "string"
-          },
-          "client_name": {
-            "type": "string"
-          },
-          "client_secret": {
-            "description": "仅在创建/轮换时返回一次，请立即妥善保存",
-            "type": "string"
-          },
-          "client_uri": {
-            "description": "应用主页",
-            "nullable": true,
-            "type": "string"
-          },
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "redirect_uris": {
-            "description": "回调地址",
+          "items": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/FavoriteCollectionItemDto"
             },
             "type": "array"
           },
-          "scope": {
-            "description": "该应用可请求的 scope",
-            "nullable": true,
-            "type": "string"
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          },
+          "type_counts": {
+            "$ref": "#/components/schemas/FavoriteCollectionItemCountsDto"
           }
         },
         "required": [
-          "client_id",
-          "client_name",
-          "scope",
-          "client_uri",
-          "redirect_uris",
-          "enabled",
-          "created_at",
-          "client_secret"
+          "items",
+          "meta",
+          "type_counts"
+        ],
+        "type": "object"
+      },
+      "FavoriteStateDto": {
+        "properties": {
+          "favorited": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "favorited"
+        ],
+        "type": "object"
+      },
+      "GalgameCoverRelationDto": {
+        "properties": {
+          "media": {
+            "$ref": "#/components/schemas/RatedMediaAssetDto"
+          },
+          "votes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "votes",
+          "media"
         ],
         "type": "object"
       },
@@ -123,6 +294,92 @@
           "CANCELLED"
         ],
         "type": "string"
+      },
+      "GalgameRateDetailDto": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "dislike_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "like_count": {
+            "type": "number"
+          },
+          "rate": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "type": "string"
+          },
+          "rate_direction": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_music": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_scenario": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_system": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_visual": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "time_to_finish_minutes": {
+            "type": "number"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "rate",
+          "rate_scenario",
+          "rate_direction",
+          "rate_music",
+          "rate_visual",
+          "rate_character",
+          "rate_system",
+          "rate_content",
+          "status",
+          "time_to_finish_minutes",
+          "is_spoiler",
+          "like_count",
+          "dislike_count",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
       },
       "GalgameStaffRole": {
         "enum": [
@@ -162,6 +419,310 @@
         ],
         "type": "string"
       },
+      "GalgameSummaryDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "origin_title": {
+            "type": "string"
+          },
+          "producers": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "producers"
+        ],
+        "type": "object"
+      },
+      "GalgameSummaryProducerDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "GalgameSummaryProducerRelationDto": {
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "producer": {
+            "$ref": "#/components/schemas/GalgameSummaryProducerDto"
+          },
+          "role": {
+            "enum": [
+              "DEVELOPER",
+              "PUBLISHER",
+              "LOCALIZER"
+            ],
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "note",
+          "producer"
+        ],
+        "type": "object"
+      },
+      "LightNovelCoverRelationDto": {
+        "properties": {
+          "media": {
+            "$ref": "#/components/schemas/RatedMediaAssetDto"
+          },
+          "votes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "votes",
+          "media"
+        ],
+        "type": "object"
+      },
+      "LightNovelRateDetailDto": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "dislike_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "like_count": {
+            "type": "number"
+          },
+          "rate": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "type": "string"
+          },
+          "rate_illustration": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_pacing": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_plot": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_worldview": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_writing": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "time_to_finish_minutes": {
+            "type": "number"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "rate",
+          "rate_plot",
+          "rate_character",
+          "rate_writing",
+          "rate_worldview",
+          "rate_pacing",
+          "rate_illustration",
+          "rate_content",
+          "status",
+          "time_to_finish_minutes",
+          "is_spoiler",
+          "like_count",
+          "dislike_count",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "LightNovelSummaryDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryPersonDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "bunko": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "enum": [
+              "SERIALIZING",
+              "FINISHED",
+              "PAUSED",
+              "ABANDONED"
+            ],
+            "type": "string"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelSummaryProducerRelationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "novel_status",
+          "publication_date",
+          "author",
+          "bunko",
+          "publishers"
+        ],
+        "type": "object"
+      },
+      "LightNovelSummaryPersonDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "LightNovelSummaryProducerDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "LightNovelSummaryProducerRelationDto": {
+        "properties": {
+          "note": {
+            "type": "string"
+          },
+          "producer": {
+            "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+          }
+        },
+        "required": [
+          "note",
+          "producer"
+        ],
+        "type": "object"
+      },
       "MangaAudience": {
         "enum": [
           "SHONEN",
@@ -171,6 +732,21 @@
         ],
         "type": "string"
       },
+      "MangaCoverRelationDto": {
+        "properties": {
+          "media": {
+            "$ref": "#/components/schemas/RatedMediaAssetDto"
+          },
+          "votes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "votes",
+          "media"
+        ],
+        "type": "object"
+      },
       "MangaProducerRole": {
         "enum": [
           "PUBLISHER",
@@ -178,6 +754,58 @@
           "LABEL"
         ],
         "type": "string"
+      },
+      "MangaRateDetailDto": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "dislike_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "like_count": {
+            "type": "number"
+          },
+          "rate": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "rate",
+          "rate_content",
+          "status",
+          "is_spoiler",
+          "like_count",
+          "dislike_count",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
       },
       "MangaReadingMode": {
         "enum": [
@@ -206,6 +834,82 @@
           "CHARACTER_DESIGN"
         ],
         "type": "string"
+      },
+      "MangaSummaryDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/MangaCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "latest_chapter_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "serial_status",
+          "publication_date",
+          "latest_chapter_at"
+        ],
+        "type": "object"
+      },
+      "MediaAssetDto": {
+        "properties": {
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "src": {
+            "type": "string"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "src",
+          "width",
+          "height"
+        ],
+        "type": "object"
       },
       "NovelStatus": {
         "enum": [
@@ -1380,45 +2084,626 @@
         ],
         "type": "object"
       },
-      "UpdateDeveloperAppDto": {
+      "PostCoverResDto": {
         "properties": {
-          "client_name": {
-            "description": "应用名称",
-            "maxLength": 64,
-            "minLength": 1,
-            "type": "string"
+          "media": {
+            "$ref": "#/components/schemas/MediaAssetDto"
           },
-          "client_uri": {
-            "description": "应用主页，https 地址",
-            "nullable": true,
-            "pattern": "^https:\\/\\/[^#\\s]+$",
-            "type": "string"
-          },
-          "enabled": {
-            "description": "停用后该应用无法再获取 token",
-            "type": "boolean"
-          },
-          "redirect_uris": {
-            "description": "回调地址，最多 5 条",
-            "items": {
-              "pattern": "^https:\\/\\/[^#\\s]+$|^http:\\/\\/localhost(:\\d+)?(\\/[^#\\s]*)?$",
-              "type": "string"
-            },
-            "maxItems": 5,
-            "type": "array"
-          },
-          "scopes": {
-            "description": "应用可请求的 scope 集合",
-            "items": {
-              "enum": [
-                "catalog:read",
-                "catalog:full"
-              ],
-              "type": "string"
-            },
-            "type": "array"
+          "order": {
+            "type": "number"
           }
         },
+        "required": [
+          "media",
+          "order"
+        ],
+        "type": "object"
+      },
+      "PostSummaryDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/PostCoverResDto"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "creator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "like_count": {
+            "type": "number"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/SectionRelationDto"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          },
+          "topics": {
+            "items": {
+              "$ref": "#/components/schemas/TopicRelationDto"
+            },
+            "type": "array"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "view_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "covers",
+          "view_count",
+          "like_count",
+          "creator",
+          "sections",
+          "topics",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "PublicUserDto": {
+        "properties": {
+          "avatar": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "bio": {
+            "nullable": true,
+            "type": "string"
+          },
+          "equipped_badges": {
+            "items": {
+              "$ref": "#/components/schemas/EquippedBadgeDto"
+            },
+            "type": "array"
+          },
+          "equipped_frame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "follower_count": {
+            "type": "number"
+          },
+          "following_count": {
+            "type": "number"
+          },
+          "head_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_following": {
+            "type": "boolean"
+          },
+          "is_mutual": {
+            "type": "boolean"
+          },
+          "mobile_head_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nickname": {
+            "nullable": true,
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "USER",
+              "ADMIN",
+              "SUPER_ADMIN"
+            ],
+            "type": "string"
+          },
+          "signature": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "BANNED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "nickname",
+          "avatar",
+          "role",
+          "equipped_frame",
+          "equipped_badges",
+          "bio",
+          "signature",
+          "head_cover",
+          "mobile_head_cover",
+          "status",
+          "is_following",
+          "is_mutual",
+          "following_count",
+          "follower_count"
+        ],
+        "type": "object"
+      },
+      "RateDimensionDto": {
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "key",
+          "score"
+        ],
+        "type": "object"
+      },
+      "RateWorkDto": {
+        "properties": {
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "dimensions": {
+            "items": {
+              "$ref": "#/components/schemas/RateDimensionDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "last_activity_at": {
+            "type": "string"
+          },
+          "rate": {
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "nullable": true,
+            "type": "string"
+          },
+          "rate_id": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "work_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "MANGA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "work_type",
+          "id",
+          "rate_id",
+          "title",
+          "cover",
+          "status",
+          "rate",
+          "rate_content",
+          "is_spoiler",
+          "dimensions",
+          "last_activity_at"
+        ],
+        "type": "object"
+      },
+      "RatedMediaAssetDto": {
+        "properties": {
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "sexual": {
+            "type": "number"
+          },
+          "src": {
+            "type": "string"
+          },
+          "violence": {
+            "type": "number"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "src",
+          "width",
+          "height",
+          "nsfw",
+          "sexual",
+          "violence"
+        ],
+        "type": "object"
+      },
+      "SectionRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ],
+        "type": "object"
+      },
+      "SectionRelationDto": {
+        "properties": {
+          "section": {
+            "$ref": "#/components/schemas/SectionRefDto"
+          }
+        },
+        "required": [
+          "section"
+        ],
+        "type": "object"
+      },
+      "TopicRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "TopicRelationDto": {
+        "properties": {
+          "topic": {
+            "$ref": "#/components/schemas/TopicRefDto"
+          }
+        },
+        "required": [
+          "topic"
+        ],
+        "type": "object"
+      },
+      "UpdateFavoriteCollectionDto": {
+        "properties": {
+          "description": {
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpsertFavoriteItemDto": {
+        "properties": {
+          "note": {
+            "maxLength": 2000,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpsertGalgameRateDto": {
+        "properties": {
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "rate": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "rate_direction": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_music": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_scenario": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_system": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_visual": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "time_to_finish_minutes": {
+            "maximum": 525600,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "UpsertLightNovelRateDto": {
+        "properties": {
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "rate": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "rate_illustration": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_pacing": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_plot": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_worldview": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_writing": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "time_to_finish_minutes": {
+            "maximum": 525600,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "UpsertMangaRateDto": {
+        "properties": {
+          "is_spoiler": {
+            "type": "boolean"
+          },
+          "rate": {
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UserRefDto": {
+        "properties": {
+          "avatar": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "equipped_badges": {
+            "items": {
+              "$ref": "#/components/schemas/EquippedBadgeDto"
+            },
+            "type": "array"
+          },
+          "equipped_frame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nickname": {
+            "nullable": true,
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "USER",
+              "ADMIN",
+              "SUPER_ADMIN"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "nickname",
+          "avatar",
+          "role",
+          "equipped_frame",
+          "equipped_badges"
+        ],
         "type": "object"
       },
       "VolumeType": {
@@ -1478,6 +2763,9 @@
         "summary": "角色详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1509,6 +2797,9 @@
         "summary": "Galgame 详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1551,6 +2842,9 @@
         "summary": "Galgame 角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1593,6 +2887,9 @@
         "summary": "Galgame Staff",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1624,6 +2921,9 @@
         "summary": "轻小说详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1666,6 +2966,9 @@
         "summary": "轻小说角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1712,6 +3015,9 @@
         "summary": "轻小说人物",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1758,6 +3064,9 @@
         "summary": "轻小说厂商",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1805,6 +3114,9 @@
         "summary": "轻小说分卷",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1836,6 +3148,9 @@
         "summary": "漫画详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1878,6 +3193,9 @@
         "summary": "漫画角色",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1912,6 +3230,9 @@
         "summary": "漫画人物",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1946,6 +3267,9 @@
         "summary": "漫画厂商",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -1980,6 +3304,9 @@
         "summary": "漫画单行本",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -2011,6 +3338,9 @@
         "summary": "人物详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -2042,6 +3372,9 @@
         "summary": "厂商详情",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
@@ -2130,42 +3463,62 @@
         "summary": "条目搜索",
         "tags": [
           "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
         ]
       }
     },
-    "/api/v3/user/me/developer/apps": {
+    "/api/v3/open/user/me": {
       "get": {
-        "operationId": "DeveloperAppController_list",
+        "operationId": "OpenUserController_getMe",
         "parameters": [],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DeveloperAppDto"
-                  },
-                  "type": "array"
+                  "$ref": "#/components/schemas/PublicUserDto"
                 }
               }
             },
             "description": ""
           }
         },
-        "summary": "我的应用列表",
+        "summary": "公开资料",
         "tags": [
-          "developer"
+          "open-user-profile"
+        ],
+        "x-hikari-scopes": [
+          "user:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections": {
+      "get": {
+        "operationId": "OpenUserCollectionController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "收藏夹列表",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
         ]
       },
       "post": {
-        "description": "client_secret 仅在本次响应中返回一次，请立即妥善保存",
-        "operationId": "DeveloperAppController_create",
+        "operationId": "OpenUserCollectionController_create",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateDeveloperAppDto"
+                "$ref": "#/components/schemas/CreateFavoriteCollectionDto"
               }
             }
           },
@@ -2176,51 +3529,57 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppSecretDto"
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
                 }
               }
             },
             "description": ""
           }
         },
-        "summary": "创建应用",
+        "summary": "创建收藏夹",
         "tags": [
-          "developer"
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
         ]
       }
     },
-    "/api/v3/user/me/developer/apps/{client_id}": {
+    "/api/v3/open/user/me/collections/{id}": {
       "delete": {
-        "operationId": "DeveloperAppController_remove",
+        "operationId": "OpenUserCollectionController_remove",
         "parameters": [
           {
             "in": "path",
-            "name": "client_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": ""
           }
         },
-        "summary": "删除应用",
+        "summary": "删除收藏夹",
         "tags": [
-          "developer"
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
         ]
       },
       "get": {
-        "operationId": "DeveloperAppController_get",
+        "operationId": "OpenUserCollectionController_get",
         "parameters": [
           {
             "in": "path",
-            "name": "client_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
@@ -2229,27 +3588,30 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppDto"
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
                 }
               }
             },
             "description": ""
           }
         },
-        "summary": "应用详情",
+        "summary": "收藏夹详情",
         "tags": [
-          "developer"
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
         ]
       },
       "patch": {
-        "operationId": "DeveloperAppController_update",
+        "operationId": "OpenUserCollectionController_update",
         "parameters": [
           {
             "in": "path",
-            "name": "client_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "number"
             }
           }
         ],
@@ -2257,7 +3619,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateDeveloperAppDto"
+                "$ref": "#/components/schemas/UpdateFavoriteCollectionDto"
               }
             }
           },
@@ -2268,30 +3630,162 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppDto"
+                  "$ref": "#/components/schemas/FavoriteCollectionDto"
                 }
               }
             },
             "description": ""
           }
         },
-        "summary": "更新应用",
+        "summary": "修改收藏夹",
         "tags": [
-          "developer"
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
         ]
       }
     },
-    "/api/v3/user/me/developer/apps/{client_id}/secret": {
-      "post": {
-        "description": "生成新的 client_secret 并立即使旧密钥失效，新密钥仅在本次响应中返回一次",
-        "operationId": "DeveloperAppController_rotateSecret",
+    "/api/v3/open/user/me/collections/{id}/galgames/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeGalgame",
         "parameters": [
           {
             "in": "path",
-            "name": "client_id",
+            "name": "id",
             "required": true,
             "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除 Galgame",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将 Galgame 收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/items": {
+      "get": {
+        "operationId": "OpenUserCollectionController_items",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light_novel",
+                "manga",
+                "article",
+                "post"
+              ],
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
             }
           }
         ],
@@ -2300,16 +3794,591 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DeveloperAppSecretDto"
+                  "$ref": "#/components/schemas/FavoriteCollectionItemsDto"
                 }
               }
             },
             "description": ""
           }
         },
-        "summary": "轮换应用密钥",
+        "summary": "收藏夹内的条目",
         "tags": [
-          "developer"
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/light-novels/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除轻小说",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将轻小说收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/collections/{id}/mangas/{work_id}": {
+      "delete": {
+        "operationId": "OpenUserCollectionController_removeManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "从收藏夹移除漫画",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserCollectionController_addManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "work_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertFavoriteItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "将漫画收入收藏夹",
+        "tags": [
+          "open-user-collection"
+        ],
+        "x-hikari-scopes": [
+          "collection:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates": {
+      "get": {
+        "operationId": "OpenUserRateController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "GOING",
+                "COMPLETED",
+                "ON_HOLD",
+                "DROPPED",
+                "PLAN"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "work_type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "GALGAME",
+                "LIGHT_NOVEL",
+                "MANGA"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only rates that carry a score.",
+            "in": "query",
+            "name": "scored",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/RateWorkDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "状态与评分记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/galgames/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回 Galgame 的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertGalgame",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertGalgameRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录 Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/light-novels/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回轻小说的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "轻小说的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertLightNovel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertLightNovelRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录轻小说的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/api/v3/open/user/me/rates/mangas/{id}": {
+      "delete": {
+        "operationId": "OpenUserRateController_withdrawManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "summary": "撤回漫画的记录",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      },
+      "get": {
+        "operationId": "OpenUserRateController_getManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "漫画的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:read"
+        ]
+      },
+      "put": {
+        "operationId": "OpenUserRateController_upsertManga",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertMangaRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRateDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "记录漫画的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
         ]
       }
     }
@@ -2317,12 +4386,16 @@
   "servers": [],
   "tags": [
     {
-      "description": "client_credentials 访问令牌鉴权的只读条目数据。",
+      "description": "应用级令牌即可读取的公开条目数据，无需用户在场。",
       "name": "open"
     },
     {
-      "description": "开发者自助应用管理：登录用户创建/管理自己的 OAuth 客户端。",
-      "name": "developer"
+      "description": "读取授权用户的公开资料，需 user:read。",
+      "name": "open-user-profile"
+    },
+    {
+      "description": "读写授权用户的观看游玩状态与评分，需 status:read 或 status:write。",
+      "name": "open-user-rate"
     }
   ]
 }

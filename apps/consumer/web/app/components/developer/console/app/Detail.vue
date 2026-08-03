@@ -4,7 +4,7 @@
 
   defineOptions({ name: 'DeveloperConsoleAppDetail' })
 
-  defineProps<{ app: DeveloperAppPageData['app'] }>()
+  defineProps<{ app: DeveloperAppPageData['app']; oauth: DeveloperAppPageData['oauth'] }>()
   const emit = defineEmits<{ changed: [] }>()
 
   const secret = ref<{ client_id: string; client_secret: string } | null>(null)
@@ -36,8 +36,9 @@
 
     <CardPanel title="应用设置">
       <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
-        <DeveloperConsoleAppCredentialsPanel :app @rotated="onRotated" />
+        <DeveloperConsoleAppCredentialsPanel :app :oauth @rotated="onRotated" />
         <DeveloperConsoleAppProfilePanel :app @changed="emit('changed')" />
+        <DeveloperConsoleAppClientTypePanel :app @changed="emit('changed')" @rotated="onRotated" />
         <DeveloperConsoleAppScopesPanel :app @changed="emit('changed')" />
         <DeveloperConsoleAppRedirectPanel :app @changed="emit('changed')" />
       </div>

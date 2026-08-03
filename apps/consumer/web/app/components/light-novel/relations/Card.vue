@@ -26,7 +26,7 @@
         :alt="title"
         class="size-full"
         image-class="object-cover object-top"
-        preset="medium"
+        :processing="{ quality: 82 }"
       >
         <template #empty><span /></template>
         <template #error><span /></template>

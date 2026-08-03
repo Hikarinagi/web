@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { FeedSidebarData } from '~~/server/utils/feed-sidebar'
+  import type { FeedSidebarData } from '~~/server/features/feed/sidebar'
 
   defineProps<{ data: FeedSidebarData }>()
 </script>

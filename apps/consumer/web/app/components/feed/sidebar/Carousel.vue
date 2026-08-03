@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import emblaCarouselVue from 'embla-carousel-vue'
-  import type { FeedSidebarData } from '~~/server/utils/feed-sidebar'
+  import type { FeedSidebarData } from '~~/server/features/feed/sidebar'
 
   const props = defineProps<{ carousel: NonNullable<FeedSidebarData['carousel']> }>()
 

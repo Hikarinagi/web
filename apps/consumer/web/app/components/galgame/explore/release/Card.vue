@@ -4,7 +4,13 @@
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'GalgameExploreReleaseCard' })
-  const props = defineProps<{ item: GalgamesPageData['release']['items'][number] }>()
+  const props = withDefaults(
+    defineProps<{
+      item: GalgamesPageData['release']['items'][number]
+      showRelease?: boolean
+    }>(),
+    { showRelease: true },
+  )
   const RELEASE_COVER_HEIGHT = 258
   const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'] as const
 
@@ -23,7 +29,9 @@
     fit: 'cover' as const,
     quality: 84,
   }))
-  const release = computed(() => formatReleaseBadge(props.item.release_date))
+  const release = computed(() =>
+    props.showRelease ? formatReleaseBadge(props.item.release_date) : '',
+  )
 
   function formatReleaseBadge(value: string | null | undefined) {
     if (!value) return ''
@@ -57,7 +65,6 @@
         v-if="release"
         class="absolute top-2 left-2 inline-flex h-6 items-center gap-1.5 rounded-md bg-surface-900/72 px-2 text-[11px] font-semibold text-white shadow-sm backdrop-blur"
       >
-        <span class="size-1.5 rounded-full bg-hikari-primary-400" aria-hidden="true" />
         {{ release }}
       </span>
     </div>

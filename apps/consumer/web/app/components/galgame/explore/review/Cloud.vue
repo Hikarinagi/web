@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { GalgamesPageData } from '~~/server/api/pages/galgames.get'
+  import type { ApiData } from '@hikarinagi/api-contract/v3'
 
   defineOptions({ name: 'GalgameExploreReviewCloud' })
-  defineProps<{ reviews: GalgamesPageData['reviews'] }>()
+  defineProps<{ reviews: ApiData<'/api/v3/galgames/rates/cloud', 'get'> }>()
 </script>
 
 <template>

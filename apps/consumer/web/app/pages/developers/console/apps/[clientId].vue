@@ -12,5 +12,5 @@
 </script>
 
 <template>
-  <DeveloperConsoleAppDetail v-if="data" :app="data.app" @changed="refresh" />
+  <DeveloperConsoleAppDetail v-if="data" :app="data.app" :oauth="data.oauth" @changed="refresh" />
 </template>
