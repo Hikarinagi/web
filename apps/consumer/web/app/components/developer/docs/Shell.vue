@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { List } from '@lucide/vue'
+  import { ListTree } from '@lucide/vue'
+  import { breakpointsTailwind } from '@vueuse/core'
   import { GUIDE_SECTIONS } from '~/features/developer/guide'
   import type { ReferenceGroup } from '~~/server/features/developer/reference'
   import { useActiveSection } from '~/features/developer/useActiveSection'
@@ -12,11 +13,26 @@
     'reference',
     ...props.groups.flatMap(group => group.operations.map(operation => operation.id)),
   ])
+
+  const breakpoints = useBreakpoints(breakpointsTailwind)
+  const belowLg = breakpoints.smaller('lg')
+
   const open = ref(false)
+  const { add } = useFloatingToolbar()
+  add({
+    id: 'developer-docs-nav',
+    label: '文档目录',
+    icon: ListTree,
+    order: 5,
+    visible: () => belowLg.value,
+    onClick: () => {
+      open.value = true
+    },
+  })
 </script>
 
 <template>
-  <div class="mx-auto box-content flex max-w-header items-start gap-10 px-6 py-10">
+  <div class="mx-auto box-content flex max-w-header items-start px-6 py-10 lg:gap-10">
     <nav
       class="sticky top-[calc(var(--app-header-height)+24px)] hidden w-64 shrink-0 lg:block"
       aria-label="开发者文档导航"
@@ -32,21 +48,24 @@
       <slot />
     </div>
 
-    <div class="lg:hidden">
-      <div class="fixed right-5 bottom-[calc(var(--app-bottombar-height)+16px)] z-20">
-        <Button rounded class="shadow-lg" aria-label="文档目录" @click="open = true">
-          <template #icon><List class="size-5" /></template>
-        </Button>
-      </div>
+    <Drawer
+      v-model:visible="open"
+      position="bottom"
+      :pt="{
+        root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
+        content: { class: 'p-2!' },
+      }"
+    >
+      <template #header>
+        <h2 class="text-base font-semibold text-color">文档目录</h2>
+      </template>
 
-      <Drawer v-model:visible="open" position="bottom" header="文档目录" class="h-[70vh]">
-        <DeveloperDocsNav
-          :groups
-          :active-id="activeId"
-          scroll-class="max-h-[calc(70vh-9rem)]"
-          @navigate="open = false"
-        />
-      </Drawer>
-    </div>
+      <DeveloperDocsNav
+        :groups
+        :active-id="activeId"
+        scroll-class="max-h-[calc(72vh-10.5rem)]"
+        @navigate="open = false"
+      />
+    </Drawer>
   </div>
 </template>
