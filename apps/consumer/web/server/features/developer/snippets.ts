@@ -54,7 +54,7 @@ const ERROR_ENVELOPE = [
   '  "success": false,',
   '  "error": {',
   '    "code": "AUTH_FORBIDDEN",',
-  '    "message": "令牌缺少所需 scope"',
+  '    "message": "访问令牌缺少此端点所需的 scope：status:write"',
   '  },',
   '  "request_id": "req-x",',
   '  "timestamp": "2026-08-02T00:00:00.000Z"',
