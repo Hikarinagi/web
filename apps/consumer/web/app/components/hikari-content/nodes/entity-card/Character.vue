@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { UserSquare } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
+  import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { useContentSummaries } from '../../composables/useContentSummaries'
   import { entityHref } from './links'
 
@@ -35,14 +35,8 @@
         preset="small"
         class="size-16 flex-none overflow-hidden rounded-md bg-(--editor-toolbar-item-hover)"
         image-class="size-full object-cover object-top"
-      >
-        <template #empty>
-          <HikariContentNodesEntityCardCoverFallback :icon="UserSquare" :size="28" />
-        </template>
-        <template #error>
-          <HikariContentNodesEntityCardCoverFallback :icon="UserSquare" :size="28" />
-        </template>
-      </HikariImage>
+        :fallback-src="ENTITY_FALLBACK_IMAGE"
+      />
       <div class="flex min-w-0 flex-1 flex-col gap-[3px]">
         <span class="truncate text-[15px] font-semibold text-(--editor-text-color)">
           {{ name }}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BackendEntitySummary } from '~/features/creator/editor'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
+  import { ENTITY_FALLBACK_IMAGE, ENTITY_KINDS } from '~/features/entity/entity'
 
   const props = defineProps<{
     item: BackendEntitySummary
@@ -10,6 +11,9 @@
 
   const imageClass = computed(() =>
     cn('size-full', props.target === 'producer' ? 'object-contain' : 'object-cover object-top'),
+  )
+  const cover = computed(
+    () => props.item.cover ?? (ENTITY_KINDS.includes(props.target) ? ENTITY_FALLBACK_IMAGE : ''),
   )
 </script>
 
@@ -24,7 +28,7 @@
     ]"
   >
     <HikariImage
-      :src="item.cover ?? ''"
+      :src="cover"
       alt=""
       preset="small"
       class="aspect-square w-full rounded bg-surface-100 dark:bg-surface-800"

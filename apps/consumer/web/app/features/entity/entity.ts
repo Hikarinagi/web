@@ -4,7 +4,11 @@ import type { HikariImageMediaSource } from '~/utils/media/image'
 export const INLINE_RELATION_CAP = 12
 export const RELATION_LIST_PAGE_SIZE = 24
 
+export const ENTITY_FALLBACK_IMAGE = '/images/default-entity.webp'
+
 export type EntityKind = 'person' | 'character' | 'producer'
+
+export const ENTITY_KINDS: readonly string[] = ['person', 'character', 'producer']
 
 export type PersonDetail = components['schemas']['PersonDetailDto']
 export type CharacterDetail = components['schemas']['CharacterDetailDto']

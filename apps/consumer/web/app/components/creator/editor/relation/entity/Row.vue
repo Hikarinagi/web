@@ -5,6 +5,7 @@
   import { relationRefValues } from '~/features/creator/editor/relation'
   import { enumLabel } from '~/features/creator/editor/presentation/enum-labels'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
+  import { ENTITY_FALLBACK_IMAGE, ENTITY_KINDS } from '~/features/entity/entity'
   import AttrPopover from '~/components/creator/editor/relation/AttrPopover.vue'
 
   const props = defineProps<{
@@ -23,6 +24,10 @@
 
   const imageClass = computed(() =>
     cn('size-full', props.target === 'producer' ? 'object-contain' : 'object-cover object-top'),
+  )
+  const cover = computed(
+    () =>
+      props.row.target.cover ?? (ENTITY_KINDS.includes(props.target) ? ENTITY_FALLBACK_IMAGE : ''),
   )
 
   const popoverRef = useTemplateRef<InstanceType<typeof AttrPopover>>('popoverRef')
@@ -62,7 +67,7 @@
       @click="togglePopover"
     >
       <HikariImage
-        :src="row.target.cover ?? ''"
+        :src="cover"
         alt=""
         preset="small"
         class="size-10 shrink-0 rounded bg-surface-100 dark:bg-surface-800"
@@ -123,7 +128,7 @@
       class="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-(--p-form-field-border-color) bg-(--p-form-field-background) p-2.5"
     >
       <HikariImage
-        :src="row.target.cover ?? ''"
+        :src="cover"
         alt=""
         preset="small"
         class="size-10 shrink-0 rounded bg-surface-100 dark:bg-surface-800"

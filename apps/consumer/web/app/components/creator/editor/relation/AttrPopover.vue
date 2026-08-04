@@ -6,6 +6,7 @@
   import { relationRefValues } from '~/features/creator/editor/relation'
   import { enumOptions } from '~/features/creator/editor/presentation/enum-labels'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
+  import { ENTITY_FALLBACK_IMAGE, ENTITY_KINDS } from '~/features/entity/entity'
 
   type RefAttribute = NonNullable<BackendEditorField['ref_attributes']>[number]
 
@@ -20,6 +21,10 @@
 
   const imageClass = computed(() =>
     cn('size-full', props.target === 'producer' ? 'object-contain' : 'object-cover object-top'),
+  )
+  const cover = computed(
+    () =>
+      row.value.target.cover ?? (ENTITY_KINDS.includes(props.target) ? ENTITY_FALLBACK_IMAGE : ''),
   )
 
   const popRef = useTemplateRef<InstanceType<typeof Popover>>('popRef')
@@ -114,7 +119,7 @@
     <div class="flex flex-col gap-4" style="min-width: 18rem">
       <div class="flex items-center gap-2">
         <HikariImage
-          :src="row.target.cover ?? ''"
+          :src="cover"
           alt=""
           preset="small"
           class="size-8 shrink-0 rounded bg-surface-100 dark:bg-surface-800"

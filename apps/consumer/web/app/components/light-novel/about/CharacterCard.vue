@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
+  import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { characterRoleLabel } from '~/labels/work'
 
   defineOptions({ name: 'LightNovelAboutCharacterCard' })
@@ -25,8 +26,8 @@
       image-class="object-cover object-top"
       :processing="{ gravity: 'face' }"
       preset="thumbnail"
+      :fallback-src="ENTITY_FALLBACK_IMAGE"
     >
-      <template #empty><span /></template>
       <template #error><span /></template>
     </HikariImage>
     <div class="flex min-w-0 flex-1 flex-col gap-1">

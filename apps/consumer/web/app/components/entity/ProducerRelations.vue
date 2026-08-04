@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Building2 } from '@lucide/vue'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { producerRelationLabel } from '~/features/entity/labels'
 
   defineOptions({ name: 'EntityProducerRelations' })
@@ -21,17 +21,13 @@
           class="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-100 dark:bg-surface-800"
         >
           <HikariImage
-            v-if="r.target_producer.logo"
-            :src="r.target_producer.logo.src"
+            :src="r.target_producer.logo?.src"
             :alt="r.target_producer.name"
             class="size-full"
             image-class="object-contain"
             :skeleton="false"
-          >
-            <template #empty><span /></template>
-            <template #error><span /></template>
-          </HikariImage>
-          <Building2 v-else :size="20" class="text-surface-400" aria-hidden="true" />
+            :fallback-src="ENTITY_FALLBACK_IMAGE"
+          />
         </div>
         <div class="min-w-0 flex-1">
           <p class="truncate text-sm font-medium text-surface-900 dark:text-surface-0">

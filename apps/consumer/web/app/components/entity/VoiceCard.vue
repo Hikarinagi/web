@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { UserRound } from '@lucide/vue'
-  import type { VoiceCardItem } from '~/features/entity/entity'
+  import { ENTITY_FALLBACK_IMAGE, type VoiceCardItem } from '~/features/entity/entity'
 
   defineOptions({ name: 'EntityVoiceCard' })
   defineProps<{ item: VoiceCardItem }>()
@@ -18,18 +17,8 @@
       image-class="object-cover object-top"
       :processing="{ gravity: 'face' }"
       preset="thumbnail"
-    >
-      <template #empty>
-        <span class="flex size-full items-center justify-center text-surface-400">
-          <UserRound :size="22" />
-        </span>
-      </template>
-      <template #error>
-        <span class="flex size-full items-center justify-center text-surface-400">
-          <UserRound :size="22" />
-        </span>
-      </template>
-    </HikariImage>
+      :fallback-src="ENTITY_FALLBACK_IMAGE"
+    />
     <div class="flex min-w-0 flex-1 flex-col gap-0.5">
       <p
         class="truncate text-sm font-bold text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-0 dark:group-hover:text-hikari-primary-400"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { entityHref, type SearchHit } from '~/features/search/search'
 
   defineProps<{ hit: SearchHit }>()
@@ -12,9 +13,8 @@
       class="size-20 rounded-full border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-800"
       image-class="object-cover object-top"
       preset="avatar"
-    >
-      <template #empty><span /></template>
-    </HikariImage>
+      :fallback-src="ENTITY_FALLBACK_IMAGE"
+    />
     <div class="flex w-full flex-col gap-0.5">
       <p
         class="truncate text-sm font-medium text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
