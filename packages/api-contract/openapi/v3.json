@@ -6454,6 +6454,11 @@
             },
             "type": "array"
           },
+          "logo": {
+            "description": "应用图标的对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
           "redirect_uris": {
             "description": "回调地址",
             "items": {
@@ -6476,6 +6481,7 @@
           "client_name",
           "scope",
           "client_uri",
+          "logo",
           "redirect_uris",
           "client_type",
           "application_type",
@@ -6530,6 +6536,11 @@
             },
             "type": "array"
           },
+          "logo": {
+            "description": "应用图标的对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
           "redirect_uris": {
             "description": "回调地址",
             "items": {
@@ -6552,6 +6563,7 @@
           "client_name",
           "scope",
           "client_uri",
+          "logo",
           "redirect_uris",
           "client_type",
           "application_type",
@@ -6609,6 +6621,11 @@
             },
             "type": "array"
           },
+          "logo": {
+            "description": "应用图标的对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
           "redirect_uris": {
             "description": "回调地址",
             "items": {
@@ -6631,6 +6648,7 @@
           "client_name",
           "scope",
           "client_uri",
+          "logo",
           "redirect_uris",
           "client_type",
           "application_type",
@@ -6690,6 +6708,11 @@
             },
             "type": "array"
           },
+          "logo": {
+            "description": "应用图标的对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
           "redirect_uris": {
             "description": "回调地址",
             "items": {
@@ -6712,6 +6735,7 @@
           "client_name",
           "scope",
           "client_uri",
+          "logo",
           "redirect_uris",
           "client_type",
           "application_type",
@@ -24639,6 +24663,12 @@
           "enabled": {
             "description": "停用后该应用无法再获取 token",
             "type": "boolean"
+          },
+          "logo_id": {
+            "description": "应用图标的媒体资源 id，传 null 清除；图标展示在授权页与用户的已授权应用列表",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
           },
           "redirect_uris": {
             "description": "回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type",

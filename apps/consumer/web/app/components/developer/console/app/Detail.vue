@@ -28,9 +28,12 @@
         <ArrowLeft class="size-4" />
         返回控制台
       </Button>
-      <div class="flex flex-wrap items-center gap-3">
-        <h2 class="text-xl font-bold text-color">{{ app.client_name }}</h2>
-        <Tag v-if="!app.enabled" severity="secondary" value="已停用" />
+      <div class="flex items-center gap-3">
+        <DeveloperConsoleAppIcon :src="app.logo" :name="app.client_name" />
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-xl font-bold text-color">{{ app.client_name }}</h2>
+          <Tag v-if="!app.enabled" severity="secondary" value="已停用" />
+        </div>
       </div>
     </div>
 

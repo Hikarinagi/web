@@ -77,7 +77,7 @@
       </Button>
     </div>
 
-    <SpaceSettingImageCropDialog
+    <MediaLibraryCropDialog
       v-model:visible="cropVisible"
       :media="picked"
       :title="cropTitle"

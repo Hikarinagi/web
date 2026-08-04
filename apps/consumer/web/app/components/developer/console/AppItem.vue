@@ -12,9 +12,10 @@
 <template>
   <NuxtLink
     :to="`/developers/console/apps/${app.client_id}`"
-    class="-mx-2 flex items-center justify-between gap-4 rounded-lg px-2 py-4 transition-colors hover:bg-emphasis"
+    class="-mx-2 flex items-center gap-4 rounded-lg px-2 py-4 transition-colors hover:bg-emphasis"
   >
-    <div class="flex min-w-0 flex-col gap-1">
+    <DeveloperConsoleAppIcon :src="app.logo" :name="app.client_name" />
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
       <div class="flex flex-wrap items-center gap-2">
         <span class="font-semibold text-color">{{ app.client_name }}</span>
         <Tag v-if="!app.enabled" severity="secondary" value="已停用" />

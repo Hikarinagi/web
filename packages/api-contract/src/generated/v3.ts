@@ -12242,6 +12242,8 @@ export interface components {
             enabled: boolean;
             /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
             grant_types: string[];
+            /** @description 应用图标的对象存储 key */
+            logo: string | null;
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
@@ -12269,6 +12271,8 @@ export interface components {
             enabled: boolean;
             /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
             grant_types: string[];
+            /** @description 应用图标的对象存储 key */
+            logo: string | null;
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
@@ -12298,6 +12302,8 @@ export interface components {
             enabled: boolean;
             /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
             grant_types: string[];
+            /** @description 应用图标的对象存储 key */
+            logo: string | null;
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
@@ -12327,6 +12333,8 @@ export interface components {
             enabled: boolean;
             /** @description 由 scope 与回调地址推导出的授权方式，配置回调地址即开通用户授权码流程 */
             grant_types: string[];
+            /** @description 应用图标的对象存储 key */
+            logo: string | null;
             /** @description 回调地址 */
             redirect_uris: string[];
             /** @description 该应用可请求的 scope */
@@ -16566,6 +16574,8 @@ export interface components {
             client_uri?: string | null;
             /** @description 停用后该应用无法再获取 token */
             enabled?: boolean;
+            /** @description 应用图标的媒体资源 id，传 null 清除；图标展示在授权页与用户的已授权应用列表 */
+            logo_id?: number | null;
             /** @description 回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type */
             redirect_uris?: string[];
             /** @description 应用可请求的 scope 集合 */

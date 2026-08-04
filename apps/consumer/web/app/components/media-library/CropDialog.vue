@@ -9,12 +9,12 @@
     type CropperResult,
   } from 'vue-advanced-cropper'
   import 'vue-advanced-cropper/dist/style.css'
-  import type { MediaValue } from '~/components/media-library/types'
-  import { uploadProfileImage } from '~/features/space/uploadProfileImage'
   import { TRANSITION } from '~/lib/motion'
   import { resolveImageUrl } from '~/utils/media/image'
+  import { uploadProfileImage } from './lib/upload'
+  import type { MediaValue } from './types'
 
-  defineOptions({ name: 'SpaceSettingImageCropDialog' })
+  defineOptions({ name: 'MediaLibraryCropDialog' })
 
   interface CropperInstance {
     getResult: () => CropperResult
@@ -91,7 +91,7 @@
         return
       }
 
-      const file = new File([blob], `profile-image-${Date.now()}.webp`, { type: blob.type })
+      const file = new File([blob], `cropped-${Date.now()}.webp`, { type: blob.type })
       const result = await uploadProfileImage(file)
       if (!result) return
 

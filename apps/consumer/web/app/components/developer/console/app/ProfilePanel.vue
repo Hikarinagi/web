@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
+  import type { MediaValue } from '~/components/media-library/types'
   import {
     developerAppProfileResolver,
     type DeveloperAppProfileValues,
@@ -14,6 +15,11 @@
   const formErrors = useFormErrors(developerAppProfileResolver)
   const form = useTemplateRef<FormInstance>('form')
   const submitting = ref(false)
+  const logo = ref<MediaValue | null | undefined>()
+
+  const logoSrc = computed(() =>
+    logo.value === undefined ? props.app.logo : (logo.value?.src ?? null),
+  )
 
   const initialValues = computed(() => ({
     client_name: props.app.client_name,
@@ -33,9 +39,11 @@
           body: {
             client_name: values.client_name,
             client_uri: values.client_uri?.length ? values.client_uri : null,
+            ...(logo.value === undefined ? {} : { logo_id: logo.value?.id ?? null }),
           },
         },
       )
+      logo.value = undefined
       push.success({ message: '应用信息已更新' })
       emit('changed')
     } catch (error) {
@@ -57,6 +65,12 @@
       @input="formErrors.clear"
       @submit="onSubmit"
     >
+      <DeveloperConsoleAppIconField
+        :src="logoSrc"
+        :name="app.client_name"
+        @picked="media => (logo = media)"
+      />
+
       <FormItem v-slot="{ id }" name="client_name" label="应用名称" required>
         <InputText :id="id" autocomplete="off" fluid />
       </FormItem>
