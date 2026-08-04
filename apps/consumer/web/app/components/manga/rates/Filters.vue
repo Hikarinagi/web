@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import { ArrowUpDown } from '@lucide/vue'
-  import {
-    MANGA_STATUS_LABEL,
-    MANGA_STATUS_ORDER,
-    type MangaRateStatus,
-  } from '~/features/manga/rate'
+  import { MANGA_STATUS_LABEL, type MangaRateStatus } from '~/features/manga/rate'
+  import { REVIEW_STATUS_ORDER } from '~/features/rate/status'
 
   defineOptions({ name: 'MangaRatesFilters' })
   const sort = defineModel<'new' | 'hot'>('sort', { required: true })
@@ -19,7 +16,7 @@
   ]
   const STATUS_OPTIONS = [
     { label: '全部', value: null },
-    ...MANGA_STATUS_ORDER.map(s => ({ label: MANGA_STATUS_LABEL[s], value: s })),
+    ...REVIEW_STATUS_ORDER.map(s => ({ label: MANGA_STATUS_LABEL[s], value: s })),
   ]
   const SCORE_OPTIONS = [
     { label: '全部', value: null },

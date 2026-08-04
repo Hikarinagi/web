@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import { ArrowUpDown } from '@lucide/vue'
-  import {
-    LIGHT_NOVEL_STATUS_LABEL,
-    LIGHT_NOVEL_STATUS_ORDER,
-    type LightNovelRateStatus,
-  } from '~/features/light-novel/rate'
+  import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
+  import { REVIEW_STATUS_ORDER } from '~/features/rate/status'
 
   defineOptions({ name: 'LightNovelRatesFilters' })
   const sort = defineModel<'new' | 'hot'>('sort', { required: true })
@@ -20,7 +17,7 @@
   ]
   const STATUS_OPTIONS = [
     { label: '全部', value: null },
-    ...LIGHT_NOVEL_STATUS_ORDER.map(s => ({ label: LIGHT_NOVEL_STATUS_LABEL[s], value: s })),
+    ...REVIEW_STATUS_ORDER.map(s => ({ label: LIGHT_NOVEL_STATUS_LABEL[s], value: s })),
   ]
   const SCORE_OPTIONS = [
     { label: '全部', value: null },
