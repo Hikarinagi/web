@@ -32,7 +32,7 @@
     <DeveloperConsoleAppIcon :src="props.src" :name="props.name" size="lg" />
     <div class="min-w-0">
       <p class="text-sm font-medium text-color">应用图标</p>
-      <p class="mt-1 text-xs text-muted-color">展示在用户的授权页与账号中心，选图后裁剪为方形</p>
+      <p class="mt-1 text-xs text-muted-color">展示在用户的授权页与账号中心，选图后裁剪为圆形</p>
       <div class="mt-2.5 flex items-center gap-2">
         <Button
           :label="props.src ? '更换图标' : '选择图标'"
