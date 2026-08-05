@@ -29529,6 +29529,8 @@ export interface operations {
                 released?: boolean;
                 /** @description 是否存在已成功匹配的漫画来源 */
                 has_linked_source?: boolean;
+                /** @description 只看站内可读(已采到章节)的作品。has_linked_source 只说明匹配上了源 */
+                readable?: boolean;
                 /** @description 只看热度不低于该值的作品 */
                 min_heat?: number;
                 page: number;

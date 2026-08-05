@@ -48169,6 +48169,15 @@
             }
           },
           {
+            "description": "只看站内可读(已采到章节)的作品。has_linked_source 只说明匹配上了源",
+            "in": "query",
+            "name": "readable",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "description": "只看热度不低于该值的作品",
             "in": "query",
             "name": "min_heat",
