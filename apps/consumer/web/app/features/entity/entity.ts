@@ -25,7 +25,8 @@ export interface WorkCardItem {
   title: string
   year: number | null
   rolePill: string | null
-  cvText: string | null
+  cv: { id: number; name: string }[] | null
+  subtitle: string | null
   aspect: 'galgame' | 'light_novel' | 'manga'
   nsfw: boolean
 }

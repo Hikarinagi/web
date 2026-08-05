@@ -18,7 +18,8 @@
     title: props.hit.title,
     year: null,
     rolePill: null,
-    cvText: props.hit.subtitle,
+    cv: null,
+    subtitle: props.hit.subtitle,
     aspect:
       props.hit.type === 'galgame'
         ? 'galgame'

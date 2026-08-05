@@ -47,7 +47,7 @@ export type WorkVariant =
 function galgameCard(
   galgame: GalgameSummary,
   rolePill: string | null,
-  cvText: string | null,
+  cv: WorkCardItem['cv'],
 ): WorkCardItem {
   return {
     to: `/galgames/${galgame.id}`,
@@ -55,7 +55,8 @@ function galgameCard(
     title: galgame.trans_title || galgame.origin_title,
     year: workYear(galgame.release_date),
     rolePill,
-    cvText,
+    cv,
+    subtitle: null,
     aspect: 'galgame',
     nsfw: galgame.nsfw,
   }
@@ -68,7 +69,8 @@ function lightNovelCard(lightNovel: LightNovelSummary, rolePill: string | null):
     title: lightNovel.name_cn || lightNovel.name,
     year: workYear(lightNovel.publication_date),
     rolePill,
-    cvText: null,
+    cv: null,
+    subtitle: null,
     aspect: 'light_novel',
     nsfw: lightNovel.nsfw,
   }
@@ -81,15 +83,16 @@ function mangaCard(manga: MangaSummary, rolePill: string | null): WorkCardItem {
     title: manga.name_cn || manga.name,
     year: workYear(manga.publication_date),
     rolePill,
-    cvText: null,
+    cv: null,
+    subtitle: null,
     aspect: 'manga',
     nsfw: manga.nsfw,
   }
 }
 
-function cvText(actors: { name: string; trans_name: string | null }[]): string | null {
-  if (!actors.length) return null
-  return `CV ${actors.map(actor => actor.trans_name || actor.name).join(' / ')}`
+function cvLinks(actors: { id: number; name: string; trans_name: string | null }[]) {
+  const list = actors.map(actor => ({ id: actor.id, name: actor.trans_name || actor.name }))
+  return list.length ? list : null
 }
 
 export function mapWorkItems(items: readonly unknown[], variant: WorkVariant): WorkCardItem[] {
@@ -104,7 +107,7 @@ export function mapWorkItems(items: readonly unknown[], variant: WorkVariant): W
       )
     case 'character-galgame':
       return (items as CharacterGalgameRel[]).map(item =>
-        galgameCard(item.galgame, characterRoleLabel(item.role), cvText(item.actors)),
+        galgameCard(item.galgame, characterRoleLabel(item.role), cvLinks(item.actors)),
       )
     case 'producer-galgame':
       return (items as ProducerGalgameRel[]).map(item => galgameCard(item.galgame, null, null))
