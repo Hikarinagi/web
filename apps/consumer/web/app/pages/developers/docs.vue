@@ -34,6 +34,7 @@
     <DeveloperGuideScopes />
     <DeveloperGuideTokens :guide="data" />
     <DeveloperGuideConventions :guide="data" />
+    <DeveloperGuideBrand />
 
     <DeveloperReferenceIntro :issuer="data.issuer" />
 

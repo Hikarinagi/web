@@ -10,6 +10,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
   { id: 'scopes', title: '权限范围' },
   { id: 'tokens', title: '令牌生命周期' },
   { id: 'conventions', title: '响应约定' },
+  { id: 'brand', title: '品牌与署名' },
 ]
 
 export interface ParamRow {
