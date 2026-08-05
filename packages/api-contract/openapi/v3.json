@@ -1548,6 +1548,32 @@
         ],
         "type": "object"
       },
+      "AdminOpenUsageDto": {
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "peak_hour_requests": {
+            "description": "单小时请求数的峰值，用于判断离额度还有多远",
+            "type": "number"
+          },
+          "requests": {
+            "description": "窗口内的开放 API 请求总数",
+            "type": "number"
+          },
+          "throttled": {
+            "description": "其中被限流拒绝的次数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "client_id",
+          "requests",
+          "throttled",
+          "peak_hour_requests"
+        ],
+        "type": "object"
+      },
       "AdminPointRecordItemDto": {
         "properties": {
           "action": {
@@ -10334,6 +10360,27 @@
           "existing_id",
           "batch_id",
           "sources_match"
+        ],
+        "type": "object"
+      },
+      "GalgameMappingItemDto": {
+        "properties": {
+          "bangumi_game_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "vndb_id": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "vndb_id",
+          "bangumi_game_id"
         ],
         "type": "object"
       },
@@ -28668,6 +28715,42 @@
         ]
       }
     },
+    "/api/v3/admin/idp/open-usage": {
+      "get": {
+        "operationId": "AdminOpenUsageController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 7,
+              "maximum": 90,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminOpenUsageDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/idp"
+        ]
+      }
+    },
     "/api/v3/admin/idp/overview": {
       "get": {
         "operationId": "AdminOverviewController_get",
@@ -45388,6 +45471,111 @@
         },
         "tags": [
           "Galgame"
+        ]
+      }
+    },
+    "/api/v3/internal/galgames/lookup": {
+      "get": {
+        "operationId": "InternalGalgamesController_lookup",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "vndb_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "bangumi_game_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/GalgameMappingItemDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
+        ]
+      }
+    },
+    "/api/v3/internal/galgames/mapping": {
+      "get": {
+        "operationId": "InternalGalgamesController_getMapping",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 200,
+              "maximum": 500,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/GalgameMappingItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
         ]
       }
     },

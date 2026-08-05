@@ -485,6 +485,22 @@ export interface paths {
         patch: operations["AdminOidcClientsController_update"];
         trace?: never;
     };
+    "/api/v3/admin/idp/open-usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminOpenUsageController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/idp/overview": {
         parameters: {
             query?: never;
@@ -6277,6 +6293,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/galgames/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_lookup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_getMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/telegram/accounts/{telegram_id}": {
         parameters: {
             query?: never;
@@ -11070,6 +11118,15 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        AdminOpenUsageDto: {
+            client_id: string;
+            /** @description 单小时请求数的峰值，用于判断离额度还有多远 */
+            peak_hour_requests: number;
+            /** @description 窗口内的开放 API 请求总数 */
+            requests: number;
+            /** @description 其中被限流拒绝的次数 */
+            throttled: number;
+        };
         AdminPointRecordItemDto: {
             /** @enum {string} */
             action: "ADD" | "SUBTRACT";
@@ -13201,6 +13258,11 @@ export interface components {
             change_request_id: number | null;
             existing_id: number | null;
             sources_match: boolean | null;
+        };
+        GalgameMappingItemDto: {
+            bangumi_game_id: number | null;
+            id: number;
+            vndb_id: number | null;
         };
         GalgameMonthlyReleaseDto: {
             current_month: boolean;
@@ -18219,6 +18281,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminOidcClientDto"];
+                };
+            };
+        };
+    };
+    AdminOpenUsageController_list: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminOpenUsageDto"][];
                 };
             };
         };
@@ -27955,6 +28038,53 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    InternalGalgamesController_lookup: {
+        parameters: {
+            query?: {
+                vndb_id?: number;
+                bangumi_game_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameMappingItemDto"] | null;
+                };
+            };
+        };
+    };
+    InternalGalgamesController_getMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["GalgameMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
             };
         };
     };
