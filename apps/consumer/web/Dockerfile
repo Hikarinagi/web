@@ -13,7 +13,7 @@ FROM base AS build
 
 ARG APP_VERSION=dev
 ENV DATABASE_URL=postgresql://hikarinagi:hikarinagi@127.0.0.1:5432/hikarinagi?schema=public
-ENV NODE_OPTIONS=--max-old-space-size=4096
+ENV NODE_OPTIONS=--max-old-space-size=6144
 ENV APP_VERSION=$APP_VERSION
 
 RUN apt-get update \
