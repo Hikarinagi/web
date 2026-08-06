@@ -1,10 +1,10 @@
-import { Flame, LayoutList, UserRoundCheck } from '@lucide/vue'
+import { Compass, LayoutList, UserRoundCheck } from '@lucide/vue'
 import type { Ref } from 'vue'
 import type { FeedScope } from './feed'
 
 export const FEED_TABS = [
-  { key: 'recommend', label: '动态', icon: LayoutList, auth: false },
-  { key: 'hot', label: '热门', icon: Flame, auth: false },
+  { key: 'latest', label: '动态', icon: LayoutList, auth: false },
+  { key: 'recommend', label: '推荐', icon: Compass, auth: false },
   { key: 'following', label: '关注', icon: UserRoundCheck, auth: true },
 ] as const
 

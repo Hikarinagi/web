@@ -7,7 +7,7 @@ import { definePageBffHandler } from '../../utils/page-bff'
 async function handler(event: H3Event) {
   const [feed, sidebar] = await Promise.all([
     fetchBackendData(event, '/api/v3/feed', {
-      query: { limit: FEED_PAGE_SIZE, scope: 'recommend' },
+      query: { limit: FEED_PAGE_SIZE, scope: 'latest' },
     }),
     loadFeedSidebar(event),
   ])

@@ -12858,7 +12858,7 @@ export interface components {
             manga: number;
             /** @description 图文收藏数 */
             post: number;
-            /** @description 收藏项总数 */
+            /** @description 下列五种内容类型的收藏项合计，不含板块与话题 */
             total: number;
         };
         FavoriteCollectionItemDto: {
@@ -15198,7 +15198,7 @@ export interface components {
         OpenEntityRefDto: {
             /** @description 条目 ID */
             id: number;
-            /** @description 头像或立绘 */
+            /** @description 人物与角色为头像或立绘，厂商为 Logo */
             image: components["schemas"]["OpenMediaDto"] | null;
             /** @description 原名 */
             name: string;
@@ -15212,7 +15212,7 @@ export interface components {
             is_default: boolean;
             /** @description 是否为私密收藏夹 */
             is_private: boolean;
-            /** @description 收藏夹内的条目总数 */
+            /** @description 收藏夹内的条目总数，含板块与话题收藏，因此可能大于收藏项接口能返回的条数 */
             item_count: number;
             /** @description 收藏夹名称 */
             name: string;
@@ -15408,7 +15408,7 @@ export interface components {
             isbn: string | null;
             /**
              * Format: date-time
-             * @description 最新一话的更新时间
+             * @description 最新一话的更新时间，暂无章节信息时为空
              */
             latest_chapter_at: string | null;
             /** @description 原名 */
@@ -15634,9 +15634,9 @@ export interface components {
             developer: string | null;
             /** @description 条目 ID，需与 type 搭配定位资源 */
             id: number;
-            /** @description 条目副标题，通常为译名 */
+            /** @description 随条目类型而异的一行摘要：galgame 为发行年份，轻小说与漫画为连载状态加年份，轻小说分卷为所属系列，角色为所属作品，厂商为厂商类型，人物为空 */
             subtitle: string | null;
-            /** @description 条目主标题，通常为原名 */
+            /** @description 条目名称，有译名时优先返回译名 */
             title: string;
             /**
              * @description 命中的条目类型
@@ -16136,9 +16136,9 @@ export interface components {
             head_cover: components["schemas"]["MediaAssetDto"] | null;
             /** @description 用户 ID */
             id: number;
-            /** @description 请求方是否已关注该用户 */
+            /** @description 请求方是否已关注该用户；查看自己的资料时恒为 false */
             is_following: boolean;
-            /** @description 是否与该用户互相关注 */
+            /** @description 是否与该用户互相关注；查看自己的资料时恒为 false */
             is_mutual: boolean;
             /** @description 移动端个人主页封面 */
             mobile_head_cover: components["schemas"]["MediaAssetDto"] | null;
@@ -16209,13 +16209,13 @@ export interface components {
         RateWorkDto: {
             /** @description 作品封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
-            /** @description 各维度评分 */
+            /** @description 已打分的维度，未打分的维度不会出现；漫画没有维度评分，恒为空数组 */
             dimensions: components["schemas"]["RateDimensionDto"][];
             /** @description 作品 ID */
             id: number;
             /** @description 短评是否含剧透 */
             is_spoiler: boolean;
-            /** @description 最近一次评分或标记变动的时间 */
+            /** @description 该评分记录的最后更新时间，短评被点赞或点踩同样会刷新它 */
             last_activity_at: string;
             /** @description 总评分 */
             rate: number | null;
@@ -17284,6 +17284,8 @@ export interface components {
         };
         UpdateMangaProgressDto: {
             chapter_id: number;
+            /** @description 本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。 */
+            duration_ms?: number;
             page: number;
         };
         UpdateMangaSourcePolicyDto: {
@@ -27791,7 +27793,7 @@ export interface operations {
             query?: {
                 cursor?: string;
                 limit?: number;
-                scope?: "hot" | "recommend" | "following";
+                scope?: "recommend" | "latest" | "following";
             };
             header?: never;
             path?: never;

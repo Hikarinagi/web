@@ -9,14 +9,14 @@
 
   const { data, refresh } = await useHikariApiData('/api/pages/home')
 
-  const scope = ref<FeedScope>('recommend')
-  const recommendSource = homeFeedSource('recommend', () => data.value?.feed)
-  const hotSource = homeFeedSource('hot', () => undefined)
+  const scope = ref<FeedScope>('latest')
+  const latestSource = homeFeedSource('latest', () => data.value?.feed)
+  const recommendSource = homeFeedSource('recommend', () => undefined)
   const followingSource = homeFeedSource('following', () => undefined)
-  const hotMounted = ref(false)
+  const recommendMounted = ref(false)
   const followingMounted = ref(false)
   watch(scope, s => {
-    if (s === 'hot') hotMounted.value = true
+    if (s === 'recommend') recommendMounted.value = true
     if (s === 'following') followingMounted.value = true
     if (import.meta.client) window.scrollTo({ top: 0, behavior: 'instant' })
   })
@@ -41,7 +41,7 @@
     isAuthed => {
       // 登出后关注流无意义,退回推荐;清空 feed 桶以新身份重拉,并按登录态切换重拉一次 BFF。
       // 列表内容整体换身份,深滚位置已无意义,直接回顶。
-      if (!isAuthed) scope.value = 'recommend'
+      if (!isAuthed) scope.value = 'latest'
       resetFeed()
       if (import.meta.client) window.scrollTo(0, 0)
       if (data.value && data.value.sidebar.authenticated !== isAuthed) refresh()
@@ -71,16 +71,12 @@
 
     <div ref="feedArea">
       <FeedComposer class="mb-4" />
+      <FeedList v-show="scope === 'latest'" :source="latestSource" :active="scope === 'latest'" />
       <FeedList
+        v-if="recommendMounted"
         v-show="scope === 'recommend'"
         :source="recommendSource"
         :active="scope === 'recommend'"
-      />
-      <FeedList
-        v-if="hotMounted"
-        v-show="scope === 'hot'"
-        :source="hotSource"
-        :active="scope === 'hot'"
       />
       <FeedList
         v-if="followingMounted"

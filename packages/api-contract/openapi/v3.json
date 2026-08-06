@@ -8548,7 +8548,7 @@
             "type": "number"
           },
           "total": {
-            "description": "收藏项总数",
+            "description": "下列五种内容类型的收藏项合计，不含板块与话题",
             "type": "number"
           }
         },
@@ -18008,7 +18008,7 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
-            "description": "头像或立绘",
+            "description": "人物与角色为头像或立绘，厂商为 Logo",
             "nullable": true,
             "type": "object"
           },
@@ -18045,7 +18045,7 @@
             "type": "boolean"
           },
           "item_count": {
-            "description": "收藏夹内的条目总数",
+            "description": "收藏夹内的条目总数，含板块与话题收藏，因此可能大于收藏项接口能返回的条数",
             "type": "number"
           },
           "name": {
@@ -18657,7 +18657,7 @@
             "type": "string"
           },
           "latest_chapter_at": {
-            "description": "最新一话的更新时间",
+            "description": "最新一话的更新时间，暂无章节信息时为空",
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -19300,12 +19300,12 @@
             "type": "number"
           },
           "subtitle": {
-            "description": "条目副标题，通常为译名",
+            "description": "随条目类型而异的一行摘要：galgame 为发行年份，轻小说与漫画为连载状态加年份，轻小说分卷为所属系列，角色为所属作品，厂商为厂商类型，人物为空",
             "nullable": true,
             "type": "string"
           },
           "title": {
-            "description": "条目主标题，通常为原名",
+            "description": "条目名称，有译名时优先返回译名",
             "type": "string"
           },
           "type": {
@@ -21464,11 +21464,11 @@
             "type": "number"
           },
           "is_following": {
-            "description": "请求方是否已关注该用户",
+            "description": "请求方是否已关注该用户；查看自己的资料时恒为 false",
             "type": "boolean"
           },
           "is_mutual": {
-            "description": "是否与该用户互相关注",
+            "description": "是否与该用户互相关注；查看自己的资料时恒为 false",
             "type": "boolean"
           },
           "mobile_head_cover": {
@@ -21726,7 +21726,7 @@
             "type": "object"
           },
           "dimensions": {
-            "description": "各维度评分",
+            "description": "已打分的维度，未打分的维度不会出现；漫画没有维度评分，恒为空数组",
             "items": {
               "$ref": "#/components/schemas/RateDimensionDto"
             },
@@ -21741,7 +21741,7 @@
             "type": "boolean"
           },
           "last_activity_at": {
-            "description": "最近一次评分或标记变动的时间",
+            "description": "该评分记录的最后更新时间，短评被点赞或点踩同样会刷新它",
             "type": "string"
           },
           "rate": {
@@ -26120,6 +26120,12 @@
         "properties": {
           "chapter_id": {
             "minimum": 1,
+            "type": "number"
+          },
+          "duration_ms": {
+            "description": "本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。",
+            "maximum": 21600000,
+            "minimum": 0,
             "type": "number"
           },
           "page": {
@@ -45022,10 +45028,10 @@
             "name": "scope",
             "required": false,
             "schema": {
-              "default": "recommend",
+              "default": "latest",
               "enum": [
-                "hot",
                 "recommend",
+                "latest",
                 "following"
               ],
               "type": "string"

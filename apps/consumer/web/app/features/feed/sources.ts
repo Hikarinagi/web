@@ -12,8 +12,8 @@ export interface FeedSource {
 }
 
 const HOME_EMPTY_TEXT: Record<FeedScope, string> = {
-  hot: '最近还没有热起来的内容',
-  recommend: '还没有动态',
+  recommend: '还没有可以推荐的内容',
+  latest: '还没有动态',
   following: '关注的人和话题还没有新动态',
 }
 
