@@ -17284,8 +17284,6 @@ export interface components {
         };
         UpdateMangaProgressDto: {
             chapter_id: number;
-            /** @description 本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。 */
-            duration_ms?: number;
             page: number;
         };
         UpdateMangaSourcePolicyDto: {

@@ -26122,12 +26122,6 @@
             "minimum": 1,
             "type": "number"
           },
-          "duration_ms": {
-            "description": "本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。",
-            "maximum": 21600000,
-            "minimum": 0,
-            "type": "number"
-          },
           "page": {
             "minimum": 1,
             "type": "number"
