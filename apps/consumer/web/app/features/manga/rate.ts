@@ -1,3 +1,4 @@
+import { MANGA_RATE_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiRequestBody } from '@hikarinagi/api-contract/v3'
 
 export type MangaRate = ApiData<'/api/v3/mangas/{id}/rate', 'get'>
@@ -17,13 +18,7 @@ export const MANGA_STATUS_ORDER: readonly MangaRateStatus[] = [
   'DROPPED',
 ]
 
-export const MANGA_STATUS_LABEL: Record<MangaRateStatus, string> = {
-  PLAN: '想看',
-  GOING: '在看',
-  COMPLETED: '看过',
-  ON_HOLD: '搁置',
-  DROPPED: '弃坑',
-}
+export const MANGA_STATUS_LABEL = MANGA_RATE_STATUS_CN
 
 export const MANGA_STATUS_SUB: Record<MangaRateStatus, string> = {
   PLAN: '之后再看',

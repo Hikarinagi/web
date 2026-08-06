@@ -12,7 +12,10 @@
       class="pointer-events-none absolute top-9 bottom-2 left-[27.5px] w-px bg-surface-200 dark:bg-surface-800"
       aria-hidden="true"
     />
-    <div class="sticky z-10 self-start py-4.5" style="top: calc(var(--app-header-height) + 0.5rem)">
+    <div
+      class="sticky z-10 self-start py-4.5"
+      style="top: calc(var(--app-header-height) + var(--feed-tabs-height) + 0.5rem)"
+    >
       <Avatar
         :user="cluster.author"
         card

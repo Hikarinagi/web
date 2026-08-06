@@ -44,6 +44,7 @@
         <p class="flex flex-wrap items-center gap-2 font-mono text-sm">
           <Tag :value="operation.method" :severity="methodSeverity" class="font-mono" />
           <Tag v-if="operation.paginated" value="分页" severity="secondary" />
+          <Tag v-if="operation.responseIsArray" value="返回数组" severity="secondary" />
           <span class="break-all text-color">{{ operation.path }}</span>
         </p>
         <p v-if="operation.scopes.length" class="flex flex-wrap items-center gap-1.5 text-xs">

@@ -4,13 +4,15 @@ import type { Ref } from 'vue'
 import { clusterFeed, feedItemBlocksNsfw, foldFeed } from './feed'
 import { feedKey } from './height'
 import type { FeedSource } from './sources'
-import { useFeedStream } from './useFeedStream'
+import { useFeedRefreshSignal, useFeedStream } from './useFeedStream'
 import { useFeedVirtualList } from './useFeedVirtualList'
 
 const TOP_REFRESH_OFFSET = 64
 const TOP_REFRESH_MIN_MS = 520
 const TOP_SCROLL_TOLERANCE = 2
 const TOP_SCROLL_TIMEOUT_MS = 1800
+const PULL_DAMPING = 0.4
+const PULL_MAX = 96
 
 export function useFeedList(source: FeedSource, active: Ref<boolean>) {
   const { items, nextCursor, loading, loaded, ensure, loadMore, refresh } = useFeedStream(source)
@@ -20,7 +22,8 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
   const topRefreshOpen = ref(false)
   // 深翻页:触发过第一次 load more 即为「深」;refresh / feed 重置后归 false
   const deep = ref(false)
-  const topRefreshY = computed(() => (topRefreshOpen.value ? TOP_REFRESH_OFFSET : 0))
+  const pullOffset = ref(0)
+  const topRefreshY = computed(() => (topRefreshOpen.value ? TOP_REFRESH_OFFSET : pullOffset.value))
   const showFooterLoading = computed(() => loading.value && !topRefreshOpen.value)
   const visibleItems = computed(() =>
     items.value.filter(item => !shouldBlockNsfw(feedItemBlocksNsfw(item))),
@@ -39,6 +42,50 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
     if (!l) deep.value = false
     if (!l && active.value) ensureSource()
   })
+
+  let pullStartY = 0
+  let pulling = false
+  useEventListener(
+    window,
+    'touchstart',
+    (event: TouchEvent) => {
+      if (!active.value || topRefreshing.value || window.scrollY > 0) return
+      pullStartY = event.touches[0]?.clientY ?? 0
+      pulling = true
+    },
+    { passive: true },
+  )
+  useEventListener(
+    window,
+    'touchmove',
+    (event: TouchEvent) => {
+      if (!pulling) return
+      const delta = (event.touches[0]?.clientY ?? 0) - pullStartY
+      if (delta <= 0 || window.scrollY > 0) {
+        pullOffset.value = 0
+        pulling = false
+        return
+      }
+      pullOffset.value = Math.min(delta * PULL_DAMPING, PULL_MAX)
+    },
+    { passive: true },
+  )
+  useEventListener(window, 'touchend', () => {
+    if (!pulling) return
+    pulling = false
+    const reached = pullOffset.value >= TOP_REFRESH_OFFSET
+    pullOffset.value = 0
+    if (reached) void runTopRefresh('instant', false)
+  })
+
+  const { signal: refreshSignal } = useFeedRefreshSignal(source.storeId)
+  watch(
+    () => refreshSignal.value[source.key],
+    () => {
+      if (active.value) void resetToTop()
+    },
+    { flush: 'post' },
+  )
 
   // source.guard:首页 following 对游客无意义(兜 logout 时序边界,避免以 guest 身份打接口);
   // topic/section 无 guard,游客可看。
@@ -86,15 +133,25 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
 
     // 未深翻页:只回顶,不刷新(不打断、不丢位置/新鲜度)
     if (!deep.value) {
-      await scrollToTop()
+      await scrollToTop('smooth')
       return
     }
 
+    await runTopRefresh('smooth', true)
+  }
+
+  async function resetToTop() {
+    if (!import.meta.client) return
+
+    await runTopRefresh('instant', false)
+  }
+
+  async function runTopRefresh(behavior: ScrollBehavior, notify: boolean) {
     if (topRefreshing.value) return
     topRefreshing.value = true
 
     try {
-      const reachedTop = await scrollToTop()
+      const reachedTop = await scrollToTop(behavior)
       if (!reachedTop || loading.value) return
 
       const beforeKeys = new Set(items.value.map(feedKey))
@@ -104,7 +161,7 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
         refresh(),
         new Promise(resolve => window.setTimeout(resolve, TOP_REFRESH_MIN_MS)),
       ])
-      notifyRefresh(countFreshItems(beforeKeys))
+      if (notify) notifyRefresh(countFreshItems(beforeKeys))
       deep.value = false
     } finally {
       topRefreshOpen.value = false
@@ -112,8 +169,8 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
     }
   }
 
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  function scrollToTop(behavior: ScrollBehavior) {
+    window.scrollTo({ top: 0, behavior })
     if (window.scrollY <= TOP_SCROLL_TOLERANCE) return Promise.resolve(true)
 
     const startedAt = window.performance.now()

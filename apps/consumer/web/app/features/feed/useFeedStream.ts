@@ -86,6 +86,16 @@ export function useFeedStream(source: FeedSource) {
   return { items, nextCursor, loading, loaded, ensure, loadMore, refresh }
 }
 
+export function useFeedRefreshSignal(storeId = 'feed:stream') {
+  const signal = useState<Record<string, number>>(`${storeId}:refresh-signal`, () => ({}))
+  return {
+    signal,
+    request: (key: string) => {
+      signal.value[key] = (signal.value[key] ?? 0) + 1
+    },
+  }
+}
+
 // 登录态变化 → 首页 feed 个性化结果改变 → 由首页统一清空 'feed:stream' 所有桶(recommend/following)。
 export function useFeedReset() {
   const buckets = useState<Record<string, FeedBucket>>('feed:stream')

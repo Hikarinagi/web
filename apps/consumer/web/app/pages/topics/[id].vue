@@ -2,7 +2,7 @@
   import type { TopicPageData } from '~~/server/api/pages/topics/[id].get'
 
   defineOptions({ name: 'PageTopicDetail' })
-  definePageMeta({ footer: false })
+  definePageMeta({ footer: false, container: 'full' })
 
   const route = useRoute()
   const id = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)

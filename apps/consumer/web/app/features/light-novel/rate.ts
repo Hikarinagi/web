@@ -1,3 +1,4 @@
+import { LIGHT_NOVEL_RATE_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiRequestBody } from '@hikarinagi/api-contract/v3'
 
 export type LightNovelRate = ApiData<'/api/v3/light-novels/{id}/rate', 'get'>
@@ -26,13 +27,7 @@ export const LIGHT_NOVEL_STATUS_ORDER: readonly LightNovelRateStatus[] = [
   'DROPPED',
 ]
 
-export const LIGHT_NOVEL_STATUS_LABEL: Record<LightNovelRateStatus, string> = {
-  PLAN: '想读',
-  GOING: '在读',
-  COMPLETED: '读完',
-  ON_HOLD: '搁置',
-  DROPPED: '弃读',
-}
+export const LIGHT_NOVEL_STATUS_LABEL = LIGHT_NOVEL_RATE_STATUS_CN
 
 export const LIGHT_NOVEL_STATUS_SUB: Record<LightNovelRateStatus, string> = {
   PLAN: '之后再读',

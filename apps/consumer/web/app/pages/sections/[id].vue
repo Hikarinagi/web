@@ -2,7 +2,7 @@
   import type { SectionPageData } from '~~/server/api/pages/sections/[id].get'
 
   defineOptions({ name: 'PageSectionDetail' })
-  definePageMeta({ footer: false })
+  definePageMeta({ footer: false, container: 'full' })
 
   const route = useRoute()
   const id = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)

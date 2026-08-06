@@ -41,6 +41,15 @@
         <span class="font-mono text-xs break-words text-muted-color">{{ field.type }}</span>
         <span class="text-sm text-muted-color">{{ field.description }}</span>
       </div>
+      <dl
+        v-if="field.enumValues?.length"
+        class="sm:ml-1/3 mt-1.5 flex flex-col gap-1 rounded px-3 py-2 bg-emphasis"
+      >
+        <div v-for="item in field.enumValues" :key="item.value" class="flex gap-3">
+          <dt class="w-44 shrink-0 font-mono text-xs text-color">{{ item.value }}</dt>
+          <dd class="text-xs text-muted-color">{{ item.label }}</dd>
+        </div>
+      </dl>
       <div
         v-if="field.children?.length && expanded.has(field.name)"
         class="mt-2 border-l-2 border-surface-200 pl-4 dark:border-surface-800"

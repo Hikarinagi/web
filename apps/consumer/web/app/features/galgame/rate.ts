@@ -1,3 +1,4 @@
+import { GALGAME_RATE_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiRequestBody } from '@hikarinagi/api-contract/v3'
 
 export type GalgameRate = ApiData<'/api/v3/galgames/{id}/rate', 'get'>
@@ -21,13 +22,7 @@ export const GALGAME_STATUS_ORDER: readonly GalgameRateStatus[] = [
   'DROPPED',
 ]
 
-export const GALGAME_STATUS_LABEL: Record<GalgameRateStatus, string> = {
-  PLAN: '想玩',
-  GOING: '在玩',
-  COMPLETED: '通关',
-  ON_HOLD: '搁置',
-  DROPPED: '弃坑',
-}
+export const GALGAME_STATUS_LABEL = GALGAME_RATE_STATUS_CN
 
 export const GALGAME_STATUS_SUB: Record<GalgameRateStatus, string> = {
   PLAN: '之后再玩',

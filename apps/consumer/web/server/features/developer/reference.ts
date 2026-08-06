@@ -8,11 +8,17 @@ export interface ReferenceParam {
   description?: string
 }
 
+export interface ReferenceEnumValue {
+  value: string
+  label: string
+}
+
 export interface ReferenceField {
   name: string
   type: string
   required: boolean
   description?: string
+  enumValues?: ReferenceEnumValue[]
   children?: ReferenceField[]
 }
 
@@ -28,6 +34,7 @@ export interface ReferenceOperation {
   request?: ReferenceField[]
   response?: ReferenceField[]
   paginated: boolean
+  responseIsArray: boolean
   scopes: string[]
   auth: ReferenceAuth
   statuses: { code: string; label: string }[]
@@ -56,6 +63,7 @@ interface SpecSchema {
   $ref?: string
   nullable?: boolean
   enum?: (string | number)[]
+  'x-enum-descriptions'?: Record<string, string>
   description?: string
   additionalProperties?: SpecSchema | boolean
 }
@@ -124,9 +132,10 @@ function typeLabel(schema: SpecSchema): string {
   if (ref) {
     const name = ref.split('/').pop() as string
     const resolved = spec.components.schemas[name]
-    const base = resolved?.enum
-      ? resolved.enum.map(value => JSON.stringify(value)).join(' | ')
-      : name
+    const base =
+      resolved?.enum && !resolved['x-enum-descriptions']
+        ? resolved.enum.map(value => JSON.stringify(value)).join(' | ')
+        : name
     return schema.nullable ? `${base} | null` : base
   }
   if (schema.enum) return schema.enum.map(value => JSON.stringify(value)).join(' | ')
@@ -146,11 +155,15 @@ function fieldsOf(schema: SpecSchema, depth = 0): ReferenceField[] {
     const inner = property.type === 'array' ? (property.items ?? {}) : property
     const { schema: child, refName } = resolveRef(inner)
     const expandable = Boolean(refName && child.properties && depth < 2)
+    const enumLabels = property['x-enum-descriptions'] ?? child['x-enum-descriptions']
     return {
       name,
       type: typeLabel(property),
       required: required.has(name),
       description: property.description,
+      ...(enumLabels
+        ? { enumValues: Object.entries(enumLabels).map(([value, label]) => ({ value, label })) }
+        : {}),
       ...(expandable ? { children: fieldsOf(child, depth + 1) } : {}),
     }
   })
@@ -262,6 +275,7 @@ function toOperation(
     })),
     ...(requestSchema ? { request: fieldsOf(requestSchema) } : {}),
     paginated,
+    responseIsArray: rawResponse?.type === 'array',
     ...(responseSchema ? { response: fieldsOf(responseSchema) } : {}),
     scopes: op['x-hikari-scopes'] ?? [],
     auth,

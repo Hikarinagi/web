@@ -1,3 +1,4 @@
+import { PRODUCER_TYPE_CN } from '@hikarinagi/shared'
 import type {
   CharacterDetail,
   EntityDetail,
@@ -14,12 +15,7 @@ const TYPE_LABELS: Record<EntityKind, string> = {
   producer: '厂商',
 }
 
-const PRODUCER_TYPE_LABELS: Record<string, string> = {
-  COMPANY: '厂商',
-  DOUJIN: '同人社团',
-  INDIVIDUAL: '',
-  MAGAZINE: '杂志',
-}
+const PRODUCER_TYPE_LABELS: Record<string, string> = { ...PRODUCER_TYPE_CN, INDIVIDUAL: '' }
 
 const PERSON_META_KEYS = ['生日', '出生地', '事务所']
 

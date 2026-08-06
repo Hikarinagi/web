@@ -11,6 +11,17 @@
 :root {
   --app-header-height: 4rem;
   --app-bottombar-height: 3.5rem;
+  --feed-tabs-height: 2.75rem;
+}
+
+@media (min-width: 80rem) {
+  :root {
+    --feed-tabs-height: 0px;
+  }
+}
+
+.app-surface-blur {
+  @apply bg-surface-0/72 backdrop-blur-xl backdrop-saturate-[1.8] dark:bg-surface-950/68;
 }
 
 html {

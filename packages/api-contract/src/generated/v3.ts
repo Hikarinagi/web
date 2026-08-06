@@ -11237,34 +11237,52 @@ export interface components {
             key: string;
         };
         AdminUserDetailDto: {
+            /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
+            /** @description 当前佩戴的徽章 */
             equipped_badges: components["schemas"]["EquippedBadgeDto"][];
+            /** @description 当前佩戴的头像框 */
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 用户 ID */
             id: number;
             moderation_counts: components["schemas"]["ModerationCountDto"][];
+            /** @description 用户名 */
             name: string;
+            /** @description 昵称 */
             nickname: string | null;
             permission_groups: components["schemas"]["UserPermissionGroupDto"][];
             /** @description 直接授予该用户的权限键(不含角色 / 权限组继承的部分) */
             permissions: string[];
             reports_against: number;
-            /** @enum {string} */
+            /**
+             * @description 用户角色
+             * @enum {string}
+             */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
         AdminUserItemDto: {
+            /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
+            /** @description 当前佩戴的徽章 */
             equipped_badges: components["schemas"]["EquippedBadgeDto"][];
+            /** @description 当前佩戴的头像框 */
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 用户 ID */
             id: number;
+            /** @description 用户名 */
             name: string;
+            /** @description 昵称 */
             nickname: string | null;
-            /** @enum {string} */
+            /**
+             * @description 用户角色
+             * @enum {string}
+             */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
@@ -11389,15 +11407,25 @@ export interface components {
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
         ArticleSummaryDto: {
+            /** @description 文章封面 */
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 发布时间 */
             created_at: string;
+            /** @description 作者 */
             creator: components["schemas"]["UserRefDto"] | null;
+            /** @description 文章 ID */
             id: number;
+            /** @description 点赞数 */
             like_count: number;
+            /** @description 所属板块 */
             sections: components["schemas"]["SectionRelationDto"][];
+            /** @description 文章标题 */
             title: string;
+            /** @description 关联话题 */
             topics: components["schemas"]["TopicRelationDto"][];
+            /** @description 最后更新时间 */
             updated_at: string;
+            /** @description 浏览量 */
             view_count: number;
         };
         AssetUploadResultDto: {
@@ -12068,8 +12096,11 @@ export interface components {
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
         CreateFavoriteCollectionDto: {
+            /** @description 收藏夹简介 */
             description?: string;
+            /** @description 是否设为私密收藏夹 */
             is_private?: boolean;
+            /** @description 收藏夹名称 */
             name: string;
         };
         CreateFeaturedSlotDto: {
@@ -12779,13 +12810,19 @@ export interface components {
             equipped_frame_id: number | null;
         };
         EquippedBadgeDto: {
+            /** @description 徽章装扮信息 */
             decoration: components["schemas"]["EquippedFrameDto"];
         };
         EquippedFrameDto: {
+            /** @description 装扮 ID */
             id: number;
+            /** @description 装扮图片 */
             image: components["schemas"]["MediaAssetDto"];
+            /** @description 装扮标识 */
             key: string;
+            /** @description 装扮名称 */
             name: string;
+            /** @description 装扮相对头像的缩放比例 */
             scale: number;
         };
         ExternalSearchItemDto: {
@@ -12797,45 +12834,77 @@ export interface components {
             year: string | null;
         };
         FavoriteCollectionDto: {
+            /** @description 收藏夹简介 */
             description: string | null;
+            /** @description 收藏夹 ID */
             id: number;
+            /** @description 是否为默认收藏夹 */
             is_default: boolean;
+            /** @description 是否为私密收藏夹 */
             is_private: boolean;
+            /** @description 收藏夹名称 */
             name: string;
+            /** @description 收藏夹所有者的用户 ID */
             owner_id: number;
         };
         FavoriteCollectionItemCountsDto: {
+            /** @description 文章收藏数 */
             article: number;
+            /** @description Galgame 收藏数 */
             galgame: number;
+            /** @description 轻小说收藏数 */
             light_novel: number;
+            /** @description 漫画收藏数 */
             manga: number;
+            /** @description 图文收藏数 */
             post: number;
+            /** @description 收藏项总数 */
             total: number;
         };
         FavoriteCollectionItemDto: {
+            /** @description 文章条目，仅当 type 为 article 时返回 */
             article?: components["schemas"]["ArticleSummaryDto"];
+            /** @description 收藏时间 */
             created_at: string;
+            /** @description Galgame 条目，仅当 type 为 galgame 时返回 */
             galgame?: components["schemas"]["GalgameSummaryDto"];
+            /** @description 收藏项 ID */
             id: number;
+            /** @description 轻小说条目，仅当 type 为 light_novel 时返回 */
             light_novel?: components["schemas"]["LightNovelSummaryDto"];
+            /** @description 漫画条目，仅当 type 为 manga 时返回 */
             manga?: components["schemas"]["MangaSummaryDto"];
+            /** @description 收藏备注 */
             note: string;
+            /** @description 图文条目，仅当 type 为 post 时返回 */
             post?: components["schemas"]["PostSummaryDto"];
-            /** @enum {string} */
+            /**
+             * @description 收藏的内容类型，决定下方哪个条目字段非空
+             * @enum {string}
+             */
             type: "galgame" | "light_novel" | "manga" | "article" | "post";
         };
         FavoriteCollectionItemsDto: {
+            /** @description 收藏项列表 */
             items: components["schemas"]["FavoriteCollectionItemDto"][];
+            /** @description 分页信息 */
             meta: components["schemas"]["PageMetaDto"];
+            /** @description 各内容类型的收藏数统计 */
             type_counts: components["schemas"]["FavoriteCollectionItemCountsDto"];
         };
         FavoriteCollectionListItemDto: {
+            /** @description 收藏夹简介 */
             description: string | null;
+            /** @description 收藏夹 ID */
             id: number;
+            /** @description 是否为默认收藏夹 */
             is_default: boolean;
+            /** @description 是否为私密收藏夹 */
             is_private: boolean;
             item_count: number;
+            /** @description 收藏夹名称 */
             name: string;
+            /** @description 收藏夹所有者的用户 ID */
             owner_id: number;
         };
         FavoriteCollectionMembershipDto: {
@@ -12865,6 +12934,7 @@ export interface components {
             note: string;
         };
         FavoriteStateDto: {
+            /** @description 请求方是否已收藏该条目 */
             favorited: boolean;
         };
         FeatureFlagsDto: {
@@ -13120,7 +13190,9 @@ export interface components {
             count: number;
         };
         GalgameCoverRelationDto: {
+            /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面得票数 */
             votes: number;
         };
         GalgameDetailDto: {
@@ -13159,7 +13231,10 @@ export interface components {
             views: number;
             vndb_id: number | null;
         };
-        /** @enum {string} */
+        /**
+         * @description 开发状态
+         * @enum {string}
+         */
         GalgameDevStatus: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED";
         GalgameDownloadFileDto: {
             file_hash: string | null;
@@ -13326,22 +13401,40 @@ export interface components {
             title: string;
         };
         GalgameRateDetailDto: {
+            /** @description 创建时间 */
             created_at: string;
+            /** @description 短评被踩数 */
             dislike_count: number;
+            /** @description 评分记录 ID */
             id: number;
+            /** @description 短评是否含剧透 */
             is_spoiler: boolean;
+            /** @description 短评获赞数 */
             like_count: number;
+            /** @description 总评分 */
             rate: number | null;
+            /** @description 角色评分 */
             rate_character: number | null;
+            /** @description 短评正文 */
             rate_content: string;
+            /** @description 演出评分 */
             rate_direction: number | null;
+            /** @description 音乐评分 */
             rate_music: number | null;
+            /** @description 剧本评分 */
             rate_scenario: number | null;
+            /** @description 系统评分 */
             rate_system: number | null;
+            /** @description CG 评分 */
             rate_visual: number | null;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 通关耗时，单位分钟 */
             time_to_finish_minutes: number;
+            /** @description 最后更新时间 */
             updated_at: string;
         };
         GalgameRateDimensionAveragesDto: {
@@ -13476,23 +13569,39 @@ export interface components {
         /** @enum {string} */
         GalgameStaffRole: "GAME_DESIGNER" | "DIRECTOR" | "PRODUCER" | "SUPERVISOR" | "EXECUTIVE_PRODUCER" | "ORIGINAL_WORK" | "CHARACTER_DESIGN" | "MECHANICAL_DESIGN" | "LEVEL_DESIGN" | "PLANNING" | "PROGRAM" | "QC" | "SCENARIO" | "SERIES_COMPOSITION" | "ANIMATION_SUPERVISOR" | "ART" | "GRAPHICS" | "CG_SUPERVISOR" | "SD_ART" | "BACKGROUND" | "COVER_ART" | "SOUND_DIRECTOR" | "MUSIC" | "THEME_COMPOSITION" | "THEME_LYRICS" | "THEME_PERFORMANCE" | "INSERT_PERFORMANCE" | "ANIMATION_PRODUCTION" | "ANIMATION_DIRECTOR" | "ANIMATION_SCRIPT" | "COOPERATION" | "TRANSLATOR" | "EDITOR";
         GalgameSummaryDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
             id: number;
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 原名 */
             origin_title: string;
+            /** @description 相关厂商 */
             producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
             release_date: string | null;
+            /** @description 译名 */
             trans_title: string | null;
         };
         GalgameSummaryProducerDto: {
+            /** @description 厂商 ID */
             id: number;
+            /** @description 厂商名 */
             name: string;
         };
         GalgameSummaryProducerRelationDto: {
+            /** @description 角色备注 */
             note: string;
+            /** @description 厂商信息 */
             producer: components["schemas"]["GalgameSummaryProducerDto"];
-            /** @enum {string|null} */
+            /**
+             * @description 厂商承担的角色
+             * @enum {string|null}
+             */
             role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER" | null;
         };
         GalgameTagRelationDto: {
@@ -13602,7 +13711,9 @@ export interface components {
             count: number;
         };
         LightNovelCoverRelationDto: {
+            /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面得票数 */
             votes: number;
         };
         LightNovelDetailDto: {
@@ -13671,22 +13782,40 @@ export interface components {
             rater: components["schemas"]["UserRefDto"] | null;
         };
         LightNovelRateDetailDto: {
+            /** @description 创建时间 */
             created_at: string;
+            /** @description 短评被踩数 */
             dislike_count: number;
+            /** @description 评分记录 ID */
             id: number;
+            /** @description 短评是否含剧透 */
             is_spoiler: boolean;
+            /** @description 短评获赞数 */
             like_count: number;
+            /** @description 总评分 */
             rate: number | null;
+            /** @description 角色评分 */
             rate_character: number | null;
+            /** @description 短评正文 */
             rate_content: string;
+            /** @description 插画评分 */
             rate_illustration: number | null;
+            /** @description 节奏评分 */
             rate_pacing: number | null;
+            /** @description 剧情评分 */
             rate_plot: number | null;
+            /** @description 世界观评分 */
             rate_worldview: number | null;
+            /** @description 文笔评分 */
             rate_writing: number | null;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 阅读耗时，单位分钟 */
             time_to_finish_minutes: number;
+            /** @description 最后更新时间 */
             updated_at: string;
         };
         LightNovelRateDimensionAveragesDto: {
@@ -13824,29 +13953,49 @@ export interface components {
             totals: components["schemas"]["LightNovelStatTotalsDto"];
         };
         LightNovelSummaryDto: {
+            /** @description 作者 */
             author: components["schemas"]["LightNovelSummaryPersonDto"] | null;
+            /** @description 所属文库 */
             bunko: components["schemas"]["LightNovelSummaryProducerDto"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["LightNovelCoverRelationDto"][];
+            /** @description 轻小说 ID */
             id: number;
+            /** @description 原名 */
             name: string;
+            /** @description 中文名 */
             name_cn: string | null;
-            /** @enum {string} */
+            /**
+             * @description 连载状态
+             * @enum {string}
+             */
             novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 首卷出版日期
+             */
             publication_date: string | null;
+            /** @description 出版方 */
             publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
         };
         LightNovelSummaryPersonDto: {
+            /** @description 人物 ID */
             id: number;
+            /** @description 人物名 */
             name: string;
         };
         LightNovelSummaryProducerDto: {
+            /** @description 厂商 ID */
             id: number;
+            /** @description 厂商名 */
             name: string;
         };
         LightNovelSummaryProducerRelationDto: {
+            /** @description 角色备注 */
             note: string;
+            /** @description 厂商信息 */
             producer: components["schemas"]["LightNovelSummaryProducerDto"];
         };
         LightNovelTagRelationDto: {
@@ -14112,7 +14261,10 @@ export interface components {
             updated_at: string;
             view_count: number;
         };
-        /** @enum {string} */
+        /**
+         * @description 受众分类
+         * @enum {string}
+         */
         MangaAudience: "SHONEN" | "SEINEN" | "SHOJO" | "JOSEI";
         MangaBacklogDto: {
             failed_chapters: number;
@@ -14159,7 +14311,9 @@ export interface components {
             count: number;
         };
         MangaCoverRelationDto: {
+            /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面得票数 */
             votes: number;
         };
         MangaCoverageDto: {
@@ -14263,7 +14417,10 @@ export interface components {
             producer: components["schemas"]["ProducerPreviewDto"];
             role: components["schemas"]["MangaProducerRole"];
         };
-        /** @enum {string} */
+        /**
+         * @description 承担的角色
+         * @enum {string}
+         */
         MangaProducerRole: "PUBLISHER" | "MAGAZINE" | "LABEL";
         MangaProgressChapterDto: {
             chapter_number: string | null;
@@ -14309,15 +14466,26 @@ export interface components {
             rater: components["schemas"]["UserRefDto"] | null;
         };
         MangaRateDetailDto: {
+            /** @description 创建时间 */
             created_at: string;
+            /** @description 短评被踩数 */
             dislike_count: number;
+            /** @description 评分记录 ID */
             id: number;
+            /** @description 短评是否含剧透 */
             is_spoiler: boolean;
+            /** @description 短评获赞数 */
             like_count: number;
+            /** @description 总评分 */
             rate: number | null;
+            /** @description 短评正文 */
             rate_content: string;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 最后更新时间 */
             updated_at: string;
         };
         MangaRateDto: {
@@ -14396,7 +14564,10 @@ export interface components {
             nsfw: boolean;
             reading_mode: components["schemas"]["MangaReadingMode"];
         };
-        /** @enum {string} */
+        /**
+         * @description 阅读方向
+         * @enum {string}
+         */
         MangaReadingMode: "PAGED_RTL" | "PAGED_LTR" | "WEBTOON";
         MangaReadingStatsDto: {
             chapters_read: number;
@@ -14441,7 +14612,10 @@ export interface components {
         };
         /** @enum {string} */
         MangaRelationType: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER";
-        /** @enum {string} */
+        /**
+         * @description 连载状态
+         * @enum {string}
+         */
         MangaSerialStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
         MangaShelfItemDto: {
             author: string | null;
@@ -14494,7 +14668,10 @@ export interface components {
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["MangaStaffRole"];
         };
-        /** @enum {string} */
+        /**
+         * @description 担任的职位
+         * @enum {string}
+         */
         MangaStaffRole: "AUTHOR" | "ART" | "ORIGINAL_CREATOR" | "SCRIPT" | "ILLUSTRATION" | "CHARACTER_DESIGN";
         MangaStatGenreDto: {
             count: number;
@@ -14522,15 +14699,27 @@ export interface components {
             pages: number;
         };
         MangaSummaryDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["MangaCoverRelationDto"][];
+            /** @description 漫画 ID */
             id: number;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最新一话的更新时间
+             */
             latest_chapter_at: string | null;
+            /** @description 原名 */
             name: string;
+            /** @description 中文名 */
             name_cn: string | null;
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 开始连载日期
+             */
             publication_date: string | null;
+            /** @description 连载状态 */
             serial_status: components["schemas"]["MangaSerialStatus"];
         };
         MangaSweeperSettingDto: {
@@ -14613,9 +14802,13 @@ export interface components {
             permissions: string[];
         };
         MediaAssetDto: {
+            /** @description 图片高度，单位像素 */
             height: number | null;
+            /** @description 媒体资源 ID */
             id: number;
+            /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description 图片宽度，单位像素 */
             width: number | null;
         };
         /** @enum {string} */
@@ -14922,36 +15115,68 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
-        /** @enum {string} */
+        /**
+         * @description 连载状态
+         * @enum {string}
+         */
         NovelStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
         OpenCharacterDetailDto: {
+            /** @description 年龄 */
             age: number | null;
+            /** @description 别名列表 */
             aliases: string[];
+            /** @description 生日日 */
             birthday_day: number | null;
+            /** @description 生日月份 */
             birthday_month: number | null;
+            /** @description 血型 */
             blood_type: string | null;
+            /** @description 胸围，单位厘米 */
             bust: number | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 罩杯 */
             cup: string | null;
+            /** @description 性别 */
             gender: string | null;
+            /** @description 身高，单位厘米 */
             height: number | null;
+            /** @description 臀围，单位厘米 */
             hips: number | null;
+            /** @description 角色 ID */
             id: number;
+            /** @description 角色头像 */
             image: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 原文简介 */
             intro: string;
+            /** @description 补充信息标签，键值对形式 */
             labels: components["schemas"]["OpenEntityLabelDto"][];
+            /** @description 原名 */
             name: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 简介译文 */
             trans_intro: string | null;
+            /** @description 译名 */
             trans_name: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
+            /** @description 腰围，单位厘米 */
             waist: number | null;
+            /** @description 体重，单位千克 */
             weight: number | null;
         };
         OpenCoverDto: {
+            /** @description 图片高度，单位像素 */
             height: number | null;
             /** @description 色情内容分级，0 为安全 */
             sexual: number;
@@ -14961,166 +15186,327 @@ export interface components {
             violence: number;
             /** @description 封面得票数 */
             votes: number;
+            /** @description 图片宽度，单位像素 */
             width: number | null;
         };
         OpenEntityLabelDto: {
+            /** @description 标签名 */
             key: string;
+            /** @description 标签值 */
             value: string;
         };
         OpenEntityRefDto: {
+            /** @description 条目 ID */
             id: number;
+            /** @description 头像或立绘 */
             image: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 原名 */
             name: string;
+            /** @description 译名 */
             trans_name: string | null;
         };
+        OpenFavoriteCollectionDto: {
+            /** @description 收藏夹 ID */
+            id: number;
+            /** @description 是否为默认收藏夹 */
+            is_default: boolean;
+            /** @description 是否为私密收藏夹 */
+            is_private: boolean;
+            /** @description 收藏夹内的条目总数 */
+            item_count: number;
+            /** @description 收藏夹名称 */
+            name: string;
+        };
         OpenGalgameCharacterDto: {
+            /** @description 配音演员列表 */
             actors: components["schemas"]["OpenEntityRefDto"][];
+            /** @description 角色信息 */
             character: components["schemas"]["OpenEntityRefDto"];
+            /** @description 角色定位 */
             role: components["schemas"]["CharacterRole"];
         };
         OpenGalgameDetailDto: {
+            /** @description 游戏类型 */
             adv_type: string | null;
+            /** @description 别名列表 */
             aliases: string[];
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["OpenCoverDto"][];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 开发状态 */
             dev_status: components["schemas"]["GalgameDevStatus"] | null;
+            /** @description 游戏引擎 */
             engine: string | null;
+            /** @description 官方网站 */
             homepage: string | null;
+            /** @description Galgame ID */
             id: number;
+            /** @description 游戏截图 */
             images: components["schemas"]["OpenMediaDto"][];
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 原文简介 */
             origin_intro: string | null;
+            /** @description 原始语言 */
             origin_lang: string | null;
+            /** @description 原名 */
             origin_title: string;
+            /** @description 支持的平台 */
             platforms: string[];
+            /** @description 各版本定价 */
             prices: components["schemas"]["OpenGalgamePriceDto"][];
-            /** Format: date-time */
+            /** @description 评分统计 */
+            rating: components["schemas"]["OpenRatingDto"];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
             release_date: string | null;
+            /** @description 发行日期是否待定 */
             release_date_tbd: boolean;
+            /** @description 发行日期待定时的补充说明 */
             release_date_tbd_note: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 标签列表 */
             tags: components["schemas"]["OpenTagDto"][];
+            /** @description 简介译文 */
             trans_intro: string | null;
+            /** @description 译名 */
             trans_title: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
         };
         OpenGalgamePriceDto: {
+            /** @description 价格金额 */
             amount: number | null;
+            /** @description 货币代码 */
             currency: string | null;
+            /** @description 金额是否已含税 */
             tax_included: boolean | null;
+            /** @description 版本名 */
             version: string | null;
         };
         OpenGalgameStaffDto: {
+            /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
+            /** @description 担任的职位 */
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
         OpenLightNovelDetailDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["OpenCoverDto"][];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 轻小说 ID */
             id: number;
+            /** @description 原名 */
             name: string;
+            /** @description 中文名 */
             name_cn: string | null;
+            /** @description 连载状态 */
             novel_status: components["schemas"]["NovelStatus"];
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 别名列表 */
             other_names: string[];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 首卷出版日期
+             */
             publication_date: string | null;
-            /** Format: date-time */
+            /** @description 评分统计 */
+            rating: components["schemas"]["OpenRatingDto"];
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 原文简介 */
             summary: string | null;
+            /** @description 简介译文 */
             summary_cn: string | null;
+            /** @description 标签列表 */
             tags: components["schemas"]["OpenTagDto"][];
+            /** @description 已收录的分卷数 */
             total_volumes: number;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
         };
         OpenLightNovelPersonDto: {
+            /** @description 职位备注 */
             note: string | null;
+            /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
+            /** @description 担任的职位 */
             relation: string;
         };
         OpenLightNovelProducerDto: {
+            /** @description 角色备注 */
             note: string | null;
+            /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
+            /** @description 承担的角色 */
             relation: string;
         };
         OpenLightNovelVolumeDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["OpenCoverDto"][];
+            /** @description 分卷 ID */
             id: number;
+            /** @description 原名 */
             name: string | null;
+            /** @description 中文名 */
             name_cn: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 出版日期
+             */
             publication_date: string | null;
+            /** @description 与所属作品的关联说明 */
             relation: string;
+            /** @description 卷号的展示文本 */
             volume_label: string | null;
+            /** @description 卷号 */
             volume_number: number | null;
+            /** @description 分卷类型 */
             volume_type: components["schemas"]["VolumeType"];
         };
         OpenMangaDetailDto: {
+            /** @description 受众分类 */
             audience: components["schemas"]["MangaAudience"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["OpenCoverDto"][];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 版本信息 */
             editions: components["schemas"]["OpenMangaEditionDto"][];
+            /** @description 官方网站 */
             homepage: string | null;
+            /** @description 漫画 ID */
             id: number;
+            /** @description ISBN */
             isbn: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最新一话的更新时间
+             */
             latest_chapter_at: string | null;
+            /** @description 原名 */
             name: string;
+            /** @description 中文名 */
             name_cn: string | null;
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 出品国家或地区 */
             origin_country: string | null;
+            /** @description 别名列表 */
             other_names: string[];
+            /** @description 页数 */
             pages: number | null;
+            /** @description 价格金额 */
             price_amount: number | null;
+            /** @description 货币代码 */
             price_currency: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 开始连载日期
+             */
             publication_date: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 完结日期
+             */
             publication_end_date: string | null;
+            /** @description 评分统计 */
+            rating: components["schemas"]["OpenRatingDto"];
+            /** @description 阅读方向 */
             reading_mode: components["schemas"]["MangaReadingMode"];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 连载状态 */
             serial_status: components["schemas"]["MangaSerialStatus"];
+            /** @description 原文简介 */
             summary: string | null;
+            /** @description 简介译文 */
             summary_cn: string | null;
+            /** @description 标签列表 */
             tags: components["schemas"]["OpenTagDto"][];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
         };
         OpenMangaEditionDto: {
+            /** @description 该版本的补充字段，键值对形式 */
             fields: {
                 [key: string]: string;
             };
+            /** @description 版本名 */
             label: string;
         };
         OpenMangaProducerDto: {
+            /** @description 角色备注 */
             note: string;
+            /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
+            /** @description 承担的角色 */
             role: components["schemas"]["MangaProducerRole"];
         };
         OpenMangaStaffDto: {
+            /** @description 职位备注 */
             note: string;
+            /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
+            /** @description 担任的职位 */
             role: components["schemas"]["MangaStaffRole"];
         };
         OpenMangaVolumeDto: {
+            /** @description 分卷封面 */
             cover: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 分卷 ID */
             id: number;
+            /** @description ISBN */
             isbn: string | null;
+            /** @description 原名 */
             name: string | null;
+            /** @description 中文名 */
             name_cn: string | null;
+            /** @description 页数 */
             page_count: number | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 出版日期
+             */
             publication_date: string | null;
+            /** @description 卷号 */
             volume_number: number | null;
         };
         OpenMediaDto: {
+            /** @description 图片高度，单位像素 */
             height: number | null;
             /** @description 色情内容分级，0 为安全 */
             sexual: number;
@@ -15128,6 +15514,7 @@ export interface components {
             url: string;
             /** @description 暴力内容分级，0 为安全 */
             violence: number;
+            /** @description 图片宽度，单位像素 */
             width: number | null;
         };
         OpenPanelPublicConfigDto: {
@@ -15137,57 +15524,136 @@ export interface components {
             client_id: string;
         };
         OpenPersonDetailDto: {
+            /** @description 别名列表 */
             aliases: string[];
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 性别 */
             gender: string | null;
+            /** @description 人物 ID */
             id: number;
+            /** @description 人物头像 */
             image: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 原文简介 */
             intro: string;
+            /** @description 补充信息标签，键值对形式 */
             labels: components["schemas"]["OpenEntityLabelDto"][];
+            /** @description 原名 */
             name: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 简介译文 */
             trans_intro: string | null;
+            /** @description 译名 */
             trans_name: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
         };
         OpenProducerDetailDto: {
+            /** @description 别名列表 */
             aliases: string[];
+            /** @description 所属国家或地区 */
             country: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目创建时间
+             */
             created_at: string;
+            /** @description 成立日期 */
             established: string | null;
+            /** @description 厂商 ID */
             id: number;
+            /** @description 原文简介 */
             intro: string | null;
+            /** @description 补充信息标签，键值对形式 */
             labels: components["schemas"]["OpenEntityLabelDto"][];
+            /** @description 厂商 Logo */
             logo: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 厂商名 */
             name: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 最近一次修订通过审核的时间
+             */
             revised_at: string | null;
+            /** @description 简介译文 */
             trans_intro: string | null;
+            /** @description 厂商类型 */
             type: string;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 条目最后更新时间
+             */
             updated_at: string;
+            /** @description 官方网站 */
             website: string | null;
         };
+        OpenRatingCountDto: {
+            /** @description 打 1 分的人数 */
+            1: number;
+            /** @description 打 2 分的人数 */
+            2: number;
+            /** @description 打 3 分的人数 */
+            3: number;
+            /** @description 打 4 分的人数 */
+            4: number;
+            /** @description 打 5 分的人数 */
+            5: number;
+            /** @description 打 6 分的人数 */
+            6: number;
+            /** @description 打 7 分的人数 */
+            7: number;
+            /** @description 打 8 分的人数 */
+            8: number;
+            /** @description 打 9 分的人数 */
+            9: number;
+            /** @description 打 10 分的人数 */
+            10: number;
+        };
+        OpenRatingDto: {
+            /** @description 各分数对应的评分人数 */
+            count: components["schemas"]["OpenRatingCountDto"];
+            /** @description 平均分，保留一位小数，无人评分时为 0 */
+            score: number;
+            /** @description 参与评分的人数 */
+            total: number;
+        };
         OpenSearchHitDto: {
+            /** @description 条目封面 */
             cover: components["schemas"]["OpenCoverDto"] | null;
             /** @description 开发厂商，仅 galgame 命中携带 */
             developer: string | null;
+            /** @description 条目 ID，需与 type 搭配定位资源 */
             id: number;
+            /** @description 条目副标题，通常为译名 */
             subtitle: string | null;
+            /** @description 条目主标题，通常为原名 */
             title: string;
-            /** @enum {string} */
+            /**
+             * @description 命中的条目类型
+             * @enum {string}
+             */
             type: "galgame" | "light_novel" | "manga" | "character" | "person" | "producer";
         };
         OpenTagDto: {
+            /** @description 标签获得的赞同数 */
             likes: number;
+            /** @description 标签名 */
             name: string;
         };
         OpenWorkCharacterDto: {
+            /** @description 角色信息 */
             character: components["schemas"]["OpenEntityRefDto"];
+            /** @description 角色定位 */
             role: components["schemas"]["CharacterRole"];
         };
         OwnedDecorationDto: {
@@ -15216,10 +15682,15 @@ export interface components {
             items: components["schemas"]["OwnedDecorationDto"][];
         };
         PageMetaDto: {
+            /** @description 当前页返回的条数 */
             item_count: number;
+            /** @description 当前页码，从 1 开始 */
             page: number;
+            /** @description 每页条数 */
             page_size: number;
+            /** @description 符合条件的总条数 */
             total_items: number;
+            /** @description 总页数 */
             total_pages: number;
         };
         PermissionCatalogDto: {
@@ -15434,7 +15905,9 @@ export interface components {
             top_section_name: string | null;
         };
         PostCoverResDto: {
+            /** @description 图片资源 */
             media: components["schemas"]["MediaAssetDto"];
+            /** @description 图片展示顺序，从 0 开始 */
             order: number;
         };
         PostDetailDto: {
@@ -15479,15 +15952,25 @@ export interface components {
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
         PostSummaryDto: {
+            /** @description 图文配图 */
             covers: components["schemas"]["PostCoverResDto"][];
+            /** @description 发布时间 */
             created_at: string;
+            /** @description 作者 */
             creator: components["schemas"]["UserRefDto"] | null;
+            /** @description 图文 ID */
             id: number;
+            /** @description 点赞数 */
             like_count: number;
+            /** @description 所属板块 */
             sections: components["schemas"]["SectionRelationDto"][];
+            /** @description 图文标题 */
             title: string;
+            /** @description 关联话题 */
             topics: components["schemas"]["TopicRelationDto"][];
+            /** @description 最后更新时间 */
             updated_at: string;
+            /** @description 浏览量 */
             view_count: number;
         };
         PostWorkRefDto: {
@@ -15637,23 +16120,43 @@ export interface components {
             rybbit: components["schemas"]["RybbitPublicConfigDto"] | null;
         };
         PublicUserDto: {
+            /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 个人简介 */
             bio: string | null;
+            /** @description 当前佩戴的徽章 */
             equipped_badges: components["schemas"]["EquippedBadgeDto"][];
+            /** @description 当前佩戴的头像框 */
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 粉丝数 */
             follower_count: number;
+            /** @description 关注数 */
             following_count: number;
+            /** @description 个人主页封面 */
             head_cover: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 用户 ID */
             id: number;
+            /** @description 请求方是否已关注该用户 */
             is_following: boolean;
+            /** @description 是否与该用户互相关注 */
             is_mutual: boolean;
+            /** @description 移动端个人主页封面 */
             mobile_head_cover: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 用户名 */
             name: string;
+            /** @description 昵称 */
             nickname: string | null;
-            /** @enum {string} */
+            /**
+             * @description 用户角色
+             * @enum {string}
+             */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
+            /** @description 个性签名 */
             signature: string | null;
-            /** @enum {string} */
+            /**
+             * @description 账号状态
+             * @enum {string}
+             */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
         /** @enum {string} */
@@ -15670,7 +16173,9 @@ export interface components {
             waiting: number;
         };
         RateDimensionDto: {
+            /** @description 评分维度标识 */
             key: string;
+            /** @description 该维度的评分 */
             score: number;
         };
         RateKeywordDto: {
@@ -15702,27 +16207,49 @@ export interface components {
             my_value: -1 | 0 | 1;
         };
         RateWorkDto: {
+            /** @description 作品封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
+            /** @description 各维度评分 */
             dimensions: components["schemas"]["RateDimensionDto"][];
+            /** @description 作品 ID */
             id: number;
+            /** @description 短评是否含剧透 */
             is_spoiler: boolean;
+            /** @description 最近一次评分或标记变动的时间 */
             last_activity_at: string;
+            /** @description 总评分 */
             rate: number | null;
+            /** @description 短评正文 */
             rate_content: string | null;
+            /** @description 评分记录 ID */
             rate_id: number;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态，具体文案随 work_type 而异
+             * @enum {string|null}
+             */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 作品标题 */
             title: string;
-            /** @enum {string} */
+            /**
+             * @description 作品类型
+             * @enum {string}
+             */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
         RatedMediaAssetDto: {
+            /** @description 图片高度，单位像素 */
             height: number | null;
+            /** @description 媒体资源 ID */
             id: number;
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 色情内容分级，0 为安全 */
             sexual: number;
+            /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description 暴力内容分级，0 为安全 */
             violence: number;
+            /** @description 图片宽度，单位像素 */
             width: number | null;
         };
         ReadAllResDto: {
@@ -16116,13 +16643,20 @@ export interface components {
             violence: number;
         };
         SearchCoverDto: {
+            /** @description 图片高度，单位像素 */
             height: number | null;
+            /** @description 媒体资源 ID */
             id: number;
+            /** @description 是否为NSFW 内容 */
             nsfw: boolean;
+            /** @description 色情内容分级，0 为安全 */
             sexual: number;
+            /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description 暴力内容分级，0 为安全 */
             violence: number;
             votes: number;
+            /** @description 图片宽度，单位像素 */
             width: number | null;
         };
         SearchHitDto: {
@@ -16163,11 +16697,15 @@ export interface components {
             following: boolean;
         };
         SectionRefDto: {
+            /** @description 板块 ID */
             id: number;
+            /** @description 板块名 */
             name: string;
+            /** @description 板块标识，用于拼接板块页地址 */
             slug: string | null;
         };
         SectionRelationDto: {
+            /** @description 板块信息 */
             section: components["schemas"]["SectionRefDto"];
         };
         SendMessageDto: {
@@ -16473,10 +17011,13 @@ export interface components {
             following: boolean;
         };
         TopicRefDto: {
+            /** @description 话题 ID */
             id: number;
+            /** @description 话题名 */
             name: string;
         };
         TopicRelationDto: {
+            /** @description 话题信息 */
             topic: components["schemas"]["TopicRefDto"];
         };
         TranslatableEntityAdminItemDto: {
@@ -16649,8 +17190,11 @@ export interface components {
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
         UpdateFavoriteCollectionDto: {
+            /** @description 收藏夹简介 */
             description?: string;
+            /** @description 是否设为私密收藏夹 */
             is_private?: boolean;
+            /** @description 收藏夹名称 */
             name?: string;
         };
         UpdateFavoriteItemDto: {
@@ -16740,6 +17284,8 @@ export interface components {
         };
         UpdateMangaProgressDto: {
             chapter_id: number;
+            /** @description 本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。 */
+            duration_ms?: number;
             page: number;
         };
         UpdateMangaSourcePolicyDto: {
@@ -16988,34 +17534,61 @@ export interface components {
             max_image_bytes: number;
         };
         UpsertFavoriteItemDto: {
+            /** @description 收藏备注 */
             note?: string;
         };
         UpsertGalgameRateDto: {
+            /** @description 短评是否含剧透 */
             is_spoiler?: boolean;
+            /** @description 总评分 */
             rate?: number | null;
+            /** @description 角色评分 */
             rate_character?: number | null;
+            /** @description 短评正文 */
             rate_content?: string;
+            /** @description 演出评分 */
             rate_direction?: number | null;
+            /** @description 音乐评分 */
             rate_music?: number | null;
+            /** @description 剧本评分 */
             rate_scenario?: number | null;
+            /** @description 系统评分 */
             rate_system?: number | null;
+            /** @description CG 评分 */
             rate_visual?: number | null;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 通关耗时，单位分钟 */
             time_to_finish_minutes?: number;
         };
         UpsertLightNovelRateDto: {
+            /** @description 短评是否含剧透 */
             is_spoiler?: boolean;
+            /** @description 总评分 */
             rate?: number | null;
+            /** @description 角色评分 */
             rate_character?: number | null;
+            /** @description 短评正文 */
             rate_content?: string;
+            /** @description 插画评分 */
             rate_illustration?: number | null;
+            /** @description 节奏评分 */
             rate_pacing?: number | null;
+            /** @description 剧情评分 */
             rate_plot?: number | null;
+            /** @description 世界观评分 */
             rate_worldview?: number | null;
+            /** @description 文笔评分 */
             rate_writing?: number | null;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 阅读耗时，单位分钟 */
             time_to_finish_minutes?: number;
         };
         UpsertLightNovelVolumeRateDto: {
@@ -17035,10 +17608,16 @@ export interface components {
             timeout_ms?: number | null;
         };
         UpsertMangaRateDto: {
+            /** @description 短评是否含剧透 */
             is_spoiler?: boolean;
+            /** @description 总评分 */
             rate?: number | null;
+            /** @description 短评正文 */
             rate_content?: string;
-            /** @enum {string|null} */
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
         };
         UpsertReadingAnnotationDto: {
@@ -17104,13 +17683,22 @@ export interface components {
             name: string;
         };
         UserRefDto: {
+            /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 当前佩戴的徽章 */
             equipped_badges: components["schemas"]["EquippedBadgeDto"][];
+            /** @description 当前佩戴的头像框 */
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 用户 ID */
             id: number;
+            /** @description 用户名 */
             name: string;
+            /** @description 昵称 */
             nickname: string | null;
-            /** @enum {string} */
+            /**
+             * @description 用户角色
+             * @enum {string}
+             */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
         };
         /** @enum {string} */
@@ -17174,7 +17762,10 @@ export interface components {
             updated_at: string;
             views: number;
         };
-        /** @enum {string} */
+        /**
+         * @description 分卷类型
+         * @enum {string}
+         */
         VolumeType: "MAIN" | "EXTRA";
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
@@ -27202,7 +27793,7 @@ export interface operations {
             query?: {
                 cursor?: string;
                 limit?: number;
-                scope?: "recommend" | "following";
+                scope?: "hot" | "recommend" | "following";
             };
             header?: never;
             path?: never;
@@ -28798,6 +29389,8 @@ export interface operations {
     LightNovelController_getList: {
         parameters: {
             query: {
+                /** @description 题材 genre key，多个之间 OR。例：romance,isekai */
+                genre?: string[];
                 sort_field?: "publication_date" | "revised_at" | "created_at" | "views" | "read_times" | "download_times";
                 sort_order?: "asc" | "desc";
                 search?: string;
@@ -28887,6 +29480,8 @@ export interface operations {
     LightNovelController_getCandidates: {
         parameters: {
             query?: {
+                /** @description 题材 genre key，多个之间 OR。例：romance,isekai */
+                genre?: string[];
                 novel_status?: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
                 /** @description 只看含某标签的系列 */
                 tag_id?: number;
@@ -30673,7 +31268,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["OpenFavoriteCollectionDto"][];
+                };
             };
         };
     };

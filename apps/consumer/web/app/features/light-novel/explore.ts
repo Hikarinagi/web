@@ -1,3 +1,4 @@
+import { NOVEL_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
 
@@ -99,12 +100,7 @@ const STATUSES: LightNovelStatus[] = ['SERIALIZING', 'FINISHED', 'PAUSED', 'ABAN
 const DECADES: LightNovelDecade[] = ['2020s', '2010s', '2000s', 'earlier']
 const TAG_GROUP_PATTERN = /^(include|exclude)\.(and|or)\.([1-9]\d*(?:\.[1-9]\d*)*)$/
 
-const STATUS_TEXT: Record<string, string> = {
-  SERIALIZING: '连载中',
-  FINISHED: '已完结',
-  PAUSED: '休刊',
-  ABANDONED: '休刊',
-}
+const STATUS_TEXT: Record<string, string> = NOVEL_STATUS_CN
 
 export function titleOf(item: SeriesCardItem): string {
   return item.name_cn || item.name || `轻小说 #${item.id}`
@@ -168,9 +164,7 @@ export function tagRoute(tagId: number): string {
   })
 }
 
-export function sortValue(
-  state: Pick<LightNovelBrowseState, 'sort_field' | 'sort_order'>,
-): string {
+export function sortValue(state: Pick<LightNovelBrowseState, 'sort_field' | 'sort_order'>): string {
   return `${state.sort_field}:${state.sort_order}`
 }
 

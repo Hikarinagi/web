@@ -11,6 +11,12 @@ export interface FeedSource {
   guard?: () => boolean
 }
 
+const HOME_EMPTY_TEXT: Record<FeedScope, string> = {
+  hot: '最近还没有热起来的内容',
+  recommend: '还没有动态',
+  following: '关注的人和话题还没有新动态',
+}
+
 export function homeFeedSource(scope: FeedScope, seed: () => FeedResponse | undefined): FeedSource {
   const auth = scope === 'following' ? useAuthStore() : null
   return {
@@ -21,7 +27,7 @@ export function homeFeedSource(scope: FeedScope, seed: () => FeedResponse | unde
       hikariRequest('/api/v3/feed', {
         query: { limit: FEED_PAGE_SIZE, scope, ...(cursor ? { cursor } : {}) },
       }),
-    emptyText: scope === 'following' ? '关注的人和话题还没有新动态' : '还没有动态',
+    emptyText: HOME_EMPTY_TEXT[scope],
     guard: auth ? () => auth.isAuthenticated : undefined,
   }
 }

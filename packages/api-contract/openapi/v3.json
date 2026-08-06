@@ -958,7 +958,13 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           },
           "views": {
             "type": "number"
@@ -1057,7 +1063,13 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           },
           "updated_at": {
             "format": "date-time",
@@ -2010,6 +2022,7 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "头像",
             "nullable": true,
             "type": "object"
           },
@@ -2018,6 +2031,7 @@
             "type": "string"
           },
           "equipped_badges": {
+            "description": "当前佩戴的徽章",
             "items": {
               "$ref": "#/components/schemas/EquippedBadgeDto"
             },
@@ -2029,10 +2043,12 @@
                 "$ref": "#/components/schemas/EquippedFrameDto"
               }
             ],
+            "description": "当前佩戴的头像框",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "用户 ID",
             "type": "number"
           },
           "moderation_counts": {
@@ -2042,9 +2058,11 @@
             "type": "array"
           },
           "name": {
+            "description": "用户名",
             "type": "string"
           },
           "nickname": {
+            "description": "昵称",
             "nullable": true,
             "type": "string"
           },
@@ -2065,6 +2083,7 @@
             "type": "number"
           },
           "role": {
+            "description": "用户角色",
             "enum": [
               "USER",
               "ADMIN",
@@ -2106,6 +2125,7 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "头像",
             "nullable": true,
             "type": "object"
           },
@@ -2114,6 +2134,7 @@
             "type": "string"
           },
           "equipped_badges": {
+            "description": "当前佩戴的徽章",
             "items": {
               "$ref": "#/components/schemas/EquippedBadgeDto"
             },
@@ -2125,20 +2146,25 @@
                 "$ref": "#/components/schemas/EquippedFrameDto"
               }
             ],
+            "description": "当前佩戴的头像框",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "用户 ID",
             "type": "number"
           },
           "name": {
+            "description": "用户名",
             "type": "string"
           },
           "nickname": {
+            "description": "昵称",
             "nullable": true,
             "type": "string"
           },
           "role": {
+            "description": "用户角色",
             "enum": [
               "USER",
               "ADMIN",
@@ -2711,10 +2737,12 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "文章封面",
             "nullable": true,
             "type": "object"
           },
           "created_at": {
+            "description": "发布时间",
             "type": "string"
           },
           "creator": {
@@ -2723,34 +2751,42 @@
                 "$ref": "#/components/schemas/UserRefDto"
               }
             ],
+            "description": "作者",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "文章 ID",
             "type": "number"
           },
           "like_count": {
+            "description": "点赞数",
             "type": "number"
           },
           "sections": {
+            "description": "所属板块",
             "items": {
               "$ref": "#/components/schemas/SectionRelationDto"
             },
             "type": "array"
           },
           "title": {
+            "description": "文章标题",
             "type": "string"
           },
           "topics": {
+            "description": "关联话题",
             "items": {
               "$ref": "#/components/schemas/TopicRelationDto"
             },
             "type": "array"
           },
           "updated_at": {
+            "description": "最后更新时间",
             "type": "string"
           },
           "view_count": {
+            "description": "浏览量",
             "type": "number"
           }
         },
@@ -3805,7 +3841,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -3825,7 +3866,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -3844,7 +3890,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -3889,7 +3940,12 @@
           "SUPPORTING",
           "GUEST"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "GUEST": "客串",
+          "MAIN": "主角",
+          "SUPPORTING": "配角"
+        }
       },
       "CheckInConfigDto": {
         "properties": {
@@ -5661,13 +5717,16 @@
       "CreateFavoriteCollectionDto": {
         "properties": {
           "description": {
+            "description": "收藏夹简介",
             "maxLength": 2000,
             "type": "string"
           },
           "is_private": {
+            "description": "是否设为私密收藏夹",
             "type": "boolean"
           },
           "name": {
+            "description": "收藏夹名称",
             "maxLength": 255,
             "type": "string"
           }
@@ -8344,7 +8403,12 @@
       "EquippedBadgeDto": {
         "properties": {
           "decoration": {
-            "$ref": "#/components/schemas/EquippedFrameDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "description": "徽章装扮信息"
           }
         },
         "required": [
@@ -8355,18 +8419,27 @@
       "EquippedFrameDto": {
         "properties": {
           "id": {
+            "description": "装扮 ID",
             "type": "number"
           },
           "image": {
-            "$ref": "#/components/schemas/MediaAssetDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "装扮图片"
           },
           "key": {
+            "description": "装扮标识",
             "type": "string"
           },
           "name": {
+            "description": "装扮名称",
             "type": "string"
           },
           "scale": {
+            "description": "装扮相对头像的缩放比例",
             "type": "number"
           }
         },
@@ -8417,22 +8490,28 @@
       "FavoriteCollectionDto": {
         "properties": {
           "description": {
+            "description": "收藏夹简介",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "收藏夹 ID",
             "type": "number"
           },
           "is_default": {
+            "description": "是否为默认收藏夹",
             "type": "boolean"
           },
           "is_private": {
+            "description": "是否为私密收藏夹",
             "type": "boolean"
           },
           "name": {
+            "description": "收藏夹名称",
             "type": "string"
           },
           "owner_id": {
+            "description": "收藏夹所有者的用户 ID",
             "type": "number"
           }
         },
@@ -8449,21 +8528,27 @@
       "FavoriteCollectionItemCountsDto": {
         "properties": {
           "article": {
+            "description": "文章收藏数",
             "type": "number"
           },
           "galgame": {
+            "description": "Galgame 收藏数",
             "type": "number"
           },
           "light_novel": {
+            "description": "轻小说收藏数",
             "type": "number"
           },
           "manga": {
+            "description": "漫画收藏数",
             "type": "number"
           },
           "post": {
+            "description": "图文收藏数",
             "type": "number"
           },
           "total": {
+            "description": "收藏项总数",
             "type": "number"
           }
         },
@@ -8480,30 +8565,59 @@
       "FavoriteCollectionItemDto": {
         "properties": {
           "article": {
-            "$ref": "#/components/schemas/ArticleSummaryDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArticleSummaryDto"
+              }
+            ],
+            "description": "文章条目，仅当 type 为 article 时返回"
           },
           "created_at": {
+            "description": "收藏时间",
             "type": "string"
           },
           "galgame": {
-            "$ref": "#/components/schemas/GalgameSummaryDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameSummaryDto"
+              }
+            ],
+            "description": "Galgame 条目，仅当 type 为 galgame 时返回"
           },
           "id": {
+            "description": "收藏项 ID",
             "type": "number"
           },
           "light_novel": {
-            "$ref": "#/components/schemas/LightNovelSummaryDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryDto"
+              }
+            ],
+            "description": "轻小说条目，仅当 type 为 light_novel 时返回"
           },
           "manga": {
-            "$ref": "#/components/schemas/MangaSummaryDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSummaryDto"
+              }
+            ],
+            "description": "漫画条目，仅当 type 为 manga 时返回"
           },
           "note": {
+            "description": "收藏备注",
             "type": "string"
           },
           "post": {
-            "$ref": "#/components/schemas/PostSummaryDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PostSummaryDto"
+              }
+            ],
+            "description": "图文条目，仅当 type 为 post 时返回"
           },
           "type": {
+            "description": "收藏的内容类型，决定下方哪个条目字段非空",
             "enum": [
               "galgame",
               "light_novel",
@@ -8511,7 +8625,14 @@
               "article",
               "post"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "article": "文章",
+              "galgame": "Galgame",
+              "light_novel": "轻小说",
+              "manga": "漫画",
+              "post": "图文"
+            }
           }
         },
         "required": [
@@ -8525,16 +8646,27 @@
       "FavoriteCollectionItemsDto": {
         "properties": {
           "items": {
+            "description": "收藏项列表",
             "items": {
               "$ref": "#/components/schemas/FavoriteCollectionItemDto"
             },
             "type": "array"
           },
           "meta": {
-            "$ref": "#/components/schemas/PageMetaDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PageMetaDto"
+              }
+            ],
+            "description": "分页信息"
           },
           "type_counts": {
-            "$ref": "#/components/schemas/FavoriteCollectionItemCountsDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FavoriteCollectionItemCountsDto"
+              }
+            ],
+            "description": "各内容类型的收藏数统计"
           }
         },
         "required": [
@@ -8547,25 +8679,31 @@
       "FavoriteCollectionListItemDto": {
         "properties": {
           "description": {
+            "description": "收藏夹简介",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "收藏夹 ID",
             "type": "number"
           },
           "is_default": {
+            "description": "是否为默认收藏夹",
             "type": "boolean"
           },
           "is_private": {
+            "description": "是否为私密收藏夹",
             "type": "boolean"
           },
           "item_count": {
             "type": "number"
           },
           "name": {
+            "description": "收藏夹名称",
             "type": "string"
           },
           "owner_id": {
+            "description": "收藏夹所有者的用户 ID",
             "type": "number"
           }
         },
@@ -8683,6 +8821,7 @@
       "FavoriteStateDto": {
         "properties": {
           "favorited": {
+            "description": "请求方是否已收藏该条目",
             "type": "boolean"
           }
         },
@@ -9784,7 +9923,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -9815,9 +9959,15 @@
       "GalgameCoverRelationDto": {
         "properties": {
           "media": {
-            "$ref": "#/components/schemas/RatedMediaAssetDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "封面图片"
           },
           "votes": {
+            "description": "封面得票数",
             "type": "number"
           }
         },
@@ -9986,12 +10136,18 @@
         "type": "object"
       },
       "GalgameDevStatus": {
+        "description": "开发状态",
         "enum": [
           "RELEASED",
           "IN_DEVELOPMENT",
           "CANCELLED"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "CANCELLED": "开发终止",
+          "IN_DEVELOPMENT": "开发中",
+          "RELEASED": "已发售"
+        }
       },
       "GalgameDownloadFileDto": {
         "properties": {
@@ -10653,52 +10809,66 @@
       "GalgameRateDetailDto": {
         "properties": {
           "created_at": {
+            "description": "创建时间",
             "type": "string"
           },
           "dislike_count": {
+            "description": "短评被踩数",
             "type": "number"
           },
           "id": {
+            "description": "评分记录 ID",
             "type": "number"
           },
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "like_count": {
+            "description": "短评获赞数",
             "type": "number"
           },
           "rate": {
+            "description": "总评分",
             "nullable": true,
             "type": "number"
           },
           "rate_character": {
+            "description": "角色评分",
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "type": "string"
           },
           "rate_direction": {
+            "description": "演出评分",
             "nullable": true,
             "type": "number"
           },
           "rate_music": {
+            "description": "音乐评分",
             "nullable": true,
             "type": "number"
           },
           "rate_scenario": {
+            "description": "剧本评分",
             "nullable": true,
             "type": "number"
           },
           "rate_system": {
+            "description": "系统评分",
             "nullable": true,
             "type": "number"
           },
           "rate_visual": {
+            "description": "CG 评分",
             "nullable": true,
             "type": "number"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -10707,12 +10877,21 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "通关",
+              "DROPPED": "弃坑",
+              "GOING": "在玩",
+              "ON_HOLD": "搁置",
+              "PLAN": "想玩"
+            }
           },
           "time_to_finish_minutes": {
+            "description": "通关耗时，单位分钟",
             "type": "number"
           },
           "updated_at": {
+            "description": "最后更新时间",
             "type": "string"
           }
         },
@@ -11294,7 +11473,42 @@
                 "$ref": "#/components/schemas/GalgameStaffRole"
               }
             ],
-            "nullable": true
+            "nullable": true,
+            "x-enum-descriptions": {
+              "ANIMATION_DIRECTOR": "动画监督",
+              "ANIMATION_PRODUCTION": "动画制作",
+              "ANIMATION_SCRIPT": "动画剧本",
+              "ANIMATION_SUPERVISOR": "作画监督",
+              "ART": "原画",
+              "BACKGROUND": "背景",
+              "CG_SUPERVISOR": "CG 监修",
+              "CHARACTER_DESIGN": "人物设定",
+              "COOPERATION": "协力",
+              "COVER_ART": "海报",
+              "DIRECTOR": "导演",
+              "EDITOR": "编辑",
+              "EXECUTIVE_PRODUCER": "制作总指挥",
+              "GAME_DESIGNER": "游戏设计师",
+              "GRAPHICS": "美工",
+              "INSERT_PERFORMANCE": "插入歌演出",
+              "LEVEL_DESIGN": "关卡设计",
+              "MECHANICAL_DESIGN": "机械设定",
+              "MUSIC": "音乐",
+              "ORIGINAL_WORK": "原作",
+              "PLANNING": "企画",
+              "PRODUCER": "制作人",
+              "PROGRAM": "程序",
+              "QC": "QC",
+              "SCENARIO": "剧本",
+              "SD_ART": "SD原画",
+              "SERIES_COMPOSITION": "系列构成",
+              "SOUND_DIRECTOR": "音响监督",
+              "SUPERVISOR": "监修",
+              "THEME_COMPOSITION": "主题歌作曲",
+              "THEME_LYRICS": "主题歌作词",
+              "THEME_PERFORMANCE": "主题歌演出",
+              "TRANSLATOR": "翻译"
+            }
           }
         },
         "required": [
@@ -11339,37 +11553,79 @@
           "TRANSLATOR",
           "EDITOR"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ANIMATION_DIRECTOR": "动画监督",
+          "ANIMATION_PRODUCTION": "动画制作",
+          "ANIMATION_SCRIPT": "动画剧本",
+          "ANIMATION_SUPERVISOR": "作画监督",
+          "ART": "原画",
+          "BACKGROUND": "背景",
+          "CG_SUPERVISOR": "CG 监修",
+          "CHARACTER_DESIGN": "人物设定",
+          "COOPERATION": "协力",
+          "COVER_ART": "海报",
+          "DIRECTOR": "导演",
+          "EDITOR": "编辑",
+          "EXECUTIVE_PRODUCER": "制作总指挥",
+          "GAME_DESIGNER": "游戏设计师",
+          "GRAPHICS": "美工",
+          "INSERT_PERFORMANCE": "插入歌演出",
+          "LEVEL_DESIGN": "关卡设计",
+          "MECHANICAL_DESIGN": "机械设定",
+          "MUSIC": "音乐",
+          "ORIGINAL_WORK": "原作",
+          "PLANNING": "企画",
+          "PRODUCER": "制作人",
+          "PROGRAM": "程序",
+          "QC": "QC",
+          "SCENARIO": "剧本",
+          "SD_ART": "SD原画",
+          "SERIES_COMPOSITION": "系列构成",
+          "SOUND_DIRECTOR": "音响监督",
+          "SUPERVISOR": "监修",
+          "THEME_COMPOSITION": "主题歌作曲",
+          "THEME_LYRICS": "主题歌作词",
+          "THEME_PERFORMANCE": "主题歌演出",
+          "TRANSLATOR": "翻译"
+        }
       },
       "GalgameSummaryDto": {
         "properties": {
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/GalgameCoverRelationDto"
             },
             "type": "array"
           },
           "id": {
+            "description": "Galgame ID",
             "type": "number"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "origin_title": {
+            "description": "原名",
             "type": "string"
           },
           "producers": {
+            "description": "相关厂商",
             "items": {
               "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
             },
             "type": "array"
           },
           "release_date": {
+            "description": "发行日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "trans_title": {
+            "description": "译名",
             "nullable": true,
             "type": "string"
           }
@@ -11388,9 +11644,11 @@
       "GalgameSummaryProducerDto": {
         "properties": {
           "id": {
+            "description": "厂商 ID",
             "type": "number"
           },
           "name": {
+            "description": "厂商名",
             "type": "string"
           }
         },
@@ -11403,19 +11661,31 @@
       "GalgameSummaryProducerRelationDto": {
         "properties": {
           "note": {
+            "description": "角色备注",
             "type": "string"
           },
           "producer": {
-            "$ref": "#/components/schemas/GalgameSummaryProducerDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameSummaryProducerDto"
+              }
+            ],
+            "description": "厂商信息"
           },
           "role": {
+            "description": "厂商承担的角色",
             "enum": [
               "DEVELOPER",
               "PUBLISHER",
               "LOCALIZER"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "DEVELOPER": "开发商",
+              "LOCALIZER": "本地化",
+              "PUBLISHER": "发行商"
+            }
           }
         },
         "required": [
@@ -11823,7 +12093,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -11853,9 +12128,15 @@
       "LightNovelCoverRelationDto": {
         "properties": {
           "media": {
-            "$ref": "#/components/schemas/RatedMediaAssetDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "封面图片"
           },
           "votes": {
+            "description": "封面得票数",
             "type": "number"
           }
         },
@@ -12143,52 +12424,66 @@
       "LightNovelRateDetailDto": {
         "properties": {
           "created_at": {
+            "description": "创建时间",
             "type": "string"
           },
           "dislike_count": {
+            "description": "短评被踩数",
             "type": "number"
           },
           "id": {
+            "description": "评分记录 ID",
             "type": "number"
           },
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "like_count": {
+            "description": "短评获赞数",
             "type": "number"
           },
           "rate": {
+            "description": "总评分",
             "nullable": true,
             "type": "number"
           },
           "rate_character": {
+            "description": "角色评分",
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "type": "string"
           },
           "rate_illustration": {
+            "description": "插画评分",
             "nullable": true,
             "type": "number"
           },
           "rate_pacing": {
+            "description": "节奏评分",
             "nullable": true,
             "type": "number"
           },
           "rate_plot": {
+            "description": "剧情评分",
             "nullable": true,
             "type": "number"
           },
           "rate_worldview": {
+            "description": "世界观评分",
             "nullable": true,
             "type": "number"
           },
           "rate_writing": {
+            "description": "文笔评分",
             "nullable": true,
             "type": "number"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -12197,12 +12492,21 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "读完",
+              "DROPPED": "弃读",
+              "GOING": "在读",
+              "ON_HOLD": "搁置",
+              "PLAN": "想读"
+            }
           },
           "time_to_finish_minutes": {
+            "description": "阅读耗时，单位分钟",
             "type": "number"
           },
           "updated_at": {
+            "description": "最后更新时间",
             "type": "string"
           }
         },
@@ -12810,6 +13114,7 @@
                 "$ref": "#/components/schemas/LightNovelSummaryPersonDto"
               }
             ],
+            "description": "作者",
             "nullable": true,
             "type": "object"
           },
@@ -12819,43 +13124,58 @@
                 "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
               }
             ],
+            "description": "所属文库",
             "nullable": true,
             "type": "object"
           },
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/LightNovelCoverRelationDto"
             },
             "type": "array"
           },
           "id": {
+            "description": "轻小说 ID",
             "type": "number"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
           "novel_status": {
+            "description": "连载状态",
             "enum": [
               "SERIALIZING",
               "FINISHED",
               "PAUSED",
               "ABANDONED"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "ABANDONED": "休刊",
+              "FINISHED": "已完结",
+              "PAUSED": "休刊",
+              "SERIALIZING": "连载中"
+            }
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "publication_date": {
+            "description": "首卷出版日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "publishers": {
+            "description": "出版方",
             "items": {
               "$ref": "#/components/schemas/LightNovelSummaryProducerRelationDto"
             },
@@ -12879,9 +13199,11 @@
       "LightNovelSummaryPersonDto": {
         "properties": {
           "id": {
+            "description": "人物 ID",
             "type": "number"
           },
           "name": {
+            "description": "人物名",
             "type": "string"
           }
         },
@@ -12894,9 +13216,11 @@
       "LightNovelSummaryProducerDto": {
         "properties": {
           "id": {
+            "description": "厂商 ID",
             "type": "number"
           },
           "name": {
+            "description": "厂商名",
             "type": "string"
           }
         },
@@ -12909,10 +13233,16 @@
       "LightNovelSummaryProducerRelationDto": {
         "properties": {
           "note": {
+            "description": "角色备注",
             "type": "string"
           },
           "producer": {
-            "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+              }
+            ],
+            "description": "厂商信息"
           }
         },
         "required": [
@@ -13956,13 +14286,20 @@
         "type": "object"
       },
       "MangaAudience": {
+        "description": "受众分类",
         "enum": [
           "SHONEN",
           "SEINEN",
           "SHOJO",
           "JOSEI"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "JOSEI": "女性",
+          "SEINEN": "青年",
+          "SHOJO": "少女",
+          "SHONEN": "少年"
+        }
       },
       "MangaBacklogDto": {
         "properties": {
@@ -14135,7 +14472,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -14165,9 +14507,15 @@
       "MangaCoverRelationDto": {
         "properties": {
           "media": {
-            "$ref": "#/components/schemas/RatedMediaAssetDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "封面图片"
           },
           "votes": {
+            "description": "封面得票数",
             "type": "number"
           }
         },
@@ -14282,7 +14630,13 @@
                 "$ref": "#/components/schemas/MangaAudience"
               }
             ],
-            "nullable": true
+            "nullable": true,
+            "x-enum-descriptions": {
+              "JOSEI": "女性",
+              "SEINEN": "青年",
+              "SHOJO": "少女",
+              "SHONEN": "少年"
+            }
           },
           "bangumi_subject_id": {
             "nullable": true,
@@ -14371,7 +14725,12 @@
               {
                 "$ref": "#/components/schemas/MangaReadingMode"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "PAGED_LTR": "从左往右",
+              "PAGED_RTL": "从右往左",
+              "WEBTOON": "条漫（竖向滚动）"
+            }
           },
           "revised_at": {
             "format": "date-time",
@@ -14383,7 +14742,13 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           },
           "status": {
             "enum": [
@@ -14607,7 +14972,12 @@
               {
                 "$ref": "#/components/schemas/MangaProducerRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "LABEL": "书系",
+              "MAGAZINE": "连载杂志",
+              "PUBLISHER": "出版社"
+            }
           }
         },
         "required": [
@@ -14618,12 +14988,18 @@
         "type": "object"
       },
       "MangaProducerRole": {
+        "description": "承担的角色",
         "enum": [
           "PUBLISHER",
           "MAGAZINE",
           "LABEL"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "LABEL": "书系",
+          "MAGAZINE": "连载杂志",
+          "PUBLISHER": "出版社"
+        }
       },
       "MangaProgressChapterDto": {
         "properties": {
@@ -14807,28 +15183,36 @@
       "MangaRateDetailDto": {
         "properties": {
           "created_at": {
+            "description": "创建时间",
             "type": "string"
           },
           "dislike_count": {
+            "description": "短评被踩数",
             "type": "number"
           },
           "id": {
+            "description": "评分记录 ID",
             "type": "number"
           },
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "like_count": {
+            "description": "短评获赞数",
             "type": "number"
           },
           "rate": {
+            "description": "总评分",
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "type": "string"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -14837,9 +15221,17 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "看过",
+              "DROPPED": "弃坑",
+              "GOING": "在看",
+              "ON_HOLD": "搁置",
+              "PLAN": "想看"
+            }
           },
           "updated_at": {
+            "description": "最后更新时间",
             "type": "string"
           }
         },
@@ -15152,7 +15544,12 @@
               {
                 "$ref": "#/components/schemas/MangaReadingMode"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "PAGED_LTR": "从左往右",
+              "PAGED_RTL": "从右往左",
+              "WEBTOON": "条漫（竖向滚动）"
+            }
           }
         },
         "required": [
@@ -15165,12 +15562,18 @@
         "type": "object"
       },
       "MangaReadingMode": {
+        "description": "阅读方向",
         "enum": [
           "PAGED_RTL",
           "PAGED_LTR",
           "WEBTOON"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "PAGED_LTR": "从左往右",
+          "PAGED_RTL": "从右往左",
+          "WEBTOON": "条漫（竖向滚动）"
+        }
       },
       "MangaReadingStatsDto": {
         "properties": {
@@ -15371,13 +15774,20 @@
         "type": "string"
       },
       "MangaSerialStatus": {
+        "description": "连载状态",
         "enum": [
           "SERIALIZING",
           "FINISHED",
           "PAUSED",
           "ABANDONED"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ABANDONED": "中止连载",
+          "FINISHED": "已完结",
+          "PAUSED": "暂停连载",
+          "SERIALIZING": "连载中"
+        }
       },
       "MangaShelfItemDto": {
         "properties": {
@@ -15430,7 +15840,13 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           },
           "title": {
             "type": "string"
@@ -15584,7 +16000,15 @@
               {
                 "$ref": "#/components/schemas/MangaStaffRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ART": "作画",
+              "AUTHOR": "作者",
+              "CHARACTER_DESIGN": "人物原案",
+              "ILLUSTRATION": "插图",
+              "ORIGINAL_CREATOR": "原作",
+              "SCRIPT": "脚本"
+            }
           }
         },
         "required": [
@@ -15595,6 +16019,7 @@
         "type": "object"
       },
       "MangaStaffRole": {
+        "description": "担任的职位",
         "enum": [
           "AUTHOR",
           "ART",
@@ -15603,7 +16028,15 @@
           "ILLUSTRATION",
           "CHARACTER_DESIGN"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ART": "作画",
+          "AUTHOR": "作者",
+          "CHARACTER_DESIGN": "人物原案",
+          "ILLUSTRATION": "插图",
+          "ORIGINAL_CREATOR": "原作",
+          "SCRIPT": "脚本"
+        }
       },
       "MangaStatGenreDto": {
         "properties": {
@@ -15712,30 +16145,37 @@
       "MangaSummaryDto": {
         "properties": {
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/MangaCoverRelationDto"
             },
             "type": "array"
           },
           "id": {
+            "description": "漫画 ID",
             "type": "number"
           },
           "latest_chapter_at": {
+            "description": "最新一话的更新时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "publication_date": {
+            "description": "开始连载日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -15745,7 +16185,14 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "description": "连载状态",
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           }
         },
         "required": [
@@ -16104,16 +16551,20 @@
       "MediaAssetDto": {
         "properties": {
           "height": {
+            "description": "图片高度，单位像素",
             "nullable": true,
             "type": "number"
           },
           "id": {
+            "description": "媒体资源 ID",
             "type": "number"
           },
           "src": {
+            "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
           "width": {
+            "description": "图片宽度，单位像素",
             "nullable": true,
             "type": "number"
           }
@@ -17328,63 +17779,82 @@
         "type": "object"
       },
       "NovelStatus": {
+        "description": "连载状态",
         "enum": [
           "SERIALIZING",
           "FINISHED",
           "PAUSED",
           "ABANDONED"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ABANDONED": "休刊",
+          "FINISHED": "已完结",
+          "PAUSED": "休刊",
+          "SERIALIZING": "连载中"
+        }
       },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
+            "description": "年龄",
             "nullable": true,
             "type": "number"
           },
           "aliases": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "birthday_day": {
+            "description": "生日日",
             "nullable": true,
             "type": "number"
           },
           "birthday_month": {
+            "description": "生日月份",
             "nullable": true,
             "type": "number"
           },
           "blood_type": {
+            "description": "血型",
             "nullable": true,
             "type": "string"
           },
           "bust": {
+            "description": "胸围，单位厘米",
             "nullable": true,
             "type": "number"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
           "cup": {
+            "description": "罩杯",
             "nullable": true,
             "type": "string"
           },
           "gender": {
+            "description": "性别",
             "nullable": true,
             "type": "string"
           },
           "height": {
+            "description": "身高，单位厘米",
             "nullable": true,
             "type": "number"
           },
           "hips": {
+            "description": "臀围，单位厘米",
             "nullable": true,
             "type": "number"
           },
           "id": {
+            "description": "角色 ID",
             "type": "number"
           },
           "image": {
@@ -17393,43 +17863,53 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
+            "description": "角色头像",
             "nullable": true,
             "type": "object"
           },
           "intro": {
+            "description": "原文简介",
             "type": "string"
           },
           "labels": {
+            "description": "补充信息标签，键值对形式",
             "items": {
               "$ref": "#/components/schemas/OpenEntityLabelDto"
             },
             "type": "array"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "trans_intro": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "trans_name": {
+            "description": "译名",
             "nullable": true,
             "type": "string"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           },
           "waist": {
+            "description": "腰围，单位厘米",
             "nullable": true,
             "type": "number"
           },
           "weight": {
+            "description": "体重，单位千克",
             "nullable": true,
             "type": "number"
           }
@@ -17463,6 +17943,7 @@
       "OpenCoverDto": {
         "properties": {
           "height": {
+            "description": "图片高度，单位像素",
             "nullable": true,
             "type": "number"
           },
@@ -17483,6 +17964,7 @@
             "type": "number"
           },
           "width": {
+            "description": "图片宽度，单位像素",
             "nullable": true,
             "type": "number"
           }
@@ -17500,9 +17982,11 @@
       "OpenEntityLabelDto": {
         "properties": {
           "key": {
+            "description": "标签名",
             "type": "string"
           },
           "value": {
+            "description": "标签值",
             "type": "string"
           }
         },
@@ -17515,6 +17999,7 @@
       "OpenEntityRefDto": {
         "properties": {
           "id": {
+            "description": "条目 ID",
             "type": "number"
           },
           "image": {
@@ -17523,13 +18008,16 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
+            "description": "头像或立绘",
             "nullable": true,
             "type": "object"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "trans_name": {
+            "description": "译名",
             "nullable": true,
             "type": "string"
           }
@@ -17542,23 +18030,67 @@
         ],
         "type": "object"
       },
+      "OpenFavoriteCollectionDto": {
+        "properties": {
+          "id": {
+            "description": "收藏夹 ID",
+            "type": "number"
+          },
+          "is_default": {
+            "description": "是否为默认收藏夹",
+            "type": "boolean"
+          },
+          "is_private": {
+            "description": "是否为私密收藏夹",
+            "type": "boolean"
+          },
+          "item_count": {
+            "description": "收藏夹内的条目总数",
+            "type": "number"
+          },
+          "name": {
+            "description": "收藏夹名称",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "is_private",
+          "is_default",
+          "item_count"
+        ],
+        "type": "object"
+      },
       "OpenGalgameCharacterDto": {
         "properties": {
           "actors": {
+            "description": "配音演员列表",
             "items": {
               "$ref": "#/components/schemas/OpenEntityRefDto"
             },
             "type": "array"
           },
           "character": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "角色信息"
           },
           "role": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "description": "角色定位",
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -17571,22 +18103,26 @@
       "OpenGalgameDetailDto": {
         "properties": {
           "adv_type": {
+            "description": "游戏类型",
             "nullable": true,
             "type": "string"
           },
           "aliases": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/OpenCoverDto"
             },
             "type": "array"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
@@ -17596,82 +18132,114 @@
                 "$ref": "#/components/schemas/GalgameDevStatus"
               }
             ],
-            "nullable": true
+            "description": "开发状态",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "CANCELLED": "开发终止",
+              "IN_DEVELOPMENT": "开发中",
+              "RELEASED": "已发售"
+            }
           },
           "engine": {
+            "description": "游戏引擎",
             "nullable": true,
             "type": "string"
           },
           "homepage": {
+            "description": "官方网站",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "Galgame ID",
             "type": "number"
           },
           "images": {
+            "description": "游戏截图",
             "items": {
               "$ref": "#/components/schemas/OpenMediaDto"
             },
             "type": "array"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "origin_intro": {
+            "description": "原文简介",
             "nullable": true,
             "type": "string"
           },
           "origin_lang": {
+            "description": "原始语言",
             "nullable": true,
             "type": "string"
           },
           "origin_title": {
+            "description": "原名",
             "type": "string"
           },
           "platforms": {
+            "description": "支持的平台",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "prices": {
+            "description": "各版本定价",
             "items": {
               "$ref": "#/components/schemas/OpenGalgamePriceDto"
             },
             "type": "array"
           },
+          "rating": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenRatingDto"
+              }
+            ],
+            "description": "评分统计"
+          },
           "release_date": {
+            "description": "发行日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "release_date_tbd": {
+            "description": "发行日期是否待定",
             "type": "boolean"
           },
           "release_date_tbd_note": {
+            "description": "发行日期待定时的补充说明",
             "type": "string"
           },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "tags": {
+            "description": "标签列表",
             "items": {
               "$ref": "#/components/schemas/OpenTagDto"
             },
             "type": "array"
           },
           "trans_intro": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "trans_title": {
+            "description": "译名",
             "nullable": true,
             "type": "string"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           }
@@ -17699,25 +18267,30 @@
           "tags",
           "created_at",
           "updated_at",
-          "revised_at"
+          "revised_at",
+          "rating"
         ],
         "type": "object"
       },
       "OpenGalgamePriceDto": {
         "properties": {
           "amount": {
+            "description": "价格金额",
             "nullable": true,
             "type": "number"
           },
           "currency": {
+            "description": "货币代码",
             "nullable": true,
             "type": "string"
           },
           "tax_included": {
+            "description": "金额是否已含税",
             "nullable": true,
             "type": "boolean"
           },
           "version": {
+            "description": "版本名",
             "nullable": true,
             "type": "string"
           }
@@ -17733,7 +18306,12 @@
       "OpenGalgameStaffDto": {
         "properties": {
           "person": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "人物信息"
           },
           "role": {
             "allOf": [
@@ -17741,7 +18319,43 @@
                 "$ref": "#/components/schemas/GalgameStaffRole"
               }
             ],
-            "nullable": true
+            "description": "担任的职位",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "ANIMATION_DIRECTOR": "动画监督",
+              "ANIMATION_PRODUCTION": "动画制作",
+              "ANIMATION_SCRIPT": "动画剧本",
+              "ANIMATION_SUPERVISOR": "作画监督",
+              "ART": "原画",
+              "BACKGROUND": "背景",
+              "CG_SUPERVISOR": "CG 监修",
+              "CHARACTER_DESIGN": "人物设定",
+              "COOPERATION": "协力",
+              "COVER_ART": "海报",
+              "DIRECTOR": "导演",
+              "EDITOR": "编辑",
+              "EXECUTIVE_PRODUCER": "制作总指挥",
+              "GAME_DESIGNER": "游戏设计师",
+              "GRAPHICS": "美工",
+              "INSERT_PERFORMANCE": "插入歌演出",
+              "LEVEL_DESIGN": "关卡设计",
+              "MECHANICAL_DESIGN": "机械设定",
+              "MUSIC": "音乐",
+              "ORIGINAL_WORK": "原作",
+              "PLANNING": "企画",
+              "PRODUCER": "制作人",
+              "PROGRAM": "程序",
+              "QC": "QC",
+              "SCENARIO": "剧本",
+              "SD_ART": "SD原画",
+              "SERIES_COMPOSITION": "系列构成",
+              "SOUND_DIRECTOR": "音响监督",
+              "SUPERVISOR": "监修",
+              "THEME_COMPOSITION": "主题歌作曲",
+              "THEME_LYRICS": "主题歌作词",
+              "THEME_PERFORMANCE": "主题歌演出",
+              "TRANSLATOR": "翻译"
+            }
           }
         },
         "required": [
@@ -17753,22 +18367,27 @@
       "OpenLightNovelDetailDto": {
         "properties": {
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/OpenCoverDto"
             },
             "type": "array"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
           "id": {
+            "description": "轻小说 ID",
             "type": "number"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
@@ -17777,45 +18396,69 @@
               {
                 "$ref": "#/components/schemas/NovelStatus"
               }
-            ]
+            ],
+            "description": "连载状态",
+            "x-enum-descriptions": {
+              "ABANDONED": "休刊",
+              "FINISHED": "已完结",
+              "PAUSED": "休刊",
+              "SERIALIZING": "连载中"
+            }
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "other_names": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "publication_date": {
+            "description": "首卷出版日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
+          "rating": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenRatingDto"
+              }
+            ],
+            "description": "评分统计"
+          },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "summary": {
+            "description": "原文简介",
             "nullable": true,
             "type": "string"
           },
           "summary_cn": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "tags": {
+            "description": "标签列表",
             "items": {
               "$ref": "#/components/schemas/OpenTagDto"
             },
             "type": "array"
           },
           "total_volumes": {
+            "description": "已收录的分卷数",
             "type": "number"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           }
@@ -17835,20 +18478,28 @@
           "tags",
           "created_at",
           "updated_at",
-          "revised_at"
+          "revised_at",
+          "rating"
         ],
         "type": "object"
       },
       "OpenLightNovelPersonDto": {
         "properties": {
           "note": {
+            "description": "职位备注",
             "nullable": true,
             "type": "string"
           },
           "person": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "人物信息"
           },
           "relation": {
+            "description": "担任的职位",
             "type": "string"
           }
         },
@@ -17862,13 +18513,20 @@
       "OpenLightNovelProducerDto": {
         "properties": {
           "note": {
+            "description": "角色备注",
             "nullable": true,
             "type": "string"
           },
           "producer": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "厂商信息"
           },
           "relation": {
+            "description": "承担的角色",
             "type": "string"
           }
         },
@@ -17882,35 +18540,43 @@
       "OpenLightNovelVolumeDto": {
         "properties": {
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/OpenCoverDto"
             },
             "type": "array"
           },
           "id": {
+            "description": "分卷 ID",
             "type": "number"
           },
           "name": {
+            "description": "原名",
             "nullable": true,
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
           "publication_date": {
+            "description": "出版日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "relation": {
+            "description": "与所属作品的关联说明",
             "type": "string"
           },
           "volume_label": {
+            "description": "卷号的展示文本",
             "nullable": true,
             "type": "string"
           },
           "volume_number": {
+            "description": "卷号",
             "nullable": true,
             "type": "number"
           },
@@ -17919,7 +18585,12 @@
               {
                 "$ref": "#/components/schemas/VolumeType"
               }
-            ]
+            ],
+            "description": "分卷类型",
+            "x-enum-descriptions": {
+              "EXTRA": "番外",
+              "MAIN": "正篇"
+            }
           }
         },
         "required": [
@@ -17943,90 +18614,129 @@
                 "$ref": "#/components/schemas/MangaAudience"
               }
             ],
-            "nullable": true
+            "description": "受众分类",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "JOSEI": "女性",
+              "SEINEN": "青年",
+              "SHOJO": "少女",
+              "SHONEN": "少年"
+            }
           },
           "covers": {
+            "description": "封面列表，按得票数由高到低排序",
             "items": {
               "$ref": "#/components/schemas/OpenCoverDto"
             },
             "type": "array"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
           "editions": {
+            "description": "版本信息",
             "items": {
               "$ref": "#/components/schemas/OpenMangaEditionDto"
             },
             "type": "array"
           },
           "homepage": {
+            "description": "官方网站",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "漫画 ID",
             "type": "number"
           },
           "isbn": {
+            "description": "ISBN",
             "nullable": true,
             "type": "string"
           },
           "latest_chapter_at": {
+            "description": "最新一话的更新时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "origin_country": {
+            "description": "出品国家或地区",
             "nullable": true,
             "type": "string"
           },
           "other_names": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "pages": {
+            "description": "页数",
             "nullable": true,
             "type": "number"
           },
           "price_amount": {
+            "description": "价格金额",
             "nullable": true,
             "type": "number"
           },
           "price_currency": {
+            "description": "货币代码",
             "nullable": true,
             "type": "string"
           },
           "publication_date": {
+            "description": "开始连载日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "publication_end_date": {
+            "description": "完结日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "rating": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenRatingDto"
+              }
+            ],
+            "description": "评分统计"
           },
           "reading_mode": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/MangaReadingMode"
               }
-            ]
+            ],
+            "description": "阅读方向",
+            "x-enum-descriptions": {
+              "PAGED_LTR": "从左往右",
+              "PAGED_RTL": "从右往左",
+              "WEBTOON": "条漫（竖向滚动）"
+            }
           },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -18036,23 +18746,34 @@
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
-            ]
+            ],
+            "description": "连载状态",
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
           },
           "summary": {
+            "description": "原文简介",
             "nullable": true,
             "type": "string"
           },
           "summary_cn": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "tags": {
+            "description": "标签列表",
             "items": {
               "$ref": "#/components/schemas/OpenTagDto"
             },
             "type": "array"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           }
@@ -18082,7 +18803,8 @@
           "tags",
           "created_at",
           "updated_at",
-          "revised_at"
+          "revised_at",
+          "rating"
         ],
         "type": "object"
       },
@@ -18092,9 +18814,11 @@
             "additionalProperties": {
               "type": "string"
             },
+            "description": "该版本的补充字段，键值对形式",
             "type": "object"
           },
           "label": {
+            "description": "版本名",
             "type": "string"
           }
         },
@@ -18107,17 +18831,29 @@
       "OpenMangaProducerDto": {
         "properties": {
           "note": {
+            "description": "角色备注",
             "type": "string"
           },
           "producer": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "厂商信息"
           },
           "role": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/MangaProducerRole"
               }
-            ]
+            ],
+            "description": "承担的角色",
+            "x-enum-descriptions": {
+              "LABEL": "书系",
+              "MAGAZINE": "连载杂志",
+              "PUBLISHER": "出版社"
+            }
           }
         },
         "required": [
@@ -18130,17 +18866,32 @@
       "OpenMangaStaffDto": {
         "properties": {
           "note": {
+            "description": "职位备注",
             "type": "string"
           },
           "person": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "人物信息"
           },
           "role": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/MangaStaffRole"
               }
-            ]
+            ],
+            "description": "担任的职位",
+            "x-enum-descriptions": {
+              "ART": "作画",
+              "AUTHOR": "作者",
+              "CHARACTER_DESIGN": "人物原案",
+              "ILLUSTRATION": "插图",
+              "ORIGINAL_CREATOR": "原作",
+              "SCRIPT": "脚本"
+            }
           }
         },
         "required": [
@@ -18158,34 +18909,42 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
+            "description": "分卷封面",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "分卷 ID",
             "type": "number"
           },
           "isbn": {
+            "description": "ISBN",
             "nullable": true,
             "type": "string"
           },
           "name": {
+            "description": "原名",
             "nullable": true,
             "type": "string"
           },
           "name_cn": {
+            "description": "中文名",
             "nullable": true,
             "type": "string"
           },
           "page_count": {
+            "description": "页数",
             "nullable": true,
             "type": "number"
           },
           "publication_date": {
+            "description": "出版日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "volume_number": {
+            "description": "卷号",
             "nullable": true,
             "type": "number"
           }
@@ -18205,6 +18964,7 @@
       "OpenMediaDto": {
         "properties": {
           "height": {
+            "description": "图片高度，单位像素",
             "nullable": true,
             "type": "number"
           },
@@ -18221,6 +18981,7 @@
             "type": "number"
           },
           "width": {
+            "description": "图片宽度，单位像素",
             "nullable": true,
             "type": "number"
           }
@@ -18254,20 +19015,24 @@
       "OpenPersonDetailDto": {
         "properties": {
           "aliases": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
           "gender": {
+            "description": "性别",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "人物 ID",
             "type": "number"
           },
           "image": {
@@ -18276,35 +19041,43 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
+            "description": "人物头像",
             "nullable": true,
             "type": "object"
           },
           "intro": {
+            "description": "原文简介",
             "type": "string"
           },
           "labels": {
+            "description": "补充信息标签，键值对形式",
             "items": {
               "$ref": "#/components/schemas/OpenEntityLabelDto"
             },
             "type": "array"
           },
           "name": {
+            "description": "原名",
             "type": "string"
           },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "trans_intro": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "trans_name": {
+            "description": "译名",
             "nullable": true,
             "type": "string"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           }
@@ -18328,30 +19101,37 @@
       "OpenProducerDetailDto": {
         "properties": {
           "aliases": {
+            "description": "别名列表",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
           "country": {
+            "description": "所属国家或地区",
             "type": "string"
           },
           "created_at": {
+            "description": "条目创建时间",
             "format": "date-time",
             "type": "string"
           },
           "established": {
+            "description": "成立日期",
             "nullable": true,
             "type": "string"
           },
           "id": {
+            "description": "厂商 ID",
             "type": "number"
           },
           "intro": {
+            "description": "原文简介",
             "nullable": true,
             "type": "string"
           },
           "labels": {
+            "description": "补充信息标签，键值对形式",
             "items": {
               "$ref": "#/components/schemas/OpenEntityLabelDto"
             },
@@ -18363,29 +19143,36 @@
                 "$ref": "#/components/schemas/OpenMediaDto"
               }
             ],
+            "description": "厂商 Logo",
             "nullable": true,
             "type": "object"
           },
           "name": {
+            "description": "厂商名",
             "type": "string"
           },
           "revised_at": {
+            "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "trans_intro": {
+            "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "type": {
+            "description": "厂商类型",
             "type": "string"
           },
           "updated_at": {
+            "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
           },
           "website": {
+            "description": "官方网站",
             "nullable": true,
             "type": "string"
           }
@@ -18408,6 +19195,89 @@
         ],
         "type": "object"
       },
+      "OpenRatingCountDto": {
+        "properties": {
+          "1": {
+            "description": "打 1 分的人数",
+            "type": "number"
+          },
+          "2": {
+            "description": "打 2 分的人数",
+            "type": "number"
+          },
+          "3": {
+            "description": "打 3 分的人数",
+            "type": "number"
+          },
+          "4": {
+            "description": "打 4 分的人数",
+            "type": "number"
+          },
+          "5": {
+            "description": "打 5 分的人数",
+            "type": "number"
+          },
+          "6": {
+            "description": "打 6 分的人数",
+            "type": "number"
+          },
+          "7": {
+            "description": "打 7 分的人数",
+            "type": "number"
+          },
+          "8": {
+            "description": "打 8 分的人数",
+            "type": "number"
+          },
+          "9": {
+            "description": "打 9 分的人数",
+            "type": "number"
+          },
+          "10": {
+            "description": "打 10 分的人数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "type": "object"
+      },
+      "OpenRatingDto": {
+        "properties": {
+          "count": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenRatingCountDto"
+              }
+            ],
+            "description": "各分数对应的评分人数"
+          },
+          "score": {
+            "description": "平均分，保留一位小数，无人评分时为 0",
+            "type": "number"
+          },
+          "total": {
+            "description": "参与评分的人数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "count",
+          "score"
+        ],
+        "type": "object"
+      },
       "OpenSearchHitDto": {
         "properties": {
           "cover": {
@@ -18416,6 +19286,7 @@
                 "$ref": "#/components/schemas/OpenCoverDto"
               }
             ],
+            "description": "条目封面",
             "nullable": true,
             "type": "object"
           },
@@ -18425,16 +19296,20 @@
             "type": "string"
           },
           "id": {
+            "description": "条目 ID，需与 type 搭配定位资源",
             "type": "number"
           },
           "subtitle": {
+            "description": "条目副标题，通常为译名",
             "nullable": true,
             "type": "string"
           },
           "title": {
+            "description": "条目主标题，通常为原名",
             "type": "string"
           },
           "type": {
+            "description": "命中的条目类型",
             "enum": [
               "galgame",
               "light_novel",
@@ -18443,7 +19318,12 @@
               "person",
               "producer"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "galgame": "Galgame",
+              "light_novel": "轻小说",
+              "manga": "漫画"
+            }
           }
         },
         "required": [
@@ -18459,9 +19339,11 @@
       "OpenTagDto": {
         "properties": {
           "likes": {
+            "description": "标签获得的赞同数",
             "type": "number"
           },
           "name": {
+            "description": "标签名",
             "type": "string"
           }
         },
@@ -18474,14 +19356,25 @@
       "OpenWorkCharacterDto": {
         "properties": {
           "character": {
-            "$ref": "#/components/schemas/OpenEntityRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "角色信息"
           },
           "role": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "description": "角色定位",
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           }
         },
         "required": [
@@ -18600,18 +19493,23 @@
       "PageMetaDto": {
         "properties": {
           "item_count": {
+            "description": "当前页返回的条数",
             "type": "number"
           },
           "page": {
+            "description": "当前页码，从 1 开始",
             "type": "number"
           },
           "page_size": {
+            "description": "每页条数",
             "type": "number"
           },
           "total_items": {
+            "description": "符合条件的总条数",
             "type": "number"
           },
           "total_pages": {
+            "description": "总页数",
             "type": "number"
           }
         },
@@ -19559,9 +20457,15 @@
       "PostCoverResDto": {
         "properties": {
           "media": {
-            "$ref": "#/components/schemas/MediaAssetDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "图片资源"
           },
           "order": {
+            "description": "图片展示顺序，从 0 开始",
             "type": "number"
           }
         },
@@ -19769,12 +20673,14 @@
       "PostSummaryDto": {
         "properties": {
           "covers": {
+            "description": "图文配图",
             "items": {
               "$ref": "#/components/schemas/PostCoverResDto"
             },
             "type": "array"
           },
           "created_at": {
+            "description": "发布时间",
             "type": "string"
           },
           "creator": {
@@ -19783,34 +20689,42 @@
                 "$ref": "#/components/schemas/UserRefDto"
               }
             ],
+            "description": "作者",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "图文 ID",
             "type": "number"
           },
           "like_count": {
+            "description": "点赞数",
             "type": "number"
           },
           "sections": {
+            "description": "所属板块",
             "items": {
               "$ref": "#/components/schemas/SectionRelationDto"
             },
             "type": "array"
           },
           "title": {
+            "description": "图文标题",
             "type": "string"
           },
           "topics": {
+            "description": "关联话题",
             "items": {
               "$ref": "#/components/schemas/TopicRelationDto"
             },
             "type": "array"
           },
           "updated_at": {
+            "description": "最后更新时间",
             "type": "string"
           },
           "view_count": {
+            "description": "浏览量",
             "type": "number"
           }
         },
@@ -20178,7 +21092,13 @@
               {
                 "$ref": "#/components/schemas/ProducerType"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "COMPANY": "厂商",
+              "DOUJIN": "同人社团",
+              "INDIVIDUAL": "个人",
+              "MAGAZINE": "杂志"
+            }
           },
           "updated_at": {
             "format": "date-time",
@@ -20262,7 +21182,12 @@
               {
                 "$ref": "#/components/schemas/MangaProducerRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "LABEL": "书系",
+              "MAGAZINE": "连载杂志",
+              "PUBLISHER": "出版社"
+            }
           }
         },
         "required": [
@@ -20354,7 +21279,13 @@
           "INDIVIDUAL",
           "MAGAZINE"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "COMPANY": "厂商",
+          "DOUJIN": "同人社团",
+          "INDIVIDUAL": "个人",
+          "MAGAZINE": "杂志"
+        }
       },
       "PromoBannerDto": {
         "properties": {
@@ -20484,14 +21415,17 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "头像",
             "nullable": true,
             "type": "object"
           },
           "bio": {
+            "description": "个人简介",
             "nullable": true,
             "type": "string"
           },
           "equipped_badges": {
+            "description": "当前佩戴的徽章",
             "items": {
               "$ref": "#/components/schemas/EquippedBadgeDto"
             },
@@ -20503,13 +21437,16 @@
                 "$ref": "#/components/schemas/EquippedFrameDto"
               }
             ],
+            "description": "当前佩戴的头像框",
             "nullable": true,
             "type": "object"
           },
           "follower_count": {
+            "description": "粉丝数",
             "type": "number"
           },
           "following_count": {
+            "description": "关注数",
             "type": "number"
           },
           "head_cover": {
@@ -20518,16 +21455,20 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "个人主页封面",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "用户 ID",
             "type": "number"
           },
           "is_following": {
+            "description": "请求方是否已关注该用户",
             "type": "boolean"
           },
           "is_mutual": {
+            "description": "是否与该用户互相关注",
             "type": "boolean"
           },
           "mobile_head_cover": {
@@ -20536,35 +21477,51 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "移动端个人主页封面",
             "nullable": true,
             "type": "object"
           },
           "name": {
+            "description": "用户名",
             "type": "string"
           },
           "nickname": {
+            "description": "昵称",
             "nullable": true,
             "type": "string"
           },
           "role": {
+            "description": "用户角色",
             "enum": [
               "USER",
               "ADMIN",
               "SUPER_ADMIN"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "ADMIN": "管理员",
+              "SUPER_ADMIN": "超级管理员",
+              "USER": "用户"
+            }
           },
           "signature": {
+            "description": "个性签名",
             "nullable": true,
             "type": "string"
           },
           "status": {
+            "description": "账号状态",
             "enum": [
               "ACTIVE",
               "INACTIVE",
               "BANNED"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "ACTIVE": "正常",
+              "BANNED": "已封禁",
+              "INACTIVE": "未激活"
+            }
           }
         },
         "required": [
@@ -20641,9 +21598,11 @@
       "RateDimensionDto": {
         "properties": {
           "key": {
+            "description": "评分维度标识",
             "type": "string"
           },
           "score": {
+            "description": "该维度的评分",
             "type": "number"
           }
         },
@@ -20762,36 +21721,45 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "作品封面",
             "nullable": true,
             "type": "object"
           },
           "dimensions": {
+            "description": "各维度评分",
             "items": {
               "$ref": "#/components/schemas/RateDimensionDto"
             },
             "type": "array"
           },
           "id": {
+            "description": "作品 ID",
             "type": "number"
           },
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "last_activity_at": {
+            "description": "最近一次评分或标记变动的时间",
             "type": "string"
           },
           "rate": {
+            "description": "总评分",
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "nullable": true,
             "type": "string"
           },
           "rate_id": {
+            "description": "评分记录 ID",
             "type": "number"
           },
           "status": {
+            "description": "标记状态，具体文案随 work_type 而异",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -20800,18 +21768,32 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "通关 / 读完 / 看过",
+              "DROPPED": "弃坑 / 弃读",
+              "GOING": "在玩 / 在读 / 在看",
+              "ON_HOLD": "搁置",
+              "PLAN": "想玩 / 想读 / 想看"
+            }
           },
           "title": {
+            "description": "作品标题",
             "type": "string"
           },
           "work_type": {
+            "description": "作品类型",
             "enum": [
               "GALGAME",
               "LIGHT_NOVEL",
               "MANGA"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "GALGAME": "Galgame",
+              "LIGHT_NOVEL": "轻小说",
+              "MANGA": "漫画"
+            }
           }
         },
         "required": [
@@ -20832,25 +21814,32 @@
       "RatedMediaAssetDto": {
         "properties": {
           "height": {
+            "description": "图片高度，单位像素",
             "nullable": true,
             "type": "number"
           },
           "id": {
+            "description": "媒体资源 ID",
             "type": "number"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "sexual": {
+            "description": "色情内容分级，0 为安全",
             "type": "number"
           },
           "src": {
+            "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
           "violence": {
+            "description": "暴力内容分级，0 为安全",
             "type": "number"
           },
           "width": {
+            "description": "图片宽度，单位像素",
             "nullable": true,
             "type": "number"
           }
@@ -21864,7 +22853,12 @@
               {
                 "$ref": "#/components/schemas/CharacterRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "GUEST": "客串",
+              "MAIN": "主角",
+              "SUPPORTING": "配角"
+            }
           },
           "source_names": {
             "items": {
@@ -22064,7 +23058,42 @@
               {
                 "$ref": "#/components/schemas/GalgameStaffRole"
               }
-            ]
+            ],
+            "x-enum-descriptions": {
+              "ANIMATION_DIRECTOR": "动画监督",
+              "ANIMATION_PRODUCTION": "动画制作",
+              "ANIMATION_SCRIPT": "动画剧本",
+              "ANIMATION_SUPERVISOR": "作画监督",
+              "ART": "原画",
+              "BACKGROUND": "背景",
+              "CG_SUPERVISOR": "CG 监修",
+              "CHARACTER_DESIGN": "人物设定",
+              "COOPERATION": "协力",
+              "COVER_ART": "海报",
+              "DIRECTOR": "导演",
+              "EDITOR": "编辑",
+              "EXECUTIVE_PRODUCER": "制作总指挥",
+              "GAME_DESIGNER": "游戏设计师",
+              "GRAPHICS": "美工",
+              "INSERT_PERFORMANCE": "插入歌演出",
+              "LEVEL_DESIGN": "关卡设计",
+              "MECHANICAL_DESIGN": "机械设定",
+              "MUSIC": "音乐",
+              "ORIGINAL_WORK": "原作",
+              "PLANNING": "企画",
+              "PRODUCER": "制作人",
+              "PROGRAM": "程序",
+              "QC": "QC",
+              "SCENARIO": "剧本",
+              "SD_ART": "SD原画",
+              "SERIES_COMPOSITION": "系列构成",
+              "SOUND_DIRECTOR": "音响监督",
+              "SUPERVISOR": "监修",
+              "THEME_COMPOSITION": "主题歌作曲",
+              "THEME_LYRICS": "主题歌作词",
+              "THEME_PERFORMANCE": "主题歌演出",
+              "TRANSLATOR": "翻译"
+            }
           },
           "source_names": {
             "items": {
@@ -22534,28 +23563,35 @@
       "SearchCoverDto": {
         "properties": {
           "height": {
+            "description": "图片高度，单位像素",
             "nullable": true,
             "type": "number"
           },
           "id": {
+            "description": "媒体资源 ID",
             "type": "number"
           },
           "nsfw": {
+            "description": "是否为NSFW 内容",
             "type": "boolean"
           },
           "sexual": {
+            "description": "色情内容分级，0 为安全",
             "type": "number"
           },
           "src": {
+            "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
           "violence": {
+            "description": "暴力内容分级，0 为安全",
             "type": "number"
           },
           "votes": {
             "type": "number"
           },
           "width": {
+            "description": "图片宽度，单位像素",
             "nullable": true,
             "type": "number"
           }
@@ -22746,12 +23782,15 @@
       "SectionRefDto": {
         "properties": {
           "id": {
+            "description": "板块 ID",
             "type": "number"
           },
           "name": {
+            "description": "板块名",
             "type": "string"
           },
           "slug": {
+            "description": "板块标识，用于拼接板块页地址",
             "nullable": true,
             "type": "string"
           }
@@ -22766,7 +23805,12 @@
       "SectionRelationDto": {
         "properties": {
           "section": {
-            "$ref": "#/components/schemas/SectionRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SectionRefDto"
+              }
+            ],
+            "description": "板块信息"
           }
         },
         "required": [
@@ -24101,9 +25145,11 @@
       "TopicRefDto": {
         "properties": {
           "id": {
+            "description": "话题 ID",
             "type": "number"
           },
           "name": {
+            "description": "话题名",
             "type": "string"
           }
         },
@@ -24116,7 +25162,12 @@
       "TopicRelationDto": {
         "properties": {
           "topic": {
-            "$ref": "#/components/schemas/TopicRefDto"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TopicRefDto"
+              }
+            ],
+            "description": "话题信息"
           }
         },
         "required": [
@@ -24755,13 +25806,16 @@
       "UpdateFavoriteCollectionDto": {
         "properties": {
           "description": {
+            "description": "收藏夹简介",
             "maxLength": 2000,
             "type": "string"
           },
           "is_private": {
+            "description": "是否设为私密收藏夹",
             "type": "boolean"
           },
           "name": {
+            "description": "收藏夹名称",
             "maxLength": 255,
             "type": "string"
           }
@@ -25066,6 +26120,12 @@
         "properties": {
           "chapter_id": {
             "minimum": 1,
+            "type": "number"
+          },
+          "duration_ms": {
+            "description": "本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。",
+            "maximum": 21600000,
+            "minimum": 0,
             "type": "number"
           },
           "page": {
@@ -26038,6 +27098,7 @@
       "UpsertFavoriteItemDto": {
         "properties": {
           "note": {
+            "description": "收藏备注",
             "maxLength": 2000,
             "type": "string"
           }
@@ -26047,55 +27108,65 @@
       "UpsertGalgameRateDto": {
         "properties": {
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "rate": {
+            "description": "总评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_character": {
+            "description": "角色评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "maxLength": 5000,
             "type": "string"
           },
           "rate_direction": {
+            "description": "演出评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_music": {
+            "description": "音乐评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_scenario": {
+            "description": "剧本评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_system": {
+            "description": "系统评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_visual": {
+            "description": "CG 评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -26104,9 +27175,17 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "通关",
+              "DROPPED": "弃坑",
+              "GOING": "在玩",
+              "ON_HOLD": "搁置",
+              "PLAN": "想玩"
+            }
           },
           "time_to_finish_minutes": {
+            "description": "通关耗时，单位分钟",
             "maximum": 525600,
             "minimum": 0,
             "type": "number"
@@ -26117,55 +27196,65 @@
       "UpsertLightNovelRateDto": {
         "properties": {
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "rate": {
+            "description": "总评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_character": {
+            "description": "角色评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "maxLength": 5000,
             "type": "string"
           },
           "rate_illustration": {
+            "description": "插画评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_pacing": {
+            "description": "节奏评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_plot": {
+            "description": "剧情评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_worldview": {
+            "description": "世界观评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_writing": {
+            "description": "文笔评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -26174,9 +27263,17 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "读完",
+              "DROPPED": "弃读",
+              "GOING": "在读",
+              "ON_HOLD": "搁置",
+              "PLAN": "想读"
+            }
           },
           "time_to_finish_minutes": {
+            "description": "阅读耗时，单位分钟",
             "maximum": 525600,
             "minimum": 0,
             "type": "number"
@@ -26255,19 +27352,23 @@
       "UpsertMangaRateDto": {
         "properties": {
           "is_spoiler": {
+            "description": "短评是否含剧透",
             "type": "boolean"
           },
           "rate": {
+            "description": "总评分",
             "maximum": 10,
             "minimum": 1,
             "nullable": true,
             "type": "number"
           },
           "rate_content": {
+            "description": "短评正文",
             "maxLength": 5000,
             "type": "string"
           },
           "status": {
+            "description": "标记状态",
             "enum": [
               "GOING",
               "COMPLETED",
@@ -26276,7 +27377,14 @@
               "PLAN"
             ],
             "nullable": true,
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "COMPLETED": "看过",
+              "DROPPED": "弃坑",
+              "GOING": "在看",
+              "ON_HOLD": "搁置",
+              "PLAN": "想看"
+            }
           }
         },
         "type": "object"
@@ -26538,10 +27646,12 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
+            "description": "头像",
             "nullable": true,
             "type": "object"
           },
           "equipped_badges": {
+            "description": "当前佩戴的徽章",
             "items": {
               "$ref": "#/components/schemas/EquippedBadgeDto"
             },
@@ -26553,26 +27663,36 @@
                 "$ref": "#/components/schemas/EquippedFrameDto"
               }
             ],
+            "description": "当前佩戴的头像框",
             "nullable": true,
             "type": "object"
           },
           "id": {
+            "description": "用户 ID",
             "type": "number"
           },
           "name": {
+            "description": "用户名",
             "type": "string"
           },
           "nickname": {
+            "description": "昵称",
             "nullable": true,
             "type": "string"
           },
           "role": {
+            "description": "用户角色",
             "enum": [
               "USER",
               "ADMIN",
               "SUPER_ADMIN"
             ],
-            "type": "string"
+            "type": "string",
+            "x-enum-descriptions": {
+              "ADMIN": "管理员",
+              "SUPER_ADMIN": "超级管理员",
+              "USER": "用户"
+            }
           }
         },
         "required": [
@@ -26592,7 +27712,12 @@
           "ADMIN",
           "SUPER_ADMIN"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ADMIN": "管理员",
+          "SUPER_ADMIN": "超级管理员",
+          "USER": "用户"
+        }
       },
       "UserSettingsDto": {
         "properties": {
@@ -26711,7 +27836,12 @@
           "INACTIVE",
           "BANNED"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "ACTIVE": "正常",
+          "BANNED": "已封禁",
+          "INACTIVE": "未激活"
+        }
       },
       "UserStatusDto": {
         "properties": {
@@ -26824,11 +27954,16 @@
         "type": "object"
       },
       "VolumeType": {
+        "description": "分卷类型",
         "enum": [
           "MAIN",
           "EXTRA"
         ],
-        "type": "string"
+        "type": "string",
+        "x-enum-descriptions": {
+          "EXTRA": "番外",
+          "MAIN": "正篇"
+        }
       },
       "WikiSnapshotDto": {
         "properties": {
@@ -43895,6 +45030,7 @@
             "schema": {
               "default": "recommend",
               "enum": [
+                "hot",
                 "recommend",
                 "following"
               ],
@@ -46601,6 +47737,18 @@
         "operationId": "LightNovelController_getList",
         "parameters": [
           {
+            "description": "题材 genre key，多个之间 OR。例：romance,isekai",
+            "in": "query",
+            "name": "genre",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
             "in": "query",
             "name": "sort_field",
             "required": false,
@@ -46868,6 +48016,18 @@
       "get": {
         "operationId": "LightNovelController_getCandidates",
         "parameters": [
+          {
+            "description": "题材 genre key，多个之间 OR。例：romance,isekai",
+            "in": "query",
+            "name": "genre",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
           {
             "in": "query",
             "name": "novel_status",
@@ -50184,6 +51344,16 @@
         "parameters": [],
         "responses": {
           "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenFavoriteCollectionDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
             "description": ""
           }
         },

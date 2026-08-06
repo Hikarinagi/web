@@ -14,7 +14,7 @@
         : null
     "
   >
-    <LayoutAppHeader />
+    <LayoutAppHeader :flush="route.meta.headerFlush === true" />
     <main
       class="flex-1 pt-(--app-header-height)"
       :class="fluid ? null : 'mx-auto w-full max-w-app px-4 sm:px-6'"
