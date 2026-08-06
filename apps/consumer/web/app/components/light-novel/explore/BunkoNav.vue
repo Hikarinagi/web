@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <LightNovelExploreSection v-if="bunko.length" title="按文库逛">
+  <LightNovelExploreSection v-if="bunko.length" title="按文库筛选">
     <LightNovelExploreRailViewport
       content-class="flex w-[var(--container-app)] flex-wrap items-center gap-2.5 px-6 pb-2"
     >

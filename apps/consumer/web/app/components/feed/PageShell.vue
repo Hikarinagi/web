@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  useHead({ htmlAttrs: { class: 'overscroll-none' } })
+  const slots = useSlots()
+
+  useHead({
+    htmlAttrs: { class: slots.nav ? 'overscroll-none page-wide' : 'overscroll-none' },
+  })
 </script>
 
 <template>

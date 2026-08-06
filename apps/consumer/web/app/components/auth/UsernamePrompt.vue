@@ -29,6 +29,6 @@
     v-model:visible="open"
     :current="auth.user.name"
     :dismissable-mask="false"
-    intro="欢迎来到全新的Hikarinagi v3！我们重新设计了用户名和昵称系统，因此我们在迁移中重置了你的初始用户名，现在你有一次修改用户名的机会"
+    intro="欢迎来到全新的 Hikarinagi v3！我们重新设计了用户名和昵称系统，因此我们在迁移中重置了你的初始用户名，现在你有一次修改用户名的机会"
   />
 </template>

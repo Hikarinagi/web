@@ -157,7 +157,7 @@ async function buildRail(event: H3Event, spec: RailSpec): Promise<Rail | null> {
   return {
     key: `series-${spec.id}`,
     title: `系列 · ${detail.name_cn || detail.name}`,
-    meta: '本传 / 续作 / 外传 / 联动',
+    meta: '',
     to: `/light-novels/${spec.id}`,
     items: [detail, ...relations.map(rel => rel.target_light_novel)],
   }

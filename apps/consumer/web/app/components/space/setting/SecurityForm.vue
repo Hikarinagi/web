@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <CardPanel title="账号安全" description="前往Hikarinagi ID管理中心管理你的账号信息">
+  <CardPanel title="账号安全" description="前往 Hikarinagi ID 管理中心管理你的账号信息">
     <div class="flex items-center justify-between gap-4">
       <div class="min-w-0">
         <p class="truncate text-sm font-medium text-color">{{ email }}</p>

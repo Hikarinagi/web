@@ -39,7 +39,7 @@
   const showTop = computed(() => y.value > SCROLL_THRESHOLD)
   const suppressed = computed(() => route.meta.floatingToolbar === false)
   const toolbarStyle = {
-    right: 'max(1rem, calc((100vw - var(--container-app)) / 2 - 3.75rem))',
+    right: 'max(1rem, calc((100vw - var(--page-container)) / 2 - 3.75rem))',
     bottom: 'max(5.5rem, calc(env(safe-area-inset-bottom) + 5.5rem))',
   }
 

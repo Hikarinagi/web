@@ -27,7 +27,7 @@
           <ShieldCheck class="size-5 shrink-0" aria-hidden="true" />
           <span class="flex min-w-0 flex-col text-left">
             <span class="font-medium">登出全部</span>
-            <span class="text-xs opacity-80">撤销本设备所有站点的Hikarinagi ID登录态</span>
+            <span class="text-xs opacity-80">撤销本设备所有站点的 Hikarinagi ID 登录态</span>
           </span>
         </span>
       </Button>

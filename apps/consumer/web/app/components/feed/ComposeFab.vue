@@ -20,7 +20,7 @@
   const visible = computed(() => isFeedRoute.value && isDesktop.value)
   const iconClass = computed(() => (open.value ? 'rotate-45' : ''))
   const menuStyle = {
-    right: 'max(1rem, calc((100vw - var(--container-app)) / 2 - 3.75rem))',
+    right: 'max(1rem, calc((100vw - var(--page-container)) / 2 - 3.75rem))',
     bottom: 'max(8.75rem, calc(env(safe-area-inset-bottom) + 8.75rem))',
   }
 

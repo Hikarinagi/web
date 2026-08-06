@@ -17,10 +17,7 @@
 </script>
 
 <template>
-  <LightNovelExploreSection
-    title="系列宇宙"
-    :meta="`${titleOf(spotlight.series)} · 本传 / 续作 / 外传 / 联动`"
-  >
+  <LightNovelExploreSection title="系列" :meta="titleOf(spotlight.series)">
     <LightNovelExploreRailViewport>
       <LightNovelExploreSeriesCard
         v-for="(card, index) in cards"

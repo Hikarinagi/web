@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <MangaHomeSection title="顺着这些标签探索">
+  <MangaHomeSection title="按标签筛选">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <NuxtLink
         v-for="entry in collections"

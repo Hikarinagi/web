@@ -46,7 +46,7 @@
     <div class="flex flex-col gap-1">
       <h1 class="text-2xl font-bold text-surface-950 dark:text-white">漫画图鉴</h1>
       <p class="text-sm text-surface-600 dark:text-surface-400">
-        浏览Hikarinagi数据库中的所有漫画条目
+        浏览 Hikarinagi 数据库中的所有漫画条目
       </p>
     </div>
 

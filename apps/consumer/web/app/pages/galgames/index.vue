@@ -13,7 +13,7 @@
 
 <template>
   <div v-if="data" class="-mt-(--app-header-height)">
-    <GalgameExploreHero :mosaic="data.mosaic" :total="data.total_items" />
+    <GalgameExploreHero :mosaic="data.mosaic" />
 
     <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-12">
       <GalgameExploreReleaseRow :release="data.release" />

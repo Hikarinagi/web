@@ -5,7 +5,6 @@
   defineOptions({ name: 'GalgameExploreHero' })
   const props = defineProps<{
     mosaic: GalgamesPageData['mosaic']
-    total: number
   }>()
 
   type MosaicItem = GalgamesPageData['mosaic'][number]
@@ -97,23 +96,18 @@
     />
 
     <div
-      class="relative z-10 mx-auto box-content flex min-h-[calc(224px+var(--app-header-height))] max-w-app items-center px-6 pt-[calc(var(--app-header-height)+24px)] pb-12 xl:min-h-[calc(300px+var(--app-header-height))] xl:pb-16"
+      class="relative z-10 mx-auto box-content flex min-h-[calc(112px+var(--app-header-height))] max-w-app items-center px-6 pt-[calc(var(--app-header-height)+16px)] pb-6 xl:min-h-[calc(140px+var(--app-header-height))] xl:pb-7"
     >
       <div class="max-w-4xl">
-        <!-- <p class="text-xs font-medium tracking-[0.08em] text-surface-400 dark:text-surface-500">
-          Hikarinagi数据库已收录 {{ total.toLocaleString() }} 部视觉小说
-        </p> -->
-        <h1 class="text-[34px] leading-tight font-semibold text-surface-950 dark:text-white">
-          我们替你把目光放慢一点———
-          <br />
-          被认真玩过、认真聊过的那些作品。
+        <h1 class="text-2xl leading-tight font-semibold text-surface-950 dark:text-white">
+          在 Hikarinagi 记录你的游戏状态
         </h1>
         <Button
           login-required
           label="记录进度"
           icon-pos="right"
-          size="large"
-          class="mt-4"
+          size="small"
+          class="mt-3"
           @click="recordOpen = true"
         >
           <template #icon>
