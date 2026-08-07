@@ -13,7 +13,8 @@ export interface FeedSource {
 
 const HOME_EMPTY_TEXT: Record<FeedScope, string> = {
   recommend: '还没有可以推荐的内容',
-  latest: '还没有动态',
+  latest: '还没有图文和文章',
+  all: '还没有动态',
   following: '关注的人和话题还没有新动态',
 }
 

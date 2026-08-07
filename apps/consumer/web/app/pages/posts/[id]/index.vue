@@ -5,7 +5,7 @@
   import { useViewPing } from '~/features/interaction/useViewPing'
 
   defineOptions({ name: 'PagePostDetail' })
-  definePageMeta({ footer: false, bottomBar: false })
+  definePageMeta({ footer: false, bottomBar: false, container: 'full' })
 
   const route = useRoute()
   const postId = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
@@ -49,57 +49,55 @@
 </script>
 
 <template>
-  <div v-if="data" class="pt-4 sm:pt-6">
-    <div class="mx-auto flex max-w-[1024px] justify-center gap-8 px-0 sm:px-4">
-      <article class="w-[600px] max-w-full min-w-0">
-        <PostImages :covers="data.post.covers" />
+  <FeedPageShell v-if="data">
+    <article>
+      <PostImages :covers="data.post.covers" />
 
-        <h1 v-if="data.post.title" class="mt-6 text-[22px] leading-snug font-bold text-color">
-          {{ data.post.title }}
-        </h1>
+      <h1 v-if="data.post.title" class="mt-6 text-[22px] leading-snug font-bold text-color">
+        {{ data.post.title }}
+      </h1>
 
-        <PostAuthorBar
-          v-if="data.post.creator"
-          class="mt-5"
-          :author="data.author"
-          :stats="data.author_stats"
-          :creator="data.post.creator"
-          :created-at="data.post.created_at"
-          :post-id="data.post.id"
-        />
+      <PostAuthorBar
+        v-if="data.post.creator"
+        class="mt-5"
+        :author="data.author"
+        :stats="data.author_stats"
+        :creator="data.post.creator"
+        :created-at="data.post.created_at"
+        :post-id="data.post.id"
+      />
 
-        <HikariContent
-          v-if="bodyDoc"
-          :doc="bodyDoc"
-          :summaries="data.post.entity_summaries"
-          :emoji-sets="data.post.emoji_sets"
-          preset="post"
-          class="mt-5"
-        />
+      <HikariContent
+        v-if="bodyDoc"
+        :doc="bodyDoc"
+        :summaries="data.post.entity_summaries"
+        :emoji-sets="data.post.emoji_sets"
+        preset="post"
+        class="mt-5"
+      />
 
-        <HikariContentNodesPollCard v-if="firstPoll" :poll="firstPoll" />
+      <HikariContentNodesPollCard v-if="firstPoll" :poll="firstPoll" />
 
-        <PostRelatedWorks
-          v-if="data.post.related_works.length"
-          :works="data.post.related_works"
-          class="mt-8"
-        />
+      <PostRelatedWorks
+        v-if="data.post.related_works.length"
+        :works="data.post.related_works"
+        class="mt-8"
+      />
 
-        <PostFooter :post="data.post" :favorited="data.favorite?.favorited ?? false" class="mt-8" />
+      <PostFooter :post="data.post" :favorited="data.favorite?.favorited ?? false" class="mt-8" />
 
-        <CommentSection
-          target-type="post"
-          :target-id="data.post.id"
-          :initial="data.comments"
-          :author-id="data.post.creator?.id ?? null"
-          :allow-comment="data.post.allow_comment !== 'DISALLOW'"
-          class="mt-10"
-        />
-      </article>
+      <CommentSection
+        target-type="post"
+        :target-id="data.post.id"
+        :initial="data.comments"
+        :author-id="data.post.creator?.id ?? null"
+        :allow-comment="data.post.allow_comment !== 'DISALLOW'"
+        class="mt-10"
+      />
+    </article>
 
-      <CommunitySidebar follow footer>
-        <FeedSidebar :data="data.sidebar" />
-      </CommunitySidebar>
-    </div>
-  </div>
+    <template #sidebar>
+      <FeedSidebar :data="data.sidebar" />
+    </template>
+  </FeedPageShell>
 </template>

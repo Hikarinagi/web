@@ -10,9 +10,9 @@ export function galgameDownloadSeo(data: GalgameDownloadsPageData) {
   const platforms = [...new Set(data.resources.flatMap(resource => resource.platform))]
 
   const maker = developer ? `${developer}的` : ''
-  const countText = fileCount ? `,共 ${data.resources.length} 个版本 ${fileCount} 个文件` : ''
-  const platformText = platforms.length ? `,支持 ${platforms.join('、')} 平台` : ''
-  const fallbackDesc = `「${name}」${maker}Galgame 资源下载${countText}${platformText}。在 Hikarinagi 登录后免费获取下载链接,支持直链复制到下载器`
+  const countText = fileCount ? `，共 ${data.resources.length} 个版本 ${fileCount} 个文件` : ''
+  const platformText = platforms.length ? `，支持 ${platforms.join('、')} 平台` : ''
+  const fallbackDesc = `「${name}」${maker}Galgame 资源下载${countText}${platformText}。在 Hikarinagi 登录后免费获取下载链接，支持直链复制到下载器`
 
   return {
     title: `「${name}」Galgame 资源下载・免费直链`,

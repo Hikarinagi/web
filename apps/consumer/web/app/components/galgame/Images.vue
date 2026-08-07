@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <GalgameSection v-if="images.length" title="看几眼" :meta="`${images.length} 张图`">
+  <GalgameSection v-if="images.length" title="画廊" :meta="`${images.length} 张图片`">
     <div ref="galleryRef" class="w-full">
       <HikariImageGroup class="flex flex-col gap-2">
         <div v-for="(row, index) in rows" :key="index" class="flex gap-2">

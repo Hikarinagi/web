@@ -19,19 +19,21 @@ function bucketFrom(res: FeedResponse): FeedBucket {
 // 跨导航保活的 feed 累积状态,放在 useState(Nuxt app-level state,非 Pinia)。一个 source 一个桶,
 // 桶 key = source.key、所在 store = source.storeId。首页 recommend/following 共用 'feed:stream'
 // 双桶(scope 即 key);topic/section 各用 'feed:relation:<type>:<id>' 独立 store。切到详情页再返回时,
-// 列表 + 游标都还在。首屏(SSR seed)在 useState factory 里一次性装入当前 key 的桶;其余 key 懒加载。
+// 列表 + 游标都还在。首屏 SSR seed 在建桶时按 key 各自装入,不依赖哪个 source 先碰到 store。
 export function useFeedStream(source: FeedSource) {
-  const buckets = useState<Record<string, FeedBucket>>(source.storeId, () => {
-    const seeded = source.seed()
-    return { [source.key]: seeded ? bucketFrom(seeded) : emptyBucket() }
-  })
+  const buckets = useState<Record<string, FeedBucket>>(source.storeId, () => ({}))
   // per-key:既是加载指示,也是并发去重锁(同 key 同时只跑一个请求)。
   const loadingMap = useState<Record<string, boolean>>(`${source.storeId}:loading`, () => ({}))
 
   function bucketFor(): FeedBucket {
-    if (!buckets.value[source.key]) buckets.value[source.key] = emptyBucket()
+    if (!buckets.value[source.key]) {
+      const seeded = source.seed()
+      buckets.value[source.key] = seeded ? bucketFrom(seeded) : emptyBucket()
+    }
     return buckets.value[source.key]!
   }
+
+  bucketFor()
 
   const bucket = computed(() => buckets.value[source.key] ?? emptyBucket())
   const items = computed(() => bucket.value.items)
@@ -44,6 +46,7 @@ export function useFeedStream(source: FeedSource) {
   async function ensure() {
     const b = bucketFor()
     if (b.loaded || loadingMap.value[source.key]) return
+    if (import.meta.server) return
     loadingMap.value[source.key] = true
     try {
       const res = await source.fetch(null)

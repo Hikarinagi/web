@@ -57,7 +57,7 @@
     confirm.require({
       group: 'app-shell',
       header: '删除评分',
-      message: '删除后,你对这一卷的评分会移除。确定删除吗?',
+      message: '删除后，你对这一卷的评分会移除。确定删除吗？',
       acceptLabel: '删除',
       rejectLabel: '再想想',
       onAccept: async ({ close }: { close: () => void }) => {
@@ -122,7 +122,13 @@
         </FormItem>
 
         <FormItem v-slot="{ id }" name="rate_content" label="短评">
-          <Textarea :id="id" rows="3" fluid auto-resize placeholder="这一卷读下来如何?一句话也行" />
+          <Textarea
+            :id="id"
+            rows="3"
+            fluid
+            auto-resize
+            placeholder="这一卷读下来如何？一句话也行"
+          />
         </FormItem>
 
         <FormItem v-slot="{ id, field }" name="is_spoiler">

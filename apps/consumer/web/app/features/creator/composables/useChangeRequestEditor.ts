@@ -64,7 +64,7 @@ function postChangeRequest(resourceType: string, id: number, body: ChangeRequest
     case 'tag':
       return hikariRequest('/api/v3/tags/{id}/change-requests', options)
     default:
-      throw new Error(`未知资源类型: ${resourceType}`)
+      throw new Error(`未知条目类型: ${resourceType}`)
   }
 }
 

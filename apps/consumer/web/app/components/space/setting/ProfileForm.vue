@@ -22,7 +22,7 @@
         v-model="avatar"
         shape="circle"
         label="头像"
-        hint="支持 JPG / PNG / WebP,展示为圆形"
+        hint="支持 JPG / PNG / WebP，展示为圆形"
         button-label="更换头像"
       />
 
@@ -32,7 +32,7 @@
         v-model="headCover"
         shape="banner"
         label="个人主页封面"
-        hint="建议 6:1(如 3000×500),展示在主页顶部"
+        hint="建议 6:1（如 3000×500），展示在主页顶部"
         button-label="更换封面"
       />
 
@@ -70,17 +70,17 @@
       >
         <FormItem v-slot="{ id, errorId }" name="nickname" label="昵称">
           <InputText :id="id" :aria-describedby="errorId" fluid autocomplete="off" />
-          <p class="text-xs text-muted-color">展示在主页和动态,可随时修改;留空则显示用户名</p>
+          <p class="text-xs text-muted-color">展示在主页和动态，可随时修改；留空则显示用户名</p>
         </FormItem>
 
         <FormItem v-slot="{ id, errorId }" name="signature" label="个性签名">
           <InputText :id="id" :aria-describedby="errorId" fluid autocomplete="off" />
-          <p class="text-xs text-muted-color">显示在你名字下方,最多 120 字</p>
+          <p class="text-xs text-muted-color">显示在你名字下方，最多 120 字</p>
         </FormItem>
 
         <FormItem v-slot="{ id, errorId }" name="bio" label="简介">
           <Textarea :id="id" :aria-describedby="errorId" rows="4" fluid auto-resize />
-          <p class="text-xs text-muted-color">介绍一下自己,会显示在动态侧的资料区</p>
+          <p class="text-xs text-muted-color">介绍一下自己，会显示在动态侧的资料区</p>
         </FormItem>
 
         <div

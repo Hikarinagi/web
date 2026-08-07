@@ -49,7 +49,7 @@
 
 <template>
   <div class="flex flex-col gap-3">
-    <p class="text-sm text-muted-color">你订阅的他人公开贴纸包,取消订阅后将从编辑器中移除。</p>
+    <p class="text-sm text-muted-color">你订阅的他人公开贴纸包，取消订阅后将从编辑器中移除。</p>
 
     <div v-if="!loaded" class="flex flex-col gap-2">
       <Skeleton height="4rem" />

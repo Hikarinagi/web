@@ -34,7 +34,7 @@
     confirm.require({
       group: 'app-shell',
       header: '取消标记',
-      message: '取消后,你对这部作品的状态标记会移除。确定吗?',
+      message: '取消后，你对这部作品的状态标记会移除。确定吗？',
       acceptLabel: '取消标记',
       rejectLabel: '再想想',
       onAccept: ({ close }: { close: () => void }) => {

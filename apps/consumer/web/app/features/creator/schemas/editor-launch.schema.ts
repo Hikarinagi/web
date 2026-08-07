@@ -16,12 +16,12 @@ export const EDITOR_RESOURCE_OPTIONS: { label: string; value: string }[] = [
 export const editorLaunchSchema = v.object({
   resource_type: v.picklist(
     EDITOR_RESOURCE_OPTIONS.map(option => option.value),
-    '请选择资源类型',
+    '请选择条目类型',
   ),
   resource_id: v.pipe(
-    v.number('请输入资源 ID'),
-    v.integer('资源 ID 必须是整数'),
-    v.minValue(1, '资源 ID 必须大于 0'),
+    v.number('请输入条目 ID'),
+    v.integer('条目 ID 必须是整数'),
+    v.minValue(1, '条目 ID 必须大于 0'),
   ),
 })
 
@@ -30,7 +30,7 @@ export type EditorLaunchValues = v.InferOutput<typeof editorLaunchSchema>
 export const editorNewSchema = v.object({
   resource_type: v.picklist(
     EDITOR_RESOURCE_OPTIONS.map(option => option.value),
-    '请选择资源类型',
+    '请选择条目类型',
   ),
 })
 

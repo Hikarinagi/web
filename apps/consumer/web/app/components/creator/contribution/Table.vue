@@ -51,7 +51,7 @@
     <Column header="#" class="w-14">
       <template #body="{ data: row }">{{ row.id }}</template>
     </Column>
-    <Column header="资源" class="min-w-56">
+    <Column header="条目" class="min-w-56">
       <template #body="{ data: row }">
         <CreatorResourceHead
           :id="row.resource_id"

@@ -7,8 +7,8 @@ type ReportableReason = Exclude<EpubReportReason, 'MISSING'>
 
 const EPUB_REPORT_REASON_LABELS = {
   WRONG_VOLUME: '卷号 / 卷名错误',
-  BUNDLE: '是合集打包,非单卷',
-  JAPANESE_ORIGINAL: '日文原版,非中文翻译',
+  BUNDLE: '是合集打包，非单卷',
+  JAPANESE_ORIGINAL: '日文原版，非中文翻译',
   MACHINE_TRANSLATION: '机翻',
   CORRUPT: '文件损坏 / 无法阅读',
   OTHER: '我有更好的版本 / 其他',

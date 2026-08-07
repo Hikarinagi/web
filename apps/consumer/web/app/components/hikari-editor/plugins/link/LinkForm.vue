@@ -88,7 +88,7 @@
         :id="id"
         autocomplete="off"
         fluid
-        :placeholder="selectedText || '可选,默认与 URL 一致'"
+        :placeholder="selectedText || '可选，默认与 URL 一致'"
         :aria-describedby="errorId"
         size="small"
       />

@@ -47,7 +47,7 @@
         确认后将更新这个进行中的变更请求
       </Message>
       <Message v-else-if="needsReview" severity="warn" variant="simple" size="small">
-        提交后将进入审核队列,由审核者合并后生效
+        提交后将进入审核队列，由审核者合并后生效
       </Message>
       <Message v-else severity="success" variant="simple" size="small">
         确认后修改将立即生效

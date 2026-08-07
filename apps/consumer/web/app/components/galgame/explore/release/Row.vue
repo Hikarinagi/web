@@ -40,7 +40,7 @@
         as="router-link"
         icon-pos="right"
         severity="secondary"
-        label="数据缺失? 来创建!"
+        label="数据缺失？来创建！"
         outlined
         to="/create/edit"
         target="_blank"

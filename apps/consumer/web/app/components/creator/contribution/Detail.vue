@@ -59,7 +59,7 @@
       group: 'app-shell',
       header: '关闭变更请求',
       message:
-        '确定要关闭这个变更请求吗？关闭后将不再进入审核队列,你可以为该条目重新发起新的变更请求。',
+        '确定要关闭这个变更请求吗？关闭后将不再进入审核队列，你可以为该条目重新发起新的变更请求。',
       acceptLabel: '关闭',
       rejectLabel: '取消',
       closeOnEscape: false,

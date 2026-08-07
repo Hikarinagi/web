@@ -7804,6 +7804,119 @@
         ],
         "type": "object"
       },
+      "EpubBulkDto": {
+        "properties": {
+          "action": {
+            "description": "curate 标记已校订；uncurate 取消校订；remove 下架并删除文件",
+            "enum": [
+              "curate",
+              "uncurate",
+              "remove"
+            ],
+            "type": "string"
+          },
+          "ids": {
+            "description": "分卷 ID",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids",
+          "action"
+        ],
+        "type": "object"
+      },
+      "EpubDuplicateGroupDto": {
+        "properties": {
+          "epub_sha": {
+            "description": "文件 sha256",
+            "type": "string"
+          },
+          "volume_count": {
+            "description": "引用该文件的分卷数",
+            "type": "number"
+          },
+          "volumes": {
+            "items": {
+              "$ref": "#/components/schemas/EpubDuplicateVolumeDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "epub_sha",
+          "volume_count",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "EpubDuplicateVolumeDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "series": {
+            "$ref": "#/components/schemas/EpubResourceSeriesDto"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "volume_number",
+          "series"
+        ],
+        "type": "object"
+      },
+      "EpubOverviewDto": {
+        "properties": {
+          "duplicate_files": {
+            "description": "被多个分卷共用的文件数",
+            "type": "number"
+          },
+          "missing_volumes": {
+            "description": "已发布但没有 EPUB 的分卷数",
+            "type": "number"
+          },
+          "pending_render_reports": {
+            "description": "待处理的阅读器渲染反馈数",
+            "type": "number"
+          },
+          "pending_reports": {
+            "description": "待处理的 EPUB 举报数",
+            "type": "number"
+          },
+          "pending_reviews": {
+            "description": "待人工接管的纠错复核数",
+            "type": "number"
+          },
+          "superseded_reports": {
+            "description": "其中文件已被替换、需要在两个版本间取舍的举报数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "pending_reviews",
+          "pending_reports",
+          "superseded_reports",
+          "pending_render_reports",
+          "missing_volumes",
+          "duplicate_files"
+        ],
+        "type": "object"
+      },
       "EpubRenderReportStatus": {
         "enum": [
           "PENDING",
@@ -7811,6 +7924,41 @@
           "DISMISSED"
         ],
         "type": "string"
+      },
+      "EpubReportCurrentFileDto": {
+        "properties": {
+          "available": {
+            "description": "该版本的文件当前是否仍然存在",
+            "type": "boolean"
+          },
+          "download_url": {
+            "description": "限时下载地址，用于比对两个版本",
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_curated": {
+            "description": "是否已人工校订",
+            "type": "boolean"
+          },
+          "epub_key": {
+            "description": "对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_sha": {
+            "description": "文件 sha256",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "epub_key",
+          "epub_sha",
+          "available",
+          "download_url",
+          "epub_curated"
+        ],
+        "type": "object"
       },
       "EpubReportDto": {
         "properties": {
@@ -7833,6 +7981,96 @@
         },
         "required": [
           "reason"
+        ],
+        "type": "object"
+      },
+      "EpubReportFileDto": {
+        "properties": {
+          "available": {
+            "description": "该版本的文件当前是否仍然存在",
+            "type": "boolean"
+          },
+          "download_url": {
+            "description": "限时下载地址，用于比对两个版本",
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_key": {
+            "description": "对象存储 key",
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_sha": {
+            "description": "文件 sha256",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "epub_key",
+          "epub_sha",
+          "available",
+          "download_url"
+        ],
+        "type": "object"
+      },
+      "EpubReportVersionDto": {
+        "properties": {
+          "keep": {
+            "description": "保留哪个版本：current 保留当前文件并驳回举报；reported 回退到被举报时的文件；none 两个都不要，直接下架",
+            "enum": [
+              "current",
+              "reported",
+              "none"
+            ],
+            "type": "string"
+          },
+          "process_comments": {
+            "description": "处理备注",
+            "maxLength": 1000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "keep"
+        ],
+        "type": "object"
+      },
+      "EpubReportVersionsDto": {
+        "properties": {
+          "current": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EpubReportCurrentFileDto"
+              }
+            ],
+            "description": "分卷当前的文件"
+          },
+          "report_id": {
+            "type": "number"
+          },
+          "reported": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EpubReportFileDto"
+              }
+            ],
+            "description": "举报时的文件"
+          },
+          "superseded": {
+            "description": "被举报的文件是否已被新版本替换。为 true 时不能直接下架，需要在两个版本之间取舍",
+            "type": "boolean"
+          },
+          "volume_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "report_id",
+          "volume_id",
+          "superseded",
+          "reported",
+          "current"
         ],
         "type": "object"
       },
@@ -7860,6 +8098,11 @@
           "epub_sha": {
             "nullable": true,
             "type": "string"
+          },
+          "epub_size": {
+            "description": "对象大小，字节",
+            "nullable": true,
+            "type": "number"
           },
           "epub_source": {
             "enum": [
@@ -7896,9 +8139,26 @@
           "series_id": {
             "type": "number"
           },
+          "shared_volumes": {
+            "description": "引用同一个文件的其他分卷，非空通常意味着合集误挂或错卷",
+            "items": {
+              "$ref": "#/components/schemas/EpubResourceSharedVolumeDto"
+            },
+            "type": "array"
+          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
+          },
+          "uploader": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "文件来自纠错上传时的提交者，采集来源为空",
+            "nullable": true,
+            "type": "object"
           },
           "volume_number": {
             "nullable": true,
@@ -7922,6 +8182,9 @@
           "updated_at",
           "epub_key",
           "epub_sha",
+          "epub_size",
+          "uploader",
+          "shared_volumes",
           "download_url"
         ],
         "type": "object"
@@ -8100,6 +8363,36 @@
           "id",
           "name",
           "name_cn"
+        ],
+        "type": "object"
+      },
+      "EpubResourceSharedVolumeDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "series": {
+            "$ref": "#/components/schemas/EpubResourceSeriesDto"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_number",
+          "series"
         ],
         "type": "object"
       },
@@ -17778,6 +18071,107 @@
         ],
         "type": "object"
       },
+      "NovelSeriesItemDto": {
+        "properties": {
+          "available_count": {
+            "description": "其中已有 EPUB 的分卷数",
+            "type": "number"
+          },
+          "download_times": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "missing_volumes": {
+            "description": "缺 EPUB 的分卷，按卷号升序",
+            "items": {
+              "$ref": "#/components/schemas/NovelSeriesMissingVolumeDto"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "pending_report_count": {
+            "description": "该系列下待处理的 EPUB 举报数",
+            "type": "number"
+          },
+          "read_times": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          },
+          "views": {
+            "type": "number"
+          },
+          "volume_count": {
+            "description": "已发布的分卷总数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "status",
+          "volume_count",
+          "available_count",
+          "missing_volumes",
+          "views",
+          "read_times",
+          "download_times",
+          "pending_report_count"
+        ],
+        "type": "object"
+      },
+      "NovelSeriesMissingVolumeDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "volume_number",
+          "name"
+        ],
+        "type": "object"
+      },
+      "NovelSeriesStatusDto": {
+        "properties": {
+          "status": {
+            "description": "系列发布状态",
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "NovelStatus": {
         "description": "连载状态",
         "enum": [
@@ -17793,6 +18187,370 @@
           "PAUSED": "休刊",
           "SERIALIZING": "连载中"
         }
+      },
+      "NovelVolumeDetailDto": {
+        "properties": {
+          "download_times": {
+            "description": "EPUB 下载次数",
+            "type": "number"
+          },
+          "download_url": {
+            "description": "15 分钟临时下载地址",
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_curated": {
+            "type": "boolean"
+          },
+          "epub_is_collection": {
+            "type": "boolean"
+          },
+          "epub_key": {
+            "nullable": true,
+            "type": "string"
+          },
+          "epub_sha": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "online_reading_available": {
+            "type": "boolean"
+          },
+          "pending_report_count": {
+            "description": "待处理举报数",
+            "type": "number"
+          },
+          "rate_count": {
+            "description": "评分条数",
+            "type": "number"
+          },
+          "read_times": {
+            "description": "在线阅读次数",
+            "type": "number"
+          },
+          "render_reports": {
+            "description": "最近 10 条渲染反馈",
+            "items": {
+              "$ref": "#/components/schemas/NovelVolumeRenderReportDto"
+            },
+            "type": "array"
+          },
+          "reports": {
+            "description": "最近 10 条举报",
+            "items": {
+              "$ref": "#/components/schemas/NovelVolumeReportDto"
+            },
+            "type": "array"
+          },
+          "reviews": {
+            "description": "最近 10 条纠错复核",
+            "items": {
+              "$ref": "#/components/schemas/NovelVolumeReviewDto"
+            },
+            "type": "array"
+          },
+          "series": {
+            "$ref": "#/components/schemas/EpubResourceSeriesDto"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "description": "详情页浏览次数",
+            "type": "number"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_type": {
+            "enum": [
+              "MAIN",
+              "EXTRA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_number",
+          "volume_type",
+          "series",
+          "status",
+          "online_reading_available",
+          "epub_curated",
+          "epub_is_collection",
+          "views",
+          "read_times",
+          "download_times",
+          "rate_count",
+          "pending_report_count",
+          "updated_at",
+          "epub_key",
+          "epub_sha",
+          "download_url",
+          "reports",
+          "reviews",
+          "render_reports"
+        ],
+        "type": "object"
+      },
+      "NovelVolumeFlagsDto": {
+        "properties": {
+          "epub_curated": {
+            "description": "文件是否已人工校订",
+            "type": "boolean"
+          },
+          "epub_is_collection": {
+            "description": "文件是否是合集而非单卷",
+            "type": "boolean"
+          },
+          "status": {
+            "description": "发布状态",
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "NovelVolumeItemDto": {
+        "properties": {
+          "download_times": {
+            "description": "EPUB 下载次数",
+            "type": "number"
+          },
+          "epub_curated": {
+            "type": "boolean"
+          },
+          "epub_is_collection": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "online_reading_available": {
+            "type": "boolean"
+          },
+          "pending_report_count": {
+            "description": "待处理举报数",
+            "type": "number"
+          },
+          "rate_count": {
+            "description": "评分条数",
+            "type": "number"
+          },
+          "read_times": {
+            "description": "在线阅读次数",
+            "type": "number"
+          },
+          "series": {
+            "$ref": "#/components/schemas/EpubResourceSeriesDto"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "description": "详情页浏览次数",
+            "type": "number"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_type": {
+            "enum": [
+              "MAIN",
+              "EXTRA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_number",
+          "volume_type",
+          "series",
+          "status",
+          "online_reading_available",
+          "epub_curated",
+          "epub_is_collection",
+          "views",
+          "read_times",
+          "download_times",
+          "rate_count",
+          "pending_report_count",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "NovelVolumeRenderReportDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "RESOLVED",
+              "DISMISSED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "note",
+          "status",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "NovelVolumeReportDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "reason": {
+            "enum": [
+              "MISSING",
+              "WRONG_VOLUME",
+              "BUNDLE",
+              "JAPANESE_ORIGINAL",
+              "MACHINE_TRANSLATION",
+              "CORRUPT",
+              "OTHER"
+            ],
+            "type": "string"
+          },
+          "reporter": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "RESOLVED",
+              "REJECTED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "reason",
+          "description",
+          "status",
+          "reporter",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "NovelVolumeReviewDto": {
+        "properties": {
+          "confidence": {
+            "nullable": true,
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "RUNNING",
+              "PASSED",
+              "REJECTED",
+              "NEEDS_HUMAN",
+              "FAILED"
+            ],
+            "type": "string"
+          },
+          "submitter": {
+            "$ref": "#/components/schemas/UserRefDto"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "reasons",
+          "confidence",
+          "submitter",
+          "created_at"
+        ],
+        "type": "object"
       },
       "OpenCharacterDetailDto": {
         "properties": {
@@ -19201,6 +19959,10 @@
             "description": "打 1 分的人数",
             "type": "number"
           },
+          "10": {
+            "description": "打 10 分的人数",
+            "type": "number"
+          },
           "2": {
             "description": "打 2 分的人数",
             "type": "number"
@@ -19231,10 +19993,6 @@
           },
           "9": {
             "description": "打 9 分的人数",
-            "type": "number"
-          },
-          "10": {
-            "description": "打 10 分的人数",
             "type": "number"
           }
         },
@@ -32342,6 +33100,303 @@
         ]
       }
     },
+    "/api/v3/admin/novel/series": {
+      "get": {
+        "operationId": "AdminNovelSeriesController_list",
+        "parameters": [
+          {
+            "description": "系列名或系列 ID",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "PENDING",
+                "PUBLISHED",
+                "REJECTED",
+                "DRAFT"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看还有分卷缺 EPUB 的系列",
+            "in": "query",
+            "name": "incomplete",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/NovelSeriesItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel"
+        ]
+      }
+    },
+    "/api/v3/admin/novel/series/{id}": {
+      "patch": {
+        "operationId": "AdminNovelSeriesController_updateStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovelSeriesStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelSeriesItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel"
+        ]
+      }
+    },
+    "/api/v3/admin/novel/volumes": {
+      "get": {
+        "operationId": "AdminNovelVolumeController_list",
+        "parameters": [
+          {
+            "description": "卷名、系列名或分卷 ID",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "PENDING",
+                "PUBLISHED",
+                "REJECTED",
+                "DRAFT"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看已校订 / 未校订",
+            "in": "query",
+            "name": "curated",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "只看被标记为合集的分卷",
+            "in": "query",
+            "name": "is_collection",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/NovelVolumeItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel"
+        ]
+      }
+    },
+    "/api/v3/admin/novel/volumes/{id}": {
+      "get": {
+        "operationId": "AdminNovelVolumeController_detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelVolumeDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminNovelVolumeController_updateFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NovelVolumeFlagsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelVolumeItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel"
+        ]
+      }
+    },
     "/api/v3/admin/platform/analytics": {
       "get": {
         "operationId": "AdminAnalyticsController_get",
@@ -35090,6 +36145,116 @@
         ]
       }
     },
+    "/api/v3/admin/ugc/epubs/bulk": {
+      "post": {
+        "operationId": "AdminEpubResourceController_bulk",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EpubBulkDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ugc"
+        ]
+      }
+    },
+    "/api/v3/admin/ugc/epubs/duplicates": {
+      "get": {
+        "operationId": "AdminEpubResourceController_duplicates",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EpubDuplicateGroupDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ugc"
+        ]
+      }
+    },
+    "/api/v3/admin/ugc/epubs/overview": {
+      "get": {
+        "operationId": "AdminEpubResourceController_overview",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpubOverviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ugc"
+        ]
+      }
+    },
     "/api/v3/admin/ugc/epubs/{id}": {
       "get": {
         "operationId": "AdminEpubResourceController_detail",
@@ -37276,6 +38441,76 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BulkResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ugc"
+        ]
+      }
+    },
+    "/api/v3/admin/ugc/reports/epub/{id}/versions": {
+      "get": {
+        "operationId": "AdminReportController_epubVersions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpubReportVersionsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ugc"
+        ]
+      }
+    },
+    "/api/v3/admin/ugc/reports/epub/{id}/versions/resolve": {
+      "post": {
+        "operationId": "AdminReportController_resolveEpubVersion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EpubReportVersionDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportDetailDto"
                 }
               }
             },
@@ -45028,10 +46263,11 @@
             "name": "scope",
             "required": false,
             "schema": {
-              "default": "latest",
+              "default": "all",
               "enum": [
                 "recommend",
                 "latest",
+                "all",
                 "following"
               ],
               "type": "string"

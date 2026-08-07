@@ -56,7 +56,7 @@
       @submit="onSubmit"
     >
       <FormItem v-slot="{ id }" name="rejection_reason" label="驳回理由" required>
-        <Textarea :id="id" rows="4" fluid placeholder="说明驳回的原因(将展示给申请人)" />
+        <Textarea :id="id" rows="4" fluid placeholder="说明驳回的原因（将展示给申请人）" />
       </FormItem>
 
       <div class="flex justify-end gap-3 pt-2">

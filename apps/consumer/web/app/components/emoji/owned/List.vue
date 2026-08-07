@@ -30,7 +30,7 @@
   <div class="flex flex-col gap-3">
     <div class="flex items-center justify-between gap-2">
       <p class="text-sm text-muted-color">
-        在这里创建、编辑和删除你自己的贴纸包,公开后其他用户可订阅。
+        在这里创建、编辑和删除你自己的贴纸包，公开后其他用户可订阅。
       </p>
       <Button label="新建" size="small" class="shrink-0" @click="createOpen = true">
         <template #icon>

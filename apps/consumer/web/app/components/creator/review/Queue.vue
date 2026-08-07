@@ -23,7 +23,7 @@
     <template #empty>
       <CreatorEmpty text="暂无待审核的变更请求" />
     </template>
-    <Column header="资源" class="min-w-56">
+    <Column header="条目" class="min-w-56">
       <template #body="{ data: row }">
         <CreatorResourceHead
           :id="row.primary.resource_id"

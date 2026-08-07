@@ -10,8 +10,8 @@
 
 <template>
   <GalgameSection
-    title="认真聊聊"
-    :meta="`${articles.meta.total_items} 篇长评`"
+    title="长评"
+    :meta="`${articles.meta.total_items} 篇`"
     :empty="!articles.items.length"
     hide-when-empty
   >

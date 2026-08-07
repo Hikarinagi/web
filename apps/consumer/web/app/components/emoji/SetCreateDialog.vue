@@ -103,7 +103,7 @@
         v-slot="{ id }"
         name="name"
         label="名称"
-        description="名称一经创建不可修改,删除后也无法被任何人重新使用"
+        description="名称一经创建不可修改，删除后也无法被任何人重新使用"
         required
       >
         <IconField>
@@ -112,7 +112,7 @@
             v-model="nameInput"
             autocomplete="off"
             fluid
-            placeholder="2-16 字符,字母/数字/下划线/连字符"
+            placeholder="2-16 字符，字母/数字/下划线/连字符"
           />
           <InputIcon v-if="nameStatus !== 'idle'" v-tooltip.top="nameStatusTooltip">
             <Loader2

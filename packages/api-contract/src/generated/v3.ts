@@ -1413,6 +1413,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/novel/series": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelSeriesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel/series/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminNovelSeriesController_updateStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/novel/volumes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelVolumeController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel/volumes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelVolumeController_detail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminNovelVolumeController_updateFlags"];
+        trace?: never;
+    };
     "/api/v3/admin/platform/analytics": {
         parameters: {
             query?: never;
@@ -2421,6 +2485,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/ugc/epubs/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminEpubResourceController_bulk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ugc/epubs/duplicates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEpubResourceController_duplicates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ugc/epubs/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEpubResourceController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/ugc/epubs/{id}": {
         parameters: {
             query?: never;
@@ -3231,6 +3343,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminReportController_bulkResolve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ugc/reports/epub/{id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReportController_epubVersions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ugc/reports/epub/{id}/versions/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminReportController_resolveEpubVersion"];
         delete?: never;
         options?: never;
         head?: never;
@@ -12670,12 +12814,89 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
+        EpubBulkDto: {
+            /**
+             * @description curate 标记已校订；uncurate 取消校订；remove 下架并删除文件
+             * @enum {string}
+             */
+            action: "curate" | "uncurate" | "remove";
+            /** @description 分卷 ID */
+            ids: number[];
+        };
+        EpubDuplicateGroupDto: {
+            /** @description 文件 sha256 */
+            epub_sha: string;
+            /** @description 引用该文件的分卷数 */
+            volume_count: number;
+            volumes: components["schemas"]["EpubDuplicateVolumeDto"][];
+        };
+        EpubDuplicateVolumeDto: {
+            id: number;
+            name: string | null;
+            series: components["schemas"]["EpubResourceSeriesDto"];
+            volume_number: number | null;
+        };
+        EpubOverviewDto: {
+            /** @description 被多个分卷共用的文件数 */
+            duplicate_files: number;
+            /** @description 已发布但没有 EPUB 的分卷数 */
+            missing_volumes: number;
+            /** @description 待处理的阅读器渲染反馈数 */
+            pending_render_reports: number;
+            /** @description 待处理的 EPUB 举报数 */
+            pending_reports: number;
+            /** @description 待人工接管的纠错复核数 */
+            pending_reviews: number;
+            /** @description 其中文件已被替换、需要在两个版本间取舍的举报数 */
+            superseded_reports: number;
+        };
         /** @enum {string} */
         EpubRenderReportStatus: "PENDING" | "RESOLVED" | "DISMISSED";
+        EpubReportCurrentFileDto: {
+            /** @description 该版本的文件当前是否仍然存在 */
+            available: boolean;
+            /** @description 限时下载地址，用于比对两个版本 */
+            download_url: string | null;
+            /** @description 是否已人工校订 */
+            epub_curated: boolean;
+            /** @description 对象存储 key */
+            epub_key: string | null;
+            /** @description 文件 sha256 */
+            epub_sha: string | null;
+        };
         EpubReportDto: {
             description?: string;
             /** @enum {string} */
             reason: "MISSING" | "WRONG_VOLUME" | "BUNDLE" | "JAPANESE_ORIGINAL" | "MACHINE_TRANSLATION" | "CORRUPT" | "OTHER";
+        };
+        EpubReportFileDto: {
+            /** @description 该版本的文件当前是否仍然存在 */
+            available: boolean;
+            /** @description 限时下载地址，用于比对两个版本 */
+            download_url: string | null;
+            /** @description 对象存储 key */
+            epub_key: string | null;
+            /** @description 文件 sha256 */
+            epub_sha: string | null;
+        };
+        EpubReportVersionDto: {
+            /**
+             * @description 保留哪个版本：current 保留当前文件并驳回举报；reported 回退到被举报时的文件；none 两个都不要，直接下架
+             * @enum {string}
+             */
+            keep: "current" | "reported" | "none";
+            /** @description 处理备注 */
+            process_comments?: string;
+        };
+        EpubReportVersionsDto: {
+            /** @description 分卷当前的文件 */
+            current: components["schemas"]["EpubReportCurrentFileDto"];
+            report_id: number;
+            /** @description 举报时的文件 */
+            reported: components["schemas"]["EpubReportFileDto"];
+            /** @description 被举报的文件是否已被新版本替换。为 true 时不能直接下架，需要在两个版本之间取舍 */
+            superseded: boolean;
+            volume_id: number;
         };
         EpubResourceDetailDto: {
             bangumi_book_id: number | null;
@@ -12685,6 +12906,8 @@ export interface components {
             epub_is_collection: boolean;
             epub_key: string | null;
             epub_sha: string | null;
+            /** @description 对象大小，字节 */
+            epub_size: number | null;
             /** @enum {string} */
             epub_source: "none" | "collected" | "curated";
             id: number;
@@ -12695,8 +12918,12 @@ export interface components {
             pending_report_count: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
             series_id: number;
+            /** @description 引用同一个文件的其他分卷，非空通常意味着合集误挂或错卷 */
+            shared_volumes: components["schemas"]["EpubResourceSharedVolumeDto"][];
             /** Format: date-time */
             updated_at: string;
+            /** @description 文件来自纠错上传时的提交者，采集来源为空 */
+            uploader: components["schemas"]["UserRefDto"] | null;
             volume_number: number | null;
         };
         EpubResourceItemDto: {
@@ -12740,6 +12967,13 @@ export interface components {
             id: number;
             name: string;
             name_cn: string | null;
+        };
+        EpubResourceSharedVolumeDto: {
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            series: components["schemas"]["EpubResourceSeriesDto"];
+            volume_number: number | null;
         };
         EpubReviewDetailDto: {
             /** @description 候选 epub 的临时下载地址(15 分钟有效),供审核者验货 */
@@ -15115,11 +15349,143 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        NovelSeriesItemDto: {
+            /** @description 其中已有 EPUB 的分卷数 */
+            available_count: number;
+            download_times: number;
+            id: number;
+            /** @description 缺 EPUB 的分卷，按卷号升序 */
+            missing_volumes: components["schemas"]["NovelSeriesMissingVolumeDto"][];
+            name: string;
+            name_cn: string | null;
+            /** @description 该系列下待处理的 EPUB 举报数 */
+            pending_report_count: number;
+            read_times: number;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            views: number;
+            /** @description 已发布的分卷总数 */
+            volume_count: number;
+        };
+        NovelSeriesMissingVolumeDto: {
+            id: number;
+            name: string | null;
+            volume_number: number | null;
+        };
+        NovelSeriesStatusDto: {
+            /**
+             * @description 系列发布状态
+             * @enum {string}
+             */
+            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        };
         /**
          * @description 连载状态
          * @enum {string}
          */
         NovelStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+        NovelVolumeDetailDto: {
+            /** @description EPUB 下载次数 */
+            download_times: number;
+            /** @description 15 分钟临时下载地址 */
+            download_url: string | null;
+            epub_curated: boolean;
+            epub_is_collection: boolean;
+            epub_key: string | null;
+            epub_sha: string | null;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            online_reading_available: boolean;
+            /** @description 待处理举报数 */
+            pending_report_count: number;
+            /** @description 评分条数 */
+            rate_count: number;
+            /** @description 在线阅读次数 */
+            read_times: number;
+            /** @description 最近 10 条渲染反馈 */
+            render_reports: components["schemas"]["NovelVolumeRenderReportDto"][];
+            /** @description 最近 10 条举报 */
+            reports: components["schemas"]["NovelVolumeReportDto"][];
+            /** @description 最近 10 条纠错复核 */
+            reviews: components["schemas"]["NovelVolumeReviewDto"][];
+            series: components["schemas"]["EpubResourceSeriesDto"];
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            /** @description 详情页浏览次数 */
+            views: number;
+            volume_number: number | null;
+            /** @enum {string} */
+            volume_type: "MAIN" | "EXTRA";
+        };
+        NovelVolumeFlagsDto: {
+            /** @description 文件是否已人工校订 */
+            epub_curated?: boolean;
+            /** @description 文件是否是合集而非单卷 */
+            epub_is_collection?: boolean;
+            /**
+             * @description 发布状态
+             * @enum {string}
+             */
+            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        };
+        NovelVolumeItemDto: {
+            /** @description EPUB 下载次数 */
+            download_times: number;
+            epub_curated: boolean;
+            epub_is_collection: boolean;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            online_reading_available: boolean;
+            /** @description 待处理举报数 */
+            pending_report_count: number;
+            /** @description 评分条数 */
+            rate_count: number;
+            /** @description 在线阅读次数 */
+            read_times: number;
+            series: components["schemas"]["EpubResourceSeriesDto"];
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            /** @description 详情页浏览次数 */
+            views: number;
+            volume_number: number | null;
+            /** @enum {string} */
+            volume_type: "MAIN" | "EXTRA";
+        };
+        NovelVolumeRenderReportDto: {
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            note: string | null;
+            /** @enum {string} */
+            status: "PENDING" | "RESOLVED" | "DISMISSED";
+        };
+        NovelVolumeReportDto: {
+            /** Format: date-time */
+            created_at: string;
+            description: string | null;
+            id: number;
+            /** @enum {string} */
+            reason: "MISSING" | "WRONG_VOLUME" | "BUNDLE" | "JAPANESE_ORIGINAL" | "MACHINE_TRANSLATION" | "CORRUPT" | "OTHER";
+            reporter: components["schemas"]["UserRefDto"];
+            /** @enum {string} */
+            status: "PENDING" | "RESOLVED" | "REJECTED";
+        };
+        NovelVolumeReviewDto: {
+            confidence: number | null;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            reasons: string[];
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
+            submitter: components["schemas"]["UserRefDto"];
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -20437,6 +20803,139 @@ export interface operations {
             };
         };
     };
+    AdminNovelSeriesController_list: {
+        parameters: {
+            query: {
+                /** @description 系列名或系列 ID */
+                q?: string;
+                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+                /** @description 只看还有分卷缺 EPUB 的系列 */
+                incomplete?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["NovelSeriesItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminNovelSeriesController_updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelSeriesStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSeriesItemDto"];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeController_list: {
+        parameters: {
+            query: {
+                /** @description 卷名、系列名或分卷 ID */
+                q?: string;
+                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+                /** @description 只看已校订 / 未校订 */
+                curated?: boolean;
+                /** @description 只看被标记为合集的分卷 */
+                is_collection?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["NovelVolumeItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminNovelVolumeController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelVolumeDetailDto"];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeController_updateFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelVolumeFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelVolumeItemDto"];
+                };
+            };
+        };
+    };
     AdminAnalyticsController_get: {
         parameters: {
             query?: never;
@@ -22175,6 +22674,73 @@ export interface operations {
             };
         };
     };
+    AdminEpubResourceController_bulk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EpubBulkDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BulkResultDto"];
+                };
+            };
+        };
+    };
+    AdminEpubResourceController_duplicates: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EpubDuplicateGroupDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminEpubResourceController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EpubOverviewDto"];
+                };
+            };
+        };
+    };
     AdminEpubResourceController_detail: {
         parameters: {
             query?: never;
@@ -23424,6 +23990,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BulkResultDto"];
+                };
+            };
+        };
+    };
+    AdminReportController_epubVersions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EpubReportVersionsDto"];
+                };
+            };
+        };
+    };
+    AdminReportController_resolveEpubVersion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EpubReportVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportDetailDto"];
                 };
             };
         };
@@ -27793,7 +28405,7 @@ export interface operations {
             query?: {
                 cursor?: string;
                 limit?: number;
-                scope?: "recommend" | "latest" | "following";
+                scope?: "recommend" | "latest" | "all" | "following";
             };
             header?: never;
             path?: never;

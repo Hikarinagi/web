@@ -7,7 +7,7 @@
 <template>
   <div class="flex flex-col items-center gap-3 py-8 text-center">
     <p class="text-sm text-surface-700 dark:text-surface-200">
-      此资源已有一个进行中的变更请求，合并或关闭后才能再次编辑。
+      此条目已有一个进行中的变更请求，合并或关闭后才能再次编辑。
     </p>
     <Button
       as="router-link"

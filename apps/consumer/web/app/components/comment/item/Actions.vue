@@ -69,7 +69,9 @@
     confirm.require({
       group: 'app-shell',
       header: pinned ? '取消置顶' : '置顶评论',
-      message: pinned ? '确定取消置顶这条评论吗?' : '确定置顶这条评论吗?置顶后会显示在评论区顶部。',
+      message: pinned
+        ? '确定取消置顶这条评论吗？'
+        : '确定置顶这条评论吗？置顶后会显示在评论区顶部。',
       acceptLabel: pinned ? '取消置顶' : '置顶',
       rejectLabel: '取消',
       onAccept: ({ close }: { close: () => void }) => {
@@ -84,7 +86,7 @@
     confirm.require({
       group: 'app-shell',
       header: '删除评论',
-      message: '删除后无法恢复,确定删除这条评论吗?',
+      message: '删除后无法恢复，确定删除这条评论吗？',
       acceptLabel: '删除',
       rejectLabel: '取消',
       onAccept: ({ close }: { close: () => void }) => {

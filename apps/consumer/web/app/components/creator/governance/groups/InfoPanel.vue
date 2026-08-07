@@ -32,7 +32,7 @@
     confirm.require({
       group: 'app-shell',
       header: '删除权限组',
-      message: `确认删除「${props.group.name}」？此操作不可撤销,组内成员会被同时移除。`,
+      message: `确认删除「${props.group.name}」？此操作不可撤销，组内成员会被同时移除。`,
       acceptLabel: '删除',
       rejectLabel: '取消',
       closeOnEscape: false,
@@ -78,7 +78,7 @@
         {{ group.name }}
         <Lock
           v-if="group.is_system"
-          v-tooltip.top="'系统权限组,不可编辑'"
+          v-tooltip.top="'系统权限组，不可编辑'"
           :size="14"
           class="text-muted-color"
         />

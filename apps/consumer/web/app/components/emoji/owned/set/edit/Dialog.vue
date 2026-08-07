@@ -121,7 +121,7 @@
   >
     <div class="flex flex-col gap-3">
       <div class="flex items-center justify-between">
-        <p class="text-xs text-muted-color">{{ set.emojis.length }} 个贴纸(上限 200)</p>
+        <p class="text-xs text-muted-color">{{ set.emojis.length }} 个贴纸（上限 200）</p>
         <Button label="上传贴纸" size="small" severity="secondary" @click="openCreate">
           <template #icon>
             <Upload class="size-3.5" />
@@ -133,7 +133,7 @@
         v-if="set.emojis.length === 0"
         class="rounded-lg border border-dashed border-surface-200 py-10 text-center text-xs text-muted-color dark:border-surface-700"
       >
-        还没有贴纸,点击上方按钮上传第一个
+        还没有贴纸，点击上方按钮上传第一个
       </p>
       <div v-else class="flex max-h-[60vh] flex-col overflow-y-auto">
         <EmojiOwnedSetEditItem

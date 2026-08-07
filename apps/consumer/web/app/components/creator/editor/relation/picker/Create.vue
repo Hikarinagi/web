@@ -47,7 +47,7 @@
     @submit="onSubmit"
   >
     <p class="text-sm text-muted-color">
-      没有合适的{{ config?.label }}?在这里新建一个,创建后立即可选。
+      没有合适的{{ config?.label }}？在这里新建一个，创建后立即可选。
     </p>
 
     <FormItem v-slot="{ id, errorId }" name="name" label="名称" required>

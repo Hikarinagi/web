@@ -77,7 +77,7 @@
             {{
               hasExpanded
                 ? `继续展开剩余 ${remainingReplies} 条回复`
-                : `共 ${childTotal} 条回复,点击查看`
+                : `共 ${childTotal} 条回复，点击查看`
             }}
             <ChevronRight class="size-3.5" />
           </Button>

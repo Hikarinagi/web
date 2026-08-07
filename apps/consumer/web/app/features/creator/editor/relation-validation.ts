@@ -52,7 +52,7 @@ export function validateRelations(
     }
 
     if (missingRelationType(field, rows)) {
-      errors[field.field] = '有关联作品未选择「关系类型」,请补全后再提交'
+      errors[field.field] = '有关联作品未选择「关系类型」，请补全后再提交'
       continue
     }
     if (hasDuplicate(field, rows)) {

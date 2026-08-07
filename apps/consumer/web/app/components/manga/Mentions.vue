@@ -9,7 +9,7 @@
 
 <template>
   <MangaSection
-    title="提到这部"
+    title="提到这部作品"
     :meta="`${posts.meta.total_items} 条`"
     :empty="!posts.items.length"
     hide-when-empty

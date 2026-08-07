@@ -5,7 +5,7 @@
   import { useViewPing } from '~/features/interaction/useViewPing'
 
   defineOptions({ name: 'PageArticleDetail' })
-  definePageMeta({ footer: false, bottomBar: false })
+  definePageMeta({ footer: false, bottomBar: false, container: 'full' })
 
   const route = useRoute()
   const articleId = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
@@ -43,39 +43,37 @@
 </script>
 
 <template>
-  <div v-if="data" class="pt-4 sm:pt-6">
-    <div class="mx-auto flex max-w-[1024px] justify-center gap-8 px-0 sm:px-4">
-      <article class="w-[600px] max-w-full min-w-0">
-        <ArticleHeader :article="data.article" :author="data.author" />
-        <HikariContent
-          v-if="data.article.content_json"
-          :doc="data.article.content_json"
-          :summaries="data.article.entity_summaries"
-          :emoji-sets="data.article.emoji_sets"
-          preset="article"
-          class="mt-8"
-        />
-        <ArticleFooter
-          :article="data.article"
-          :favorited="data.favorite?.favorited ?? false"
-          class="mt-10"
-        />
+  <FeedPageShell v-if="data" :follow="false">
+    <article>
+      <ArticleHeader :article="data.article" :author="data.author" />
+      <HikariContent
+        v-if="data.article.content_json"
+        :doc="data.article.content_json"
+        :summaries="data.article.entity_summaries"
+        :emoji-sets="data.article.emoji_sets"
+        preset="article"
+        class="mt-8"
+      />
+      <ArticleFooter
+        :article="data.article"
+        :favorited="data.favorite?.favorited ?? false"
+        class="mt-10"
+      />
 
-        <CommentSection
-          target-type="article"
-          :target-id="data.article.id"
-          :initial="data.comments"
-          :author-id="data.article.creator?.id ?? null"
-          :allow-comment="data.article.allow_comment !== 'DISALLOW'"
-          class="mt-10"
-        />
-      </article>
+      <CommentSection
+        target-type="article"
+        :target-id="data.article.id"
+        :initial="data.comments"
+        :author-id="data.article.creator?.id ?? null"
+        :allow-comment="data.article.allow_comment !== 'DISALLOW'"
+        class="mt-10"
+      />
+    </article>
 
-      <CommunitySidebar footer>
-        <ArticleSidebar :data="data" />
-      </CommunitySidebar>
-    </div>
+    <template #sidebar>
+      <ArticleSidebar :data="data" />
+    </template>
 
     <ArticleMobileToc :doc="data.article.content_json" />
-  </div>
+  </FeedPageShell>
 </template>

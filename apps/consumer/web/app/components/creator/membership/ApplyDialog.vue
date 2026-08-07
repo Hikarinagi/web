@@ -112,11 +112,11 @@
         <Textarea :id="id" rows="4" fluid placeholder="说明加入意愿、相关经验等" />
       </FormItem>
 
-      <FormItem v-slot="{ id }" name="homepage" label="个人主页(可选)">
+      <FormItem v-slot="{ id }" name="homepage" label="个人主页（可选）">
         <InputText :id="id" autocomplete="off" fluid placeholder="https://..." />
       </FormItem>
 
-      <FormItem v-slot="{ field }" name="images" label="作品/证明(可选)" :initial-value="[]">
+      <FormItem v-slot="{ field }" name="images" label="作品/证明（可选）" :initial-value="[]">
         <MediaLibrarySelection
           :model-value="pickedImages"
           class="sm:grid-cols-[repeat(auto-fill,minmax(7rem,1fr))]"

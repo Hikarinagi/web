@@ -91,7 +91,7 @@ export function useRateForm(opts: RateFormOptions) {
     confirm.require({
       group: 'app-shell',
       header: '删除评分',
-      message: '删除后,你对这部作品的评分与状态都会移除。确定删除吗?',
+      message: '删除后，你对这部作品的评分与状态都会移除。确定删除吗？',
       acceptLabel: '删除',
       rejectLabel: '再想想',
       onAccept: async ({ close }: { close: () => void }) => {

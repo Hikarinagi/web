@@ -109,7 +109,7 @@ export function useCollectionDetail(data: {
     confirm.require({
       group: 'app-shell',
       header: '删除收藏夹',
-      message: `确认删除「${collection.value.name}」？夹内 ${counts.value.total} 项收藏将移出本夹,作品本身保留。`,
+      message: `确认删除「${collection.value.name}」？夹内 ${counts.value.total} 项收藏将移出本夹，作品本身保留。`,
       acceptLabel: '删除',
       rejectLabel: '取消',
       closeOnEscape: false,

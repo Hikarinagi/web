@@ -41,7 +41,7 @@
     try {
       const mode = await submit(event.values as EpubReportFormValues)
       if (mode === 'reported') {
-        push.success({ message: '已收到,我们会尽快核实' })
+        push.success({ message: '已收到，我们会尽快核实' })
         visible.value = false
       }
     } catch (error) {
@@ -98,14 +98,14 @@
           maxlength="500"
           auto-resize
           fluid
-          :placeholder="requiresDescription ? '请描述具体问题' : '可补充说明具体问题(选填)'"
+          :placeholder="requiresDescription ? '请描述具体问题' : '可补充说明具体问题（选填）'"
         />
       </FormItem>
 
       <LightNovelVolumeEpubUploadZone
         :file="file"
         label="有更正确的 EPUB?"
-        hint="一并上传,自动校验通过后会替换当前文件"
+        hint="一并上传，自动校验通过后会替换当前文件"
         @pick="pickFile"
       />
 

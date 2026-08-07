@@ -17,7 +17,7 @@ export const DEVELOPER_SCOPES = [
   },
   {
     scope: 'catalog:full',
-    label: '读取条目数据(全部)',
+    label: '读取条目数据（全部）',
     description: '含 NSFW 与乙女向条目；用户令牌下以该用户账号的内容偏好为上限',
     requires_user: false,
   },

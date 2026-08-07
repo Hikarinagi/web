@@ -52,9 +52,9 @@ function moduleOf(module: ApiData<'/api/v3/galgames/recommendations', 'get'>['mo
         : module.reason === 'SCENARIO'
           ? '剧本高分'
           : module.reason === 'VISUAL'
-            ? '画面评分'
+            ? '画面高分'
             : module.reason === 'MUSIC'
-              ? '音乐评分'
+              ? '音乐高分'
               : null
   if (!title || !module.items.length) return null
   return {

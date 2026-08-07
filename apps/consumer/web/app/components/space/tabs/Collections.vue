@@ -15,7 +15,7 @@
     useCollectionManage(props.collections)
 
   const emptyText = computed(() =>
-    props.isSelf ? '还没有收藏夹,新建一个开始收藏吧' : 'TA 还没有公开的收藏夹',
+    props.isSelf ? '还没有收藏夹，新建一个开始收藏吧' : 'TA 还没有公开的收藏夹',
   )
 </script>
 

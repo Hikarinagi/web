@@ -56,7 +56,7 @@ export function useCollectionManage(initial: SpaceCollectionCard[]) {
     confirm.require({
       group: 'app-shell',
       header: '删除收藏夹',
-      message: `确认删除「${collection.name}」？夹内 ${collection.item_count} 项收藏将移出本夹,作品本身保留。此操作不可撤销。`,
+      message: `确认删除「${collection.name}」？夹内 ${collection.item_count} 项收藏将移出本夹，作品本身保留。此操作不可撤销。`,
       acceptLabel: '删除',
       rejectLabel: '取消',
       closeOnEscape: false,

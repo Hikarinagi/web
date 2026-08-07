@@ -30,7 +30,7 @@
           v-model="title"
           unstyled
           maxlength="200"
-          placeholder="加个标题(选填)"
+          placeholder="加个标题（选填）"
           class="w-full border-0 bg-transparent pb-1.5 text-base font-semibold text-color outline-none placeholder:font-normal placeholder:text-(--editor-placeholder-color)"
           :class="titleOverLimit ? 'text-red-500' : ''"
         />

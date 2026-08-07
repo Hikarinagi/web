@@ -39,7 +39,7 @@
       <p v-if="intro" class="text-sm text-muted-color">{{ intro }}</p>
 
       <Message severity="warn" :closable="false" size="small">
-        用户名只能修改一次,且无法撤销。请谨慎决定。
+        用户名只能修改一次，且无法撤销。请谨慎决定。
       </Message>
 
       <div class="flex flex-col gap-2">
@@ -53,7 +53,7 @@
           :aria-describedby="errorId"
           fluid
           autocomplete="off"
-          placeholder="字母、数字、下划线,3-20 位"
+          placeholder="字母、数字、下划线，3-20 位"
         />
       </FormItem>
 

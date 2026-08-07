@@ -23,7 +23,6 @@
       >
         更详细评分
       </span>
-      <span class="text-[11px] text-surface-400">每项 1-10,可跳过</span>
       <span class="flex-1" />
       <motion.span
         :animate="{ rotate: open ? 180 : 0 }"

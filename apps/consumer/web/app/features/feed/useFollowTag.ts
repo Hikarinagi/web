@@ -34,7 +34,7 @@ export function useFollowTag(kind: 'topic' | 'section', id: number, initial: boo
     confirm.require({
       group: 'app-shell',
       header: '取消关注',
-      message: `取消关注后,该${kind === 'topic' ? '话题' : '板块'}的更新将不再进入你的关注流。`,
+      message: `取消关注后，该${kind === 'topic' ? '话题' : '板块'}的更新将不再进入你的关注流。`,
       acceptLabel: '取消关注',
       rejectLabel: '再想想',
       onAccept: ({ close }: { close: () => void }) => {

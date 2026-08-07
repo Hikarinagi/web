@@ -42,7 +42,7 @@
           {{ row.name }}
           <Lock
             v-if="row.is_system"
-            v-tooltip.top="'系统权限组,不可编辑'"
+            v-tooltip.top="'系统权限组，不可编辑'"
             :size="13"
             class="text-muted-color"
           />

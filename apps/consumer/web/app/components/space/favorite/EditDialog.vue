@@ -95,7 +95,7 @@
         <InputText :id="id" autocomplete="off" fluid placeholder="例如:今年最爱" />
       </FormItem>
       <FormItem v-slot="{ id }" name="description" label="简介">
-        <Textarea :id="id" auto-resize rows="2" fluid placeholder="这个收藏夹收什么(可选)" />
+        <Textarea :id="id" auto-resize rows="2" fluid placeholder="这个收藏夹收什么（可选）" />
       </FormItem>
       <FormItem v-slot="{ id }" name="is_private" label="设为私密">
         <ToggleSwitch :input-id="id" />

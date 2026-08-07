@@ -120,7 +120,7 @@
             "
           />
           <p class="text-xs text-muted-color">
-            支持 WebP / PNG / JPEG / GIF,最大 {{ Math.round(EMOJI_MAX_FILE_BYTES / 1024) }} KB
+            支持 WebP / PNG / JPEG / GIF，最大 {{ Math.round(EMOJI_MAX_FILE_BYTES / 1024) }} KB
           </p>
         </div>
         <div
@@ -154,7 +154,7 @@
       </FormItem>
 
       <FormItem v-if="!isReplace" v-slot="{ id }" name="name" label="名称" required>
-        <InputText :id="id" autocomplete="off" fluid placeholder="描述这个贴纸, 会显示为 :name:" />
+        <InputText :id="id" autocomplete="off" fluid placeholder="描述这个贴纸，会显示为 :name:" />
       </FormItem>
 
       <div class="flex justify-end gap-3 pt-2">

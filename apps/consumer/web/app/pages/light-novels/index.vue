@@ -31,7 +31,7 @@
       <LightNovelExploreBunkoNav :bunko="data.stats.top_bunko" />
       <LightNovelExploreSeriesRail
         title="完结不挖坑"
-        meta="已完结,放心入坑"
+        meta="已完结，放心入坑"
         to="/light-novels/browse?status=finished"
         :items="data.completed.items"
       />

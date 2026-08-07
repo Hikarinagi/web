@@ -34,7 +34,7 @@
   <CardPanel
     title="发起编辑"
     :icon="SquarePen"
-    description="新建一个条目,或选择已有资源发起变更请求。"
+    description="新建一个条目，或对已存在的条目发起变更请求"
   >
     <div class="flex flex-col gap-5">
       <SelectButton
@@ -53,7 +53,7 @@
         class="flex flex-col gap-5"
         @submit="submitNew"
       >
-        <FormItem v-slot="{ id, errorId }" name="resource_type" label="资源类型" required>
+        <FormItem v-slot="{ id, errorId }" name="resource_type" label="条目类型" required>
           <Select
             :input-id="id"
             :aria-describedby="errorId"
@@ -80,7 +80,7 @@
         class="flex flex-col gap-5"
         @submit="submitEdit"
       >
-        <FormItem v-slot="{ id, errorId }" name="resource_type" label="资源类型" required>
+        <FormItem v-slot="{ id, errorId }" name="resource_type" label="条目类型" required>
           <Select
             :input-id="id"
             :aria-describedby="errorId"
@@ -90,7 +90,7 @@
             fluid
           />
         </FormItem>
-        <FormItem v-slot="{ id, errorId }" name="resource_id" label="资源 ID" required>
+        <FormItem v-slot="{ id, errorId }" name="resource_id" label="条目 ID" required>
           <InputNumber
             :input-id="id"
             :aria-describedby="errorId"

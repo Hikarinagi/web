@@ -18,7 +18,7 @@ export const LANGUAGE_LABELS = {
   de: '德语',
   es: '西班牙语',
   it: '意大利语',
-  'pt-br': '葡萄牙语(巴西)',
+  'pt-br': '葡萄牙语（巴西）',
   'pt-pt': '葡萄牙语',
   pl: '波兰语',
   uk: '乌克兰语',

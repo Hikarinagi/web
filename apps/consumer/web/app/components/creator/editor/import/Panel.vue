@@ -51,7 +51,7 @@
       confirm.require({
         group: 'app-shell',
         header: '两源可能不是同一作品',
-        message: 'Bangumi 与 VNDB 选中的条目标题差异较大,确认仍要合并导入吗?',
+        message: 'Bangumi 与 VNDB 选中的条目标题差异较大，确认仍要合并导入吗？',
         acceptLabel: '仍要合并',
         rejectLabel: '取消',
         onAccept: ({ close }: { close: () => void }) => {
@@ -85,8 +85,8 @@
 <template>
   <div class="flex flex-col gap-4 rounded-lg border border-surface-200 p-4 dark:border-surface-800">
     <p class="text-sm text-muted-color">
-      <template v-if="showVndb">可填 Bangumi、VNDB 任一或两者,两源数据自动合并。</template>
-      <template v-else>从 Bangumi 书籍条目获取数据。</template>
+      <template v-if="showVndb">我们会自动合并两个数据源的数据</template>
+      <template v-else>从 Bangumi 书籍条目获取数据</template>
     </p>
     <div class="grid gap-4" :class="showVndb ? 'sm:grid-cols-2' : ''">
       <CreatorEditorImportSourceSearch

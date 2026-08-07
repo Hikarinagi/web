@@ -67,8 +67,8 @@
 
     <div class="space-y-4">
       <p class="text-sm leading-6 text-muted-color">
-        提交后会附带当前页面的渲染快照(章节、页码、进度、视口、阅读设置等),帮助我们定位并修复 Rito
-        排版问题。
+        提交后会附带当前页面的渲染快照（章节、页码、进度、视口、阅读设置等），帮助我们定位并修复
+        Rito 排版问题。
       </p>
 
       <dl class="grid grid-cols-[4rem_1fr] gap-x-3 gap-y-1.5 rounded-md p-3 text-sm bg-emphasis">
@@ -87,7 +87,7 @@
       </dl>
 
       <div class="space-y-1.5">
-        <label for="reader-report-note" class="text-sm font-medium">补充说明(可选)</label>
+        <label for="reader-report-note" class="text-sm font-medium">补充说明（可选）</label>
         <Textarea
           id="reader-report-note"
           v-model="note"
@@ -95,7 +95,7 @@
           auto-resize
           maxlength="1000"
           class="w-full"
-          placeholder="描述一下哪里渲染不对,比如文字重叠、图片缺失、空白页…"
+          placeholder="描述一下哪里渲染不对，比如文字重叠、图片缺失、空白页…"
         />
       </div>
     </div>

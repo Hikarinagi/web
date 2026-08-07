@@ -19,7 +19,7 @@
 
 <template>
   <GalgameSection
-    title="大家说说"
+    title="大家的评价"
     :meta="meta"
     :empty="stats.played_count === 0 && stats.rated_count === 0"
     empty-text="还没有人评分"

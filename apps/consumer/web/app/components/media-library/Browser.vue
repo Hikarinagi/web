@@ -104,7 +104,7 @@
     confirm.require({
       group: 'app-shell',
       header: '从媒体库移除',
-      message: '将这张图片从媒体库移除?',
+      message: '将这张图片从媒体库移除？',
       rejectLabel: '取消',
       acceptLabel: '移除',
       defaultFocus: 'reject',

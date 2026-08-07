@@ -73,7 +73,7 @@
     confirm.require({
       group: 'app-shell',
       header: '清空草稿',
-      message: '会清掉当前正文、图片和本地草稿,确定吗?',
+      message: '会清掉当前正文、图片和本地草稿，确定吗？',
       acceptLabel: '清空',
       rejectLabel: '取消',
       onAccept: ({ close }: { close: () => void }) => {

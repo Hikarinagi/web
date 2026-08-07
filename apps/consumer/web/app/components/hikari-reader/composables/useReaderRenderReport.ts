@@ -66,7 +66,7 @@ export function useReaderRenderReport(options: UseReaderRenderReportOptions) {
           body: { note: note ?? undefined, metadata: snapshot.value },
         },
       )
-      push.success({ message: '已收到你的渲染反馈,谢谢!' })
+      push.success({ message: '已收到你的渲染反馈，谢谢！' })
       open.value = false
     } catch {
       // hikariRequest surfaces the API error toast automatically

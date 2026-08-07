@@ -4,14 +4,12 @@
   import { useFeedTabs } from '~/features/feed/useFeedTabs'
   import { TRANSITION } from '~/lib/motion'
 
-  const scope = defineModel<FeedScope>({ required: true })
-  const props = withDefaults(
-    defineProps<{ topicCount?: number; orientation?: 'horizontal' | 'vertical' }>(),
-    { topicCount: 0, orientation: 'horizontal' },
-  )
+  const props = withDefaults(defineProps<{ orientation?: 'horizontal' | 'vertical' }>(), {
+    orientation: 'horizontal',
+  })
   const emit = defineEmits<{ select: [FeedScope] }>()
 
-  const { tabs, select } = useFeedTabs(scope, key => emit('select', key))
+  const { tabs, active, select } = useFeedTabs(key => emit('select', key))
 
   const indicatorId = computed(() => `feed-tab-indicator-${props.orientation}`)
 </script>
@@ -27,7 +25,7 @@
       :key="tab.key"
       type="button"
       role="tab"
-      :aria-selected="scope === tab.key"
+      :aria-selected="active === tab.key"
       class="group relative flex cursor-pointer flex-col items-center gap-2 rounded outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
       :while-press="{ opacity: 0.7 }"
       @click="select(tab.key)"
@@ -35,7 +33,7 @@
       <span
         class="text-sm transition-colors duration-150"
         :class="
-          scope === tab.key
+          active === tab.key
             ? 'font-bold text-color'
             : 'font-medium text-muted-color group-hover:text-color'
         "
@@ -44,17 +42,13 @@
       </span>
       <span class="relative h-0.5 w-6">
         <motion.span
-          v-if="scope === tab.key"
+          v-if="active === tab.key"
           :layout-id="indicatorId"
           class="absolute inset-0 rounded-full bg-primary"
           :transition="TRANSITION"
         />
       </span>
     </motion.button>
-
-    <span v-if="topicCount" class="ml-auto self-center text-xs text-muted-color">
-      你关注 {{ topicCount }} 个话题
-    </span>
   </div>
 
   <div v-else role="tablist" aria-orientation="vertical" class="flex flex-col gap-1">
@@ -63,26 +57,22 @@
       :key="tab.key"
       type="button"
       role="tab"
-      :aria-selected="scope === tab.key"
+      :aria-selected="active === tab.key"
       class="group relative flex cursor-pointer items-center gap-3 rounded-lg py-2.5 pr-3 pl-4 transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
-      :class="scope === tab.key ? 'text-color' : 'text-muted-color hover:bg-emphasis'"
+      :class="active === tab.key ? 'text-color' : 'text-muted-color hover:bg-emphasis'"
       :while-press="{ opacity: 0.7 }"
       @click="select(tab.key)"
     >
       <motion.span
-        v-if="scope === tab.key"
+        v-if="active === tab.key"
         :layout-id="indicatorId"
         class="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
         :transition="TRANSITION"
       />
       <component :is="tab.icon" class="size-4 shrink-0" aria-hidden="true" />
-      <span class="text-sm" :class="scope === tab.key ? 'font-bold' : 'font-medium'">
+      <span class="text-sm" :class="active === tab.key ? 'font-bold' : 'font-medium'">
         {{ tab.label }}
       </span>
     </motion.button>
-
-    <p v-if="topicCount" class="mt-2 px-4 text-xs text-muted-color">
-      你关注 {{ topicCount }} 个话题
-    </p>
   </div>
 </template>

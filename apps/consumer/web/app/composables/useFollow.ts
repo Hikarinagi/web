@@ -27,7 +27,7 @@ export function useFollow(userId: number, initial: boolean) {
     confirm.require({
       group: 'app-shell',
       header: '取消关注',
-      message: '取消关注后,TA 的更新将不再出现在你的关注流里。',
+      message: '取消关注后，TA 的更新将不再出现在你的关注流里。',
       acceptLabel: '取消关注',
       rejectLabel: '再想想',
       onAccept: ({ close }) => {
