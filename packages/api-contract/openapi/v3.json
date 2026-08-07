@@ -19959,10 +19959,6 @@
             "description": "打 1 分的人数",
             "type": "number"
           },
-          "10": {
-            "description": "打 10 分的人数",
-            "type": "number"
-          },
           "2": {
             "description": "打 2 分的人数",
             "type": "number"
@@ -19993,6 +19989,10 @@
           },
           "9": {
             "description": "打 9 分的人数",
+            "type": "number"
+          },
+          "10": {
+            "description": "打 10 分的人数",
             "type": "number"
           }
         },
@@ -46552,6 +46552,27 @@
             "required": false,
             "schema": {
               "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "题材 genre key，多个之间 OR。例：romance,mystery",
+            "in": "query",
+            "name": "genre",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "description": "只看站内有下载资源的作品",
+            "in": "query",
+            "name": "downloadable",
+            "required": false,
+            "schema": {
               "type": "boolean"
             }
           },

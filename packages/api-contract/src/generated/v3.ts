@@ -28490,6 +28490,10 @@ export interface operations {
                 staff_person_ids?: number[];
                 staff_role?: components["schemas"]["GalgameStaffRole"];
                 include_dev?: boolean;
+                /** @description 题材 genre key，多个之间 OR。例：romance,mystery */
+                genre?: string[];
+                /** @description 只看站内有下载资源的作品 */
+                downloadable?: boolean;
                 page: number;
                 page_size: number;
             };
