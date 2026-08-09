@@ -4,6 +4,7 @@ import { bulletList } from '../../../app/components/hikari-editor/plugins/bullet
 import { codeBlock } from '../../../app/components/hikari-editor/plugins/code-block'
 import { horizontalRule } from '../../../app/components/hikari-editor/plugins/horizontal-rule'
 import { orderedList } from '../../../app/components/hikari-editor/plugins/ordered-list'
+import { table } from '../../../app/components/hikari-editor/plugins/table'
 import type {
   EditorPlugin,
   EditorPluginContext,
@@ -25,6 +26,7 @@ describe('block-format plugins emit snake_case node names', () => {
     ['code-block', codeBlock, ['code_block']],
     ['blockquote', blockquote, ['blockquote']],
     ['horizontal-rule', horizontalRule, ['horizontal_rule']],
+    ['table', table, ['table', 'table_row', 'table_header', 'table_cell']],
   ] as const)('%s', (_id, plugin, expected) => {
     const names = nodeNames(plugin)
     expect(names).toEqual(expected)

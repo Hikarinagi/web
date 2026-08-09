@@ -5,6 +5,7 @@
   import type { EntitySummaries } from '~/components/hikari-content/composables/useContentSummaries'
   import { useEditorOverlays } from '../../composables/useEditorOverlays'
   import { useEditorSummariesMerge } from '../../composables/useEditorSummaries'
+  import { insertAfterTable } from '../table/insert'
   import { ENTITY_CARD_META } from './labels'
   import { searchEntities, SEARCH_PAGE_SIZE, type PickedEntity } from './search'
   import type { EntityCardType } from './types'
@@ -74,11 +75,9 @@
   })
 
   function insertNode(nodeType: string, idAttr: string, id: number) {
-    props.editor
-      .chain()
-      .focus()
-      .insertContent([{ type: nodeType, attrs: { [idAttr]: id } }, { type: 'paragraph' }])
-      .run()
+    const content = [{ type: nodeType, attrs: { [idAttr]: id } }, { type: 'paragraph' }]
+    if (insertAfterTable(props.editor, content)) return
+    props.editor.chain().focus().insertContent(content).run()
   }
 
   function insertItem(item: PickedEntity) {

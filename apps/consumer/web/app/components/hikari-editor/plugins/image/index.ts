@@ -7,6 +7,7 @@ import { push } from 'notivue'
 import { useMediaLibrary } from '~/components/media-library/composables/useMediaLibrary'
 import { isAcceptedImage, uploadImage } from '~/components/media-library/lib/upload'
 import type { MediaValue } from '~/components/media-library/types'
+import { insertAfterTable } from '../table/insert'
 import type { EditorPlugin } from '../types'
 import { pickInitialWidthPercent } from './composables/useImageResize'
 import ImageBlockNodeView from './ImageBlockNodeView.vue'
@@ -14,25 +15,23 @@ import ImageMetaForm from './ImageMetaForm.vue'
 
 function insertUploadedImage(editor: Editor, media: MediaValue) {
   const surfaceWidth = (editor.view.dom as HTMLElement).clientWidth || 0
-  editor
-    .chain()
-    .focus()
-    .insertContent([
-      {
-        type: 'image_block',
-        attrs: {
-          media_asset_id: media.id,
-          src: media.src,
-          alt: null,
-          caption: null,
-          width: media.width ?? 0,
-          height: media.height ?? 0,
-          width_percent: pickInitialWidthPercent(media.width ?? 0, surfaceWidth),
-        },
+  const content = [
+    {
+      type: 'image_block',
+      attrs: {
+        media_asset_id: media.id,
+        src: media.src,
+        alt: null,
+        caption: null,
+        width: media.width ?? 0,
+        height: media.height ?? 0,
+        width_percent: pickInitialWidthPercent(media.width ?? 0, surfaceWidth),
       },
-      { type: 'paragraph' },
-    ])
-    .run()
+    },
+    { type: 'paragraph' },
+  ]
+  if (insertAfterTable(editor, content)) return
+  editor.chain().focus().insertContent(content).run()
 }
 
 function clipboardImages(event: ClipboardEvent): File[] {

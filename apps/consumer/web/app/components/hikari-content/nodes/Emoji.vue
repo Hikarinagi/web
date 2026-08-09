@@ -84,7 +84,7 @@
 
     <span
       ref="anchorRef"
-      class="inline-flex size-[28px] cursor-pointer items-center justify-center overflow-hidden rounded-(--editor-chip-radius) bg-contain bg-center bg-no-repeat leading-[28px]"
+      class="inline-flex size-16 cursor-pointer items-center justify-center overflow-hidden rounded-(--editor-chip-radius) bg-contain bg-center bg-no-repeat leading-16"
       role="img"
       :aria-label="label"
       :style="anchorStyle"
@@ -93,7 +93,7 @@
       @click="showNow"
     >
       <span
-        class="pointer-events-none block min-w-full text-base leading-[28px] font-normal whitespace-nowrap text-transparent opacity-0 select-none"
+        class="pointer-events-none block min-w-full text-base leading-16 font-normal whitespace-nowrap text-transparent opacity-0 select-none"
         aria-hidden="true"
       >
         {{ label }}

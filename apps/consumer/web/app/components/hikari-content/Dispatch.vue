@@ -17,6 +17,12 @@
   <HikariContentNodesCodeBlock v-else-if="node.type === 'code_block'" :node="node" />
   <HikariContentNodesHorizontalRule v-else-if="node.type === 'horizontal_rule'" :node="node" />
   <HikariContentNodesHardBreak v-else-if="node.type === 'hard_break'" :node="node" />
+  <HikariContentNodesTableBlock v-else-if="node.type === 'table'" :node="node" />
+  <HikariContentNodesTableRow v-else-if="node.type === 'table_row'" :node="node" />
+  <HikariContentNodesTableCell
+    v-else-if="node.type === 'table_cell' || node.type === 'table_header'"
+    :node="node"
+  />
   <HikariContentNodesText v-else-if="node.type === 'text'" :node="node" />
   <HikariContentNodesImage v-else-if="node.type === 'image_block'" :node="node" />
   <HikariContentNodesMention v-else-if="node.type === 'mention_user'" :node="node" />

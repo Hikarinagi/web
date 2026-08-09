@@ -1,1 +1,1 @@
-export const EDITOR_SCHEMA_VERSION = 5
+export const EDITOR_SCHEMA_VERSION = 6

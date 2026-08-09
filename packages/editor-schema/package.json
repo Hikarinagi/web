@@ -26,6 +26,7 @@
     "@tiptap/extension-history": "^3.0.0",
     "@tiptap/extension-link": "^3.0.0",
     "@tiptap/extension-paragraph": "^3.0.0",
+    "@tiptap/extension-table": "3.23.6",
     "@tiptap/extension-text": "^3.0.0",
     "@tiptap/pm": "^3.0.0",
     "@tiptap/starter-kit": "^3.0.0"

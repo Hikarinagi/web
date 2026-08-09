@@ -154,6 +154,9 @@
   --editor-focus-ring: var(--color-hikari-primary-500);
   --editor-selection-bg: var(--color-hikari-primary-soft);
 
+  --editor-grip-bg: var(--color-hikari-surface-300);
+  --editor-grip-hover: var(--color-hikari-surface-500);
+
   --editor-chrome-radius: 12px;
   --editor-panel-radius: 8px;
   --editor-chip-radius: 4px;
@@ -193,6 +196,9 @@ html.dark {
   --editor-placeholder-color: var(--color-hikari-surface-500);
 
   --editor-focus-ring: var(--color-hikari-primary-400);
+
+  --editor-grip-bg: var(--color-hikari-surface-700);
+  --editor-grip-hover: var(--color-hikari-surface-500);
 
   --editor-status-success-bg: var(--color-hikari-green-700);
   --editor-status-success-text: var(--color-hikari-green-300);

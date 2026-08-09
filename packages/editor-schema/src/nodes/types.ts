@@ -1,3 +1,5 @@
+import type { TableCellAlign } from './table.js'
+
 export interface EditorDocument {
   type: 'doc'
   content?: EditorNode[]
@@ -43,6 +45,13 @@ export interface PollNodeAttrs {
   anonymous: boolean
   allow_change: boolean
   closes_at: string | null
+}
+
+export interface TableCellAttrs {
+  colspan: number
+  rowspan: number
+  colwidth: number[] | null
+  align: TableCellAlign | null
 }
 
 export interface GalgameCardAttrs {
@@ -113,3 +122,4 @@ export type EntityCardAttrs =
   | CommentCardAttrs
 
 export type { EntityCardNodeType } from '../render-protocol.js'
+export type { TableCellAlign, TableCellNodeType, TableNodeType } from './table.js'

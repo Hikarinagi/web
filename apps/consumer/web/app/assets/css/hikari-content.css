@@ -115,6 +115,59 @@
   font-size: inherit;
 }
 
+.hikari-content .tableWrapper {
+  position: relative;
+  margin: 1em 0;
+}
+.hikari-content .hikari-table-scroll {
+  max-height: 70vh;
+  --hikari-scroll-shadow-inset-y: var(--hikari-table-head-h, 0px);
+  --hikari-scroll-shadow-inset-x: var(--hikari-table-head-w, 0px);
+}
+.hikari-content table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-top: 1px solid var(--editor-surface-border);
+  border-left: 1px solid var(--editor-surface-border);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.hikari-content th,
+.hikari-content td {
+  border: none;
+  border-right: 1px solid var(--editor-surface-border);
+  border-bottom: 1px solid var(--editor-surface-border);
+  padding: 8px 12px;
+  vertical-align: top;
+  text-align: left;
+}
+.hikari-content .tableWrapper.has-header-row tr:first-child > th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.hikari-content .tableWrapper.has-header-column tr > th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+}
+.hikari-content .tableWrapper.has-header-row.has-header-column tr:first-child > th:first-child {
+  z-index: 6;
+}
+.hikari-content th {
+  background: var(--editor-toolbar-item-hover);
+  font-weight: 600;
+}
+.hikari-content th > p,
+.hikari-content td > p {
+  margin: 0;
+}
+.hikari-content th > p + p,
+.hikari-content td > p + p {
+  margin-top: 0.5em;
+}
+
 .hikari-content hr {
   border: none;
   border-top: 1px solid var(--editor-surface-border);
@@ -144,6 +197,204 @@
 .hikari-content a.hikari-content-link:hover {
   text-decoration-color: var(--p-primary-color);
 }
+.hikari-content .hikari-table-sentinel {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  width: 1px;
+}
+.hikari-content .hikari-table-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  height: 0;
+}
+.hikari-content .hikari-table-sticky__clip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease-out;
+}
+.hikari-content .tableWrapper.is-pinned .hikari-table-sticky__clip {
+  opacity: 1;
+  box-shadow: 0 8px 12px -10px color-mix(in oklab, var(--p-surface-950) 45%, transparent);
+}
+.hikari-editor-surface .hikari-table-shadows {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.hikari-editor-surface .hikari-table-shadow {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.hikari-editor-surface .hikari-table-shadow.is-visible {
+  opacity: 1;
+}
+.hikari-editor-surface .hikari-table-shadow.is-top,
+.hikari-editor-surface .hikari-table-shadow.is-bottom {
+  left: var(--hikari-table-head-w, 0px);
+  width: calc(var(--hikari-table-vp-w, 0px) - var(--hikari-table-head-w, 0px));
+  height: 16px;
+}
+.hikari-editor-surface .hikari-table-shadow.is-left,
+.hikari-editor-surface .hikari-table-shadow.is-right {
+  top: var(--hikari-table-head-h, 0px);
+  height: calc(var(--hikari-table-vp-h, 0px) - var(--hikari-table-head-h, 0px));
+  width: 16px;
+}
+.hikari-editor-surface .hikari-table-shadow.is-top {
+  top: var(--hikari-table-head-h, 0px);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
+    transparent
+  );
+}
+.hikari-editor-surface .hikari-table-shadow.is-bottom {
+  top: calc(var(--hikari-table-vp-h, 0px) - 16px);
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
+    transparent
+  );
+}
+.hikari-editor-surface .hikari-table-shadow.is-left {
+  left: var(--hikari-table-head-w, 0px);
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
+    transparent
+  );
+}
+.hikari-editor-surface .hikari-table-shadow.is-right {
+  left: calc(var(--hikari-table-vp-w, 0px) - 16px);
+  background: linear-gradient(
+    to left,
+    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
+    transparent
+  );
+}
+
+.hikari-editor-surface th,
+.hikari-editor-surface td {
+  position: relative;
+}
+
+.hikari-editor-surface .hikari-table-grip {
+  position: absolute;
+  z-index: 7;
+  background: var(--editor-grip-bg);
+  border-radius: 999px;
+  opacity: 0;
+  cursor: grab;
+  transition:
+    opacity 120ms ease-out,
+    background 120ms ease-out,
+    inset 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hikari-editor-surface .hikari-table-grip.is-column {
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 3px;
+}
+.hikari-editor-surface .hikari-table-grip.is-row {
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+}
+.hikari-editor-surface .hikari-table-grip[data-hot='true'] {
+  opacity: 1;
+}
+.hikari-editor-surface .hikari-table-grip:hover {
+  background: var(--editor-grip-hover);
+}
+.hikari-editor-surface .hikari-table-grip.is-column:hover {
+  height: 7px;
+}
+.hikari-editor-surface .hikari-table-grip.is-row:hover {
+  width: 7px;
+}
+.hikari-editor-surface .hikari-table-grip:active {
+  cursor: grabbing;
+}
+
+.hikari-editor-surface .hikari-table-plus {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  z-index: 8;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--editor-popover-bg);
+  box-shadow: inset 0 0 0 1px var(--editor-popover-border);
+  color: var(--editor-text-muted);
+  opacity: 0;
+  cursor: pointer;
+  transition:
+    opacity 120ms ease-out,
+    background 120ms ease-out,
+    box-shadow 120ms ease-out,
+    color 120ms ease-out;
+}
+.hikari-editor-surface .hikari-table-plus::before {
+  content: '+';
+  font-size: 14px;
+  line-height: 1;
+}
+.hikari-editor-surface .hikari-table-plus.is-column {
+  top: 50%;
+  right: -26px;
+  transform: translateY(-50%);
+}
+.hikari-editor-surface .hikari-table-plus.is-row {
+  left: 50%;
+  bottom: -26px;
+  transform: translateX(-50%);
+}
+.hikari-editor-surface .tableWrapper:hover .hikari-table-plus {
+  opacity: 1;
+}
+.hikari-editor-surface .hikari-table-plus:hover {
+  background: var(--editor-toolbar-item-active-bg);
+  box-shadow: inset 0 0 0 1px var(--editor-toolbar-item-active);
+  color: var(--editor-toolbar-item-active);
+}
+.hikari-editor-surface .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--editor-selection-bg);
+  pointer-events: none;
+  z-index: 1;
+}
+.hikari-editor-surface .column-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  background: var(--editor-toolbar-item-active);
+  pointer-events: none;
+  z-index: 2;
+}
+.hikari-editor-surface .resize-cursor,
+.hikari-editor-surface.resize-cursor {
+  cursor: col-resize;
+}
+
 .hikari-editor-surface .hikari-spoiler {
   background: var(--editor-toolbar-item-hover);
   border-bottom: 1px dashed var(--editor-text-muted);

@@ -17,6 +17,7 @@ export interface ToolbarDropdownItem {
   id: string
   icon: Component
   label: string
+  isDisabled?: (editor: Editor) => boolean
   onClick: (editor: Editor, context: EditorPluginContext, trigger: HTMLElement) => void
 }
 

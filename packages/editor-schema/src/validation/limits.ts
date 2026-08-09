@@ -12,6 +12,7 @@ export interface LimitCounters {
   entity_card_nodes: number
   mention_user_nodes: number
   poll_nodes: number
+  table_nodes: number
 }
 
 export function countLimits(json: unknown, root: EditorNode): LimitCounters {
@@ -21,6 +22,7 @@ export function countLimits(json: unknown, root: EditorNode): LimitCounters {
   let entityCardNodes = 0
   let mentionUserNodes = 0
   let pollNodes = 0
+  let tableNodes = 0
 
   for (const { node } of walkNodes(root)) {
     if (node.type === 'text' && typeof node.text === 'string') {
@@ -35,6 +37,7 @@ export function countLimits(json: unknown, root: EditorNode): LimitCounters {
       plainTextChars += 1
     }
     if (node.type === 'poll') pollNodes++
+    if (node.type === 'table') tableNodes++
     if (ENTITY_CARD_NODE_TYPES.has(node.type as never)) entityCardNodes++
   }
 
@@ -46,6 +49,7 @@ export function countLimits(json: unknown, root: EditorNode): LimitCounters {
     entity_card_nodes: entityCardNodes,
     mention_user_nodes: mentionUserNodes,
     poll_nodes: pollNodes,
+    table_nodes: tableNodes,
   }
 }
 
@@ -98,6 +102,13 @@ export function checkLimits(counters: LimitCounters, limits: PresetLimits): Vali
       path: [],
       code: 'limit_exceeded_poll_nodes',
       message: `投票数量超出限制 (${counters.poll_nodes} > ${limits.max_poll_nodes})`,
+    })
+  }
+  if (counters.table_nodes > limits.max_table_nodes) {
+    issues.push({
+      path: [],
+      code: 'limit_exceeded_table_nodes',
+      message: `表格数量超出限制 (${counters.table_nodes} > ${limits.max_table_nodes})`,
     })
   }
   return issues

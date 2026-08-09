@@ -31,7 +31,13 @@
   defineOptions({ name: 'HikariScrollArea' })
 
   const viewport = ref<HTMLElement | null>(null)
-  const { showTop, showBottom, showLeft, showRight } = useScrollShadow(viewport)
+  const { showTop, showBottom, showLeft, showRight, viewWidth, viewHeight } =
+    useScrollShadow(viewport)
+
+  const shadowFrame = computed(() => ({
+    '--hikari-scroll-vp-w': `${viewWidth.value}px`,
+    '--hikari-scroll-vp-h': `${viewHeight.value}px`,
+  }))
 
   const hasY = computed(() => props.axis === 'y' || props.axis === 'both')
   const hasX = computed(() => props.axis === 'x' || props.axis === 'both')
@@ -79,33 +85,30 @@
       defer
       class="hikari-scroll-area__os"
     >
+      <div class="hikari-scroll-area__shadows" :style="shadowFrame" aria-hidden="true">
+        <div
+          v-if="hasY && allowStart"
+          class="hikari-scroll-area__shadow hikari-scroll-area__shadow--top"
+          :class="{ 'is-visible': showTop }"
+        />
+        <div
+          v-if="hasY && allowEnd"
+          class="hikari-scroll-area__shadow hikari-scroll-area__shadow--bottom"
+          :class="{ 'is-visible': showBottom }"
+        />
+        <div
+          v-if="hasX && allowStart"
+          class="hikari-scroll-area__shadow hikari-scroll-area__shadow--left"
+          :class="{ 'is-visible': showLeft }"
+        />
+        <div
+          v-if="hasX && allowEnd"
+          class="hikari-scroll-area__shadow hikari-scroll-area__shadow--right"
+          :class="{ 'is-visible': showRight }"
+        />
+      </div>
       <slot />
     </OverlayScrollbarsComponent>
-
-    <div
-      v-if="hasY && allowStart"
-      class="hikari-scroll-area__shadow hikari-scroll-area__shadow--top"
-      :class="{ 'is-visible': showTop }"
-      aria-hidden="true"
-    />
-    <div
-      v-if="hasY && allowEnd"
-      class="hikari-scroll-area__shadow hikari-scroll-area__shadow--bottom"
-      :class="{ 'is-visible': showBottom }"
-      aria-hidden="true"
-    />
-    <div
-      v-if="hasX && allowStart"
-      class="hikari-scroll-area__shadow hikari-scroll-area__shadow--left"
-      :class="{ 'is-visible': showLeft }"
-      aria-hidden="true"
-    />
-    <div
-      v-if="hasX && allowEnd"
-      class="hikari-scroll-area__shadow hikari-scroll-area__shadow--right"
-      :class="{ 'is-visible': showRight }"
-      aria-hidden="true"
-    />
 
     <template v-if="showArrows">
       <div
@@ -142,12 +145,20 @@
        fill 模式下 root 无 max-height → inherit 为 none,行为不变。 */
     max-height: inherit;
   }
+  .hikari-scroll-area__shadows {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
   .hikari-scroll-area__shadow {
     position: absolute;
     pointer-events: none;
     opacity: 0;
     transition: opacity 120ms ease-out;
-    z-index: 1;
   }
   .hikari-scroll-area__shadow.is-visible {
     opacity: 1;
@@ -173,12 +184,12 @@
   }
   .hikari-scroll-area__shadow--top,
   .hikari-scroll-area__shadow--bottom {
-    left: 0;
-    right: 0;
+    left: var(--hikari-scroll-shadow-inset-x, 0px);
+    width: calc(var(--hikari-scroll-vp-w, 0px) - var(--hikari-scroll-shadow-inset-x, 0px));
     height: 16px;
   }
   .hikari-scroll-area__shadow--top {
-    top: 0;
+    top: var(--hikari-scroll-shadow-inset-y, 0px);
     background: linear-gradient(
       to bottom,
       color-mix(in oklab, var(--p-surface-950) 14%, transparent),
@@ -186,7 +197,7 @@
     );
   }
   .hikari-scroll-area__shadow--bottom {
-    bottom: 0;
+    top: calc(var(--hikari-scroll-vp-h, 0px) - 16px);
     background: linear-gradient(
       to top,
       color-mix(in oklab, var(--p-surface-950) 14%, transparent),
@@ -195,12 +206,12 @@
   }
   .hikari-scroll-area__shadow--left,
   .hikari-scroll-area__shadow--right {
-    top: 0;
-    bottom: 0;
+    top: var(--hikari-scroll-shadow-inset-y, 0px);
+    height: calc(var(--hikari-scroll-vp-h, 0px) - var(--hikari-scroll-shadow-inset-y, 0px));
     width: 16px;
   }
   .hikari-scroll-area__shadow--left {
-    left: 0;
+    left: var(--hikari-scroll-shadow-inset-x, 0px);
     background: linear-gradient(
       to right,
       color-mix(in oklab, var(--p-surface-950) 14%, transparent),
@@ -208,7 +219,7 @@
     );
   }
   .hikari-scroll-area__shadow--right {
-    right: 0;
+    left: calc(var(--hikari-scroll-vp-w, 0px) - 16px);
     background: linear-gradient(
       to left,
       color-mix(in oklab, var(--p-surface-950) 14%, transparent),

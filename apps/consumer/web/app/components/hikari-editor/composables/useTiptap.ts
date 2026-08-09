@@ -1,5 +1,6 @@
 import { onBeforeUnmount, onMounted, provide, shallowRef, type Ref, type ShallowRef } from 'vue'
-import type { Editor as CoreEditor, EditorOptions } from '@tiptap/core'
+import { Extension, type Editor as CoreEditor, type EditorOptions } from '@tiptap/core'
+import { dropCursor } from '@tiptap/pm/dropcursor'
 import { Editor } from '@tiptap/vue-3'
 import Document from '@tiptap/extension-document'
 import Gapcursor from '@tiptap/extension-gapcursor'
@@ -16,6 +17,13 @@ import {
   type EditorPlugin,
   type EditorPluginContext,
 } from '../plugins/types'
+
+const DropCursor = Extension.create({
+  name: 'drop_cursor',
+  addProseMirrorPlugins() {
+    return [dropCursor({ width: 2, color: false, class: 'hikari-drop-cursor' })]
+  },
+})
 
 export interface UseTiptapOptions {
   plugins: EditorPlugin[]
@@ -91,6 +99,7 @@ export function useTiptap(options: UseTiptapOptions): UseTiptapReturn {
         HardBreak.extend({ name: 'hard_break' }),
         History,
         Gapcursor,
+        DropCursor,
         Placeholder.configure({ placeholder: options.placeholder ?? '' }),
         ...pluginExtensions,
       ],

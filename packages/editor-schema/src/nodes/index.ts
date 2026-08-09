@@ -5,6 +5,17 @@ export { EmojiInlineExtension } from './emoji-inline.js'
 export { PollExtension } from './poll.js'
 export { TextAlignExtension } from './text-align.js'
 export {
+  TableExtension,
+  TableRowExtension,
+  TableHeaderExtension,
+  TableCellExtension,
+  TABLE_EXTENSIONS,
+  TABLE_NODE_TYPES,
+  TABLE_CELL_NODE_TYPES,
+  TABLE_CELL_ALIGN_VALUES,
+  TABLE_CELL_MIN_WIDTH,
+} from './table.js'
+export {
   GalgameCardExtension,
   LightNovelCardExtension,
   LightNovelVolumeCardExtension,

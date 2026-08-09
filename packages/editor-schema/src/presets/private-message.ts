@@ -24,6 +24,7 @@ export const PRIVATE_MESSAGE_PRESET: PresetDefinition = {
     max_entity_card_nodes: 0,
     max_mention_user_nodes: 0,
     max_poll_nodes: 0,
+    max_table_nodes: 0,
   },
   css_scope_class: 'hikari-content--private-message',
 }

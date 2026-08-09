@@ -13,17 +13,21 @@ import {
   Pilcrow,
   Quote,
   Smile,
+  Table,
   Vote,
 } from '@lucide/vue'
 import { Extension, type Range } from '@tiptap/core'
 import { Plugin, PluginKey, type EditorState } from '@tiptap/pm/state'
 import { useMediaLibrary } from '~/components/media-library/composables/useMediaLibrary'
 import { pickInitialWidthPercent } from '../image/composables/useImageResize'
+import { insertHorizontalRule } from '../horizontal-rule'
 import { getSelectionAnchor, readLinkContext } from '../link/helpers'
 import type { EditorPlugin, EditorPluginContext } from '../types'
 import { ENTITY_CARD_META } from '../entity-card/labels'
 import { ENTITY_CARD_TYPES, type EntityCardType } from '../entity-card/types'
 import { openPollInsert } from '../poll'
+import { insertTable } from '../table'
+import { insertAfterTable } from '../table/insert'
 import { createCommandMenuRenderer, type CommandMenuState } from './composables/useCommandMenu'
 import type { CommandActionContext, CommandMenuItem } from './types'
 
@@ -84,25 +88,23 @@ async function insertImage(ctx: CommandActionContext) {
 
   const surfaceWidth = (ctx.editor.view.dom as HTMLElement).clientWidth || 0
   const widthPercent = pickInitialWidthPercent(media.width ?? 0, surfaceWidth)
-  ctx.editor
-    .chain()
-    .focus()
-    .insertContent([
-      {
-        type: 'image_block',
-        attrs: {
-          media_asset_id: media.id,
-          src: media.src,
-          alt: null,
-          caption: null,
-          width: media.width ?? 0,
-          height: media.height ?? 0,
-          width_percent: widthPercent,
-        },
+  const content = [
+    {
+      type: 'image_block',
+      attrs: {
+        media_asset_id: media.id,
+        src: media.src,
+        alt: null,
+        caption: null,
+        width: media.width ?? 0,
+        height: media.height ?? 0,
+        width_percent: widthPercent,
       },
-      { type: 'paragraph' },
-    ])
-    .run()
+    },
+    { type: 'paragraph' },
+  ]
+  if (insertAfterTable(ctx.editor, content)) return
+  ctx.editor.chain().focus().insertContent(content).run()
 }
 
 function openEntityCard(ctx: CommandActionContext, entityType: EntityCardType) {
@@ -212,7 +214,10 @@ function createCommandItems(): CommandMenuItem[] {
       label: '分隔线',
       description: '插入内容分隔线',
       keywords: ['hr', 'rule', 'divider', '分割', '分隔线'],
-      action: ctx => ctx.editor.chain().focus().deleteRange(ctx.range).setHorizontalRule().run(),
+      action: ctx => {
+        ctx.editor.chain().focus().deleteRange(ctx.range).run()
+        insertHorizontalRule(ctx.editor)
+      },
     },
     {
       id: 'image',
@@ -255,6 +260,18 @@ function createCommandItems(): CommandMenuItem[] {
       action: ctx => {
         ctx.editor.chain().focus().deleteRange(ctx.range).run()
         openPollInsert(ctx.editor)
+      },
+    },
+    {
+      id: 'table',
+      icon: Table,
+      command: '/table',
+      label: '表格',
+      description: '插入 3×3 表格',
+      keywords: ['table', 'grid', '表格', '数据表'],
+      action: ctx => {
+        ctx.editor.chain().focus().deleteRange(ctx.range).run()
+        insertTable(ctx.editor)
       },
     },
     {

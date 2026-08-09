@@ -66,6 +66,7 @@ export const COMMENT_PRESET: PresetDefinition = {
     max_entity_card_nodes: 5,
     max_mention_user_nodes: 10,
     max_poll_nodes: 0,
+    max_table_nodes: 0,
   },
   css_scope_class: 'hikari-content--comment',
 }

@@ -102,6 +102,20 @@
     "producer_card": [
       "producer_id"
     ],
+    "table": [],
+    "table_cell": [
+      "align",
+      "colspan",
+      "colwidth",
+      "rowspan"
+    ],
+    "table_header": [
+      "align",
+      "colspan",
+      "colwidth",
+      "rowspan"
+    ],
+    "table_row": [],
     "text": []
   },
   "presets": {
@@ -142,6 +156,10 @@
         "poll",
         "post_card",
         "producer_card",
+        "table",
+        "table_cell",
+        "table_header",
+        "table_row",
         "text"
       ],
       "allowed_top_level_nodes": [
@@ -165,7 +183,8 @@
         "person_card",
         "poll",
         "post_card",
-        "producer_card"
+        "producer_card",
+        "table"
       ]
     },
     "post": {
@@ -308,5 +327,5 @@
       ]
     }
   },
-  "schema_version": 5
+  "schema_version": 6
 }

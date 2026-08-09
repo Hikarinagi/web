@@ -1,4 +1,5 @@
 import { ENTITY_CARD_ID_KEY, ENTITY_CARD_NODE_TYPES } from '../nodes/entity-card.js'
+import { TABLE_CELL_ALIGN_VALUES } from '../nodes/table.js'
 import type { EditorDocument, EditorMark, EditorNode } from '../nodes/types.js'
 import type { PresetDefinition } from '../presets/types.js'
 import {
@@ -129,6 +130,14 @@ function validateNodeAttrs(
     case 'paragraph':
     case 'heading':
       return validateTextAlignAttr(node, path, issues)
+    case 'table':
+      return validateChildTypes(node, path, ['table_row'], issues)
+    case 'table_row':
+      return validateChildTypes(node, path, ['table_cell', 'table_header'], issues)
+    case 'table_cell':
+    case 'table_header':
+      validateChildTypes(node, path, ['paragraph'], issues)
+      return validateTableCellAttrs(node, path, issues)
     default:
       if (ENTITY_CARD_NODE_TYPES.has(node.type as never)) {
         const idKey = ENTITY_CARD_ID_KEY[node.type as keyof typeof ENTITY_CARD_ID_KEY]
@@ -207,6 +216,68 @@ function validateTextAlignAttr(
       path: [...path, 'attrs', 'text_align'],
       code: 'invalid_attr_type',
       message: 'text_align 取值必须是 left / center / right / justify',
+    })
+  }
+}
+
+function validateChildTypes(
+  node: EditorNode,
+  path: (string | number)[],
+  allowed: string[],
+  issues: ValidationIssue[],
+): void {
+  if (!Array.isArray(node.content)) return
+  for (let i = 0; i < node.content.length; i++) {
+    const child = node.content[i]!
+    if (allowed.includes(child.type)) continue
+    issues.push({
+      path: [...path, 'content', i],
+      code: 'invalid_node_child',
+      message: `${node.type} 的子节点只能是 ${allowed.join(' / ')}，收到 ${child.type}`,
+    })
+  }
+}
+
+function validateTableCellAttrs(
+  node: EditorNode,
+  path: (string | number)[],
+  issues: ValidationIssue[],
+): void {
+  const attrs = node.attrs ?? {}
+  const attrsPath = [...path, 'attrs']
+
+  if (attrs.colspan != null && !isPositiveInteger(attrs.colspan)) {
+    issues.push({
+      path: [...attrsPath, 'colspan'],
+      code: 'invalid_attr_type',
+      message: 'colspan 必须是正整数',
+    })
+  }
+  if (attrs.rowspan != null && !isPositiveInteger(attrs.rowspan)) {
+    issues.push({
+      path: [...attrsPath, 'rowspan'],
+      code: 'invalid_attr_type',
+      message: 'rowspan 必须是正整数',
+    })
+  }
+  if (
+    attrs.colwidth != null &&
+    (!Array.isArray(attrs.colwidth) || !attrs.colwidth.every(isPositiveInteger))
+  ) {
+    issues.push({
+      path: [...attrsPath, 'colwidth'],
+      code: 'invalid_attr_type',
+      message: 'colwidth 必须是正整数数组或 null',
+    })
+  }
+  if (
+    attrs.align != null &&
+    !(TABLE_CELL_ALIGN_VALUES as readonly unknown[]).includes(attrs.align)
+  ) {
+    issues.push({
+      path: [...attrsPath, 'align'],
+      code: 'invalid_attr_type',
+      message: 'align 取值必须是 left / center / right',
     })
   }
 }

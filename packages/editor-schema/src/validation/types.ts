@@ -16,6 +16,8 @@ export type ValidationIssueCode =
   | 'limit_exceeded_entity_card_nodes'
   | 'limit_exceeded_mention_user_nodes'
   | 'limit_exceeded_poll_nodes'
+  | 'limit_exceeded_table_nodes'
+  | 'invalid_node_child'
 
 export interface ValidationIssue {
   path: (string | number)[]

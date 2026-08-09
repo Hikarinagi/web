@@ -16,6 +16,7 @@ import { orderedList } from './ordered-list'
 import { poll } from './poll'
 import { spoiler } from './spoiler'
 import { strike } from './strike'
+import { table } from './table'
 import { textAlign } from './text-align'
 import { textColor } from './text-color'
 import type { EditorPlugin, EditorProfile, ToolbarGroup } from './types'
@@ -39,6 +40,7 @@ const COMMUNITY_PLUGINS: EditorPlugin[] = [
   image,
   entityCard,
   poll,
+  table,
   emoji,
   mention,
 ]

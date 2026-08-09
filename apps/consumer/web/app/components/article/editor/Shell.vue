@@ -55,23 +55,6 @@
     )
   }
 
-  const dotClass = computed(() => {
-    if (saveState.value === 'saving') return 'bg-amber-400'
-    if (saveState.value === 'error') return 'bg-red-500'
-    if (saveState.value === 'saved') return 'bg-green-500'
-    return 'bg-surface-300 dark:bg-surface-600'
-  })
-  const savedLabel = computed(() => {
-    if (saveState.value === 'saving') return '保存中…'
-    if (saveState.value === 'error') return '保存失败'
-    if (saveState.value === 'saved' && savedAt.value) {
-      const h = savedAt.value.getHours().toString().padStart(2, '0')
-      const m = savedAt.value.getMinutes().toString().padStart(2, '0')
-      return `已保存 ${h}:${m}`
-    }
-    return '草稿'
-  })
-
   const router = useRouter()
   const leavePromptOpen = ref(false)
   let pendingPath: string | null = null
@@ -180,11 +163,13 @@
       <div
         class="mx-auto flex w-[600px] max-w-full items-center justify-between gap-3 px-4 py-3 sm:px-0"
       >
-        <div class="flex items-center gap-2 text-xs text-muted-color">
-          <span class="size-1.5 rounded-full" :class="dotClass" />
-          <span>{{ savedLabel }}</span>
-          <span>·</span>
-          <span class="tabular-nums">{{ charCount }} 字</span>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 text-xs text-muted-color">
+            <ArticleEditorSaveState :state="saveState" :saved-at="savedAt" />
+            <span class="min-w-14 tabular-nums">{{ charCount }} 字</span>
+          </div>
+          <div class="h-4 w-px bg-surface-200 dark:bg-surface-700" />
+          <HikariEditorUndoRedo :editor="editor" />
         </div>
         <Button
           label="发布"
@@ -197,6 +182,8 @@
     </div>
 
     <HikariEditorBubbleMenu :editor="editor" :items="plugins" :context="pluginContext" />
+    <HikariEditorBlockHandle :editor="editor" />
+    <HikariEditorTableControls :editor="editor" />
     <HikariEditorOverlayHost :plugins="plugins" />
     <ArticleEditorPublishDialog v-model:visible="publishOpen" :host="host" />
     <ArticleEditorDraftChooser v-if="props.articleId === null && !isReview" @restore="onRestore" />

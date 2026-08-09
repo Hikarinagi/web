@@ -6,6 +6,8 @@ interface ShadowState {
   showBottom: ComputedRef<boolean>
   showLeft: ComputedRef<boolean>
   showRight: ComputedRef<boolean>
+  viewWidth: Ref<number>
+  viewHeight: Ref<number>
 }
 
 const EDGE_TOLERANCE = 1
@@ -47,5 +49,12 @@ export function useScrollShadow(target: Ref<HTMLElement | null>): ShadowState {
     return max > 0 && x.value < max - EDGE_TOLERANCE
   })
 
-  return { showTop, showBottom, showLeft, showRight }
+  return {
+    showTop,
+    showBottom,
+    showLeft,
+    showRight,
+    viewWidth: clientWidth,
+    viewHeight: clientHeight,
+  }
 }

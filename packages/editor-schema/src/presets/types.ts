@@ -10,6 +10,7 @@ export interface PresetLimits {
   max_entity_card_nodes: number
   max_mention_user_nodes: number
   max_poll_nodes: number
+  max_table_nodes: number
 }
 
 export interface PresetDefinition {

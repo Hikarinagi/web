@@ -96,6 +96,7 @@ export const POST_PRESET: PresetDefinition = {
     max_entity_card_nodes: 15,
     max_mention_user_nodes: 20,
     max_poll_nodes: 1,
+    max_table_nodes: 0,
   },
   css_scope_class: 'hikari-content--post',
 }

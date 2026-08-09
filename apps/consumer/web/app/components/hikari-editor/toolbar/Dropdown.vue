@@ -2,7 +2,7 @@
   import type { Editor } from '@tiptap/vue-3'
   import Menu from 'primevue/menu'
   import type { MenuItem } from 'primevue/menuitem'
-  import { computed, useTemplateRef } from 'vue'
+  import { ref, useTemplateRef } from 'vue'
   import type { EditorPluginContext, ToolbarDropdownItem } from '../plugins/types'
 
   const props = defineProps<{
@@ -10,24 +10,20 @@
     context: EditorPluginContext
   }>()
 
-  const items = ref<ToolbarDropdownItem[]>([])
-  const trigger = ref<HTMLElement | null>(null)
+  const model = ref<MenuItem[]>([])
   const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menuRef')
 
-  const model = computed<MenuItem[]>(() =>
-    items.value.map(item => ({
+  function open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement, event: Event) {
+    const editor = props.editor
+    model.value = dropdownItems.map(item => ({
       label: item.label,
+      disabled: editor === null || (item.isDisabled?.(editor) ?? false),
       __dropdownItem: item,
       command: () => {
-        if (!props.editor || !trigger.value) return
-        item.onClick(props.editor, props.context, trigger.value)
+        if (!editor) return
+        item.onClick(editor, props.context, triggerEl)
       },
-    })),
-  )
-
-  function open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement, event: Event) {
-    items.value = dropdownItems
-    trigger.value = triggerEl
+    }))
     nextTick(() => menuRef.value?.toggle(event))
   }
 
@@ -56,5 +52,9 @@
     padding: 6px 12px;
     color: var(--editor-text-color);
     cursor: pointer;
+  }
+  li[data-p-disabled='true'] .dropdown-item {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 </style>
