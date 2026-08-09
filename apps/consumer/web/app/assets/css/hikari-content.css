@@ -314,7 +314,8 @@
   bottom: 10px;
   width: 3px;
 }
-.hikari-editor-surface .hikari-table-grip[data-hot='true'] {
+.hikari-editor-surface .is-hot-column > .hikari-table-grip.is-column,
+.hikari-editor-surface .is-hot-row > .hikari-table-grip.is-row {
   opacity: 1;
 }
 .hikari-editor-surface .hikari-table-grip:hover {
@@ -377,15 +378,36 @@
   position: absolute;
   inset: 0;
   background: var(--editor-selection-bg);
+  border: 0 solid var(--editor-toolbar-item-active);
   pointer-events: none;
   z-index: 1;
+}
+.hikari-editor-surface .is-select-column .selectedCell::after {
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+.hikari-editor-surface .is-select-column tr:first-child > .selectedCell::after {
+  border-top-width: 1px;
+}
+.hikari-editor-surface .is-select-column tr:last-child > .selectedCell::after {
+  border-bottom-width: 1px;
+}
+.hikari-editor-surface .is-select-row .selectedCell::after {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+}
+.hikari-editor-surface .is-select-row .selectedCell:first-child::after {
+  border-left-width: 1px;
+}
+.hikari-editor-surface .is-select-row .selectedCell:last-child::after {
+  border-right-width: 1px;
 }
 .hikari-editor-surface .column-resize-handle {
   position: absolute;
   top: 0;
-  right: -2px;
-  bottom: -2px;
-  width: 4px;
+  right: 0;
+  bottom: 0;
+  width: 3px;
   background: var(--editor-toolbar-item-active);
   pointer-events: none;
   z-index: 2;

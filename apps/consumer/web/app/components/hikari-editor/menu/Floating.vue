@@ -72,6 +72,11 @@
     ],
   })
 
+  const anchored = ref<Record<string, string>>({})
+  watchEffect(() => {
+    if (props.open) anchored.value = { ...floatingStyles.value }
+  })
+
   watch(
     () => props.open,
     async open => {
@@ -115,7 +120,7 @@
       @touchmove.prevent
       @contextmenu.prevent
     />
-    <div ref="panelRef" class="hikari-editor-menu-host" :style="floatingStyles">
+    <div ref="panelRef" class="hikari-editor-menu-host" :style="anchored">
       <AnimatePresence>
         <motion.div
           v-if="open"
