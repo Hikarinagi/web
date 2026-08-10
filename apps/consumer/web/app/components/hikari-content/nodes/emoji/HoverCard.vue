@@ -47,7 +47,7 @@
     :alt="`:${code}:`"
     :processing="false"
     :draggable="false"
-    class="size-12"
+    class="size-28"
     image-class="h-full w-full object-contain"
   />
   <span class="font-mono text-xs text-surface-500 dark:text-surface-400">:{{ code }}:</span>
