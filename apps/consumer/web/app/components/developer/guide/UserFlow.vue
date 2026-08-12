@@ -117,7 +117,7 @@
         以
         <code class="font-mono">Authorization: Bearer</code>
         请求头携带访问令牌。相关端点统一位于
-        <code class="font-mono">/open/user/me/**</code>
+        <code class="font-mono">/v3/user/me/**</code>
         之下，主体由令牌的
         <code class="font-mono">sub</code>
         声明确定，不接受在请求中指定用户。

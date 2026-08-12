@@ -1689,6 +1689,7 @@
               "LIGHT_NOVEL_FEED",
               "HOME_FEED",
               "MANGA_FEED",
+              "GALGAME_FEED",
               "GALGAME_DOWNLOAD"
             ],
             "type": "string"
@@ -6219,6 +6220,7 @@
               "LIGHT_NOVEL_FEED",
               "HOME_FEED",
               "MANGA_FEED",
+              "GALGAME_FEED",
               "GALGAME_DOWNLOAD"
             ],
             "type": "string"
@@ -27558,6 +27560,7 @@
               "LIGHT_NOVEL_FEED",
               "HOME_FEED",
               "MANGA_FEED",
+              "GALGAME_FEED",
               "GALGAME_DOWNLOAD"
             ],
             "type": "string"
@@ -33744,6 +33747,7 @@
                 "LIGHT_NOVEL_FEED",
                 "HOME_FEED",
                 "MANGA_FEED",
+                "GALGAME_FEED",
                 "GALGAME_DOWNLOAD"
               ],
               "type": "string"
@@ -55370,6 +55374,7 @@
                 "LIGHT_NOVEL_FEED",
                 "HOME_FEED",
                 "MANGA_FEED",
+                "GALGAME_FEED",
                 "GALGAME_DOWNLOAD"
               ],
               "type": "string"

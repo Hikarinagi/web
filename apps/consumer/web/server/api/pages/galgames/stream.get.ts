@@ -1,21 +1,34 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 import { getQuery, type H3Event } from 'h3'
+import { bannerForPosition, type PromoBanner } from '~/features/promotion/placement'
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
+const BANNER_EVERY = 2 // 每 2 批插一个运营 banner(一批最多 4 个模块,故约每 4~8 个模块一条)
+
 async function handler(event: H3Event) {
   const cursor = Math.max(0, Math.floor(Number(getQuery(event).cursor) || 0))
-  const batch: ApiData<'/api/v3/galgames/recommendations', 'get'> = await fetchBackendData(
-    event,
-    '/api/v3/galgames/recommendations',
-    { query: { cursor } },
-  )
+  const wantBanner = cursor > 0 && cursor % BANNER_EVERY === 0
+  const [batch, banners]: [ApiData<'/api/v3/galgames/recommendations', 'get'>, PromoBanner[]] =
+    await Promise.all([
+      fetchBackendData(event, '/api/v3/galgames/recommendations', { query: { cursor } }),
+      wantBanner
+        ? fetchBackendData(event, '/api/v3/promotions/banners', {
+            query: { surface: 'GALGAME_FEED' },
+          }).catch(() => [] as PromoBanner[])
+        : Promise.resolve([] as PromoBanner[]),
+    ])
+
+  const modules = batch.modules.flatMap(module => {
+    const entry = moduleOf(module)
+    return entry ? [entry] : []
+  })
+  const banner = bannerForPosition(cursor, banners, BANNER_EVERY)
 
   return {
-    modules: batch.modules.flatMap(module => {
-      const entry = moduleOf(module)
-      return entry ? [entry] : []
-    }),
+    modules: banner
+      ? [{ kind: 'banner' as const, key: `banner-${cursor}`, banner }, ...modules]
+      : modules,
     next_cursor: batch.next_cursor,
   }
 }

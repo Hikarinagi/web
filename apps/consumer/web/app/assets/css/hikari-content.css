@@ -158,6 +158,8 @@
 .hikari-content th {
   background: var(--editor-toolbar-item-hover);
   font-weight: 600;
+  border-right-color: var(--editor-table-header-border);
+  border-bottom-color: var(--editor-table-header-border);
 }
 .hikari-content th > p,
 .hikari-content td > p {

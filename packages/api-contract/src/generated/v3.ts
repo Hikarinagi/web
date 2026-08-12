@@ -11297,7 +11297,7 @@ export interface components {
             /** Format: date-time */
             start_at: string | null;
             /** @enum {string} */
-            surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_DOWNLOAD";
+            surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_FEED" | "GALGAME_DOWNLOAD";
             title: string | null;
             /** Format: date-time */
             updated_at: string;
@@ -12380,7 +12380,7 @@ export interface components {
             order?: number;
             start_at?: string | null;
             /** @enum {string} */
-            surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_DOWNLOAD";
+            surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_FEED" | "GALGAME_DOWNLOAD";
             title?: string | null;
         };
         CreatePromoNavItemDto: {
@@ -17817,7 +17817,7 @@ export interface components {
             order?: number;
             start_at?: string | null;
             /** @enum {string} */
-            surface?: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_DOWNLOAD";
+            surface?: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_FEED" | "GALGAME_DOWNLOAD";
             title?: string | null;
         };
         UpdatePromoNavItemDto: {
@@ -21213,7 +21213,7 @@ export interface operations {
     AdminPromoBannerController_list: {
         parameters: {
             query: {
-                surface?: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_DOWNLOAD";
+                surface?: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_FEED" | "GALGAME_DOWNLOAD";
                 page: number;
                 page_size: number;
             };
@@ -33331,7 +33331,7 @@ export interface operations {
     PromotionController_banners: {
         parameters: {
             query: {
-                surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_DOWNLOAD";
+                surface: "LIGHT_NOVEL_FEED" | "HOME_FEED" | "MANGA_FEED" | "GALGAME_FEED" | "GALGAME_DOWNLOAD";
             };
             header?: never;
             path?: never;

@@ -3652,7 +3652,7 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/api/v3/open/characters/{id}": {
+    "/v3/characters/{id}": {
       "get": {
         "operationId": "OpenCharacterController_getById",
         "parameters": [
@@ -3686,7 +3686,7 @@
         ]
       }
     },
-    "/api/v3/open/galgames/{id}": {
+    "/v3/galgames/{id}": {
       "get": {
         "operationId": "OpenGalgameController_getById",
         "parameters": [
@@ -3720,7 +3720,7 @@
         ]
       }
     },
-    "/api/v3/open/galgames/{id}/characters": {
+    "/v3/galgames/{id}/characters": {
       "get": {
         "operationId": "OpenGalgameController_getCharacters",
         "parameters": [
@@ -3765,7 +3765,7 @@
         ]
       }
     },
-    "/api/v3/open/galgames/{id}/staff": {
+    "/v3/galgames/{id}/staff": {
       "get": {
         "operationId": "OpenGalgameController_getStaff",
         "parameters": [
@@ -3810,7 +3810,7 @@
         ]
       }
     },
-    "/api/v3/open/light-novels/{id}": {
+    "/v3/light-novels/{id}": {
       "get": {
         "operationId": "OpenLightNovelController_getById",
         "parameters": [
@@ -3844,7 +3844,7 @@
         ]
       }
     },
-    "/api/v3/open/light-novels/{id}/characters": {
+    "/v3/light-novels/{id}/characters": {
       "get": {
         "operationId": "OpenLightNovelController_getCharacters",
         "parameters": [
@@ -3889,7 +3889,7 @@
         ]
       }
     },
-    "/api/v3/open/light-novels/{id}/people": {
+    "/v3/light-novels/{id}/people": {
       "get": {
         "operationId": "OpenLightNovelController_getPeople",
         "parameters": [
@@ -3938,7 +3938,7 @@
         ]
       }
     },
-    "/api/v3/open/light-novels/{id}/producers": {
+    "/v3/light-novels/{id}/producers": {
       "get": {
         "operationId": "OpenLightNovelController_getProducers",
         "parameters": [
@@ -3987,7 +3987,7 @@
         ]
       }
     },
-    "/api/v3/open/light-novels/{id}/volumes": {
+    "/v3/light-novels/{id}/volumes": {
       "get": {
         "operationId": "OpenLightNovelController_getVolumes",
         "parameters": [
@@ -4037,7 +4037,7 @@
         ]
       }
     },
-    "/api/v3/open/mangas/{id}": {
+    "/v3/mangas/{id}": {
       "get": {
         "operationId": "OpenMangaController_getById",
         "parameters": [
@@ -4071,7 +4071,7 @@
         ]
       }
     },
-    "/api/v3/open/mangas/{id}/characters": {
+    "/v3/mangas/{id}/characters": {
       "get": {
         "operationId": "OpenMangaController_getCharacters",
         "parameters": [
@@ -4116,7 +4116,7 @@
         ]
       }
     },
-    "/api/v3/open/mangas/{id}/people": {
+    "/v3/mangas/{id}/people": {
       "get": {
         "operationId": "OpenMangaController_getPeople",
         "parameters": [
@@ -4153,7 +4153,7 @@
         ]
       }
     },
-    "/api/v3/open/mangas/{id}/producers": {
+    "/v3/mangas/{id}/producers": {
       "get": {
         "operationId": "OpenMangaController_getProducers",
         "parameters": [
@@ -4190,7 +4190,7 @@
         ]
       }
     },
-    "/api/v3/open/mangas/{id}/volumes": {
+    "/v3/mangas/{id}/volumes": {
       "get": {
         "operationId": "OpenMangaController_getVolumes",
         "parameters": [
@@ -4227,7 +4227,7 @@
         ]
       }
     },
-    "/api/v3/open/people/{id}": {
+    "/v3/people/{id}": {
       "get": {
         "operationId": "OpenPersonController_getById",
         "parameters": [
@@ -4261,7 +4261,7 @@
         ]
       }
     },
-    "/api/v3/open/producers/{id}": {
+    "/v3/producers/{id}": {
       "get": {
         "operationId": "OpenProducerController_getById",
         "parameters": [
@@ -4295,7 +4295,7 @@
         ]
       }
     },
-    "/api/v3/open/search": {
+    "/v3/search": {
       "get": {
         "operationId": "OpenSearchController_search",
         "parameters": [
@@ -4386,7 +4386,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me": {
+    "/v3/user/me": {
       "get": {
         "operationId": "OpenUserController_getMe",
         "parameters": [],
@@ -4411,7 +4411,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections": {
+    "/v3/user/me/collections": {
       "get": {
         "operationId": "OpenUserCollectionController_list",
         "parameters": [],
@@ -4472,7 +4472,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections/{id}": {
+    "/v3/user/me/collections/{id}": {
       "delete": {
         "operationId": "OpenUserCollectionController_remove",
         "parameters": [
@@ -4573,7 +4573,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections/{id}/galgames/{work_id}": {
+    "/v3/user/me/collections/{id}/galgames/{work_id}": {
       "delete": {
         "operationId": "OpenUserCollectionController_removeGalgame",
         "parameters": [
@@ -4658,7 +4658,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections/{id}/items": {
+    "/v3/user/me/collections/{id}/items": {
       "get": {
         "operationId": "OpenUserCollectionController_items",
         "parameters": [
@@ -4737,7 +4737,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections/{id}/light-novels/{work_id}": {
+    "/v3/user/me/collections/{id}/light-novels/{work_id}": {
       "delete": {
         "operationId": "OpenUserCollectionController_removeLightNovel",
         "parameters": [
@@ -4822,7 +4822,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/collections/{id}/mangas/{work_id}": {
+    "/v3/user/me/collections/{id}/mangas/{work_id}": {
       "delete": {
         "operationId": "OpenUserCollectionController_removeManga",
         "parameters": [
@@ -4907,7 +4907,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/rates": {
+    "/v3/user/me/rates": {
       "get": {
         "operationId": "OpenUserRateController_list",
         "parameters": [
@@ -5006,7 +5006,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/rates/galgames/{id}": {
+    "/v3/user/me/rates/galgames/{id}": {
       "delete": {
         "operationId": "OpenUserRateController_withdrawGalgame",
         "parameters": [
@@ -5107,7 +5107,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/rates/light-novels/{id}": {
+    "/v3/user/me/rates/light-novels/{id}": {
       "delete": {
         "operationId": "OpenUserRateController_withdrawLightNovel",
         "parameters": [
@@ -5208,7 +5208,7 @@
         ]
       }
     },
-    "/api/v3/open/user/me/rates/mangas/{id}": {
+    "/v3/user/me/rates/mangas/{id}": {
       "delete": {
         "operationId": "OpenUserRateController_withdrawManga",
         "parameters": [
@@ -5310,7 +5310,11 @@
       }
     }
   },
-  "servers": [],
+  "servers": [
+    {
+      "url": "https://api.hikarinagi.org"
+    }
+  ],
   "tags": [
     {
       "description": "公开条目数据，需 catalog:read 或 catalog:full；令牌无需代表任何用户。",

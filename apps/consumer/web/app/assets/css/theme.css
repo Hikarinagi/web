@@ -49,6 +49,7 @@
   --color-hikari-surface-900: #0f172a;
   --color-hikari-surface-950: #020617;
 
+  --color-hikari-editor-dark-700: #3f3f46;
   --color-hikari-editor-dark-800: #27272a;
   --color-hikari-editor-dark-900: #18181b;
   --color-hikari-editor-dark-950: #09090b;
@@ -135,6 +136,7 @@
   --editor-page-bg: var(--color-hikari-surface-50);
   --editor-surface-bg: var(--color-hikari-surface-0);
   --editor-surface-border: var(--color-hikari-surface-200);
+  --editor-table-header-border: var(--color-hikari-surface-200);
 
   --editor-toolbar-bg: var(--color-hikari-surface-50);
   --editor-toolbar-border: var(--color-hikari-surface-200);
@@ -179,6 +181,7 @@ html.dark {
   --editor-page-bg: var(--color-hikari-editor-dark-950);
   --editor-surface-bg: var(--color-hikari-editor-dark-900);
   --editor-surface-border: var(--color-hikari-editor-dark-800);
+  --editor-table-header-border: var(--color-hikari-editor-dark-700);
 
   --editor-toolbar-bg: var(--color-hikari-editor-dark-900);
   --editor-toolbar-border: var(--color-hikari-editor-dark-800);

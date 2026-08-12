@@ -26,8 +26,9 @@
 <template>
   <div class="flex flex-col gap-14">
     <template v-for="module in modules" :key="module.key">
+      <PromotionBanner v-if="module.kind === 'banner'" :banner="module.banner" />
       <GalgameExploreRecommendFeature
-        v-if="module.kind === 'feature'"
+        v-else-if="module.kind === 'feature'"
         :item="module.item"
         :intro="module.intro"
       />

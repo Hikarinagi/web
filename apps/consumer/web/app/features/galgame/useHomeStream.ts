@@ -7,7 +7,9 @@ const RAIL_KEEP = 12
 const RAIL_MIN = 6
 
 function moduleIds(module: StreamModule): number[] {
-  return module.kind === 'feature' ? [module.item.id] : module.items.map(item => item.id)
+  if (module.kind === 'rail' || module.kind === 'grid') return module.items.map(item => item.id)
+  if (module.kind === 'feature') return [module.item.id]
+  return []
 }
 
 export function useGalgameHomeStream() {
@@ -79,6 +81,10 @@ export function useGalgameHomeStream() {
         modules.value.slice(-DEDUP_WINDOW).flatMap(module => moduleIds(module)),
       )
       for (const module of data.value.modules) {
+        if (module.kind === 'banner') {
+          modules.value.push(module)
+          continue
+        }
         if (module.kind === 'feature') {
           if (!windowSeen.has(module.item.id)) modules.value.push(module)
           continue
