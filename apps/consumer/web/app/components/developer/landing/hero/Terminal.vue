@@ -1,14 +1,14 @@
 <script setup lang="ts">
   defineOptions({ name: 'DeveloperLandingHeroTerminal' })
 
-  const origin = useRequestURL().origin
+  const openApiBase = useRuntimeConfig().public.openApiBase
 
   const lines = [
     {
       segments: [
         { text: '$ ', accent: true },
         {
-          text: `curl --get "${origin}/api/v3/open/search" \\`,
+          text: `curl --get "${openApiBase}/v3/search" \\`,
           accent: false,
         },
       ],

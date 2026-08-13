@@ -137,6 +137,7 @@ export default defineNuxtConfig({
     },
     public: {
       apiBase: '/api/v3',
+      openApiBase: 'https://api.hikarinagi.org',
       wsBase: '',
       cdnHost: '',
       imageProcessorHost: '',
