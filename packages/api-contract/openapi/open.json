@@ -542,6 +542,23 @@
         ],
         "type": "object"
       },
+      "GalgameRelationType": {
+        "description": "当前条目相对目标作品的关系类型",
+        "enum": [
+          "SEQUEL",
+          "PREQUEL",
+          "SIDE_STORY",
+          "MAIN_STORY",
+          "VARIANT",
+          "MAIN_VERSION",
+          "COLLECTION",
+          "COLLECTED_WORK",
+          "SAME_UNIVERSE",
+          "DIFFERENT_ADAPTATION",
+          "EXPANSION"
+        ],
+        "type": "string"
+      },
       "GalgameStaffRole": {
         "enum": [
           "GAME_DESIGNER",
@@ -1977,6 +1994,110 @@
         ],
         "type": "object"
       },
+      "OpenGalgameProducerDto": {
+        "properties": {
+          "note": {
+            "description": "角色备注",
+            "type": "string"
+          },
+          "producer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenEntityRefDto"
+              }
+            ],
+            "description": "厂商信息"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProducerRole"
+              }
+            ],
+            "description": "厂商承担的角色",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "DEVELOPER": "开发商",
+              "LOCALIZER": "本地化",
+              "PUBLISHER": "发行商"
+            }
+          }
+        },
+        "required": [
+          "role",
+          "note",
+          "producer"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameRelationDto": {
+        "properties": {
+          "galgame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenGalgameRelationTargetDto"
+              }
+            ],
+            "description": "目标作品"
+          },
+          "relation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameRelationType"
+              }
+            ],
+            "description": "当前条目相对目标作品的关系类型"
+          }
+        },
+        "required": [
+          "relation",
+          "galgame"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameRelationTargetDto": {
+        "properties": {
+          "covers": {
+            "description": "主封面",
+            "items": {
+              "$ref": "#/components/schemas/OpenCoverDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "nsfw",
+          "release_date",
+          "covers"
+        ],
+        "type": "object"
+      },
       "OpenGalgameStaffDto": {
         "properties": {
           "person": {
@@ -3172,6 +3293,20 @@
         ],
         "type": "object"
       },
+      "ProducerRole": {
+        "description": "厂商承担的角色",
+        "enum": [
+          "DEVELOPER",
+          "PUBLISHER",
+          "LOCALIZER"
+        ],
+        "type": "string",
+        "x-enum-descriptions": {
+          "DEVELOPER": "开发商",
+          "LOCALIZER": "本地化",
+          "PUBLISHER": "发行商"
+        }
+      },
       "PublicUserDto": {
         "properties": {
           "avatar": {
@@ -4041,6 +4176,80 @@
           }
         },
         "summary": "Galgame 角色",
+        "tags": [
+          "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
+        ]
+      }
+    },
+    "/v3/galgames/{id}/producers": {
+      "get": {
+        "operationId": "OpenGalgameController_getProducers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenGalgameProducerDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 厂商",
+        "tags": [
+          "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:read"
+        ]
+      }
+    },
+    "/v3/galgames/{id}/relations": {
+      "get": {
+        "operationId": "OpenGalgameController_getRelations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OpenGalgameRelationDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Galgame 相关作品",
         "tags": [
           "open"
         ],

@@ -7881,6 +7881,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/galgames/{id}/producers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 厂商 */
+        get: operations["OpenGalgameController_getProducers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/galgames/{id}/relations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 相关作品 */
+        get: operations["OpenGalgameController_getRelations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/galgames/{id}/staff": {
         parameters: {
             query?: never;
@@ -13847,6 +13881,11 @@ export interface components {
             release_date: string | null;
             trans_title: string | null;
         };
+        /**
+         * @description 当前条目相对目标作品的关系类型
+         * @enum {string}
+         */
+        GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION";
         GalgameStaffRelationDto: {
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["GalgameStaffRole"] | null;
@@ -15779,6 +15818,37 @@ export interface components {
             /** @description 版本名 */
             version: string | null;
         };
+        OpenGalgameProducerDto: {
+            /** @description 角色备注 */
+            note: string;
+            /** @description 厂商信息 */
+            producer: components["schemas"]["OpenEntityRefDto"];
+            /** @description 厂商承担的角色 */
+            role: components["schemas"]["ProducerRole"] | null;
+        };
+        OpenGalgameRelationDto: {
+            /** @description 目标作品 */
+            galgame: components["schemas"]["OpenGalgameRelationTargetDto"];
+            /** @description 当前条目相对目标作品的关系类型 */
+            relation: components["schemas"]["GalgameRelationType"];
+        };
+        OpenGalgameRelationTargetDto: {
+            /** @description 主封面 */
+            covers: components["schemas"]["OpenCoverDto"][];
+            /** @description Galgame ID */
+            id: number;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
         OpenGalgameStaffDto: {
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
@@ -16569,6 +16639,11 @@ export interface components {
             relation: "PARENT" | "SUBSIDIARY" | "IMPRINT" | "IMPRINT_PARENT" | "SPAWNED" | "ORIGINATED" | "OLD_NAME" | "NEW_NAME";
             target_producer: components["schemas"]["ProducerSummaryDto"];
         };
+        /**
+         * @description 厂商承担的角色
+         * @enum {string}
+         */
+        ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
         ProducerSummaryDto: {
             id: number;
             logo: components["schemas"]["MediaAssetDto"] | null;
@@ -31678,6 +31753,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OpenGalgameCharacterDto"][];
+                };
+            };
+        };
+    };
+    OpenGalgameController_getProducers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenGalgameProducerDto"][];
+                };
+            };
+        };
+    };
+    OpenGalgameController_getRelations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenGalgameRelationDto"][];
                 };
             };
         };
