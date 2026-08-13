@@ -7,7 +7,7 @@ export interface EditorFieldPresentation {
   label: string
   // 'select' / 'multiselect':后端按自由字符串(string / string[])存储,但编辑器用固定选项呈现,
   // 选项 value+label 由前端 options 提供(非 Prisma 枚举字段)。
-  control?: 'textarea' | 'select' | 'multiselect' | 'labels'
+  control?: 'textarea' | 'select' | 'multiselect' | 'labels' | 'external-links'
   options?: EditorSelectOption[]
   help?: string
   enableWhen?: (values: Record<string, unknown>) => boolean

@@ -6,6 +6,7 @@ export const producerPresentation: EditorPresentation = {
     aliases: { label: '别名' },
     intro: { label: '简介', control: 'textarea' },
     trans_intro: { label: '译介简介', control: 'textarea' },
+    en_intro: { label: '英文简介', control: 'textarea' },
     country: { label: '国家/地区' },
     established: { label: '成立时间' },
     logo: { label: 'Logo' },

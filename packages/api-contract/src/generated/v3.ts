@@ -7813,6 +7813,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 条目变更事件流,按游标增量拉取 */
+        get: operations["OpenCatalogController_changes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/characters/{id}": {
         parameters: {
             query?: never;
@@ -11667,6 +11684,11 @@ export interface components {
             subjectTypes: string[];
             type: string;
         };
+        /**
+         * @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id
+         * @enum {string}
+         */
+        CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
         CatalogOptionDto: {
             label: string;
             op: string;
@@ -11793,6 +11815,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             cup: string | null;
+            en_intro: string | null;
+            en_name: string | null;
             gender: string | null;
             height: number | null;
             hips: number | null;
@@ -11833,7 +11857,7 @@ export interface components {
             trans_name: string | null;
         };
         /** @enum {string} */
-        CharacterRole: "MAIN" | "SUPPORTING" | "GUEST";
+        CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
         CheckInConfigDto: {
             daily_point_max: number;
             daily_point_min: number;
@@ -12091,7 +12115,10 @@ export interface components {
             /** @enum {string} */
             type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED";
         };
-        /** @enum {string} */
+        /**
+         * @description 发生变更的资源类型
+         * @enum {string}
+         */
         ContributionResourceType: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         ContributionStatsDayDto: {
             count: number;
@@ -13423,7 +13450,21 @@ export interface components {
             contributors: components["schemas"]["UserRefDto"][];
             count: number;
         };
+        /**
+         * @description 封面类型：数字版宣传图或实体版包装正面
+         * @enum {string}
+         */
+        GalgameCoverKind: "DIG" | "PKGFRONT";
         GalgameCoverRelationDto: {
+            /** @description 封面图片 */
+            media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面得票数 */
+            votes: number;
+        };
+        GalgameDetailCoverDto: {
+            kind: components["schemas"]["GalgameCoverKind"] | null;
+            /** @description 封面对应发行版本的语言 */
+            language: string | null;
             /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
             /** @description 封面得票数 */
@@ -13433,14 +13474,17 @@ export interface components {
             adv_type: string | null;
             aliases: string[];
             bangumi_game_id: number | null;
-            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            covers: components["schemas"]["GalgameDetailCoverDto"][];
             /** Format: date-time */
             created_at: string;
             /** @enum {string|null} */
             dev_status: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED" | null;
             /** @description 可下载资源数,由 shionlib 同步而来 */
             download_resource_count: number;
+            en_intro: string | null;
+            en_title: string | null;
             engine: string | null;
+            external_links: components["schemas"]["GalgameExternalLinkDto"][];
             homepage: string | null;
             id: number;
             images: components["schemas"]["RatedMediaAssetDto"][];
@@ -13533,6 +13577,13 @@ export interface components {
             sources_match: boolean | null;
             staff: components["schemas"]["ResolvedStaffDto"][];
             tags: components["schemas"]["ResolvedTagDto"][];
+        };
+        GalgameExternalLinkDto: {
+            /** @description 链接显示名称 */
+            label: string;
+            /** @description 链接来源标识,如 steam、website */
+            name: string;
+            url: string;
         };
         GalgameHeroCoverDto: {
             cover: components["schemas"]["RatedMediaAssetDto"];
@@ -15486,6 +15537,31 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             submitter: components["schemas"]["UserRefDto"];
         };
+        OpenCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["OpenCatalogEventDto"][];
+            /** @description 当前最新事件序号;首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        OpenCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号,单调递增,可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -15506,6 +15582,10 @@ export interface components {
             created_at: string;
             /** @description 罩杯 */
             cup: string | null;
+            /** @description 英文简介 */
+            en_intro: string | null;
+            /** @description 英文名或罗马字 */
+            en_name: string | null;
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -15591,13 +15671,33 @@ export interface components {
             /** @description 角色定位 */
             role: components["schemas"]["CharacterRole"];
         };
+        OpenGalgameCoverDto: {
+            /** @description 图片高度，单位像素 */
+            height: number | null;
+            /** @description 封面类型：数字版宣传图或实体版包装正面 */
+            kind: components["schemas"]["GalgameCoverKind"] | null;
+            /** @description 封面对应发行版本的语言 */
+            language: string | null;
+            /** @description 色情内容分级，0 为安全 */
+            sexual: number;
+            /** @description 完整图片 URL */
+            url: string;
+            /** @description 暴力内容分级，0 为安全 */
+            violence: number;
+            /** @description 封面得票数 */
+            votes: number;
+            /** @description 图片宽度，单位像素 */
+            width: number | null;
+        };
         OpenGalgameDetailDto: {
             /** @description 游戏类型 */
             adv_type: string | null;
             /** @description 别名列表 */
             aliases: string[];
+            /** @description Bangumi 游戏条目 ID */
+            bangumi_game_id: number | null;
             /** @description 封面列表，按得票数由高到低排序 */
-            covers: components["schemas"]["OpenCoverDto"][];
+            covers: components["schemas"]["OpenGalgameCoverDto"][];
             /**
              * Format: date-time
              * @description 条目创建时间
@@ -15605,8 +15705,14 @@ export interface components {
             created_at: string;
             /** @description 开发状态 */
             dev_status: components["schemas"]["GalgameDevStatus"] | null;
+            /** @description 英文简介 */
+            en_intro: string | null;
+            /** @description 官方英文标题 */
+            en_title: string | null;
             /** @description 游戏引擎 */
             engine: string | null;
+            /** @description 官网、商店页等外部链接 */
+            external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -15652,6 +15758,16 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
+            /** @description VNDB 数字 ID */
+            vndb_id: number | null;
+        };
+        OpenGalgameExternalLinkDto: {
+            /** @description 链接显示名称 */
+            label: string;
+            /** @description 链接来源标识，如 steam、website */
+            name: string;
+            /** @description 链接 URL */
+            url: string;
         };
         OpenGalgamePriceDto: {
             /** @description 价格金额 */
@@ -15934,6 +16050,8 @@ export interface components {
              * @description 条目创建时间
              */
             created_at: string;
+            /** @description 英文简介 */
+            en_intro: string | null;
             /** @description 成立日期 */
             established: string | null;
             /** @description 厂商 ID */
@@ -16409,6 +16527,7 @@ export interface components {
             country: string;
             /** Format: date-time */
             created_at: string;
+            en_intro: string | null;
             established: string | null;
             id: number;
             intro: string | null;
@@ -31470,6 +31589,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaVolumeRelationDto"][];
+                };
+            };
+        };
+    };
+    OpenCatalogController_changes: {
+        parameters: {
+            query?: {
+                /** @description 事件游标,返回 id 大于该值的事件;默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenCatalogChangesDto"];
                 };
             };
         };

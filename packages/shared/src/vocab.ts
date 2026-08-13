@@ -36,6 +36,7 @@ export const STAFF_ROLE_CN = {
 
 export const CHARACTER_ROLE_CN = {
   MAIN: '主角',
+  PRIMARY: '主要角色',
   SUPPORTING: '配角',
   GUEST: '客串',
 } as const

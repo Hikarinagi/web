@@ -115,6 +115,14 @@
       :disabled="disabled"
     />
 
+    <CreatorEditorScalarExternalLinksField
+      v-else-if="presentation?.control === 'external-links'"
+      v-model="asObjectArray"
+      :field="field"
+      :input-id="fieldId"
+      :disabled="disabled"
+    />
+
     <CreatorEditorScalarPricesField
       v-else-if="field.value_type === 'object[]'"
       v-model="asObjectArray"

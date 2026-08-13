@@ -6,3 +6,4 @@ export type BackendEntitySummary = ApiData<'/api/v3/tags', 'get'>['items'][numbe
 
 export type BackendEditorRef = components['schemas']['EntityRefSummaryDto'] | null
 export type BackendGalgamePriceRow = components['schemas']['GalgamePriceRowDto']
+export type BackendGalgameExternalLinkRow = components['schemas']['GalgameExternalLinkDto']
