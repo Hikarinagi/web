@@ -106,14 +106,14 @@
     <template v-if="hasSexual || hasViolence" #overlay="{ media }">
       <div
         v-if="rowOf(media.id)"
-        class="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
+        class="absolute inset-x-1.5 bottom-1.5 flex min-w-0 items-center gap-1.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
       >
         <Button
           v-if="hasSexual"
           v-tooltip.top="attrHelp.get('sexual') ?? null"
           unstyled
           :class="[
-            'flex h-6 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
+            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
             SEXUAL_TONE[readLevel(rowOf(media.id)!, 'sexual')],
           ]"
           @click="cycleLevel(media.id, 'sexual')"
@@ -125,7 +125,7 @@
           v-tooltip.top="attrHelp.get('violence') ?? null"
           unstyled
           :class="[
-            'flex h-6 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
+            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
             VIOLENCE_TONE[readLevel(rowOf(media.id)!, 'violence')],
           ]"
           @click="cycleLevel(media.id, 'violence')"

@@ -41,16 +41,16 @@
 
 <template>
   <Button
-    v-tooltip.top="'标注封面语言与类型'"
+    v-tooltip.top="summary || '标注封面语言与类型'"
     unstyled
     :class="[
-      'flex h-6 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
+      'flex h-6 min-w-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
       summary ? 'bg-surface-0/90 text-surface-900' : 'bg-surface-900/55 text-white',
     ]"
     @click="event => popRef?.toggle(event)"
   >
-    <Tags :size="11" />
-    {{ summary || '标注' }}
+    <Tags :size="11" class="shrink-0" />
+    <span class="truncate">{{ summary || '标注' }}</span>
   </Button>
 
   <Popover ref="popRef">
