@@ -1377,6 +1377,11 @@
             },
             "type": "array"
           },
+          "bangumi_id": {
+            "description": "Bangumi 条目 ID",
+            "nullable": true,
+            "type": "string"
+          },
           "birthday_day": {
             "description": "生日日",
             "nullable": true,
@@ -1482,6 +1487,11 @@
             "format": "date-time",
             "type": "string"
           },
+          "vndb_id": {
+            "description": "VNDB ID",
+            "nullable": true,
+            "type": "string"
+          },
           "waist": {
             "description": "腰围，单位厘米",
             "nullable": true,
@@ -1517,6 +1527,8 @@
           "labels",
           "created_at",
           "updated_at",
+          "vndb_id",
+          "bangumi_id",
           "revised_at"
         ],
         "type": "object"
@@ -1579,6 +1591,11 @@
       },
       "OpenEntityRefDto": {
         "properties": {
+          "bangumi_id": {
+            "description": "Bangumi 条目 ID",
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "description": "条目 ID",
             "type": "number"
@@ -1601,12 +1618,19 @@
             "description": "译名",
             "nullable": true,
             "type": "string"
+          },
+          "vndb_id": {
+            "description": "VNDB ID,如 c123、s45、p6",
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "id",
           "name",
           "trans_name",
+          "vndb_id",
+          "bangumi_id",
           "image"
         ],
         "type": "object"
@@ -2799,6 +2823,11 @@
             },
             "type": "array"
           },
+          "bangumi_id": {
+            "description": "Bangumi 条目 ID",
+            "nullable": true,
+            "type": "string"
+          },
           "created_at": {
             "description": "条目创建时间",
             "format": "date-time",
@@ -2858,6 +2887,11 @@
             "description": "条目最后更新时间",
             "format": "date-time",
             "type": "string"
+          },
+          "vndb_id": {
+            "description": "VNDB ID",
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
@@ -2872,6 +2906,8 @@
           "labels",
           "created_at",
           "updated_at",
+          "vndb_id",
+          "bangumi_id",
           "revised_at"
         ],
         "type": "object"
@@ -2884,6 +2920,11 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "bangumi_id": {
+            "description": "Bangumi 条目 ID",
+            "nullable": true,
+            "type": "string"
           },
           "country": {
             "description": "所属国家或地区",
@@ -2954,6 +2995,11 @@
             "format": "date-time",
             "type": "string"
           },
+          "vndb_id": {
+            "description": "VNDB ID",
+            "nullable": true,
+            "type": "string"
+          },
           "website": {
             "description": "官方网站",
             "nullable": true,
@@ -2975,6 +3021,8 @@
           "labels",
           "created_at",
           "updated_at",
+          "vndb_id",
+          "bangumi_id",
           "revised_at"
         ],
         "type": "object"

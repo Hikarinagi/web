@@ -15606,6 +15606,8 @@ export interface components {
             age: number | null;
             /** @description 别名列表 */
             aliases: string[];
+            /** @description Bangumi 条目 ID */
+            bangumi_id: string | null;
             /** @description 生日日 */
             birthday_day: number | null;
             /** @description 生日月份 */
@@ -15655,6 +15657,8 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
+            /** @description VNDB ID */
+            vndb_id: string | null;
             /** @description 腰围，单位厘米 */
             waist: number | null;
             /** @description 体重，单位千克 */
@@ -15681,6 +15685,8 @@ export interface components {
             value: string;
         };
         OpenEntityRefDto: {
+            /** @description Bangumi 条目 ID */
+            bangumi_id: string | null;
             /** @description 条目 ID */
             id: number;
             /** @description 人物与角色为头像或立绘，厂商为 Logo */
@@ -15689,6 +15695,8 @@ export interface components {
             name: string;
             /** @description 译名 */
             trans_name: string | null;
+            /** @description VNDB ID,如 c123、s45、p6 */
+            vndb_id: string | null;
         };
         OpenFavoriteCollectionDto: {
             /** @description 收藏夹 ID */
@@ -16078,6 +16086,8 @@ export interface components {
         OpenPersonDetailDto: {
             /** @description 别名列表 */
             aliases: string[];
+            /** @description Bangumi 条目 ID */
+            bangumi_id: string | null;
             /**
              * Format: date-time
              * @description 条目创建时间
@@ -16109,10 +16119,14 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
+            /** @description VNDB ID */
+            vndb_id: string | null;
         };
         OpenProducerDetailDto: {
             /** @description 别名列表 */
             aliases: string[];
+            /** @description Bangumi 条目 ID */
+            bangumi_id: string | null;
             /** @description 所属国家或地区 */
             country: string;
             /**
@@ -16148,6 +16162,8 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
+            /** @description VNDB ID */
+            vndb_id: string | null;
             /** @description 官方网站 */
             website: string | null;
         };
