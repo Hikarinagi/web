@@ -2,6 +2,7 @@
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { MediaValue } from '~/components/media-library/types'
   import { toRelationRows, type EditorRelationRow } from '~/features/creator/editor/relation'
+  import MediaAttrPopover from '~/components/creator/editor/relation/MediaAttrPopover.vue'
 
   const props = defineProps<{
     field: BackendEditorField
@@ -78,6 +79,16 @@
     return typeof value === 'number' && value >= 0 && value <= 2 ? value : 0
   }
 
+  const RATING_ATTRS = new Set(['order', 'sexual', 'violence'])
+
+  const metaAttrs = computed(() =>
+    (props.field.attributes ?? []).filter(attr => !RATING_ATTRS.has(attr.name)),
+  )
+
+  function replaceRow(next: EditorRelationRow) {
+    model.value = rows.value.map(row => (row.target_id === next.target_id ? next : row))
+  }
+
   const SEXUAL_TONE = [
     'bg-surface-900/55 text-white',
     'bg-amber-500/85 text-white',
@@ -121,6 +132,12 @@
         >
           Vi {{ readLevel(rowOf(media.id)!, 'violence') }}
         </Button>
+        <MediaAttrPopover
+          v-if="metaAttrs.length"
+          :attributes="metaAttrs"
+          :row="rowOf(media.id)!"
+          @update:row="replaceRow"
+        />
       </div>
     </template>
     <template #add>

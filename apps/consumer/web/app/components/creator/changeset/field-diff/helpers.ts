@@ -1,5 +1,6 @@
 import { TimeFormatEnum, timeFormat } from '~/utils/time-format'
 import { enumLabel } from '~/features/creator/editor/presentation/enum-labels'
+import { LANGUAGE_LABELS } from '~/features/galgame/labels'
 
 const ISO_DATETIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/
 
@@ -56,7 +57,13 @@ export function asRefValues(value: unknown): RefDisplayValue[] {
 
 export const REF_ATTR_LABEL: Record<string, string> = { actors: '声优' }
 
-const ATTR_KEY_LABEL: Record<string, string> = { note: '备注', role: '角色', relation: '关系类型' }
+const ATTR_KEY_LABEL: Record<string, string> = {
+  note: '备注',
+  role: '角色',
+  relation: '关系类型',
+  language: '语言',
+  kind: '类型',
+}
 const RELATION_ROLE_ENUM: Record<string, string> = {
   staffs: 'GalgameStaffRole',
   characters: 'CharacterRole',
@@ -71,6 +78,10 @@ export function attrValueLabel(op: Record<string, unknown>, key: string, value: 
   const relationField = (op.field ?? op.relation) as string | undefined
   if (key === 'role' && relationField && RELATION_ROLE_ENUM[relationField]) {
     return enumLabel(RELATION_ROLE_ENUM[relationField], String(value))
+  }
+  if (key === 'kind') return enumLabel('GalgameCoverKind', String(value))
+  if (key === 'language' && typeof value === 'string') {
+    return LANGUAGE_LABELS[value as keyof typeof LANGUAGE_LABELS] ?? value
   }
   return fmt(value)
 }
