@@ -6437,6 +6437,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/characters/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getCharacterMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/galgames/lookup": {
         parameters: {
             query?: never;
@@ -6461,6 +6477,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["InternalGalgamesController_getMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/producers/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getProducerMapping"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12847,6 +12879,11 @@ export interface components {
             order: number;
             value: string;
         };
+        EntityMappingItemDto: {
+            bangumi_id: string | null;
+            id: number;
+            vndb_id: string | null;
+        };
         EntityRefSummaryDto: {
             cover: string | null;
             name: string;
@@ -15606,8 +15643,6 @@ export interface components {
             age: number | null;
             /** @description 别名列表 */
             aliases: string[];
-            /** @description Bangumi 条目 ID */
-            bangumi_id: string | null;
             /** @description 生日日 */
             birthday_day: number | null;
             /** @description 生日月份 */
@@ -15657,8 +15692,6 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
-            /** @description VNDB ID */
-            vndb_id: string | null;
             /** @description 腰围，单位厘米 */
             waist: number | null;
             /** @description 体重，单位千克 */
@@ -15685,8 +15718,6 @@ export interface components {
             value: string;
         };
         OpenEntityRefDto: {
-            /** @description Bangumi 条目 ID */
-            bangumi_id: string | null;
             /** @description 条目 ID */
             id: number;
             /** @description 人物与角色为头像或立绘，厂商为 Logo */
@@ -15695,8 +15726,6 @@ export interface components {
             name: string;
             /** @description 译名 */
             trans_name: string | null;
-            /** @description VNDB ID,如 c123、s45、p6 */
-            vndb_id: string | null;
         };
         OpenFavoriteCollectionDto: {
             /** @description 收藏夹 ID */
@@ -15741,8 +15770,6 @@ export interface components {
             adv_type: string | null;
             /** @description 别名列表 */
             aliases: string[];
-            /** @description Bangumi 游戏条目 ID */
-            bangumi_game_id: number | null;
             /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["OpenGalgameCoverDto"][];
             /**
@@ -15805,8 +15832,6 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
-            /** @description VNDB 数字 ID */
-            vndb_id: number | null;
         };
         OpenGalgameExternalLinkDto: {
             /** @description 链接显示名称 */
@@ -16086,8 +16111,6 @@ export interface components {
         OpenPersonDetailDto: {
             /** @description 别名列表 */
             aliases: string[];
-            /** @description Bangumi 条目 ID */
-            bangumi_id: string | null;
             /**
              * Format: date-time
              * @description 条目创建时间
@@ -16119,14 +16142,10 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
-            /** @description VNDB ID */
-            vndb_id: string | null;
         };
         OpenProducerDetailDto: {
             /** @description 别名列表 */
             aliases: string[];
-            /** @description Bangumi 条目 ID */
-            bangumi_id: string | null;
             /** @description 所属国家或地区 */
             country: string;
             /**
@@ -16162,8 +16181,6 @@ export interface components {
              * @description 条目最后更新时间
              */
             updated_at: string;
-            /** @description VNDB ID */
-            vndb_id: string | null;
             /** @description 官方网站 */
             website: string | null;
         };
@@ -29458,6 +29475,31 @@ export interface operations {
             };
         };
     };
+    InternalEntitiesController_getCharacterMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     InternalGalgamesController_lookup: {
         parameters: {
             query?: {
@@ -29499,6 +29541,31 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["GalgameMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getProducerMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
