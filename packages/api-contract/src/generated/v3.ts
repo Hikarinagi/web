@@ -29503,6 +29503,7 @@ export interface operations {
     InternalGalgamesController_lookup: {
         parameters: {
             query?: {
+                id?: number;
                 vndb_id?: number;
                 bangumi_game_id?: number;
             };

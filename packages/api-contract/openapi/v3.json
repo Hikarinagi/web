@@ -48396,6 +48396,15 @@
         "parameters": [
           {
             "in": "query",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
             "name": "vndb_id",
             "required": false,
             "schema": {
