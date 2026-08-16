@@ -49,7 +49,7 @@
     <ul class="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-relaxed text-muted-color">
       <li>
         开放平台令牌仅可访问
-        <code class="font-mono">api.hikarinagi.org/v3/**</code>
+        <code class="font-mono">/api/v3/open/**</code>
         ，用于其它接口将返回 401。
       </li>
       <li>

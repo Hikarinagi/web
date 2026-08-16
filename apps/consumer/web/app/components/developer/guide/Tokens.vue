@@ -9,7 +9,7 @@
     {
       term: '受众',
       detail:
-        '开放平台令牌的 aud 固定为 Hikarinagi ID 的 open 受众，仅 api.hikarinagi.org/v3/** 接受该受众。',
+        '开放平台令牌的 aud 固定为 Hikarinagi ID 的 open 受众，仅 /api/v3/open/** 接受该受众。',
     },
     {
       term: '刷新令牌',

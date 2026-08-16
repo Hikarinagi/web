@@ -76,19 +76,9 @@
         ],
         "type": "object"
       },
-      "CatalogEventKind": {
-        "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id",
-        "enum": [
-          "UPSERT",
-          "DELETE",
-          "MERGE"
-        ],
-        "type": "string"
-      },
       "CharacterRole": {
         "enum": [
           "MAIN",
-          "PRIMARY",
           "SUPPORTING",
           "GUEST"
         ],
@@ -96,24 +86,8 @@
         "x-enum-descriptions": {
           "GUEST": "客串",
           "MAIN": "主角",
-          "PRIMARY": "主要角色",
           "SUPPORTING": "配角"
         }
-      },
-      "ContributionResourceType": {
-        "description": "发生变更的资源类型",
-        "enum": [
-          "GALGAME",
-          "LIGHT_NOVEL",
-          "LIGHT_NOVEL_VOLUME",
-          "MANGA",
-          "MANGA_VOLUME",
-          "PERSON",
-          "PRODUCER",
-          "CHARACTER",
-          "TAG"
-        ],
-        "type": "string"
       },
       "CreateFavoriteCollectionDto": {
         "properties": {
@@ -390,14 +364,6 @@
         ],
         "type": "object"
       },
-      "GalgameCoverKind": {
-        "description": "封面类型：数字版宣传图或实体版包装正面",
-        "enum": [
-          "DIG",
-          "PKGFRONT"
-        ],
-        "type": "string"
-      },
       "GalgameCoverRelationDto": {
         "properties": {
           "media": {
@@ -541,23 +507,6 @@
           "updated_at"
         ],
         "type": "object"
-      },
-      "GalgameRelationType": {
-        "description": "当前条目相对目标作品的关系类型",
-        "enum": [
-          "SEQUEL",
-          "PREQUEL",
-          "SIDE_STORY",
-          "MAIN_STORY",
-          "VARIANT",
-          "MAIN_VERSION",
-          "COLLECTION",
-          "COLLECTED_WORK",
-          "SAME_UNIVERSE",
-          "DIFFERENT_ADAPTATION",
-          "EXPANSION"
-        ],
-        "type": "string"
       },
       "GalgameStaffRole": {
         "enum": [
@@ -1291,78 +1240,6 @@
           "SERIALIZING": "连载中"
         }
       },
-      "OpenCatalogChangesDto": {
-        "properties": {
-          "has_more": {
-            "description": "本页之后是否还有更多事件",
-            "type": "boolean"
-          },
-          "items": {
-            "description": "按序号升序排列的变更事件",
-            "items": {
-              "$ref": "#/components/schemas/OpenCatalogEventDto"
-            },
-            "type": "array"
-          },
-          "latest_id": {
-            "description": "当前最新事件序号;首次同步时可先记录该值再做全量",
-            "type": "number"
-          }
-        },
-        "required": [
-          "items",
-          "latest_id",
-          "has_more"
-        ],
-        "type": "object"
-      },
-      "OpenCatalogEventDto": {
-        "properties": {
-          "created_at": {
-            "description": "事件发生时间",
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "description": "事件序号,单调递增,可作为增量游标",
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CatalogEventKind"
-              }
-            ],
-            "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id"
-          },
-          "merged_to_id": {
-            "description": "merge 事件的目标资源 ID",
-            "nullable": true,
-            "type": "number"
-          },
-          "resource_id": {
-            "description": "发生变更的资源 ID",
-            "type": "number"
-          },
-          "resource_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ContributionResourceType"
-              }
-            ],
-            "description": "发生变更的资源类型"
-          }
-        },
-        "required": [
-          "id",
-          "resource_type",
-          "resource_id",
-          "kind",
-          "merged_to_id",
-          "created_at"
-        ],
-        "type": "object"
-      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -1404,16 +1281,6 @@
           },
           "cup": {
             "description": "罩杯",
-            "nullable": true,
-            "type": "string"
-          },
-          "en_intro": {
-            "description": "英文简介",
-            "nullable": true,
-            "type": "string"
-          },
-          "en_name": {
-            "description": "英文名或罗马字",
             "nullable": true,
             "type": "string"
           },
@@ -1497,11 +1364,9 @@
           "id",
           "name",
           "trans_name",
-          "en_name",
           "aliases",
           "intro",
           "trans_intro",
-          "en_intro",
           "image",
           "gender",
           "blood_type",
@@ -1670,7 +1535,6 @@
             "x-enum-descriptions": {
               "GUEST": "客串",
               "MAIN": "主角",
-              "PRIMARY": "主要角色",
               "SUPPORTING": "配角"
             }
           }
@@ -1679,61 +1543,6 @@
           "role",
           "actors",
           "character"
-        ],
-        "type": "object"
-      },
-      "OpenGalgameCoverDto": {
-        "properties": {
-          "height": {
-            "description": "图片高度，单位像素",
-            "nullable": true,
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/GalgameCoverKind"
-              }
-            ],
-            "description": "封面类型：数字版宣传图或实体版包装正面",
-            "nullable": true
-          },
-          "language": {
-            "description": "封面对应发行版本的语言",
-            "nullable": true,
-            "type": "string"
-          },
-          "sexual": {
-            "description": "色情内容分级，0 为安全",
-            "type": "number"
-          },
-          "url": {
-            "description": "完整图片 URL",
-            "type": "string"
-          },
-          "violence": {
-            "description": "暴力内容分级，0 为安全",
-            "type": "number"
-          },
-          "votes": {
-            "description": "封面得票数",
-            "type": "number"
-          },
-          "width": {
-            "description": "图片宽度，单位像素",
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "url",
-          "width",
-          "height",
-          "sexual",
-          "violence",
-          "votes",
-          "language",
-          "kind"
         ],
         "type": "object"
       },
@@ -1754,7 +1563,7 @@
           "covers": {
             "description": "封面列表，按得票数由高到低排序",
             "items": {
-              "$ref": "#/components/schemas/OpenGalgameCoverDto"
+              "$ref": "#/components/schemas/OpenCoverDto"
             },
             "type": "array"
           },
@@ -1777,27 +1586,10 @@
               "RELEASED": "已发售"
             }
           },
-          "en_intro": {
-            "description": "英文简介",
-            "nullable": true,
-            "type": "string"
-          },
-          "en_title": {
-            "description": "官方英文标题",
-            "nullable": true,
-            "type": "string"
-          },
           "engine": {
             "description": "游戏引擎",
             "nullable": true,
             "type": "string"
-          },
-          "external_links": {
-            "description": "官网、商店页等外部链接",
-            "items": {
-              "$ref": "#/components/schemas/OpenGalgameExternalLinkDto"
-            },
-            "type": "array"
           },
           "homepage": {
             "description": "官方网站",
@@ -1902,7 +1694,6 @@
           "id",
           "origin_title",
           "trans_title",
-          "en_title",
           "aliases",
           "covers",
           "images",
@@ -1911,7 +1702,6 @@
           "release_date_tbd_note",
           "origin_intro",
           "trans_intro",
-          "en_intro",
           "adv_type",
           "platforms",
           "homepage",
@@ -1919,35 +1709,12 @@
           "origin_lang",
           "dev_status",
           "prices",
-          "external_links",
           "nsfw",
           "tags",
           "created_at",
           "updated_at",
           "revised_at",
           "rating"
-        ],
-        "type": "object"
-      },
-      "OpenGalgameExternalLinkDto": {
-        "properties": {
-          "label": {
-            "description": "链接显示名称",
-            "type": "string"
-          },
-          "name": {
-            "description": "链接来源标识，如 steam、website",
-            "type": "string"
-          },
-          "url": {
-            "description": "链接 URL",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "label",
-          "url"
         ],
         "type": "object"
       },
@@ -1979,110 +1746,6 @@
           "amount",
           "currency",
           "tax_included"
-        ],
-        "type": "object"
-      },
-      "OpenGalgameProducerDto": {
-        "properties": {
-          "note": {
-            "description": "角色备注",
-            "type": "string"
-          },
-          "producer": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/OpenEntityRefDto"
-              }
-            ],
-            "description": "厂商信息"
-          },
-          "role": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ProducerRole"
-              }
-            ],
-            "description": "厂商承担的角色",
-            "nullable": true,
-            "x-enum-descriptions": {
-              "DEVELOPER": "开发商",
-              "LOCALIZER": "本地化",
-              "PUBLISHER": "发行商"
-            }
-          }
-        },
-        "required": [
-          "role",
-          "note",
-          "producer"
-        ],
-        "type": "object"
-      },
-      "OpenGalgameRelationDto": {
-        "properties": {
-          "galgame": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/OpenGalgameRelationTargetDto"
-              }
-            ],
-            "description": "目标作品"
-          },
-          "relation": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/GalgameRelationType"
-              }
-            ],
-            "description": "当前条目相对目标作品的关系类型"
-          }
-        },
-        "required": [
-          "relation",
-          "galgame"
-        ],
-        "type": "object"
-      },
-      "OpenGalgameRelationTargetDto": {
-        "properties": {
-          "covers": {
-            "description": "主封面",
-            "items": {
-              "$ref": "#/components/schemas/OpenCoverDto"
-            },
-            "type": "array"
-          },
-          "id": {
-            "description": "Galgame ID",
-            "type": "number"
-          },
-          "nsfw": {
-            "description": "是否为NSFW 内容",
-            "type": "boolean"
-          },
-          "origin_title": {
-            "description": "原名",
-            "type": "string"
-          },
-          "release_date": {
-            "description": "发行日期",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "trans_title": {
-            "description": "译名",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "origin_title",
-          "trans_title",
-          "nsfw",
-          "release_date",
-          "covers"
         ],
         "type": "object"
       },
@@ -2882,11 +2545,6 @@
             "format": "date-time",
             "type": "string"
           },
-          "en_intro": {
-            "description": "英文简介",
-            "nullable": true,
-            "type": "string"
-          },
           "established": {
             "description": "成立日期",
             "nullable": true,
@@ -2955,7 +2613,6 @@
           "aliases",
           "intro",
           "trans_intro",
-          "en_intro",
           "country",
           "established",
           "website",
@@ -3145,7 +2802,6 @@
             "x-enum-descriptions": {
               "GUEST": "客串",
               "MAIN": "主角",
-              "PRIMARY": "主要角色",
               "SUPPORTING": "配角"
             }
           }
@@ -3280,20 +2936,6 @@
           "updated_at"
         ],
         "type": "object"
-      },
-      "ProducerRole": {
-        "description": "厂商承担的角色",
-        "enum": [
-          "DEVELOPER",
-          "PUBLISHER",
-          "LOCALIZER"
-        ],
-        "type": "string",
-        "x-enum-descriptions": {
-          "DEVELOPER": "开发商",
-          "LOCALIZER": "本地化",
-          "PUBLISHER": "发行商"
-        }
       },
       "PublicUserDto": {
         "properties": {
@@ -4010,55 +3652,6 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/v3/catalog/changes": {
-      "get": {
-        "operationId": "OpenCatalogController_changes",
-        "parameters": [
-          {
-            "description": "事件游标,返回 id 大于该值的事件;默认 0",
-            "in": "query",
-            "name": "since",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          {
-            "description": "单次返回的最大事件数",
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "default": 200,
-              "maximum": 500,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OpenCatalogChangesDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "summary": "条目变更事件流,按游标增量拉取",
-        "tags": [
-          "open"
-        ],
-        "x-hikari-scopes": [
-          "catalog:read"
-        ]
-      }
-    },
     "/v3/characters/{id}": {
       "get": {
         "operationId": "OpenCharacterController_getById",
@@ -4164,80 +3757,6 @@
           }
         },
         "summary": "Galgame 角色",
-        "tags": [
-          "open"
-        ],
-        "x-hikari-scopes": [
-          "catalog:read"
-        ]
-      }
-    },
-    "/v3/galgames/{id}/producers": {
-      "get": {
-        "operationId": "OpenGalgameController_getProducers",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/OpenGalgameProducerDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "summary": "Galgame 厂商",
-        "tags": [
-          "open"
-        ],
-        "x-hikari-scopes": [
-          "catalog:read"
-        ]
-      }
-    },
-    "/v3/galgames/{id}/relations": {
-      "get": {
-        "operationId": "OpenGalgameController_getRelations",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/OpenGalgameRelationDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "summary": "Galgame 相关作品",
         "tags": [
           "open"
         ],
