@@ -6,6 +6,7 @@ export const galgamePresentation: EditorPresentation = {
   fields: {
     trans_title: { label: '译名' },
     origin_title: { label: '原名' },
+    en_title: { label: '英文标题' },
     aliases: { label: '别名' },
     release_date: {
       label: '发售日期',
@@ -19,10 +20,13 @@ export const galgamePresentation: EditorPresentation = {
     },
     origin_intro: { label: '原文简介', control: 'textarea' },
     trans_intro: { label: '译介简介', control: 'textarea' },
+    en_intro: { label: '英文简介', control: 'textarea' },
     adv_type: { label: 'ADV 类型' },
     platforms: { label: '平台', control: 'multiselect', options: PLATFORM_OPTIONS },
     homepage: { label: '官方网站' },
     prices: { label: '价格' },
+    external_links: { label: '外部链接', control: 'external-links' },
+    steam_apps: { label: 'Steam App ID', control: 'steam-apps' },
     nsfw: { label: 'NSFW' },
     engine: { label: '引擎' },
     origin_lang: { label: '原始语言', control: 'select', options: LANGUAGE_OPTIONS },

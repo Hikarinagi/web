@@ -38,6 +38,11 @@ export const LANGUAGE_OPTIONS: { value: string; label: string }[] = ORIGIN_LANGU
 
 export const DEV_STATUS_LABELS: Record<string, string> = GALGAME_DEV_STATUS_CN
 
+export const COVER_KIND_LABELS: Record<string, string> = {
+  DIG: '数字版',
+  PKGFRONT: '包装版',
+}
+
 export const RELATION_LABELS: Record<string, string> = {
   SEQUEL: '续作',
   PREQUEL: '前作',

@@ -2,6 +2,7 @@
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { MediaValue } from '~/components/media-library/types'
   import { toRelationRows, type EditorRelationRow } from '~/features/creator/editor/relation'
+  import MediaAttrPopover from '~/components/creator/editor/relation/MediaAttrPopover.vue'
 
   const props = defineProps<{
     field: BackendEditorField
@@ -78,6 +79,16 @@
     return typeof value === 'number' && value >= 0 && value <= 2 ? value : 0
   }
 
+  const RATING_ATTRS = new Set(['order', 'sexual', 'violence'])
+
+  const metaAttrs = computed(() =>
+    (props.field.attributes ?? []).filter(attr => !RATING_ATTRS.has(attr.name)),
+  )
+
+  function replaceRow(next: EditorRelationRow) {
+    model.value = rows.value.map(row => (row.target_id === next.target_id ? next : row))
+  }
+
   const SEXUAL_TONE = [
     'bg-surface-900/55 text-white',
     'bg-amber-500/85 text-white',
@@ -95,14 +106,14 @@
     <template v-if="hasSexual || hasViolence" #overlay="{ media }">
       <div
         v-if="rowOf(media.id)"
-        class="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
+        class="absolute inset-x-1.5 bottom-1.5 flex min-w-0 items-center gap-1.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
       >
         <Button
           v-if="hasSexual"
           v-tooltip.top="attrHelp.get('sexual') ?? null"
           unstyled
           :class="[
-            'flex h-6 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
+            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
             SEXUAL_TONE[readLevel(rowOf(media.id)!, 'sexual')],
           ]"
           @click="cycleLevel(media.id, 'sexual')"
@@ -114,13 +125,19 @@
           v-tooltip.top="attrHelp.get('violence') ?? null"
           unstyled
           :class="[
-            'flex h-6 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
+            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
             VIOLENCE_TONE[readLevel(rowOf(media.id)!, 'violence')],
           ]"
           @click="cycleLevel(media.id, 'violence')"
         >
           Vi {{ readLevel(rowOf(media.id)!, 'violence') }}
         </Button>
+        <MediaAttrPopover
+          v-if="metaAttrs.length"
+          :attributes="metaAttrs"
+          :row="rowOf(media.id)!"
+          @update:row="replaceRow"
+        />
       </div>
     </template>
     <template #add>

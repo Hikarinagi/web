@@ -6437,6 +6437,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/characters/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getCharacterMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/galgames/lookup": {
         parameters: {
             query?: never;
@@ -6461,6 +6477,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["InternalGalgamesController_getMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/producers/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getProducerMapping"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7813,6 +7845,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 条目变更事件流,按游标增量拉取 */
+        get: operations["OpenCatalogController_changes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/characters/{id}": {
         parameters: {
             query?: never;
@@ -7856,6 +7905,57 @@ export interface paths {
         };
         /** Galgame 角色 */
         get: operations["OpenGalgameController_getCharacters"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/galgames/{id}/developers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 开发商 */
+        get: operations["OpenGalgameController_getDevelopers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/galgames/{id}/producers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 厂商 */
+        get: operations["OpenGalgameController_getProducers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/galgames/{id}/relations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Galgame 相关作品 */
+        get: operations["OpenGalgameController_getRelations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11667,6 +11767,11 @@ export interface components {
             subjectTypes: string[];
             type: string;
         };
+        /**
+         * @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id
+         * @enum {string}
+         */
+        CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
         CatalogOptionDto: {
             label: string;
             op: string;
@@ -11793,6 +11898,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             cup: string | null;
+            en_intro: string | null;
+            en_name: string | null;
             gender: string | null;
             height: number | null;
             hips: number | null;
@@ -11833,7 +11940,7 @@ export interface components {
             trans_name: string | null;
         };
         /** @enum {string} */
-        CharacterRole: "MAIN" | "SUPPORTING" | "GUEST";
+        CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
         CheckInConfigDto: {
             daily_point_max: number;
             daily_point_min: number;
@@ -12091,7 +12198,10 @@ export interface components {
             /** @enum {string} */
             type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED";
         };
-        /** @enum {string} */
+        /**
+         * @description 发生变更的资源类型
+         * @enum {string}
+         */
         ContributionResourceType: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         ContributionStatsDayDto: {
             count: number;
@@ -12786,6 +12896,11 @@ export interface components {
             order: number;
             value: string;
         };
+        EntityMappingItemDto: {
+            bangumi_id: string | null;
+            id: number;
+            vndb_id: string | null;
+        };
         EntityRefSummaryDto: {
             cover: string | null;
             name: string;
@@ -13423,7 +13538,21 @@ export interface components {
             contributors: components["schemas"]["UserRefDto"][];
             count: number;
         };
+        /**
+         * @description 封面类型：数字版宣传图或实体版包装正面
+         * @enum {string}
+         */
+        GalgameCoverKind: "DIG" | "PKGFRONT";
         GalgameCoverRelationDto: {
+            /** @description 封面图片 */
+            media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面得票数 */
+            votes: number;
+        };
+        GalgameDetailCoverDto: {
+            kind: components["schemas"]["GalgameCoverKind"] | null;
+            /** @description 封面对应发行版本的语言 */
+            language: string | null;
             /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
             /** @description 封面得票数 */
@@ -13433,14 +13562,17 @@ export interface components {
             adv_type: string | null;
             aliases: string[];
             bangumi_game_id: number | null;
-            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            covers: components["schemas"]["GalgameDetailCoverDto"][];
             /** Format: date-time */
             created_at: string;
             /** @enum {string|null} */
             dev_status: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED" | null;
             /** @description 可下载资源数,由 shionlib 同步而来 */
             download_resource_count: number;
+            en_intro: string | null;
+            en_title: string | null;
             engine: string | null;
+            external_links: components["schemas"]["GalgameExternalLinkDto"][];
             homepage: string | null;
             id: number;
             images: components["schemas"]["RatedMediaAssetDto"][];
@@ -13458,6 +13590,8 @@ export interface components {
             revised_at: string | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** @description Steam 应用，首条为主商店页 */
+            steam_apps: components["schemas"]["GalgameSteamAppDto"][];
             trans_intro: string | null;
             trans_title: string | null;
             /** Format: date-time */
@@ -13533,6 +13667,13 @@ export interface components {
             sources_match: boolean | null;
             staff: components["schemas"]["ResolvedStaffDto"][];
             tags: components["schemas"]["ResolvedTagDto"][];
+        };
+        GalgameExternalLinkDto: {
+            /** @description 链接显示名称 */
+            label: string;
+            /** @description 链接来源标识,如 steam、website */
+            name: string;
+            url: string;
         };
         GalgameHeroCoverDto: {
             cover: components["schemas"]["RatedMediaAssetDto"];
@@ -13796,12 +13937,21 @@ export interface components {
             release_date: string | null;
             trans_title: string | null;
         };
+        /**
+         * @description 当前条目相对目标作品的关系类型
+         * @enum {string}
+         */
+        GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION";
         GalgameStaffRelationDto: {
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
         /** @enum {string} */
         GalgameStaffRole: "GAME_DESIGNER" | "DIRECTOR" | "PRODUCER" | "SUPERVISOR" | "EXECUTIVE_PRODUCER" | "ORIGINAL_WORK" | "CHARACTER_DESIGN" | "MECHANICAL_DESIGN" | "LEVEL_DESIGN" | "PLANNING" | "PROGRAM" | "QC" | "SCENARIO" | "SERIES_COMPOSITION" | "ANIMATION_SUPERVISOR" | "ART" | "GRAPHICS" | "CG_SUPERVISOR" | "SD_ART" | "BACKGROUND" | "COVER_ART" | "SOUND_DIRECTOR" | "MUSIC" | "THEME_COMPOSITION" | "THEME_LYRICS" | "THEME_PERFORMANCE" | "INSERT_PERFORMANCE" | "ANIMATION_PRODUCTION" | "ANIMATION_DIRECTOR" | "ANIMATION_SCRIPT" | "COOPERATION" | "TRANSLATOR" | "EDITOR";
+        GalgameSteamAppDto: {
+            /** @description Steam 商店 App ID */
+            app_id: number;
+        };
         GalgameSummaryDto: {
             /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["GalgameCoverRelationDto"][];
@@ -15486,6 +15636,31 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             submitter: components["schemas"]["UserRefDto"];
         };
+        OpenCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["OpenCatalogEventDto"][];
+            /** @description 当前最新事件序号;首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        OpenCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号,单调递增,可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -15506,6 +15681,10 @@ export interface components {
             created_at: string;
             /** @description 罩杯 */
             cup: string | null;
+            /** @description 英文简介 */
+            en_intro: string | null;
+            /** @description 英文名或罗马字 */
+            en_name: string | null;
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -15591,13 +15770,31 @@ export interface components {
             /** @description 角色定位 */
             role: components["schemas"]["CharacterRole"];
         };
+        OpenGalgameCoverDto: {
+            /** @description 图片高度，单位像素 */
+            height: number | null;
+            /** @description 封面类型：数字版宣传图或实体版包装正面 */
+            kind: components["schemas"]["GalgameCoverKind"] | null;
+            /** @description 封面对应发行版本的语言 */
+            language: string | null;
+            /** @description 色情内容分级，0 为安全 */
+            sexual: number;
+            /** @description 完整图片 URL */
+            url: string;
+            /** @description 暴力内容分级，0 为安全 */
+            violence: number;
+            /** @description 封面得票数 */
+            votes: number;
+            /** @description 图片宽度，单位像素 */
+            width: number | null;
+        };
         OpenGalgameDetailDto: {
             /** @description 游戏类型 */
             adv_type: string | null;
             /** @description 别名列表 */
             aliases: string[];
             /** @description 封面列表，按得票数由高到低排序 */
-            covers: components["schemas"]["OpenCoverDto"][];
+            covers: components["schemas"]["OpenGalgameCoverDto"][];
             /**
              * Format: date-time
              * @description 条目创建时间
@@ -15605,8 +15802,16 @@ export interface components {
             created_at: string;
             /** @description 开发状态 */
             dev_status: components["schemas"]["GalgameDevStatus"] | null;
+            /** @description 开发商名称，取首个开发商 */
+            developer: string | null;
+            /** @description 英文简介 */
+            en_intro: string | null;
+            /** @description 官方英文标题 */
+            en_title: string | null;
             /** @description 游戏引擎 */
             engine: string | null;
+            /** @description 官网、商店页等外部链接 */
+            external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -15641,6 +15846,8 @@ export interface components {
              * @description 最近一次修订通过审核的时间
              */
             revised_at: string | null;
+            /** @description Steam 商店页，首项为主商店页 */
+            steam_apps: components["schemas"]["OpenGalgameSteamAppDto"][];
             /** @description 标签列表 */
             tags: components["schemas"]["OpenTagDto"][];
             /** @description 简介译文 */
@@ -15653,6 +15860,40 @@ export interface components {
              */
             updated_at: string;
         };
+        OpenGalgameDeveloperDto: {
+            /** @description 别名列表 */
+            aliases: string[];
+            /** @description 所属国家或地区 */
+            country: string;
+            /** @description 英文简介 */
+            en_intro: string | null;
+            /** @description 成立日期 */
+            established: string | null;
+            /** @description 厂商 ID */
+            id: number;
+            /** @description 原文简介 */
+            intro: string | null;
+            /** @description 厂商 Logo */
+            logo: components["schemas"]["OpenMediaDto"] | null;
+            /** @description 厂商名 */
+            name: string;
+            /** @description 该作品下的厂商备注 */
+            note: string;
+            /** @description 简介译文 */
+            trans_intro: string | null;
+            /** @description 厂商类型 */
+            type: string;
+            /** @description 官方网站 */
+            website: string | null;
+        };
+        OpenGalgameExternalLinkDto: {
+            /** @description 链接显示名称 */
+            label: string;
+            /** @description 链接来源标识，如 steam、website */
+            name: string;
+            /** @description 链接 URL */
+            url: string;
+        };
         OpenGalgamePriceDto: {
             /** @description 价格金额 */
             amount: number | null;
@@ -15663,11 +15904,46 @@ export interface components {
             /** @description 版本名 */
             version: string | null;
         };
+        OpenGalgameProducerDto: {
+            /** @description 角色备注 */
+            note: string;
+            /** @description 厂商信息 */
+            producer: components["schemas"]["OpenEntityRefDto"];
+            /** @description 厂商承担的角色 */
+            role: components["schemas"]["ProducerRole"] | null;
+        };
+        OpenGalgameRelationDto: {
+            /** @description 目标作品 */
+            galgame: components["schemas"]["OpenGalgameRelationTargetDto"];
+            /** @description 当前条目相对目标作品的关系类型 */
+            relation: components["schemas"]["GalgameRelationType"];
+        };
+        OpenGalgameRelationTargetDto: {
+            /** @description 主封面 */
+            covers: components["schemas"]["OpenCoverDto"][];
+            /** @description Galgame ID */
+            id: number;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
         OpenGalgameStaffDto: {
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
             /** @description 担任的职位 */
             role: components["schemas"]["GalgameStaffRole"] | null;
+        };
+        OpenGalgameSteamAppDto: {
+            /** @description Steam 商店 App ID */
+            app_id: number;
         };
         OpenLightNovelDetailDto: {
             /** @description 封面列表，按得票数由高到低排序 */
@@ -15934,6 +16210,8 @@ export interface components {
              * @description 条目创建时间
              */
             created_at: string;
+            /** @description 英文简介 */
+            en_intro: string | null;
             /** @description 成立日期 */
             established: string | null;
             /** @description 厂商 ID */
@@ -16409,6 +16687,7 @@ export interface components {
             country: string;
             /** Format: date-time */
             created_at: string;
+            en_intro: string | null;
             established: string | null;
             id: number;
             intro: string | null;
@@ -16450,6 +16729,11 @@ export interface components {
             relation: "PARENT" | "SUBSIDIARY" | "IMPRINT" | "IMPRINT_PARENT" | "SPAWNED" | "ORIGINATED" | "OLD_NAME" | "NEW_NAME";
             target_producer: components["schemas"]["ProducerSummaryDto"];
         };
+        /**
+         * @description 厂商承担的角色
+         * @enum {string}
+         */
+        ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
         ProducerSummaryDto: {
             id: number;
             logo: components["schemas"]["MediaAssetDto"] | null;
@@ -29248,9 +29532,35 @@ export interface operations {
             };
         };
     };
+    InternalEntitiesController_getCharacterMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     InternalGalgamesController_lookup: {
         parameters: {
             query?: {
+                id?: number;
                 vndb_id?: number;
                 bangumi_game_id?: number;
             };
@@ -29289,6 +29599,31 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["GalgameMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getProducerMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -31474,6 +31809,30 @@ export interface operations {
             };
         };
     };
+    OpenCatalogController_changes: {
+        parameters: {
+            query?: {
+                /** @description 事件游标,返回 id 大于该值的事件;默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenCatalogChangesDto"];
+                };
+            };
+        };
+    };
     OpenCharacterController_getById: {
         parameters: {
             query?: never;
@@ -31535,6 +31894,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OpenGalgameCharacterDto"][];
+                };
+            };
+        };
+    };
+    OpenGalgameController_getDevelopers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenGalgameDeveloperDto"][];
+                };
+            };
+        };
+    };
+    OpenGalgameController_getProducers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenGalgameProducerDto"][];
+                };
+            };
+        };
+    };
+    OpenGalgameController_getRelations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenGalgameRelationDto"][];
                 };
             };
         };

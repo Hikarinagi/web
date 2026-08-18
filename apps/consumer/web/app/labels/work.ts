@@ -9,6 +9,7 @@ export const NOVEL_STATUS_LABELS: Record<string, string> = {
 
 export const CHARACTER_ROLE_LABELS = {
   MAIN: '主角',
+  PRIMARY: '主要角色',
   SUPPORTING: '配角',
   GUEST: '客串',
 } satisfies Record<components['schemas']['CharacterRole'], string>

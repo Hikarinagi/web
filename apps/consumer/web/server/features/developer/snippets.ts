@@ -104,10 +104,9 @@ function appTokenCurl(tokenEndpoint: string): string {
 }
 
 function appCallCurl(apiBase: string): string {
-  return [
-    `curl "${apiBase}/open/galgames/1" \\`,
-    '  -H "Authorization: Bearer $ACCESS_TOKEN"',
-  ].join('\n')
+  return [`curl "${apiBase}/v3/galgames/1" \\`, '  -H "Authorization: Bearer $ACCESS_TOKEN"'].join(
+    '\n',
+  )
 }
 
 export async function buildGuideSnippets(
@@ -119,7 +118,7 @@ export async function buildGuideSnippets(
   const appCall = appCallCurl(apiBase)
 
   const userCall = [
-    `curl -X PUT "${apiBase}/open/user/me/rates/galgames/1" \\`,
+    `curl -X PUT "${apiBase}/v3/user/me/rates/galgames/1" \\`,
     '  -H "Authorization: Bearer $ACCESS_TOKEN" \\',
     '  -H "Content-Type: application/json" \\',
     `  -d '{"status":"COMPLETED","rate":9}'`,

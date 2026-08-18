@@ -22,6 +22,11 @@
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />
     </div>
+    <GalgameAboutSteam
+      v-if="galgame.steam_apps.length"
+      :galgame-id="galgame.id"
+      :app-ids="galgame.steam_apps.map(app => app.app_id)"
+    />
     <GalgameAboutCharacters :characters="characters" />
   </GalgameSection>
 </template>

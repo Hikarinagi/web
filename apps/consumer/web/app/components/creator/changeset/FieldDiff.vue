@@ -21,7 +21,12 @@
     if (kind.value === 'relation_update') return 'relation-update'
     if (kind.value !== 'scalar') return 'unknown'
     if (props.op.value_type === 'ref') return 'ref'
-    if (props.op.value_type === 'object[]') return props.op.field === 'labels' ? 'labels' : 'prices'
+    if (props.op.value_type === 'object[]') {
+      if (props.op.field === 'labels') return 'labels'
+      if (props.op.field === 'external_links') return 'external-links'
+      if (props.op.field === 'steam_apps') return 'steam-apps'
+      return 'prices'
+    }
     const from = props.op.from
     const to = props.op.to
     if (Array.isArray(from) || Array.isArray(to)) return 'array'
@@ -59,6 +64,8 @@
       <CreatorChangesetFieldDiffRef v-else-if="mode === 'ref'" :op="op" />
       <CreatorChangesetFieldDiffPrices v-else-if="mode === 'prices'" :op="op" />
       <CreatorChangesetFieldDiffLabels v-else-if="mode === 'labels'" :op="op" />
+      <CreatorChangesetFieldDiffExternalLinks v-else-if="mode === 'external-links'" :op="op" />
+      <CreatorChangesetFieldDiffSteamApps v-else-if="mode === 'steam-apps'" :op="op" />
       <CreatorChangesetFieldDiffMedia v-else-if="mode === 'media'" :op="op" />
       <CreatorChangesetFieldDiffArray v-else-if="mode === 'array'" :op="op" />
       <CreatorChangesetFieldDiffLines v-else-if="mode === 'lines'" :op="op" />

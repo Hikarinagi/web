@@ -4,9 +4,11 @@ export const characterPresentation: EditorPresentation = {
   fields: {
     name: { label: '姓名' },
     trans_name: { label: '译名' },
+    en_name: { label: '英文名 / 罗马字' },
     aliases: { label: '别名' },
     intro: { label: '简介', control: 'textarea' },
     trans_intro: { label: '译介简介', control: 'textarea' },
+    en_intro: { label: '英文简介', control: 'textarea' },
     image: { label: '立绘' },
     gender: {
       label: '性别',

@@ -1,6 +1,7 @@
 import type { EditorSelectOption } from './types'
 import { PRODUCER_RELATION_LABELS } from '~/features/entity/labels'
 import {
+  COVER_KIND_LABELS,
   DEV_STATUS_LABELS,
   LANGUAGE_LABELS,
   PRODUCER_ROLE_LABELS,
@@ -19,6 +20,7 @@ import {
 } from '~/features/manga/labels'
 
 export const ENUM_LABELS: Record<string, Record<string, string>> = {
+  GalgameCoverKind: COVER_KIND_LABELS,
   GalgameDevStatus: DEV_STATUS_LABELS,
   GalgameRelationType: RELATION_LABELS,
   GalgameStaffRole: STAFF_ROLE_LABELS,
