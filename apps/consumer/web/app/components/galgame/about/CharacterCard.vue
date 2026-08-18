@@ -35,7 +35,7 @@
       </NuxtLink>
       <p
         v-if="actors.length"
-        class="relative z-10 flex items-center gap-1 text-xs text-surface-600 dark:text-surface-400"
+        class="relative z-10 flex w-fit max-w-full items-center gap-1 text-xs text-surface-600 dark:text-surface-400"
       >
         <span class="shrink-0 text-[11px] text-surface-400">CV</span>
         <span class="truncate">

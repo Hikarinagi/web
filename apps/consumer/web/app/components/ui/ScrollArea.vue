@@ -2,7 +2,6 @@
   import type { OverlayScrollbars } from 'overlayscrollbars'
   import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue'
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
-  import { useMediaQuery } from '@vueuse/core'
   import { computed, ref } from 'vue'
   import { useScrollShadow } from './scroll-area/composables/useScrollShadow'
   import { useWheelToHorizontal } from './scroll-area/composables/useWheelToHorizontal'
@@ -39,8 +38,7 @@
   useWheelToHorizontal(viewport, () => props.wheelToHorizontal && hasX.value)
 
   // 悬停翻页箭头:仅在能 hover 的设备(鼠标/触控板,非触屏)出现;触屏用户直接横滑
-  const canHover = useMediaQuery('(hover: hover)')
-  const showArrows = computed(() => props.arrows && hasX.value && canHover.value)
+  const showArrows = computed(() => props.arrows && hasX.value)
   function page(dir: 1 | -1) {
     const el = viewport.value
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
@@ -153,6 +151,7 @@
     opacity: 1;
   }
   .hikari-scroll-area__arrow {
+    display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -161,9 +160,14 @@
     pointer-events: none;
     transition: opacity 200ms ease-out;
   }
-  .hikari-scroll-area:hover .hikari-scroll-area__arrow.is-visible {
-    opacity: 1;
-    pointer-events: auto;
+  @media (hover: hover) {
+    .hikari-scroll-area__arrow {
+      display: block;
+    }
+    .hikari-scroll-area:hover .hikari-scroll-area__arrow.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
   .hikari-scroll-area__arrow--left {
     left: 0.75rem;

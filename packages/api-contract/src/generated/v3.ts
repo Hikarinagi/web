@@ -6437,6 +6437,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalCatalogController_changes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/characters/mapping": {
         parameters: {
             query?: never;
@@ -7837,23 +7853,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MangaController_getVolumes"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/open/catalog/changes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 条目变更事件流,按游标增量拉取 */
-        get: operations["OpenCatalogController_changes"];
         put?: never;
         post?: never;
         delete?: never;
@@ -14053,6 +14052,31 @@ export interface components {
         InstantResponseDto: {
             groups: components["schemas"]["InstantGroupDto"][];
         };
+        InternalCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["InternalCatalogEventDto"][];
+            /** @description 当前最新事件序号;首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        InternalCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号,单调递增,可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         LightNovelAdminItemDto: {
             /** Format: date-time */
             created_at: string;
@@ -15635,31 +15659,6 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             submitter: components["schemas"]["UserRefDto"];
-        };
-        OpenCatalogChangesDto: {
-            /** @description 本页之后是否还有更多事件 */
-            has_more: boolean;
-            /** @description 按序号升序排列的变更事件 */
-            items: components["schemas"]["OpenCatalogEventDto"][];
-            /** @description 当前最新事件序号;首次同步时可先记录该值再做全量 */
-            latest_id: number;
-        };
-        OpenCatalogEventDto: {
-            /**
-             * Format: date-time
-             * @description 事件发生时间
-             */
-            created_at: string;
-            /** @description 事件序号,单调递增,可作为增量游标 */
-            id: number;
-            /** @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id */
-            kind: components["schemas"]["CatalogEventKind"];
-            /** @description merge 事件的目标资源 ID */
-            merged_to_id: number | null;
-            /** @description 发生变更的资源 ID */
-            resource_id: number;
-            /** @description 发生变更的资源类型 */
-            resource_type: components["schemas"]["ContributionResourceType"];
         };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
@@ -29532,6 +29531,30 @@ export interface operations {
             };
         };
     };
+    InternalCatalogController_changes: {
+        parameters: {
+            query?: {
+                /** @description 事件游标,返回 id 大于该值的事件;默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternalCatalogChangesDto"];
+                };
+            };
+        };
+    };
     InternalEntitiesController_getCharacterMapping: {
         parameters: {
             query: {
@@ -31805,30 +31828,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaVolumeRelationDto"][];
-                };
-            };
-        };
-    };
-    OpenCatalogController_changes: {
-        parameters: {
-            query?: {
-                /** @description 事件游标,返回 id 大于该值的事件;默认 0 */
-                since?: number;
-                /** @description 单次返回的最大事件数 */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OpenCatalogChangesDto"];
                 };
             };
         };

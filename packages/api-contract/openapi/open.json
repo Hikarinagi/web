@@ -76,15 +76,6 @@
         ],
         "type": "object"
       },
-      "CatalogEventKind": {
-        "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id",
-        "enum": [
-          "UPSERT",
-          "DELETE",
-          "MERGE"
-        ],
-        "type": "string"
-      },
       "CharacterRole": {
         "enum": [
           "MAIN",
@@ -99,21 +90,6 @@
           "PRIMARY": "主要角色",
           "SUPPORTING": "配角"
         }
-      },
-      "ContributionResourceType": {
-        "description": "发生变更的资源类型",
-        "enum": [
-          "GALGAME",
-          "LIGHT_NOVEL",
-          "LIGHT_NOVEL_VOLUME",
-          "MANGA",
-          "MANGA_VOLUME",
-          "PERSON",
-          "PRODUCER",
-          "CHARACTER",
-          "TAG"
-        ],
-        "type": "string"
       },
       "CreateFavoriteCollectionDto": {
         "properties": {
@@ -1290,78 +1266,6 @@
           "PAUSED": "休刊",
           "SERIALIZING": "连载中"
         }
-      },
-      "OpenCatalogChangesDto": {
-        "properties": {
-          "has_more": {
-            "description": "本页之后是否还有更多事件",
-            "type": "boolean"
-          },
-          "items": {
-            "description": "按序号升序排列的变更事件",
-            "items": {
-              "$ref": "#/components/schemas/OpenCatalogEventDto"
-            },
-            "type": "array"
-          },
-          "latest_id": {
-            "description": "当前最新事件序号;首次同步时可先记录该值再做全量",
-            "type": "number"
-          }
-        },
-        "required": [
-          "items",
-          "latest_id",
-          "has_more"
-        ],
-        "type": "object"
-      },
-      "OpenCatalogEventDto": {
-        "properties": {
-          "created_at": {
-            "description": "事件发生时间",
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "description": "事件序号,单调递增,可作为增量游标",
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CatalogEventKind"
-              }
-            ],
-            "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id"
-          },
-          "merged_to_id": {
-            "description": "merge 事件的目标资源 ID",
-            "nullable": true,
-            "type": "number"
-          },
-          "resource_id": {
-            "description": "发生变更的资源 ID",
-            "type": "number"
-          },
-          "resource_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ContributionResourceType"
-              }
-            ],
-            "description": "发生变更的资源类型"
-          }
-        },
-        "required": [
-          "id",
-          "resource_type",
-          "resource_id",
-          "kind",
-          "merged_to_id",
-          "created_at"
-        ],
-        "type": "object"
       },
       "OpenCharacterDetailDto": {
         "properties": {
@@ -4117,55 +4021,6 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/v3/catalog/changes": {
-      "get": {
-        "operationId": "OpenCatalogController_changes",
-        "parameters": [
-          {
-            "description": "事件游标,返回 id 大于该值的事件;默认 0",
-            "in": "query",
-            "name": "since",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          {
-            "description": "单次返回的最大事件数",
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "default": 200,
-              "maximum": 500,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OpenCatalogChangesDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "summary": "条目变更事件流,按游标增量拉取",
-        "tags": [
-          "open"
-        ],
-        "x-hikari-scopes": [
-          "catalog:read"
-        ]
-      }
-    },
     "/v3/characters/{id}": {
       "get": {
         "operationId": "OpenCharacterController_getById",
