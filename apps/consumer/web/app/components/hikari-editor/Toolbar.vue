@@ -10,7 +10,19 @@
     context: EditorPluginContext
   }>()
 
-  const GROUP_KEYS: ToolbarGroup[] = ['format-inline', 'format-block', 'insert-media']
+  const GROUP_KEYS: ToolbarGroup[] = [
+    'format-inline',
+    'format-block',
+    'insert-link',
+    'insert-media',
+  ]
+
+  // P05:文章编辑器(community profile)不再提供「插入实体卡片」工具栏入口。
+  // 插件本身必须保留在 community profile 里——它注册的卡片节点扩展是编辑器解析/渲染
+  // 既有文章正文中实体卡片的前提,移除插件会导致带卡片的旧文 setContent 直接失败,
+  // 因此只在工具栏层过滤入口。本 Toolbar 目前仅被文章编辑器使用;
+  // post/comment profile 走各自的编辑器 UI,不受影响。
+  const HIDDEN_TOOLBAR_PLUGIN_IDS = new Set(['entity-card'])
 
   const grouped = computed(() => {
     const map: Record<ToolbarGroup, EditorPlugin[]> = {
@@ -20,7 +32,7 @@
       'insert-media': [],
     }
     for (const p of props.items) {
-      if (!p.toolbarItem || p.group === null) continue
+      if (!p.toolbarItem || p.group === null || HIDDEN_TOOLBAR_PLUGIN_IDS.has(p.id)) continue
       map[p.group].push(p)
     }
     return map

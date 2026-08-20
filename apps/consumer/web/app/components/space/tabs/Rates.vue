@@ -1,10 +1,9 @@
 <script setup lang="ts">
   import { Star } from '@lucide/vue'
   import {
-    RATE_STATUS_FILTERS,
+    RATE_TYPE_FILTERS,
     SPACE_RATE_PAGE_SIZE,
     type SpaceRatePage,
-    type SpaceRateStatusCounts,
   } from '~/features/space/space'
   import { usePagedList } from '~/features/space/usePagedList'
 
@@ -13,19 +12,18 @@
   const props = defineProps<{
     userId: number
     rates: SpaceRatePage
-    counts: SpaceRateStatusCounts
   }>()
 
   const filter = ref('all')
-  const activeStatus = computed(
-    () => RATE_STATUS_FILTERS.find(f => f.key === filter.value)?.status ?? null,
+  const activeWorkType = computed(
+    () => RATE_TYPE_FILTERS.find(f => f.key === filter.value)?.workType ?? null,
   )
 
   function query(page: number) {
     return {
       page,
       page_size: SPACE_RATE_PAGE_SIZE,
-      ...(activeStatus.value ? { status: activeStatus.value } : {}),
+      ...(activeWorkType.value ? { work_type: activeWorkType.value } : {}),
     }
   }
 
@@ -43,7 +41,7 @@
   <div class="flex flex-col gap-4 pt-2">
     <div class="flex flex-wrap items-center gap-2">
       <Button
-        v-for="f in RATE_STATUS_FILTERS"
+        v-for="f in RATE_TYPE_FILTERS"
         :key="f.key"
         unstyled
         class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
@@ -52,7 +50,7 @@
         "
         @click="filter = f.key"
       >
-        {{ f.label }} {{ counts[f.key] }}
+        {{ f.label }}
       </Button>
     </div>
 

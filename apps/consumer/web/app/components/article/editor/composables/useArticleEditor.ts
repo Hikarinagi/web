@@ -28,7 +28,15 @@ export interface ArticleReviewContext {
   workTitle: string | null
 }
 
+export interface ArticleWork {
+  work_type: 'GALGAME' | 'LIGHT_NOVEL'
+  id: number
+  title: string
+}
+
 const MAX_TOPICS = 5
+// 对齐帖子侧 POST_MAX_RELATED_WORKS 与后端 CreateArticleDto 的 ArrayMaxSize(10)
+export const ARTICLE_MAX_RELATED_WORKS = 10
 
 export function useArticleEditor(articleId: Ref<number | null>, review?: ArticleReviewContext) {
   const summariesRef = ref(emptyEditorSummaries())
@@ -45,8 +53,8 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
   const plugins = useEditorPlugins('community')
   const title = ref('')
   const cover = ref<MediaValue | null>(null)
-  const sectionId = ref<number | null>(null)
   const topics = ref<TopicValue[]>([])
+  const relatedWorks = ref<ArticleWork[]>([])
   const visible = ref<'PUBLIC' | 'PRIVATE'>('PUBLIC')
   const allowComment = ref(true)
   const relatedGalgameRateId = ref<number | null>(review?.galgameRateId ?? null)
@@ -67,6 +75,7 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
   let hydrating = false
 
   const topicsFull = computed(() => topics.value.length >= MAX_TOPICS)
+  const relatedWorksFull = computed(() => relatedWorks.value.length >= ARTICLE_MAX_RELATED_WORKS)
   const hasContent = computed(() => !!title.value.trim() || !isEmpty.value)
   const canPublish = computed(
     () =>
@@ -83,6 +92,19 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
   }
   function removeTopic(id: number) {
     topics.value = topics.value.filter(t => t.id !== id)
+  }
+  function addWork(work: ArticleWork) {
+    if (
+      relatedWorksFull.value ||
+      relatedWorks.value.some(w => w.work_type === work.work_type && w.id === work.id)
+    )
+      return
+    relatedWorks.value = [...relatedWorks.value, work]
+  }
+  function removeWork(work: ArticleWork) {
+    relatedWorks.value = relatedWorks.value.filter(
+      w => !(w.work_type === work.work_type && w.id === work.id),
+    )
   }
   async function createTopic(rawName: string) {
     const name = rawName.replace(/^#+/, '').trim()
@@ -114,8 +136,10 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
         content_json: ed.getJSON() as Record<string, unknown>,
         client_schema_version: EDITOR_SCHEMA_VERSION,
         cover_id: cover.value?.id ?? null,
-        section_ids: sectionId.value ? [sectionId.value] : [],
+        // P05:发布设置不再选板块,提交固定空数组(后端 CreateArticleDto.section_ids 必填)
+        section_ids: [] as number[],
         topic_ids: topics.value.filter(t => t.id > 0).map(t => t.id),
+        related_works: relatedWorks.value.map(w => ({ work_type: w.work_type, id: w.id })),
         visible: visible.value,
         allow_comment: (allowComment.value ? 'ALLOW' : 'DISALLOW') as 'ALLOW' | 'DISALLOW',
       }
@@ -176,7 +200,7 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
     },
   })
 
-  watch([title, cover, sectionId, topics, visible, allowComment], scheduleSave, { deep: true })
+  watch([title, cover, topics, relatedWorks, visible, allowComment], scheduleSave, { deep: true })
 
   const { open: openLibrary } = useMediaLibrary()
   async function openCoverLibrary() {
@@ -199,8 +223,10 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
           height: detail.cover.height,
         }
       : null
-    sectionId.value = detail.sections[0]?.section?.id ?? null
     topics.value = (detail.topics ?? []).map(t => ({ id: t.topic.id, name: t.topic.name }))
+    relatedWorks.value = (detail.manual_related_works ?? []).flatMap(w =>
+      w.work_type === 'MANGA' ? [] : [{ work_type: w.work_type, id: w.id, title: w.title }],
+    )
     visible.value = detail.visible
     allowComment.value = detail.allow_comment !== 'DISALLOW'
     relatedGalgameRateId.value = detail.related_galgame_rate_id ?? null
@@ -255,9 +281,10 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
     pluginContext,
     title,
     cover,
-    sectionId,
     topics,
     topicsFull,
+    relatedWorks,
+    relatedWorksFull,
     visible,
     allowComment,
     isEmpty,
@@ -273,6 +300,8 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
     addTopic,
     removeTopic,
     createTopic,
+    addWork,
+    removeWork,
     openCoverLibrary,
     removeCover,
     load,

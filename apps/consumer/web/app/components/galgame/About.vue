@@ -5,7 +5,6 @@
   defineProps<{
     galgame: GalgamePageData['galgame']
     tags: GalgamePageData['tags']
-    characters: GalgamePageData['characters']
     producers: GalgamePageData['producers']
     contributors: GalgamePageData['contributors']
   }>()
@@ -27,6 +26,5 @@
       :galgame-id="galgame.id"
       :app-ids="galgame.steam_apps.map(app => app.app_id)"
     />
-    <GalgameAboutCharacters :characters="characters" />
   </GalgameSection>
 </template>

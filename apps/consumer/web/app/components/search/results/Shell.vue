@@ -2,7 +2,7 @@
   import type { SearchPageData } from '~~/server/api/pages/search.get'
   import { searchRoute } from '~/features/search/results'
   import { useSearchResults } from '~/features/search/composables/useSearchResults'
-  import { SEARCH_TYPE_LABELS, type SearchType } from '~/features/search/search'
+  import { SEARCH_TYPE_LABELS, isContentType, type SearchType } from '~/features/search/search'
 
   defineOptions({ name: 'SearchResultsShell' })
 
@@ -15,6 +15,7 @@
   }
 
   function gridClass(type: SearchType) {
+    if (isContentType(type)) return 'grid-cols-1 sm:grid-cols-2'
     return isEntity(type)
       ? 'grid-cols-3 sm:grid-cols-5 lg:grid-cols-8'
       : 'grid-cols-3 sm:grid-cols-4 lg:grid-cols-6'

@@ -17,6 +17,7 @@
   <div v-if="data" class="-mt-(--app-header-height)">
     <MangaHomeHeroBand :slides="data.hero.slides" />
     <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-10">
+      <MangaHomeTags :tags="data.tags" />
       <MangaHomeRail
         title="热门连载"
         to="/mangas/browse?status=serializing&sort=heat:desc"
@@ -44,8 +45,8 @@
         :items="data.magazine.items"
       />
       <MangaHomeRail
-        title="完结佳作"
-        to="/mangas/browse?status=finished&sort=heat:desc"
+        title="最新"
+        to="/mangas/browse?status=finished&sort=publication_date:desc"
         :items="data.finished"
         hide-status
       />

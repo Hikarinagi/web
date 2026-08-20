@@ -14,9 +14,9 @@ const ITEM_GAP_X = 3 * SPACING
 const AVATAR_SIZE = 10 * SPACING
 const CONTENT_GAP = 2 * SPACING
 const STACK_GAP = 3 * SPACING
-const HEADER_DESKTOP = 24
-const HEADER_MOBILE = 42
-const HEADER_MOBILE_COMPACT = 20
+const HEADER_TWO_ROW = 42
+const HEADER_COMPACT = 20
+const HEADER_SINGLE_ROW = 24
 const ACTION_BAR = 32
 const HOT_COMMENT = 32
 const WORK_REF_CARD = 94
@@ -29,7 +29,6 @@ const TOPIC_ICON = 14
 const TOPIC_ICON_GAP = 2
 const TOPIC_GAP_X = 2 * SPACING
 const TOPIC_GAP_Y = SPACING
-const SM_BREAKPOINT = 640
 
 let canvasContext: CanvasRenderingContext2D | null | undefined
 let fontFamilyCache: string | null = null
@@ -61,19 +60,14 @@ function entryHeight(row: FeedRow, ctx: HeightContext, hideName: boolean) {
 function itemContentHeight(item: BackendFeedItem, ctx: HeightContext, hideName: boolean) {
   const width = contentWidth(ctx.rowWidth)
   const body = bodyHeight(item, width, ctx.browserMeasure === true)
-  const header =
-    ctx.viewportWidth >= SM_BREAKPOINT
-      ? HEADER_DESKTOP
-      : hideName
-        ? HEADER_MOBILE_COMPACT
-        : HEADER_MOBILE
+  const header = hideName ? HEADER_COMPACT : HEADER_TWO_ROW
   const hotComment = 'hot_comment' in item && item.hot_comment ? CONTENT_GAP + HOT_COMMENT : 0
   return header + CONTENT_GAP + body + CONTENT_GAP + ACTION_BAR + hotComment
 }
 
 function groupContentHeight() {
   return (
-    HEADER_DESKTOP + CONTENT_GAP + BODY_TEXT_NORMAL.lineHeight + CONTENT_GAP + GROUP_COVER_HEIGHT
+    HEADER_SINGLE_ROW + CONTENT_GAP + BODY_TEXT_NORMAL.lineHeight + CONTENT_GAP + GROUP_COVER_HEIGHT
   )
 }
 

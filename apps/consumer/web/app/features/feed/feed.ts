@@ -3,6 +3,8 @@ import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
 export const FEED_PAGE_SIZE = 20
 export type FeedResponse = ApiData<'/api/v3/feed', 'get'>
 export type FeedScope = NonNullable<ApiQuery<'/api/v3/feed', 'get'>['scope']>
+// 话题页 feed 排序口径,与后端 FEED_RELATION_SORT 一致(api:contract 再生成后可改从契约派生)
+export type TopicFeedSort = 'latest' | 'hot'
 export type BackendFeedItem = FeedResponse['items'][number]
 export type FeedItemByType<T extends BackendFeedItem['type']> = Extract<
   BackendFeedItem,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import {
     Building2,
+    CalendarCheck,
     CalendarDays,
     Coins,
     Cpu,
@@ -21,11 +22,24 @@
     contributors: GalgamePageData['contributors']
   }>()
 
-  const releaseText = computed(() =>
-    props.galgame.release_date_tbd
-      ? '未定'
-      : timeFormat(props.galgame.release_date, TimeFormatEnum.YYYY_MM_DD) || '未收录',
-  )
+  const startText = computed(() => {
+    if (props.galgame.start_date_tbd) return props.galgame.start_date_tbd_note || '待定'
+    if (props.galgame.start_date_year_only) return yearOnlyText(props.galgame.start_date)
+
+    return datePartFormat(props.galgame.start_date, TimeFormatEnum.YYYY_MM_DD) || '未收录'
+  })
+  const endText = computed(() => {
+    if (!props.galgame.end_date) return '—'
+    if (props.galgame.end_date_year_only) return yearOnlyText(props.galgame.end_date)
+
+    return datePartFormat(props.galgame.end_date, TimeFormatEnum.YYYY_MM_DD) || '—'
+  })
+
+  function yearOnlyText(value: string | null): string {
+    // date 字段按日历日处理,取 ISO 前 4 位年份,避免负时区偏移一天
+    const year = Number(value?.slice(0, 4))
+    return Number.isFinite(year) && year > 0 ? `${year}年` : '未收录'
+  }
   const platformsText = computed(() => props.galgame.platforms.map(platformLabel).join(' · '))
   const aliasesText = computed(() => props.galgame.aliases.join(' / '))
   const priceText = computed(() =>
@@ -67,7 +81,17 @@
       </div>
       <div class="flex items-center gap-2.5">
         <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ releaseText }}</span>
+        <span class="flex min-w-0 items-center gap-1.5">
+          <span class="shrink-0 text-xs text-surface-400">开始时间</span>
+          <span class="text-surface-700 dark:text-surface-300">{{ startText }}</span>
+        </span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <CalendarCheck class="size-3.5 shrink-0 text-surface-400" />
+        <span class="flex min-w-0 items-center gap-1.5">
+          <span class="shrink-0 text-xs text-surface-400">完结时间</span>
+          <span class="text-surface-700 dark:text-surface-300">{{ endText }}</span>
+        </span>
       </div>
       <div v-if="platformsText" class="flex items-center gap-2.5">
         <Monitor class="size-3.5 shrink-0 text-surface-400" />

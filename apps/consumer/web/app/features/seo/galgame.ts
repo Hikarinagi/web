@@ -18,7 +18,8 @@ export function galgameSeo(data: GalgamePageData) {
   const name = g.trans_title || g.origin_title
   const developer = producerName(data.producers, ['DEVELOPER', 'PUBLISHER'])
   const platform = g.platforms[0]
-  const year = g.release_date ? new Date(g.release_date).getFullYear() : undefined
+  // date 字段按日历日处理,取 ISO 前 4 位年份,避免负时区偏移一年
+  const year = g.start_date ? Number(g.start_date.slice(0, 4)) || undefined : undefined
 
   const hasDownload = g.download_resource_count > 0
   const maker = developer ? `${developer}制作的` : ''
@@ -32,7 +33,7 @@ export function galgameSeo(data: GalgamePageData) {
   const videoGame: Record<string, unknown> = { '@type': 'VideoGame', name }
   if (g.trans_title && g.trans_title !== g.origin_title) videoGame.alternateName = g.origin_title
   if (g.origin_lang) videoGame.inLanguage = g.origin_lang
-  if (g.release_date) videoGame.datePublished = g.release_date.slice(0, 10)
+  if (g.start_date) videoGame.datePublished = g.start_date.slice(0, 10)
   if (g.platforms.length) videoGame.gamePlatform = g.platforms
   const publisher = producerName(data.producers, ['PUBLISHER', 'DEVELOPER'])
   if (publisher) videoGame.publisher = { '@type': 'Organization', name: publisher }

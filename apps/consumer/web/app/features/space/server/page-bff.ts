@@ -1,15 +1,10 @@
 import { getQuery, type H3Event } from 'h3'
-import { FEED_PAGE_SIZE, type FeedResponse } from '~/features/feed/feed'
 import { readSpaceRouteQuery } from '~/features/space/route'
 import {
-  MANAGED_CONTENT_PAGE_SIZE,
-  SPACE_BOOKSHELF_PAGE_SIZE,
   SPACE_CONTENT_PAGE_SIZE,
   SPACE_CONTRIBUTION_PAGE_SIZE,
   SPACE_FOLLOW_PAGE_SIZE,
   SPACE_RATE_PAGE_SIZE,
-  type ManagedContentPage,
-  type SpaceBookshelfTabData,
   type SpaceCollectionCard,
   type SpaceCollectionItem,
   type SpaceContentPage,
@@ -45,47 +40,28 @@ export async function fetchShell(event: H3Event, id: number) {
   return { is_self, profile, statistics, going, status }
 }
 
-export async function fetchTab(event: H3Event, id: number, tab: SpaceTabKey, is_self: boolean) {
+export async function fetchTab(event: H3Event, id: number, tab: SpaceTabKey) {
   const page = readPage(event)
   const tabData: {
-    feed: FeedResponse | null
-    contents: SpaceContentPage | null
-    managed: ManagedContentPage | null
+    feed: SpaceContentPage | null
     rates: SpaceRatePage | null
     collections: SpaceCollectionCard[] | null
     contributions: SpaceContributionPage | null
     following: SpaceFollowPage | null
     followers: SpaceFollowPage | null
-    bookshelf: SpaceBookshelfTabData | null
   } = {
     feed: null,
-    contents: null,
-    managed: null,
     rates: null,
     collections: null,
     contributions: null,
     following: null,
     followers: null,
-    bookshelf: null,
   }
 
   if (tab === 'feed') {
-    tabData.feed = await fetchBackendData(event, '/api/v3/user/{id}/feed', {
+    tabData.feed = await fetchBackendData(event, '/api/v3/user/{id}/contents', {
       path: { id },
-      query: { limit: FEED_PAGE_SIZE },
-    })
-  } else if (tab === 'articles') {
-    tabData.contents = await fetchBackendData(event, '/api/v3/user/{id}/contents', {
-      path: { id },
-      query: { page, page_size: SPACE_CONTENT_PAGE_SIZE, content_type: 'article' },
-    })
-  } else if (tab === 'my-posts' && is_self) {
-    tabData.managed = await fetchBackendData(event, '/api/v3/user/me/contents', {
-      query: { page, page_size: MANAGED_CONTENT_PAGE_SIZE, type: 'post' },
-    })
-  } else if (tab === 'my-articles' && is_self) {
-    tabData.managed = await fetchBackendData(event, '/api/v3/user/me/contents', {
-      query: { page, page_size: MANAGED_CONTENT_PAGE_SIZE, type: 'article' },
+      query: { page, page_size: SPACE_CONTENT_PAGE_SIZE },
     })
   } else if (tab === 'rates') {
     tabData.rates = await fetchBackendData(event, '/api/v3/user/{id}/rates', {
@@ -112,25 +88,6 @@ export async function fetchTab(event: H3Event, id: number, tab: SpaceTabKey, is_
     ])
     tabData.following = following
     tabData.followers = followers
-  } else if (tab === 'bookshelf' && is_self) {
-    const shelf = readSpaceRouteQuery(getQuery(event)).shelf
-    if (shelf === 'manga') {
-      const [list, stats] = await Promise.all([
-        fetchBackendData(event, '/api/v3/reader/me/manga/reading', {
-          query: { page, page_size: SPACE_BOOKSHELF_PAGE_SIZE },
-        }),
-        fetchBackendData(event, '/api/v3/reader/me/manga/stats'),
-      ])
-      tabData.bookshelf = { shelf, list, stats }
-    } else {
-      const [list, stats] = await Promise.all([
-        fetchBackendData(event, '/api/v3/reader/me/reading', {
-          query: { page, page_size: SPACE_BOOKSHELF_PAGE_SIZE },
-        }),
-        fetchBackendData(event, '/api/v3/reader/me/stats'),
-      ])
-      tabData.bookshelf = { shelf, list, stats }
-    }
   }
 
   return { active_tab: tab, ...tabData }

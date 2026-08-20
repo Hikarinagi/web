@@ -5,7 +5,7 @@ import { definePageBffHandler } from '../../../utils/page-bff'
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
   const shell = await fetchShell(event, id)
-  const tab = await fetchTab(event, id, readTab(event), shell.is_self)
+  const tab = await fetchTab(event, id, readTab(event))
 
   return {
     ...shell,

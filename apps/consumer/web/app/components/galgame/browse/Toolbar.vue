@@ -1,12 +1,20 @@
 <script setup lang="ts">
-  import { Search } from '@lucide/vue'
-  import type { GalgameBrowseState } from '~/features/galgame/explore'
+  import { LayoutGrid, List, Search } from '@lucide/vue'
+  import type { BrowseViewMode, GalgameBrowseState } from '~/features/galgame/explore'
   import { GALGAME_SORT_OPTIONS, sortValue } from '~/features/galgame/explore'
-  import { LANGUAGE_OPTIONS } from '~/features/galgame/labels'
+  import { DEV_STATUS_OPTIONS, LANGUAGE_OPTIONS } from '~/features/galgame/labels'
 
   defineOptions({ name: 'GalgameBrowseToolbar' })
-  const props = defineProps<{ state: GalgameBrowseState; total: number; disabled?: boolean }>()
-  const emit = defineEmits<{ update: [value: Partial<GalgameBrowseState>] }>()
+  const props = defineProps<{
+    state: GalgameBrowseState
+    total: number
+    disabled?: boolean
+    mode: BrowseViewMode
+  }>()
+  const emit = defineEmits<{
+    update: [value: Partial<GalgameBrowseState>]
+    'update:mode': [value: BrowseViewMode]
+  }>()
 
   const search = ref(props.state.search ?? '')
   const sort = ref(sortValue(props.state))
@@ -61,6 +69,19 @@
       class="w-32"
       @update:model-value="value => patch({ origin_lang: value })"
     />
+    <MultiSelect
+      :model-value="state.dev_status"
+      :options="DEV_STATUS_OPTIONS"
+      option-label="label"
+      option-value="value"
+      placeholder="状态"
+      size="small"
+      :max-selected-labels="0"
+      :selected-items-label="'状态 ({0})'"
+      class="w-32"
+      :disabled="disabled"
+      @update:model-value="value => patch({ dev_status: value })"
+    />
 
     <span class="h-5 w-px bg-surface-200 dark:bg-surface-700" />
 
@@ -107,6 +128,7 @@
         </Button>
       </InputGroup>
       <label
+        v-if="!state.dev_status.length"
         class="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-surface-500 dark:text-surface-400"
       >
         <Checkbox
@@ -120,6 +142,29 @@
       <span class="shrink-0 text-xs whitespace-nowrap text-surface-500 dark:text-surface-400">
         共 {{ total.toLocaleString() }} 部
       </span>
+    </div>
+
+    <div class="ml-auto flex shrink-0 items-center gap-1">
+      <Button
+        v-tooltip.top="'列表模式'"
+        :severity="mode === 'list' ? 'primary' : 'secondary'"
+        :text="mode !== 'list'"
+        size="small"
+        aria-label="列表模式"
+        @click="emit('update:mode', 'list')"
+      >
+        <List class="size-4" />
+      </Button>
+      <Button
+        v-tooltip.top="'网格模式'"
+        :severity="mode === 'grid' ? 'primary' : 'secondary'"
+        :text="mode !== 'grid'"
+        size="small"
+        aria-label="网格模式"
+        @click="emit('update:mode', 'grid')"
+      >
+        <LayoutGrid class="size-4" />
+      </Button>
     </div>
   </div>
 </template>

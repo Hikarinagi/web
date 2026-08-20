@@ -8,10 +8,15 @@
   }>()
 
   const releaseText = computed(() => {
-    if (props.galgame.release_date_tbd) return props.galgame.release_date_tbd_note || '发售日未定'
-    if (!props.galgame.release_date) return '发售日未定'
+    if (props.galgame.start_date_tbd) return props.galgame.start_date_tbd_note || '发售日待定'
+    if (!props.galgame.start_date) return '发售日未定'
+    if (props.galgame.start_date_year_only) {
+      // date 字段按日历日处理,取 ISO 前 4 位年份,避免负时区偏移一年
+      const year = Number(props.galgame.start_date.slice(0, 4))
+      return Number.isFinite(year) && year > 0 ? `${year}年` : '发售日未定'
+    }
 
-    return timeFormat(props.galgame.release_date, TimeFormatEnum.YYYY_M_DD_CN)
+    return datePartFormat(props.galgame.start_date, TimeFormatEnum.YYYY_M_DD_CN)
   })
   const producerNames = computed(() =>
     Array.from(

@@ -10,7 +10,7 @@ async function handler(event: H3Event) {
 
   return {
     is_self,
-    ...(await fetchTab(event, id, readTab(event), is_self)),
+    ...(await fetchTab(event, id, readTab(event))),
   }
 }
 

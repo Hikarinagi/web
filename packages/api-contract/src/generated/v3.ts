@@ -6229,6 +6229,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameExternalLinkController_getList"];
+        put?: never;
+        post: operations["GalgameExternalLinkController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/merchs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameMerchController_getList"];
+        put?: never;
+        post: operations["GalgameMerchController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/posts": {
         parameters: {
             query?: never;
@@ -6416,6 +6448,26 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/{tagId}/like": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * 点赞/取消点赞均为幂等操作:重复点赞返回 200 且不重复计数,
+         *     未点赞时取消同样返回 200(返回当前计数),不报 404。
+         */
+        put: operations["GalgameController_likeTag"];
+        post?: never;
+        delete: operations["GalgameController_unlikeTag"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7397,6 +7449,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/links/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ExternalLinkController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-volumes/{id}": {
         parameters: {
             query?: never;
@@ -7856,6 +7924,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/merchs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MerchController_remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -11622,6 +11706,7 @@ export interface components {
             id: number;
             like_count: number;
             liked: boolean;
+            manual_related_works?: components["schemas"]["ArticleRelatedWorkDto"][];
             /** @enum {string|null} */
             news_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA" | null;
             related_galgame_rate_id: number | null;
@@ -11670,6 +11755,11 @@ export interface components {
             updated_at: string;
             /** @description 浏览量 */
             view_count: number;
+        };
+        ArticleWorkRefDto: {
+            id: number;
+            /** @enum {string} */
+            work_type: "GALGAME" | "LIGHT_NOVEL";
         };
         AssetUploadResultDto: {
             height: number | null;
@@ -12279,6 +12369,7 @@ export interface components {
             news_type?: "GALGAME" | "LIGHT_NOVEL" | "MANGA" | null;
             related_galgame_rate_id?: number | null;
             related_light_novel_rate_id?: number | null;
+            related_works?: components["schemas"]["ArticleWorkRefDto"][];
             section_ids: number[];
             /** @enum {string} */
             status: "draft" | "published";
@@ -12376,6 +12467,21 @@ export interface components {
             order?: number;
             start_at?: string | null;
             title: string;
+        };
+        CreateGalgameExternalLinkDto: {
+            name: string;
+            /** @enum {string} */
+            type: "WEBSITE" | "TWITTER" | "BLOG" | "WIKI" | "OTHER";
+            url: string;
+        };
+        CreateGalgameMerchDto: {
+            /** @description 制品定位,如 实体出版/周边制品/设定集/同人/官方 */
+            category?: string;
+            description?: string;
+            image_id?: number;
+            labels?: components["schemas"]["GalgameMerchLabelInputDto"][];
+            name: string;
+            staffs?: components["schemas"]["GalgameMerchStaffInputDto"][];
         };
         CreateLlmCredentialDto: {
             api_key: string;
@@ -13523,7 +13629,7 @@ export interface components {
             id: number;
             nsfw: boolean;
             origin_title: string;
-            release_date: string | null;
+            start_date: string | null;
             top_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             top_producer_name: string | null;
             trans_title: string | null;
@@ -13570,11 +13676,20 @@ export interface components {
             download_resource_count: number;
             en_intro: string | null;
             en_title: string | null;
+            /**
+             * Format: date-time
+             * @description 完结时间(仍在连载或未知时为 null)
+             */
+            end_date: string | null;
+            /** @description 完结时间是否精确到年份 */
+            end_date_year_only: boolean;
             engine: string | null;
-            external_links: components["schemas"]["GalgameExternalLinkDto"][];
+            external_links: components["schemas"]["GalgameDetailExternalLinkDto"][];
             homepage: string | null;
             id: number;
             images: components["schemas"]["RatedMediaAssetDto"][];
+            /** @description 多语种简介;展示优先级(trans_intro → zh-Hans → 其他)由前端决定 */
+            intros: components["schemas"]["GalgameIntroDto"][];
             nsfw: boolean;
             origin_intro: string | null;
             origin_lang: string | null;
@@ -13582,11 +13697,18 @@ export interface components {
             platforms: string[];
             prices: components["schemas"]["GalgamePriceDto"][];
             /** Format: date-time */
-            release_date: string | null;
-            release_date_tbd: boolean;
-            release_date_tbd_note: string;
-            /** Format: date-time */
             revised_at: string | null;
+            /**
+             * Format: date-time
+             * @description 开始时间(首次连载/首卷出版日期)
+             */
+            start_date: string | null;
+            /** @description 开始时间是否待定 */
+            start_date_tbd: boolean;
+            /** @description 开始时间待定备注 */
+            start_date_tbd_note: string;
+            /** @description 开始时间是否精确到年份 */
+            start_date_year_only: boolean;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** @description Steam 应用，首条为主商店页 */
@@ -13597,6 +13719,13 @@ export interface components {
             updated_at: string;
             views: number;
             vndb_id: number | null;
+        };
+        GalgameDetailExternalLinkDto: {
+            /** @description 链接显示名称 */
+            label: string;
+            /** @description 链接来源标识,如 steam、website */
+            name: string;
+            url: string;
         };
         /**
          * @description 开发状态
@@ -13668,10 +13797,16 @@ export interface components {
             tags: components["schemas"]["ResolvedTagDto"][];
         };
         GalgameExternalLinkDto: {
-            /** @description 链接显示名称 */
-            label: string;
-            /** @description 链接来源标识,如 steam、website */
+            /** Format: date-time */
+            created_at: string;
+            creator: components["schemas"]["UserRefDto"] | null;
+            galgame_id: number;
+            id: number;
             name: string;
+            /** @enum {string} */
+            type: "WEBSITE" | "TWITTER" | "BLOG" | "WIKI" | "OTHER";
+            /** Format: date-time */
+            updated_at: string;
             url: string;
         };
         GalgameHeroCoverDto: {
@@ -13708,10 +13843,56 @@ export interface components {
             existing_id: number | null;
             sources_match: boolean | null;
         };
+        GalgameIntroDto: {
+            content: string;
+            /** @description 语种标记,小写规范化,如 zh-hans、zh-hant、ja、en */
+            lang: string;
+        };
+        GalgameIntroRowDto: {
+            content: string;
+            /** @description 语种标记,小写规范化,如 zh-hans、zh-hant、ja、en */
+            lang: string;
+        };
         GalgameMappingItemDto: {
             bangumi_game_id: number | null;
             id: number;
             vndb_id: number | null;
+        };
+        GalgameMerchDto: {
+            /** @description 制品定位,如 实体出版/周边制品/设定集/同人/官方 */
+            category: string;
+            /** Format: date-time */
+            created_at: string;
+            creator: components["schemas"]["UserRefDto"] | null;
+            description: string;
+            galgame_id: number;
+            id: number;
+            image: components["schemas"]["MediaAssetDto"] | null;
+            labels: components["schemas"]["GalgameMerchLabelDto"][];
+            name: string;
+            staffs: components["schemas"]["GalgameMerchStaffDto"][];
+            /** Format: date-time */
+            updated_at: string;
+        };
+        GalgameMerchLabelDto: {
+            id: number;
+            key: string;
+            order: number;
+            value: string;
+        };
+        GalgameMerchLabelInputDto: {
+            key: string;
+            value: string;
+        };
+        GalgameMerchStaffDto: {
+            id: number;
+            name: string;
+            order: number;
+            role: string;
+        };
+        GalgameMerchStaffInputDto: {
+            name: string;
+            role: string;
         };
         GalgameMonthlyReleaseDto: {
             current_month: boolean;
@@ -13932,8 +14113,13 @@ export interface components {
             id: number;
             nsfw: boolean;
             origin_title: string;
-            /** Format: date-time */
-            release_date: string | null;
+            /**
+             * Format: date-time
+             * @description 开始时间(首次连载/首卷出版日期)
+             */
+            start_date: string | null;
+            /** @description 开始时间是否精确到年份 */
+            start_date_year_only: boolean;
             trans_title: string | null;
         };
         /**
@@ -13962,11 +14148,15 @@ export interface components {
             origin_title: string;
             /** @description 相关厂商 */
             producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            /** @description 平均分(保留一位小数),无评分时为 null;仅 GET /galgames 列表返回,其它 summary 场景不包含 */
+            score?: number | null;
             /**
              * Format: date-time
-             * @description 发行日期
+             * @description 开始时间(首次连载/首卷出版日期)
              */
-            release_date: string | null;
+            start_date: string | null;
+            /** @description 开始时间是否精确到年份 */
+            start_date_year_only: boolean;
             /** @description 译名 */
             trans_title: string | null;
         };
@@ -13987,7 +14177,17 @@ export interface components {
              */
             role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER" | null;
         };
+        GalgameTagLikeStateDto: {
+            /** @description 操作后当前用户的点赞状态 */
+            liked_by_me: boolean;
+            /** @description 操作后的点赞数 */
+            likes: number;
+        };
         GalgameTagRelationDto: {
+            /** @description 当前用户是否已点赞;匿名用户恒为 false */
+            liked_by_me: boolean;
+            /** @description 该标签在此作品上的点赞数 */
+            likes: number;
             tag: components["schemas"]["TagPreviewDto"];
         };
         GrantDecorationDto: {
@@ -14047,7 +14247,7 @@ export interface components {
         InstantGroupDto: {
             items: components["schemas"]["SearchHitDto"][];
             /** @enum {string} */
-            type: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer";
+            type: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer" | "post" | "article";
         };
         InstantResponseDto: {
             groups: components["schemas"]["InstantGroupDto"][];
@@ -15807,6 +16007,13 @@ export interface components {
             en_intro: string | null;
             /** @description 官方英文标题 */
             en_title: string | null;
+            /**
+             * Format: date-time
+             * @description 完结时间(仍在连载或未知时为 null)
+             */
+            end_date: string | null;
+            /** @description 完结时间是否精确到年份 */
+            end_date_year_only: boolean;
             /** @description 游戏引擎 */
             engine: string | null;
             /** @description 官网、商店页等外部链接 */
@@ -15833,18 +16040,20 @@ export interface components {
             rating: components["schemas"]["OpenRatingDto"];
             /**
              * Format: date-time
-             * @description 发行日期
-             */
-            release_date: string | null;
-            /** @description 发行日期是否待定 */
-            release_date_tbd: boolean;
-            /** @description 发行日期待定时的补充说明 */
-            release_date_tbd_note: string;
-            /**
-             * Format: date-time
              * @description 最近一次修订通过审核的时间
              */
             revised_at: string | null;
+            /**
+             * Format: date-time
+             * @description 开始时间(首次连载/首卷出版日期)
+             */
+            start_date: string | null;
+            /** @description 开始时间是否待定 */
+            start_date_tbd: boolean;
+            /** @description 开始时间待定备注 */
+            start_date_tbd_note: string;
+            /** @description 开始时间是否精确到年份 */
+            start_date_year_only: boolean;
             /** @description Steam 商店页，首项为主商店页 */
             steam_apps: components["schemas"]["OpenGalgameSteamAppDto"][];
             /** @description 标签列表 */
@@ -15930,7 +16139,7 @@ export interface components {
              * Format: date-time
              * @description 发行日期
              */
-            release_date: string | null;
+            start_date: string | null;
             /** @description 译名 */
             trans_title: string | null;
         };
@@ -16371,7 +16580,7 @@ export interface components {
             id: number;
             origin_title: string;
             /** Format: date-time */
-            release_date: string | null;
+            start_date: string | null;
             trans_title: string | null;
         };
         PersonCharacterRelationDto: {
@@ -17309,16 +17518,25 @@ export interface components {
             width: number | null;
         };
         SearchHitDto: {
+            /** @description 作者名，仅 post/article 命中携带 */
+            author?: string | null;
             cover: components["schemas"]["SearchCoverDto"] | null;
+            /**
+             * Format: date-time
+             * @description 发布时间，仅 post/article 命中携带
+             */
+            created_at?: string | null;
             /** @description 开发厂商，仅 galgame 命中携带 */
             developer: string | null;
+            /** @description 正文摘要，仅 post/article 命中携带 */
+            excerpt?: string | null;
             id: number;
             /** @description 相关度评分，越大越相关；仅即时搜索携带 */
             score?: number;
             subtitle: string | null;
             title: string;
             /** @enum {string} */
-            type: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer";
+            type: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer" | "post" | "article";
         };
         SearchStatusDto: {
             /** @enum {string} */
@@ -17753,6 +17971,7 @@ export interface components {
             news_type?: "GALGAME" | "LIGHT_NOVEL" | "MANGA" | null;
             related_galgame_rate_id?: number | null;
             related_light_novel_rate_id?: number | null;
+            related_works?: components["schemas"]["ArticleWorkRefDto"][];
             section_ids?: number[];
             title?: string;
             topic_ids?: number[];
@@ -18429,6 +18648,7 @@ export interface components {
             intro: string | null;
             nsfw: boolean;
             original_title: string | null;
+            platforms: string[];
             rated_count: number;
             title: string;
             /** @enum {string} */
@@ -28754,16 +28974,38 @@ export interface operations {
     GalgameController_getList: {
         parameters: {
             query: {
-                sort_field?: "release_date" | "title" | "views" | "revised_at" | "created_at";
+                /** @description discussion_heat 按讨论热度(作品评论区 + 所有短评评论区的已审核评论总数)排序,固定降序,忽略 sort_order。 */
+                sort_field?: "release_date" | "start_date" | "end_date" | "title" | "views" | "revised_at" | "created_at" | "discussion_heat";
                 sort_order?: "asc" | "desc";
                 search?: string;
                 year_start?: number;
                 year_end?: number;
-                /** @description Inclusive release lower bound in YYYY or YYYY-MM format. */
+                /** @description Inclusive start-date lower bound in YYYY or YYYY-MM format. */
+                start_from?: string;
+                /** @description Inclusive start-date upper bound in YYYY or YYYY-MM format. */
+                start_to?: string;
+                /** @description Specific start years or months. OR semantics. Each item is YYYY or YYYY-MM. */
+                start_periods?: string[];
+                /** @description Inclusive end-date lower bound in YYYY or YYYY-MM format. */
+                end_from?: string;
+                /** @description Inclusive end-date upper bound in YYYY or YYYY-MM format. */
+                end_to?: string;
+                /** @description Specific end years or months. OR semantics. Each item is YYYY or YYYY-MM. */
+                end_periods?: string[];
+                /**
+                 * @deprecated
+                 * @description Inclusive release lower bound in YYYY or YYYY-MM format.
+                 */
                 release_from?: string;
-                /** @description Inclusive release upper bound in YYYY or YYYY-MM format. */
+                /**
+                 * @deprecated
+                 * @description Inclusive release upper bound in YYYY or YYYY-MM format.
+                 */
                 release_to?: string;
-                /** @description Specific release years or months. OR semantics. Each item is YYYY or YYYY-MM. */
+                /**
+                 * @deprecated
+                 * @description Specific release years or months. OR semantics. Each item is YYYY or YYYY-MM.
+                 */
                 release_periods?: string[];
                 platforms?: string[];
                 origin_lang?: string[];
@@ -28773,6 +29015,8 @@ export interface operations {
                 staff_person_ids?: number[];
                 staff_role?: components["schemas"]["GalgameStaffRole"];
                 include_dev?: boolean;
+                /** @description 按开发状态过滤,多个之间 OR。显式传入时覆盖 include_dev 的默认排除行为(即不再强制只看 RELEASED/未知)。 */
+                dev_status?: components["schemas"]["GalgameDevStatus"][];
                 /** @description 题材 genre key，多个之间 OR。例：romance,mystery */
                 genre?: string[];
                 /** @description 只看站内有下载资源的作品 */
@@ -29188,6 +29432,98 @@ export interface operations {
             };
         };
     };
+    GalgameExternalLinkController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameExternalLinkDto"][];
+                };
+            };
+        };
+    };
+    GalgameExternalLinkController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateGalgameExternalLinkDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameExternalLinkDto"];
+                };
+            };
+        };
+    };
+    GalgameMerchController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameMerchDto"][];
+                };
+            };
+        };
+    };
+    GalgameMerchController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateGalgameMerchDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameMerchDto"];
+                };
+            };
+        };
+    };
     GalgameController_getPosts: {
         parameters: {
             query: {
@@ -29508,6 +29844,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameTagRelationDto"][];
+                };
+            };
+        };
+    };
+    GalgameController_likeTag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                tagId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 幂等:已点赞时重复调用返回 200,不重复计数 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameTagLikeStateDto"];
+                };
+            };
+        };
+    };
+    GalgameController_unlikeTag: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                tagId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 幂等:未点赞时调用返回 200(当前计数),不报 404 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameTagLikeStateDto"];
                 };
             };
         };
@@ -31116,6 +31498,25 @@ export interface operations {
             };
         };
     };
+    ExternalLinkController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     MangaVolumeController_getById: {
         parameters: {
             query?: never;
@@ -31829,6 +32230,25 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MangaVolumeRelationDto"][];
                 };
+            };
+        };
+    };
+    MerchController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -34491,7 +34911,7 @@ export interface operations {
             query: {
                 /** @description 搜索关键词 */
                 q?: string;
-                types?: ("galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer")[];
+                types?: ("galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer" | "post" | "article")[];
                 page: number;
                 page_size: number;
             };
@@ -34519,7 +34939,7 @@ export interface operations {
             query?: {
                 /** @description 搜索关键词 */
                 q?: string;
-                types?: ("galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer")[];
+                types?: ("galgame" | "light_novel" | "light_novel_volume" | "manga" | "character" | "person" | "producer" | "post" | "article")[];
             };
             header?: never;
             path?: never;
@@ -35102,6 +35522,7 @@ export interface operations {
             query?: {
                 cursor?: string;
                 limit?: number;
+                sort?: "latest" | "hot";
             };
             header?: never;
             path: {

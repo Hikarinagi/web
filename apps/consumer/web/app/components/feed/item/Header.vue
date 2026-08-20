@@ -78,25 +78,11 @@
     >
       <template #icon><Pin class="size-3" /></template>
     </Tag>
-    <div
-      v-if="!hideName"
-      class="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-2"
-    >
-      <div class="flex min-w-0 items-center gap-2">
-        <UserName :user="item.author" class="min-w-0 font-semibold text-color" />
-        <UserBadges :user="item.author" />
-        <span v-if="!isPinned" class="shrink-0 text-muted-color sm:hidden">
-          {{ timeFromNow(item.sort_time) }}
-        </span>
-      </div>
-
-      <div class="flex min-w-0 items-center gap-1 text-muted-color">
-        <span class="shrink-0">{{ typeLabel }}</span>
-        <span v-if="!isPinned" class="hidden shrink-0 sm:inline">·</span>
-        <span v-if="!isPinned" class="hidden shrink-0 sm:inline">
-          {{ timeFromNow(item.sort_time) }}
-        </span>
-      </div>
+    <div v-if="!hideName" class="flex min-w-0 flex-1 flex-col gap-0.5">
+      <UserName :user="item.author" :handle="false" class="min-w-0 font-semibold text-color" />
+      <span v-if="!isPinned" class="shrink-0 text-muted-color">
+        {{ timeFromNow(item.sort_time) }}
+      </span>
     </div>
 
     <div v-else class="flex min-w-0 flex-1 items-center gap-1 text-muted-color">

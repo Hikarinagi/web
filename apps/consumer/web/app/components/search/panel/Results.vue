@@ -4,6 +4,7 @@
   import {
     SEARCH_TYPE_LABELS,
     entityHref,
+    isContentType,
     searchHref,
     searchOptionId,
   } from '~/features/search/search'
@@ -57,6 +58,7 @@
           "
         >
           <HikariImage
+            v-if="!isContentType(hit.type)"
             :src="hit.cover"
             :alt="hit.title"
             :skeleton="false"

@@ -46,10 +46,11 @@
       <GalgameAbout
         :galgame="data.galgame"
         :tags="data.tags"
-        :characters="data.characters"
         :producers="data.producers"
         :contributors="data.contributors"
       />
+
+      <GalgameCharactersSection :characters="data.characters" />
 
       <GalgameLongReviews :articles="data.articles" />
 
@@ -57,7 +58,12 @@
 
       <GalgameImages :galgame="data.galgame" />
 
-      <GalgameRelations :relations="data.relations" />
+      <GalgameDerivativesSection
+        :galgame-id="data.galgame.id"
+        :relations="data.relations"
+        :merchs="data.merchs"
+        :links="data.links"
+      />
 
       <GalgameCrew :producers="data.producers" :staff="data.staff" />
     </div>

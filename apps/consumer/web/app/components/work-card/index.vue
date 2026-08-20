@@ -39,6 +39,9 @@
             {{ work.original_title }}
           </p>
           <p v-if="meta" class="line-clamp-1 text-xs text-muted-color">{{ meta }}</p>
+          <p v-if="work.platforms.length" class="line-clamp-1 text-xs text-muted-color">
+            平台:{{ work.platforms.join(' / ') }}
+          </p>
           <div v-if="work.average_rate != null" class="mt-auto flex items-center gap-1 pt-1">
             <Star class="size-3.5 fill-amber-400 text-amber-400" />
             <span class="text-sm font-semibold text-color">{{ work.average_rate.toFixed(1) }}</span>

@@ -151,19 +151,22 @@ const KANA_PATTERN = /[぀-ヿ]/
 interface StreamPools {
   genres: { key: string; name: string }[]
   magazines: { id: number; name: string }[]
+  tags: { name: string }[]
 }
 
 async function fetchStreamPools(event: H3Event): Promise<StreamPools> {
   const stats = await fetchBackendData(event, '/api/v3/mangas/stats').catch(() => null)
-  if (!stats) return { genres: [], magazines: [] }
+  if (!stats) return { genres: [], magazines: [], tags: [] }
   const genres = stats.top_genres.slice(0, 24).map(genre => ({ key: genre.key, name: genre.name }))
   const magazines = stats.top_magazines
     .filter(magazine => KANA_PATTERN.test(magazine.name))
     .slice(0, 12)
     .map(magazine => ({ id: magazine.id, name: magazine.name }))
+  const tags = stats.top_tags.slice(0, 20).map(tag => ({ name: tag.name }))
   return {
     genres,
     magazines: magazines.length >= 4 ? magazines : [],
+    tags,
   }
 }
 
@@ -392,7 +395,7 @@ async function buildHome(event: H3Event) {
         query: {
           exclude_regions: HOME_EXCLUDE_REGIONS,
           has_linked_source: true,
-          sort_field: 'heat',
+          sort_field: 'publication_date',
           sort_order: 'desc',
           serial_status: 'FINISHED',
           page: 1,
@@ -415,6 +418,7 @@ async function buildHome(event: H3Event) {
   return {
     hero: { slides: await buildHeroSlides(event, featured, spotlight, serialRank.items) },
     hot: serialRank.items.slice(0, HOT_SIZE),
+    tags: pools.tags,
     updates,
     board: {
       serializing: serialRank.items,

@@ -39,7 +39,7 @@ describe('scalarCandidates', () => {
     { field: 'trans_title', kind: 'scalar', value_type: 'string' },
     { field: 'aliases', kind: 'scalar', value_type: 'string[]' },
     { field: 'homepage', kind: 'scalar', value_type: 'string' },
-    { field: 'release_date', kind: 'scalar', value_type: 'date' },
+    { field: 'start_date', kind: 'scalar', value_type: 'date' },
     { field: 'characters', kind: 'relation' },
   ]
   const skip = new Set(['bangumi_game_id', 'vndb_id', 'id'])
@@ -79,8 +79,8 @@ describe('scalarCandidates', () => {
   })
 
   it('treats a Date and an equal date-string as the same (no false date conflict)', () => {
-    const draft = { release_date: '2009-10-15' }
-    const current = { release_date: new Date('2009-10-15T00:00:00.000Z') }
+    const draft = { start_date: '2009-10-15' }
+    const current = { start_date: new Date('2009-10-15T00:00:00.000Z') }
     expect(scalarCandidates(draft, current, fields, new Set(), {})).toEqual([])
   })
 })

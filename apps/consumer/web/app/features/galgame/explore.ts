@@ -12,6 +12,8 @@ export type GalgameSortOrder = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['
 export type ReleaseFilterMode = 'range' | 'periods'
 export type TagFilterOp = 'include' | 'exclude'
 export type TagMatchMode = 'and' | 'or'
+export type GalgameDevStatus = components['schemas']['GalgameDevStatus']
+export type BrowseViewMode = 'grid' | 'list'
 
 export interface TagFilterGroup {
   op: TagFilterOp
@@ -25,9 +27,12 @@ export interface GalgameBrowseState {
   search?: string
   sort_field: GalgameSortField
   sort_order: GalgameSortOrder
-  release_from?: string
-  release_to?: string
-  release_periods: string[]
+  start_from?: string
+  start_to?: string
+  start_periods: string[]
+  end_from?: string
+  end_to?: string
+  end_periods: string[]
   platforms: string[]
   origin_lang: string[]
   producer_ids: number[]
@@ -35,6 +40,7 @@ export interface GalgameBrowseState {
   staff_person_ids: number[]
   staff_role?: components['schemas']['GalgameStaffRole']
   include_dev: boolean
+  dev_status: GalgameDevStatus[]
 }
 
 export const GALGAME_SORT_OPTIONS: {
@@ -43,48 +49,57 @@ export const GALGAME_SORT_OPTIONS: {
   sort_order: GalgameSortOrder
   value: string
 }[] = [
+  { label: '最新完结', sort_field: 'end_date', sort_order: 'desc', value: 'end_date:desc' },
+  { label: '最早连载', sort_field: 'start_date', sort_order: 'asc', value: 'start_date:asc' },
+  { label: '最新创建', sort_field: 'created_at', sort_order: 'desc', value: 'created_at:desc' },
+  { label: '热门', sort_field: 'views', sort_order: 'desc', value: 'views:desc' },
   {
-    label: '发售日 新→旧',
-    sort_field: 'release_date',
+    label: '热议',
+    sort_field: 'discussion_heat',
     sort_order: 'desc',
-    value: 'release_date:desc',
+    value: 'discussion_heat:desc',
   },
-  {
-    label: '发售日 旧→新',
-    sort_field: 'release_date',
-    sort_order: 'asc',
-    value: 'release_date:asc',
-  },
-  { label: '最热门', sort_field: 'views', sort_order: 'desc', value: 'views:desc' },
-  { label: '标题', sort_field: 'title', sort_order: 'asc', value: 'title:asc' },
-  { label: '最近更新', sort_field: 'revised_at', sort_order: 'desc', value: 'revised_at:desc' },
 ]
 
 const SORT_FIELDS: GalgameSortField[] = [
   'release_date',
+  'start_date',
+  'end_date',
   'title',
   'views',
   'revised_at',
   'created_at',
+  'discussion_heat',
 ]
 const SORT_ORDERS: GalgameSortOrder[] = ['asc', 'desc']
+const DEV_STATUSES: GalgameDevStatus[] = ['RELEASED', 'IN_DEVELOPMENT', 'CANCELLED']
 const RELEASE_BOUND_PATTERN = /^(\d{4})(?:-(0[1-9]|1[0-2]))?$/
 const TAG_GROUP_PATTERN = /^(include|exclude)\.(and|or)\.([1-9]\d*(?:\.[1-9]\d*)*)$/
 
 export function readBrowseQuery(query: Record<string, unknown>): GalgameBrowseState {
   const sort = readString(query.sort)
   const [rawField, rawOrder] = sort?.split(':') ?? []
-  const sort_field = SORT_FIELDS.includes(rawField as GalgameSortField)
+  const parsedField = SORT_FIELDS.includes(rawField as GalgameSortField)
     ? (rawField as GalgameSortField)
-    : 'release_date'
-  const sort_order = SORT_ORDERS.includes(rawOrder as GalgameSortOrder)
+    : 'created_at'
+  // 旧链接里的 release_date 排序映射到 start_date
+  const sort_field = parsedField === 'release_date' ? 'start_date' : parsedField
+  const rawSortOrder = SORT_ORDERS.includes(rawOrder as GalgameSortOrder)
     ? (rawOrder as GalgameSortOrder)
     : 'desc'
-  const [release_from, release_to] = orderReleaseBounds(
-    readReleaseBound(query.from),
-    readReleaseBound(query.to),
+  // discussion_heat 固定降序,后端忽略 sort_order
+  const sort_order = sort_field === 'discussion_heat' ? 'desc' : rawSortOrder
+  const [start_from, start_to] = orderReleaseBounds(
+    // 旧参数 from/to 按开始时间读取
+    readReleaseBound(query.sfrom) ?? readReleaseBound(query.from),
+    readReleaseBound(query.sto) ?? readReleaseBound(query.to),
   )
-  const release_periods = readReleasePeriods(query.periods)
+  const start_periods = readReleasePeriods(query.speriods ?? query.periods)
+  const [end_from, end_to] = orderReleaseBounds(
+    readReleaseBound(query.efrom),
+    readReleaseBound(query.eto),
+  )
+  const end_periods = readReleasePeriods(query.eperiods)
 
   return {
     page: readPageQuery(query),
@@ -92,9 +107,12 @@ export function readBrowseQuery(query: Record<string, unknown>): GalgameBrowseSt
     search: readString(query.search)?.trim() || undefined,
     sort_field,
     sort_order,
-    release_from: release_periods.length ? undefined : release_from,
-    release_to: release_periods.length ? undefined : release_to,
-    release_periods,
+    start_from: start_periods.length ? undefined : start_from,
+    start_to: start_periods.length ? undefined : start_to,
+    start_periods,
+    end_from: end_periods.length ? undefined : end_from,
+    end_to: end_periods.length ? undefined : end_to,
+    end_periods,
     platforms: readStrings(query.platforms),
     origin_lang: readStrings(query.lang),
     producer_ids: readInts(query.producers),
@@ -103,6 +121,7 @@ export function readBrowseQuery(query: Record<string, unknown>): GalgameBrowseSt
     staff_role:
       (readString(query.staff_role) as components['schemas']['GalgameStaffRole']) || undefined,
     include_dev: readBool(query.dev),
+    dev_status: readDevStatuses(query.status),
   }
 }
 
@@ -170,21 +189,28 @@ export function releasePeriodLabel(value: string): string {
 }
 
 export function yearText(galgame: GalgameSummary): string {
-  if (!galgame.release_date) return '发售日未定'
-  const year = new Date(galgame.release_date).getFullYear()
-  return Number.isFinite(year) ? String(year) : '发售日未定'
+  if (!galgame.start_date) return '发售日未定'
+  // date 字段按日历日处理,取 ISO 前 4 位年份,避免负时区偏移一年
+  const year = Number(galgame.start_date.slice(0, 4))
+  return Number.isFinite(year) && year > 0 ? String(year) : '发售日未定'
 }
 
 function buildPath(base: string, state: GalgameBrowseState): string {
   const query = new URLSearchParams()
   if (state.page > 1) query.set('page', String(state.page))
   if (state.search) query.set('search', state.search)
-  if (sortValue(state) !== 'release_date:desc') query.set('sort', sortValue(state))
-  if (state.release_periods.length) {
-    query.set('periods', state.release_periods.join(','))
+  if (sortValue(state) !== 'created_at:desc') query.set('sort', sortValue(state))
+  if (state.start_periods.length) {
+    query.set('speriods', state.start_periods.join(','))
   } else {
-    if (state.release_from) query.set('from', state.release_from)
-    if (state.release_to) query.set('to', state.release_to)
+    if (state.start_from) query.set('sfrom', state.start_from)
+    if (state.start_to) query.set('sto', state.start_to)
+  }
+  if (state.end_periods.length) {
+    query.set('eperiods', state.end_periods.join(','))
+  } else {
+    if (state.end_from) query.set('efrom', state.end_from)
+    if (state.end_to) query.set('eto', state.end_to)
   }
   if (state.platforms.length) query.set('platforms', state.platforms.join(','))
   if (state.origin_lang.length) query.set('lang', state.origin_lang.join(','))
@@ -195,6 +221,7 @@ function buildPath(base: string, state: GalgameBrowseState): string {
   if (state.staff_person_ids.length) query.set('staff', state.staff_person_ids.join(','))
   if (state.staff_role) query.set('staff_role', state.staff_role)
   if (state.include_dev) query.set('dev', '1')
+  if (state.dev_status.length) query.set('status', state.dev_status.join(','))
 
   const search = query.toString()
   return `${base}${search ? `?${search}` : ''}`
@@ -299,4 +326,14 @@ function releaseBoundLabel(value: string): string {
 function readBool(value: unknown): boolean {
   const raw = readString(value)
   return raw === '1' || raw === 'true'
+}
+
+function readDevStatuses(value: unknown): GalgameDevStatus[] {
+  return [
+    ...new Set(
+      readStrings(value).filter((item): item is GalgameDevStatus =>
+        DEV_STATUSES.includes(item as GalgameDevStatus),
+      ),
+    ),
+  ]
 }

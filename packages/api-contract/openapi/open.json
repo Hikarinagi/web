@@ -636,11 +636,20 @@
             },
             "type": "array"
           },
-          "release_date": {
-            "description": "发行日期",
+          "score": {
+            "description": "平均分(保留一位小数),无评分时为 null;仅 GET /galgames 列表返回,其它 summary 场景不包含",
+            "nullable": true,
+            "type": "number"
+          },
+          "start_date": {
+            "description": "开始时间(首次连载/首卷出版日期)",
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "start_date_year_only": {
+            "description": "开始时间是否精确到年份",
+            "type": "boolean"
           },
           "trans_title": {
             "description": "译名",
@@ -654,7 +663,8 @@
           "trans_title",
           "covers",
           "nsfw",
-          "release_date",
+          "start_date",
+          "start_date_year_only",
           "producers"
         ],
         "type": "object"
@@ -1696,6 +1706,16 @@
             "nullable": true,
             "type": "string"
           },
+          "end_date": {
+            "description": "完结时间(仍在连载或未知时为 null)",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "end_date_year_only": {
+            "description": "完结时间是否精确到年份",
+            "type": "boolean"
+          },
           "engine": {
             "description": "游戏引擎",
             "nullable": true,
@@ -1764,25 +1784,29 @@
             ],
             "description": "评分统计"
           },
-          "release_date": {
-            "description": "发行日期",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "release_date_tbd": {
-            "description": "发行日期是否待定",
-            "type": "boolean"
-          },
-          "release_date_tbd_note": {
-            "description": "发行日期待定时的补充说明",
-            "type": "string"
-          },
           "revised_at": {
             "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "start_date": {
+            "description": "开始时间(首次连载/首卷出版日期)",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "start_date_tbd": {
+            "description": "开始时间是否待定",
+            "type": "boolean"
+          },
+          "start_date_tbd_note": {
+            "description": "开始时间待定备注",
+            "type": "string"
+          },
+          "start_date_year_only": {
+            "description": "开始时间是否精确到年份",
+            "type": "boolean"
           },
           "steam_apps": {
             "description": "Steam 商店页，首项为主商店页",
@@ -1822,9 +1846,12 @@
           "aliases",
           "covers",
           "images",
-          "release_date",
-          "release_date_tbd",
-          "release_date_tbd_note",
+          "start_date",
+          "start_date_year_only",
+          "start_date_tbd",
+          "start_date_tbd_note",
+          "end_date",
+          "end_date_year_only",
           "origin_intro",
           "trans_intro",
           "en_intro",
@@ -2063,7 +2090,7 @@
             "description": "原名",
             "type": "string"
           },
-          "release_date": {
+          "start_date": {
             "description": "发行日期",
             "format": "date-time",
             "nullable": true,
@@ -2080,7 +2107,7 @@
           "origin_title",
           "trans_title",
           "nsfw",
-          "release_date",
+          "start_date",
           "covers"
         ],
         "type": "object"

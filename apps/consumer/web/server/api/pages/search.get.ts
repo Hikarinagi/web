@@ -6,6 +6,7 @@ import { definePageBffHandler } from '../../utils/page-bff'
 
 const WORK_GROUP_SIZE = 12
 const ENTITY_GROUP_SIZE = 8
+const CONTENT_GROUP_SIZE = 6
 
 const GROUP_SIZES: Record<SearchType, number> = {
   galgame: WORK_GROUP_SIZE,
@@ -15,6 +16,8 @@ const GROUP_SIZES: Record<SearchType, number> = {
   character: ENTITY_GROUP_SIZE,
   person: ENTITY_GROUP_SIZE,
   producer: ENTITY_GROUP_SIZE,
+  post: CONTENT_GROUP_SIZE,
+  article: CONTENT_GROUP_SIZE,
 }
 
 async function handler(event: H3Event) {

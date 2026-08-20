@@ -15,7 +15,6 @@
   const pendingRoute = shallowRef({
     page: readRouteState().page,
     tab: tabPage.value.active_tab,
-    shelf: readRouteState().shelf,
   })
   const requestUrl = computed(() => spaceTabBffPath(props.userId, pendingRoute.value))
   const {
@@ -37,23 +36,18 @@
   })
 
   watch(
-    () => [route.query.tab, route.query.shelf],
+    () => route.query.tab,
     () => {
       if (syncingTabRoute) return
       const next = readRouteState()
-      if (next.tab !== tabPage.value.active_tab || !sameShelf(next.tab, next.shelf)) {
+      if (next.tab !== tabPage.value.active_tab) {
         void loadTab(next.tab, false)
       }
     },
   )
 
-  function sameShelf(tab: SpaceTabKey, shelf: string) {
-    if (tab !== 'bookshelf') return true
-    return shelf === (tabPage.value.bookshelf?.shelf ?? 'novel')
-  }
-
   async function loadTab(next: SpaceTabKey, syncRoute: boolean) {
-    if (next === tabPage.value.active_tab && sameShelf(next, readRouteState().shelf)) {
+    if (next === tabPage.value.active_tab) {
       if (syncRoute) await replaceTab(next)
       return
     }
@@ -62,7 +56,6 @@
     pendingRoute.value = {
       page: syncRoute ? 1 : readRouteState().page,
       tab: next,
-      shelf: readRouteState().shelf,
     }
     await nuxtApp.callHook('page:loading:start')
     try {
@@ -104,14 +97,11 @@
       active_tab: data.active_tab,
       is_self: data.is_self,
       feed: data.feed,
-      contents: data.contents,
-      managed: data.managed,
       rates: data.rates,
       collections: data.collections,
       contributions: data.contributions,
       following: data.following,
       followers: data.followers,
-      bookshelf: data.bookshelf,
     }
   }
 </script>
@@ -126,26 +116,10 @@
         :is-self="initial.is_self"
         :feed="tabPage.feed"
       />
-      <SpaceTabsArticles
-        v-else-if="selectedTab === 'articles' && tabPage.contents"
-        :user-id="userId"
-        :contents="tabPage.contents"
-      />
-      <SpaceTabsContentManage
-        v-else-if="selectedTab === 'my-posts' && tabPage.managed"
-        :managed="tabPage.managed"
-        type="post"
-      />
-      <SpaceTabsContentManage
-        v-else-if="selectedTab === 'my-articles' && tabPage.managed"
-        :managed="tabPage.managed"
-        type="article"
-      />
       <SpaceTabsRates
         v-else-if="selectedTab === 'rates' && tabPage.rates"
         :user-id="userId"
         :rates="tabPage.rates"
-        :counts="initial.statistics.rate_status_counts"
       />
       <SpaceTabsCollections
         v-else-if="selectedTab === 'collections' && tabPage.collections"
@@ -166,11 +140,6 @@
         :follower-count="initial.profile.follower_count"
         :following="tabPage.following"
         :followers="tabPage.followers"
-      />
-      <SpaceTabsBookshelf
-        v-else-if="selectedTab === 'bookshelf' && initial.is_self && tabPage.bookshelf"
-        :user-id="userId"
-        :bookshelf="tabPage.bookshelf"
       />
     </div>
   </div>

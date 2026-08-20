@@ -11,9 +11,10 @@
 
   const {
     cover,
-    sectionId,
     topics,
     topicsFull,
+    relatedWorks,
+    relatedWorksFull,
     visible,
     allowComment,
     publishing,
@@ -23,14 +24,10 @@
     addTopic,
     removeTopic,
     createTopic,
+    addWork,
+    removeWork,
     publish,
   } = props.host
-
-  const { data: sections, pending: sectionsPending } = useHikariApiData('/api/v3/sections', {
-    query: { page: 1, page_size: 50 },
-    lazy: true,
-  })
-  const sectionOptions = computed(() => sections.value?.items ?? [])
 
   const op = ref<InstanceType<typeof Popover>>()
   const {
@@ -95,20 +92,6 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-color">板块</label>
-      <Select
-        v-model="sectionId"
-        :options="sectionOptions"
-        option-label="name"
-        option-value="id"
-        :loading="sectionsPending"
-        placeholder="选择板块"
-        show-clear
-        fluid
-      />
-    </div>
-
-    <div class="flex flex-col gap-2">
       <label class="text-sm font-medium text-color">话题</label>
       <div class="flex flex-wrap items-center gap-2">
         <span
@@ -140,6 +123,12 @@
             <Hash :size="12" />
           </template>
         </Button>
+        <ArticleEditorPublishRelatedWorks
+          :works="relatedWorks"
+          :full="relatedWorksFull"
+          @add="addWork"
+          @remove="removeWork"
+        />
       </div>
       <Popover ref="op" :pt="{ root: { class: 'popover-no-arrow' } }" @show="ensureLoaded">
         <TopicPicker
