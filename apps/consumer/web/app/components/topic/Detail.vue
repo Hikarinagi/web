@@ -1,20 +1,12 @@
 <script setup lang="ts">
   import type { TopicPageData } from '~~/server/api/pages/topics/[id].get'
-  import type { TopicFeedSort } from '~/features/feed/feed'
   import { topicFeedSource } from '~/features/feed/sources'
 
   defineOptions({ name: 'TopicDetail' })
 
   const props = defineProps<{ initial: TopicPageData; topicId: number }>()
   const topic = computed(() => props.initial.topic)
-  // 「最新」为默认 tab,BFF 首屏 feed 即 latest;hot 桶切到该 tab 才挂载并拉取。
-  const sort = ref<TopicFeedSort>('latest')
-  const latestSource = topicFeedSource(props.topicId, () => props.initial.feed, 'latest')
-  const hotSource = topicFeedSource(props.topicId, () => undefined, 'hot')
-  const hotMounted = ref(false)
-  watch(sort, s => {
-    if (s === 'hot') hotMounted.value = true
-  })
+  const source = topicFeedSource(props.topicId, () => props.initial.feed)
 </script>
 
 <template>
@@ -43,14 +35,7 @@
     </header>
 
     <FeedComposer :topic="{ id: topic.id, name: topic.name }" class="mb-4" />
-    <TopicFeedTabs v-model="sort" class="mb-2" />
-    <FeedList v-show="sort === 'latest'" :source="latestSource" :active="sort === 'latest'" />
-    <FeedList
-      v-if="hotMounted"
-      v-show="sort === 'hot'"
-      :source="hotSource"
-      :active="sort === 'hot'"
-    />
+    <FeedList :source="source" />
 
     <template #sidebar>
       <FeedSidebar :data="initial.sidebar" />

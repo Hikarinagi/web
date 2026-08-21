@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { GalgamesBrowsePageData } from '~~/server/api/pages/galgames/browse.get'
-  import type { BrowseViewMode, GalgameBrowseState } from '~/features/galgame/explore'
+  import type { GalgameBrowseState } from '~/features/galgame/explore'
   import { BROWSE_FILTER_KEY, useBrowseFilter } from '~/features/galgame/useBrowseFilter'
 
   defineOptions({ name: 'GalgameBrowseShell' })
@@ -10,17 +10,6 @@
     state: GalgameBrowseState
   }>()
   const emit = defineEmits<{ update: [value: Partial<GalgameBrowseState>] }>()
-
-  // 视图模式只存 localStorage,不进 URL;SSR 一律按 grid 渲染,挂载后再读回偏好
-  const storedMode = useLocalStorage<BrowseViewMode>('hikari-galgame-browse-view-mode', 'grid')
-  const mode = ref<BrowseViewMode>('grid')
-  onMounted(() => {
-    if (storedMode.value === 'list' || storedMode.value === 'grid') mode.value = storedMode.value
-  })
-  function changeMode(next: BrowseViewMode) {
-    mode.value = next
-    storedMode.value = next
-  }
 
   const filter = useBrowseFilter(
     () => props.state,
@@ -49,12 +38,9 @@
 
     <GalgameBrowseTimeline
       :histogram="data.histogram"
-      :start-from="state.start_from"
-      :start-to="state.start_to"
-      :start-periods="state.start_periods"
-      :end-from="state.end_from"
-      :end-to="state.end_to"
-      :end-periods="state.end_periods"
+      :release-from="state.release_from"
+      :release-to="state.release_to"
+      :release-periods="state.release_periods"
       @update="emit('update', $event)"
     />
 
@@ -62,16 +48,13 @@
       :state="state"
       :total="data.list.meta.total_items"
       :disabled="pending"
-      :mode="mode"
       @update="emit('update', $event)"
-      @update:mode="changeMode"
     />
 
     <GalgameBrowseChipsBar />
 
     <div id="galgame-browse-list" data-list-wrapper class="flex flex-col gap-5">
-      <GalgameBrowseList v-if="mode === 'list'" :list="data.list" :pending="pending" />
-      <GalgameBrowseGrid v-else :list="data.list" :pending="pending" />
+      <GalgameBrowseGrid :list="data.list" :pending="pending" />
 
       <Paginator
         :meta="data.list.meta"

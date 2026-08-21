@@ -2,7 +2,7 @@ import { Clock, Compass, LayoutList, UserRoundCheck } from '@lucide/vue'
 import type { FeedScope } from './feed'
 
 export const FEED_TABS = [
-  { key: 'recommend', label: '广场', icon: Compass, auth: false },
+  { key: 'recommend', label: '推荐', icon: Compass, auth: false },
   { key: 'latest', label: '最新', icon: Clock, auth: false },
   { key: 'all', label: '全站', icon: LayoutList, auth: false },
   { key: 'following', label: '关注', icon: UserRoundCheck, auth: true },

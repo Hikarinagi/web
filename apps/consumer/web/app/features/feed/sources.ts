@@ -1,4 +1,4 @@
-import { FEED_PAGE_SIZE, type FeedResponse, type FeedScope, type TopicFeedSort } from './feed'
+import { FEED_PAGE_SIZE, type FeedResponse, type FeedScope } from './feed'
 
 export type FeedFetch = (cursor: string | null) => Promise<FeedResponse>
 
@@ -41,20 +41,15 @@ export function sectionStoreId(id: number): string {
   return `feed:relation:section:${id}`
 }
 
-// 同一话题一个 store,sort 即桶 key:latest 桶由 BFF 首屏 seed,hot 桶切到该 tab 时按需拉取。
-export function topicFeedSource(
-  id: number,
-  seed: () => FeedResponse | undefined,
-  sort: TopicFeedSort = 'latest',
-): FeedSource {
+export function topicFeedSource(id: number, seed: () => FeedResponse | undefined): FeedSource {
   return {
-    key: sort,
+    key: 'main',
     storeId: topicStoreId(id),
     seed,
     fetch: cursor =>
       hikariRequest('/api/v3/topics/{id}/feed', {
         path: { id },
-        query: { limit: FEED_PAGE_SIZE, sort, ...(cursor ? { cursor } : {}) },
+        query: { limit: FEED_PAGE_SIZE, ...(cursor ? { cursor } : {}) },
       }),
     emptyText: '这个话题下还没有内容',
   }

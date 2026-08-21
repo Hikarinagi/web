@@ -8,25 +8,15 @@ export const galgamePresentation: EditorPresentation = {
     origin_title: { label: '原名' },
     en_title: { label: '英文标题' },
     aliases: { label: '别名' },
-    start_date: {
-      label: '开始时间',
-      enableWhen: values => values.start_date_tbd !== true,
+    release_date: {
+      label: '发售日期',
+      enableWhen: values => values.release_date_tbd !== true,
     },
-    start_date_year_only: {
-      label: '只选取年份',
-      help: '只确认到年份时开启，保存后仅按年份展示。',
-      enableWhen: values => values.start_date_tbd !== true,
-    },
-    start_date_tbd: { label: '开始时间待定' },
-    start_date_tbd_note: {
+    release_date_tbd: { label: '发售日期待定' },
+    release_date_tbd_note: {
       label: '待定说明',
-      enableWhen: values => values.start_date_tbd === true,
-      requireWhen: values => values.start_date_tbd === true,
-    },
-    end_date: { label: '完结时间' },
-    end_date_year_only: {
-      label: '只选取年份',
-      help: '只确认到年份时开启，保存后仅按年份展示。',
+      enableWhen: values => values.release_date_tbd === true,
+      requireWhen: values => values.release_date_tbd === true,
     },
     origin_intro: { label: '原文简介', control: 'textarea' },
     trans_intro: { label: '译介简介', control: 'textarea' },

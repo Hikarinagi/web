@@ -11,6 +11,16 @@
   const stats = computed(() => [
     { key: 'follows', value: props.profile.following_count, label: '关注' },
     { key: 'followers', value: props.profile.follower_count, label: '粉丝' },
+    {
+      key: 'played',
+      value: props.statistics.played_galgame_count,
+      label: '玩过',
+    },
+    {
+      key: 'read',
+      value: props.statistics.read_light_novel_count,
+      label: '看过',
+    },
     { key: 'join', value: props.statistics.join_days, label: '天', prefix: '加入' },
   ])
 </script>

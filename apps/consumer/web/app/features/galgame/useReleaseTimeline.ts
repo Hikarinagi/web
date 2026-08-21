@@ -6,18 +6,18 @@ import {
   type ReleaseFilterMode,
 } from './explore'
 
-export type TimelineRangeUpdate = {
-  from?: string
-  periods?: string[]
-  to?: string
+type ReleaseRangeUpdate = {
+  release_from?: string
+  release_periods?: string[]
+  release_to?: string
 }
-export type TimelinePanelProps = {
+type ReleaseTimelineProps = {
   histogram: GalgameHistogram
-  from?: string
-  periods: string[]
-  to?: string
+  releaseFrom?: string
+  releasePeriods: string[]
+  releaseTo?: string
 }
-type TimelinePanelEmit = (event: 'update', value: TimelineRangeUpdate) => void
+type ReleaseTimelineEmit = (event: 'update', value: ReleaseRangeUpdate) => void
 type Option<T> = { label: string; value: T }
 
 const MODE_OPTIONS: Option<ReleaseFilterMode>[] = [
@@ -30,11 +30,13 @@ const MONTH_OPTIONS: Option<number>[] = Array.from({ length: 12 }, (_, index) =>
 })
 const CURRENT_YEAR = new Date().getFullYear()
 
-export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePanelEmit) {
+export function useReleaseTimeline(props: ReleaseTimelineProps, emit: ReleaseTimelineEmit) {
   const selectedYears = computed(() =>
-    [yearOf(props.from), yearOf(props.to), ...props.periods.map(yearOf)].filter(
-      (item): item is number => item != null,
-    ),
+    [
+      yearOf(props.releaseFrom),
+      yearOf(props.releaseTo),
+      ...props.releasePeriods.map(yearOf),
+    ].filter((item): item is number => item != null),
   )
   const minYear = computed(() => Math.min(props.histogram.min_year ?? 1990, ...selectedYears.value))
   const maxYear = computed(() =>
@@ -43,11 +45,11 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
   const buckets = computed(
     () => new Map(props.histogram.buckets.map(bucket => [bucket.year, bucket])),
   )
-  const mode = ref<ReleaseFilterMode>(props.periods.length ? 'periods' : 'range')
-  const rangeFromYear = ref(yearOf(props.from) ?? minYear.value)
-  const rangeFromMonth = ref<number | null>(monthOf(props.from))
-  const rangeToYear = ref(yearOf(props.to) ?? yearOf(props.from) ?? maxYear.value)
-  const rangeToMonth = ref<number | null>(monthOf(props.to))
+  const mode = ref<ReleaseFilterMode>(props.releasePeriods.length ? 'periods' : 'range')
+  const rangeFromYear = ref(yearOf(props.releaseFrom) ?? minYear.value)
+  const rangeFromMonth = ref(monthOf(props.releaseFrom) ?? 1)
+  const rangeToYear = ref(yearOf(props.releaseTo) ?? yearOf(props.releaseFrom) ?? maxYear.value)
+  const rangeToMonth = ref(monthOf(props.releaseTo) ?? 12)
   const rangeYears = ref<[number, number]>([rangeFromYear.value, rangeToYear.value])
   const { start: commitYearRange, stop: cancelYearRange } = useTimeoutFn(
     () => {
@@ -79,16 +81,24 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
     }),
   )
   const selectedLabel = computed(() =>
-    props.periods.length
-      ? releasePeriodsLabel(props.periods)
-      : releaseRangeLabel(props.from, props.to),
+    props.releasePeriods.length
+      ? releasePeriodsLabel(props.releasePeriods)
+      : releaseRangeLabel(props.releaseFrom, props.releaseTo),
   )
-  const hasSelection = computed(() => Boolean(props.from || props.to || props.periods.length))
+  const hasSelection = computed(() =>
+    Boolean(props.releaseFrom || props.releaseTo || props.releasePeriods.length),
+  )
 
   watch(
-    () => [props.from, props.to, props.periods.join(','), minYear.value, maxYear.value],
+    () => [
+      props.releaseFrom,
+      props.releaseTo,
+      props.releasePeriods.join(','),
+      minYear.value,
+      maxYear.value,
+    ],
     () => {
-      if (props.periods.length) {
+      if (props.releasePeriods.length) {
         cancelYearRange()
         mode.value = 'periods'
         return
@@ -96,10 +106,10 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
 
       cancelYearRange()
       mode.value = 'range'
-      rangeFromYear.value = yearOf(props.from) ?? minYear.value
-      rangeFromMonth.value = monthOf(props.from)
-      rangeToYear.value = yearOf(props.to) ?? yearOf(props.from) ?? maxYear.value
-      rangeToMonth.value = monthOf(props.to)
+      rangeFromYear.value = yearOf(props.releaseFrom) ?? minYear.value
+      rangeFromMonth.value = monthOf(props.releaseFrom) ?? 1
+      rangeToYear.value = yearOf(props.releaseTo) ?? yearOf(props.releaseFrom) ?? maxYear.value
+      rangeToMonth.value = monthOf(props.releaseTo) ?? 12
       syncYears()
     },
   )
@@ -109,10 +119,10 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
 
     cancelYearRange()
     mode.value = value
-    if (value === 'range' && props.periods.length) {
-      emit('update', { periods: [] })
-    } else if (value === 'periods' && (props.from || props.to)) {
-      emit('update', { from: undefined, to: undefined })
+    if (value === 'range' && props.releasePeriods.length) {
+      emit('update', { release_periods: [] })
+    } else if (value === 'periods' && (props.releaseFrom || props.releaseTo)) {
+      emit('update', { release_from: undefined, release_to: undefined })
     }
   }
 
@@ -126,10 +136,10 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
   }
 
   function changeFromMonth(value: unknown) {
-    if (typeof value !== 'number' && value != null) return
+    if (typeof value !== 'number') return
 
     cancelYearRange()
-    rangeFromMonth.value = value ?? null
+    rangeFromMonth.value = value
     commitRange()
   }
 
@@ -143,10 +153,10 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
   }
 
   function changeToMonth(value: unknown) {
-    if (typeof value !== 'number' && value != null) return
+    if (typeof value !== 'number') return
 
     cancelYearRange()
-    rangeToMonth.value = value ?? null
+    rangeToMonth.value = value
     commitRange()
   }
 
@@ -164,28 +174,28 @@ export function useReleaseTimeline(props: TimelinePanelProps, emit: TimelinePane
     cancelYearRange()
     mode.value = 'periods'
     emit('update', {
-      from: undefined,
-      periods: normalizePeriods(value),
-      to: undefined,
+      release_from: undefined,
+      release_periods: normalizePeriods(value),
+      release_to: undefined,
     })
   }
 
   function clear() {
     cancelYearRange()
     emit('update', {
-      from: undefined,
-      periods: [],
-      to: undefined,
+      release_from: undefined,
+      release_periods: [],
+      release_to: undefined,
     })
   }
 
   function commitRange() {
     mode.value = 'range'
     const [from, to] = orderedPeriods(
-      boundOf(rangeFromYear.value, rangeFromMonth.value),
-      boundOf(rangeToYear.value, rangeToMonth.value),
+      periodOf(rangeFromYear.value, rangeFromMonth.value),
+      periodOf(rangeToYear.value, rangeToMonth.value),
     )
-    emit('update', { from, periods: [], to })
+    emit('update', { release_from: from, release_periods: [], release_to: to })
   }
 
   function syncYears() {
@@ -257,11 +267,6 @@ function isPeriod(value: string): boolean {
 
 function periodOf(year: number, month: number): string {
   return `${year}-${String(month).padStart(2, '0')}`
-}
-
-// 月份留空时退化为整年（YYYY）,后端按全年范围解释
-function boundOf(year: number, month: number | null): string {
-  return month == null ? String(year) : periodOf(year, month)
 }
 
 function startKey(value: string): string {

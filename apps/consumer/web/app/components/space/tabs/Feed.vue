@@ -1,37 +1,43 @@
 <script setup lang="ts">
-  import { SPACE_CONTENT_PAGE_SIZE, type SpaceContentPage } from '~/features/space/space'
-  import { usePagedList } from '~/features/space/usePagedList'
+  import { Activity } from '@lucide/vue'
+  import type { BackendFeedItem, FeedResponse } from '~/features/feed/feed'
+  import { useSpaceFeed } from '~/features/space/useSpaceFeed'
 
   defineOptions({ name: 'SpaceTabsFeed' })
 
   const props = defineProps<{
     userId: number
     isSelf: boolean
-    feed: SpaceContentPage
+    feed: FeedResponse
   }>()
 
-  const { list, pending, loadPage } = usePagedList(props.feed, page =>
-    hikariRequest('/api/v3/user/{id}/contents', {
-      path: { id: props.userId },
-      query: { page, page_size: SPACE_CONTENT_PAGE_SIZE },
-    }),
+  const { items, nextCursor, loading, loadMore } = useSpaceFeed(props.userId, props.feed)
+
+  const sentinel = ref<HTMLElement | null>(null)
+  useIntersectionObserver(
+    sentinel,
+    ([entry]) => {
+      if (entry?.isIntersecting && !loading.value && nextCursor.value) loadMore()
+    },
+    { rootMargin: '400px' },
   )
+
+  const feedKey = (item: BackendFeedItem) => `${item.type}:${item.id}`
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <LoadingOverlay :loading="pending">
-      <SpaceContentList
-        :items="list.items"
-        :empty-text="isSelf ? '你还没有发布图文或文章' : 'TA 还没有发布图文或文章'"
-      />
-    </LoadingOverlay>
-    <Paginator
-      v-if="list.meta.total_items > list.meta.page_size"
-      :meta="list.meta"
-      :loading="pending"
-      route="replace"
-      @change="loadPage"
-    />
+  <div v-if="items.length">
+    <div class="flex flex-col">
+      <SpaceFeedItem v-for="item in items" :key="feedKey(item)" :item="item" />
+    </div>
+    <div ref="sentinel" class="h-px" />
+    <div v-if="loading" class="flex justify-center py-6">
+      <Spinner :size="28" />
+    </div>
   </div>
+  <SpaceEmptyState
+    v-else
+    :icon="Activity"
+    :text="isSelf ? '你还没有任何动态' : 'TA 还没有任何动态'"
+  />
 </template>

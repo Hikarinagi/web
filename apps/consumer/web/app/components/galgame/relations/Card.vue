@@ -3,17 +3,16 @@
   import { relationLabel } from '~/features/galgame/labels'
   import { topVotedMedia } from '~/utils/media/image'
 
-  defineOptions({ name: 'GalgameDerivativesRelationsCard' })
+  defineOptions({ name: 'GalgameRelationsCard' })
   const props = defineProps<{ item: GalgamePageData['relations'][number] }>()
 
   const target = computed(() => props.item.target_galgame)
   const title = computed(() => target.value.trans_title || target.value.origin_title)
   const cover = computed(() => topVotedMedia(target.value.covers))
   const year = computed(() => {
-    if (!target.value.start_date) return null
-    // date 字段按日历日处理,取 ISO 前 4 位年份,避免负时区偏移一年
-    const y = Number(target.value.start_date.slice(0, 4))
-    return Number.isFinite(y) && y > 0 ? y : null
+    if (!target.value.release_date) return null
+    const d = new Date(target.value.release_date)
+    return Number.isNaN(d.getTime()) ? null : d.getFullYear()
   })
 </script>
 

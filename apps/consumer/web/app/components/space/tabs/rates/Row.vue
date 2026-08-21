@@ -26,15 +26,13 @@
     :to="workPath(item.work_type, item.id)"
     class="group flex gap-4 border-b border-surface-100 py-4 last:border-b-0 dark:border-surface-800/60"
   >
-    <WorkCardTrigger :work-type="item.work_type" :work-id="item.id">
-      <HikariImage
-        :src="item.cover"
-        :alt="item.title"
-        class="h-[84px] w-[60px] shrink-0 rounded-md bg-surface-100 dark:bg-surface-800"
-        image-class="size-full object-cover"
-        :processing="{ width: 120, height: 168, fit: 'cover', quality: 80 }"
-      />
-    </WorkCardTrigger>
+    <HikariImage
+      :src="item.cover"
+      :alt="item.title"
+      class="h-[84px] w-[60px] shrink-0 rounded-md bg-surface-100 dark:bg-surface-800"
+      image-class="size-full object-cover"
+      :processing="{ width: 120, height: 168, fit: 'cover', quality: 80 }"
+    />
     <div class="flex min-w-0 flex-1 flex-col gap-2">
       <div class="flex items-start justify-between gap-3">
         <div class="flex min-w-0 items-center gap-2">

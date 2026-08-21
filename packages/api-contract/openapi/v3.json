@@ -2590,12 +2590,6 @@
           "liked": {
             "type": "boolean"
           },
-          "manual_related_works": {
-            "items": {
-              "$ref": "#/components/schemas/ArticleRelatedWorkDto"
-            },
-            "type": "array"
-          },
           "news_type": {
             "enum": [
               "GALGAME",
@@ -2808,26 +2802,6 @@
           "topics",
           "created_at",
           "updated_at"
-        ],
-        "type": "object"
-      },
-      "ArticleWorkRefDto": {
-        "properties": {
-          "id": {
-            "minimum": 1,
-            "type": "number"
-          },
-          "work_type": {
-            "enum": [
-              "GALGAME",
-              "LIGHT_NOVEL"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "work_type",
-          "id"
         ],
         "type": "object"
       },
@@ -5503,13 +5477,6 @@
             "nullable": true,
             "type": "number"
           },
-          "related_works": {
-            "items": {
-              "$ref": "#/components/schemas/ArticleWorkRefDto"
-            },
-            "maxItems": 10,
-            "type": "array"
-          },
           "section_ids": {
             "items": {
               "type": "number"
@@ -5879,74 +5846,6 @@
           "title",
           "image_id",
           "link"
-        ],
-        "type": "object"
-      },
-      "CreateGalgameExternalLinkDto": {
-        "properties": {
-          "name": {
-            "maxLength": 100,
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "WEBSITE",
-              "TWITTER",
-              "BLOG",
-              "WIKI",
-              "OTHER"
-            ],
-            "type": "string"
-          },
-          "url": {
-            "maxLength": 500,
-            "pattern": "^https?:\\/\\/\\S+$",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "name",
-          "url"
-        ],
-        "type": "object"
-      },
-      "CreateGalgameMerchDto": {
-        "properties": {
-          "category": {
-            "description": "制品定位,如 实体出版/周边制品/设定集/同人/官方",
-            "maxLength": 50,
-            "type": "string"
-          },
-          "description": {
-            "maxLength": 2000,
-            "type": "string"
-          },
-          "image_id": {
-            "minimum": 1,
-            "type": "number"
-          },
-          "labels": {
-            "items": {
-              "$ref": "#/components/schemas/GalgameMerchLabelInputDto"
-            },
-            "maxItems": 50,
-            "type": "array"
-          },
-          "name": {
-            "maxLength": 255,
-            "type": "string"
-          },
-          "staffs": {
-            "items": {
-              "$ref": "#/components/schemas/GalgameMerchStaffInputDto"
-            },
-            "maxItems": 50,
-            "type": "array"
-          }
-        },
-        "required": [
-          "name"
         ],
         "type": "object"
       },
@@ -10316,7 +10215,7 @@
           "origin_title": {
             "type": "string"
           },
-          "start_date": {
+          "release_date": {
             "nullable": true,
             "type": "string"
           },
@@ -10342,7 +10241,7 @@
           "id",
           "origin_title",
           "trans_title",
-          "start_date",
+          "release_date",
           "nsfw",
           "top_cover",
           "top_producer_name"
@@ -10511,23 +10410,13 @@
             "nullable": true,
             "type": "string"
           },
-          "end_date": {
-            "description": "完结时间(仍在连载或未知时为 null)",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "end_date_year_only": {
-            "description": "完结时间是否精确到年份",
-            "type": "boolean"
-          },
           "engine": {
             "nullable": true,
             "type": "string"
           },
           "external_links": {
             "items": {
-              "$ref": "#/components/schemas/GalgameDetailExternalLinkDto"
+              "$ref": "#/components/schemas/GalgameExternalLinkDto"
             },
             "type": "array"
           },
@@ -10541,13 +10430,6 @@
           "images": {
             "items": {
               "$ref": "#/components/schemas/RatedMediaAssetDto"
-            },
-            "type": "array"
-          },
-          "intros": {
-            "description": "多语种简介;展示优先级(trans_intro → zh-Hans → 其他)由前端决定",
-            "items": {
-              "$ref": "#/components/schemas/GalgameIntroDto"
             },
             "type": "array"
           },
@@ -10577,28 +10459,21 @@
             },
             "type": "array"
           },
+          "release_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_tbd": {
+            "type": "boolean"
+          },
+          "release_date_tbd_note": {
+            "type": "string"
+          },
           "revised_at": {
             "format": "date-time",
             "nullable": true,
             "type": "string"
-          },
-          "start_date": {
-            "description": "开始时间(首次连载/首卷出版日期)",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "start_date_tbd": {
-            "description": "开始时间是否待定",
-            "type": "boolean"
-          },
-          "start_date_tbd_note": {
-            "description": "开始时间待定备注",
-            "type": "string"
-          },
-          "start_date_year_only": {
-            "description": "开始时间是否精确到年份",
-            "type": "boolean"
           },
           "status": {
             "enum": [
@@ -10644,15 +10519,11 @@
           "trans_title",
           "origin_title",
           "en_title",
-          "start_date",
-          "start_date_year_only",
-          "start_date_tbd",
-          "start_date_tbd_note",
-          "end_date",
-          "end_date_year_only",
+          "release_date",
+          "release_date_tbd",
+          "release_date_tbd_note",
           "origin_intro",
           "trans_intro",
-          "intros",
           "en_intro",
           "adv_type",
           "platforms",
@@ -10672,27 +10543,6 @@
           "updated_at",
           "revised_at",
           "download_resource_count"
-        ],
-        "type": "object"
-      },
-      "GalgameDetailExternalLinkDto": {
-        "properties": {
-          "label": {
-            "description": "链接显示名称",
-            "type": "string"
-          },
-          "name": {
-            "description": "链接来源标识,如 steam、website",
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "label",
-          "url"
         ],
         "type": "object"
       },
@@ -10949,40 +10799,12 @@
       },
       "GalgameExternalLinkDto": {
         "properties": {
-          "created_at": {
-            "format": "date-time",
+          "label": {
+            "description": "链接显示名称",
             "type": "string"
-          },
-          "creator": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "galgame_id": {
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
           },
           "name": {
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "WEBSITE",
-              "TWITTER",
-              "BLOG",
-              "WIKI",
-              "OTHER"
-            ],
-            "type": "string"
-          },
-          "updated_at": {
-            "format": "date-time",
+            "description": "链接来源标识,如 steam、website",
             "type": "string"
           },
           "url": {
@@ -10990,14 +10812,9 @@
           }
         },
         "required": [
-          "id",
-          "galgame_id",
-          "type",
           "name",
-          "url",
-          "creator",
-          "created_at",
-          "updated_at"
+          "label",
+          "url"
         ],
         "type": "object"
       },
@@ -11134,38 +10951,6 @@
         ],
         "type": "object"
       },
-      "GalgameIntroDto": {
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "lang": {
-            "description": "语种标记,小写规范化,如 zh-hans、zh-hant、ja、en",
-            "type": "string"
-          }
-        },
-        "required": [
-          "lang",
-          "content"
-        ],
-        "type": "object"
-      },
-      "GalgameIntroRowDto": {
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "lang": {
-            "description": "语种标记,小写规范化,如 zh-hans、zh-hant、ja、en",
-            "type": "string"
-          }
-        },
-        "required": [
-          "lang",
-          "content"
-        ],
-        "type": "object"
-      },
       "GalgameMappingItemDto": {
         "properties": {
           "bangumi_game_id": {
@@ -11184,158 +10969,6 @@
           "id",
           "vndb_id",
           "bangumi_game_id"
-        ],
-        "type": "object"
-      },
-      "GalgameMerchDto": {
-        "properties": {
-          "category": {
-            "description": "制品定位,如 实体出版/周边制品/设定集/同人/官方",
-            "type": "string"
-          },
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "creator": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "description": {
-            "type": "string"
-          },
-          "galgame_id": {
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "image": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MediaAssetDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "labels": {
-            "items": {
-              "$ref": "#/components/schemas/GalgameMerchLabelDto"
-            },
-            "type": "array"
-          },
-          "name": {
-            "type": "string"
-          },
-          "staffs": {
-            "items": {
-              "$ref": "#/components/schemas/GalgameMerchStaffDto"
-            },
-            "type": "array"
-          },
-          "updated_at": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "galgame_id",
-          "name",
-          "image",
-          "description",
-          "category",
-          "labels",
-          "staffs",
-          "creator",
-          "created_at",
-          "updated_at"
-        ],
-        "type": "object"
-      },
-      "GalgameMerchLabelDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "key": {
-            "type": "string"
-          },
-          "order": {
-            "type": "number"
-          },
-          "value": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "key",
-          "value",
-          "order"
-        ],
-        "type": "object"
-      },
-      "GalgameMerchLabelInputDto": {
-        "properties": {
-          "key": {
-            "maxLength": 50,
-            "type": "string"
-          },
-          "value": {
-            "maxLength": 500,
-            "type": "string"
-          }
-        },
-        "required": [
-          "key",
-          "value"
-        ],
-        "type": "object"
-      },
-      "GalgameMerchStaffDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "order": {
-            "type": "number"
-          },
-          "role": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "role",
-          "name",
-          "order"
-        ],
-        "type": "object"
-      },
-      "GalgameMerchStaffInputDto": {
-        "properties": {
-          "name": {
-            "maxLength": 255,
-            "type": "string"
-          },
-          "role": {
-            "maxLength": 50,
-            "type": "string"
-          }
-        },
-        "required": [
-          "role",
-          "name"
         ],
         "type": "object"
       },
@@ -12241,15 +11874,10 @@
           "origin_title": {
             "type": "string"
           },
-          "start_date": {
-            "description": "开始时间(首次连载/首卷出版日期)",
+          "release_date": {
             "format": "date-time",
             "nullable": true,
             "type": "string"
-          },
-          "start_date_year_only": {
-            "description": "开始时间是否精确到年份",
-            "type": "boolean"
           },
           "trans_title": {
             "nullable": true,
@@ -12261,8 +11889,7 @@
           "origin_title",
           "trans_title",
           "nsfw",
-          "start_date",
-          "start_date_year_only",
+          "release_date",
           "covers"
         ],
         "type": "object"
@@ -12452,20 +12079,11 @@
             },
             "type": "array"
           },
-          "score": {
-            "description": "平均分(保留一位小数),无评分时为 null;仅 GET /galgames 列表返回,其它 summary 场景不包含",
-            "nullable": true,
-            "type": "number"
-          },
-          "start_date": {
-            "description": "开始时间(首次连载/首卷出版日期)",
+          "release_date": {
+            "description": "发行日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
-          },
-          "start_date_year_only": {
-            "description": "开始时间是否精确到年份",
-            "type": "boolean"
           },
           "trans_title": {
             "description": "译名",
@@ -12479,8 +12097,7 @@
           "trans_title",
           "covers",
           "nsfw",
-          "start_date",
-          "start_date_year_only",
+          "release_date",
           "producers"
         ],
         "type": "object"
@@ -12539,41 +12156,14 @@
         ],
         "type": "object"
       },
-      "GalgameTagLikeStateDto": {
-        "properties": {
-          "liked_by_me": {
-            "description": "操作后当前用户的点赞状态",
-            "type": "boolean"
-          },
-          "likes": {
-            "description": "操作后的点赞数",
-            "type": "number"
-          }
-        },
-        "required": [
-          "likes",
-          "liked_by_me"
-        ],
-        "type": "object"
-      },
       "GalgameTagRelationDto": {
         "properties": {
-          "liked_by_me": {
-            "description": "当前用户是否已点赞;匿名用户恒为 false",
-            "type": "boolean"
-          },
-          "likes": {
-            "description": "该标签在此作品上的点赞数",
-            "type": "number"
-          },
           "tag": {
             "$ref": "#/components/schemas/TagPreviewDto"
           }
         },
         "required": [
-          "tag",
-          "likes",
-          "liked_by_me"
+          "tag"
         ],
         "type": "object"
       },
@@ -12798,9 +12388,7 @@
               "manga",
               "character",
               "person",
-              "producer",
-              "post",
-              "article"
+              "producer"
             ],
             "type": "string"
           }
@@ -12894,6 +12482,23 @@
           "kind",
           "merged_to_id",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "InternalGalgameBatchDto": {
+        "properties": {
+          "ids": {
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids"
         ],
         "type": "object"
       },
@@ -19206,6 +18811,10 @@
         ],
         "type": "object"
       },
+      "Object": {
+        "properties": {},
+        "type": "object"
+      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -19635,16 +19244,6 @@
             "nullable": true,
             "type": "string"
           },
-          "end_date": {
-            "description": "完结时间(仍在连载或未知时为 null)",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "end_date_year_only": {
-            "description": "完结时间是否精确到年份",
-            "type": "boolean"
-          },
           "engine": {
             "description": "游戏引擎",
             "nullable": true,
@@ -19713,29 +19312,25 @@
             ],
             "description": "评分统计"
           },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_tbd": {
+            "description": "发行日期是否待定",
+            "type": "boolean"
+          },
+          "release_date_tbd_note": {
+            "description": "发行日期待定时的补充说明",
+            "type": "string"
+          },
           "revised_at": {
             "description": "最近一次修订通过审核的时间",
             "format": "date-time",
             "nullable": true,
             "type": "string"
-          },
-          "start_date": {
-            "description": "开始时间(首次连载/首卷出版日期)",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "start_date_tbd": {
-            "description": "开始时间是否待定",
-            "type": "boolean"
-          },
-          "start_date_tbd_note": {
-            "description": "开始时间待定备注",
-            "type": "string"
-          },
-          "start_date_year_only": {
-            "description": "开始时间是否精确到年份",
-            "type": "boolean"
           },
           "steam_apps": {
             "description": "Steam 商店页，首项为主商店页",
@@ -19775,12 +19370,9 @@
           "aliases",
           "covers",
           "images",
-          "start_date",
-          "start_date_year_only",
-          "start_date_tbd",
-          "start_date_tbd_note",
-          "end_date",
-          "end_date_year_only",
+          "release_date",
+          "release_date_tbd",
+          "release_date_tbd_note",
           "origin_intro",
           "trans_intro",
           "en_intro",
@@ -20019,7 +19611,7 @@
             "description": "原名",
             "type": "string"
           },
-          "start_date": {
+          "release_date": {
             "description": "发行日期",
             "format": "date-time",
             "nullable": true,
@@ -20036,7 +19628,7 @@
           "origin_title",
           "trans_title",
           "nsfw",
-          "start_date",
+          "release_date",
           "covers"
         ],
         "type": "object"
@@ -21422,7 +21014,7 @@
           "origin_title": {
             "type": "string"
           },
-          "start_date": {
+          "release_date": {
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -21436,7 +21028,7 @@
           "id",
           "origin_title",
           "trans_title",
-          "start_date"
+          "release_date"
         ],
         "type": "object"
       },
@@ -25387,11 +24979,6 @@
       },
       "SearchHitDto": {
         "properties": {
-          "author": {
-            "description": "作者名，仅 post/article 命中携带",
-            "nullable": true,
-            "type": "string"
-          },
           "cover": {
             "allOf": [
               {
@@ -25401,19 +24988,8 @@
             "nullable": true,
             "type": "object"
           },
-          "created_at": {
-            "description": "发布时间，仅 post/article 命中携带",
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
           "developer": {
             "description": "开发厂商，仅 galgame 命中携带",
-            "nullable": true,
-            "type": "string"
-          },
-          "excerpt": {
-            "description": "正文摘要，仅 post/article 命中携带",
             "nullable": true,
             "type": "string"
           },
@@ -25439,9 +25015,7 @@
               "manga",
               "character",
               "person",
-              "producer",
-              "post",
-              "article"
+              "producer"
             ],
             "type": "string"
           }
@@ -27299,13 +26873,6 @@
           "related_light_novel_rate_id": {
             "nullable": true,
             "type": "number"
-          },
-          "related_works": {
-            "items": {
-              "$ref": "#/components/schemas/ArticleWorkRefDto"
-            },
-            "maxItems": 10,
-            "type": "array"
           },
           "section_ids": {
             "items": {
@@ -29819,12 +29386,6 @@
             "nullable": true,
             "type": "string"
           },
-          "platforms": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
           "rated_count": {
             "type": "number"
           },
@@ -29850,7 +29411,6 @@
           "title",
           "original_title",
           "aliases",
-          "platforms",
           "cover",
           "byline",
           "year",
@@ -47444,21 +47004,17 @@
         "operationId": "GalgameController_getList",
         "parameters": [
           {
-            "description": "discussion_heat 按讨论热度(作品评论区 + 所有短评评论区的已审核评论总数)排序,固定降序,忽略 sort_order。",
             "in": "query",
             "name": "sort_field",
             "required": false,
             "schema": {
-              "default": "start_date",
+              "default": "release_date",
               "enum": [
                 "release_date",
-                "start_date",
-                "end_date",
                 "title",
                 "views",
                 "revised_at",
-                "created_at",
-                "discussion_heat"
+                "created_at"
               ],
               "type": "string"
             }
@@ -47506,73 +47062,6 @@
             }
           },
           {
-            "description": "Inclusive start-date lower bound in YYYY or YYYY-MM format.",
-            "in": "query",
-            "name": "start_from",
-            "required": false,
-            "schema": {
-              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Inclusive start-date upper bound in YYYY or YYYY-MM format.",
-            "in": "query",
-            "name": "start_to",
-            "required": false,
-            "schema": {
-              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Specific start years or months. OR semantics. Each item is YYYY or YYYY-MM.",
-            "in": "query",
-            "name": "start_periods",
-            "required": false,
-            "schema": {
-              "items": {
-                "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "description": "Inclusive end-date lower bound in YYYY or YYYY-MM format.",
-            "in": "query",
-            "name": "end_from",
-            "required": false,
-            "schema": {
-              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Inclusive end-date upper bound in YYYY or YYYY-MM format.",
-            "in": "query",
-            "name": "end_to",
-            "required": false,
-            "schema": {
-              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Specific end years or months. OR semantics. Each item is YYYY or YYYY-MM.",
-            "in": "query",
-            "name": "end_periods",
-            "required": false,
-            "schema": {
-              "items": {
-                "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          {
-            "deprecated": true,
             "description": "Inclusive release lower bound in YYYY or YYYY-MM format.",
             "in": "query",
             "name": "release_from",
@@ -47583,7 +47072,6 @@
             }
           },
           {
-            "deprecated": true,
             "description": "Inclusive release upper bound in YYYY or YYYY-MM format.",
             "in": "query",
             "name": "release_to",
@@ -47594,7 +47082,6 @@
             }
           },
           {
-            "deprecated": true,
             "description": "Specific release years or months. OR semantics. Each item is YYYY or YYYY-MM.",
             "in": "query",
             "name": "release_periods",
@@ -47679,18 +47166,6 @@
             "schema": {
               "default": false,
               "type": "boolean"
-            }
-          },
-          {
-            "description": "按开发状态过滤,多个之间 OR。显式传入时覆盖 include_dev 的默认排除行为(即不再强制只看 RELEASED/未知)。",
-            "in": "query",
-            "name": "dev_status",
-            "required": false,
-            "schema": {
-              "items": {
-                "$ref": "#/components/schemas/GalgameDevStatus"
-              },
-              "type": "array"
             }
           },
           {
@@ -48376,148 +47851,6 @@
         ]
       }
     },
-    "/api/v3/galgames/{id}/links": {
-      "get": {
-        "operationId": "GalgameExternalLinkController_getList",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/GalgameExternalLinkDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "GalgameExternalLink"
-        ]
-      },
-      "post": {
-        "operationId": "GalgameExternalLinkController_create",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateGalgameExternalLinkDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameExternalLinkDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "GalgameExternalLink"
-        ]
-      }
-    },
-    "/api/v3/galgames/{id}/merchs": {
-      "get": {
-        "operationId": "GalgameMerchController_getList",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/GalgameMerchDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "GalgameMerch"
-        ]
-      },
-      "post": {
-        "operationId": "GalgameMerchController_create",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateGalgameMerchDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameMerchDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "GalgameMerch"
-        ]
-      }
-    },
     "/api/v3/galgames/{id}/posts": {
       "get": {
         "operationId": "GalgameController_getPosts",
@@ -49124,81 +48457,6 @@
         ]
       }
     },
-    "/api/v3/galgames/{id}/tags/{tagId}/like": {
-      "delete": {
-        "operationId": "GalgameController_unlikeTag",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "in": "path",
-            "name": "tagId",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameTagLikeStateDto"
-                }
-              }
-            },
-            "description": "幂等:未点赞时调用返回 200(当前计数),不报 404"
-          }
-        },
-        "tags": [
-          "Galgame"
-        ]
-      },
-      "put": {
-        "operationId": "GalgameController_likeTag",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "in": "path",
-            "name": "tagId",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameTagLikeStateDto"
-                }
-              }
-            },
-            "description": "幂等:已点赞时重复调用返回 200,不重复计数"
-          }
-        },
-        "summary": "点赞/取消点赞均为幂等操作:重复点赞返回 200 且不重复计数,\n未点赞时取消同样返回 200(返回当前计数),不报 404。",
-        "tags": [
-          "Galgame"
-        ]
-      }
-    },
     "/api/v3/galgames/{id}/views": {
       "post": {
         "operationId": "GalgameController_recordView",
@@ -49325,6 +48583,343 @@
         ]
       }
     },
+    "/api/v3/internal/characters/{id}": {
+      "get": {
+        "operationId": "InternalEntitiesController_getCharacter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalEntities"
+        ]
+      }
+    },
+    "/api/v3/internal/galgames/batch": {
+      "post": {
+        "operationId": "InternalGalgamesController_getBatch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternalGalgameBatchDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
+        ]
+      }
+    },
+    "/api/v3/internal/galgames/ids": {
+      "get": {
+        "operationId": "InternalGalgamesController_listIds",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sort_field",
+            "required": false,
+            "schema": {
+              "default": "release_date",
+              "enum": [
+                "release_date",
+                "title",
+                "views",
+                "revised_at",
+                "created_at"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort_order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_start",
+            "required": false,
+            "schema": {
+              "maximum": 2200,
+              "minimum": 1900,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_end",
+            "required": false,
+            "schema": {
+              "maximum": 2200,
+              "minimum": 1900,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Inclusive release lower bound in YYYY or YYYY-MM format.",
+            "in": "query",
+            "name": "release_from",
+            "required": false,
+            "schema": {
+              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Inclusive release upper bound in YYYY or YYYY-MM format.",
+            "in": "query",
+            "name": "release_to",
+            "required": false,
+            "schema": {
+              "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Specific release years or months. OR semantics. Each item is YYYY or YYYY-MM.",
+            "in": "query",
+            "name": "release_periods",
+            "required": false,
+            "schema": {
+              "items": {
+                "pattern": "^(?:19\\d{2}|20\\d{2}|21\\d{2}|2200)(?:-(?:0[1-9]|1[0-2]))?$",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "platforms",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin_lang",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "producer_ids",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "description": "Tag filter groups encoded as op.match.ids, e.g. include.and.1.2 or exclude.or.5.6. Groups are AND-combined.",
+            "in": "query",
+            "name": "tag_groups",
+            "required": false,
+            "schema": {
+              "items": {
+                "pattern": "^(?:include|exclude)\\.(?:and|or)\\.[1-9]\\d*(?:\\.[1-9]\\d*)*$",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staff_person_ids",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "staff_role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GalgameStaffRole"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_dev",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "题材 genre key，多个之间 OR。例：romance,mystery",
+            "in": "query",
+            "name": "genre",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "description": "只看站内有下载资源的作品",
+            "in": "query",
+            "name": "downloadable",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "content_limit",
+            "required": true,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ],
+              "default": "NEVER_SHOW_NSFW_CONTENT"
+            }
+          },
+          {
+            "in": "query",
+            "name": "character_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tags",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exclude_tags",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "released_after",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "released_before",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exclude_rated_covers",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
+        ]
+      }
+    },
     "/api/v3/internal/galgames/lookup": {
       "get": {
         "operationId": "InternalGalgamesController_lookup",
@@ -49439,6 +49034,87 @@
         ]
       }
     },
+    "/api/v3/internal/galgames/search": {
+      "get": {
+        "operationId": "InternalGalgamesController_searchIds",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "content_limit",
+            "required": true,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Object"
+                }
+              ],
+              "default": "NEVER_SHOW_NSFW_CONTENT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
+        ]
+      }
+    },
+    "/api/v3/internal/galgames/{id}/detail": {
+      "get": {
+        "operationId": "InternalGalgamesController_getDetail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalGalgames"
+        ]
+      }
+    },
     "/api/v3/internal/producers/mapping": {
       "get": {
         "operationId": "InternalEntitiesController_getProducerMapping",
@@ -49489,6 +49165,29 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalEntities"
+        ]
+      }
+    },
+    "/api/v3/internal/producers/{id}": {
+      "get": {
+        "operationId": "InternalEntitiesController_getProducer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "description": ""
           }
         },
@@ -52005,29 +51704,6 @@
         ]
       }
     },
-    "/api/v3/links/{id}": {
-      "delete": {
-        "operationId": "ExternalLinkController_remove",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalLink"
-        ]
-      }
-    },
     "/api/v3/manga-volumes/{id}": {
       "get": {
         "operationId": "MangaVolumeController_getById",
@@ -53381,29 +53057,6 @@
         },
         "tags": [
           "Manga"
-        ]
-      }
-    },
-    "/api/v3/merchs/{id}": {
-      "delete": {
-        "operationId": "MerchController_remove",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "Merch"
         ]
       }
     },
@@ -58287,9 +57940,7 @@
                   "manga",
                   "character",
                   "person",
-                  "producer",
-                  "post",
-                  "article"
+                  "producer"
                 ],
                 "type": "string"
               },
@@ -58377,9 +58028,7 @@
                   "manga",
                   "character",
                   "person",
-                  "producer",
-                  "post",
-                  "article"
+                  "producer"
                 ],
                 "type": "string"
               },
@@ -59454,19 +59103,6 @@
               "maximum": 50,
               "minimum": 1,
               "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "required": false,
-            "schema": {
-              "default": "latest",
-              "enum": [
-                "latest",
-                "hot"
-              ],
-              "type": "string"
             }
           }
         ],

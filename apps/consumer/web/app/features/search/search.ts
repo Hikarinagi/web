@@ -15,8 +15,6 @@ export const SEARCH_TYPES = [
   'character',
   'person',
   'producer',
-  'post',
-  'article',
 ] as const satisfies readonly SearchType[]
 
 export const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
@@ -27,8 +25,6 @@ export const SEARCH_TYPE_LABELS: Record<SearchType, string> = {
   person: '人物',
   producer: '厂商',
   manga: '漫画',
-  post: '图文',
-  article: '文章',
 }
 
 const ENTITY_BASE: Record<SearchType, string> = {
@@ -39,12 +35,6 @@ const ENTITY_BASE: Record<SearchType, string> = {
   person: '/people',
   producer: '/producers',
   manga: '/mangas',
-  post: '/posts',
-  article: '/articles',
-}
-
-export function isContentType(type: SearchType): boolean {
-  return type === 'post' || type === 'article'
 }
 
 export function entityHref(hit: Pick<SearchHit, 'type' | 'id'>): string {

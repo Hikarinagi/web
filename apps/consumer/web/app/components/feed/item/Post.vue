@@ -17,7 +17,7 @@
     <p v-if="body" class="text-[15px] leading-relaxed whitespace-pre-wrap text-color">
       {{ body }}
     </p>
-    <FeedItemPostCovers :post-id="item.id" :covers="item.covers" :cover-count="item.cover_count" />
+    <FeedItemCovers :covers="item.covers" :total="item.cover_count" />
     <div v-if="item.poll" class="relative z-1">
       <HikariContentNodesPollCard :poll="item.poll" />
     </div>

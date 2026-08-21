@@ -17,7 +17,7 @@ async function handler(event: H3Event) {
       query: {
         page: 1,
         page_size: 1,
-        sort_field: 'start_date',
+        sort_field: 'release_date',
         sort_order: 'desc',
       },
     }),
@@ -27,10 +27,10 @@ async function handler(event: H3Event) {
       query: {
         page: 1,
         page_size: LAST_MONTH_SIZE,
-        sort_field: 'start_date',
+        sort_field: 'release_date',
         sort_order: 'desc',
-        start_from: previousMonthKey,
-        start_to: previousMonthKey,
+        release_from: previousMonthKey,
+        release_to: previousMonthKey,
         origin_lang: ['ja', 'zh-Hans', 'zh-Hant'],
         include_dev: true,
       },
@@ -48,7 +48,7 @@ async function handler(event: H3Event) {
       month: previousMonthNumber,
       current_month: false,
       total_items: lastMonth.meta.total_items,
-      browse_to: `/galgames/browse?sfrom=${previousMonthKey}&sto=${previousMonthKey}&dev=1`,
+      browse_to: `/galgames/browse?from=${previousMonthKey}&to=${previousMonthKey}&dev=1`,
       items: lastMonth.items,
     },
   }

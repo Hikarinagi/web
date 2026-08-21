@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { entityHref, isContentType, type SearchHit } from '~/features/search/search'
+  import { entityHref, type SearchHit } from '~/features/search/search'
   import type { WorkCardItem } from '~/features/entity/entity'
 
   const props = defineProps<{ hit: SearchHit }>()
@@ -11,8 +11,6 @@
       props.hit.type === 'light_novel_volume' ||
       props.hit.type === 'manga',
   )
-
-  const isContent = computed(() => isContentType(props.hit.type))
 
   const workItem = computed<WorkCardItem>(() => ({
     to: entityHref(props.hit),
@@ -34,6 +32,5 @@
 
 <template>
   <EntityWorkCard v-if="isWork" :item="workItem" />
-  <SearchResultsContentCard v-else-if="isContent" :hit="hit" />
   <SearchResultsEntityCard v-else :hit="hit" />
 </template>

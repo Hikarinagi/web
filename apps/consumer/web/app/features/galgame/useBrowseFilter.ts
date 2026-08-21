@@ -35,34 +35,19 @@ export function useBrowseFilter(
     const s = state()
     const out: BrowseChip[] = []
 
-    if (s.start_periods.length) {
+    if (s.release_periods.length) {
       out.push({
-        key: 'start-periods',
+        key: 'release-periods',
         kind: 'year',
-        label: `开始: ${releasePeriodsLabel(s.start_periods)}`,
-        remove: () => update({ start_periods: [] }),
+        label: `发售: ${releasePeriodsLabel(s.release_periods)}`,
+        remove: () => update({ release_periods: [] }),
       })
-    } else if (s.start_from || s.start_to) {
+    } else if (s.release_from || s.release_to) {
       out.push({
-        key: 'start',
+        key: 'release',
         kind: 'year',
-        label: `开始: ${releaseRangeLabel(s.start_from, s.start_to)}`,
-        remove: () => update({ start_from: undefined, start_to: undefined }),
-      })
-    }
-    if (s.end_periods.length) {
-      out.push({
-        key: 'end-periods',
-        kind: 'year',
-        label: `完结: ${releasePeriodsLabel(s.end_periods)}`,
-        remove: () => update({ end_periods: [] }),
-      })
-    } else if (s.end_from || s.end_to) {
-      out.push({
-        key: 'end',
-        kind: 'year',
-        label: `完结: ${releaseRangeLabel(s.end_from, s.end_to)}`,
-        remove: () => update({ end_from: undefined, end_to: undefined }),
+        label: `发售: ${releaseRangeLabel(s.release_from, s.release_to)}`,
+        remove: () => update({ release_from: undefined, release_to: undefined }),
       })
     }
     for (const code of s.platforms) {
@@ -118,12 +103,9 @@ export function useBrowseFilter(
 
   function clear() {
     update({
-      start_from: undefined,
-      start_to: undefined,
-      start_periods: [],
-      end_from: undefined,
-      end_to: undefined,
-      end_periods: [],
+      release_from: undefined,
+      release_to: undefined,
+      release_periods: [],
       platforms: [],
       origin_lang: [],
       producer_ids: [],

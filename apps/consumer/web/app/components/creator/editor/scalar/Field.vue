@@ -83,12 +83,10 @@
       model.value = value
     },
   })
-  // 日期字段若有对应的 `<field>_year_only` 布尔开关且为真,只允许选年,保存规整为 YYYY-01-01。
-  const yearOnly = computed(() => props.siblingValues?.[`${props.field.field}_year_only`] === true)
   const asDate = computed<Date | null>({
     get: () => (model.value instanceof Date ? model.value : null),
     set: value => {
-      model.value = value && yearOnly.value ? new Date(value.getFullYear(), 0, 1) : value
+      model.value = value
     },
   })
 </script>
@@ -220,8 +218,7 @@
       v-else-if="field.value_type === 'date'"
       v-model="asDate"
       :input-id="fieldId"
-      :view="yearOnly ? 'year' : 'date'"
-      :date-format="yearOnly ? 'yy' : 'yy-mm-dd'"
+      date-format="yy-mm-dd"
       :disabled="disabled"
       show-icon
       show-button-bar

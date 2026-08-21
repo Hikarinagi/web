@@ -28,7 +28,7 @@
       : null
   })
   const meta = computed(() =>
-    joinMeta(['Galgame', yearOf(summary.value?.start_date), summary.value?.top_producer_name]),
+    joinMeta(['Galgame', yearOf(summary.value?.release_date), summary.value?.top_producer_name]),
   )
   const cover = computed(() => summary.value?.top_cover ?? null)
   const hasBackdrop = computed(() => !!cover.value)

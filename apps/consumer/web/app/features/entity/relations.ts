@@ -53,7 +53,7 @@ function galgameCard(
     to: `/galgames/${galgame.id}`,
     cover: topVotedMedia(galgame.covers),
     title: galgame.trans_title || galgame.origin_title,
-    year: workYear(galgame.start_date),
+    year: workYear(galgame.release_date),
     rolePill,
     cv,
     subtitle: null,

@@ -12,14 +12,14 @@ describe('mapVoiceItems', () => {
           image: null,
         },
         galgames: [
-          { id: 1, origin_title: '五等分のプリンセス', trans_title: null, start_date: null },
+          { id: 1, origin_title: '五等分のプリンセス', trans_title: null, release_date: null },
           {
             id: 2,
             origin_title: 'ごとぱずストーリー',
             trans_title: '花嫁物语',
-            start_date: null,
+            release_date: null,
           },
-          { id: 3, origin_title: '五等分の花嫁', trans_title: null, start_date: null },
+          { id: 3, origin_title: '五等分の花嫁', trans_title: null, release_date: null },
         ],
       },
     ])
@@ -38,7 +38,7 @@ describe('mapVoiceItems', () => {
     const [item] = mapVoiceItems([
       {
         character: { id: 1, name: '角色', trans_name: null, image: null },
-        galgames: [{ id: 1, origin_title: '作品', trans_title: null, start_date: null }],
+        galgames: [{ id: 1, origin_title: '作品', trans_title: null, release_date: null }],
       },
     ])
 

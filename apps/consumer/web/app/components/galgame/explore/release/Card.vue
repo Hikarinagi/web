@@ -30,7 +30,7 @@
     quality: 84,
   }))
   const release = computed(() =>
-    props.showRelease ? formatReleaseBadge(props.item.start_date) : '',
+    props.showRelease ? formatReleaseBadge(props.item.release_date) : '',
   )
 
   function formatReleaseBadge(value: string | null | undefined) {

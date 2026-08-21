@@ -2,7 +2,7 @@
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
 
-  defineOptions({ name: 'GalgameCharactersCard' })
+  defineOptions({ name: 'GalgameAboutCharacterCard' })
   const props = defineProps<{ item: GalgamePageData['characters'][number] }>()
 
   const name = computed(() => props.item.character.trans_name || props.item.character.name)

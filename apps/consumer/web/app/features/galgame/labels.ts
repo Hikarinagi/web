@@ -43,10 +43,6 @@ export const COVER_KIND_LABELS: Record<string, string> = {
   PKGFRONT: '包装版',
 }
 
-export const DEV_STATUS_OPTIONS: { value: string; label: string }[] = Object.entries(
-  DEV_STATUS_LABELS,
-).map(([value, label]) => ({ value, label }))
-
 export const RELATION_LABELS: Record<string, string> = {
   SEQUEL: '续作',
   PREQUEL: '前作',
@@ -78,18 +74,6 @@ export const CURRENCY_SYMBOL: Record<string, string> = {
   HKD: 'HK$',
   KRW: '₩',
 }
-
-export const EXTERNAL_LINK_TYPE_LABELS = {
-  WEBSITE: '网站',
-  TWITTER: 'Twitter',
-  BLOG: '博客',
-  WIKI: '维基',
-  OTHER: '其他',
-} satisfies Record<components['schemas']['CreateGalgameExternalLinkDto']['type'], string>
-
-export const EXTERNAL_LINK_TYPE_OPTIONS: { value: string; label: string }[] = Object.entries(
-  EXTERNAL_LINK_TYPE_LABELS,
-).map(([value, label]) => ({ value, label }))
 
 export function langLabel(code: string | null | undefined): string {
   return (code && LANGUAGE_LABELS[code as LanguageCode]) || code || ''
