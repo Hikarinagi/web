@@ -79,16 +79,12 @@
       <div class="flex flex-col gap-[22px] px-6 pb-6">
         <GalgameRateStatusPills />
         <GalgameRateScore />
-        <FormItem v-slot="{ id, field }" name="time_to_finish_hours" label="玩了多久">
+        <FormItem v-slot="{ id }" name="time_to_finish_hours" label="玩了多久">
           <div class="flex items-center gap-2">
             <InputNumber
               :input-id="id"
-              :model-value="field.value"
-              :min="0"
-              :max="9999"
               :max-fraction-digits="1"
               fluid
-              @update:model-value="value => field.props.onInput({ value })"
             />
             <span class="shrink-0 text-[13px] text-surface-500">小时</span>
           </div>
@@ -104,13 +100,11 @@
           />
         </FormItem>
 
-        <FormItem v-slot="{ id, field }" name="is_spoiler">
+        <FormItem v-slot="{ id }" name="is_spoiler">
           <div class="flex items-center gap-2.5">
             <Checkbox
               :input-id="id"
-              :model-value="field.value as boolean"
               binary
-              @update:model-value="value => field.props.onInput({ value })"
             />
             <label
               :for="id"
