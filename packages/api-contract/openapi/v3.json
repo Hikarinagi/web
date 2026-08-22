@@ -12502,6 +12502,42 @@
         ],
         "type": "object"
       },
+      "InternalProducerListItemDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "works_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "aliases",
+          "logo",
+          "works_count"
+        ],
+        "type": "object"
+      },
       "LightNovelAdminItemDto": {
         "properties": {
           "created_at": {
@@ -49112,6 +49148,73 @@
         },
         "tags": [
           "InternalGalgames"
+        ]
+      }
+    },
+    "/api/v3/internal/producers": {
+      "get": {
+        "operationId": "InternalEntitiesController_listProducers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/InternalProducerListItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalEntities"
         ]
       }
     },
