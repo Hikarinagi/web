@@ -133,10 +133,7 @@
 
         <FormItem v-slot="{ id }" name="is_spoiler">
           <div class="flex items-center gap-2.5">
-            <Checkbox
-              :input-id="id"
-              binary
-            />
+            <Checkbox :input-id="id" binary />
             <label
               :for="id"
               class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"

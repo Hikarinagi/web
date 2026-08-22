@@ -2,26 +2,23 @@ import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 const dimension = v.nullish(
-  v.union([
-    v.pipe(
-      v.number('维度评分应为数字'),
-      v.integer('维度评分需为整数'),
-      v.minValue(1, '维度评分需 1-10'),
-      v.maxValue(10, '维度评分需 1-10'),
-    ),
-    v.pipe(
-      v.string(),
-      v.trim(),
-      v.transform(val => (val === '' ? null : Number(val))),
-      v.check(
-        val =>
-          val === null ||
-          (typeof val === 'number' && !isNaN(val) && Number.isInteger(val) && val >= 1 && val <= 10),
-        '维度评分需 1-10 整数',
-      ),
-    ),
-    v.null_(),
-  ]),
+  v.pipe(
+    v.number('维度评分应为数字'),
+    v.integer('维度评分需为整数'),
+    v.minValue(1, '维度评分需 1-10'),
+    v.maxValue(10, '维度评分需 1-10'),
+  ),
+  null,
+)
+
+const hours = v.nullish(
+  v.pipe(
+    v.union([v.number('时长应为数字'), v.pipe(v.string('时长应为数字'), v.trim())], '时长应为数字'),
+    v.transform(val => (val === '' ? null : Number(val))),
+    v.check(val => val === null || Number.isFinite(val), '时长应为数字'),
+    v.check(val => val === null || val >= 0, '时长不能为负'),
+    v.check(val => val === null || val <= 9999, '时长不能超过 9999 小时'),
+  ),
   null,
 )
 
@@ -38,26 +35,7 @@ export const lightNovelRateSchema = v.object({
     v.trim(),
     v.maxLength(2000, '短评不能超过 2000 字'),
   ),
-  time_to_finish_hours: v.nullish(
-    v.union([
-      v.pipe(
-        v.number('时长应为数字'),
-        v.minValue(0, '时长不能为负'),
-        v.maxValue(9999, '时长不能超过 9999 小时'),
-      ),
-      v.pipe(
-        v.string(),
-        v.trim(),
-        v.transform(val => (val === '' ? null : Number(val))),
-        v.check(
-          val => val === null || (typeof val === 'number' && !isNaN(val) && val >= 0 && val <= 9999),
-          '时长不能为负且需在 9999 小时内',
-        ),
-      ),
-      v.null_(),
-    ]),
-    null,
-  ),
+  time_to_finish_hours: hours,
   is_spoiler: v.optional(v.boolean(), false),
   rate_plot: dimension,
   rate_character: dimension,

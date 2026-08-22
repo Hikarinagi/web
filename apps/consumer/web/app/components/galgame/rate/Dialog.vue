@@ -81,11 +81,10 @@
         <GalgameRateScore />
         <FormItem v-slot="{ id }" name="time_to_finish_hours" label="玩了多久">
           <div class="flex items-center gap-2">
-            <InputNumber
-              :input-id="id"
-              :max-fraction-digits="1"
-              fluid
-            />
+            <!-- use-grouping=false is load-bearing: PrimeVue's InputNumber registers its
+                 inner InputText under the same form field name, so on mobile IME input the raw
+                 DOM string reaches the resolver. A grouped "1,234" would parse to NaN. -->
+            <InputNumber :input-id="id" :max-fraction-digits="1" :use-grouping="false" fluid />
             <span class="shrink-0 text-[13px] text-surface-500">小时</span>
           </div>
         </FormItem>
@@ -102,10 +101,7 @@
 
         <FormItem v-slot="{ id }" name="is_spoiler">
           <div class="flex items-center gap-2.5">
-            <Checkbox
-              :input-id="id"
-              binary
-            />
+            <Checkbox :input-id="id" binary />
             <label
               :for="id"
               class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
