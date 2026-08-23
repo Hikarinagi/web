@@ -42,6 +42,6 @@
     <MangaRatesFilterSelect v-model="score" :options="SCORE_OPTIONS" placeholder="全部评分" />
     <MangaRatesFilterSelect v-model="spoiler" :options="SPOILER_OPTIONS" placeholder="含剧透" />
     <span class="flex-1" />
-    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条</span>
+    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条短评</span>
   </div>
 </template>

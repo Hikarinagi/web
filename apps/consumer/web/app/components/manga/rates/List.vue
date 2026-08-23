@@ -8,6 +8,7 @@
     total: number
     hasMore: boolean
     pending: boolean
+    filtered: boolean
   }>()
   defineEmits<{ loadMore: [] }>()
 </script>
@@ -18,7 +19,7 @@
       v-if="!items.length"
       class="rounded-xl border border-surface-200 bg-surface-0 px-6 py-5 text-sm text-surface-500 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-400"
     >
-      什么都没有...
+      {{ filtered ? '没有符合筛选条件的短评' : '还没有人写短评' }}
     </p>
 
     <div v-else class="gap-4 md:columns-2">

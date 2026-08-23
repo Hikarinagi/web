@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Clock, FileText, Star } from '@lucide/vue'
+  import { ArrowRight, Clock, Star } from '@lucide/vue'
   import {
     GALGAME_RATE_DIMENSIONS,
     GALGAME_STATUS_LABEL,
@@ -36,18 +36,6 @@
             class="text-sm font-medium text-surface-900 dark:text-surface-0"
           />
           <span
-            v-if="rate.status"
-            class="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-medium"
-            :class="
-              rate.status === 'COMPLETED'
-                ? 'border-hikari-primary-500 bg-hikari-primary-50 text-hikari-primary-700 dark:bg-hikari-primary-950 dark:text-hikari-primary-300'
-                : 'border-surface-200 bg-surface-100 text-surface-600 dark:border-surface-700 dark:bg-surface-800 dark:text-surface-300'
-            "
-          >
-            <component :is="STATUS_ICON[rate.status]" class="size-[11px]" />
-            {{ GALGAME_STATUS_LABEL[rate.status] }}
-          </span>
-          <span
             v-if="highlyRated"
             class="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300"
           >
@@ -61,6 +49,11 @@
             {{ playHours }} 小时
           </span>
           <span v-if="playHours" class="text-surface-300 dark:text-surface-600">·</span>
+          <span v-if="rate.status" class="flex items-center gap-1">
+            <component :is="STATUS_ICON[rate.status]" class="size-[11px]" />
+            {{ GALGAME_STATUS_LABEL[rate.status] }}
+          </span>
+          <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
           <span>{{ timeFromNow(rate.created_at) }}</span>
         </div>
       </div>
@@ -76,7 +69,7 @@
 
     <p
       v-if="rate.rate_content"
-      class="text-[13px] leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
+      class="text-sm leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
     >
       <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
       <template v-else>{{ rate.rate_content }}</template>
@@ -111,13 +104,14 @@
       >
         <template #icon><InteractionDislikeIcon :active="rate.my_value === -1" /></template>
       </Button>
-      <span
-        v-if="rate.has_long_review"
-        class="flex items-center gap-1 text-xs font-medium text-hikari-primary-600 dark:text-hikari-primary-400"
+      <NuxtLink
+        v-if="rate.long_review"
+        :to="`/articles/${rate.long_review.id}`"
+        class="group ml-auto flex min-w-0 items-center gap-1 text-xs font-medium text-hikari-primary-600 transition-colors hover:text-hikari-primary-700 dark:text-hikari-primary-400"
       >
-        <FileText class="size-3" />
-        写了长评
-      </span>
+        <span class="truncate">{{ rate.long_review.title }}</span>
+        <ArrowRight class="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
+      </NuxtLink>
     </div>
   </article>
 </template>

@@ -19,7 +19,7 @@
 
 <template>
   <LightNovelSection
-    title="大家的评价"
+    title="安利墙"
     :meta="meta"
     :empty="stats.played_count === 0 && stats.rated_count === 0"
     empty-text="还没有人评分"
@@ -55,7 +55,7 @@
 
       <LightNovelRatesTopReviews
         :rates="topRates.items"
-        :total="stats.rated_count"
+        :total="stats.content_count"
         :light-novel-id="lightNovelId"
       />
     </div>

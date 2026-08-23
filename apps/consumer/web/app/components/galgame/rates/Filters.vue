@@ -30,7 +30,7 @@
   ]
   const DIMS_OPTIONS = [
     { label: '全部', value: false },
-    { label: '仅填了多维', value: true },
+    { label: '仅含多维', value: true },
   ]
 </script>
 
@@ -49,9 +49,9 @@
     <GalgameRatesFilterSelect
       v-model="hasDimensions"
       :options="DIMS_OPTIONS"
-      placeholder="填了多维"
+      placeholder="含多维"
     />
     <span class="flex-1" />
-    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条</span>
+    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条短评</span>
   </div>
 </template>

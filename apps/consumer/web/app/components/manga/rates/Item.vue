@@ -30,18 +30,6 @@
             class="text-sm font-medium text-surface-900 dark:text-surface-0"
           />
           <span
-            v-if="rate.status"
-            class="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-medium"
-            :class="
-              rate.status === 'COMPLETED'
-                ? 'border-hikari-primary-500 bg-hikari-primary-50 text-hikari-primary-700 dark:bg-hikari-primary-950 dark:text-hikari-primary-300'
-                : 'border-surface-200 bg-surface-100 text-surface-600 dark:border-surface-700 dark:bg-surface-800 dark:text-surface-300'
-            "
-          >
-            <component :is="STATUS_ICON[rate.status]" class="size-[11px]" />
-            {{ MANGA_STATUS_LABEL[rate.status] }}
-          </span>
-          <span
             v-if="highlyRated"
             class="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300"
           >
@@ -50,6 +38,11 @@
           </span>
         </div>
         <div class="flex items-center gap-2 text-[11px] text-surface-500 dark:text-surface-400">
+          <span v-if="rate.status" class="flex items-center gap-1">
+            <component :is="STATUS_ICON[rate.status]" class="size-[11px]" />
+            {{ MANGA_STATUS_LABEL[rate.status] }}
+          </span>
+          <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
           <span>{{ timeFromNow(rate.created_at) }}</span>
         </div>
       </div>
@@ -63,7 +56,7 @@
 
     <p
       v-if="rate.rate_content"
-      class="text-[13px] leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
+      class="text-sm leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
     >
       <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
       <template v-else>{{ rate.rate_content }}</template>

@@ -11392,9 +11392,6 @@
           "dislike_count": {
             "type": "number"
           },
-          "has_long_review": {
-            "type": "boolean"
-          },
           "id": {
             "type": "number"
           },
@@ -11403,6 +11400,16 @@
           },
           "like_count": {
             "type": "number"
+          },
+          "long_review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RateLongReviewRefDto"
+              }
+            ],
+            "description": "关联的长评文章;没有则为 null",
+            "nullable": true,
+            "type": "object"
           },
           "my_value": {
             "description": "当前用户的投票:1赞/-1踩/0未投或未登录",
@@ -11478,7 +11485,7 @@
           "rate_content",
           "like_count",
           "dislike_count",
-          "has_long_review",
+          "long_review",
           "my_value",
           "created_at"
         ],
@@ -11492,9 +11499,6 @@
           "dislike_count": {
             "type": "number"
           },
-          "has_long_review": {
-            "type": "boolean"
-          },
           "id": {
             "type": "number"
           },
@@ -11503,6 +11507,16 @@
           },
           "like_count": {
             "type": "number"
+          },
+          "long_review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RateLongReviewRefDto"
+              }
+            ],
+            "description": "关联的长评文章;没有则为 null",
+            "nullable": true,
+            "type": "object"
           },
           "my_value": {
             "description": "当前用户的投票:1赞/-1踩/0未投或未登录",
@@ -11581,7 +11595,7 @@
           "rate_content",
           "like_count",
           "dislike_count",
-          "has_long_review",
+          "long_review",
           "my_value",
           "created_at",
           "work_ref"
@@ -12499,6 +12513,42 @@
         },
         "required": [
           "ids"
+        ],
+        "type": "object"
+      },
+      "InternalProducerListItemDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          },
+          "works_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "aliases",
+          "logo",
+          "works_count"
         ],
         "type": "object"
       },
@@ -23006,6 +23056,21 @@
         },
         "required": [
           "keywords"
+        ],
+        "type": "object"
+      },
+      "RateLongReviewRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title"
         ],
         "type": "object"
       },
@@ -48110,6 +48175,15 @@
             }
           },
           {
+            "description": "仅返回写了正文的短评",
+            "in": "query",
+            "name": "has_content",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "in": "query",
             "name": "page",
             "required": true,
@@ -49112,6 +49186,73 @@
         },
         "tags": [
           "InternalGalgames"
+        ]
+      }
+    },
+    "/api/v3/internal/producers": {
+      "get": {
+        "operationId": "InternalEntitiesController_listProducers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/InternalProducerListItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalEntities"
         ]
       }
     },
@@ -51329,6 +51470,15 @@
             }
           },
           {
+            "description": "仅返回写了正文的短评",
+            "in": "query",
+            "name": "has_content",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "in": "query",
             "name": "page",
             "required": true,
@@ -52725,6 +52875,15 @@
                 "hide"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "仅返回写了正文的短评",
+            "in": "query",
+            "name": "has_content",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           },
           {

@@ -13,8 +13,19 @@
   })
   await redirectIfMerged(data)
   useNsfwDetailGate(() => data.value?.light_novel.nsfw)
-  const { items, total, pending, hasMore, loadMore, sort, status, score, spoiler, hasDimensions } =
-    useLightNovelRates(lightNovelId, data.value!.rates)
+  const {
+    items,
+    total,
+    pending,
+    hasMore,
+    filtered,
+    loadMore,
+    sort,
+    status,
+    score,
+    spoiler,
+    hasDimensions,
+  } = useLightNovelRates(lightNovelId, data.value!.rates)
 
   const lightNovelName = computed(() => {
     const ln = data.value?.light_novel
@@ -65,6 +76,7 @@
         :light-novel-id="lightNovelId"
         :total="total"
         :has-more="hasMore"
+        :filtered="filtered"
         :pending="pending"
         @load-more="loadMore"
       />

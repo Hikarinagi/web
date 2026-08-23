@@ -10,8 +10,19 @@
   const { data } = await useHikariApiData(`/api/pages/galgames/${galgameId}/rates`, { fatal: true })
   await redirectIfMerged(data)
   useNsfwDetailGate(() => data.value?.galgame.nsfw)
-  const { items, total, pending, hasMore, loadMore, sort, status, score, spoiler, hasDimensions } =
-    useGalgameRates(galgameId, data.value!.rates)
+  const {
+    items,
+    total,
+    pending,
+    hasMore,
+    filtered,
+    loadMore,
+    sort,
+    status,
+    score,
+    spoiler,
+    hasDimensions,
+  } = useGalgameRates(galgameId, data.value!.rates)
 
   const galgameName = computed(() => {
     const g = data.value?.galgame
@@ -58,6 +69,7 @@
         :galgame-id="galgameId"
         :total="total"
         :has-more="hasMore"
+        :filtered="filtered"
         :pending="pending"
         @load-more="loadMore"
       />

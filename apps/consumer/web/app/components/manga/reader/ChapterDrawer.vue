@@ -37,7 +37,9 @@
     v-model:visible="visible"
     position="right"
     :pt="{
-      root: { class: '!w-[21rem] !max-w-full !border-l !border-white/10 !bg-[#0b0e13] !text-white' },
+      root: {
+        class: '!w-[21rem] !max-w-full !border-l !border-white/10 !bg-[#0b0e13] !text-white',
+      },
       header: { class: '!px-5' },
       content: { class: '!px-3 !pb-3' },
       pcCloseButton: { root: { class: '!text-[#b8c2d1]' } },

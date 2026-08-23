@@ -6581,6 +6581,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/producers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_listProducers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/producers/mapping": {
         parameters: {
             query?: never;
@@ -13918,10 +13934,11 @@ export interface components {
         GalgameRateDto: {
             created_at: string;
             dislike_count: number;
-            has_long_review: boolean;
             id: number;
             is_spoiler: boolean;
             like_count: number;
+            /** @description 关联的长评文章;没有则为 null */
+            long_review: components["schemas"]["RateLongReviewRefDto"] | null;
             /**
              * @description 当前用户的投票:1赞/-1踩/0未投或未登录
              * @enum {number}
@@ -13943,10 +13960,11 @@ export interface components {
         GalgameRatePermalinkDto: {
             created_at: string;
             dislike_count: number;
-            has_long_review: boolean;
             id: number;
             is_spoiler: boolean;
             like_count: number;
+            /** @description 关联的长评文章;没有则为 null */
+            long_review: components["schemas"]["RateLongReviewRefDto"] | null;
             /**
              * @description 当前用户的投票:1赞/-1踩/0未投或未登录
              * @enum {number}
@@ -14175,6 +14193,13 @@ export interface components {
         };
         InternalGalgameBatchDto: {
             ids: number[];
+        };
+        InternalProducerListItemDto: {
+            aliases: string[];
+            id: number;
+            logo: components["schemas"]["MediaAssetDto"] | null;
+            name: string;
+            works_count: number;
         };
         LightNovelAdminItemDto: {
             /** Format: date-time */
@@ -16933,6 +16958,10 @@ export interface components {
         };
         RateKeywordsDto: {
             keywords: components["schemas"]["RateKeywordDto"][];
+        };
+        RateLongReviewRefDto: {
+            id: number;
+            title: string;
         };
         RateStatusCountsDto: {
             all: number;
@@ -29409,6 +29438,8 @@ export interface operations {
                 score?: number;
                 spoiler?: "only" | "hide";
                 has_dimensions?: boolean;
+                /** @description 仅返回写了正文的短评 */
+                has_content?: boolean;
                 page: number;
                 page_size: number;
             };
@@ -29856,6 +29887,32 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    InternalEntitiesController_listProducers: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["InternalProducerListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
             };
         };
     };
@@ -31144,6 +31201,8 @@ export interface operations {
                 score?: number;
                 spoiler?: "only" | "hide";
                 has_dimensions?: boolean;
+                /** @description 仅返回写了正文的短评 */
+                has_content?: boolean;
                 page: number;
                 page_size: number;
             };
@@ -31883,6 +31942,8 @@ export interface operations {
                 status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
                 score?: number;
                 spoiler?: "only" | "hide";
+                /** @description 仅返回写了正文的短评 */
+                has_content?: boolean;
                 page: number;
                 page_size: number;
             };

@@ -33,16 +33,16 @@ async function loadOtherReviews(event: H3Event, relatedWorks: RelatedWork[]) {
           ? ((
               await fetchBackendData(event, '/api/v3/galgames/{id}/rates', {
                 path: { id: work.id },
-                query: { sort: 'hot', page: 1, page_size: 4 },
+                query: { sort: 'hot', page: 1, page_size: 4, has_content: true },
               }).catch(() => null)
             )?.items ?? [])
           : ((
               await fetchBackendData(event, '/api/v3/light-novels/{id}/rates', {
                 path: { id: work.id },
-                query: { sort: 'hot', page: 1, page_size: 4 },
+                query: { sort: 'hot', page: 1, page_size: 4, has_content: true },
               }).catch(() => null)
             )?.items ?? [])
-      return { work, reviews: reviews.filter(r => r.rate_content.trim().length > 0).slice(0, 2) }
+      return { work, reviews: reviews.slice(0, 2) }
     }),
   )
   return groups.filter(g => g.reviews.length > 0)

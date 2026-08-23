@@ -70,7 +70,7 @@ export default defineNuxtConfig({
 
   css: [
     '@bprogress/core/css',
-    './app/assets/css/main.css',
+    '~/assets/css/main.css',
     'notivue/notification.css',
     'notivue/animations.css',
   ],

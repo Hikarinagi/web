@@ -31,7 +31,7 @@ async function handler(event: H3Event) {
     }).catch(() => null),
     fetchBackendData(event, '/api/v3/mangas/{id}/rates', {
       path: { id },
-      query: { page: 1, page_size: 20, sort: 'hot' },
+      query: { page: 1, page_size: 20, sort: 'hot', has_content: true },
     }),
     fetchBackendData(event, '/api/v3/mangas/{id}/rates/statistics', { path: { id } }),
   ])

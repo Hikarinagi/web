@@ -15,7 +15,7 @@
   <section
     class="flex flex-col gap-5.5 rounded-2xl border border-surface-200 bg-surface-0 p-6 dark:border-surface-800 dark:bg-surface-900"
   >
-    <h2 class="text-[22px] font-bold text-surface-900 dark:text-surface-0">大家的评价</h2>
+    <h2 class="text-[22px] font-bold text-surface-900 dark:text-surface-0">安利墙</h2>
 
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
       <div class="flex flex-col gap-2.5 lg:w-[220px] lg:shrink-0">
@@ -37,9 +37,7 @@
             "
           />
         </div>
-        <p class="text-xs text-surface-600 dark:text-surface-400">
-          {{ stats.rated_count }} 人评分 · {{ stats.content_count }} 人留了短评
-        </p>
+        <p class="text-xs text-surface-600 dark:text-surface-400">{{ stats.rated_count }} 人评分</p>
       </div>
 
       <GalgameRatesStatsScores :distribution="stats.distribution" />

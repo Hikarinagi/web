@@ -17,6 +17,9 @@ export function useMangaRates(mangaId: number, initial: MangaRateList) {
   const spoiler = ref<SpoilerFilter | null>(null)
 
   const hasMore = computed(() => page.value < totalPages.value)
+  const filtered = computed(
+    () => Boolean(status.value) || score.value != null || Boolean(spoiler.value),
+  )
 
   async function fetchPage(target: number, replace: boolean) {
     if (pending.value) return
@@ -28,6 +31,7 @@ export function useMangaRates(mangaId: number, initial: MangaRateList) {
           page: target,
           page_size: PAGE_SIZE,
           sort: sort.value,
+          has_content: true,
           ...(status.value ? { status: status.value } : {}),
           ...(score.value != null ? { score: score.value } : {}),
           ...(spoiler.value ? { spoiler: spoiler.value } : {}),
@@ -48,5 +52,5 @@ export function useMangaRates(mangaId: number, initial: MangaRateList) {
 
   watch([sort, status, score, spoiler], () => void fetchPage(1, true))
 
-  return { items, total, pending, hasMore, loadMore, sort, status, score, spoiler }
+  return { items, total, pending, hasMore, filtered, loadMore, sort, status, score, spoiler }
 }

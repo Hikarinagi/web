@@ -10,10 +10,8 @@
 
   const { data } = await useHikariApiData(`/api/pages/mangas/${mangaId}/rates`, { fatal: true })
   useNsfwDetailGate(() => data.value?.manga.nsfw)
-  const { items, total, pending, hasMore, loadMore, sort, status, score, spoiler } = useMangaRates(
-    mangaId,
-    data.value!.rates,
-  )
+  const { items, total, pending, hasMore, filtered, loadMore, sort, status, score, spoiler } =
+    useMangaRates(mangaId, data.value!.rates)
 
   const mangaName = computed(() => (data.value ? getMangaTitle(data.value.manga) : ''))
 
@@ -59,6 +57,7 @@
         :manga-id="mangaId"
         :total="total"
         :has-more="hasMore"
+        :filtered="filtered"
         :pending="pending"
         @load-more="loadMore"
       />

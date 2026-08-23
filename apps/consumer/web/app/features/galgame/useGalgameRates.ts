@@ -18,6 +18,10 @@ export function useGalgameRates(galgameId: number, initial: GalgameRateList) {
   const hasDimensions = ref(false)
 
   const hasMore = computed(() => page.value < totalPages.value)
+  const filtered = computed(
+    () =>
+      Boolean(status.value) || score.value != null || Boolean(spoiler.value) || hasDimensions.value,
+  )
 
   async function fetchPage(target: number, replace: boolean) {
     if (pending.value) return
@@ -29,6 +33,7 @@ export function useGalgameRates(galgameId: number, initial: GalgameRateList) {
           page: target,
           page_size: PAGE_SIZE,
           sort: sort.value,
+          has_content: true,
           ...(status.value ? { status: status.value } : {}),
           ...(score.value != null ? { score: score.value } : {}),
           ...(spoiler.value ? { spoiler: spoiler.value } : {}),
@@ -50,5 +55,17 @@ export function useGalgameRates(galgameId: number, initial: GalgameRateList) {
 
   watch([sort, status, score, spoiler, hasDimensions], () => void fetchPage(1, true))
 
-  return { items, total, pending, hasMore, loadMore, sort, status, score, spoiler, hasDimensions }
+  return {
+    items,
+    total,
+    pending,
+    hasMore,
+    filtered,
+    loadMore,
+    sort,
+    status,
+    score,
+    spoiler,
+    hasDimensions,
+  }
 }
