@@ -11,17 +11,6 @@ const dimension = v.nullish(
   null,
 )
 
-const hours = v.nullish(
-  v.pipe(
-    v.union([v.number('时长应为数字'), v.pipe(v.string('时长应为数字'), v.trim())], '时长应为数字'),
-    v.transform(val => (val === '' ? null : Number(val))),
-    v.check(val => val === null || Number.isFinite(val), '时长应为数字'),
-    v.check(val => val === null || val >= 0, '时长不能为负'),
-    v.check(val => val === null || val <= 9999, '时长不能超过 9999 小时'),
-  ),
-  null,
-)
-
 export const galgameRateSchema = v.object({
   status: v.picklist(['GOING', 'COMPLETED', 'ON_HOLD', 'DROPPED'], '选个状态'),
   rate: v.pipe(
@@ -35,7 +24,10 @@ export const galgameRateSchema = v.object({
     v.trim(),
     v.maxLength(2000, '短评不能超过 2000 字'),
   ),
-  time_to_finish_hours: hours,
+  time_to_finish_hours: v.nullish(
+    v.pipe(v.number('时长应为数字'), v.minValue(0, '时长不能为负'), v.maxValue(9999, '时长过大')),
+    null,
+  ),
   is_spoiler: v.optional(v.boolean(), false),
   rate_scenario: dimension,
   rate_direction: dimension,

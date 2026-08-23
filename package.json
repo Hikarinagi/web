@@ -7,17 +7,11 @@
     "node": ">=24"
   },
   "scripts": {
-    "build": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web build",
     "build:frontend-deps": "pnpm --filter @hikarinagi/consumer-web^... --if-present build",
+    "build": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web build",
     "dev": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web dev",
-    "format": "prettier --write \"apps/consumer/web/**/*.{js,cjs,mjs,ts,tsx,vue,json,jsonc,md,yml,yaml,css,html}\"",
-    "format:check": "prettier --check \"apps/consumer/web/**/*.{js,cjs,mjs,ts,tsx,vue,json,jsonc,md,yml,yaml,css,html}\"",
     "lint": "pnpm --filter @hikarinagi/consumer-web lint:check",
     "test": "pnpm --filter @hikarinagi/consumer-web test",
     "typecheck": "pnpm build:frontend-deps && pnpm --filter @hikarinagi/consumer-web typecheck"
-  },
-  "devDependencies": {
-    "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.8.0"
   }
 }

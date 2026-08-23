@@ -29,9 +29,7 @@
         <div class="order-2 flex flex-col gap-1 text-sm text-muted-color md:order-1 md:items-end">
           <p>
             © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
-            <span v-tooltip.top="buildLabel" class="cursor-help tabular-nums">
-              {{ appVersion }}
-            </span>
+            <span v-tooltip.top="buildLabel" class="cursor-help tabular-nums">{{ appVersion }}</span>
           </p>
           <NuxtLink to="/developers" class="w-fit transition-colors hover:text-color">
             开发者平台

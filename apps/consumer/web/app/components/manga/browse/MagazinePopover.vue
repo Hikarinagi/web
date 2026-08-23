@@ -86,9 +86,7 @@
             class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
             @click="select(null)"
           >
-            <span
-              class="min-w-0 flex-1 truncate text-[13px] text-surface-700 dark:text-surface-300"
-            >
+            <span class="min-w-0 flex-1 truncate text-[13px] text-surface-700 dark:text-surface-300">
               全部杂志
             </span>
             <Check
@@ -103,9 +101,7 @@
             class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
             @click="select(row)"
           >
-            <span
-              class="min-w-0 flex-1 truncate text-[13px] text-surface-700 dark:text-surface-300"
-            >
+            <span class="min-w-0 flex-1 truncate text-[13px] text-surface-700 dark:text-surface-300">
               {{ row.name }}
             </span>
             <Check
