@@ -1,6 +1,5 @@
-import type { TocEntry } from '@ritojs/core'
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { Reader } from '@ritojs/core/web'
+import type { TocEntry, Reader } from '@ritojs/core'
+import type { ReadingPosition } from '@ritojs/kit'
 import type { ShallowRef } from 'vue'
 import { onBeforeUnmount, watch } from 'vue'
 import { toBackendPosition } from '../lib/storage'

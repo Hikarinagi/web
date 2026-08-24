@@ -1,6 +1,7 @@
-import { createReader } from '@ritojs/core/web'
+import { createReader } from '@ritojs/core'
 import { createController } from '@ritojs/kit'
 import { createControllerOptions, createReaderOptions } from './layout'
+import { loadPinnedFontPolicy } from './pinned-fonts'
 import type { HikariReaderInput, ReaderStack, ReaderViewport } from '../types'
 
 export async function createReaderStack(
@@ -9,7 +10,11 @@ export async function createReaderStack(
   input: HikariReaderInput,
 ): Promise<ReaderStack> {
   const canvas = document.createElement('canvas')
-  const reader = await createReader(epub, canvas, createReaderOptions(viewport, input))
+  const pinnedFontPolicy = await loadPinnedFontPolicy()
+  const reader = await createReader(epub, canvas, {
+    ...createReaderOptions(viewport, input),
+    pinnedFontPolicy,
+  })
 
   try {
     const controller = createController(reader, canvas, createControllerOptions(input))

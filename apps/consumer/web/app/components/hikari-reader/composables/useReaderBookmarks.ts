@@ -1,6 +1,5 @@
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { ReaderController } from '@ritojs/kit'
-import type { Reader } from '@ritojs/core/web'
+import type { ReadingPosition, ReaderController } from '@ritojs/kit'
+import type { Reader } from '@ritojs/core'
 import { push } from 'notivue'
 import type { ShallowRef } from 'vue'
 import { computed, ref } from 'vue'

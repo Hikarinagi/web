@@ -23,9 +23,15 @@ export function useReaderSettingsSync(options: ReaderSettingsSyncOptions) {
   )
 
   watch(
-    () => [options.settings.value.line_height, options.settings.value.font_family] as const,
-    ([lineHeight, fontFamily]) => {
+    () =>
+      [
+        options.settings.value.font_size,
+        options.settings.value.line_height,
+        options.settings.value.font_family,
+      ] as const,
+    ([fontSize, lineHeight, fontFamily]) => {
       options.controller.value?.setTypography({
+        fontSize,
         lineHeight,
         lineHeightForce: true,
         fontFamily: fontFamily || null,
@@ -35,7 +41,7 @@ export function useReaderSettingsSync(options: ReaderSettingsSyncOptions) {
   )
 
   watch(
-    () => [options.settings.value.font_size, options.settings.value.margins] as const,
+    () => options.settings.value.margins,
     () => {
       options.refreshLayout()
     },

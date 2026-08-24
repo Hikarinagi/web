@@ -1,40 +1,24 @@
-import type { ReaderOptions } from '@ritojs/core/web'
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { ControllerOptions } from '@ritojs/kit'
+import type { ReaderOptions } from '@ritojs/core'
+import type { ReadingPosition, ControllerOptions } from '@ritojs/kit'
 import { createAnnotationStorage, createPositionStorage } from './storage'
 import { isDarkBackground } from './theme'
 import type { HikariReaderInput, ReaderSpreadMode, ReaderViewport } from '../types'
 
 const RITO_TRANSITION = { stiffness: 180, damping: 22 } as const
-const READER_BASE_FONT_SIZE = 16
-
-/**
- * Map a UI font_size (px) to a Rito zoom scale.
- *
- * Rito implements visual font zoom through `setRenderScale` plus a re-pagination at
- * `viewport / scale`, not through `setTypography({ fontSize })`. The latter only
- * shifts rem-derived layout dimensions and rarely changes the rendered text size
- * users perceive. Following the official `apps/reader` demo, we treat font_size
- * as a zoom factor over a 16px baseline.
- */
-export function fontSizeToZoomScale(fontSize: number) {
-  if (!Number.isFinite(fontSize) || fontSize <= 0) return 1
-  return fontSize / READER_BASE_FONT_SIZE
-}
 
 export function createReaderOptions(
   viewport: ReaderViewport,
   input: HikariReaderInput,
 ): ReaderOptions {
   const settings = input.settings.value
-  const scale = fontSizeToZoomScale(settings.font_size)
-  const vpWidth = Math.max(1, Math.round(viewport.width / scale))
-  const vpHeight = Math.max(1, Math.round(viewport.height / scale))
+  const vpWidth = Math.max(1, Math.round(viewport.width))
+  const vpHeight = Math.max(1, Math.round(viewport.height))
   return {
     width: vpWidth,
     height: vpHeight,
     margin: getReaderMargin(vpWidth, settings.margins),
     spread: getSpreadMode(viewport.width),
+    fontSize: settings.font_size,
     backgroundColor: settings.background_color,
     foregroundColor: isDarkBackground(settings.background_color) ? settings.text_color : undefined,
     lineBreaking: 'greedy',
@@ -48,7 +32,6 @@ export function createReaderOptions(
 export function createControllerOptions(input: HikariReaderInput): ControllerOptions {
   return {
     transition: RITO_TRANSITION,
-    renderScale: fontSizeToZoomScale(input.settings.value.font_size),
     positionStorage: createPositionStorage({
       volumeId: input.volumeId,
       initialPosition:

@@ -1,7 +1,7 @@
 import type { ReaderController } from '@ritojs/kit'
 import type { Ref, ShallowRef } from 'vue'
 import type { BackendReaderSettings } from '~/components/hikari-reader/types'
-import { getReaderMargin, getSpreadMode, fontSizeToZoomScale } from '../lib/layout'
+import { getReaderMargin, getSpreadMode } from '../lib/layout'
 import type { ReaderSpreadMode } from '../types'
 
 interface ReaderResizeOptions {
@@ -19,16 +19,14 @@ export function useReaderResize(options: ReaderResizeOptions) {
     if (!controller) return
     if (containerWidth < 1 || containerHeight < 1) return
 
-    const scale = fontSizeToZoomScale(options.settings.value.font_size)
-    const vpWidth = Math.max(1, Math.round(containerWidth / scale))
-    const vpHeight = Math.max(1, Math.round(containerHeight / scale))
+    const vpWidth = Math.max(1, Math.round(containerWidth))
+    const vpHeight = Math.max(1, Math.round(containerHeight))
 
     const nextSpreadMode = getSpreadMode(containerWidth)
     if (nextSpreadMode !== activeSpreadMode) {
       activeSpreadMode = nextSpreadMode
       controller.setSpreadMode(nextSpreadMode)
     }
-    controller.setRenderScale(scale)
     controller.resize(vpWidth, vpHeight, getReaderMargin(vpWidth, options.settings.value.margins))
   }
 

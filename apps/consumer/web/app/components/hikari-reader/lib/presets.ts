@@ -39,10 +39,12 @@ export const READER_FONT_SIZE_RANGE = { min: 12, max: 36, step: 1, default: 18 }
 export const READER_LINE_HEIGHT_RANGE = { min: 1, max: 2.4, step: 0.1, default: 1.75 }
 export const READER_MARGIN_RANGE = { min: 0, max: 120, step: 4, default: 64 }
 
+// Values resolve inside the engine, which shapes with pinned faces only:
+// the generic families map to the pinned font policy's roles (serif =
+// Tinos + Source Han Serif, sans-serif = Arimo + Source Han Sans).
+// Platform font names are not resolvable there and must not be listed.
 export const READER_FONT_FAMILIES = [
   { value: '', label: '跟随书籍' },
-  { value: 'system-ui, -apple-system, "Segoe UI", sans-serif', label: '系统无衬线' },
-  { value: 'Georgia, "Times New Roman", serif', label: '衬线' },
-  { value: '"Noto Sans SC", system-ui, sans-serif', label: '思源黑体' },
-  { value: '"Source Han Serif SC", serif', label: '思源宋体' },
+  { value: 'serif', label: '衬线（思源宋体）' },
+  { value: 'sans-serif', label: '无衬线（思源黑体）' },
 ]

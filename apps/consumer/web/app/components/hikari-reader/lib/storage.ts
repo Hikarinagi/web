@@ -1,6 +1,9 @@
-import type { AnnotationRecord, RecordStorageAdapter } from '@ritojs/core/annotations'
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { ControllerOptions } from '@ritojs/kit'
+import type {
+  AnnotationRecord,
+  RecordStorageAdapter,
+  ReadingPosition,
+  ControllerOptions,
+} from '@ritojs/kit'
 import type { components } from '@hikarinagi/api-contract/v3'
 import type { BackendReaderVolumeState } from '~/components/hikari-reader/types'
 

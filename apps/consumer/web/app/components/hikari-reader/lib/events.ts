@@ -1,5 +1,4 @@
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { ReaderController } from '@ritojs/kit'
+import type { ReadingPosition, ReaderController } from '@ritojs/kit'
 import type { Ref, ShallowRef } from 'vue'
 import { DEFAULT_READER_ERROR } from './session'
 

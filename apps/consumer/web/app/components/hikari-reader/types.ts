@@ -1,5 +1,5 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import type { Reader } from '@ritojs/core/web'
+import type { Reader } from '@ritojs/core'
 import type { ReaderController } from '@ritojs/kit'
 import type { Ref } from 'vue'
 

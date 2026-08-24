@@ -1,11 +1,13 @@
 import { computed, onBeforeUnmount, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
 import { push } from 'notivue'
-import type { Reader } from '@ritojs/core/web'
-import type { ReadingPosition } from '@ritojs/core/position'
-import type { ReaderController } from '@ritojs/kit'
-import { buildHitMap } from '@ritojs/core/advanced'
-import type { AnnotationRecord, AnnotationRecordPatch } from '@ritojs/core/annotations'
-import { resolveAnnotations } from '@ritojs/core/annotations'
+import type { Reader } from '@ritojs/core'
+import type {
+  ReadingPosition,
+  ReaderController,
+  AnnotationRecord,
+  AnnotationRecordPatch,
+} from '@ritojs/kit'
+import { buildHitMap, resolveAnnotations } from '@ritojs/kit'
 import type { BackendReaderVolumeState } from '~/components/hikari-reader/types'
 import { toBackendKind, toBackendPosition, toRitoAnnotation } from '../lib/storage'
 
