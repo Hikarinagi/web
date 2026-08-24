@@ -27244,6 +27244,10 @@
             "description": "应用可请求的 scope 集合",
             "items": {
               "enum": [
+                "openid",
+                "profile",
+                "email",
+                "offline_access",
                 "catalog:read",
                 "catalog:full",
                 "user:read",

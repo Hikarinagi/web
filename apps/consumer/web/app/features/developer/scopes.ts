@@ -10,6 +10,30 @@ export interface DeveloperScopeEntry extends DeveloperScopeInfo {
 
 export const DEVELOPER_SCOPES = [
   {
+    scope: 'openid',
+    label: '以 Hikarinagi 账号登录',
+    description: '标准 OIDC 登录，签发 ID 令牌并返回用户的唯一标识 sub',
+    requires_user: true,
+  },
+  {
+    scope: 'profile',
+    label: '读取标准资料声明',
+    description: 'OIDC profile 声明：用户名、昵称与头像',
+    requires_user: true,
+  },
+  {
+    scope: 'email',
+    label: '读取邮箱地址',
+    description: 'OIDC email 声明：授权用户的邮箱及其验证状态',
+    requires_user: true,
+  },
+  {
+    scope: 'offline_access',
+    label: '保持登录状态',
+    description: '签发刷新令牌，应用可在用户离线时续期访问令牌',
+    requires_user: true,
+  },
+  {
     scope: 'catalog:read',
     label: '读取条目数据',
     description: '不含 NSFW 与乙女向条目',

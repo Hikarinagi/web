@@ -5,11 +5,20 @@
   defineProps<{ guide: DevelopersDocsPageData }>()
 
   const FACTS = [
-    { term: '访问令牌有效期', detail: '1 小时。访问令牌为自包含 JWT，无需调用内省端点即可验证。' },
+    {
+      term: '访问令牌形态',
+      detail:
+        '授权包含开放 API 权限时，签发自包含 JWT，无需调用内省端点即可验证；仅包含 openid / profile / email 时，签发不透明的身份令牌，用于调用用户信息端点。有效期均为 1 小时。',
+    },
     {
       term: '受众',
       detail:
-        '开放平台令牌的 aud 固定为 Hikarinagi ID 的 open 受众，仅 api.hikarinagi.org/v3/** 接受该受众。',
+        '开放 API 令牌的 aud 固定为 Hikarinagi ID 的 open 受众，仅 api.hikarinagi.org/v3/** 接受该受众；身份令牌不携带受众。',
+    },
+    {
+      term: '用户信息端点',
+      detail:
+        '服务发现文档中的 userinfo_endpoint。仅接受身份令牌；以绑定受众的 JWT 调用会返回 401，用户资料声明请读取 ID 令牌，或按下文换取身份令牌。',
     },
     {
       term: '刷新令牌',
@@ -50,6 +59,13 @@
     <p class="text-sm leading-relaxed text-muted-color">
       401
       并不总是意味着令牌过期。用户撤销授权后刷新同样会失败，此时应引导用户重新完成授权流程，而非持续重试。
+    </p>
+
+    <h3 class="text-base font-semibold text-color">身份令牌与开放 API 令牌</h3>
+    <p class="text-sm leading-relaxed text-muted-color">
+      同时申请了 openid 与开放 API 权限的应用，常规流程签发的是开放 API
+      令牌。如需调用用户信息端点，可在刷新时传入 scope=openid（可按需附加 profile、email）
+      换取一枚身份令牌；轮换返回的新刷新令牌仍保留完整权限，后续照常刷新即可取回开放 API 令牌。
     </p>
   </section>
 </template>

@@ -17972,7 +17972,7 @@ export interface components {
             /** @description 回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type */
             redirect_uris?: string[];
             /** @description 应用可请求的 scope 集合 */
-            scopes?: ("catalog:read" | "catalog:full" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
+            scopes?: ("openid" | "profile" | "email" | "offline_access" | "catalog:read" | "catalog:full" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
             /**
              * @description 机密客户端的令牌端点认证方式，对 public 客户端无效
              * @enum {string}
