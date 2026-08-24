@@ -10135,7 +10135,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** 我的应用列表 */
+        /**
+         * 我的应用列表
+         * @description limit 为当前账号可创建的应用数上限
+         */
         get: operations["DeveloperAppController_list"];
         put?: never;
         /**
@@ -11174,6 +11177,8 @@ export interface components {
             avatar_url: string | null;
             /** Format: date-time */
             created_at: string;
+            /** @description 该身份的应用数上限覆盖值，null 表示跟随全局配置 */
+            developer_app_limit: number | null;
             /** Format: email */
             email: string;
             is_verified: boolean;
@@ -11191,6 +11196,8 @@ export interface components {
             auth_web_url: string | null;
             bcrypt_cost: number;
             cdn_host: string | null;
+            /** @description 每个开发者可创建的应用数上限，0 表示关闭自助创建 */
+            developer_app_limit: number;
             email_provider: string;
             email_provider_api_key_set: boolean;
             email_provider_endpoint: string | null;
@@ -12732,6 +12739,11 @@ export interface components {
             scope: string | null;
             /** @description 令牌端点认证方式，公共客户端为 none */
             token_endpoint_auth_method: string;
+        };
+        DeveloperAppListDto: {
+            items: components["schemas"]["DeveloperAppDto"][];
+            /** @description 当前账号可创建的应用数上限，由后台按全局或用户级配置下发 */
+            limit: number;
         };
         DeveloperAppSecretDto: {
             /**
@@ -18008,6 +18020,8 @@ export interface components {
             feed_carousel_show_dots?: boolean;
         };
         UpdateIdentityDto: {
+            /** @description 应用数上限覆盖值，null 表示跟随全局配置，0 表示禁止该身份创建应用 */
+            developer_app_limit?: number | null;
             /** Format: email */
             email?: string;
             is_verified?: boolean;
@@ -18020,6 +18034,8 @@ export interface components {
             auth_web_url?: string | null;
             bcrypt_cost?: number;
             cdn_host?: string | null;
+            /** @description 每个开发者可创建的应用数上限，0 表示关闭自助创建 */
+            developer_app_limit?: number;
             /** @enum {string} */
             email_provider?: "elastic" | "postal";
             /** @description null clears; encrypted at rest by the IdP */
@@ -35924,7 +35940,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeveloperAppDto"][];
+                    "application/json": components["schemas"]["DeveloperAppListDto"];
                 };
             };
         };

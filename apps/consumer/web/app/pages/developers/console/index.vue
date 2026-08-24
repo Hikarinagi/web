@@ -9,5 +9,5 @@
 </script>
 
 <template>
-  <DeveloperConsoleApps v-if="data" :apps="data.apps" @changed="refresh" />
+  <DeveloperConsoleApps v-if="data" :apps="data.apps" :limit="data.limit" @changed="refresh" />
 </template>

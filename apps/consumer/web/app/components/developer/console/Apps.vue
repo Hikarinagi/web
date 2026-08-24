@@ -4,8 +4,18 @@
 
   defineOptions({ name: 'DeveloperConsoleApps' })
 
-  const props = defineProps<{ apps: DevelopersConsolePageData['apps'] }>()
+  const props = defineProps<{
+    apps: DevelopersConsolePageData['apps']
+    limit: DevelopersConsolePageData['limit']
+  }>()
   const emit = defineEmits<{ changed: [] }>()
+
+  const atLimit = computed(() => props.apps.length >= props.limit)
+  const limitHint = computed(() => {
+    if (!atLimit.value) return undefined
+    if (props.limit === 0) return '当前未开放自助创建应用'
+    return `已达应用数量上限 ${props.limit} 个，删除已有应用后可继续创建`
+  })
 
   const createOpen = ref(false)
   const secret = ref<{ client_id: string; client_secret: string } | null>(null)
@@ -23,9 +33,9 @@
 
 <template>
   <div class="flex flex-col gap-5">
-    <CardPanel title="我的应用" :count="props.apps.length">
+    <CardPanel title="我的应用" :count="props.apps.length" :description="limitHint">
       <template #actions>
-        <Button label="创建应用" :disabled="props.apps.length >= 3" @click="createOpen = true">
+        <Button label="创建应用" :disabled="atLimit" @click="createOpen = true">
           <template #icon><Plus class="size-4" /></template>
         </Button>
       </template>

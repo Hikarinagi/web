@@ -327,6 +327,11 @@
             "format": "date-time",
             "type": "string"
           },
+          "developer_app_limit": {
+            "description": "该身份的应用数上限覆盖值，null 表示跟随全局配置",
+            "nullable": true,
+            "type": "number"
+          },
           "email": {
             "format": "email",
             "type": "string"
@@ -365,6 +370,7 @@
           "username",
           "nickname",
           "avatar_url",
+          "developer_app_limit",
           "created_at",
           "updated_at"
         ],
@@ -389,6 +395,10 @@
           "cdn_host": {
             "nullable": true,
             "type": "string"
+          },
+          "developer_app_limit": {
+            "description": "每个开发者可创建的应用数上限，0 表示关闭自助创建",
+            "type": "number"
           },
           "email_provider": {
             "type": "string"
@@ -463,6 +473,7 @@
           "username_min_length",
           "username_max_length",
           "bcrypt_cost",
+          "developer_app_limit",
           "forbidden_email_domains"
         ],
         "type": "object"
@@ -6683,6 +6694,25 @@
           "grant_types",
           "enabled",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "DeveloperAppListDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeveloperAppDto"
+            },
+            "type": "array"
+          },
+          "limit": {
+            "description": "当前账号可创建的应用数上限，由后台按全局或用户级配置下发",
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "limit"
         ],
         "type": "object"
       },
@@ -27369,6 +27399,13 @@
       },
       "UpdateIdentityDto": {
         "properties": {
+          "developer_app_limit": {
+            "description": "应用数上限覆盖值，null 表示跟随全局配置，0 表示禁止该身份创建应用",
+            "maximum": 100,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
           "email": {
             "format": "email",
             "type": "string"
@@ -27408,6 +27445,12 @@
           "cdn_host": {
             "nullable": true,
             "type": "string"
+          },
+          "developer_app_limit": {
+            "description": "每个开发者可创建的应用数上限，0 表示关闭自助创建",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
           },
           "email_provider": {
             "enum": [
@@ -60097,6 +60140,7 @@
     },
     "/api/v3/user/me/developer/apps": {
       "get": {
+        "description": "limit 为当前账号可创建的应用数上限",
         "operationId": "DeveloperAppController_list",
         "parameters": [],
         "responses": {
@@ -60104,10 +60148,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DeveloperAppDto"
-                  },
-                  "type": "array"
+                  "$ref": "#/components/schemas/DeveloperAppListDto"
                 }
               }
             },
