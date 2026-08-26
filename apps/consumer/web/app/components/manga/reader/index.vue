@@ -11,7 +11,9 @@
   import { useReaderChrome } from './composables/useReaderChrome'
   import { useReaderInteractions } from './composables/useReaderInteractions'
   import { useReaderSettings } from './composables/useReaderSettings'
-  import { MANGA_READER_EDUCATION_KEY } from './lib/settings'
+  import { useReaderEducation } from '~/components/reader/composables/useReaderEducation'
+  import { useReaderExit } from '~/components/reader/composables/useReaderExit'
+  import { MANGA_READER_EDUCATION_KEY, mangaEducationHints } from './lib/education'
 
   defineOptions({ name: 'MangaReader' })
 
@@ -32,7 +34,7 @@
   const { settings, toggleLayout, cycleFit } = useReaderSettings()
   const isMobile = useMediaQuery('(max-width: 639px)')
   const effectiveLayout = computed(() => (isMobile.value ? 'single' : settings.value.layout))
-  const effectiveFit = computed(() => (isMobile.value ? 'width' : settings.value.fit))
+  const effectiveFit = computed(() => (isMobile.value ? 'screen' : settings.value.fit))
 
   const reader = useMangaReader({
     pages: () => props.data.manifest.pages,
@@ -56,13 +58,18 @@
     panelOpen: () => settingsOpen.value || catalogOpen.value,
   })
 
-  const educationSeen = useLocalStorage(MANGA_READER_EDUCATION_KEY, false)
-  const mounted = useMounted()
-  const educationVisible = computed(() => mounted.value && !educationSeen.value)
+  const coarsePointer = useMediaQuery('(pointer: coarse)')
+  const education = useReaderEducation(MANGA_READER_EDUCATION_KEY)
+  const educationHints = computed(() =>
+    mangaEducationHints({
+      coarsePointer: coarsePointer.value,
+      zoomable: effectiveFit.value === 'screen',
+    }),
+  )
 
   function dismissEducation() {
-    educationSeen.value = true
-    chrome.showIntro()
+    education.dismiss()
+    chrome.show()
   }
 
   const auth = useAuthStore()
@@ -117,9 +124,7 @@
     void navigateTo(`/mangas/${manga.value.id}/read/${next.id}`, { replace: true })
   }
 
-  function backToDetail() {
-    void navigateTo(`/mangas/${manga.value.id}`)
-  }
+  const { back: goBack, exit: backToDetail } = useReaderExit(() => `/mangas/${manga.value.id}`)
 
   function openChapter(target: { id: number }) {
     if (leavingLabel.value) return
@@ -129,7 +134,7 @@
   }
 
   const interactions = useReaderInteractions({
-    educationVisible,
+    educationVisible: education.visible,
     next: reader.next,
     previous: reader.previous,
     hideChrome: chrome.hide,
@@ -147,7 +152,6 @@
   onMounted(() => {
     const spread = reader.currentSpread.value
     if (spread?.pages.length) loader.ensureAround(spread.pages.map(page => page.page_number))
-    if (!educationVisible.value) chrome.showIntro()
   })
 </script>
 
@@ -155,7 +159,7 @@
   <div
     class="manga-reader-root fixed inset-0 overflow-hidden"
     :class="backgroundClass"
-    @contextmenu.prevent="interactions.onChromeIntent"
+    @contextmenu="interactions.onContextMenu"
   >
     <MangaReaderStage
       :spreads="reader.spreads.value"
@@ -163,12 +167,12 @@
       :fit="effectiveFit"
       :can-go-next="reader.canGoNext.value"
       :can-go-previous="reader.canGoPrevious.value"
+      :animate="settings.page_animation"
       :status-of="loader.statusOf"
       :image-of="loader.imageOf"
       @next="reader.next"
       @previous="reader.previous"
       @tap="interactions.onChromeIntent"
-      @long-press="interactions.onChromeIntent"
       @retry-page="page => loader.retry(page)"
       @pointer-move="chrome.onStagePointerMove"
     >
@@ -196,13 +200,12 @@
       :chapter-label="chapterLabel"
       :total="reader.totalPages.value"
       :filled="reader.maxVisiblePage.value"
-      :page-label="pageLabel"
       :layout="effectiveLayout"
       :fit="effectiveFit"
       :can-go-next="reader.canGoNext.value"
       :can-go-previous="reader.canGoPrevious.value"
       :show-layout-controls="!isMobile"
-      @back="backToDetail"
+      @back="goBack"
       @open-catalog="catalogOpen = true"
       @next="reader.next"
       @previous="reader.previous"
@@ -210,8 +213,6 @@
       @toggle-layout="toggleLayout"
       @cycle-fit="cycleFit"
       @open-settings="event => settingsPopover?.toggle(event)"
-      @hover-start="chrome.pauseTimer"
-      @hover-end="chrome.resumeTimer"
     />
 
     <p
@@ -228,7 +229,7 @@
       :show-layout-controls="!isMobile"
       @show="settingsOpen = true"
       @hide="settingsOpen = false"
-      @replay-education="educationSeen = false"
+      @replay-education="education.replay()"
     />
 
     <MangaReaderChapterDrawer
@@ -253,14 +254,14 @@
 
     <AnimatePresence>
       <motion.div
-        v-if="educationVisible"
+        v-if="education.visible.value"
         key="manga-reader-education"
         class="absolute inset-0 z-50"
         :initial="{ opacity: 0 }"
         :animate="{ opacity: 1 }"
         :exit="{ opacity: 0 }"
       >
-        <MangaReaderEducationOverlay @dismiss="dismissEducation" />
+        <ReaderEducationOverlay :hints="educationHints" @dismiss="dismissEducation" />
       </motion.div>
     </AnimatePresence>
   </div>

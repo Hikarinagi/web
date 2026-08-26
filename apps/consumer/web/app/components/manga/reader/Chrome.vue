@@ -10,7 +10,6 @@
     chapterLabel: string
     total: number
     filled: number
-    pageLabel: string
     layout: MangaReaderLayout
     fit: MangaReaderFit
     canGoNext: boolean
@@ -27,8 +26,6 @@
     toggleLayout: []
     cycleFit: []
     openSettings: [event: Event]
-    hoverStart: []
-    hoverEnd: []
   }>()
 </script>
 
@@ -47,8 +44,6 @@
         :chapter-label="chapterLabel"
         @back="emit('back')"
         @open-catalog="emit('openCatalog')"
-        @hover-start="emit('hoverStart')"
-        @hover-end="emit('hoverEnd')"
       />
     </motion.div>
   </AnimatePresence>
@@ -65,7 +60,6 @@
       <MangaReaderBottomBar
         :total="total"
         :filled="filled"
-        :page-label="pageLabel"
         :layout="layout"
         :fit="fit"
         :can-go-next="canGoNext"
@@ -77,8 +71,6 @@
         @toggle-layout="emit('toggleLayout')"
         @cycle-fit="emit('cycleFit')"
         @open-settings="event => emit('openSettings', event)"
-        @hover-start="emit('hoverStart')"
-        @hover-end="emit('hoverEnd')"
       />
     </motion.div>
   </AnimatePresence>

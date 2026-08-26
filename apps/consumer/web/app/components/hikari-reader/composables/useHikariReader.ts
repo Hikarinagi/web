@@ -100,8 +100,58 @@ export function useHikariReader(input: HikariReaderInput) {
       totalSpreads,
     })
     stack.controller.mount(target)
+    // Overwrite Rito's built-in navigation shortcuts so keyboard turns honour
+    // the device's page-animation preference like every other entry point.
+    stack.controller.keyboard.registerPreset('reader-navigation', {
+      next,
+      prev: previous,
+      first: () => goToSpread(0),
+      last: () => goToSpread(totalSpreads.value - 1),
+    })
     resize.watch(getSpreadMode(width))
     return true
+  }
+
+  function goToSpread(index: number) {
+    const active = controller.value
+    if (!active) return
+    if (input.device.value.page_animation) active.goToSpread(index)
+    else active.jumpToSpread(index)
+  }
+
+  /** Always cuts, regardless of the device's animation preference. */
+  function jumpToSpread(index: number) {
+    controller.value?.jumpToSpread(index)
+  }
+
+  function next() {
+    const active = controller.value
+    if (active) goToSpread(active.currentSpread + 1)
+  }
+
+  function previous() {
+    const active = controller.value
+    if (active) goToSpread(active.currentSpread - 1)
+  }
+
+  function goTo(entry: TocEntry) {
+    const active = controller.value
+    if (!active) return
+    if (input.device.value.page_animation) {
+      active.navigateToTocEntry(entry)
+      return
+    }
+    const resolved = reader.value?.resolveTocEntry(entry)
+    if (resolved) active.jumpToSpread(resolved.spreadIndex)
+  }
+
+  /**
+   * Rito resolves the stored position asynchronously and lands on it through
+   * `jumpToSpread`, so this entry point never animates regardless of the
+   * device preference.
+   */
+  function goToPosition(position: ReadingPosition) {
+    return controller.value?.goToPosition(position) ?? Promise.resolve(undefined)
   }
 
   function dispose() {
@@ -128,13 +178,16 @@ export function useHikariReader(input: HikariReaderInput) {
     currentPosition,
     currentSpread,
     error,
-    goTo: (entry: TocEntry) => controller.value?.navigateToTocEntry(entry),
+    goTo,
+    goToPosition,
+    goToSpread,
     isLoaded,
     isLoading,
     isTransitioning,
+    jumpToSpread,
     load,
-    next: () => controller.value?.nextSpread(),
-    previous: () => controller.value?.prevSpread(),
+    next,
+    previous,
     progressPercentage,
     reader,
     retry: () => void load(),

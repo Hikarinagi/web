@@ -109,6 +109,15 @@
         />
       </div>
 
+      <div class="flex items-center justify-between">
+        <label for="manga-reader-page-animation" class="text-[13px] text-white">翻页动画</label>
+        <ToggleSwitch
+          input-id="manga-reader-page-animation"
+          :model-value="settings.page_animation"
+          @update:model-value="value => (settings = { ...settings, page_animation: value })"
+        />
+      </div>
+
       <Button
         unstyled
         class="cursor-pointer self-start text-[13px] text-primary transition-colors hover:text-primary/80"

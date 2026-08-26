@@ -106,6 +106,9 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['@ritojs/core', '@ritojs/kit'],
+    },
   },
 
   fonts: {

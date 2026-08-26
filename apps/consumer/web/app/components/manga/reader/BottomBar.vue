@@ -9,7 +9,6 @@
   const props = defineProps<{
     total: number
     filled: number
-    pageLabel: string
     layout: MangaReaderLayout
     fit: MangaReaderFit
     canGoNext: boolean
@@ -24,8 +23,6 @@
     toggleLayout: []
     cycleFit: []
     openSettings: [event: Event]
-    hoverStart: []
-    hoverEnd: []
   }>()
 
   const pillClass =
@@ -40,10 +37,8 @@
   >
     <div
       class="pointer-events-auto absolute inset-x-0 top-[30px] mx-auto w-[min(800px,calc(100%-32px))] sm:w-[min(800px,calc(100%-48px))]"
-      @pointerenter="emit('hoverStart')"
-      @pointerleave="emit('hoverEnd')"
     >
-      <MangaReaderProgressStrip
+      <MangaReaderProgressScrubber
         :total="total"
         :filled="filled"
         @jump="page => emit('jump', page)"
@@ -51,10 +46,8 @@
     </div>
     <div
       class="pointer-events-auto absolute inset-x-0 bottom-0 flex h-12 items-center justify-center gap-3 px-3 sm:justify-start sm:gap-4 sm:px-6"
-      @pointerenter="emit('hoverStart')"
-      @pointerleave="emit('hoverEnd')"
     >
-      <p class="hidden shrink-0 text-[11px] text-[#b8c2d1] lg:block">右滑下一页 右键呼出工具栏</p>
+      <p class="hidden shrink-0 text-[11px] text-[#b8c2d1] lg:block">右滑下一页 双击缩放</p>
       <span class="hidden w-2.5 shrink-0 lg:block" />
       <Button
         unstyled
@@ -65,7 +58,6 @@
         <ChevronLeft :size="15" aria-hidden="true" />
         下一页
       </Button>
-      <p class="shrink-0 text-[13px] font-medium text-white tabular-nums">{{ pageLabel }}</p>
       <Button
         unstyled
         :class="cn(pillClass, 'pr-3 pl-2.5')"

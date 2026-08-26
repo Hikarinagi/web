@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { AnimatePresence } from 'motion-v'
+  import { AnimatePresence, motion } from 'motion-v'
   import type { TocEntry } from '@ritojs/core'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
   import { getLightNovelTitle, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
@@ -21,7 +21,14 @@
   import { useReaderRenderReport } from './composables/useReaderRenderReport'
   import { useReaderSettingsPersist } from './composables/useReaderSettingsPersist'
   import { useReaderSystemTheme } from './composables/useReaderSystemTheme'
-  import { useReaderTapDetector } from './composables/useReaderTapDetector'
+  import { useReaderTapNavigation } from './composables/useReaderTapNavigation'
+  import { useReaderEducation } from '~/components/reader/composables/useReaderEducation'
+  import { useReaderExit } from '~/components/reader/composables/useReaderExit'
+  import {
+    HIKARI_READER_DEFAULT_DEVICE_SETTINGS,
+    HIKARI_READER_DEVICE_SETTINGS_KEY,
+  } from './lib/device-settings'
+  import { HIKARI_READER_EDUCATION_KEY, readerEducationHints } from './lib/education'
   import { deriveReaderTheme } from './lib/theme'
 
   defineOptions({
@@ -32,15 +39,21 @@
     data: LightNovelVolumeReaderPageData
   }>()
 
-  const router = useRouter()
   const title = computed(() => getLightNovelVolumeTitle(props.data.volume))
   const subtitle = computed(() => getLightNovelTitle(props.data.light_novel))
   const settings = ref<LightNovelVolumeReaderPageData['settings']>({ ...props.data.settings })
+  const device = useLocalStorage(
+    HIKARI_READER_DEVICE_SETTINGS_KEY,
+    { ...HIKARI_READER_DEFAULT_DEVICE_SETTINGS },
+    { mergeDefaults: true },
+  )
+  const education = useReaderEducation(HIKARI_READER_EDUCATION_KEY)
   useReaderSystemTheme(settings)
   useReaderSettingsPersist({ settings })
   const reader = useHikariReader({
     volumeId: props.data.volume.id,
     settings,
+    device,
     state: props.data.state,
   })
   const {
@@ -50,9 +63,11 @@
     currentSpread,
     error,
     goTo,
+    goToPosition,
+    goToSpread,
     isLoaded,
+    jumpToSpread,
     isLoading,
-    isTransitioning,
     load,
     next,
     previous,
@@ -103,32 +118,23 @@
       annotationsOpen.value = false
     },
   })
-  const CONTENT_TAP_SUPPRESS_MS = 360
-  let contentTapSuppressed = false
-  let contentTapSuppressTimer: number | null = null
-
-  function suppressContentTap() {
-    if (!controls.isCoarsePointer.value) return
-    contentTapSuppressed = true
-    if (contentTapSuppressTimer !== null) window.clearTimeout(contentTapSuppressTimer)
-    contentTapSuppressTimer = window.setTimeout(() => {
-      contentTapSuppressed = false
-      contentTapSuppressTimer = null
-    }, CONTENT_TAP_SUPPRESS_MS)
-  }
-
-  function consumeContentTapSuppression() {
-    const suppressed = contentTapSuppressed
-    contentTapSuppressed = false
-    if (contentTapSuppressTimer !== null) {
-      window.clearTimeout(contentTapSuppressTimer)
-      contentTapSuppressTimer = null
-    }
-    return suppressed
-  }
-
-  onBeforeUnmount(() => {
-    if (contentTapSuppressTimer !== null) window.clearTimeout(contentTapSuppressTimer)
+  const educationHints = computed(() =>
+    readerEducationHints({
+      coarsePointer: controls.isCoarsePointer.value,
+      tapZones: device.value.tap_zones,
+    }),
+  )
+  const surfaceTap = useReaderTapNavigation({
+    device,
+    isCoarsePointer: controls.isCoarsePointer,
+    isLoaded,
+    surface,
+    currentSpread,
+    jumpToSpread,
+    toggleToolbar: controls.toggle,
+    next,
+    previous,
+    blocked: education.visible,
   })
 
   const contextMenuEl = ref<HTMLElement | null>(null)
@@ -137,8 +143,8 @@
   const bookmarks = useReaderBookmarks({
     volumeId: props.data.volume.id,
     reader: reader.reader,
-    controller: reader.controller,
     currentPosition,
+    goToPosition,
     initial: props.data.state.bookmarks,
   })
   const annotations = useReaderAnnotations({
@@ -147,21 +153,23 @@
     reader: reader.reader,
     currentPosition,
     surface,
+    goToSpread,
+    suppressTap: surfaceTap.suppressTap,
     initial: props.data.state.annotations,
   })
   useReaderImagePreview({
     controller: reader.controller,
-    suppressTap: suppressContentTap,
+    suppressTap: surfaceTap.suppressTap,
   })
   const linkPrompts = useReaderLinkPrompts({
     controller: reader.controller,
     currentSpread,
-    suppressTap: suppressContentTap,
+    suppressTap: surfaceTap.suppressTap,
   })
   const footnotes = useReaderFootnotes({
     controller: reader.controller,
     currentSpread,
-    suppressTap: suppressContentTap,
+    suppressTap: surfaceTap.suppressTap,
   })
   const {
     open: reportOpen,
@@ -298,19 +306,9 @@
     catalogOpen.value = false
   }
 
-  function goBack() {
-    void router.push(`/light-novel-volumes/${props.data.volume.id}`)
-  }
-
-  function goBackHistory() {
-    if (router.options.history.state.back) router.back()
-    else goBack()
-  }
-
-  function toggleToolbar() {
-    if (controls.visible.value) controls.hide()
-    else controls.showTransient()
-  }
+  const { back: goBackHistory, exit: goBack } = useReaderExit(
+    () => `/light-novel-volumes/${props.data.volume.id}`,
+  )
 
   const contextItems = useReaderContextItems({
     isLoaded,
@@ -328,7 +326,7 @@
     openBookmarks,
     openAnnotations,
     addBookmark,
-    toggleToolbar,
+    toggleToolbar: controls.toggle,
     openReport,
     retry,
     back: goBackHistory,
@@ -336,17 +334,22 @@
   })
 
   function onContextMenu(event: MouseEvent) {
+    if (education.visible.value) return
     contextMenu.show(event)
   }
 
   function onRootClick(event: MouseEvent) {
     contextMenu.handleOutsidePointer(event.target)
+    // The tap detector already acted on this gesture; the trailing compatibility
+    // click must not be read as "pointer went down outside the toolbar".
+    if (surfaceTap.consumeGhostClick()) return
     controls.handleOutsidePointer(event.target)
   }
 
   function onRootPointerDown(event: PointerEvent) {
-    annotations.handleOutsidePointer(event.target)
-    if (footnotes.handleOutsidePointer(event.target)) suppressContentTap()
+    // Dismissing a popover is what this tap was for — it must not also page.
+    if (annotations.handleOutsidePointer(event.target)) surfaceTap.suppressTap()
+    if (footnotes.handleOutsidePointer(event.target)) surfaceTap.suppressTap()
   }
 
   watch(annotationDialogOpen, visible => {
@@ -354,14 +357,6 @@
     pendingAnnotationKind.value = null
     editingAnnotationId.value = null
     annotationDialogInitialColor.value = null
-  })
-
-  const surfaceTap = useReaderTapDetector({
-    isCoarsePointer: controls.isCoarsePointer,
-    isLoaded,
-    toggle: controls.toggleMobile,
-    consumeSuppressedTap: consumeContentTapSuppression,
-    shouldIgnoreTapStart: () => isTransitioning.value,
   })
 </script>
 
@@ -379,8 +374,8 @@
         data-hikari-reader-surface
         class="relative z-1 flex h-full w-full items-center justify-center overflow-hidden"
         @pointerdown.capture="surfaceTap.onPointerDown"
-        @pointerup.capture="surfaceTap.onPointerUp"
-        @pointercancel.capture="surfaceTap.onPointerCancel"
+        @pointerup="surfaceTap.onPointerUp"
+        @pointercancel="surfaceTap.onPointerCancel"
         @touchstart="surfaceTap.onTouchStart"
         @touchend="surfaceTap.onTouchEnd"
         @touchcancel="surfaceTap.onTouchCancel"
@@ -433,7 +428,12 @@
       @select="selectToc"
     />
 
-    <HikariReaderSettingsPanel v-model:visible="settingsOpen" v-model:settings="settings" />
+    <HikariReaderSettingsPanel
+      v-model:visible="settingsOpen"
+      v-model:settings="settings"
+      v-model:device="device"
+      @replay-education="education.replay()"
+    />
 
     <HikariReaderBookmarkPanel
       v-model:visible="bookmarksOpen"
@@ -522,6 +522,19 @@
         "
         @remove="annotations.remove(annotations.activeAction.value!.id)"
       />
+    </AnimatePresence>
+
+    <AnimatePresence>
+      <motion.div
+        v-if="education.visible.value"
+        key="hikari-reader-education"
+        class="absolute inset-0 z-50"
+        :initial="{ opacity: 0 }"
+        :animate="{ opacity: 1 }"
+        :exit="{ opacity: 0 }"
+      >
+        <ReaderEducationOverlay :hints="educationHints" @dismiss="education.dismiss" />
+      </motion.div>
     </AnimatePresence>
 
     <AnimatePresence>

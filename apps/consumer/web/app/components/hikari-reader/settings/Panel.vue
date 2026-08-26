@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { BackendReaderSettings } from '~/components/hikari-reader/types'
+  import type { HikariReaderDeviceSettings } from '../lib/device-settings'
   import {
     READER_FONT_FAMILIES,
     READER_FONT_SIZE_RANGE,
@@ -7,11 +8,14 @@
     READER_MARGIN_RANGE,
     READER_SYSTEM_THEME_INDEX,
     READER_THEME_PRESETS,
-  } from './lib/presets'
+  } from '../lib/presets'
 
   defineOptions({ name: 'HikariReaderSettingsPanel' })
 
+  const emit = defineEmits<{ replayEducation: [] }>()
+
   const settings = defineModel<BackendReaderSettings>('settings', { required: true })
+  const device = defineModel<HikariReaderDeviceSettings>('device', { required: true })
   const visible = defineModel<boolean>('visible', { required: true })
 
   function applyPreset(index: number) {
@@ -31,6 +35,13 @@
 
   function patch<K extends keyof BackendReaderSettings>(key: K, value: BackendReaderSettings[K]) {
     settings.value = { ...settings.value, [key]: value }
+  }
+
+  function patchDevice<K extends keyof HikariReaderDeviceSettings>(
+    key: K,
+    value: HikariReaderDeviceSettings[K],
+  ) {
+    device.value = { ...device.value, [key]: value }
   }
 </script>
 
@@ -140,38 +151,58 @@
       </section>
 
       <section class="space-y-3">
-        <div class="flex items-center justify-between">
-          <div class="space-y-0.5">
-            <p class="text-sm">显示进度</p>
-            <p class="text-xs text-muted-color">底部工具栏显示阅读进度</p>
-          </div>
-          <ToggleSwitch
-            :model-value="settings.show_progress"
-            @update:model-value="value => patch('show_progress', value)"
-          />
-        </div>
+        <HikariReaderSettingsToggleRow
+          :model-value="settings.show_progress"
+          label="显示进度"
+          description="底部工具栏显示阅读进度"
+          @update:model-value="value => patch('show_progress', value)"
+        />
+        <HikariReaderSettingsToggleRow
+          :model-value="settings.show_time"
+          label="显示时间"
+          description="底部工具栏显示当前时间"
+          @update:model-value="value => patch('show_time', value)"
+        />
+        <HikariReaderSettingsToggleRow
+          :model-value="settings.keep_screen_on"
+          label="保持屏幕常亮"
+          description="在支持的浏览器上阅读时防止息屏"
+          @update:model-value="value => patch('keep_screen_on', value)"
+        />
+      </section>
 
-        <div class="flex items-center justify-between">
-          <div class="space-y-0.5">
-            <p class="text-sm">显示时间</p>
-            <p class="text-xs text-muted-color">底部工具栏显示当前时间</p>
-          </div>
-          <ToggleSwitch
-            :model-value="settings.show_time"
-            @update:model-value="value => patch('show_time', value)"
-          />
+      <section class="space-y-3">
+        <div class="space-y-1">
+          <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">本设备</h3>
+          <p class="text-xs text-muted-color">以下选项只在当前设备生效，不会同步到其他设备</p>
         </div>
+        <HikariReaderSettingsToggleRow
+          :model-value="device.page_animation"
+          label="翻页动画"
+          description="关闭后翻页直接切换，适合水墨屏等低刷新率设备"
+          @update:model-value="value => patchDevice('page_animation', value)"
+        />
+        <HikariReaderSettingsToggleRow
+          :model-value="device.tap_zones"
+          label="点击区域翻页"
+          description="左侧 1/3 上一页，右侧 1/3 下一页，中间呼出工具栏"
+          @update:model-value="value => patchDevice('tap_zones', value)"
+        />
+      </section>
 
-        <div class="flex items-center justify-between">
-          <div class="space-y-0.5">
-            <p class="text-sm">保持屏幕常亮</p>
-            <p class="text-xs text-muted-color">在支持的浏览器上阅读时防止息屏</p>
-          </div>
-          <ToggleSwitch
-            :model-value="settings.keep_screen_on"
-            @update:model-value="value => patch('keep_screen_on', value)"
-          />
-        </div>
+      <section>
+        <Button
+          text
+          size="small"
+          label="操作说明"
+          class="px-0!"
+          @click="
+            () => {
+              visible = false
+              emit('replayEducation')
+            }
+          "
+        />
       </section>
     </div>
   </Drawer>

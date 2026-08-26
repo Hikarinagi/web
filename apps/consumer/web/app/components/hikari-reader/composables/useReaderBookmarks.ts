@@ -1,4 +1,4 @@
-import type { ReadingPosition, ReaderController } from '@ritojs/kit'
+import type { ReadingPosition } from '@ritojs/kit'
 import type { Reader } from '@ritojs/core'
 import { push } from 'notivue'
 import type { ShallowRef } from 'vue'
@@ -11,8 +11,8 @@ export type ReaderBookmark = BackendReaderVolumeState['bookmarks'][number]
 interface UseReaderBookmarksOptions {
   volumeId: number
   reader: ShallowRef<Reader | null>
-  controller: ShallowRef<ReaderController | null>
   currentPosition: ShallowRef<ReadingPosition | null>
+  goToPosition: (position: ReadingPosition) => Promise<number | undefined>
   initial: ReaderBookmark[]
 }
 
@@ -139,10 +139,11 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
   }
 
   function jumpTo(bookmark: ReaderBookmark) {
-    const controller = options.controller.value
     const position = positionOf(bookmark)
-    if (!controller || !position) return
-    controller.goToPosition(position)
+    if (!position) return
+    void options.goToPosition(position).catch(() => {
+      push.error({ message: '跳转到书签位置失败' })
+    })
   }
 
   return {

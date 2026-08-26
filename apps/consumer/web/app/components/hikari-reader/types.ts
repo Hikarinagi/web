@@ -2,6 +2,7 @@ import type { ApiData } from '@hikarinagi/api-contract/v3'
 import type { Reader } from '@ritojs/core'
 import type { ReaderController } from '@ritojs/kit'
 import type { Ref } from 'vue'
+import type { HikariReaderDeviceSettings } from './lib/device-settings'
 
 export type BackendReaderSettings = ApiData<'/api/v3/reader/settings', 'get'>
 export type BackendReaderVolumeState = ApiData<'/api/v3/reader/volumes/{volume_id}/state', 'get'>
@@ -9,6 +10,7 @@ export type BackendReaderVolumeState = ApiData<'/api/v3/reader/volumes/{volume_i
 export interface HikariReaderInput {
   volumeId: number
   settings: Ref<BackendReaderSettings>
+  device: Ref<HikariReaderDeviceSettings>
   state: BackendReaderVolumeState
 }
 

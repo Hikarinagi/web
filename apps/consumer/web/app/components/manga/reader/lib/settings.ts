@@ -7,16 +7,18 @@ export interface MangaReaderSettings {
   fit: MangaReaderFit
   background: MangaReaderBackground
   show_page_number: boolean
+  /** `false` cuts straight to the next page instead of dragging/animating it. */
+  page_animation: boolean
 }
 
 export const MANGA_READER_SETTINGS_KEY = 'hikari-manga-reader-settings'
-export const MANGA_READER_EDUCATION_KEY = 'hikari-manga-reader-education-seen'
 
 export const MANGA_READER_DEFAULT_SETTINGS: MangaReaderSettings = {
   layout: 'single',
   fit: 'screen',
   background: 'black',
   show_page_number: true,
+  page_animation: true,
 }
 
 export const MANGA_READER_LAYOUT_OPTIONS: { value: MangaReaderLayout; label: string }[] = [

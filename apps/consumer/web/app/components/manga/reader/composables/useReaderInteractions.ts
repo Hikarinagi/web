@@ -9,9 +9,22 @@ interface UseReaderInteractionsOptions {
 }
 
 export function useReaderInteractions(options: UseReaderInteractionsOptions) {
+  let lastPointerType = 'mouse'
+
   function onChromeIntent() {
     if (options.educationVisible.value) return
     options.toggleChrome()
+  }
+
+  /**
+   * A touch long-press raises `contextmenu` on Android. The mobile reader does
+   * nothing on long-press, so neither do we — right-click stays a pointer-only
+   * shortcut.
+   */
+  function onContextMenu(event: Event) {
+    event.preventDefault()
+    if (lastPointerType === 'touch') return
+    onChromeIntent()
   }
 
   function onKeydown(event: KeyboardEvent) {
@@ -28,6 +41,12 @@ export function useReaderInteractions(options: UseReaderInteractionsOptions) {
   }
 
   useEventListener(window, 'keydown', onKeydown)
+  useEventListener(
+    window,
+    'pointerdown',
+    (event: PointerEvent) => (lastPointerType = event.pointerType),
+    { capture: true },
+  )
 
-  return { onChromeIntent }
+  return { onChromeIntent, onContextMenu }
 }

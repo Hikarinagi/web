@@ -4,6 +4,7 @@
   import type { ReaderSpread } from './composables/useMangaReader'
   import type { MangaReaderFit } from './lib/settings'
   import { useStageGestures } from './composables/useStageGestures'
+  import { useStageZoom } from './composables/useStageZoom'
 
   defineOptions({ name: 'MangaReaderStage' })
 
@@ -13,6 +14,7 @@
     fit: MangaReaderFit
     canGoNext: boolean
     canGoPrevious: boolean
+    animate: boolean
     statusOf: (page: number) => PageLoadStatus
     imageOf: (page: number) => HTMLImageElement | null
   }>()
@@ -21,27 +23,43 @@
     next: []
     previous: []
     tap: [event: PointerEvent]
-    longPress: []
     retryPage: [page: number]
     pointerMove: [event: PointerEvent]
   }>()
 
   const viewport = ref<HTMLElement | null>(null)
   const scrollers = new Map<number, HTMLElement>()
+  const contents = new Map<number, HTMLElement>()
 
   function setScroller(index: number, el: Element | null) {
     if (el instanceof HTMLElement) scrollers.set(index, el)
     else scrollers.delete(index)
   }
 
+  function setContent(index: number, el: Element | null) {
+    if (el instanceof HTMLElement) contents.set(index, el)
+    else contents.delete(index)
+  }
+
+  /** Only the whole-page layout can be panned; the rest scroll natively. */
+  const zoomable = computed(() => props.fit === 'screen')
+
+  const zoom = useStageZoom({
+    viewport,
+    content: () => contents.get(props.current) ?? null,
+    enabled: () => zoomable.value,
+  })
+
   const gestures = useStageGestures({
     viewport,
     canGoNext: () => props.canGoNext,
     canGoPrevious: () => props.canGoPrevious,
+    animate: () => props.animate,
+    zoomable: () => zoomable.value,
+    zoom,
     next: () => emit('next'),
     previous: () => emit('previous'),
     onTap: event => emit('tap', event),
-    onLongPress: () => emit('longPress'),
   })
 
   const windowSpreads = computed(() =>
@@ -86,9 +104,12 @@
     () => {
       const scroller = scrollers.get(props.current)
       if (scroller) scroller.scrollTop = 0
+      zoom.reset()
     },
     { flush: 'post' },
   )
+
+  watch(zoomable, () => zoom.reset())
 
   function slotStyle(index: number) {
     return { transform: `translateX(${(props.current - index) * 100}%)` }
@@ -98,7 +119,8 @@
 <template>
   <div
     ref="viewport"
-    class="stage-viewport absolute inset-0 overflow-hidden"
+    class="absolute inset-0 overflow-hidden"
+    :style="{ touchAction: zoomable ? 'none' : 'pan-y' }"
     @pointerdown="gestures.onPointerDown"
     @pointermove="
       (event: PointerEvent) => {
@@ -123,9 +145,10 @@
           v-else
           :ref="el => setScroller(spread.index, el as Element | null)"
           :class="cn('h-full w-full', scrollerClass)"
+          :style="spread.index === current ? zoom.style.value : undefined"
         >
           <div :class="outerClass">
-            <div :class="innerClass">
+            <div :ref="el => setContent(spread.index, el as Element | null)" :class="innerClass">
               <MangaReaderPageCanvas
                 v-for="page in spread.pages"
                 :key="page.page_number"
@@ -143,9 +166,3 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-  .stage-viewport {
-    touch-action: pan-y;
-  }
-</style>

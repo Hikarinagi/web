@@ -60,7 +60,7 @@ export function useReaderControls(options: UseReaderControlsOptions) {
     mode.value = 'hidden'
   }
 
-  function toggleMobile() {
+  function toggle() {
     if (mode.value === 'hidden') showTransient()
     else hide()
   }
@@ -124,7 +124,7 @@ export function useReaderControls(options: UseReaderControlsOptions) {
     showTransient,
     showIntro,
     hide,
-    toggleMobile,
+    toggle,
     handleOutsidePointer,
     pauseTimer,
     resumeTimer,

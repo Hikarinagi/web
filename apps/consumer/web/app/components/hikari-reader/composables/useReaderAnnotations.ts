@@ -7,8 +7,8 @@ import type {
   AnnotationRecord,
   AnnotationRecordPatch,
 } from '@ritojs/kit'
-import { buildHitMap, resolveAnnotations } from '@ritojs/kit'
 import type { BackendReaderVolumeState } from '~/components/hikari-reader/types'
+import { annotationPageIndex, progressPageOf } from '../lib/annotation-position'
 import { toBackendKind, toBackendPosition, toRitoAnnotation } from '../lib/storage'
 
 export type ReaderAnnotation = AnnotationRecord
@@ -30,6 +30,9 @@ interface UseReaderAnnotationsOptions {
   reader: ShallowRef<Reader | null>
   currentPosition: ShallowRef<ReadingPosition | null>
   surface: Ref<HTMLElement | null>
+  goToSpread: (index: number) => void
+  /** Claim the in-flight tap so it cannot also turn the page. */
+  suppressTap: () => void
   initial: BackendReaderVolumeState['annotations']
 }
 
@@ -42,57 +45,6 @@ export const ANNOTATION_COLORS = [
 ] as const
 
 export const DEFAULT_ANNOTATION_COLOR = ANNOTATION_COLORS[0].value
-
-function stripFragment(href: string): string {
-  const idx = href.indexOf('#')
-  return idx === -1 ? href : href.slice(0, idx)
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max)
-}
-
-function chapterRangeOf(reader: Reader, href: string) {
-  const direct = reader.chapterMap.get(href)
-  if (direct) return direct
-
-  const targetHref = stripFragment(href)
-  for (const [idref, manifestHref] of reader.manifestHrefMap) {
-    if (stripFragment(manifestHref) !== targetHref) continue
-    return reader.chapterMap.get(idref) ?? null
-  }
-  return null
-}
-
-function progressPageOf(record: AnnotationRecord, reader: Reader) {
-  const range = chapterRangeOf(reader, record.target.href)
-  if (!range) return null
-
-  const rawProgress = record.target.selectors.progression.chapterProgress
-  const progress = Number.isFinite(rawProgress) ? clamp(rawProgress, 0, 1) : 0
-  const offset = Math.round((range.endPage - range.startPage) * progress)
-  return range.startPage + offset
-}
-
-function exactPageOf(record: AnnotationRecord, reader: Reader) {
-  const range = reader.chapterMap.get(record.target.href)
-  if (!range) return null
-
-  const hitMaps = new Map<number, ReturnType<typeof buildHitMap>>()
-  for (let pageIndex = range.startPage; pageIndex <= range.endPage; pageIndex++) {
-    const page = reader.pages[pageIndex]
-    if (page) hitMaps.set(page.index, buildHitMap(page))
-  }
-
-  const [resolved] = resolveAnnotations([record], {
-    chapterIndices: reader.getChapterTextIndices(),
-    hitMaps,
-    chapterPageRanges: reader.chapterMap,
-    measurer: reader.measurer,
-  })
-  const pages = resolved?.segments.map(segment => segment.pageIndex) ?? []
-  return pages.length ? Math.min(...pages) : null
-}
 
 export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
   const initialRecords = options.initial.map(toRitoAnnotation)
@@ -132,10 +84,14 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
   }
 
   function handleOutsidePointer(target: EventTarget | null) {
-    if (!activeAction.value) return
-    if (!(target instanceof HTMLElement)) return
-    if (target.closest('[data-reader-action-popover]')) return
+    if (!activeAction.value && !selection.value) return false
+    if (!(target instanceof HTMLElement)) return false
+    if (target.closest('[data-reader-action-popover]')) return false
+    if (target.closest('[data-reader-selection-popover]')) return false
     activeAction.value = null
+    // The selection itself is Rito's to clear on touchend; we only need the
+    // tap that dismisses it to stop short of turning the page.
+    return true
   }
 
   function handleEscape(event: KeyboardEvent) {
@@ -230,12 +186,11 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
 
   function jumpTo(record: AnnotationRecord) {
     const reader = options.reader.value
-    const controller = options.controller.value
-    if (!reader || !controller) return
-    const pageIndex = exactPageOf(record, reader) ?? progressPageOf(record, reader)
+    if (!reader) return
+    const pageIndex = annotationPageIndex(record, reader)
     if (pageIndex === null) return
     const spreadIndex = reader.findSpread(pageIndex)
-    if (spreadIndex !== undefined) controller.goToSpread(spreadIndex)
+    if (spreadIndex !== undefined) options.goToSpread(spreadIndex)
   }
 
   let unsubs: Array<() => void> = []
@@ -282,6 +237,7 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
 
     unsubs.push(
       controller.on('annotationClick', ({ annotation, x, y }) => {
+        options.suppressTap()
         selection.value = null
         activeAction.value = {
           id: annotation.id,
