@@ -48,7 +48,9 @@ export async function fetchEntitySearch(
       return res.items
     }
     case 'galgame': {
-      const res = await hikariRequest('/api/v3/galgames', { query })
+      const res = await hikariRequest('/api/v3/galgames', {
+        query: { ...query, include_dev: true },
+      })
       return res.items.map(g => ({
         id: g.id,
         name: g.trans_title || g.origin_title,
