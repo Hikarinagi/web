@@ -5,6 +5,7 @@ import {
   LogOut,
   Palette,
   Settings,
+  Terminal,
   UserRound,
   Shirt,
 } from '@lucide/vue'
@@ -78,6 +79,12 @@ export function useUserMenu() {
         label: '创作者中心',
         iconComponent: LayoutDashboard,
         command: () => void navigateTo('/create', { open: { target: '_blank' } }),
+      },
+      {
+        key: 'developers',
+        label: '开发者平台',
+        iconComponent: Terminal,
+        command: () => void navigateTo('/developers'),
       },
       { separator: true },
       {

@@ -37,11 +37,5 @@ export function useFeedTabs(onSelect?: (key: FeedScope) => void) {
     onSelect?.(key)
   }
 
-  function shift(step: number) {
-    const index = FEED_TABS.findIndex(item => item.key === scope.value)
-    const next = FEED_TABS[index + step]
-    if (next) select(next.key)
-  }
-
-  return { tabs: FEED_TABS, scope, active, select, shift }
+  return { tabs: FEED_TABS, scope, active, select }
 }

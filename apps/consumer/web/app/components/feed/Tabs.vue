@@ -18,7 +18,7 @@
   <div
     v-if="orientation === 'horizontal'"
     role="tablist"
-    class="app-surface-blur sticky top-(--app-header-height) z-30 flex h-(--feed-tabs-height) items-end gap-8"
+    class="app-surface-blur sticky top-(--app-header-height) z-30 flex h-(--feed-tabs-height) items-end gap-0 sm:gap-8"
   >
     <motion.button
       v-for="tab in tabs"
@@ -26,7 +26,7 @@
       type="button"
       role="tab"
       :aria-selected="active === tab.key"
-      class="group relative flex cursor-pointer flex-col items-center gap-2 rounded outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
+      class="group relative flex flex-1 cursor-pointer flex-col items-center gap-2 rounded outline-none focus-visible:ring-2 focus-visible:ring-primary-200 sm:flex-none dark:focus-visible:ring-primary-900"
       :while-press="{ opacity: 0.7 }"
       @click="select(tab.key)"
     >

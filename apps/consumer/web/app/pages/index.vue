@@ -8,7 +8,7 @@
   definePageMeta({ footer: false, container: 'full', headerFlush: true })
 
   const { request: requestFeedRefresh } = useFeedRefreshSignal()
-  const { scope, shift } = useFeedTabs(requestFeedRefresh)
+  const { scope } = useFeedTabs(requestFeedRefresh)
 
   // 首屏 seed 的是落地时那个 tab。这里刻意取快照而非响应式引用:BFF 的 key 跟着变会让
   // 每次切 tab 都重拉一次侧栏。切 tab 后的流由 feed 接口自己拉。
@@ -30,14 +30,6 @@
     { immediate: true },
   )
 
-  const feedArea = ref<HTMLElement | null>(null)
-  useSwipe(feedArea, {
-    threshold: 60,
-    onSwipeEnd(_event, direction) {
-      if (direction === 'left') shift(1)
-      else if (direction === 'right') shift(-1)
-    },
-  })
   const auth = useAuthStore()
   const router = useRouter()
   const resetFeed = useFeedReset()
@@ -55,16 +47,21 @@
 </script>
 
 <template>
-  <FeedPageShell v-if="data" lock-overscroll>
+  <FeedPageShell v-if="data" lock-overscroll flush>
     <template #top>
-      <FeedTabs class="w-full xl:hidden" @select="requestFeedRefresh" />
+      <!-- 移动端拉满整屏:抵消 PageShell 的 px-4,再把内容边距补回来,
+           否则 sticky 的毛玻璃条两侧会漏出下面滚动的内容。 -->
+      <FeedTabs
+        class="-mx-4 w-[calc(100%+2rem)] px-4 sm:mx-0 sm:w-full sm:px-0 xl:hidden"
+        @select="requestFeedRefresh"
+      />
     </template>
 
     <template #nav>
       <FeedTabs orientation="vertical" @select="requestFeedRefresh" />
     </template>
 
-    <div ref="feedArea">
+    <div>
       <FeedComposer class="mb-4" />
       <FeedList v-show="scope === 'all'" :source="allSource" :active="scope === 'all'" />
       <FeedList
