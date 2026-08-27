@@ -22,10 +22,20 @@
   function sizeLabel(size: number) {
     return size > 0 ? `${(size / 1e6).toFixed(1)} MB` : ''
   }
+
+  const buildLabel = computed(() => {
+    const manifest = props.manifest
+    if (!manifest) return ''
+    if (manifest.channel === 'release') return `v${manifest.version}`
+
+    const build = manifest.build_number ? `内部构建 #${manifest.build_number}` : '内部构建'
+    return manifest.commit ? `${build} · ${manifest.commit.slice(0, 7)}` : build
+  })
 </script>
 
 <template>
   <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <span v-if="buildLabel" class="font-mono text-xs text-muted-color">{{ buildLabel }}</span>
     <Button
       v-if="others.length"
       variant="link"
