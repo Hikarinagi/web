@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { BookImage, BookOpen, GamepadDirectional, MessagesSquare } from '@lucide/vue'
+  import { BookImage, BookOpen, GamepadDirectional, MessagesSquare, Smartphone } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
   import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
   import { cn } from '~/utils/cn'
@@ -13,6 +13,7 @@
     bookOpen: BookOpen,
     bookImage: BookImage,
     messagesSquare: MessagesSquare,
+    smartphone: Smartphone,
   } satisfies Record<HeaderNavIcon, Component>
 
   function isActive(item: HeaderNavItem) {

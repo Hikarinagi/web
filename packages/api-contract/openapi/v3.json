@@ -9203,17 +9203,24 @@
       },
       "FeatureFlagsDto": {
         "properties": {
+          "app_download": {
+            "type": "boolean"
+          },
           "manga_section": {
             "type": "boolean"
           }
         },
         "required": [
-          "manga_section"
+          "manga_section",
+          "app_download"
         ],
         "type": "object"
       },
       "FeatureFlagsInput": {
         "properties": {
+          "app_download": {
+            "type": "boolean"
+          },
           "manga_section": {
             "type": "boolean"
           }
@@ -9222,12 +9229,16 @@
       },
       "FeatureFlagsResponse": {
         "properties": {
+          "app_download": {
+            "type": "boolean"
+          },
           "manga_section": {
             "type": "boolean"
           }
         },
         "required": [
-          "manga_section"
+          "manga_section",
+          "app_download"
         ],
         "type": "object"
       },
@@ -12534,7 +12545,7 @@
           "ids": {
             "items": {
               "minimum": 1,
-              "type": "number"
+              "type": "string"
             },
             "maxItems": 200,
             "minItems": 1,
@@ -48943,6 +48954,14 @@
           },
           {
             "in": "query",
+            "name": "exclude_rated_covers",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
             "name": "content_limit",
             "required": true,
             "schema": {
@@ -48999,14 +49018,6 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "exclude_rated_covers",
-            "required": false,
-            "schema": {
-              "type": "boolean"
             }
           },
           {

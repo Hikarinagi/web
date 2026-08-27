@@ -154,7 +154,7 @@
 
     return {
       loading: props.lazy ? 'lazy' : 'eager',
-      decoding: 'async',
+      decoding: props.lazy ? 'async' : 'sync',
       ...rest,
     }
   })

@@ -1,6 +1,6 @@
-export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSquare'
+export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSquare' | 'smartphone'
 
-export type FeatureFlagKey = 'manga_section'
+export type FeatureFlagKey = 'manga_section' | 'app_download'
 
 export interface HeaderNavItem {
   label: string
@@ -8,6 +8,7 @@ export interface HeaderNavItem {
   icon: HeaderNavIcon
   match: 'exact' | 'prefix'
   flag?: FeatureFlagKey
+  desktopOnly?: boolean
 }
 
 export type FooterSocialIcon = 'telegram' | 'github'
@@ -55,6 +56,13 @@ export const SITE_CONFIG = {
       icon: 'bookImage',
       match: 'prefix',
       flag: 'manga_section',
+    },
+    {
+      label: 'App',
+      to: '/app',
+      icon: 'smartphone',
+      match: 'prefix',
+      desktopOnly: true,
     },
   ],
   footerSocial: [

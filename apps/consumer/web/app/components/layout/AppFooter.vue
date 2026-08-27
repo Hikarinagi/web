@@ -33,9 +33,12 @@
               {{ appVersion }}
             </span>
           </p>
-          <NuxtLink to="/developers" class="w-fit transition-colors hover:text-color">
-            开发者平台
-          </NuxtLink>
+          <div class="flex gap-4">
+            <NuxtLink to="/app" class="w-fit transition-colors hover:text-color">下载 App</NuxtLink>
+            <NuxtLink to="/developers" class="w-fit transition-colors hover:text-color">
+              开发者平台
+            </NuxtLink>
+          </div>
         </div>
         <LayoutFooterSocial class="order-1 md:order-2" />
       </div>

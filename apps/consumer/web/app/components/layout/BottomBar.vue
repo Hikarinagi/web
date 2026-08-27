@@ -8,6 +8,7 @@
     Image as ImageIcon,
     MessagesSquare,
     Plus,
+    Smartphone,
   } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
   import { TRANSITION } from '~/lib/motion'
@@ -33,11 +34,13 @@
     bookOpen: BookOpen,
     bookImage: BookImage,
     messagesSquare: MessagesSquare,
+    smartphone: Smartphone,
   } satisfies Record<HeaderNavIcon, Component>
 
   const navItems = useHeaderNav()
-  const leadingItems = computed(() => navItems.value.slice(0, 2))
-  const trailingItems = computed(() => navItems.value.slice(2))
+  const barItems = computed(() => navItems.value.filter(item => !item.desktopOnly))
+  const leadingItems = computed(() => barItems.value.slice(0, 2))
+  const trailingItems = computed(() => barItems.value.slice(2))
 
   function isActive(item: HeaderNavItem) {
     if (item.match === 'exact') return route.path === item.to

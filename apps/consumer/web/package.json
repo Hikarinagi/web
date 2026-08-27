@@ -82,6 +82,7 @@
     "pinia": "^3.0.4",
     "primelocale": "^2.3.2",
     "primevue": "^4.5.5",
+    "qrcode": "^1.5.4",
     "reka-ui": "^2.9.7",
     "shiki": "4.0.2",
     "socket.io-client": "^4.8.3",
@@ -96,6 +97,7 @@
   },
   "devDependencies": {
     "@iconify-json/simple-icons": "^1.2.82",
+    "@types/qrcode": "^1.5.6",
     "@types/sortablejs": "^1.15.8",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vue/test-utils": "^2.4.10",

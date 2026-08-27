@@ -8,7 +8,7 @@ export default defineNuxtPlugin({
     if (!event) return
     try {
       const config = await fetchBackendData(event, '/api/v3/site/config')
-      flags.value = config.feature_flags
+      flags.value = { ...flags.value, ...config.feature_flags }
     } catch {
       // keep defaults (all flags off) when the config request fails
     }

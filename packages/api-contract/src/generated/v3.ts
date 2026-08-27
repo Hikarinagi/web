@@ -13410,12 +13410,15 @@ export interface components {
             favorited: boolean;
         };
         FeatureFlagsDto: {
+            app_download: boolean;
             manga_section: boolean;
         };
         FeatureFlagsInput: {
+            app_download?: boolean;
             manga_section?: boolean;
         };
         FeatureFlagsResponse: {
+            app_download: boolean;
             manga_section: boolean;
         };
         FeedArticleItemDto: {
@@ -14204,7 +14207,7 @@ export interface components {
             resource_type: components["schemas"]["ContributionResourceType"];
         };
         InternalGalgameBatchDto: {
-            ids: number[];
+            ids: string[];
         };
         InternalProducerListItemDto: {
             aliases: string[];
@@ -29793,13 +29796,13 @@ export interface operations {
                 genre?: string[];
                 /** @description 只看站内有下载资源的作品 */
                 downloadable?: boolean;
+                exclude_rated_covers?: boolean;
                 content_limit: components["schemas"]["Object"];
                 character_id?: number;
                 tags?: string[];
                 exclude_tags?: string[];
                 released_after?: string;
                 released_before?: string;
-                exclude_rated_covers?: boolean;
                 page: number;
                 page_size: number;
             };

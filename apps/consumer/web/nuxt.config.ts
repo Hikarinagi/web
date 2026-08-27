@@ -131,6 +131,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     apiBase: 'http://localhost:5003/api/v3',
+    appManifestUrl: '',
     site: { indexable: true },
     oidc: {
       issuer: 'http://localhost:5010/oidc',
