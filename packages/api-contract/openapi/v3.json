@@ -12545,7 +12545,7 @@
           "ids": {
             "items": {
               "minimum": 1,
-              "type": "string"
+              "type": "number"
             },
             "maxItems": 200,
             "minItems": 1,

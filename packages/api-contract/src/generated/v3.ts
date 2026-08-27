@@ -14207,7 +14207,7 @@ export interface components {
             resource_type: components["schemas"]["ContributionResourceType"];
         };
         InternalGalgameBatchDto: {
-            ids: string[];
+            ids: number[];
         };
         InternalProducerListItemDto: {
             aliases: string[];
