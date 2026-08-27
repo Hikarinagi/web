@@ -28,14 +28,15 @@
     if (!manifest) return ''
     if (manifest.channel === 'release') return `v${manifest.version}`
 
-    const build = manifest.build_number ? `内部构建 #${manifest.build_number}` : '内部构建'
-    return manifest.commit ? `${build} · ${manifest.commit.slice(0, 7)}` : build
+    return [manifest.build_number && `#${manifest.build_number}`, manifest.commit?.slice(0, 7)]
+      .filter(Boolean)
+      .join(' · ')
   })
 </script>
 
 <template>
   <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-    <span v-if="buildLabel" class="font-mono text-xs text-muted-color">{{ buildLabel }}</span>
+    <Tag v-if="buildLabel" severity="secondary" class="!font-mono !text-xs">{{ buildLabel }}</Tag>
     <Button
       v-if="others.length"
       variant="link"

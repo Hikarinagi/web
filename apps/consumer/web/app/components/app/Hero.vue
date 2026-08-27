@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { AppPageData } from '~~/server/api/pages/app.get'
+  import appIcon from '~/assets/images/app/app-icon.webp'
   import kvLandscape from '~/assets/images/app/kv-landscape.webp'
   import shotFeed from '~/assets/images/app/shot-feed.webp'
   import shotFeedDark from '~/assets/images/app/shot-feed-dark.webp'
@@ -164,13 +165,22 @@
             class="rounded-lg bg-surface-0 p-2 shadow-md dark:bg-white"
             :class="downloadable && androidQr ? null : 'pointer-events-none opacity-35 grayscale'"
           >
-            <HikariImage
-              v-if="androidQr"
-              :src="androidQr"
-              alt="扫码下载 Android 版"
-              class="size-20"
-              image-class="size-20"
-            />
+            <div v-if="androidQr" class="relative size-20">
+              <HikariImage
+                :src="androidQr"
+                alt="扫码下载 Android 版"
+                class="size-20"
+                image-class="size-20"
+              />
+              <HikariImage
+                :src="appIcon"
+                alt=""
+                class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-[5px] ring-2 ring-white"
+                image-class="size-5 rounded-[5px]"
+                :skeleton="false"
+                aria-hidden="true"
+              />
+            </div>
             <div v-else class="size-20 rounded-sm bg-surface-200" />
           </div>
           <span class="text-xs leading-relaxed text-muted-color">

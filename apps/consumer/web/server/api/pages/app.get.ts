@@ -84,7 +84,7 @@ async function androidQrCode(manifest: AppReleaseManifest | null) {
   return QRCode.toDataURL(target.url, {
     margin: 1,
     width: 320,
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: 'H',
     color: { dark: '#0f172a', light: '#ffffff' },
   }).catch(() => null)
 }
