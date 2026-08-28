@@ -1,6 +1,6 @@
 export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSquare' | 'smartphone'
 
-export type FeatureFlagKey = 'manga_section' | 'app_download'
+export type FeatureFlagKey = 'manga_section'
 
 export interface HeaderNavItem {
   label: string
