@@ -39,8 +39,8 @@
           <HikariImage
             :src="hinaWordmark"
             alt="Hinagi"
-            class="h-9 w-auto"
-            image-class="h-9 w-auto object-contain"
+            class="aspect-[1200/490] h-9 w-auto dark:brightness-0 dark:invert"
+            image-class="aspect-[1200/490] h-9 w-auto object-contain"
             :lazy="false"
             :skeleton="false"
             :preload="{ fetchPriority: 'high' }"
