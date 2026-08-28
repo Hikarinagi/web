@@ -2241,6 +2241,93 @@
         ],
         "type": "object"
       },
+      "AppReleaseAndroidDto": {
+        "properties": {
+          "abi": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "abi",
+          "url",
+          "size",
+          "sha256"
+        ],
+        "type": "object"
+      },
+      "AppReleaseDto": {
+        "properties": {
+          "android": {
+            "items": {
+              "$ref": "#/components/schemas/AppReleaseAndroidDto"
+            },
+            "type": "array"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "build_number": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "ios": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AppReleaseIosDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "released_at": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "type": "object"
+      },
+      "AppReleaseIosDto": {
+        "properties": {
+          "sha256": {
+            "type": "string"
+          },
+          "signed": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "signed",
+          "url",
+          "size",
+          "sha256"
+        ],
+        "type": "object"
+      },
       "AppealAdminDetailDto": {
         "properties": {
           "appealer": {
@@ -58572,6 +58659,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PublicAnalyticsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "site"
+        ]
+      }
+    },
+    "/api/v3/site/app-release": {
+      "get": {
+        "operationId": "SiteController_appRelease",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppReleaseDto"
                 }
               }
             },

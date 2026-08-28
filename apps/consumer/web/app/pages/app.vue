@@ -18,7 +18,7 @@
   <AppHero
     v-if="data"
     class="-mt-(--app-header-height)"
-    :manifest="data.manifest"
+    :release="data.release"
     :android-qr="data.android_qr"
   />
 </template>

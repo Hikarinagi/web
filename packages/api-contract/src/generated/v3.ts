@@ -9600,6 +9600,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/site/app-release": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SiteController_appRelease"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/site/config": {
         parameters: {
             query?: never;
@@ -11656,6 +11672,28 @@ export interface components {
             rybbit_enabled: boolean;
             rybbit_host: string | null;
             rybbit_site_id: string | null;
+        };
+        AppReleaseAndroidDto: {
+            abi: string;
+            sha256: string;
+            size: number;
+            url: string;
+        };
+        AppReleaseDto: {
+            android?: components["schemas"]["AppReleaseAndroidDto"][];
+            available: boolean;
+            build_number?: string;
+            channel?: string;
+            commit?: string;
+            ios?: components["schemas"]["AppReleaseIosDto"] | null;
+            released_at?: string;
+            version?: string;
+        };
+        AppReleaseIosDto: {
+            sha256: string;
+            signed: boolean;
+            size: number;
+            url: string;
         };
         AppealAdminDetailDto: {
             appealer: components["schemas"]["UserRefDto"];
@@ -35038,6 +35076,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublicAnalyticsDto"];
+                };
+            };
+        };
+    };
+    SiteController_appRelease: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppReleaseDto"];
                 };
             };
         };

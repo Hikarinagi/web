@@ -3,15 +3,15 @@
 
   defineOptions({ name: 'AppDownloadNotes' })
 
-  const props = defineProps<{ manifest: AppPageData['manifest'] }>()
+  const props = defineProps<{ release: AppPageData['release']; downloadable: boolean }>()
 
   const abiPopover = ref<{ toggle: (event: Event) => void }>()
   const sideloadPopover = ref<{ toggle: (event: Event) => void }>()
 
   const others = computed(() =>
-    (props.manifest?.android ?? []).filter(item => item.abi !== 'arm64-v8a').slice(0, 4),
+    (props.release.android ?? []).filter(item => item.abi !== 'arm64-v8a').slice(0, 4),
   )
-  const ios = computed(() => props.manifest?.ios ?? null)
+  const ios = computed(() => props.release.ios ?? null)
 
   const sideloadSteps = [
     '在PC设备上安装 AltStore 或 Sideloadly，登录你的 Apple ID',
@@ -24,7 +24,7 @@
   }
 
   const buildLabel = computed(() => {
-    const manifest = props.manifest
+    const manifest = props.release
     if (!manifest) return ''
     if (manifest.channel === 'release') return `v${manifest.version}`
 
@@ -39,6 +39,7 @@
     <Tag v-if="buildLabel" severity="secondary" class="!font-mono !text-xs">{{ buildLabel }}</Tag>
     <Button
       v-if="others.length"
+      :disabled="!downloadable"
       variant="link"
       size="small"
       class="!text-xs"
