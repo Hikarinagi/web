@@ -1808,6 +1808,82 @@
         ],
         "type": "object"
       },
+      "AdminReleaseNoteDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "is_published": {
+            "type": "boolean"
+          },
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionDto"
+            },
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "target",
+          "version",
+          "title",
+          "released_at",
+          "is_published",
+          "sections",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "AdminReleaseNoteItemDto": {
+        "properties": {
+          "scope": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReleaseNoteSectionDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReleaseNoteItemDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "AdminRenderReportDetailDto": {
         "properties": {
           "created_at": {
@@ -6414,6 +6490,43 @@
         },
         "required": [
           "volume_id"
+        ],
+        "type": "object"
+      },
+      "CreateReleaseNoteDto": {
+        "properties": {
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionInputDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "pattern": "^\\d+(\\.\\d+)*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "version",
+          "released_at",
+          "sections"
         ],
         "type": "object"
       },
@@ -12677,6 +12790,21 @@
           "aliases",
           "logo",
           "works_count"
+        ],
+        "type": "object"
+      },
+      "InternalReleaseNoteDto": {
+        "properties": {
+          "created": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "created"
         ],
         "type": "object"
       },
@@ -24075,6 +24203,125 @@
         ],
         "type": "object"
       },
+      "ReleaseNoteDto": {
+        "properties": {
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionDto"
+            },
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "version",
+          "title",
+          "released_at",
+          "sections"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteItemDto": {
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "text"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteItemInputDto": {
+        "properties": {
+          "scope": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "text"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteListDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteSectionDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteItemDto"
+            },
+            "type": "array"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteSectionInputDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteItemInputDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ],
+        "type": "object"
+      },
       "ReportBulkDto": {
         "properties": {
           "items": {
@@ -28555,6 +28802,28 @@
           "position",
           "percentage"
         ],
+        "type": "object"
+      },
+      "UpdateReleaseNoteDto": {
+        "properties": {
+          "is_published": {
+            "type": "boolean"
+          },
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReleaseNoteSectionDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 120,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "UpdateRenderReportDto": {
@@ -35051,6 +35320,104 @@
         },
         "tags": [
           "admin/reader"
+        ]
+      }
+    },
+    "/api/v3/admin/release/notes": {
+      "get": {
+        "operationId": "AdminReleaseNotesController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "enum": [
+                "SITE",
+                "MOBILE"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminReleaseNoteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
+        ]
+      }
+    },
+    "/api/v3/admin/release/notes/{id}": {
+      "delete": {
+        "operationId": "AdminReleaseNotesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminReleaseNotesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReleaseNoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReleaseNoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
         ]
       }
     },
@@ -49482,6 +49849,37 @@
         ]
       }
     },
+    "/api/v3/internal/releases": {
+      "post": {
+        "operationId": "InternalReleasesController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReleaseNoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalReleaseNoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalReleases"
+        ]
+      }
+    },
     "/api/v3/internal/telegram/accounts/{telegram_id}": {
       "get": {
         "operationId": "TelegramInternalController_getAccount",
@@ -58722,6 +59120,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HikariPointGuideDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "site"
+        ]
+      }
+    },
+    "/api/v3/site/releases": {
+      "get": {
+        "operationId": "SiteController_releases",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "enum": [
+                "SITE",
+                "MOBILE"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseNoteListDto"
                 }
               }
             },

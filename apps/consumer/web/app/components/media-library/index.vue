@@ -61,6 +61,7 @@
     :visible="visible"
     modal
     header="我的媒体库"
+    :scroll="false"
     :style="{ width: '52rem' }"
     :breakpoints="{ '768px': '95vw' }"
     @update:visible="onDialogVisible"

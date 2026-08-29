@@ -78,6 +78,11 @@ export const PROMOTIONS_PERMISSIONS = {
   WRITE: 'promotions.write',
 } as const
 
+export const RELEASE_NOTES_PERMISSIONS = {
+  READ: 'release_notes.read',
+  WRITE: 'release_notes.write',
+} as const
+
 export const DECORATIONS_PERMISSIONS = {
   READ: 'decorations.read',
   WRITE: 'decorations.write',
@@ -158,6 +163,7 @@ export type PermissionKey =
   | ValueOf<typeof MEDIA_PERMISSIONS>
   | ValueOf<typeof READER_PERMISSIONS>
   | ValueOf<typeof PROMOTIONS_PERMISSIONS>
+  | ValueOf<typeof RELEASE_NOTES_PERMISSIONS>
   | ValueOf<typeof DECORATIONS_PERMISSIONS>
   | ValueOf<typeof SEARCH_PERMISSIONS>
   | ValueOf<typeof TELEGRAM_PERMISSIONS>

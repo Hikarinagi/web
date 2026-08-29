@@ -10,7 +10,7 @@
   const emit = defineEmits<{ navigate: [] }>()
 
   const active = ref(props.fields[0]?.field ?? '')
-  const navEl = useTemplateRef<HTMLElement>('navEl')
+  const navEl = useTemplateRef<{ viewport: HTMLElement | null }>('navEl')
 
   function label(field: BackendEditorField) {
     return props.presentation[field.field]?.label ?? field.field
@@ -22,7 +22,7 @@
   }
 
   function followActive(name: string) {
-    const container = navEl.value
+    const container = navEl.value?.viewport ?? null
     const target = container?.querySelector<HTMLElement>(`[data-nav-field="${name}"]`)
     if (!container || !target) return
     const box = container.getBoundingClientRect()
@@ -68,29 +68,28 @@
 </script>
 
 <template>
-  <nav
-    ref="navEl"
-    class="flex max-h-[calc(100dvh-7rem)] flex-col gap-0.5 overflow-y-auto lg:max-h-[calc(100vh-13rem)]"
-  >
-    <Button
-      v-for="field in fields"
-      :key="field.field"
-      unstyled
-      :data-nav-field="field.field"
-      :class="[
-        'flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors',
-        active === field.field
-          ? 'bg-primary-50 font-medium text-primary-700 dark:bg-primary-500/15 dark:text-primary-300'
-          : 'text-surface-600 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800',
-      ]"
-      @click="jumpTo(field.field)"
-    >
-      <span class="truncate">{{ label(field) }}</span>
-      <span
-        v-if="changedFields.has(field.field)"
-        class="ml-auto size-1.5 shrink-0 rounded-full bg-primary-500"
-        aria-hidden="true"
-      />
-    </Button>
-  </nav>
+  <ScrollArea ref="navEl" class="max-h-[calc(100dvh-7rem)] lg:max-h-[calc(100vh-13rem)]">
+    <nav class="flex flex-col gap-0.5">
+      <Button
+        v-for="field in fields"
+        :key="field.field"
+        unstyled
+        :data-nav-field="field.field"
+        :class="[
+          'flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors',
+          active === field.field
+            ? 'bg-primary-50 font-medium text-primary-700 dark:bg-primary-500/15 dark:text-primary-300'
+            : 'text-surface-600 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800',
+        ]"
+        @click="jumpTo(field.field)"
+      >
+        <span class="truncate">{{ label(field) }}</span>
+        <span
+          v-if="changedFields.has(field.field)"
+          class="ml-auto size-1.5 shrink-0 rounded-full bg-primary-500"
+          aria-hidden="true"
+        />
+      </Button>
+    </nav>
+  </ScrollArea>
 </template>

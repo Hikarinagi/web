@@ -172,6 +172,7 @@ export default defineNuxtConfig({
         if (item.name === 'Button') return 'PrimeButton'
         if (item.name === 'Avatar') return 'PrimeAvatar'
         if (item.name === 'ConfirmDialog') return 'PrimeConfirmDialog'
+        if (item.name === 'Dialog') return 'PrimeDialog'
         if (item.name === 'Paginator') return 'PrimePaginator'
         return item.name
       },
