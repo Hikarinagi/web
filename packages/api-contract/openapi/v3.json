@@ -23330,7 +23330,7 @@
         ],
         "type": "object"
       },
-      "RateStatusCountsDto": {
+      "RateStatusBucketsDto": {
         "properties": {
           "all": {
             "type": "number"
@@ -23358,6 +23358,60 @@
           "plan",
           "on_hold",
           "dropped"
+        ],
+        "type": "object"
+      },
+      "RateStatusCountsByWorkTypeDto": {
+        "properties": {
+          "galgame": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          },
+          "light_novel": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          }
+        },
+        "required": [
+          "galgame",
+          "light_novel",
+          "manga"
+        ],
+        "type": "object"
+      },
+      "RateStatusCountsDto": {
+        "properties": {
+          "all": {
+            "type": "number"
+          },
+          "by_work_type": {
+            "$ref": "#/components/schemas/RateStatusCountsByWorkTypeDto"
+          },
+          "completed": {
+            "type": "number"
+          },
+          "dropped": {
+            "type": "number"
+          },
+          "going": {
+            "type": "number"
+          },
+          "on_hold": {
+            "type": "number"
+          },
+          "plan": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "all",
+          "going",
+          "completed",
+          "plan",
+          "on_hold",
+          "dropped",
+          "by_work_type"
         ],
         "type": "object"
       },

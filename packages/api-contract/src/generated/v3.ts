@@ -17111,8 +17111,22 @@ export interface components {
             id: number;
             title: string;
         };
+        RateStatusBucketsDto: {
+            all: number;
+            completed: number;
+            dropped: number;
+            going: number;
+            on_hold: number;
+            plan: number;
+        };
+        RateStatusCountsByWorkTypeDto: {
+            galgame: components["schemas"]["RateStatusBucketsDto"];
+            light_novel: components["schemas"]["RateStatusBucketsDto"];
+            manga: components["schemas"]["RateStatusBucketsDto"];
+        };
         RateStatusCountsDto: {
             all: number;
+            by_work_type: components["schemas"]["RateStatusCountsByWorkTypeDto"];
             completed: number;
             dropped: number;
             going: number;
