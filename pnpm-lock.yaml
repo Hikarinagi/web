@@ -81,11 +81,11 @@ importers:
         specifier: 4.5.5
         version: 4.5.5(@babel/parser@7.29.8)(magicast@0.5.4)(vue@3.5.42(typescript@6.0.3))
       '@ritojs/core':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
       '@ritojs/kit':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
       '@rybbit/js':
         specifier: ^0.6.2
         version: 0.6.2
@@ -1605,11 +1605,11 @@ packages:
     resolution: {integrity: sha512-o/0VgsBXgwcY1lyeqcVtSGdTQAPnVggo0fbFVPlxl5XVDKUcVH0OLRqt3CbkwByT5FU305E0iE0O7MzThjDblw==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@ritojs/core@1.0.0':
-    resolution: {integrity: sha512-p9bs+9PwKpzyJ6WTLtlxKeJ+t8js2ET+NN4+uU+cue2uGZxtR9VR7f5gSys9WH3o8zCGa/oQ8wLp8rMOkrbp1w==}
+  '@ritojs/core@1.0.1':
+    resolution: {integrity: sha512-WtE363OXogMuzhC2fEuWRbiCD3tbq0757Jw5AfIg2E55WovHm5WpFIw7g0KCB4cLspPaUE6DX3vXFJ/NSCSXzQ==}
 
-  '@ritojs/kit@1.0.0':
-    resolution: {integrity: sha512-91qb/jxxtsQUoB5bWY+EpUHh9pGUvXpinPaR39S17tzWKfX+CUJkdxtVdgj2D5Crx8sI12ESdf4pfF2AHFzStg==}
+  '@ritojs/kit@1.0.1':
+    resolution: {integrity: sha512-U63Vp5rdRIly5+PN/sxew97E76Ir8CwqIYjVV7qGaa+xym0XTfnJGW3+sHK4zKKvjLFPUEzQovB70jiYne+jkw==}
 
   '@rolldown/binding-android-arm-eabi@1.2.6':
     resolution: {integrity: sha512-b+jTcARdTiFLI6jB4a5XjTm0RWd6KcRfQj/I2356fxUZemiho9zQLxo0RtCuMDAyKcLo6cEltkgbQp6d1+sjjQ==}
@@ -5186,8 +5186,8 @@ packages:
       zod:
         optional: true
 
-  nwsapi@2.2.26:
-    resolution: {integrity: sha512-LPmrA6J31t9ac9294T/WZV6AK5CUcFZ+VXQ7pNNc1+JAjeKthW7vqekOBu6pXzsxD7slwJ7M4XMhamojG3T4oA==}
+  nwsapi@2.2.27:
+    resolution: {integrity: sha512-gQPNF78qebCQ6tvVFBYrvJdBNOrYZm90ZlXgpIFm06p6qHDHq/XC4TnJftN6OMbxVE0UTBAoRgcsDeJBBooITw==}
 
   nypm@0.6.9:
     resolution: {integrity: sha512-zxlE2yvSWZWmHcNdT3+5zV2lrCogeE9YOklHrR3dFjqutq5wO7GFDYLFDRXLsYnJzwvy/im9fYoxePvS0VTW0w==}
@@ -8909,11 +8909,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ritojs/core@1.0.0': {}
+  '@ritojs/core@1.0.1': {}
 
-  '@ritojs/kit@1.0.0':
+  '@ritojs/kit@1.0.1':
     dependencies:
-      '@ritojs/core': 1.0.0
+      '@ritojs/core': 1.0.1
 
   '@rolldown/binding-android-arm-eabi@1.2.6':
     optional: true
@@ -12241,7 +12241,7 @@ snapshots:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
       is-potential-custom-element-name: 1.0.1
-      nwsapi: 2.2.26
+      nwsapi: 2.2.27
       parse5: 7.3.0
       saxes: 6.0.0
       symbol-tree: 3.2.4
@@ -13035,7 +13035,7 @@ snapshots:
       - unplugin
       - vite
 
-  nwsapi@2.2.26: {}
+  nwsapi@2.2.27: {}
 
   nypm@0.6.9:
     dependencies:
