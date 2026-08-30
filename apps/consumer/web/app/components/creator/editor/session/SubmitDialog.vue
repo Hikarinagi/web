@@ -61,55 +61,53 @@
         共 {{ sectionCount }} 个条目的修改将作为一批提交，各自生成独立的变更请求
       </p>
 
-      <ScrollArea class="max-h-[50vh]">
-        <div class="flex flex-col gap-4 pr-1">
-          <section v-if="workChangeset.length" class="flex flex-col gap-2">
-            <h3 class="flex items-center gap-2 text-sm font-semibold">
-              {{ workLabel }}
-              <Tag
-                :severity="workQueued ? 'warn' : 'success'"
-                :value="workQueued ? '将进入审核' : '将即时生效'"
-                class="text-[10px]!"
-              />
-            </h3>
-            <Message
-              v-if="session.itemErrors.value.work"
-              severity="error"
-              size="small"
-              variant="simple"
-            >
-              {{ session.itemErrors.value.work }}
-            </Message>
-            <CreatorChangesetView :payload="workChangeset" :resource-type="workResourceType" />
-          </section>
-
-          <section v-for="member in members" :key="memberKey(member)" class="flex flex-col gap-2">
-            <h3 class="flex items-center gap-2 text-sm font-semibold">
-              <span class="text-muted-color">
-                {{ RESOURCE_TYPE_LABEL[ENTITY_RESOURCE_TYPE[member.target]] }}
-              </span>
-              {{ member.name || `#${member.id}` }}
-              <Tag
-                :severity="memberQueued(member) ? 'warn' : 'success'"
-                :value="memberQueued(member) ? '将进入审核' : '将即时生效'"
-                class="text-[10px]!"
-              />
-            </h3>
-            <Message
-              v-if="session.itemErrors.value[memberKey(member)]"
-              severity="error"
-              size="small"
-              variant="simple"
-            >
-              {{ session.itemErrors.value[memberKey(member)] }}
-            </Message>
-            <CreatorChangesetView
-              :payload="member.changeset as unknown as Record<string, unknown>[]"
-              :resource-type="ENTITY_RESOURCE_TYPE[member.target]"
+      <div class="flex max-h-[50vh] flex-col gap-4 overflow-y-auto pr-1">
+        <section v-if="workChangeset.length" class="flex flex-col gap-2">
+          <h3 class="flex items-center gap-2 text-sm font-semibold">
+            {{ workLabel }}
+            <Tag
+              :severity="workQueued ? 'warn' : 'success'"
+              :value="workQueued ? '将进入审核' : '将即时生效'"
+              class="text-[10px]!"
             />
-          </section>
-        </div>
-      </ScrollArea>
+          </h3>
+          <Message
+            v-if="session.itemErrors.value.work"
+            severity="error"
+            size="small"
+            variant="simple"
+          >
+            {{ session.itemErrors.value.work }}
+          </Message>
+          <CreatorChangesetView :payload="workChangeset" :resource-type="workResourceType" />
+        </section>
+
+        <section v-for="member in members" :key="memberKey(member)" class="flex flex-col gap-2">
+          <h3 class="flex items-center gap-2 text-sm font-semibold">
+            <span class="text-muted-color">
+              {{ RESOURCE_TYPE_LABEL[ENTITY_RESOURCE_TYPE[member.target]] }}
+            </span>
+            {{ member.name || `#${member.id}` }}
+            <Tag
+              :severity="memberQueued(member) ? 'warn' : 'success'"
+              :value="memberQueued(member) ? '将进入审核' : '将即时生效'"
+              class="text-[10px]!"
+            />
+          </h3>
+          <Message
+            v-if="session.itemErrors.value[memberKey(member)]"
+            severity="error"
+            size="small"
+            variant="simple"
+          >
+            {{ session.itemErrors.value[memberKey(member)] }}
+          </Message>
+          <CreatorChangesetView
+            :payload="member.changeset as unknown as Record<string, unknown>[]"
+            :resource-type="ENTITY_RESOURCE_TYPE[member.target]"
+          />
+        </section>
+      </div>
 
       <Form :resolver="editorSubmitResolver" class="flex flex-col gap-3" @submit="onSubmit">
         <FormItem v-slot="{ id }" name="summary" label="变更说明" required>

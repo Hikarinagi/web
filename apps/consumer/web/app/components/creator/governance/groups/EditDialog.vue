@@ -78,13 +78,15 @@
       </FormItem>
 
       <FormItem v-slot="{ field }" name="permissions" label="权限" required>
-        <ScrollArea class="max-h-[40vh] rounded-md ring-1 ring-surface-200 dark:ring-surface-700">
+        <div
+          class="max-h-[40vh] overflow-auto rounded-md ring-1 ring-surface-200 dark:ring-surface-700"
+        >
           <CreatorGovernancePermissionTree
             :model-value="field.value as string[]"
             :entries="entries"
             @update:model-value="value => field.props.onInput({ value })"
           />
-        </ScrollArea>
+        </div>
       </FormItem>
 
       <div class="flex justify-end gap-3 pt-2">

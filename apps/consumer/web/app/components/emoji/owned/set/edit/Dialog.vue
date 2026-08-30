@@ -116,7 +116,6 @@
     v-model:visible="open"
     modal
     :header="`编辑 ${set.name}`"
-    :scroll="false"
     :style="{ width: '92vw', maxWidth: '32rem' }"
     :pt="{ content: { class: '!flex !min-h-0 !flex-col' } }"
   >
@@ -136,17 +135,15 @@
       >
         还没有贴纸，点击上方按钮上传第一个
       </p>
-      <ScrollArea v-else class="max-h-[60vh]">
-        <div class="flex flex-col">
-          <EmojiOwnedSetEditItem
-            v-for="emoji in set.emojis"
-            :key="emoji.id"
-            :emoji="emoji"
-            :deleting="deletingEmojiId === emoji.id"
-            @more-click="onMoreClick"
-          />
-        </div>
-      </ScrollArea>
+      <div v-else class="flex max-h-[60vh] flex-col overflow-y-auto">
+        <EmojiOwnedSetEditItem
+          v-for="emoji in set.emojis"
+          :key="emoji.id"
+          :emoji="emoji"
+          :deleting="deletingEmojiId === emoji.id"
+          @more-click="onMoreClick"
+        />
+      </div>
     </div>
 
     <Menu

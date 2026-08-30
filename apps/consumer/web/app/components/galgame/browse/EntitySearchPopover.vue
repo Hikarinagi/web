@@ -66,7 +66,7 @@
       <div class="p-2">
         <InputText v-model="query" :placeholder="`搜索${label}…`" size="small" fluid />
       </div>
-      <ScrollArea class="max-h-72 px-2 pb-2" :aria-busy="loading">
+      <div class="max-h-72 overflow-auto px-2 pb-2" :aria-busy="loading">
         <div v-if="loading" class="flex flex-col gap-1" role="status" aria-label="搜索中">
           <div
             v-for="index in 5"
@@ -123,7 +123,7 @@
         >
           输入关键词开始搜索
         </p>
-      </ScrollArea>
+      </div>
     </div>
   </Popover>
 </template>

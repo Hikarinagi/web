@@ -12,7 +12,11 @@
   const router = useRouter()
   const nuxtApp = useNuxtApp()
   const tabPage = shallowRef(toTabPage(props.initial))
-  const pendingRoute = shallowRef({ ...readRouteState(), tab: tabPage.value.active_tab })
+  const pendingRoute = shallowRef({
+    page: readRouteState().page,
+    tab: tabPage.value.active_tab,
+    shelf: readRouteState().shelf,
+  })
   const requestUrl = computed(() => spaceTabBffPath(props.userId, pendingRoute.value))
   const {
     data: loadedTab,
@@ -55,10 +59,11 @@
     }
 
     const seq = ++requestSeq
-    const current = readRouteState()
-    pendingRoute.value = syncRoute
-      ? { ...current, page: 1, tab: next, work: 'all', status: 'all' }
-      : { ...current, tab: next }
+    pendingRoute.value = {
+      page: syncRoute ? 1 : readRouteState().page,
+      tab: next,
+      shelf: readRouteState().shelf,
+    }
     await nuxtApp.callHook('page:loading:start')
     try {
       await execute()
@@ -85,8 +90,6 @@
           ...route.query,
           page: undefined,
           page_size: undefined,
-          work: undefined,
-          status: undefined,
           tab: tab === 'feed' ? undefined : tab,
         },
       })

@@ -41,31 +41,29 @@
     position="bottom"
     :pt="{
       root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
-      content: { class: 'p-2! min-h-0 flex' },
+      content: { class: 'p-2! overflow-y-auto' },
     }"
   >
     <template #header>
       <h2 class="text-base font-semibold text-color">目录</h2>
     </template>
 
-    <ScrollArea class="min-h-0 flex-1">
-      <div class="pb-1">
-        <Button
-          v-for="e in entries"
-          :key="e.id"
-          unstyled
-          :class="
-            cn(
-              'block w-full cursor-pointer truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-emphasis',
-              e.level === 3 && 'pl-7',
-              activeId === e.id ? 'font-semibold text-primary' : 'text-muted-color',
-            )
-          "
-          @click="select(e.id)"
-        >
-          {{ e.text }}
-        </Button>
-      </div>
-    </ScrollArea>
+    <div class="pb-1">
+      <Button
+        v-for="e in entries"
+        :key="e.id"
+        unstyled
+        :class="
+          cn(
+            'block w-full cursor-pointer truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-emphasis',
+            e.level === 3 && 'pl-7',
+            activeId === e.id ? 'font-semibold text-primary' : 'text-muted-color',
+          )
+        "
+        @click="select(e.id)"
+      >
+        {{ e.text }}
+      </Button>
+    </div>
   </Drawer>
 </template>

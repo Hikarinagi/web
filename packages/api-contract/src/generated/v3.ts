@@ -1701,38 +1701,6 @@ export interface paths {
         patch: operations["AdminRenderReportController_update"];
         trace?: never;
     };
-    "/api/v3/admin/release/notes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminReleaseNotesController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/release/notes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminReleaseNotesController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminReleaseNotesController_update"];
-        trace?: never;
-    };
     "/api/v3/admin/search/engine": {
         parameters: {
             query?: never;
@@ -6661,22 +6629,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/internal/releases": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["InternalReleasesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/internal/telegram/accounts/{telegram_id}": {
         parameters: {
             query?: never;
@@ -9696,22 +9648,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/site/releases": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["SiteController_releases"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/sitemap/{type}": {
         parameters: {
             query?: never;
@@ -11619,25 +11555,6 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
-        AdminReleaseNoteDto: {
-            id: number;
-            is_published: boolean;
-            released_at: string;
-            sections: components["schemas"]["ReleaseNoteSectionDto"][];
-            /** @enum {string} */
-            target: "SITE" | "MOBILE";
-            title: string | null;
-            updated_at: string;
-            version: string;
-        };
-        AdminReleaseNoteItemDto: {
-            scope?: string;
-            text?: string;
-        };
-        AdminReleaseNoteSectionDto: {
-            items?: components["schemas"]["AdminReleaseNoteItemDto"][];
-            type?: string;
-        };
         AdminRenderReportDetailDto: {
             /** Format: date-time */
             created_at: string;
@@ -12745,14 +12662,6 @@ export interface components {
         };
         CreateReaderSessionDto: {
             volume_id: number;
-        };
-        CreateReleaseNoteDto: {
-            released_at: string;
-            sections: components["schemas"]["ReleaseNoteSectionInputDto"][];
-            /** @enum {string} */
-            target: "SITE" | "MOBILE";
-            title?: string;
-            version: string;
         };
         CreateRenderReportDto: {
             /** @description 阅读器/Rito 运行时快照(章节、页码、进度、视口、设置、错误等) */
@@ -14344,10 +14253,6 @@ export interface components {
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
             works_count: number;
-        };
-        InternalReleaseNoteDto: {
-            created: boolean;
-            id: number;
         };
         LightNovelAdminItemDto: {
             /** Format: date-time */
@@ -17111,22 +17016,8 @@ export interface components {
             id: number;
             title: string;
         };
-        RateStatusBucketsDto: {
-            all: number;
-            completed: number;
-            dropped: number;
-            going: number;
-            on_hold: number;
-            plan: number;
-        };
-        RateStatusCountsByWorkTypeDto: {
-            galgame: components["schemas"]["RateStatusBucketsDto"];
-            light_novel: components["schemas"]["RateStatusBucketsDto"];
-            manga: components["schemas"]["RateStatusBucketsDto"];
-        };
         RateStatusCountsDto: {
             all: number;
-            by_work_type: components["schemas"]["RateStatusCountsByWorkTypeDto"];
             completed: number;
             dropped: number;
             going: number;
@@ -17348,33 +17239,6 @@ export interface components {
         };
         RejectReviewGroupApplicationDto: {
             rejection_reason: string;
-        };
-        ReleaseNoteDto: {
-            released_at: string;
-            sections: components["schemas"]["ReleaseNoteSectionDto"][];
-            /** @enum {string} */
-            target: "SITE" | "MOBILE";
-            title: string | null;
-            version: string;
-        };
-        ReleaseNoteItemDto: {
-            scope: string;
-            text: string;
-        };
-        ReleaseNoteItemInputDto: {
-            scope: string;
-            text: string;
-        };
-        ReleaseNoteListDto: {
-            items: components["schemas"]["ReleaseNoteDto"][];
-        };
-        ReleaseNoteSectionDto: {
-            items: components["schemas"]["ReleaseNoteItemDto"][];
-            type: string;
-        };
-        ReleaseNoteSectionInputDto: {
-            items: components["schemas"]["ReleaseNoteItemInputDto"][];
-            type: string;
         };
         ReportBulkDto: {
             items: components["schemas"]["ReportRefDto"][];
@@ -18471,12 +18335,6 @@ export interface components {
             duration_ms?: number;
             percentage: number;
             position: components["schemas"]["ReadingPositionDto"];
-        };
-        UpdateReleaseNoteDto: {
-            is_published?: boolean;
-            released_at?: string;
-            sections?: components["schemas"]["AdminReleaseNoteSectionDto"][];
-            title?: string;
         };
         UpdateRenderReportDto: {
             process_comments?: string | null;
@@ -22116,71 +21974,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminRenderReportDetailDto"];
-                };
-            };
-        };
-    };
-    AdminReleaseNotesController_list: {
-        parameters: {
-            query?: {
-                target?: "SITE" | "MOBILE";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminReleaseNoteDto"][];
-                };
-            };
-        };
-    };
-    AdminReleaseNotesController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminReleaseNotesController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateReleaseNoteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminReleaseNoteDto"];
                 };
             };
         };
@@ -30224,29 +30017,6 @@ export interface operations {
             };
         };
     };
-    InternalReleasesController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateReleaseNoteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InternalReleaseNoteDto"];
-                };
-            };
-        };
-    };
     TelegramInternalController_getAccount: {
         parameters: {
             query?: never;
@@ -35363,27 +35133,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HikariPointGuideDto"];
-                };
-            };
-        };
-    };
-    SiteController_releases: {
-        parameters: {
-            query?: {
-                target?: "SITE" | "MOBILE";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ReleaseNoteListDto"];
                 };
             };
         };

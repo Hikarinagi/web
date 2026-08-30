@@ -114,7 +114,6 @@
     modal
     :header="title || (mode === 'single' ? '选择' : '选择多个')"
     dismissable-mask
-    :scroll="false"
     :style="{ width: '92vw', maxWidth: '46rem' }"
   >
     <div class="flex flex-col gap-3">

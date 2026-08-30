@@ -52,11 +52,11 @@
       </Button>
     </header>
 
-    <ScrollArea class="mt-2 max-h-[min(45dvh,18rem)]">
-      <p class="reader-footnote-content text-sm leading-7">
-        {{ footnote.text || '无内容' }}
-      </p>
-    </ScrollArea>
+    <p
+      class="reader-footnote-content mt-2 max-h-[min(45dvh,18rem)] overflow-y-auto text-sm leading-7"
+    >
+      {{ footnote.text || '无内容' }}
+    </p>
   </motion.aside>
 </template>
 

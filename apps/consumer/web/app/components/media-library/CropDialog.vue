@@ -130,7 +130,6 @@
     :header="title"
     :dismissable-mask="!saving"
     :close-on-escape="!saving"
-    :scroll="false"
     :style="{ width: 'min(92vw, 48rem)' }"
   >
     <div class="flex flex-col gap-4">

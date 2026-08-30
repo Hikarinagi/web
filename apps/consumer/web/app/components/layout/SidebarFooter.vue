@@ -5,7 +5,6 @@
   const year = new Date().getFullYear()
   const { appVersion, buildTime } = useRuntimeConfig().public
   const buildLabel = buildTime ? `Built ${buildTime}` : 'Local build'
-  const changelogOpen = ref(false)
 </script>
 
 <template>
@@ -24,16 +23,7 @@
     </div>
     <p class="text-xs leading-relaxed text-muted-color">
       © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
-      <button
-        v-tooltip.top="buildLabel"
-        type="button"
-        class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
-        @click="changelogOpen = true"
-      >
-        {{ appVersion }}
-      </button>
+      <span v-tooltip.top="buildLabel" class="cursor-help tabular-nums">{{ appVersion }}</span>
     </p>
-
-    <ChangelogDialog v-model:visible="changelogOpen" />
   </footer>
 </template>

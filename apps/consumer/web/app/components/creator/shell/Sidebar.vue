@@ -49,9 +49,7 @@
         </NuxtLink>
       </motion.div>
     </motion.div>
-    <ScrollArea class="min-h-0 flex-1">
-      <CreatorShellSidebarNav :collapsed="collapsed" />
-    </ScrollArea>
+    <CreatorShellSidebarNav :collapsed="collapsed" class="min-h-0 flex-1 overflow-y-auto" />
     <CreatorShellSidebarUser :collapsed="collapsed" class="mt-6" />
   </div>
 </template>

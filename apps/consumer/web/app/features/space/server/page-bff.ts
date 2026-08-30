@@ -3,8 +3,6 @@ import { FEED_PAGE_SIZE, type FeedResponse } from '~/features/feed/feed'
 import { readSpaceRouteQuery } from '~/features/space/route'
 import {
   MANAGED_CONTENT_PAGE_SIZE,
-  RATE_STATUS_FILTERS,
-  RATE_WORK_FILTERS,
   SPACE_BOOKSHELF_PAGE_SIZE,
   SPACE_CONTENT_PAGE_SIZE,
   SPACE_CONTRIBUTION_PAGE_SIZE,
@@ -90,17 +88,9 @@ export async function fetchTab(event: H3Event, id: number, tab: SpaceTabKey, is_
       query: { page, page_size: MANAGED_CONTENT_PAGE_SIZE, type: 'article' },
     })
   } else if (tab === 'rates') {
-    const { work, status } = readSpaceRouteQuery(getQuery(event))
-    const workType = RATE_WORK_FILTERS.find(f => f.key === work)?.workType
-    const rateStatus = RATE_STATUS_FILTERS.find(f => f.key === status)?.status
     tabData.rates = await fetchBackendData(event, '/api/v3/user/{id}/rates', {
       path: { id },
-      query: {
-        page,
-        page_size: SPACE_RATE_PAGE_SIZE,
-        ...(workType ? { work_type: workType } : {}),
-        ...(rateStatus ? { status: rateStatus } : {}),
-      },
+      query: { page, page_size: SPACE_RATE_PAGE_SIZE },
     })
   } else if (tab === 'collections') {
     tabData.collections = await fetchCollectionCards(event, id)

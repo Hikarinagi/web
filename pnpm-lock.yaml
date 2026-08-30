@@ -81,10 +81,10 @@ importers:
         specifier: 4.5.5
         version: 4.5.5(@babel/parser@7.29.8)(magicast@0.5.4)(vue@3.5.42(typescript@6.0.3))
       '@ritojs/core':
-        specifier: ^1.0.1
+        specifier: ^1.0.0
         version: 1.0.1
       '@ritojs/kit':
-        specifier: ^1.0.1
+        specifier: ^1.0.0
         version: 1.0.1
       '@rybbit/js':
         specifier: ^0.6.2

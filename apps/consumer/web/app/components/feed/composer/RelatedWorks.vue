@@ -112,7 +112,7 @@
             fluid
             autofocus
           />
-          <ScrollArea v-if="loading || query.trim()" class="mt-2 max-h-64">
+          <div v-if="loading || query.trim()" class="mt-2 max-h-64 overflow-y-auto">
             <div v-if="loading" class="flex flex-col gap-2 px-1 py-1">
               <Skeleton
                 v-for="(w, i) in SKELETON_WIDTHS"
@@ -144,7 +144,7 @@
                 没有匹配的作品
               </p>
             </template>
-          </ScrollArea>
+          </div>
         </div>
       </Popover>
     </motion.div>
