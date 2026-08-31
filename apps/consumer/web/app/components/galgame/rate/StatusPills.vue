@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <FormItem v-slot="{ field }" name="status" label="状态" required>
+  <FormItem v-slot="{ field }" name="status" label="标记" required>
     <div class="flex gap-1.5">
       <Button
         v-for="pill in STATUS_PILLS"

@@ -5,7 +5,6 @@
   import type { MenuItem } from 'primevue/menuitem'
   import type { Component } from 'vue'
   import type { BackendFeedItem } from '~/features/feed/feed'
-  import { feedTypeLabel } from '~/features/feed/feed'
   import { usePostOwnerActions } from '~/features/post/usePostOwnerActions'
   import { useArticleOwnerActions } from '~/features/article/useArticleOwnerActions'
 
@@ -21,7 +20,6 @@
   const ownerActions = usePostOwnerActions()
   const articleActions = useArticleOwnerActions()
 
-  const typeLabel = computed(() => feedTypeLabel(props.item))
   const isPinned = computed(
     () => (props.item.type === 'post' || props.item.type === 'article') && props.item.pinned,
   )
@@ -91,8 +89,6 @@
       </div>
 
       <div class="flex min-w-0 items-center gap-1 text-muted-color">
-        <span class="shrink-0">{{ typeLabel }}</span>
-        <span v-if="!isPinned" class="hidden shrink-0 sm:inline">·</span>
         <span v-if="!isPinned" class="hidden shrink-0 sm:inline">
           {{ timeFromNow(item.sort_time) }}
         </span>
@@ -100,8 +96,6 @@
     </div>
 
     <div v-else class="flex min-w-0 flex-1 items-center gap-1 text-muted-color">
-      <span class="shrink-0">{{ typeLabel }}</span>
-      <span v-if="!isPinned" class="shrink-0">·</span>
       <span v-if="!isPinned" class="shrink-0">{{ timeFromNow(item.sort_time) }}</span>
     </div>
     <Button

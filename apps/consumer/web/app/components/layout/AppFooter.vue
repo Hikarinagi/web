@@ -2,9 +2,11 @@
   import logoUrl from '~/assets/images/logo.png'
   import { SITE_CONFIG } from '~/config/site'
 
+  const flags = useFeatureFlags()
   const year = new Date().getFullYear()
   const { appVersion, buildTime } = useRuntimeConfig().public
   const buildLabel = buildTime ? `Built ${buildTime}` : 'Local build'
+  const changelogOpen = ref(false)
 </script>
 
 <template>
@@ -29,12 +31,23 @@
         <div class="order-2 flex flex-col gap-1 text-sm text-muted-color md:order-1 md:items-end">
           <p>
             © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
-            <span v-tooltip.top="buildLabel" class="cursor-help tabular-nums">
+            <button
+              v-tooltip.top="buildLabel"
+              type="button"
+              class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
+              @click="changelogOpen = true"
+            >
               {{ appVersion }}
-            </span>
+            </button>
           </p>
           <div class="flex gap-4">
-            <NuxtLink to="/app" class="w-fit transition-colors hover:text-color">下载 App</NuxtLink>
+            <NuxtLink
+              v-if="flags.app_download"
+              to="/app"
+              class="w-fit transition-colors hover:text-color"
+            >
+              下载 App
+            </NuxtLink>
             <NuxtLink to="/developers" class="w-fit transition-colors hover:text-color">
               开发者平台
             </NuxtLink>
@@ -43,5 +56,7 @@
         <LayoutFooterSocial class="order-1 md:order-2" />
       </div>
     </div>
+
+    <ChangelogDialog v-model:visible="changelogOpen" />
   </footer>
 </template>

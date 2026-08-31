@@ -24,11 +24,14 @@ const hours = v.nullish(
 
 export const galgameRateSchema = v.object({
   status: v.picklist(['GOING', 'COMPLETED', 'ON_HOLD', 'DROPPED'], '选个状态'),
-  rate: v.pipe(
-    v.number('给个总分'),
-    v.integer('请打整数分'),
-    v.minValue(1, '总分需 1-10'),
-    v.maxValue(10, '总分需 1-10'),
+  rate: v.nullish(
+    v.pipe(
+      v.number('给个总分'),
+      v.integer('请打整数分'),
+      v.minValue(1, '总分需 1-10'),
+      v.maxValue(10, '总分需 1-10'),
+    ),
+    null,
   ),
   rate_content: v.pipe(
     v.nullish(v.string('短评应为文本'), ''),
@@ -37,6 +40,7 @@ export const galgameRateSchema = v.object({
   ),
   time_to_finish_hours: hours,
   is_spoiler: v.optional(v.boolean(), false),
+  status_private: v.optional(v.boolean(), false),
   rate_scenario: dimension,
   rate_direction: dimension,
   rate_music: dimension,

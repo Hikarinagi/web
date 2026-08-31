@@ -43,10 +43,12 @@
   <div class="flex flex-wrap items-stretch gap-3">
     <WorkStatusMenu
       :status="rateCtl.status.value"
+      :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
       :busy="rateCtl.pending.value"
       @select="value => rateCtl.setStatus(value as GalgameRateStatus)"
-      @clear="rateCtl.clearStatus"
+      @clear="rateCtl.remove"
+      @privacy="rateCtl.setPrivacy"
     />
 
     <Button

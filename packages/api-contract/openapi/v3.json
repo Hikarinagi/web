@@ -1808,6 +1808,82 @@
         ],
         "type": "object"
       },
+      "AdminReleaseNoteDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "is_published": {
+            "type": "boolean"
+          },
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionDto"
+            },
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "target",
+          "version",
+          "title",
+          "released_at",
+          "is_published",
+          "sections",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "AdminReleaseNoteItemDto": {
+        "properties": {
+          "scope": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "AdminReleaseNoteSectionDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReleaseNoteItemDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "AdminRenderReportDetailDto": {
         "properties": {
           "created_at": {
@@ -6414,6 +6490,43 @@
         },
         "required": [
           "volume_id"
+        ],
+        "type": "object"
+      },
+      "CreateReleaseNoteDto": {
+        "properties": {
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionInputDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 120,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "pattern": "^\\d+(\\.\\d+)*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "version",
+          "released_at",
+          "sections"
         ],
         "type": "object"
       },
@@ -11446,6 +11559,10 @@
               "PLAN": "想玩"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "通关耗时，单位分钟",
             "type": "number"
@@ -11468,6 +11585,7 @@
           "status",
           "time_to_finish_minutes",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -12680,6 +12798,21 @@
         ],
         "type": "object"
       },
+      "InternalReleaseNoteDto": {
+        "properties": {
+          "created": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "created"
+        ],
+        "type": "object"
+      },
       "LightNovelAdminItemDto": {
         "properties": {
           "created_at": {
@@ -13230,6 +13363,10 @@
               "PLAN": "想读"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "阅读耗时，单位分钟",
             "type": "number"
@@ -13252,6 +13389,7 @@
           "status",
           "time_to_finish_minutes",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -15671,6 +15809,50 @@
         ],
         "type": "object"
       },
+      "MangaNotifySettingDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "on_favorite": {
+            "type": "boolean"
+          },
+          "on_progress": {
+            "type": "boolean"
+          },
+          "on_status": {
+            "type": "boolean"
+          },
+          "statuses": {
+            "items": {
+              "enum": [
+                "GOING",
+                "COMPLETED",
+                "ON_HOLD",
+                "DROPPED",
+                "PLAN"
+              ],
+              "type": "string",
+              "x-enum-descriptions": {
+                "COMPLETED": "看过",
+                "DROPPED": "弃坑",
+                "GOING": "在看",
+                "ON_HOLD": "搁置",
+                "PLAN": "想看"
+              }
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "enabled",
+          "on_progress",
+          "on_status",
+          "on_favorite",
+          "statuses"
+        ],
+        "type": "object"
+      },
       "MangaPipelineStatusDto": {
         "properties": {
           "paused": {
@@ -15960,6 +16142,10 @@
               "PLAN": "想看"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "updated_at": {
             "description": "最后更新时间",
             "type": "string"
@@ -15971,6 +16157,7 @@
           "rate_content",
           "status",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -16682,6 +16869,9 @@
           },
           "sweeper": {
             "$ref": "#/components/schemas/MangaSweeperSettingDto"
+          },
+          "update_notify": {
+            "$ref": "#/components/schemas/MangaUpdateNotifySettingDto"
           }
         },
         "required": [
@@ -16689,7 +16879,8 @@
           "matching",
           "ingestion",
           "sweeper",
-          "rediscover"
+          "rediscover",
+          "update_notify"
         ],
         "type": "object"
       },
@@ -16978,6 +17169,23 @@
         "required": [
           "likes",
           "tag"
+        ],
+        "type": "object"
+      },
+      "MangaUpdateNotifySettingDto": {
+        "properties": {
+          "batch_size": {
+            "maximum": 2000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "batch_size"
         ],
         "type": "object"
       },
@@ -23202,7 +23410,7 @@
         ],
         "type": "object"
       },
-      "RateStatusCountsDto": {
+      "RateStatusBucketsDto": {
         "properties": {
           "all": {
             "type": "number"
@@ -23230,6 +23438,60 @@
           "plan",
           "on_hold",
           "dropped"
+        ],
+        "type": "object"
+      },
+      "RateStatusCountsByWorkTypeDto": {
+        "properties": {
+          "galgame": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          },
+          "light_novel": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/RateStatusBucketsDto"
+          }
+        },
+        "required": [
+          "galgame",
+          "light_novel",
+          "manga"
+        ],
+        "type": "object"
+      },
+      "RateStatusCountsDto": {
+        "properties": {
+          "all": {
+            "type": "number"
+          },
+          "by_work_type": {
+            "$ref": "#/components/schemas/RateStatusCountsByWorkTypeDto"
+          },
+          "completed": {
+            "type": "number"
+          },
+          "dropped": {
+            "type": "number"
+          },
+          "going": {
+            "type": "number"
+          },
+          "on_hold": {
+            "type": "number"
+          },
+          "plan": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "all",
+          "going",
+          "completed",
+          "plan",
+          "on_hold",
+          "dropped",
+          "by_work_type"
         ],
         "type": "object"
       },
@@ -23338,6 +23600,10 @@
               "PLAN": "想玩 / 想读 / 想看"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "title": {
             "description": "作品标题",
             "type": "string"
@@ -23364,6 +23630,7 @@
           "title",
           "cover",
           "status",
+          "status_private",
           "rate",
           "rate_content",
           "is_spoiler",
@@ -24072,6 +24339,125 @@
         },
         "required": [
           "rejection_reason"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteDto": {
+        "properties": {
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteSectionDto"
+            },
+            "type": "array"
+          },
+          "target": {
+            "enum": [
+              "SITE",
+              "MOBILE"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "version",
+          "title",
+          "released_at",
+          "sections"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteItemDto": {
+        "properties": {
+          "scope": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "text"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteItemInputDto": {
+        "properties": {
+          "scope": {
+            "maxLength": 16,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "text"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteListDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteSectionDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteItemDto"
+            },
+            "type": "array"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ],
+        "type": "object"
+      },
+      "ReleaseNoteSectionInputDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseNoteItemInputDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "items"
         ],
         "type": "object"
       },
@@ -27695,6 +28081,48 @@
         },
         "type": "object"
       },
+      "UpdateMangaNotifyDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "on_favorite": {
+            "description": "对收藏的作品推送",
+            "type": "boolean"
+          },
+          "on_progress": {
+            "description": "对有阅读进度的作品推送",
+            "type": "boolean"
+          },
+          "on_status": {
+            "description": "对有状态标记的作品推送",
+            "type": "boolean"
+          },
+          "statuses": {
+            "description": "哪些状态标记会触发推送",
+            "items": {
+              "enum": [
+                "GOING",
+                "COMPLETED",
+                "ON_HOLD",
+                "DROPPED",
+                "PLAN"
+              ],
+              "type": "string",
+              "x-enum-descriptions": {
+                "COMPLETED": "看过",
+                "DROPPED": "弃坑",
+                "GOING": "在看",
+                "ON_HOLD": "搁置",
+                "PLAN": "想看"
+              }
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "type": "object"
+      },
       "UpdateMangaProgressDto": {
         "properties": {
           "chapter_id": {
@@ -27737,6 +28165,9 @@
           },
           "sweeper": {
             "$ref": "#/components/schemas/MangaSweeperSettingDto"
+          },
+          "update_notify": {
+            "$ref": "#/components/schemas/MangaUpdateNotifySettingDto"
           }
         },
         "required": [
@@ -27744,7 +28175,8 @@
           "matching",
           "ingestion",
           "sweeper",
-          "rediscover"
+          "rediscover",
+          "update_notify"
         ],
         "type": "object"
       },
@@ -28557,6 +28989,28 @@
         ],
         "type": "object"
       },
+      "UpdateReleaseNoteDto": {
+        "properties": {
+          "is_published": {
+            "type": "boolean"
+          },
+          "released_at": {
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReleaseNoteSectionDto"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 120,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UpdateRenderReportDto": {
         "properties": {
           "process_comments": {
@@ -28764,6 +29218,10 @@
               "PLAN": "想玩"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "通关耗时，单位分钟",
             "maximum": 525600,
@@ -28851,6 +29309,10 @@
               "ON_HOLD": "搁置",
               "PLAN": "想读"
             }
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
           },
           "time_to_finish_minutes": {
             "description": "阅读耗时，单位分钟",
@@ -28965,6 +29427,10 @@
               "ON_HOLD": "搁置",
               "PLAN": "想看"
             }
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -35051,6 +35517,104 @@
         },
         "tags": [
           "admin/reader"
+        ]
+      }
+    },
+    "/api/v3/admin/release/notes": {
+      "get": {
+        "operationId": "AdminReleaseNotesController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "enum": [
+                "SITE",
+                "MOBILE"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminReleaseNoteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
+        ]
+      }
+    },
+    "/api/v3/admin/release/notes/{id}": {
+      "delete": {
+        "operationId": "AdminReleaseNotesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminReleaseNotesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReleaseNoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReleaseNoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/release-notes"
         ]
       }
     },
@@ -49482,6 +50046,37 @@
         ]
       }
     },
+    "/api/v3/internal/releases": {
+      "post": {
+        "operationId": "InternalReleasesController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReleaseNoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalReleaseNoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalReleases"
+        ]
+      }
+    },
     "/api/v3/internal/telegram/accounts/{telegram_id}": {
       "get": {
         "operationId": "TelegramInternalController_getAccount",
@@ -57342,6 +57937,56 @@
         ]
       }
     },
+    "/api/v3/reader/me/manga/notification": {
+      "get": {
+        "operationId": "MangaNotifyController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaNotifySettingDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "reader"
+        ]
+      },
+      "patch": {
+        "operationId": "MangaNotifyController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMangaNotifyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaNotifySettingDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "reader"
+        ]
+      }
+    },
     "/api/v3/reader/me/manga/reading": {
       "get": {
         "operationId": "MangaShelfController_getReading",
@@ -58722,6 +59367,40 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HikariPointGuideDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "site"
+        ]
+      }
+    },
+    "/api/v3/site/releases": {
+      "get": {
+        "operationId": "SiteController_releases",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "enum": [
+                "SITE",
+                "MOBILE"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseNoteListDto"
                 }
               }
             },

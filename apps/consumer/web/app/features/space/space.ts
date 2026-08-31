@@ -91,7 +91,7 @@ export const SPACE_TABS = [
   { key: 'articles', label: '文章', selfHidden: true },
   { key: 'my-posts', label: '图文', selfOnly: true },
   { key: 'my-articles', label: '文章', selfOnly: true },
-  { key: 'rates', label: '评分' },
+  { key: 'rates', label: '状态' },
   { key: 'collections', label: '收藏' },
   { key: 'contributions', label: '贡献' },
   { key: 'follows', label: '关注' },
@@ -158,18 +158,54 @@ export function rateStatusLabel(workType: string, status: string | null): string
 
 export { RATE_DIMENSION_LABELS } from '~/features/rate/dimensions'
 
-// 合并评分板的状态筛选桶(galgame + 轻小说)
-export const RATE_STATUS_FILTERS = [
-  { key: 'all', label: '全部', status: null },
-  { key: 'going', label: '在玩 · 在读', status: 'GOING' },
-  { key: 'completed', label: '玩过 · 读过', status: 'COMPLETED' },
-  { key: 'plan', label: '想玩 · 想读', status: 'PLAN' },
+const NEUTRAL_STATUS: Record<string, string> = {
+  PLAN: '想看',
+  GOING: '进行中',
+  COMPLETED: '已完成',
+  ON_HOLD: '搁置',
+  DROPPED: '弃坑',
+}
+
+export const RATE_WORK_FILTERS = [
+  { key: 'all', label: '全部', workType: null },
+  { key: 'galgame', label: 'Galgame', workType: 'GALGAME' },
+  { key: 'light_novel', label: '轻小说', workType: 'LIGHT_NOVEL' },
+  { key: 'manga', label: '漫画', workType: 'MANGA' },
 ] as const
+
+export type RateWorkFilterKey = (typeof RATE_WORK_FILTERS)[number]['key']
+
+export const RATE_STATUS_FILTERS = [
+  { key: 'all', status: null },
+  { key: 'going', status: 'GOING' },
+  { key: 'completed', status: 'COMPLETED' },
+  { key: 'plan', status: 'PLAN' },
+  { key: 'on_hold', status: 'ON_HOLD' },
+  { key: 'dropped', status: 'DROPPED' },
+] as const
+
+export type RateStatusFilterKey = (typeof RATE_STATUS_FILTERS)[number]['key']
+
+const RATE_STATUS_FILTER_LABELS: Record<RateWorkFilterKey, Record<string, string>> = {
+  all: NEUTRAL_STATUS,
+  galgame: GALGAME_STATUS,
+  light_novel: LIGHT_NOVEL_STATUS,
+  manga: MANGA_STATUS,
+}
+
+export function rateStatusFilterLabel(work: RateWorkFilterKey, key: RateStatusFilterKey): string {
+  const status = RATE_STATUS_FILTERS.find(f => f.key === key)?.status
+  return status ? (RATE_STATUS_FILTER_LABELS[work][status] ?? status) : '全部'
+}
 
 export type SpaceRateStatusCounts = ApiData<
   '/api/v3/user/{id}/statistics',
   'get'
 >['rate_status_counts']
+
+export function rateStatusBuckets(counts: SpaceRateStatusCounts, work: RateWorkFilterKey) {
+  return work === 'all' ? counts : counts.by_work_type[work]
+}
 
 function formatRateDate(iso: string): string {
   const year = Number(iso.slice(0, 4))

@@ -489,6 +489,10 @@
               "PLAN": "想玩"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "通关耗时，单位分钟",
             "type": "number"
@@ -511,6 +515,7 @@
           "status",
           "time_to_finish_minutes",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -814,6 +819,10 @@
               "PLAN": "想读"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "阅读耗时，单位分钟",
             "type": "number"
@@ -836,6 +845,7 @@
           "status",
           "time_to_finish_minutes",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -1089,6 +1099,10 @@
               "PLAN": "想看"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "updated_at": {
             "description": "最后更新时间",
             "type": "string"
@@ -1100,6 +1114,7 @@
           "rate_content",
           "status",
           "is_spoiler",
+          "status_private",
           "like_count",
           "dislike_count",
           "created_at",
@@ -3524,6 +3539,10 @@
               "PLAN": "想玩 / 想读 / 想看"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "title": {
             "description": "作品标题",
             "type": "string"
@@ -3550,6 +3569,7 @@
           "title",
           "cover",
           "status",
+          "status_private",
           "rate",
           "rate_content",
           "is_spoiler",
@@ -3782,6 +3802,10 @@
               "PLAN": "想玩"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "通关耗时，单位分钟",
             "maximum": 525600,
@@ -3870,6 +3894,10 @@
               "PLAN": "想读"
             }
           },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
           "time_to_finish_minutes": {
             "description": "阅读耗时，单位分钟",
             "maximum": 525600,
@@ -3915,6 +3943,10 @@
               "ON_HOLD": "搁置",
               "PLAN": "想看"
             }
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
           }
         },
         "type": "object"

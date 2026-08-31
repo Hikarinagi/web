@@ -43,8 +43,8 @@
 </script>
 
 <template>
-  <div
-    class="max-h-72 w-72 overflow-y-auto rounded-lg border border-surface-200 bg-surface-0 shadow-lg dark:border-surface-700 dark:bg-surface-900"
+  <ScrollArea
+    class="max-h-72 w-72 rounded-lg border border-surface-200 bg-surface-0 shadow-lg dark:border-surface-700 dark:bg-surface-900"
   >
     <div v-if="loading || (query && !resolved)" class="flex flex-col gap-1 p-1">
       <div v-for="i in 3" :key="i" class="flex items-center gap-2 px-2 py-1.5">
@@ -74,5 +74,5 @@
         <span class="text-sm font-medium">@{{ item.name }}</span>
       </Button>
     </div>
-  </div>
+  </ScrollArea>
 </template>

@@ -76,10 +76,12 @@
     <WorkStatusMenu
       :tone="progress || startTarget ? 'secondary' : 'primary'"
       :status="rateCtl.status.value"
+      :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
       :busy="rateCtl.pending.value"
       @select="value => rateCtl.setStatus(value as MangaRateStatus)"
-      @clear="rateCtl.clearStatus"
+      @clear="rateCtl.remove"
+      @privacy="rateCtl.setPrivacy"
     />
 
     <Button v-if="rateMode === 'chip'" severity="secondary" outlined @click="dialogOpen = true">

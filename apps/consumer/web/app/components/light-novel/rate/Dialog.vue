@@ -27,6 +27,7 @@
     initialValues,
     prepare,
     submit,
+    confirmClearScore,
     confirmDelete,
   } = useRateForm({
     rate: () => props.rate,
@@ -111,6 +112,18 @@
           </div>
         </FormItem>
 
+        <FormItem v-slot="{ id }" name="status_private">
+          <div class="flex items-center gap-2.5">
+            <Checkbox :input-id="id" binary />
+            <label
+              :for="id"
+              class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
+            >
+              状态仅自己可见
+            </label>
+          </div>
+        </FormItem>
+
         <LightNovelRateDimensions v-model:open="detailOpen" />
       </div>
 
@@ -119,11 +132,18 @@
       >
         <template v-if="isEdit">
           <Button
-            label="删除"
+            label="清除评分"
             text
             severity="secondary"
             :disabled="submitting"
             class="text-surface-500!"
+            @click="confirmClearScore"
+          />
+          <Button
+            label="移除状态"
+            text
+            severity="danger"
+            :disabled="submitting"
             @click="confirmDelete"
           />
           <span class="flex-1" />
@@ -139,7 +159,7 @@
             <template #icon><PenLine class="size-4" /></template>
           </Button>
           <Button
-            label="保存"
+            label="更新状态"
             type="submit"
             :loading="submitting && !reviewing"
             :disabled="submitting"
@@ -159,7 +179,7 @@
           </Button>
           <span class="flex-1" />
           <Button
-            label="打个分"
+            label="更新状态"
             type="submit"
             :loading="submitting && !reviewing"
             :disabled="submitting"

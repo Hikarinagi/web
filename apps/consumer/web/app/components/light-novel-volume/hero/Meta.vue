@@ -14,7 +14,7 @@
       props.volume.price_amount != null
         ? [props.volume.price_currency, props.volume.price_amount].filter(Boolean).join(' ')
         : '',
-    ].filter(Boolean),
+    ].filter((part): part is string => Boolean(part)),
   )
 </script>
 

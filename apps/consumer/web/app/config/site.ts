@@ -1,6 +1,6 @@
 export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSquare' | 'smartphone'
 
-export type FeatureFlagKey = 'manga_section'
+export type FeatureFlagKey = 'manga_section' | 'app_download'
 
 export interface HeaderNavItem {
   label: string
@@ -62,6 +62,7 @@ export const SITE_CONFIG = {
       to: '/app',
       icon: 'smartphone',
       match: 'prefix',
+      flag: 'app_download',
       desktopOnly: true,
     },
   ],

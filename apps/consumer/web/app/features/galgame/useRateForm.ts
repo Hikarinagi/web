@@ -20,21 +20,23 @@ export function useRateForm(opts: RateFormOptions) {
   const pendingReview = ref(false)
   const reviewing = ref(false)
 
-  const isEdit = computed(() => opts.rate()?.rate != null)
-  const title = computed(() =>
-    isEdit.value ? `编辑《${opts.workTitle()}》的打分` : `给《${opts.workTitle()}》打分`,
-  )
+  const isEdit = computed(() => {
+    const r = opts.rate()
+    return r != null && (r.rate != null || r.status != null)
+  })
+  const title = computed(() => `编辑《${opts.workTitle()}》的状态`)
 
   const initialValues = computed(() => {
     const r = opts.rate()
     return {
       status: r?.status && r.status !== 'PLAN' ? r.status : 'GOING',
-      rate: r?.rate ?? 8,
+      rate: r?.rate ?? null,
       rate_content: r?.rate_content ?? '',
       time_to_finish_hours: r?.time_to_finish_minutes
         ? Math.round((r.time_to_finish_minutes / 60) * 10) / 10
         : null,
       is_spoiler: r?.is_spoiler ?? false,
+      status_private: r?.status_private ?? false,
       rate_scenario: r?.rate_scenario ?? null,
       rate_direction: r?.rate_direction ?? null,
       rate_music: r?.rate_music ?? null,
@@ -66,6 +68,7 @@ export function useRateForm(opts: RateFormOptions) {
         time_to_finish_minutes:
           v.time_to_finish_hours != null ? Math.round(v.time_to_finish_hours * 60) : 0,
         is_spoiler: v.is_spoiler,
+        status_private: v.status_private,
         rate_scenario: v.rate_scenario,
         rate_direction: v.rate_direction,
         rate_music: v.rate_music,
@@ -83,12 +86,27 @@ export function useRateForm(opts: RateFormOptions) {
     }
   }
 
+  function confirmClearScore() {
+    confirm.require({
+      group: 'app-shell',
+      header: '清除评分',
+      message: '清除后只保留标记，评分与短评会移除。确定吗？',
+      acceptLabel: '清除',
+      rejectLabel: '再想想',
+      onAccept: async ({ close }: { close: () => void }) => {
+        close()
+        await opts.upsert({ rate: null, rate_content: '', is_spoiler: false })
+        opts.close()
+      },
+    })
+  }
+
   function confirmDelete() {
     confirm.require({
       group: 'app-shell',
-      header: '删除评分',
-      message: '删除后，你对这部作品的评分与状态都会移除。确定删除吗？',
-      acceptLabel: '删除',
+      header: '移除状态',
+      message: '移除后，你对这部作品的标记、评分与短评都会删除。确定吗？',
+      acceptLabel: '移除',
       rejectLabel: '再想想',
       onAccept: async ({ close }: { close: () => void }) => {
         close()
@@ -110,6 +128,7 @@ export function useRateForm(opts: RateFormOptions) {
     initialValues,
     prepare,
     submit,
+    confirmClearScore,
     confirmDelete,
   }
 }

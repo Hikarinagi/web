@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { SquarePen, Star } from '@lucide/vue'
   import { workPath } from '#shared/utils/work'
   import {
     RATE_DIMENSION_LABELS,
@@ -10,7 +10,8 @@
 
   defineOptions({ name: 'SpaceTabsRatesRow' })
 
-  const props = defineProps<{ item: SpaceRateItem }>()
+  const props = defineProps<{ item: SpaceRateItem; isSelf: boolean; busy?: boolean }>()
+  const emit = defineEmits<{ edit: [SpaceRateItem] }>()
 
   const statusLabel = computed(() => rateStatusLabel(props.item.work_type, props.item.status))
   const dimensions = computed(() =>
@@ -46,9 +47,24 @@
             {{ statusLabel }}
           </span>
         </div>
-        <div v-if="item.rate" class="flex shrink-0 items-center gap-1">
-          <Star class="size-4 fill-amber-400 text-amber-400" />
-          <span class="font-semibold text-color">{{ item.rate }}</span>
+        <div class="flex shrink-0 items-center gap-1">
+          <template v-if="item.rate">
+            <Star class="size-4 fill-amber-400 text-amber-400" />
+            <span class="font-semibold text-color">{{ item.rate }}</span>
+          </template>
+          <Button
+            v-if="isSelf"
+            v-tooltip.top="'编辑'"
+            text
+            rounded
+            severity="secondary"
+            size="small"
+            aria-label="编辑标记"
+            :loading="busy"
+            @click.stop.prevent="emit('edit', item)"
+          >
+            <template #icon><SquarePen class="size-4" /></template>
+          </Button>
         </div>
       </div>
 

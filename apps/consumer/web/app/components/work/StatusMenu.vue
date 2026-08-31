@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Check, ChevronDown, Plus, RotateCcw } from '@lucide/vue'
+  import { Check, ChevronDown, EyeOff, Plus, RotateCcw } from '@lucide/vue'
   import Popover from 'primevue/popover'
   import type { Component } from 'vue'
 
@@ -13,11 +13,12 @@
   const props = defineProps<{
     status: string | null
     options: WorkStatusOption[]
+    statusPrivate?: boolean
     busy?: boolean
     size?: 'small' | 'large'
     tone?: 'primary' | 'secondary'
   }>()
-  const emit = defineEmits<{ select: [value: string]; clear: [] }>()
+  const emit = defineEmits<{ select: [value: string]; clear: []; privacy: [value: boolean] }>()
 
   defineOptions({ name: 'WorkStatusMenu' })
 
@@ -33,9 +34,9 @@
     pop.value?.hide()
     confirm.require({
       group: 'app-shell',
-      header: '取消标记',
-      message: '取消后，你对这部作品的状态标记会移除。确定吗？',
-      acceptLabel: '取消标记',
+      header: '移除状态',
+      message: '移除后，你对这部作品的标记、评分与短评都会删除。确定吗？',
+      acceptLabel: '移除',
       rejectLabel: '再想想',
       onAccept: ({ close }: { close: () => void }) => {
         close()
@@ -89,13 +90,25 @@
 
         <template v-if="status">
           <div class="my-1 border-t border-surface-200 dark:border-surface-700" />
+          <label
+            class="flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+          >
+            <EyeOff class="size-4 shrink-0 text-muted-color" />
+            <span class="min-w-0 flex-1 text-sm text-color">仅自己可见</span>
+            <ToggleSwitch
+              :model-value="statusPrivate ?? false"
+              :disabled="busy"
+              size="small"
+              @update:model-value="value => emit('privacy', Boolean(value))"
+            />
+          </label>
           <Button
             unstyled
             class="flex items-center gap-3 rounded-md px-2.5 py-2 text-left text-sm text-muted-color transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
             @click="onClear"
           >
             <RotateCcw class="size-4 shrink-0" />
-            取消标记
+            移除状态
           </Button>
         </template>
       </div>

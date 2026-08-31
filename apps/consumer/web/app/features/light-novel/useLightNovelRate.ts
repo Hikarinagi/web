@@ -4,6 +4,7 @@ export function useLightNovelRate(lightNovelId: number, initial: LightNovelRate 
   const rate = ref<LightNovelRate | null>(initial)
   const pending = ref(false)
   const status = computed(() => rate.value?.status ?? null)
+  const statusPrivate = computed(() => rate.value?.status_private ?? false)
   const score = computed(() => rate.value?.rate ?? null)
 
   async function upsert(body: UpsertLightNovelRateBody) {
@@ -24,8 +25,8 @@ export function useLightNovelRate(lightNovelId: number, initial: LightNovelRate 
     return upsert({ status: next })
   }
 
-  function clearStatus() {
-    return upsert({ status: null })
+  function setPrivacy(value: boolean) {
+    return upsert({ status_private: value })
   }
 
   async function remove() {
@@ -42,5 +43,15 @@ export function useLightNovelRate(lightNovelId: number, initial: LightNovelRate 
     }
   }
 
-  return { rate, status, score, pending, upsert, setStatus, clearStatus, remove }
+  return {
+    rate,
+    status,
+    statusPrivate,
+    score,
+    pending,
+    upsert,
+    setStatus,
+    setPrivacy,
+    remove,
+  }
 }

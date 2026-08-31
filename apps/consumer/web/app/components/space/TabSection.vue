@@ -12,11 +12,7 @@
   const router = useRouter()
   const nuxtApp = useNuxtApp()
   const tabPage = shallowRef(toTabPage(props.initial))
-  const pendingRoute = shallowRef({
-    page: readRouteState().page,
-    tab: tabPage.value.active_tab,
-    shelf: readRouteState().shelf,
-  })
+  const pendingRoute = shallowRef({ ...readRouteState(), tab: tabPage.value.active_tab })
   const requestUrl = computed(() => spaceTabBffPath(props.userId, pendingRoute.value))
   const {
     data: loadedTab,
@@ -59,11 +55,10 @@
     }
 
     const seq = ++requestSeq
-    pendingRoute.value = {
-      page: syncRoute ? 1 : readRouteState().page,
-      tab: next,
-      shelf: readRouteState().shelf,
-    }
+    const current = readRouteState()
+    pendingRoute.value = syncRoute
+      ? { ...current, page: 1, tab: next, work: 'all', status: 'all' }
+      : { ...current, tab: next }
     await nuxtApp.callHook('page:loading:start')
     try {
       await execute()
@@ -90,6 +85,8 @@
           ...route.query,
           page: undefined,
           page_size: undefined,
+          work: undefined,
+          status: undefined,
           tab: tab === 'feed' ? undefined : tab,
         },
       })
@@ -144,6 +141,7 @@
       <SpaceTabsRates
         v-else-if="selectedTab === 'rates' && tabPage.rates"
         :user-id="userId"
+        :is-self="initial.is_self"
         :rates="tabPage.rates"
         :counts="initial.statistics.rate_status_counts"
       />

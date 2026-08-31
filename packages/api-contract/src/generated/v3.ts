@@ -1701,6 +1701,38 @@ export interface paths {
         patch: operations["AdminRenderReportController_update"];
         trace?: never;
     };
+    "/api/v3/admin/release/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminReleaseNotesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/release/notes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminReleaseNotesController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminReleaseNotesController_update"];
+        trace?: never;
+    };
     "/api/v3/admin/search/engine": {
         parameters: {
             query?: never;
@@ -6629,6 +6661,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InternalReleasesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/telegram/accounts/{telegram_id}": {
         parameters: {
             query?: never;
@@ -9152,6 +9200,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/reader/me/manga/notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaNotifyController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["MangaNotifyController_update"];
+        trace?: never;
+    };
     "/api/v3/reader/me/manga/reading": {
         parameters: {
             query?: never;
@@ -9640,6 +9704,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["SiteController_hikariPoints"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/site/releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SiteController_releases"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11555,6 +11635,25 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        AdminReleaseNoteDto: {
+            id: number;
+            is_published: boolean;
+            released_at: string;
+            sections: components["schemas"]["ReleaseNoteSectionDto"][];
+            /** @enum {string} */
+            target: "SITE" | "MOBILE";
+            title: string | null;
+            updated_at: string;
+            version: string;
+        };
+        AdminReleaseNoteItemDto: {
+            scope?: string;
+            text?: string;
+        };
+        AdminReleaseNoteSectionDto: {
+            items?: components["schemas"]["AdminReleaseNoteItemDto"][];
+            type?: string;
+        };
         AdminRenderReportDetailDto: {
             /** Format: date-time */
             created_at: string;
@@ -12662,6 +12761,14 @@ export interface components {
         };
         CreateReaderSessionDto: {
             volume_id: number;
+        };
+        CreateReleaseNoteDto: {
+            released_at: string;
+            sections: components["schemas"]["ReleaseNoteSectionInputDto"][];
+            /** @enum {string} */
+            target: "SITE" | "MOBILE";
+            title?: string;
+            version: string;
         };
         CreateRenderReportDto: {
             /** @description 阅读器/Rito 运行时快照(章节、页码、进度、视口、设置、错误等) */
@@ -13971,6 +14078,8 @@ export interface components {
              * @enum {string|null}
              */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private: boolean;
             /** @description 通关耗时，单位分钟 */
             time_to_finish_minutes: number;
             /** @description 最后更新时间 */
@@ -14254,6 +14363,10 @@ export interface components {
             name: string;
             works_count: number;
         };
+        InternalReleaseNoteDto: {
+            created: boolean;
+            id: number;
+        };
         LightNovelAdminItemDto: {
             /** Format: date-time */
             created_at: string;
@@ -14398,6 +14511,8 @@ export interface components {
              * @enum {string|null}
              */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private: boolean;
             /** @description 阅读耗时，单位分钟 */
             time_to_finish_minutes: number;
             /** @description 最后更新时间 */
@@ -14993,6 +15108,13 @@ export interface components {
         MangaMatchingSettingDto: {
             auto_accept_confidence: number;
         };
+        MangaNotifySettingDto: {
+            enabled: boolean;
+            on_favorite: boolean;
+            on_progress: boolean;
+            on_status: boolean;
+            statuses: ("GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN")[];
+        };
         MangaPipelineStatusDto: {
             paused: boolean;
             queues: components["schemas"]["MangaQueueStatusDto"][];
@@ -15070,6 +15192,8 @@ export interface components {
              * @enum {string|null}
              */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private: boolean;
             /** @description 最后更新时间 */
             updated_at: string;
         };
@@ -15241,6 +15365,7 @@ export interface components {
             rediscover: components["schemas"]["MangaRediscoverSettingDto"];
             sources: components["schemas"]["MangaSourceSettingDto"][];
             sweeper: components["schemas"]["MangaSweeperSettingDto"];
+            update_notify: components["schemas"]["MangaUpdateNotifySettingDto"];
         };
         MangaSourceSettingDto: {
             data_saver?: boolean;
@@ -15316,6 +15441,10 @@ export interface components {
         MangaTagRelationDto: {
             likes: number;
             tag: components["schemas"]["TagPreviewDto"];
+        };
+        MangaUpdateNotifySettingDto: {
+            batch_size: number;
+            enabled: boolean;
         };
         MangaVolumeDetailDto: {
             bangumi_book_id: number | null;
@@ -17016,8 +17145,22 @@ export interface components {
             id: number;
             title: string;
         };
+        RateStatusBucketsDto: {
+            all: number;
+            completed: number;
+            dropped: number;
+            going: number;
+            on_hold: number;
+            plan: number;
+        };
+        RateStatusCountsByWorkTypeDto: {
+            galgame: components["schemas"]["RateStatusBucketsDto"];
+            light_novel: components["schemas"]["RateStatusBucketsDto"];
+            manga: components["schemas"]["RateStatusBucketsDto"];
+        };
         RateStatusCountsDto: {
             all: number;
+            by_work_type: components["schemas"]["RateStatusCountsByWorkTypeDto"];
             completed: number;
             dropped: number;
             going: number;
@@ -17059,6 +17202,8 @@ export interface components {
              * @enum {string|null}
              */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private: boolean;
             /** @description 作品标题 */
             title: string;
             /**
@@ -17239,6 +17384,33 @@ export interface components {
         };
         RejectReviewGroupApplicationDto: {
             rejection_reason: string;
+        };
+        ReleaseNoteDto: {
+            released_at: string;
+            sections: components["schemas"]["ReleaseNoteSectionDto"][];
+            /** @enum {string} */
+            target: "SITE" | "MOBILE";
+            title: string | null;
+            version: string;
+        };
+        ReleaseNoteItemDto: {
+            scope: string;
+            text: string;
+        };
+        ReleaseNoteItemInputDto: {
+            scope: string;
+            text: string;
+        };
+        ReleaseNoteListDto: {
+            items: components["schemas"]["ReleaseNoteDto"][];
+        };
+        ReleaseNoteSectionDto: {
+            items: components["schemas"]["ReleaseNoteItemDto"][];
+            type: string;
+        };
+        ReleaseNoteSectionInputDto: {
+            items: components["schemas"]["ReleaseNoteItemInputDto"][];
+            type: string;
         };
         ReportBulkDto: {
             items: components["schemas"]["ReportRefDto"][];
@@ -18117,6 +18289,17 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        UpdateMangaNotifyDto: {
+            enabled?: boolean;
+            /** @description 对收藏的作品推送 */
+            on_favorite?: boolean;
+            /** @description 对有阅读进度的作品推送 */
+            on_progress?: boolean;
+            /** @description 对有状态标记的作品推送 */
+            on_status?: boolean;
+            /** @description 哪些状态标记会触发推送 */
+            statuses?: ("GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN")[];
+        };
         UpdateMangaProgressDto: {
             chapter_id: number;
             /** @description 本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。 */
@@ -18129,6 +18312,7 @@ export interface components {
             rediscover: components["schemas"]["MangaRediscoverSettingDto"];
             sources: components["schemas"]["MangaSourceSettingDto"][];
             sweeper: components["schemas"]["MangaSweeperSettingDto"];
+            update_notify: components["schemas"]["MangaUpdateNotifySettingDto"];
         };
         UpdateMeDto: {
             avatar_id?: number | null;
@@ -18336,6 +18520,12 @@ export interface components {
             percentage: number;
             position: components["schemas"]["ReadingPositionDto"];
         };
+        UpdateReleaseNoteDto: {
+            is_published?: boolean;
+            released_at?: string;
+            sections?: components["schemas"]["AdminReleaseNoteSectionDto"][];
+            title?: string;
+        };
         UpdateRenderReportDto: {
             process_comments?: string | null;
             /** @enum {string} */
@@ -18396,6 +18586,8 @@ export interface components {
              * @enum {string|null}
              */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
             /** @description 通关耗时，单位分钟 */
             time_to_finish_minutes?: number;
         };
@@ -18423,6 +18615,8 @@ export interface components {
              * @enum {string|null}
              */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
             /** @description 阅读耗时，单位分钟 */
             time_to_finish_minutes?: number;
         };
@@ -18454,6 +18648,8 @@ export interface components {
              * @enum {string|null}
              */
             status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
         };
         UpsertReadingAnnotationDto: {
             client_id: string;
@@ -21974,6 +22170,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminRenderReportDetailDto"];
+                };
+            };
+        };
+    };
+    AdminReleaseNotesController_list: {
+        parameters: {
+            query?: {
+                target?: "SITE" | "MOBILE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReleaseNoteDto"][];
+                };
+            };
+        };
+    };
+    AdminReleaseNotesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminReleaseNotesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReleaseNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReleaseNoteDto"];
                 };
             };
         };
@@ -30017,6 +30278,29 @@ export interface operations {
             };
         };
     };
+    InternalReleasesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReleaseNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternalReleaseNoteDto"];
+                };
+            };
+        };
+    };
     TelegramInternalController_getAccount: {
         parameters: {
             query?: never;
@@ -34353,6 +34637,48 @@ export interface operations {
             };
         };
     };
+    MangaNotifyController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNotifySettingDto"];
+                };
+            };
+        };
+    };
+    MangaNotifyController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMangaNotifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNotifySettingDto"];
+                };
+            };
+        };
+    };
     MangaShelfController_getReading: {
         parameters: {
             query: {
@@ -35133,6 +35459,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HikariPointGuideDto"];
+                };
+            };
+        };
+    };
+    SiteController_releases: {
+        parameters: {
+            query?: {
+                target?: "SITE" | "MOBILE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReleaseNoteListDto"];
                 };
             };
         };
