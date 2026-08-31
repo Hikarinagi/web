@@ -1059,8 +1059,8 @@ packages:
   '@iconify-json/simple-icons@1.2.94':
     resolution: {integrity: sha512-l8UWzVxKaqZd9ABsE/M/9p6NyGkQnmCnOoZyhQmjlXCtY5PuL2rcWxOFk2l9pk7ux3ERMPkTLE4jl6kQpTkwxA==}
 
-  '@iconify/collections@1.0.730':
-    resolution: {integrity: sha512-vuSS1r5FVWH5Oo6vEnAYvCd4u13sr95s0uDjfOaSFdF15EvLAaUKA2yDpufc5KbFLBVvwzE5pIFt0dIM2kjYWA==}
+  '@iconify/collections@1.0.732':
+    resolution: {integrity: sha512-q0epTjWdN6L9MyQi5Ww4lCch0oh1/D3Xni7xsScA9iKAtfdM0ENHElE1o5eo2XqXOKfK+b+5Aob3VP/5NG+7kw==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -4240,8 +4240,8 @@ packages:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
 
-  ignore@7.0.7:
-    resolution: {integrity: sha512-dML0wP6oak21rsNYCJpJB6O1BJIEwNpGrTw0URPfAk4hm0e3pRfCtzkfB6olBcXcVlU2rouCyz7lCyRB0OMVCA==}
+  ignore@7.0.8:
+    resolution: {integrity: sha512-YYNsSlXBjMk92SKnkwvB5LOVSa6OznlFUGcsvrFgNJbJCd0M1XKeFVRc8ZByeCqz32FivYNHJVooLmdqrmvp/Q==}
     engines: {node: '>= 4'}
 
   image-meta@0.2.2:
@@ -6477,8 +6477,8 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@8.10.0:
-    resolution: {integrity: sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ==}
+  undici@8.10.1:
+    resolution: {integrity: sha512-YQ3WlbqjYMmNpdvDH64jAgLjxuAR9+649calDWhbshYaeQGO2bR4nI94ORJmwI3J9YhoKQnpyGOK+0zlWS5N5Q==}
     engines: {node: '>=22.19.0'}
 
   unenv@2.0.0-rc.24:
@@ -7788,7 +7788,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/collections@1.0.730':
+  '@iconify/collections@1.0.732':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -8435,7 +8435,7 @@ snapshots:
 
   '@nuxt/icon@2.5.1(magic-string@1.2.3)(magicast@0.5.4)(rolldown@1.2.6)(unplugin@3.3.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)))(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2))(vue@3.5.42(typescript@6.0.3))':
     dependencies:
-      '@iconify/collections': 1.0.730
+      '@iconify/collections': 1.0.732
       '@iconify/types': 2.0.0
       '@iconify/utils': 3.1.4
       '@iconify/vue': 5.0.1(vue@3.5.42(typescript@6.0.3))
@@ -8508,7 +8508,7 @@ snapshots:
       destr: 2.0.5
       errx: 0.1.2
       exsolve: 1.1.1
-      ignore: 7.0.7
+      ignore: 7.0.8
       jiti: 2.7.0
       klona: 2.0.6
       knitwork: 1.3.0
@@ -8534,7 +8534,7 @@ snapshots:
       destr: 2.0.5
       errx: 0.1.2
       exsolve: 1.1.1
-      ignore: 7.0.7
+      ignore: 7.0.8
       jiti: 2.7.0
       klona: 2.0.6
       mlly: 1.8.2
@@ -9621,7 +9621,7 @@ snapshots:
       '@typescript-eslint/utils': 8.68.0(eslint@9.39.5(jiti@2.7.0))(typescript@6.0.3)
       '@typescript-eslint/visitor-keys': 8.68.0
       eslint: 9.39.5(jiti@2.7.0)
-      ignore: 7.0.7
+      ignore: 7.0.8
       natural-compare: 1.4.0
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
@@ -11512,7 +11512,7 @@ snapshots:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       fast-glob: 3.3.3
-      ignore: 7.0.7
+      ignore: 7.0.8
       is-path-inside: 4.0.0
       micromatch: 4.0.8
       slash: 5.1.0
@@ -11652,7 +11652,7 @@ snapshots:
 
   ignore@5.3.2: {}
 
-  ignore@7.0.7: {}
+  ignore@7.0.8: {}
 
   image-meta@0.2.2: {}
 
@@ -12899,7 +12899,7 @@ snapshots:
       exsolve: 1.1.1
       fnv1a-64: 0.1.2
       hookable: 6.1.1
-      ignore: 7.0.7
+      ignore: 7.0.8
       impound: 1.2.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2))
       jiti: 2.7.0
       klona: 2.0.6
@@ -12928,7 +12928,7 @@ snapshots:
       ultrahtml: 1.7.0
       uncrypto: 0.1.3
       unctx: 3.0.1(magic-string@1.2.3)(rolldown@1.2.6)(unplugin@3.3.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)))
-      undici: 8.10.0
+      undici: 8.10.1
       unhead: 3.4.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2))
       unimport: 6.4.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2))
       unplugin: 3.3.0(esbuild@0.27.7)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2))
@@ -14314,7 +14314,7 @@ snapshots:
 
   undici-types@8.3.0: {}
 
-  undici@8.10.0: {}
+  undici@8.10.1: {}
 
   unenv@2.0.0-rc.24:
     dependencies:
@@ -14344,7 +14344,7 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
       ohash: 2.0.12
-      undici: 8.10.0
+      undici: 8.10.1
 
   unimport@5.7.0:
     dependencies:

@@ -11590,6 +11590,7 @@ export interface components {
             action: "ADD" | "SUBTRACT";
             amount: number;
             balance: number;
+            /** Format: date-time */
             created_at: string;
             id: number;
             /** @enum {string} */
@@ -11638,11 +11639,13 @@ export interface components {
         AdminReleaseNoteDto: {
             id: number;
             is_published: boolean;
+            /** Format: date-time */
             released_at: string;
             sections: components["schemas"]["ReleaseNoteSectionDto"][];
             /** @enum {string} */
             target: "SITE" | "MOBILE";
             title: string | null;
+            /** Format: date-time */
             updated_at: string;
             version: string;
         };
@@ -11693,6 +11696,7 @@ export interface components {
             volume_label: string;
         };
         AdminSigningKeyDto: {
+            /** Format: date-time */
             activated_at: string | null;
             alg: string;
             /** Format: date-time */
@@ -11702,6 +11706,7 @@ export interface components {
             public_jwk: {
                 [key: string]: unknown;
             };
+            /** Format: date-time */
             retired_at: string | null;
             /** @enum {string} */
             status: "ACTIVE" | "NEXT" | "RETIRED";
@@ -11870,6 +11875,7 @@ export interface components {
             content_json?: components["schemas"]["EditorDocumentDto"];
             content_meta: components["schemas"]["ContentMetaResDto"];
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             editor_schema_version: number;
@@ -11888,6 +11894,7 @@ export interface components {
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             title: string;
             topics: components["schemas"]["TopicRelationDto"][];
+            /** Format: date-time */
             updated_at: string;
             view_count: number;
             /** @enum {string} */
@@ -11908,7 +11915,10 @@ export interface components {
         ArticleSummaryDto: {
             /** @description 文章封面 */
             cover: components["schemas"]["MediaAssetDto"] | null;
-            /** @description 发布时间 */
+            /**
+             * Format: date-time
+             * @description 发布时间
+             */
             created_at: string;
             /** @description 作者 */
             creator: components["schemas"]["UserRefDto"] | null;
@@ -11922,7 +11932,10 @@ export interface components {
             title: string;
             /** @description 关联话题 */
             topics: components["schemas"]["TopicRelationDto"][];
-            /** @description 最后更新时间 */
+            /**
+             * Format: date-time
+             * @description 最后更新时间
+             */
             updated_at: string;
             /** @description 浏览量 */
             view_count: number;
@@ -11997,7 +12010,10 @@ export interface components {
             client_id_set: boolean;
             /** @description 是否已连接(库中有有效 token) */
             connected: boolean;
-            /** @description access_token 到期时间(ISO) */
+            /**
+             * Format: date-time
+             * @description access_token 到期时间(ISO)
+             */
             token_expires_at: string | null;
         };
         BulkAdjustPointDto: {
@@ -12269,6 +12285,7 @@ export interface components {
             children: components["schemas"]["CommentNodeDto"][];
             content_json: components["schemas"]["EditorDocumentDto"] | null;
             content_meta: components["schemas"]["ContentMetaResDto"] | null;
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             editor_schema_version: number;
@@ -12285,6 +12302,7 @@ export interface components {
             /** @enum {string} */
             status: "APPROVED" | "PENDING" | "BLOCKED";
             thread_id: number;
+            /** Format: date-time */
             updated_at: string;
         };
         CommentItemPageDto: {
@@ -12305,6 +12323,7 @@ export interface components {
             can_edit: boolean;
             content_json: components["schemas"]["EditorDocumentDto"] | null;
             content_meta: components["schemas"]["ContentMetaResDto"] | null;
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             editor_schema_version: number;
@@ -12321,6 +12340,7 @@ export interface components {
             /** @enum {string} */
             status: "APPROVED" | "PENDING" | "BLOCKED";
             thread_id: number;
+            /** Format: date-time */
             updated_at: string;
         };
         CommentNodePageDto: {
@@ -12495,6 +12515,7 @@ export interface components {
         ConversationLastMessageDto: {
             excerpt: string;
             from_me: boolean;
+            /** Format: date-time */
             sent_at: string;
         };
         CountByStatusDto: {
@@ -12960,6 +12981,7 @@ export interface components {
         DraftListItemDto: {
             char_count: number;
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
             created_at: string;
             excerpt: string | null;
             id: number;
@@ -12967,6 +12989,7 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             title: string;
+            /** Format: date-time */
             updated_at: string;
             view_count: number;
         };
@@ -13481,7 +13504,10 @@ export interface components {
         FavoriteCollectionItemDto: {
             /** @description 文章条目，仅当 type 为 article 时返回 */
             article?: components["schemas"]["ArticleSummaryDto"];
-            /** @description 收藏时间 */
+            /**
+             * Format: date-time
+             * @description 收藏时间
+             */
             created_at: string;
             /** @description Galgame 条目，仅当 type 为 galgame 时返回 */
             galgame?: components["schemas"]["GalgameSummaryDto"];
@@ -13533,18 +13559,21 @@ export interface components {
             name: string;
         };
         FavoriteGalgameItemDto: {
+            /** Format: date-time */
             created_at: string;
             galgame: components["schemas"]["GalgameSummaryDto"];
             id: number;
             note: string;
         };
         FavoriteLightNovelItemDto: {
+            /** Format: date-time */
             created_at: string;
             id: number;
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string;
         };
         FavoriteMangaItemDto: {
+            /** Format: date-time */
             created_at: string;
             id: number;
             manga: components["schemas"]["MangaSummaryDto"];
@@ -13582,6 +13611,7 @@ export interface components {
             poll: components["schemas"]["PollResDto"] | null;
             review_rate: number | null;
             review_work: components["schemas"]["FeedWorkRefDto"] | null;
+            /** Format: date-time */
             sort_time: string;
             title: string;
             topics: components["schemas"]["TopicRelationDto"][];
@@ -13626,6 +13656,7 @@ export interface components {
             my_value: -1 | 0 | 1;
             rate: number | null;
             rate_content: string;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string|null} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
@@ -13636,6 +13667,7 @@ export interface components {
         FeedGalgameStatusItemDto: {
             author: components["schemas"]["UserRefDto"] | null;
             id: number;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
@@ -13663,6 +13695,7 @@ export interface components {
             my_value: -1 | 0 | 1;
             rate: number | null;
             rate_content: string;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string|null} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
@@ -13673,6 +13706,7 @@ export interface components {
         FeedLightNovelStatusItemDto: {
             author: components["schemas"]["UserRefDto"] | null;
             id: number;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
@@ -13689,6 +13723,7 @@ export interface components {
             like_count: number;
             rate: number | null;
             rate_content: string;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string} */
             type: "light_novel_volume_rate";
@@ -13708,6 +13743,7 @@ export interface components {
             my_value: -1 | 0 | 1;
             rate: number | null;
             rate_content: string;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string|null} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
@@ -13718,6 +13754,7 @@ export interface components {
         FeedMangaStatusItemDto: {
             author: components["schemas"]["UserRefDto"] | null;
             id: number;
+            /** Format: date-time */
             sort_time: string;
             /** @enum {string} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
@@ -13738,6 +13775,7 @@ export interface components {
             liked: boolean;
             pinned: boolean;
             poll: components["schemas"]["PollResDto"] | null;
+            /** Format: date-time */
             sort_time: string;
             title: string;
             /** @enum {string} */
@@ -14035,6 +14073,7 @@ export interface components {
         };
         GalgameRateCloudItemDto: {
             author: components["schemas"]["UserRefDto"];
+            /** Format: date-time */
             created_at: string;
             id: number;
             rate: number | null;
@@ -14047,7 +14086,10 @@ export interface components {
             title: string;
         };
         GalgameRateDetailDto: {
-            /** @description 创建时间 */
+            /**
+             * Format: date-time
+             * @description 创建时间
+             */
             created_at: string;
             /** @description 短评被踩数 */
             dislike_count: number;
@@ -14082,7 +14124,10 @@ export interface components {
             status_private: boolean;
             /** @description 通关耗时，单位分钟 */
             time_to_finish_minutes: number;
-            /** @description 最后更新时间 */
+            /**
+             * Format: date-time
+             * @description 最后更新时间
+             */
             updated_at: string;
         };
         GalgameRateDimensionAveragesDto: {
@@ -14094,6 +14139,7 @@ export interface components {
             visual: number | null;
         };
         GalgameRateDto: {
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             id: number;
@@ -14120,6 +14166,7 @@ export interface components {
             time_to_finish_minutes: number;
         };
         GalgameRatePermalinkDto: {
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             id: number;
@@ -14192,6 +14239,7 @@ export interface components {
         };
         GalgameRelatedPostDto: {
             comment_count: number;
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             excerpt: string | null;
@@ -14287,6 +14335,7 @@ export interface components {
         IdentitySessionDto: {
             /** Format: date-time */
             created_at: string;
+            /** Format: date-time */
             expires_at: string | null;
             id: string;
         };
@@ -14307,7 +14356,10 @@ export interface components {
             signing_keys: components["schemas"]["IdpSigningKeyStatsDto"];
         };
         IdpRestartStatusDto: {
-            /** @description IdP 进程启动时间(ISO);null 表示未捕获 */
+            /**
+             * Format: date-time
+             * @description IdP 进程启动时间(ISO);null 表示未捕获
+             */
             booted_at: string | null;
             needs_restart: boolean;
             /** @description issuer / api_audience 已改但未生效 */
@@ -14480,7 +14532,10 @@ export interface components {
             rater: components["schemas"]["UserRefDto"] | null;
         };
         LightNovelRateDetailDto: {
-            /** @description 创建时间 */
+            /**
+             * Format: date-time
+             * @description 创建时间
+             */
             created_at: string;
             /** @description 短评被踩数 */
             dislike_count: number;
@@ -14515,7 +14570,10 @@ export interface components {
             status_private: boolean;
             /** @description 阅读耗时，单位分钟 */
             time_to_finish_minutes: number;
-            /** @description 最后更新时间 */
+            /**
+             * Format: date-time
+             * @description 最后更新时间
+             */
             updated_at: string;
         };
         LightNovelRateDimensionAveragesDto: {
@@ -14527,6 +14585,7 @@ export interface components {
             writing: number | null;
         };
         LightNovelRateDto: {
+            /** Format: date-time */
             created_at: string;
             id: number;
             is_spoiler: boolean;
@@ -14552,6 +14611,7 @@ export interface components {
             volume: components["schemas"]["LightNovelRateVolumeRefDto"] | null;
         };
         LightNovelRatePermalinkDto: {
+            /** Format: date-time */
             created_at: string;
             id: number;
             is_spoiler: boolean;
@@ -14604,6 +14664,7 @@ export interface components {
         };
         LightNovelRelatedPostDto: {
             comment_count: number;
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             excerpt: string | null;
@@ -14756,6 +14817,7 @@ export interface components {
             volume_id: number;
         };
         LightNovelVolumeRateDetailDto: {
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             id: number;
@@ -14763,6 +14825,7 @@ export interface components {
             like_count: number;
             rate: number | null;
             rate_content: string;
+            /** Format: date-time */
             updated_at: string;
         };
         LightNovelVolumeRelationDto: {
@@ -14952,12 +15015,14 @@ export interface components {
             /** @enum {string} */
             content_type: "article" | "post";
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
             created_at: string;
             id: number;
             like_count: number;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             title: string;
+            /** Format: date-time */
             updated_at: string;
             view_count: number;
         };
@@ -15173,7 +15238,10 @@ export interface components {
             rater: components["schemas"]["UserRefDto"] | null;
         };
         MangaRateDetailDto: {
-            /** @description 创建时间 */
+            /**
+             * Format: date-time
+             * @description 创建时间
+             */
             created_at: string;
             /** @description 短评被踩数 */
             dislike_count: number;
@@ -15194,10 +15262,14 @@ export interface components {
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
             /** @description 状态标记仅自己可见 */
             status_private: boolean;
-            /** @description 最后更新时间 */
+            /**
+             * Format: date-time
+             * @description 最后更新时间
+             */
             updated_at: string;
         };
         MangaRateDto: {
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             id: number;
@@ -15215,6 +15287,7 @@ export interface components {
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
         };
         MangaRatePermalinkDto: {
+            /** Format: date-time */
             created_at: string;
             dislike_count: number;
             id: number;
@@ -15309,6 +15382,7 @@ export interface components {
         };
         MangaRelatedPostDto: {
             comment_count: number;
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             excerpt: string | null;
@@ -15812,6 +15886,7 @@ export interface components {
             action: "ADD" | "SUBTRACT";
             amount: number;
             balance: number;
+            /** Format: date-time */
             created_at: string;
             id: number;
             /** @enum {string} */
@@ -16832,6 +16907,7 @@ export interface components {
             can_edit: boolean;
             can_edit_options: boolean;
             closed: boolean;
+            /** Format: date-time */
             closes_at: string | null;
             id: number;
             max_choices: number | null;
@@ -16866,6 +16942,7 @@ export interface components {
             content_json?: components["schemas"]["EditorDocumentDto"];
             content_meta: components["schemas"]["ContentMetaResDto"];
             covers: components["schemas"]["PostCoverResDto"][];
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             editor_schema_version: number;
@@ -16884,6 +16961,7 @@ export interface components {
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             title: string;
             topics: components["schemas"]["TopicRelationDto"][];
+            /** Format: date-time */
             updated_at: string;
             view_count: number;
             /** @enum {string} */
@@ -16904,7 +16982,10 @@ export interface components {
         PostSummaryDto: {
             /** @description 图文配图 */
             covers: components["schemas"]["PostCoverResDto"][];
-            /** @description 发布时间 */
+            /**
+             * Format: date-time
+             * @description 发布时间
+             */
             created_at: string;
             /** @description 作者 */
             creator: components["schemas"]["UserRefDto"] | null;
@@ -16918,7 +16999,10 @@ export interface components {
             title: string;
             /** @description 关联话题 */
             topics: components["schemas"]["TopicRelationDto"][];
-            /** @description 最后更新时间 */
+            /**
+             * Format: date-time
+             * @description 最后更新时间
+             */
             updated_at: string;
             /** @description 浏览量 */
             view_count: number;
@@ -16957,7 +17041,9 @@ export interface components {
             from_me: boolean;
             id: number;
             is_read: boolean;
+            /** Format: date-time */
             read_at: string | null;
+            /** Format: date-time */
             sent_at: string;
         };
         PrivateUserDto: {
@@ -17189,7 +17275,10 @@ export interface components {
             id: number;
             /** @description 短评是否含剧透 */
             is_spoiler: boolean;
-            /** @description 该评分记录的最后更新时间，短评被点赞或点踩同样会刷新它 */
+            /**
+             * Format: date-time
+             * @description 该评分记录的最后更新时间，短评被点赞或点踩同样会刷新它
+             */
             last_activity_at: string;
             /** @description 总评分 */
             rate: number | null;
@@ -17386,6 +17475,7 @@ export interface components {
             rejection_reason: string;
         };
         ReleaseNoteDto: {
+            /** Format: date-time */
             released_at: string;
             sections: components["schemas"]["ReleaseNoteSectionDto"][];
             /** @enum {string} */
@@ -17684,6 +17774,7 @@ export interface components {
         SectionDto: {
             color: string | null;
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             description: string | null;
@@ -17693,6 +17784,7 @@ export interface components {
             id: number;
             name: string;
             slug: string | null;
+            /** Format: date-time */
             updated_at: string;
             use_count: number;
         };
@@ -17805,6 +17897,7 @@ export interface components {
             is_read: boolean;
             /** @enum {string} */
             render_mode: "TEMPLATE" | "RICH";
+            /** Format: date-time */
             sent_at: string;
             template_key: string | null;
             title: string | null;
@@ -17818,6 +17911,7 @@ export interface components {
             is_read: boolean;
             /** @enum {string} */
             render_mode: "TEMPLATE" | "RICH";
+            /** Format: date-time */
             sent_at: string;
             template_key: string | null;
             title: string | null;
@@ -18000,6 +18094,7 @@ export interface components {
             user: components["schemas"]["UserRefDto"] | null;
         };
         TopicDto: {
+            /** Format: date-time */
             created_at: string;
             creator: components["schemas"]["UserRefDto"] | null;
             description: string | null;
@@ -18007,6 +18102,7 @@ export interface components {
             followed: boolean;
             id: number;
             name: string;
+            /** Format: date-time */
             updated_at: string;
             use_count: number;
         };

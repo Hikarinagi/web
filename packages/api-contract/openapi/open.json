@@ -15,6 +15,7 @@
           },
           "created_at": {
             "description": "发布时间",
+            "format": "date-time",
             "type": "string"
           },
           "creator": {
@@ -55,6 +56,7 @@
           },
           "updated_at": {
             "description": "最后更新时间",
+            "format": "date-time",
             "type": "string"
           },
           "view_count": {
@@ -252,6 +254,7 @@
           },
           "created_at": {
             "description": "收藏时间",
+            "format": "date-time",
             "type": "string"
           },
           "galgame": {
@@ -413,6 +416,7 @@
         "properties": {
           "created_at": {
             "description": "创建时间",
+            "format": "date-time",
             "type": "string"
           },
           "dislike_count": {
@@ -499,6 +503,7 @@
           },
           "updated_at": {
             "description": "最后更新时间",
+            "format": "date-time",
             "type": "string"
           }
         },
@@ -743,6 +748,7 @@
         "properties": {
           "created_at": {
             "description": "创建时间",
+            "format": "date-time",
             "type": "string"
           },
           "dislike_count": {
@@ -829,6 +835,7 @@
           },
           "updated_at": {
             "description": "最后更新时间",
+            "format": "date-time",
             "type": "string"
           }
         },
@@ -1053,6 +1060,7 @@
         "properties": {
           "created_at": {
             "description": "创建时间",
+            "format": "date-time",
             "type": "string"
           },
           "dislike_count": {
@@ -1105,6 +1113,7 @@
           },
           "updated_at": {
             "description": "最后更新时间",
+            "format": "date-time",
             "type": "string"
           }
         },
@@ -3246,6 +3255,7 @@
           },
           "created_at": {
             "description": "发布时间",
+            "format": "date-time",
             "type": "string"
           },
           "creator": {
@@ -3286,6 +3296,7 @@
           },
           "updated_at": {
             "description": "最后更新时间",
+            "format": "date-time",
             "type": "string"
           },
           "view_count": {
@@ -3504,6 +3515,7 @@
           },
           "last_activity_at": {
             "description": "该评分记录的最后更新时间，短评被点赞或点踩同样会刷新它",
+            "format": "date-time",
             "type": "string"
           },
           "rate": {
