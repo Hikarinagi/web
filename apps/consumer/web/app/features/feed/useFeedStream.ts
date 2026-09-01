@@ -11,6 +11,18 @@ function emptyBucket(): FeedBucket {
   return { items: [], nextCursor: null, loaded: false }
 }
 
+// 同一条内容出现两次会撞同一个列表 :key(`rowId` 就是 `type:id`),Vue 会复用错的
+// DOM 节点。推荐流按实时分数分页,分数在翻页之间会动,边界上重复吐是可能的。
+export function withoutSeen(current: BackendFeedItem[], incoming: BackendFeedItem[]) {
+  const seen = new Set(current.map(item => `${item.type}:${item.id}`))
+  return incoming.filter(item => {
+    const key = `${item.type}:${item.id}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 // clone items —— seed 是 useHikariApiData 的缓存对象,直接引用会让 loadMore 的 push 反向污染 BFF payload。
 function bucketFrom(res: FeedResponse): FeedBucket {
   return { items: [...res.items], nextCursor: res.meta.next_cursor, loaded: true }
@@ -64,7 +76,7 @@ export function useFeedStream(source: FeedSource) {
     loadingMap.value[source.key] = true
     try {
       const res = await source.fetch(b.nextCursor)
-      b.items.push(...res.items)
+      b.items.push(...withoutSeen(b.items, res.items))
       b.nextCursor = res.meta.next_cursor
     } finally {
       loadingMap.value[source.key] = false
