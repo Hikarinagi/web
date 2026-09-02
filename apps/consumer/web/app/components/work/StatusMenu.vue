@@ -18,7 +18,11 @@
     size?: 'small' | 'large'
     tone?: 'primary' | 'secondary'
   }>()
-  const emit = defineEmits<{ select: [value: string]; clear: []; privacy: [value: boolean] }>()
+  const emit = defineEmits<{
+    select: [value: string, statusPrivate: boolean]
+    clear: []
+    privacy: [value: boolean]
+  }>()
 
   defineOptions({ name: 'WorkStatusMenu' })
 
@@ -26,9 +30,18 @@
   const confirm = useConfirm()
   const current = computed(() => props.options.find(o => o.value === props.status) ?? null)
 
+  const intendedPrivate = ref(false)
+  const isPrivate = computed(() =>
+    props.status ? (props.statusPrivate ?? false) : intendedPrivate.value,
+  )
+
+  function setPrivate(value: boolean) {
+    if (props.status) emit('privacy', value)
+    else intendedPrivate.value = value
+  }
   function pick(value: string) {
     pop.value?.hide()
-    if (value !== props.status) emit('select', value)
+    if (value !== props.status) emit('select', value, isPrivate.value)
   }
   function onClear() {
     pop.value?.hide()
@@ -40,6 +53,7 @@
       rejectLabel: '再想想',
       onAccept: ({ close }: { close: () => void }) => {
         close()
+        intendedPrivate.value = false
         emit('clear')
       },
     })
@@ -88,29 +102,29 @@
           <Check v-if="opt.value === status" class="ml-auto size-4 shrink-0" />
         </Button>
 
-        <template v-if="status">
-          <div class="my-1 border-t border-surface-200 dark:border-surface-700" />
-          <label
-            class="flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
-          >
-            <EyeOff class="size-4 shrink-0 text-muted-color" />
-            <span class="min-w-0 flex-1 text-sm text-color">仅自己可见</span>
-            <ToggleSwitch
-              :model-value="statusPrivate ?? false"
-              :disabled="busy"
-              size="small"
-              @update:model-value="value => emit('privacy', Boolean(value))"
-            />
-          </label>
-          <Button
-            unstyled
-            class="flex items-center gap-3 rounded-md px-2.5 py-2 text-left text-sm text-muted-color transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
-            @click="onClear"
-          >
-            <RotateCcw class="size-4 shrink-0" />
-            移除状态
-          </Button>
-        </template>
+        <div class="my-1 border-t border-surface-200 dark:border-surface-700" />
+        <label
+          class="flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-2 transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+        >
+          <EyeOff class="size-4 shrink-0 text-muted-color" />
+          <span class="min-w-0 flex-1 text-sm text-color">仅自己可见</span>
+          <ToggleSwitch
+            :model-value="isPrivate"
+            :disabled="busy"
+            size="small"
+            @update:model-value="value => setPrivate(Boolean(value))"
+          />
+        </label>
+
+        <Button
+          v-if="status"
+          unstyled
+          class="flex items-center gap-3 rounded-md px-2.5 py-2 text-left text-sm text-muted-color transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+          @click="onClear"
+        >
+          <RotateCcw class="size-4 shrink-0" />
+          移除状态
+        </Button>
       </div>
     </Popover>
   </div>

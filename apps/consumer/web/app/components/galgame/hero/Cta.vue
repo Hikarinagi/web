@@ -46,7 +46,7 @@
       :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
       :busy="rateCtl.pending.value"
-      @select="value => rateCtl.setStatus(value as GalgameRateStatus)"
+      @select="(value, priv) => rateCtl.setStatus(value as GalgameRateStatus, priv)"
       @clear="rateCtl.remove"
       @privacy="rateCtl.setPrivacy"
     />
