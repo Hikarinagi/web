@@ -85,6 +85,166 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/catalog/listing/manga/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminCatalogController_setListing"];
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/listing/origins": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_origins"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/listing/recompute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminCatalogController_recompute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_pending"];
+        put?: never;
+        post: operations["AdminCatalogController_review"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_listRuns"];
+        put?: never;
+        post: operations["AdminCatalogController_trigger"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/runs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_runDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/runs/{id}/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_listItems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_settings"];
+        put: operations["AdminCatalogController_updateSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/trace/{externalId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_trace"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/condition-presets": {
         parameters: {
             query?: never;
@@ -11453,8 +11613,11 @@ export interface components {
             /** Format: date-time */
             latest_chapter_at: string | null;
             linked_sources: string[];
+            listed: boolean;
+            listing: components["schemas"]["MangaListing"];
             name: string;
             name_cn: string | null;
+            origin_country: string | null;
             pending_count: number;
             serial_status: components["schemas"]["MangaSerialStatus"];
             /** Format: date-time */
@@ -12043,13 +12206,174 @@ export interface components {
          * @enum {string}
          */
         CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
+        CatalogItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
+            /** Format: date-time */
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_id: number;
+            title: string;
+        };
+        CatalogListingPolicyDto: {
+            origins: string[];
+            unknown_listed: boolean;
+        };
         CatalogOptionDto: {
             label: string;
             op: string;
         };
+        CatalogOriginStatDto: {
+            listed: number;
+            origin_country: string | null;
+            total: number;
+        };
+        CatalogOverviewDto: {
+            light_novel: components["schemas"]["CatalogOverviewNovelDto"];
+            manga: components["schemas"]["CatalogOverviewMangaDto"];
+            pending_review: number;
+            recent_runs: components["schemas"]["CatalogRunItemDto"][];
+        };
+        CatalogOverviewMangaDto: {
+            hidden: number;
+            listed: number;
+            origin_unknown: number;
+            override_hidden: number;
+            override_shown: number;
+            total: number;
+        };
+        CatalogOverviewNovelDto: {
+            pending: number;
+            total: number;
+            volumes: number;
+        };
+        CatalogRecomputeResultDto: {
+            changed: number;
+            dry_run: boolean;
+            policy: components["schemas"]["CatalogListingPolicyDto"];
+            run_id: number;
+            scanned: number;
+            to_hidden: number;
+            to_listed: number;
+        };
+        CatalogReviewResultDto: {
+            updated: number;
+        };
+        CatalogRunDecisionCountDto: {
+            count: number;
+            decision: components["schemas"]["CatalogSyncDecision"];
+        };
+        CatalogRunDetailDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            config: {
+                [key: string]: unknown;
+            } | null;
+            created: number;
+            decisions: components["schemas"]["CatalogRunDecisionCountDto"][];
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
+        CatalogRunItemDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            created: number;
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
         CatalogScalarDto: {
             field: string;
             label: string;
+        };
+        /** @enum {string} */
+        CatalogSyncDecision: "CREATED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED";
+        /** @enum {string} */
+        CatalogSyncKind: "MANGA" | "LIGHT_NOVEL";
+        /** @enum {string} */
+        CatalogSyncOperation: "IMPORT" | "LISTING";
+        /** @enum {string} */
+        CatalogSyncReview: "PENDING" | "APPROVED" | "REJECTED";
+        CatalogSyncSettingsDto: {
+            auto_publish: boolean;
+            batch_limit: number;
+            enabled: boolean;
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            listing: components["schemas"]["CatalogListingPolicyDto"];
+            ln_label_count: number;
+            ln_label_min: number;
+            schedule: string;
+            since_months: number;
+        };
+        /** @enum {string} */
+        CatalogSyncStatus: "RUNNING" | "SUCCEEDED" | "FAILED";
+        /** @enum {string} */
+        CatalogSyncTrigger: "CRON" | "MANUAL";
+        CatalogTraceEntryDto: {
+            /** Format: date-time */
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
+            /** Format: date-time */
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_dump_version: string | null;
+            run_id: number;
+            /** Format: date-time */
+            run_started_at: string;
+            title: string;
+        };
+        CatalogTriggerResultDto: {
+            run_id: number;
+            started: boolean;
         };
         ChangeRequestBatchItemDto: {
             change_request_id?: number;
@@ -15164,6 +15488,13 @@ export interface components {
             image_quality: number;
             max_image_dimension: number;
         };
+        /** @enum {string} */
+        MangaListing: "AUTO" | "SHOWN" | "HIDDEN";
+        MangaListingStateDto: {
+            id: number;
+            listed: boolean;
+            listing: components["schemas"]["MangaListing"];
+        };
         MangaMagazineDto: {
             id: number;
             name: string;
@@ -17444,6 +17775,10 @@ export interface components {
             set_name: string;
             src: components["schemas"]["MediaAssetDto"] | null;
         };
+        RecomputeListingDto: {
+            /** @description 只出预览记录,不改条目 */
+            dry_run?: boolean;
+        };
         ReferencedRefsDto: {
             article_ids?: number[];
             character_ids?: number[];
@@ -17627,6 +17962,10 @@ export interface components {
             cover: string | null;
             title: string;
         };
+        ReviewCatalogItemsDto: {
+            item_ids: number[];
+            review: components["schemas"]["CatalogSyncReview"];
+        };
         ReviewChangeRequestBatchDto: {
             body?: string;
             change_request_ids?: number[];
@@ -17809,6 +18148,11 @@ export interface components {
             content_json: {
                 [key: string]: unknown;
             };
+        };
+        SetMangaListingDto: {
+            listing: components["schemas"]["MangaListing"];
+            /** @description 覆盖原因,便于后续复核 */
+            reason?: string;
         };
         SetSearchEngineDto: {
             /** @enum {string} */
@@ -18139,6 +18483,12 @@ export interface components {
         TrendingResponseDto: {
             items: components["schemas"]["TrendingItemDto"][];
         };
+        TriggerCatalogSyncDto: {
+            dry_run?: boolean;
+            kind: components["schemas"]["CatalogSyncKind"];
+            /** @description 本轮最多处理多少条,0 表示不限 */
+            limit?: number;
+        };
         UgcBacklogDto: {
             failed: number;
             needs_human: number;
@@ -18220,6 +18570,24 @@ export interface components {
         UpdateBangumiCredentialsDto: {
             client_id: string;
             client_secret: string;
+        };
+        UpdateCatalogSettingsDto: {
+            /** @description 新建条目直接发布,否则留待复核 */
+            auto_publish: boolean;
+            /** @description 单次最多创建多少条,0 表示不限 */
+            batch_limit: number;
+            enabled: boolean;
+            /** @description 同步明细保留天数 */
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            /** @description 产地未知的漫画是否上架 */
+            origin_unknown_listed: boolean;
+            /** @description 收录的漫画产地 */
+            origins: string[];
+            /** @description cron 表达式,保存后立即重排 */
+            schedule: string;
+            /** @description 只处理最近多少个月出版的条目 */
+            since_months: number;
         };
         UpdateCheckInSettingsDto: {
             check_in_daily_point_max?: number;
@@ -19046,6 +19414,313 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BackupSettingsResDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_setListing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetMangaListingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaListingStateDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_origins: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogOriginStatDto"][];
+                };
+            };
+        };
+    };
+    AdminCatalogController_recompute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecomputeListingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogRecomputeResultDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogOverviewDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_pending: {
+        parameters: {
+            query: {
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
+                /** @description 按标题模糊匹配 */
+                keyword?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["CatalogItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminCatalogController_review: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewCatalogItemsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogReviewResultDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_listRuns: {
+        parameters: {
+            query: {
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+                status?: components["schemas"]["CatalogSyncStatus"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["CatalogRunItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminCatalogController_trigger: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerCatalogSyncDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogTriggerResultDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_runDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogRunDetailDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_listItems: {
+        parameters: {
+            query: {
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
+                /** @description 按标题模糊匹配 */
+                keyword?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["CatalogItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminCatalogController_settings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCatalogSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_trace: {
+        parameters: {
+            query?: {
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+            };
+            header?: never;
+            path: {
+                externalId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogTraceEntryDto"][];
                 };
             };
         };
@@ -21102,6 +21777,11 @@ export interface operations {
                 keyword?: string;
                 link_status?: "linked" | "pending" | "none";
                 health?: "failed";
+                /** @description 只看已上架 / 只看已下架 */
+                listed?: boolean;
+                listing?: components["schemas"]["MangaListing"];
+                /** @description 按产地筛选,传 unknown 表示产地未知 */
+                origin?: string;
                 page: number;
                 page_size: number;
             };

@@ -114,6 +114,16 @@ export const MANGA_PERMISSIONS = {
   SETTINGS_WRITE: 'manga.settings.write',
 } as const
 
+export const CATALOG_PERMISSIONS = {
+  RUNS_READ: 'catalog.runs.read',
+  SYNC_RUN: 'catalog.sync.run',
+  REVIEW_READ: 'catalog.review.read',
+  REVIEW_WRITE: 'catalog.review.write',
+  LISTING_WRITE: 'catalog.listing.write',
+  SETTINGS_READ: 'catalog.settings.read',
+  SETTINGS_WRITE: 'catalog.settings.write',
+} as const
+
 export const GALGAME_DOWNLOAD_PERMISSIONS = {
   READ: 'galgame_download.read',
   SYNC_RUN: 'galgame_download.sync.run',
@@ -144,6 +154,7 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(SEARCH_PERMISSIONS),
   ...Object.values(TELEGRAM_PERMISSIONS),
   ...Object.values(MANGA_PERMISSIONS),
+  ...Object.values(CATALOG_PERMISSIONS),
   ...Object.values(LLM_PERMISSIONS),
   ...Object.values(GALGAME_DOWNLOAD_PERMISSIONS),
 ]
@@ -168,6 +179,7 @@ export type PermissionKey =
   | ValueOf<typeof SEARCH_PERMISSIONS>
   | ValueOf<typeof TELEGRAM_PERMISSIONS>
   | ValueOf<typeof MANGA_PERMISSIONS>
+  | ValueOf<typeof CATALOG_PERMISSIONS>
   | ValueOf<typeof LLM_PERMISSIONS>
   | ValueOf<typeof GALGAME_DOWNLOAD_PERMISSIONS>
 

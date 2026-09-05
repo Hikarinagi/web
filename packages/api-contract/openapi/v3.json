@@ -1059,10 +1059,24 @@
             },
             "type": "array"
           },
+          "listed": {
+            "type": "boolean"
+          },
+          "listing": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaListing"
+              }
+            ]
+          },
           "name": {
             "type": "string"
           },
           "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "origin_country": {
             "nullable": true,
             "type": "string"
           },
@@ -1093,6 +1107,9 @@
           "name_cn",
           "cover",
           "serial_status",
+          "origin_country",
+          "listed",
+          "listing",
           "linked_sources",
           "chapters_total",
           "chapters_readable",
@@ -3371,6 +3388,116 @@
         ],
         "type": "string"
       },
+      "CatalogItemDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "external_id": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "resource_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reviewer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "run_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_id",
+          "kind",
+          "operation",
+          "external_id",
+          "title",
+          "decision",
+          "evidence",
+          "note",
+          "resource_id",
+          "review",
+          "reviewer",
+          "reviewed_at",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "CatalogListingPolicyDto": {
+        "properties": {
+          "origins": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "unknown_listed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "origins",
+          "unknown_listed"
+        ],
+        "type": "object"
+      },
       "CatalogOptionDto": {
         "properties": {
           "label": {
@@ -3386,6 +3513,384 @@
         ],
         "type": "object"
       },
+      "CatalogOriginStatDto": {
+        "properties": {
+          "listed": {
+            "type": "number"
+          },
+          "origin_country": {
+            "nullable": true,
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "origin_country",
+          "total",
+          "listed"
+        ],
+        "type": "object"
+      },
+      "CatalogOverviewDto": {
+        "properties": {
+          "light_novel": {
+            "$ref": "#/components/schemas/CatalogOverviewNovelDto"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/CatalogOverviewMangaDto"
+          },
+          "pending_review": {
+            "type": "number"
+          },
+          "recent_runs": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogRunItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "pending_review",
+          "manga",
+          "light_novel",
+          "recent_runs"
+        ],
+        "type": "object"
+      },
+      "CatalogOverviewMangaDto": {
+        "properties": {
+          "hidden": {
+            "type": "number"
+          },
+          "listed": {
+            "type": "number"
+          },
+          "origin_unknown": {
+            "type": "number"
+          },
+          "override_hidden": {
+            "type": "number"
+          },
+          "override_shown": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "listed",
+          "hidden",
+          "origin_unknown",
+          "override_shown",
+          "override_hidden"
+        ],
+        "type": "object"
+      },
+      "CatalogOverviewNovelDto": {
+        "properties": {
+          "pending": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "volumes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "pending",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "CatalogRecomputeResultDto": {
+        "properties": {
+          "changed": {
+            "type": "number"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/CatalogListingPolicyDto"
+          },
+          "run_id": {
+            "type": "number"
+          },
+          "scanned": {
+            "type": "number"
+          },
+          "to_hidden": {
+            "type": "number"
+          },
+          "to_listed": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "run_id",
+          "policy",
+          "scanned",
+          "changed",
+          "to_listed",
+          "to_hidden",
+          "dry_run"
+        ],
+        "type": "object"
+      },
+      "CatalogReviewResultDto": {
+        "properties": {
+          "updated": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "updated"
+        ],
+        "type": "object"
+      },
+      "CatalogRunDecisionCountDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          }
+        },
+        "required": [
+          "decision",
+          "count"
+        ],
+        "type": "object"
+      },
+      "CatalogRunDetailDto": {
+        "properties": {
+          "actor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "candidates": {
+            "type": "number"
+          },
+          "changed": {
+            "type": "number"
+          },
+          "config": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "created": {
+            "type": "number"
+          },
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogRunDecisionCountDto"
+            },
+            "type": "array"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "rejected": {
+            "type": "number"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncStatus"
+              }
+            ]
+          },
+          "trigger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncTrigger"
+              }
+            ]
+          },
+          "volumes_created": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "operation",
+          "status",
+          "trigger",
+          "dry_run",
+          "dump_version",
+          "candidates",
+          "changed",
+          "created",
+          "volumes_created",
+          "rejected",
+          "failed",
+          "started_at",
+          "finished_at",
+          "error_message",
+          "actor",
+          "config",
+          "decisions"
+        ],
+        "type": "object"
+      },
+      "CatalogRunItemDto": {
+        "properties": {
+          "actor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "candidates": {
+            "type": "number"
+          },
+          "changed": {
+            "type": "number"
+          },
+          "created": {
+            "type": "number"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "rejected": {
+            "type": "number"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncStatus"
+              }
+            ]
+          },
+          "trigger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncTrigger"
+              }
+            ]
+          },
+          "volumes_created": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "operation",
+          "status",
+          "trigger",
+          "dry_run",
+          "dump_version",
+          "candidates",
+          "changed",
+          "created",
+          "volumes_created",
+          "rejected",
+          "failed",
+          "started_at",
+          "finished_at",
+          "error_message",
+          "actor"
+        ],
+        "type": "object"
+      },
       "CatalogScalarDto": {
         "properties": {
           "field": {
@@ -3398,6 +3903,224 @@
         "required": [
           "field",
           "label"
+        ],
+        "type": "object"
+      },
+      "CatalogSyncDecision": {
+        "enum": [
+          "CREATED",
+          "SKIPPED_EXISTING",
+          "REJECTED_NO_ISBN",
+          "REJECTED_LOOKUP",
+          "REJECTED_NO_LABEL",
+          "REJECTED_LABEL",
+          "LISTED",
+          "HIDDEN",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncKind": {
+        "enum": [
+          "MANGA",
+          "LIGHT_NOVEL"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncOperation": {
+        "enum": [
+          "IMPORT",
+          "LISTING"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncReview": {
+        "enum": [
+          "PENDING",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncSettingsDto": {
+        "properties": {
+          "auto_publish": {
+            "type": "boolean"
+          },
+          "batch_limit": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "item_keep_days": {
+            "type": "number"
+          },
+          "kinds": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            },
+            "type": "array"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/CatalogListingPolicyDto"
+          },
+          "ln_label_count": {
+            "type": "number"
+          },
+          "ln_label_min": {
+            "type": "number"
+          },
+          "schedule": {
+            "type": "string"
+          },
+          "since_months": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "schedule",
+          "kinds",
+          "since_months",
+          "batch_limit",
+          "auto_publish",
+          "ln_label_min",
+          "ln_label_count",
+          "item_keep_days",
+          "listing"
+        ],
+        "type": "object"
+      },
+      "CatalogSyncStatus": {
+        "enum": [
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncTrigger": {
+        "enum": [
+          "CRON",
+          "MANUAL"
+        ],
+        "type": "string"
+      },
+      "CatalogTraceEntryDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "external_id": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "resource_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reviewer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "run_dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "run_id": {
+            "type": "number"
+          },
+          "run_started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_id",
+          "kind",
+          "operation",
+          "external_id",
+          "title",
+          "decision",
+          "evidence",
+          "note",
+          "resource_id",
+          "review",
+          "reviewer",
+          "reviewed_at",
+          "created_at",
+          "run_started_at",
+          "run_dump_version"
+        ],
+        "type": "object"
+      },
+      "CatalogTriggerResultDto": {
+        "properties": {
+          "run_id": {
+            "type": "number"
+          },
+          "started": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "run_id",
+          "started"
         ],
         "type": "object"
       },
@@ -15819,6 +16542,37 @@
         ],
         "type": "object"
       },
+      "MangaListing": {
+        "enum": [
+          "AUTO",
+          "SHOWN",
+          "HIDDEN"
+        ],
+        "type": "string"
+      },
+      "MangaListingStateDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "listed": {
+            "type": "boolean"
+          },
+          "listing": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaListing"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "listing",
+          "listed"
+        ],
+        "type": "object"
+      },
       "MangaMagazineDto": {
         "properties": {
           "id": {
@@ -24257,6 +25011,15 @@
         ],
         "type": "object"
       },
+      "RecomputeListingDto": {
+        "properties": {
+          "dry_run": {
+            "description": "只出预览记录,不改条目",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
       "ReferencedRefsDto": {
         "properties": {
           "article_ids": {
@@ -25166,6 +25929,30 @@
         ],
         "type": "object"
       },
+      "ReviewCatalogItemsDto": {
+        "properties": {
+          "item_ids": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "type": "array"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          }
+        },
+        "required": [
+          "item_ids",
+          "review"
+        ],
+        "type": "object"
+      },
       "ReviewChangeRequestBatchDto": {
         "properties": {
           "body": {
@@ -25847,6 +26634,26 @@
         },
         "required": [
           "content_json"
+        ],
+        "type": "object"
+      },
+      "SetMangaListingDto": {
+        "properties": {
+          "listing": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaListing"
+              }
+            ]
+          },
+          "reason": {
+            "description": "覆盖原因,便于后续复核",
+            "maxLength": 200,
+            "type": "string"
+          }
+        },
+        "required": [
+          "listing"
         ],
         "type": "object"
       },
@@ -27266,6 +28073,29 @@
         ],
         "type": "object"
       },
+      "TriggerCatalogSyncDto": {
+        "properties": {
+          "dry_run": {
+            "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "limit": {
+            "description": "本轮最多处理多少条,0 表示不限",
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "type": "object"
+      },
       "UgcBacklogDto": {
         "properties": {
           "failed": {
@@ -27593,6 +28423,67 @@
         "required": [
           "client_id",
           "client_secret"
+        ],
+        "type": "object"
+      },
+      "UpdateCatalogSettingsDto": {
+        "properties": {
+          "auto_publish": {
+            "description": "新建条目直接发布,否则留待复核",
+            "type": "boolean"
+          },
+          "batch_limit": {
+            "description": "单次最多创建多少条,0 表示不限",
+            "minimum": 0,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "item_keep_days": {
+            "description": "同步明细保留天数",
+            "minimum": 0,
+            "type": "number"
+          },
+          "kinds": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            },
+            "type": "array"
+          },
+          "origin_unknown_listed": {
+            "description": "产地未知的漫画是否上架",
+            "type": "boolean"
+          },
+          "origins": {
+            "description": "收录的漫画产地",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "schedule": {
+            "description": "cron 表达式,保存后立即重排",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "since_months": {
+            "description": "只处理最近多少个月出版的条目",
+            "maximum": 600,
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "schedule",
+          "kinds",
+          "since_months",
+          "batch_limit",
+          "auto_publish",
+          "item_keep_days",
+          "origins",
+          "origin_unknown_listed"
         ],
         "type": "object"
       },
@@ -30387,6 +31278,567 @@
         },
         "tags": [
           "admin/backup"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/listing/manga/{id}": {
+      "patch": {
+        "operationId": "AdminCatalogController_setListing",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetMangaListingDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaListingStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/listing/origins": {
+      "get": {
+        "operationId": "AdminCatalogController_origins",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogOriginStatDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/listing/recompute": {
+      "post": {
+        "operationId": "AdminCatalogController_recompute",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecomputeListingDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogRecomputeResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/overview": {
+      "get": {
+        "operationId": "AdminCatalogController_overview",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogOverviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/review": {
+      "get": {
+        "operationId": "AdminCatalogController_pending",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "decision",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncDecision"
+            }
+          },
+          {
+            "in": "query",
+            "name": "review",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncReview"
+            }
+          },
+          {
+            "description": "按标题模糊匹配",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/CatalogItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      },
+      "post": {
+        "operationId": "AdminCatalogController_review",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewCatalogItemsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogReviewResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/runs": {
+      "get": {
+        "operationId": "AdminCatalogController_listRuns",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "operation",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncOperation"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/CatalogRunItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      },
+      "post": {
+        "operationId": "AdminCatalogController_trigger",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerCatalogSyncDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogTriggerResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/runs/{id}": {
+      "get": {
+        "operationId": "AdminCatalogController_runDetail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogRunDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/runs/{id}/items": {
+      "get": {
+        "operationId": "AdminCatalogController_listItems",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "decision",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncDecision"
+            }
+          },
+          {
+            "in": "query",
+            "name": "review",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncReview"
+            }
+          },
+          {
+            "description": "按标题模糊匹配",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/CatalogItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/settings": {
+      "get": {
+        "operationId": "AdminCatalogController_settings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogSyncSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      },
+      "put": {
+        "operationId": "AdminCatalogController_updateSettings",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCatalogSettingsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogSyncSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/trace/{externalId}": {
+      "get": {
+        "operationId": "AdminCatalogController_trace",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "externalId",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "operation",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncOperation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogTraceEntryDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
         ]
       }
     },
@@ -33657,6 +35109,33 @@
               "enum": [
                 "failed"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看已上架 / 只看已下架",
+            "in": "query",
+            "name": "listed",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "listing",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MangaListing"
+            }
+          },
+          {
+            "description": "按产地筛选,传 unknown 表示产地未知",
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "maxLength": 20,
               "type": "string"
             }
           },
