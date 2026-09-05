@@ -211,7 +211,7 @@ importers:
         version: 3.0.4(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))
       primelocale:
         specifier: ^2.3.2
-        version: 2.4.0
+        version: 2.5.0
       primevue:
         specifier: ^4.5.5
         version: 4.5.5(vue@3.5.42(typescript@6.0.3))
@@ -5672,8 +5672,8 @@ packages:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  primelocale@2.4.0:
-    resolution: {integrity: sha512-+FxfN+NjImzSoFTE8n5TLidMucC+7pl1DZKrNokgcMPbN7iVWYtb9+zC+y9ZSkn81vDa328PiCPh966gSjW6zQ==}
+  primelocale@2.5.0:
+    resolution: {integrity: sha512-if5sKywlbltSJbuojKEHpiQu7MDVXGUCpAETjZtqchjRglV9dXgOnFQ4LL/YkYBYAgHPBoel2JhAd67sDIhZVg==}
     engines: {node: '>=18.0.0', npm: '>=8.6.0'}
 
   primevue@4.5.5:
@@ -13380,7 +13380,7 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.3.1
 
-  primelocale@2.4.0: {}
+  primelocale@2.5.0: {}
 
   primevue@4.5.5(vue@3.5.42(typescript@6.0.3)):
     dependencies:

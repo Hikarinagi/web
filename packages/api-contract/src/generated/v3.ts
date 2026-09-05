@@ -12235,8 +12235,12 @@ export interface components {
             op: string;
         };
         CatalogOriginStatDto: {
+            /** @description 策略判定为上架的条目数 */
             listed: number;
             origin_country: string | null;
+            /** @description 其中站点真正能读到的作品数 */
+            readable: number;
+            /** @description 未删除的条目数 */
             total: number;
         };
         CatalogOverviewDto: {
@@ -12251,6 +12255,8 @@ export interface components {
             origin_unknown: number;
             override_hidden: number;
             override_shown: number;
+            /** @description 已发布、已上架且有章节的作品数 */
+            readable: number;
             total: number;
         };
         CatalogOverviewNovelDto: {
@@ -12325,7 +12331,7 @@ export interface components {
             label: string;
         };
         /** @enum {string} */
-        CatalogSyncDecision: "CREATED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED";
+        CatalogSyncDecision: "CREATED" | "VOLUMES_ADDED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED";
         /** @enum {string} */
         CatalogSyncKind: "MANGA" | "LIGHT_NOVEL";
         /** @enum {string} */

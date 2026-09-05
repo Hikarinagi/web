@@ -3516,20 +3516,27 @@
       "CatalogOriginStatDto": {
         "properties": {
           "listed": {
+            "description": "策略判定为上架的条目数",
             "type": "number"
           },
           "origin_country": {
             "nullable": true,
             "type": "string"
           },
+          "readable": {
+            "description": "其中站点真正能读到的作品数",
+            "type": "number"
+          },
           "total": {
+            "description": "未删除的条目数",
             "type": "number"
           }
         },
         "required": [
           "origin_country",
           "total",
-          "listed"
+          "listed",
+          "readable"
         ],
         "type": "object"
       },
@@ -3576,6 +3583,10 @@
           "override_shown": {
             "type": "number"
           },
+          "readable": {
+            "description": "已发布、已上架且有章节的作品数",
+            "type": "number"
+          },
           "total": {
             "type": "number"
           }
@@ -3586,7 +3597,8 @@
           "hidden",
           "origin_unknown",
           "override_shown",
-          "override_hidden"
+          "override_hidden",
+          "readable"
         ],
         "type": "object"
       },
@@ -3909,6 +3921,7 @@
       "CatalogSyncDecision": {
         "enum": [
           "CREATED",
+          "VOLUMES_ADDED",
           "SKIPPED_EXISTING",
           "REJECTED_NO_ISBN",
           "REJECTED_LOOKUP",
