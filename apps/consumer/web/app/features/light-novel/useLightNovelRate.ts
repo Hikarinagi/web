@@ -21,8 +21,8 @@ export function useLightNovelRate(lightNovelId: number, initial: LightNovelRate 
     return rate.value
   }
 
-  function setStatus(next: LightNovelRateStatus, priv: boolean) {
-    return upsert({ status: next, status_private: priv })
+  function setStatus(next: LightNovelRateStatus) {
+    return upsert({ status: next })
   }
 
   function setPrivacy(value: boolean) {

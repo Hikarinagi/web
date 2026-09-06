@@ -21,8 +21,8 @@ export function useMangaRate(mangaId: number, initial: MangaRate | null) {
     return rate.value
   }
 
-  function setStatus(next: MangaRateStatus, priv: boolean) {
-    return upsert({ status: next, status_private: priv })
+  function setStatus(next: MangaRateStatus) {
+    return upsert({ status: next })
   }
 
   function setPrivacy(value: boolean) {

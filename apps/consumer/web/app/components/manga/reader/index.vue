@@ -78,7 +78,7 @@
 
   async function markGoing() {
     try {
-      await rate.setStatus('GOING', false)
+      await rate.setStatus('GOING')
       push.success({ message: '已标记在看' })
     } catch {
       /* empty */

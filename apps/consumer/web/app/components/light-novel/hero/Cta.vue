@@ -116,7 +116,7 @@
       :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
       :busy="rateCtl.pending.value"
-      @select="(value, priv) => rateCtl.setStatus(value as LightNovelRateStatus, priv)"
+      @select="value => rateCtl.setStatus(value as LightNovelRateStatus)"
       @clear="rateCtl.remove"
       @privacy="rateCtl.setPrivacy"
     />

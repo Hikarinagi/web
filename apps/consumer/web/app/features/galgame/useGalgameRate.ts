@@ -21,8 +21,8 @@ export function useGalgameRate(galgameId: number, initial: GalgameRate | null) {
     return rate.value
   }
 
-  function setStatus(next: GalgameRateStatus, priv: boolean) {
-    return upsert({ status: next, status_private: priv })
+  function setStatus(next: GalgameRateStatus) {
+    return upsert({ status: next })
   }
 
   function setPrivacy(value: boolean) {
