@@ -12274,6 +12274,8 @@ export interface components {
             to_listed: number;
         };
         CatalogReviewResultDto: {
+            /** @description 因通过复核而发布的条目数 */
+            published: number;
             updated: number;
         };
         CatalogRunDecisionCountDto: {
@@ -17969,7 +17971,13 @@ export interface components {
             title: string;
         };
         ReviewCatalogItemsDto: {
-            item_ids: number[];
+            /** @description 对当前筛选下所有待复核明细生效 */
+            all_matching?: boolean;
+            decision?: components["schemas"]["CatalogSyncDecision"];
+            /** @description 显式勾选的明细,与 all_matching 二选一 */
+            item_ids?: number[];
+            /** @description 按标题模糊匹配 */
+            keyword?: string;
             review: components["schemas"]["CatalogSyncReview"];
         };
         ReviewChangeRequestBatchDto: {

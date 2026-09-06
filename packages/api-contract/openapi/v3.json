@@ -3658,12 +3658,17 @@
       },
       "CatalogReviewResultDto": {
         "properties": {
+          "published": {
+            "description": "因通过复核而发布的条目数",
+            "type": "number"
+          },
           "updated": {
             "type": "number"
           }
         },
         "required": [
-          "updated"
+          "updated",
+          "published"
         ],
         "type": "object"
       },
@@ -25944,13 +25949,30 @@
       },
       "ReviewCatalogItemsDto": {
         "properties": {
+          "all_matching": {
+            "description": "对当前筛选下所有待复核明细生效",
+            "type": "boolean"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
           "item_ids": {
+            "description": "显式勾选的明细,与 all_matching 二选一",
             "items": {
               "type": "number"
             },
             "maxItems": 500,
             "minItems": 1,
             "type": "array"
+          },
+          "keyword": {
+            "description": "按标题模糊匹配",
+            "maxLength": 100,
+            "type": "string"
           },
           "review": {
             "allOf": [
@@ -25961,7 +25983,6 @@
           }
         },
         "required": [
-          "item_ids",
           "review"
         ],
         "type": "object"
