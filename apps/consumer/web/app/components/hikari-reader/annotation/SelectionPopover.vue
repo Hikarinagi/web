@@ -72,7 +72,6 @@
     box-shadow: var(--reader-bar-shadow);
     color: var(--reader-text);
     backdrop-filter: blur(18px) saturate(1.6);
-    -webkit-backdrop-filter: blur(18px) saturate(1.6);
   }
 
   .reader-selection-popover :deep(.p-button) {

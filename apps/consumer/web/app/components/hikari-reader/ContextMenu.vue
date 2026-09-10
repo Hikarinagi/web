@@ -69,7 +69,6 @@
     color: var(--reader-text);
     box-shadow: var(--reader-bar-shadow);
     backdrop-filter: blur(18px) saturate(1.6);
-    -webkit-backdrop-filter: blur(18px) saturate(1.6);
   }
 
   .reader-context-menu-item {
