@@ -12220,7 +12220,7 @@ export interface components {
             type: string;
         };
         /**
-         * @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id
+         * @description upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id
          * @enum {string}
          */
         CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
@@ -12236,7 +12236,7 @@ export interface components {
             kind: components["schemas"]["CatalogSyncKind"];
             note: string | null;
             operation: components["schemas"]["CatalogSyncOperation"];
-            resource_id: number | null;
+            resource_id: Record<string, never> | null;
             review: components["schemas"]["CatalogSyncReview"];
             /** Format: date-time */
             reviewed_at: string | null;
@@ -12386,7 +12386,7 @@ export interface components {
             kind: components["schemas"]["CatalogSyncKind"];
             note: string | null;
             operation: components["schemas"]["CatalogSyncOperation"];
-            resource_id: number | null;
+            resource_id: Record<string, never> | null;
             review: components["schemas"]["CatalogSyncReview"];
             /** Format: date-time */
             reviewed_at: string | null;
@@ -12664,7 +12664,7 @@ export interface components {
             entity_summaries: components["schemas"]["EntitySummariesResDto"];
             page: components["schemas"]["CommentItemPageDto"];
             thread_id: number;
-            /** @description 未删除评论总数(顶层 + 回复;用于「评论 N」展示;不计任何已删除,与分页 total_items 解耦) */
+            /** @description 未删除评论总数(顶层 + 回复；用于「评论 N」展示；不计任何已删除，与分页 total_items 解耦) */
             total: number;
         };
         CommentNodeDto: {
@@ -13028,7 +13028,7 @@ export interface components {
             input_schema: {
                 [key: string]: unknown;
             };
-            /** @description 小写字母开头,仅小写字母/数字/下划线(provider 函数名约束) */
+            /** @description 小写字母开头，仅小写字母/数字/下划线(provider 函数名约束) */
             tool_key: string;
         };
         CreateOauthProviderDto: {
@@ -14226,7 +14226,7 @@ export interface components {
             created_at: string;
             /** @enum {string|null} */
             dev_status: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED" | null;
-            /** @description 可下载资源数,由 shionlib 同步而来 */
+            /** @description 可下载资源数，由 shionlib 同步而来 */
             download_resource_count: number;
             en_intro: string | null;
             en_title: string | null;
@@ -14266,7 +14266,7 @@ export interface components {
         GalgameDownloadFileDto: {
             file_hash: string | null;
             file_name: string;
-            /** @description 字节数,超出 JS 安全整数范围故用字符串 */
+            /** @description 字节数，超出 JS 安全整数范围故用字符串 */
             file_size: string;
             hash_algorithm: string | null;
             id: number;
@@ -14293,7 +14293,7 @@ export interface components {
             last_synced_at: string | null;
             /** @description shionlib partner 接口当前是否可达 */
             reachable: boolean;
-            /** @description 对方快照里可用的作品数,与 works 的差值即未匹配上的部分 */
+            /** @description 对方快照里可用的作品数，与 works 的差值即未匹配上的部分 */
             remote_works: number;
             /** @description 这些作品的资源总数 */
             resources: number;
@@ -14330,7 +14330,7 @@ export interface components {
         GalgameExternalLinkDto: {
             /** @description 链接显示名称 */
             label: string;
-            /** @description 链接来源标识,如 steam、website */
+            /** @description 链接来源标识，如 steam、website */
             name: string;
             url: string;
         };
@@ -14495,7 +14495,7 @@ export interface components {
             id: number;
             is_spoiler: boolean;
             like_count: number;
-            /** @description 关联的长评文章;没有则为 null */
+            /** @description 关联的长评文章；没有则为 null */
             long_review: components["schemas"]["RateLongReviewRefDto"] | null;
             /**
              * @description 当前用户的投票:1赞/-1踩/0未投或未登录
@@ -14522,7 +14522,7 @@ export interface components {
             id: number;
             is_spoiler: boolean;
             like_count: number;
-            /** @description 关联的长评文章;没有则为 null */
+            /** @description 关联的长评文章；没有则为 null */
             long_review: components["schemas"]["RateLongReviewRefDto"] | null;
             /**
              * @description 当前用户的投票:1赞/-1踩/0未投或未登录
@@ -14735,7 +14735,7 @@ export interface components {
             has_more: boolean;
             /** @description 按序号升序排列的变更事件 */
             items: components["schemas"]["InternalCatalogEventDto"][];
-            /** @description 当前最新事件序号;首次同步时可先记录该值再做全量 */
+            /** @description 当前最新事件序号；首次同步时可先记录该值再做全量 */
             latest_id: number;
         };
         InternalCatalogEventDto: {
@@ -14744,9 +14744,9 @@ export interface components {
              * @description 事件发生时间
              */
             created_at: string;
-            /** @description 事件序号,单调递增,可作为增量游标 */
+            /** @description 事件序号，单调递增，可作为增量游标 */
             id: number;
-            /** @description upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id */
+            /** @description upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id */
             kind: components["schemas"]["CatalogEventKind"];
             /** @description merge 事件的目标资源 ID */
             merged_to_id: number | null;
@@ -14957,7 +14957,7 @@ export interface components {
             /** @enum {string|null} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
             time_to_finish_minutes: number;
-            /** @description 卷评所属分卷;系列短评为 null */
+            /** @description 卷评所属分卷；系列短评为 null */
             volume: components["schemas"]["LightNovelRateVolumeRefDto"] | null;
         };
         LightNovelRatePermalinkDto: {
@@ -14983,7 +14983,7 @@ export interface components {
             /** @enum {string|null} */
             status: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
             time_to_finish_minutes: number;
-            /** @description 卷评所属分卷;系列短评为 null */
+            /** @description 卷评所属分卷；系列短评为 null */
             volume: components["schemas"]["LightNovelRateVolumeRefDto"] | null;
             work_ref: components["schemas"]["FeedWorkRefDto"];
         };
@@ -15041,9 +15041,9 @@ export interface components {
             name: string;
         };
         LightNovelStatSpotlightDto: {
-            /** @description 作品最多的 top-N 作者候选池,供前端种子化随机选 */
+            /** @description 作品最多的 top-N 作者候选池，供前端种子化随机选 */
             author_ids: number[];
-            /** @description 关系最多的 top-N 系列候选池,供前端种子化随机选 */
+            /** @description 关系最多的 top-N 系列候选池，供前端种子化随机选 */
             series_ids: number[];
         };
         LightNovelStatTagDto: {
@@ -15213,7 +15213,7 @@ export interface components {
             nsfw: boolean;
         };
         LlmCredentialDto: {
-            /** @description 脱敏提示,如 ····wxyz;不返回完整 key */
+            /** @description 脱敏提示，如 ····wxyz;不返回完整 key */
             api_key_hint: string;
             api_key_set: boolean;
             base_url: string | null;
@@ -17188,7 +17188,7 @@ export interface components {
             mode: "text" | "object";
             model: string;
             prompt: string;
-            /** @description JSON schema 字符串,mode=object 时必填 */
+            /** @description JSON schema 字符串，mode=object 时必填 */
             schema?: string;
             system?: string;
             temperature?: number;
@@ -17612,7 +17612,7 @@ export interface components {
         };
         RateVoteDto: {
             /**
-             * @description 1=赞,-1=踩,0=取消
+             * @description 1=赞,-1=踩，0=取消
              * @enum {number}
              */
             value: -1 | 0 | 1;
@@ -17802,7 +17802,7 @@ export interface components {
             src: components["schemas"]["MediaAssetDto"] | null;
         };
         RecomputeListingDto: {
-            /** @description 只出预览记录,不改条目 */
+            /** @description 只出预览记录，不改条目 */
             dry_run?: boolean;
         };
         ReferencedRefsDto: {
@@ -17992,7 +17992,7 @@ export interface components {
             /** @description 对当前筛选下所有待复核明细生效 */
             all_matching?: boolean;
             decision?: components["schemas"]["CatalogSyncDecision"];
-            /** @description 显式勾选的明细,与 all_matching 二选一 */
+            /** @description 显式勾选的明细，与 all_matching 二选一 */
             item_ids?: number[];
             /** @description 按标题模糊匹配 */
             keyword?: string;
@@ -18183,7 +18183,7 @@ export interface components {
         };
         SetMangaListingDto: {
             listing: components["schemas"]["MangaListing"];
-            /** @description 覆盖原因,便于后续复核 */
+            /** @description 覆盖原因，便于后续复核 */
             reason?: string;
         };
         SetSearchEngineDto: {
@@ -18354,7 +18354,7 @@ export interface components {
             reply_max_chars: number;
             /** @description 省略则保持现值 */
             tools?: components["schemas"]["TelegramChatToolsInputDto"];
-            /** @description bot 名字/昵称/别名,群内出现即触发(@提及与回复 bot 始终触发,与此无关) */
+            /** @description bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关) */
             trigger_keywords: string[];
             user_cooldown_seconds: number;
         };
@@ -18518,7 +18518,7 @@ export interface components {
         TriggerCatalogSyncDto: {
             dry_run?: boolean;
             kind: components["schemas"]["CatalogSyncKind"];
-            /** @description 本轮最多处理多少条,0 表示不限 */
+            /** @description 本轮最多处理多少条，0 表示不限 */
             limit?: number;
         };
         UgcBacklogDto: {
@@ -18604,9 +18604,9 @@ export interface components {
             client_secret: string;
         };
         UpdateCatalogSettingsDto: {
-            /** @description 新建条目直接发布,否则留待复核 */
+            /** @description 新建条目直接发布，否则留待复核 */
             auto_publish: boolean;
-            /** @description 单次最多创建多少条,0 表示不限 */
+            /** @description 单次最多创建多少条，0 表示不限 */
             batch_limit: number;
             enabled: boolean;
             /** @description 同步明细保留天数 */
@@ -18616,7 +18616,7 @@ export interface components {
             origin_unknown_listed: boolean;
             /** @description 收录的漫画产地 */
             origins: string[];
-            /** @description cron 表达式,保存后立即重排 */
+            /** @description cron 表达式，保存后立即重排 */
             schedule: string;
             /** @description 只处理最近多少个月出版的条目 */
             since_months: number;
@@ -18778,7 +18778,7 @@ export interface components {
             verification_ticket_ttl_seconds?: number;
         };
         UpdateLlmCredentialDto: {
-            /** @description 仅在轮换时传入,省略则保持现值 */
+            /** @description 仅在轮换时传入，省略则保持现值 */
             api_key?: string;
             base_url?: string | null;
             is_default?: boolean;
@@ -18812,7 +18812,7 @@ export interface components {
         };
         UpdateMangaProgressDto: {
             chapter_id: number;
-            /** @description 本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。 */
+            /** @description 本次阅读会话时长(毫秒)。上限 6 小时，超出视为忘记熄屏。 */
             duration_ms?: number;
             page: number;
         };
@@ -19042,7 +19042,7 @@ export interface components {
             status: "PENDING" | "RESOLVED" | "DISMISSED";
         };
         UpdateTelegramSettingsDto: {
-            /** @description 仅在轮换时传入,省略则保持现值 */
+            /** @description 仅在轮换时传入，省略则保持现值 */
             bot_token?: string;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
@@ -21826,7 +21826,7 @@ export interface operations {
                 /** @description 只看已上架 / 只看已下架 */
                 listed?: boolean;
                 listing?: components["schemas"]["MangaListing"];
-                /** @description 按产地筛选,传 unknown 表示产地未知 */
+                /** @description 按产地筛选，传 unknown 表示产地未知 */
                 origin?: string;
                 page: number;
                 page_size: number;
@@ -28258,7 +28258,7 @@ export interface operations {
                 target_type: "person" | "producer" | "character" | "galgame" | "light_novel" | "light_novel_volume" | "article" | "post" | "galgame_rate" | "light_novel_rate" | "light_novel_volume_rate" | "manga_rate";
                 target_id: number;
                 sort?: "time_desc" | "time_asc" | "hot";
-                /** @description 深链跳转:定位该评论(顶层;回复取其父)所在页并返回该页,而非第 1 页;仅稳定序有效 */
+                /** @description 深链跳转：定位该评论(顶层；回复取其父)所在页并返回该页，而非第 1 页；仅稳定序有效 */
                 focus_comment_id?: number;
                 page: number;
                 page_size: number;
@@ -30805,7 +30805,7 @@ export interface operations {
     InternalCatalogController_changes: {
         parameters: {
             query?: {
-                /** @description 事件游标,返回 id 大于该值的事件;默认 0 */
+                /** @description 事件游标，返回 id 大于该值的事件；默认 0 */
                 since?: number;
                 /** @description 单次返回的最大事件数 */
                 limit?: number;
@@ -31880,7 +31880,7 @@ export interface operations {
     LightNovelController_searchBunko: {
         parameters: {
             query?: {
-                /** @description 按文库名搜索关键词,为空时返回最热门文库 */
+                /** @description 按文库名搜索关键词，为空时返回最热门文库 */
                 search?: string;
             };
             header?: never;
@@ -31902,7 +31902,7 @@ export interface operations {
     LightNovelController_getByIds: {
         parameters: {
             query?: {
-                /** @description 逗号分隔 id 列表(批量水合,最多 50) */
+                /** @description 逗号分隔 id 列表(批量水合，最多 50) */
                 ids?: number[];
             };
             header?: never;
@@ -32767,7 +32767,7 @@ export interface operations {
     MangaController_searchMagazines: {
         parameters: {
             query?: {
-                /** @description 按杂志名搜索关键词,为空时返回最热门杂志 */
+                /** @description 按杂志名搜索关键词，为空时返回最热门杂志 */
                 search?: string;
             };
             header?: never;
@@ -37001,7 +37001,7 @@ export interface operations {
     ConversationController_history: {
         parameters: {
             query?: {
-                /** @description 游标:只取此消息 id 之前(更旧)的消息 */
+                /** @description 游标：只取此消息 id 之前(更旧)的消息 */
                 before?: number;
                 limit?: number;
             };

@@ -3422,7 +3422,7 @@
         "type": "object"
       },
       "CatalogEventKind": {
-        "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id",
+        "description": "upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id",
         "enum": [
           "UPSERT",
           "DELETE",
@@ -3474,7 +3474,7 @@
           },
           "resource_id": {
             "nullable": true,
-            "type": "number"
+            "type": "object"
           },
           "review": {
             "allOf": [
@@ -4111,7 +4111,7 @@
           },
           "resource_id": {
             "nullable": true,
-            "type": "number"
+            "type": "object"
           },
           "review": {
             "allOf": [
@@ -5395,7 +5395,7 @@
             "type": "number"
           },
           "total": {
-            "description": "未删除评论总数(顶层 + 回复;用于「评论 N」展示;不计任何已删除,与分页 total_items 解耦)",
+            "description": "未删除评论总数(顶层 + 回复；用于「评论 N」展示；不计任何已删除，与分页 total_items 解耦)",
             "type": "number"
           }
         },
@@ -6889,7 +6889,7 @@
             "type": "object"
           },
           "tool_key": {
-            "description": "小写字母开头,仅小写字母/数字/下划线(provider 函数名约束)",
+            "description": "小写字母开头，仅小写字母/数字/下划线(provider 函数名约束)",
             "pattern": "^[a-z][a-z0-9_]{0,63}$",
             "type": "string"
           }
@@ -11453,7 +11453,7 @@
             "type": "string"
           },
           "download_resource_count": {
-            "description": "可下载资源数,由 shionlib 同步而来",
+            "description": "可下载资源数，由 shionlib 同步而来",
             "type": "number"
           },
           "en_intro": {
@@ -11624,7 +11624,7 @@
             "type": "string"
           },
           "file_size": {
-            "description": "字节数,超出 JS 安全整数范围故用字符串",
+            "description": "字节数，超出 JS 安全整数范围故用字符串",
             "type": "string"
           },
           "hash_algorithm": {
@@ -11725,7 +11725,7 @@
             "type": "boolean"
           },
           "remote_works": {
-            "description": "对方快照里可用的作品数,与 works 的差值即未匹配上的部分",
+            "description": "对方快照里可用的作品数，与 works 的差值即未匹配上的部分",
             "type": "number"
           },
           "resources": {
@@ -11858,7 +11858,7 @@
             "type": "string"
           },
           "name": {
-            "description": "链接来源标识,如 steam、website",
+            "description": "链接来源标识，如 steam、website",
             "type": "string"
           },
           "url": {
@@ -12470,7 +12470,7 @@
                 "$ref": "#/components/schemas/RateLongReviewRefDto"
               }
             ],
-            "description": "关联的长评文章;没有则为 null",
+            "description": "关联的长评文章；没有则为 null",
             "nullable": true,
             "type": "object"
           },
@@ -12578,7 +12578,7 @@
                 "$ref": "#/components/schemas/RateLongReviewRefDto"
               }
             ],
-            "description": "关联的长评文章;没有则为 null",
+            "description": "关联的长评文章；没有则为 null",
             "nullable": true,
             "type": "object"
           },
@@ -13508,7 +13508,7 @@
             "type": "array"
           },
           "latest_id": {
-            "description": "当前最新事件序号;首次同步时可先记录该值再做全量",
+            "description": "当前最新事件序号；首次同步时可先记录该值再做全量",
             "type": "number"
           }
         },
@@ -13527,7 +13527,7 @@
             "type": "string"
           },
           "id": {
-            "description": "事件序号,单调递增,可作为增量游标",
+            "description": "事件序号，单调递增，可作为增量游标",
             "type": "number"
           },
           "kind": {
@@ -13536,7 +13536,7 @@
                 "$ref": "#/components/schemas/CatalogEventKind"
               }
             ],
-            "description": "upsert 后应重读资源详情;delete 表示资源已不可见;merge 表示资源并入 merged_to_id"
+            "description": "upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id"
           },
           "merged_to_id": {
             "description": "merge 事件的目标资源 ID",
@@ -14335,7 +14335,7 @@
                 "$ref": "#/components/schemas/LightNovelRateVolumeRefDto"
               }
             ],
-            "description": "卷评所属分卷;系列短评为 null",
+            "description": "卷评所属分卷；系列短评为 null",
             "nullable": true,
             "type": "object"
           }
@@ -14439,7 +14439,7 @@
                 "$ref": "#/components/schemas/LightNovelRateVolumeRefDto"
               }
             ],
-            "description": "卷评所属分卷;系列短评为 null",
+            "description": "卷评所属分卷；系列短评为 null",
             "nullable": true,
             "type": "object"
           },
@@ -14708,14 +14708,14 @@
       "LightNovelStatSpotlightDto": {
         "properties": {
           "author_ids": {
-            "description": "作品最多的 top-N 作者候选池,供前端种子化随机选",
+            "description": "作品最多的 top-N 作者候选池，供前端种子化随机选",
             "items": {
               "type": "number"
             },
             "type": "array"
           },
           "series_ids": {
-            "description": "关系最多的 top-N 系列候选池,供前端种子化随机选",
+            "description": "关系最多的 top-N 系列候选池，供前端种子化随机选",
             "items": {
               "type": "number"
             },
@@ -15373,7 +15373,7 @@
       "LlmCredentialDto": {
         "properties": {
           "api_key_hint": {
-            "description": "脱敏提示,如 ····wxyz;不返回完整 key",
+            "description": "脱敏提示，如 ····wxyz;不返回完整 key",
             "type": "string"
           },
           "api_key_set": {
@@ -22614,7 +22614,7 @@
             "type": "string"
           },
           "schema": {
-            "description": "JSON schema 字符串,mode=object 时必填",
+            "description": "JSON schema 字符串，mode=object 时必填",
             "maxLength": 8000,
             "type": "string"
           },
@@ -24372,7 +24372,7 @@
       "RateVoteDto": {
         "properties": {
           "value": {
-            "description": "1=赞,-1=踩,0=取消",
+            "description": "1=赞,-1=踩，0=取消",
             "enum": [
               -1,
               0,
@@ -25074,7 +25074,7 @@
       "RecomputeListingDto": {
         "properties": {
           "dry_run": {
-            "description": "只出预览记录,不改条目",
+            "description": "只出预览记录，不改条目",
             "type": "boolean"
           }
         },
@@ -26003,7 +26003,7 @@
             ]
           },
           "item_ids": {
-            "description": "显式勾选的明细,与 all_matching 二选一",
+            "description": "显式勾选的明细，与 all_matching 二选一",
             "items": {
               "type": "number"
             },
@@ -26723,7 +26723,7 @@
             ]
           },
           "reason": {
-            "description": "覆盖原因,便于后续复核",
+            "description": "覆盖原因，便于后续复核",
             "maxLength": 200,
             "type": "string"
           }
@@ -27449,7 +27449,7 @@
             "description": "省略则保持现值"
           },
           "trigger_keywords": {
-            "description": "bot 名字/昵称/别名,群内出现即触发(@提及与回复 bot 始终触发,与此无关)",
+            "description": "bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关)",
             "items": {
               "maxLength": 50,
               "type": "string"
@@ -28162,7 +28162,7 @@
             ]
           },
           "limit": {
-            "description": "本轮最多处理多少条,0 表示不限",
+            "description": "本轮最多处理多少条，0 表示不限",
             "minimum": 0,
             "type": "number"
           }
@@ -28505,11 +28505,11 @@
       "UpdateCatalogSettingsDto": {
         "properties": {
           "auto_publish": {
-            "description": "新建条目直接发布,否则留待复核",
+            "description": "新建条目直接发布，否则留待复核",
             "type": "boolean"
           },
           "batch_limit": {
-            "description": "单次最多创建多少条,0 表示不限",
+            "description": "单次最多创建多少条，0 表示不限",
             "minimum": 0,
             "type": "number"
           },
@@ -28539,7 +28539,7 @@
             "type": "array"
           },
           "schedule": {
-            "description": "cron 表达式,保存后立即重排",
+            "description": "cron 表达式，保存后立即重排",
             "maxLength": 100,
             "type": "string"
           },
@@ -29081,7 +29081,7 @@
       "UpdateLlmCredentialDto": {
         "properties": {
           "api_key": {
-            "description": "仅在轮换时传入,省略则保持现值",
+            "description": "仅在轮换时传入，省略则保持现值",
             "maxLength": 500,
             "minLength": 1,
             "type": "string"
@@ -29191,7 +29191,7 @@
             "type": "number"
           },
           "duration_ms": {
-            "description": "本次阅读会话时长(毫秒)。上限 6 小时,超出视为忘记熄屏。",
+            "description": "本次阅读会话时长(毫秒)。上限 6 小时，超出视为忘记熄屏。",
             "maximum": 21600000,
             "minimum": 0,
             "type": "number"
@@ -30096,7 +30096,7 @@
       "UpdateTelegramSettingsDto": {
         "properties": {
           "bot_token": {
-            "description": "仅在轮换时传入,省略则保持现值",
+            "description": "仅在轮换时传入，省略则保持现值",
             "maxLength": 200,
             "minLength": 10,
             "type": "string"
@@ -35232,7 +35232,7 @@
             }
           },
           {
-            "description": "按产地筛选,传 unknown 表示产地未知",
+            "description": "按产地筛选，传 unknown 表示产地未知",
             "in": "query",
             "name": "origin",
             "required": false,
@@ -46317,7 +46317,7 @@
             }
           },
           {
-            "description": "深链跳转:定位该评论(顶层;回复取其父)所在页并返回该页,而非第 1 页;仅稳定序有效",
+            "description": "深链跳转：定位该评论(顶层；回复取其父)所在页并返回该页，而非第 1 页；仅稳定序有效",
             "in": "query",
             "name": "focus_comment_id",
             "required": false,
@@ -50917,7 +50917,7 @@
         "operationId": "InternalCatalogController_changes",
         "parameters": [
           {
-            "description": "事件游标,返回 id 大于该值的事件;默认 0",
+            "description": "事件游标，返回 id 大于该值的事件；默认 0",
             "in": "query",
             "name": "since",
             "required": false,
@@ -52954,7 +52954,7 @@
         "operationId": "LightNovelController_searchBunko",
         "parameters": [
           {
-            "description": "按文库名搜索关键词,为空时返回最热门文库",
+            "description": "按文库名搜索关键词，为空时返回最热门文库",
             "in": "query",
             "name": "search",
             "required": false,
@@ -52989,7 +52989,7 @@
         "operationId": "LightNovelController_getByIds",
         "parameters": [
           {
-            "description": "逗号分隔 id 列表(批量水合,最多 50)",
+            "description": "逗号分隔 id 列表(批量水合，最多 50)",
             "in": "query",
             "name": "ids",
             "required": false,
@@ -54662,7 +54662,7 @@
         "operationId": "MangaController_searchMagazines",
         "parameters": [
           {
-            "description": "按杂志名搜索关键词,为空时返回最热门杂志",
+            "description": "按杂志名搜索关键词，为空时返回最热门杂志",
             "in": "query",
             "name": "search",
             "required": false,
@@ -62378,7 +62378,7 @@
             }
           },
           {
-            "description": "游标:只取此消息 id 之前(更旧)的消息",
+            "description": "游标：只取此消息 id 之前(更旧)的消息",
             "in": "query",
             "name": "before",
             "required": false,
