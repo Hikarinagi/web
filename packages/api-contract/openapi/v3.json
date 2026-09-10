@@ -3474,7 +3474,7 @@
           },
           "resource_id": {
             "nullable": true,
-            "type": "object"
+            "type": "number"
           },
           "review": {
             "allOf": [
@@ -4111,7 +4111,7 @@
           },
           "resource_id": {
             "nullable": true,
-            "type": "object"
+            "type": "number"
           },
           "review": {
             "allOf": [

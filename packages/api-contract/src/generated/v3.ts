@@ -12236,7 +12236,7 @@ export interface components {
             kind: components["schemas"]["CatalogSyncKind"];
             note: string | null;
             operation: components["schemas"]["CatalogSyncOperation"];
-            resource_id: Record<string, never> | null;
+            resource_id: number | null;
             review: components["schemas"]["CatalogSyncReview"];
             /** Format: date-time */
             reviewed_at: string | null;
@@ -12386,7 +12386,7 @@ export interface components {
             kind: components["schemas"]["CatalogSyncKind"];
             note: string | null;
             operation: components["schemas"]["CatalogSyncOperation"];
-            resource_id: Record<string, never> | null;
+            resource_id: number | null;
             review: components["schemas"]["CatalogSyncReview"];
             /** Format: date-time */
             reviewed_at: string | null;
