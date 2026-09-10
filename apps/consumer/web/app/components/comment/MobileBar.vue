@@ -8,7 +8,7 @@
 
   defineOptions({ name: 'CommentMobileBar' })
 
-  // 只在 CommentSection(provide thread)内、且页面 provide 了动作上下文时渲染,故断言非空
+  // 只在 CommentSection(provide thread)内、且页面 provide 了动作上下文时渲染，故断言非空
   const actions = inject(COMMENT_DETAIL_ACTIONS_KEY)!
   const thread = inject(COMMENT_THREAD_KEY)!
   const { emojiSets, posting, replyTarget, postRoot, postReply, setReplyTarget } = thread

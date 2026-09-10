@@ -205,7 +205,7 @@ describe('schema renderHTML contract', () => {
     expect(render(doc)).toMatchSnapshot()
   })
 
-  it('综合文档:嵌套 + 多 mark + atoms 混排', () => {
+  it('综合文档：嵌套 + 多 mark + atoms 混排', () => {
     const doc: EditorDocument = {
       type: 'doc',
       content: [

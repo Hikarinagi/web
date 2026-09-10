@@ -35,7 +35,7 @@
     const fromCatalog = sets.value.find(s => s.name === setName)
     if (!fromCatalog) return
     // upsert by id:线程已有的 set 可能是后端按已用 code 裁剪过的
-    // 直接替换为目录里的完整集,保证刚选中的表情(及 src)进入 doc 快照
+    // 直接替换为目录里的完整集，保证刚选中的表情(及 src)进入 doc 快照
     docRef.value = [
       ...docRef.value.filter(s => s.id !== fromCatalog.id),
       {

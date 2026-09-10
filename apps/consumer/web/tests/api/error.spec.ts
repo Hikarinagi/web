@@ -22,11 +22,11 @@ describe('normalizeApiError', () => {
     const err = normalizeApiError(
       fetchError(422, {
         success: false,
-        error: { code: 'POLL_LOCKED', message: '投票已有人参与,选项无法修改' },
+        error: { code: 'POLL_LOCKED', message: '投票已有人参与，选项无法修改' },
         request_id: 'r2',
       }),
     )
-    expect(err.message).toBe('投票已有人参与,选项无法修改')
+    expect(err.message).toBe('投票已有人参与，选项无法修改')
     expect(err.status).toBe(422)
   })
 })

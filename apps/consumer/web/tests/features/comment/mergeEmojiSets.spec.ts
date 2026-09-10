@@ -25,7 +25,7 @@ describe('mergeEmojiSets', () => {
 
     expect(merged).toHaveLength(1)
     expect(merged[0]!.emojis.map(e => e.id).sort()).toEqual([1, 2])
-    // 新增表情的 src 必须保留,否则渲染无 src(刷新前)
+    // 新增表情的 src 必须保留，否则渲染无 src(刷新前)
     expect(merged[0]!.emojis.find(e => e.id === 2)?.src).toBe('/laugh.webp')
   })
 

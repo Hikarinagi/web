@@ -25,7 +25,7 @@
 
   const isReplace = computed(() => !!props.emoji)
   const header = computed(() =>
-    props.emoji ? `替换图片:${props.emoji.name}` : `上传贴纸到 ${props.setName}`,
+    props.emoji ? `替换图片：${props.emoji.name}` : `上传贴纸到 ${props.setName}`,
   )
   const fileLabel = computed(() => (isReplace.value ? '新图片' : '图片文件'))
   const submitLabel = computed(() => (isReplace.value ? '替换' : '上传'))

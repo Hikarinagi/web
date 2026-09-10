@@ -7,8 +7,8 @@ export function sanitizeCssColor(value: unknown): string | null {
   return v && SAFE_CSS_COLOR_REGEX.test(v) ? v : null
 }
 
-// text_style:只承载 color 的内联 mark(对齐 tiptap textStyle 心智,snake 命名同 hard_break)。
-// 不引 @tiptap/extension-text-style/color(v3 未安装),最小自定义即可,且自己掌控 color 闸口。
+// text_style:只承载 color 的内联 mark(对齐 tiptap textStyle 心智，snake 命名同 hard_break)。
+// 不引 @tiptap/extension-text-style/color(v3 未安装),最小自定义即可，且自己掌控 color 闸口。
 export const TextStyleMark = Mark.create({
   name: 'text_style',
 

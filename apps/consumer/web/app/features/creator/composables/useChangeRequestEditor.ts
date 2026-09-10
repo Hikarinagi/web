@@ -30,7 +30,7 @@ interface ChangeRequestBody {
   changeset: Record<string, unknown>[]
 }
 
-// /api/v3/change-requests 同时有 GET(列表)和 POST(新建),hikariRequest 不按 method 收窄返回,
+// /api/v3/change-requests 同时有 GET(列表)和 POST(新建),hikariRequest 不按 method 收窄返回，
 // 故显式标注为 CR 详情(POST 的实际返回)。
 function postCreate(
   resourceType: BackendEditorSchema['resource_type'],
@@ -64,7 +64,7 @@ function postChangeRequest(resourceType: string, id: number, body: ChangeRequest
     case 'tag':
       return hikariRequest('/api/v3/tags/{id}/change-requests', options)
     default:
-      throw new Error(`未知条目类型: ${resourceType}`)
+      throw new Error(`未知条目类型：${resourceType}`)
   }
 }
 
@@ -73,7 +73,7 @@ export function useChangeRequestEditor(params: {
   resourceId: number | null
   schema: BackendEditorSchema
   snapshot: Record<string, unknown>
-  // 新建预填:作为初始表单值,但 diff 基线仍是(空)snapshot,故预填字段全部计入 changeset。
+  // 新建预填：作为初始表单值，但 diff 基线仍是(空)snapshot,故预填字段全部计入 changeset。
   prefill?: Record<string, unknown>
   snapshotRefs: Record<string, BackendEditorRef>
   openChangeRequest: BackendChangeRequestDetail | null
@@ -91,7 +91,7 @@ export function useChangeRequestEditor(params: {
 
   const openCr = params.openChangeRequest
   const resolver = valibotResolver(schemaToValibot(params.schema, params.presentation))
-  // JSON 在线缆把 Date 序列化成 ISO 字符串,本机收到后在 form 入口一次性还原回 Date,
+  // JSON 在线缆把 Date 序列化成 ISO 字符串，本机收到后在 form 入口一次性还原回 Date,
   // 让 DatePicker / valibot / diff 在 PrimeVue Forms 子树里全程跑 Date 语义。
   const dateFields = new Set(
     params.schema.fields
@@ -121,8 +121,8 @@ export function useChangeRequestEditor(params: {
     if (initialValues[field.field] === undefined) initialValues[field.field] = false
   }
 
-  // 续编时,把 openCr payload 里 scalar ref op 已记录的 to_name/to_cover 当作该字段的初始实体,
-  // 否则 RefField 拿到的还是 snapshot 的旧实体,会跟实际 FK 不匹配。
+  // 续编时，把 openCr payload 里 scalar ref op 已记录的 to_name/to_cover 当作该字段的初始实体，
+  // 否则 RefField 拿到的还是 snapshot 的旧实体，会跟实际 FK 不匹配。
   const initialRefs = ((): Record<string, BackendEditorRef> => {
     const out: Record<string, BackendEditorRef> = { ...params.snapshotRefs }
     if (!rehydrateOps) return out
@@ -160,7 +160,7 @@ export function useChangeRequestEditor(params: {
   const refApply = ref<RefApplyPayload | null>(null)
   provide(REF_APPLY_KEY, refApply)
 
-  // 关系字段不进 PrimeVue Form:FormField 会让子树里所有 PrimeVue 输入自动绑定到字段值,
+  // 关系字段不进 PrimeVue Form:FormField 会让子树里所有 PrimeVue 输入自动绑定到字段值，
   // 而关系字段内含多个输入控件。改由这里单独持有关系草稿。
   const relations = ref<Record<string, EditorRelationRow[]>>(
     Object.fromEntries(
@@ -179,7 +179,7 @@ export function useChangeRequestEditor(params: {
       .map(field => [field.field, toRelationRows(snapshot[field.field])]),
   )
 
-  // 首次提交后,关系修改实时回灌错误状态,跟 PrimeVue Form 的 scalar 行为对齐
+  // 首次提交后，关系修改实时回灌错误状态，跟 PrimeVue Form 的 scalar 行为对齐
   watch(
     relations,
     () => {

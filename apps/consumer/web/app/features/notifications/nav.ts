@@ -1,4 +1,4 @@
-// 推导通知「前往」目标:变更请求通知优先跳 CR 详情页;否则取首个 work card 的路由 + comment card 的 #comment 锚点。
+// 推导通知「前往」目标：变更请求通知优先跳 CR 详情页；否则取首个 work card 的路由 + comment card 的 #comment 锚点。
 
 const WORK_ROUTE: Record<string, string> = {
   galgame_card: '/galgames',

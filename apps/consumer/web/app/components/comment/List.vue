@@ -16,7 +16,7 @@
   const bottomSentinel = ref<HTMLElement | null>(null)
   const loadingUp = ref(false)
 
-  // 视口顶部第一个仍可见的评论,作为向上加载的锚
+  // 视口顶部第一个仍可见的评论，作为向上加载的锚
   function topAnchor(): HTMLElement | null {
     const nodes = listEl.value?.querySelectorAll<HTMLElement>('article[id^="comment-"]')
     if (!nodes) return null
@@ -24,7 +24,7 @@
     return null
   }
 
-  // 向上加载:顶部骨架、prepend 都会把已读内容顶下去。以真实锚评论为基准,
+  // 向上加载：顶部骨架、prepend 都会把已读内容顶下去。以真实锚评论为基准，
   // 每次 DOM 变化后把 scrollTop 校回锚点原视口位置(不依赖 scrollHeight,免受 flush 时序/级联影响),阅读位置不动。
   async function onTopEnter() {
     if (!hasMoreUp.value || loading.value || loadingUp.value) return

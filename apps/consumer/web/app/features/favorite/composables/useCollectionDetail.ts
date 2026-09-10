@@ -9,8 +9,8 @@ import {
 } from '~/features/space/space'
 import { usePagedList } from '~/features/space/usePagedList'
 
-// 收藏夹详情页工作流:分页 + 类型筛选 + 收藏夹编辑/删除 + item 移除。
-// 入参用 feature 别名(不 import BFF 路由类型,避免 composable→BFF 反向依赖)。
+// 收藏夹详情页工作流：分页 + 类型筛选 + 收藏夹编辑/删除 + item 移除。
+// 入参用 feature 别名(不 import BFF 路由类型，避免 composable→BFF 反向依赖)。
 export function useCollectionDetail(data: {
   collection: SpaceCollectionDetail
   items: SpaceCollectionItemPage

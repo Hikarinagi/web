@@ -128,7 +128,7 @@ export function buildProcessUrl(
 }
 
 // resolveImageUrl 是否会让这张图真正走图片处理器(而非直出原图)。
-// nsfw 模糊依赖处理器加 blur 参数,未通过处理器的图无法被安全模糊,调用方应据此 fail-closed。
+// nsfw 模糊依赖处理器加 blur 参数，未通过处理器的图无法被安全模糊，调用方应据此 fail-closed。
 export function canProcessImage(
   source: string | null | undefined,
   options: Pick<HikariImageResolveOptions, 'cdnHost' | 'imageProcessorHost'> = {},

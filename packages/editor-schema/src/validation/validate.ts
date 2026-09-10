@@ -56,7 +56,7 @@ function validateNode(
     issues.push({
       path,
       code: 'unknown_node',
-      message: `不支持的节点类型: ${node.type}`,
+      message: `不支持的节点类型：${node.type}`,
     })
     return
   }
@@ -87,7 +87,7 @@ function validateMark(
     issues.push({
       path,
       code: 'unknown_mark',
-      message: `不支持的 mark 类型: ${mark.type}`,
+      message: `不支持的 mark 类型：${mark.type}`,
     })
     return
   }

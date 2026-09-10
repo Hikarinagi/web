@@ -12,7 +12,7 @@ function emptyBucket(): FeedBucket {
 }
 
 // 同一条内容出现两次会撞同一个列表 :key(`rowId` 就是 `type:id`),Vue 会复用错的
-// DOM 节点。推荐流按实时分数分页,分数在翻页之间会动,边界上重复吐是可能的。
+// DOM 节点。推荐流按实时分数分页，分数在翻页之间会动，边界上重复吐是可能的。
 export function withoutSeen(current: BackendFeedItem[], incoming: BackendFeedItem[]) {
   const seen = new Set(current.map(item => `${item.type}:${item.id}`))
   return incoming.filter(item => {
@@ -23,18 +23,18 @@ export function withoutSeen(current: BackendFeedItem[], incoming: BackendFeedIte
   })
 }
 
-// clone items —— seed 是 useHikariApiData 的缓存对象,直接引用会让 loadMore 的 push 反向污染 BFF payload。
+// clone items —— seed 是 useHikariApiData 的缓存对象，直接引用会让 loadMore 的 push 反向污染 BFF payload。
 function bucketFrom(res: FeedResponse): FeedBucket {
   return { items: [...res.items], nextCursor: res.meta.next_cursor, loaded: true }
 }
 
-// 跨导航保活的 feed 累积状态,放在 useState(Nuxt app-level state,非 Pinia)。一个 source 一个桶,
+// 跨导航保活的 feed 累积状态，放在 useState(Nuxt app-level state,非 Pinia)。一个 source 一个桶，
 // 桶 key = source.key、所在 store = source.storeId。首页 recommend/following 共用 'feed:stream'
-// 双桶(scope 即 key);topic/section 各用 'feed:relation:<type>:<id>' 独立 store。切到详情页再返回时,
-// 列表 + 游标都还在。首屏 SSR seed 在建桶时按 key 各自装入,不依赖哪个 source 先碰到 store。
+// 双桶(scope 即 key);topic/section 各用 'feed:relation:<type>:<id>' 独立 store。切到详情页再返回时，
+// 列表 + 游标都还在。首屏 SSR seed 在建桶时按 key 各自装入，不依赖哪个 source 先碰到 store。
 export function useFeedStream(source: FeedSource) {
   const buckets = useState<Record<string, FeedBucket>>(source.storeId, () => ({}))
-  // per-key:既是加载指示,也是并发去重锁(同 key 同时只跑一个请求)。
+  // per-key:既是加载指示，也是并发去重锁(同 key 同时只跑一个请求)。
   const loadingMap = useState<Record<string, boolean>>(`${source.storeId}:loading`, () => ({}))
 
   function bucketFor(): FeedBucket {

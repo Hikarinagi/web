@@ -27,7 +27,7 @@
       replyToName?: string | null
       initialAttachments?: MediaValue[]
       rows?: number
-      // overlay(贴纸/提及浮层)host 是否渲染。overlay 状态是模块级单例,同页多个编辑器实例
+      // overlay(贴纸/提及浮层)host 是否渲染。overlay 状态是模块级单例，同页多个编辑器实例
       // 会有多个 host 抢同一份状态(失活 host 的 mousedown 会抢先关掉浮层)。调用方需保证
       // 同一时刻只有一个编辑器开启 overlay(见 CommentSection:顶部仅在 !showDock 时开启)。
       overlayEnabled?: boolean
@@ -103,8 +103,8 @@
   watch(focused, f => {
     if (f) opened.value = true
   })
-  // 点「回复」(reply-to-name 由空变为有)时主动聚焦:autofocus 只在编辑器创建时触发,dock
-  // 已挂载(滚动已显示)时不会重新创建,需在此补焦点。仅非空时触发,避免取消(变 null)抢焦点。
+  // 点「回复」(reply-to-name 由空变为有)时主动聚焦：autofocus 只在编辑器创建时触发，dock
+  // 已挂载(滚动已显示)时不会重新创建，需在此补焦点。仅非空时触发，避免取消(变 null)抢焦点。
   watch(
     () => props.replyToName,
     name => {

@@ -46,7 +46,7 @@ function applyRelationUpdate(
     for (const [key, change] of Object.entries(refAttributes)) {
       if (!isRecord(change) || !('to' in change)) continue
       // 后端 snapshot-diff(回滚/版本)产出的 ref 值只带 id,缺 name/cover;
-      // 用基线行已有的摘要补全,避免续编/审阅里声优显示成 #id。
+      // 用基线行已有的摘要补全，避免续编/审阅里声优显示成 #id。
       const priorById = new Map((result.ref_attributes?.[key] ?? []).map(v => [v.id, v]))
       nextRefs[key] = toRowRefValues(change.to).map(v =>
         v.name || v.cover ? v : (priorById.get(v.id) ?? v),

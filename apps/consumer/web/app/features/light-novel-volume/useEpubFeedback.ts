@@ -73,7 +73,7 @@ export function useEpubFeedback(volumeId: number) {
     if (!isTerminalStatus(review.value.status)) resume()
   }
 
-  // epub 已存在:报告问题(幂等),可选附上修正文件
+  // epub 已存在：报告问题(幂等),可选附上修正文件
   async function submit(values: {
     reason: EpubReportReason
     description?: string
@@ -94,7 +94,7 @@ export function useEpubFeedback(volumeId: number) {
     }
   }
 
-  // epub 缺失:纯上传补全
+  // epub 缺失：纯上传补全
   async function contribute() {
     const picked = file.value
     if (!picked || submitting.value) return

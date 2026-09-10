@@ -40,14 +40,14 @@ function bucketIndex(bucketMinutes: number): number {
   return Math.floor(Date.now() / (bucketMinutes * 60_000))
 }
 
-// 时间桶种子:同一时间窗内稳定(可缓存、不跳),跨窗轮换;salt 让各 rail 独立打散。
-// 以后要按用户轮换,把 session/device key 拼进 salt 即可,调用方不变。
+// 时间桶种子：同一时间窗内稳定(可缓存、不跳),跨窗轮换；salt 让各 rail 独立打散。
+// 以后要按用户轮换，把 session/device key 拼进 salt 即可，调用方不变。
 export function bucketSeed(salt: string, bucketMinutes = 15): string {
   return `${bucketIndex(bucketMinutes)}:${salt}`
 }
 
-// 整窗平移取样:全池按 salt 稳定洗牌一次,再按桶号整段平移取 n 条。
-// 相比 pickN(每窗独立洗牌、随机重叠),相邻窗口是相邻切片 → 零重叠直到绕回,
+// 整窗平移取样：全池按 salt 稳定洗牌一次，再按桶号整段平移取 n 条。
+// 相比 pickN(每窗独立洗牌、随机重叠),相邻窗口是相邻切片 → 零重叠直到绕回，
 // 让「同一来源(如同一标签)每次访问取到尽量不同的一批」。同窗稳定、可缓存。
 export function pickRotating<T>(
   arr: readonly T[],

@@ -34,7 +34,7 @@ async function handler(event: H3Event) {
   const firstSeries = pickN(stats.spotlight.series_ids, 1, bucketSeed('series'))[0]
   const firstBunko = new Set(pickN(stats.top_bunko, 2, bucketSeed('bunko')).map(b => b.id))
 
-  // 各池按桶种子定序(同窗稳定 → cursor 稳定;跨窗轮换)
+  // 各池按桶种子定序(同窗稳定 → cursor 稳定；跨窗轮换)
   const tagSpecs: RailSpec[] = seededShuffle(stats.top_tags, bucketSeed('rail-tag')).map(t => ({
     type: 'tag',
     id: t.id,
@@ -61,7 +61,7 @@ async function handler(event: H3Event) {
     const q = queues[qi % 3]!
     if (q.length) nonTags.push(q.shift()!)
   }
-  // 标签为主:每第 4 条插一条非标签;标签用尽即收尾(尾部不堆剩余非标签)
+  // 标签为主：每第 4 条插一条非标签；标签用尽即收尾(尾部不堆剩余非标签)
   const specs: RailSpec[] = []
   let ti = 0
   let ni = 0
@@ -99,7 +99,7 @@ async function buildRail(event: H3Event, spec: RailSpec): Promise<Rail | null> {
       query: { tag_id: spec.id },
     }).catch(() => null)
     if (!cand) return null
-    // 整窗平移:同一标签每次访问取到尽量不同的一批(相邻窗口零重叠直到绕回)
+    // 整窗平移：同一标签每次访问取到尽量不同的一批(相邻窗口零重叠直到绕回)
     const ids = pickRotating(cand.ids, RAIL_SIZE, `tag:${spec.id}`)
     const items = await fetchBackendData(event, '/api/v3/light-novels/by-ids', {
       query: { ids },

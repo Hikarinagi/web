@@ -20,7 +20,7 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
   const toolbar = useFloatingToolbar()
   const topRefreshing = ref(false)
   const topRefreshOpen = ref(false)
-  // 深翻页:触发过第一次 load more 即为「深」;refresh / feed 重置后归 false
+  // 深翻页：触发过第一次 load more 即为「深」;refresh / feed 重置后归 false
   const deep = ref(false)
   const pullOffset = ref(0)
   const topRefreshY = computed(() => (topRefreshOpen.value ? TOP_REFRESH_OFFSET : pullOffset.value))
@@ -87,7 +87,7 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
     { flush: 'post' },
   )
 
-  // source.guard:首页 following 对游客无意义(兜 logout 时序边界,避免以 guest 身份打接口);
+  // source.guard:首页 following 对游客无意义(兜 logout 时序边界，避免以 guest 身份打接口);
   // topic/section 无 guard,游客可看。
   function ensureSource() {
     if (source.guard && !source.guard()) return
@@ -105,7 +105,7 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
     { rootMargin: '400px' },
   )
 
-  // 顶栏「回到顶部」只由当前激活的实例接管;隐藏实例必须摘除注册,否则 at(-1) 会取错
+  // 顶栏「回到顶部」只由当前激活的实例接管；隐藏实例必须摘除注册，否则 at(-1) 会取错
   const topHandlerId = `feed-list-refresh:${cacheKey}`
   const activated = ref(true)
   onActivated(() => {
@@ -131,7 +131,7 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
   async function refreshTop() {
     if (!import.meta.client) return
 
-    // 未深翻页:只回顶,不刷新(不打断、不丢位置/新鲜度)
+    // 未深翻页：只回顶，不刷新(不打断、不丢位置/新鲜度)
     if (!deep.value) {
       await scrollToTop('smooth')
       return

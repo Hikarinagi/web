@@ -83,8 +83,8 @@
     }
   }
   async function openPicker(refAttr: RefAttribute) {
-    // Dialog 由 v-if="activeRef" 控制挂载,其初始化靠 watch(visible) 的 false→true 跳变;
-    // 必须先挂载(设 activeRef)、下一 tick 再开,否则挂载即 visible=true,watch 不触发。
+    // Dialog 由 v-if="activeRef" 控制挂载，其初始化靠 watch(visible) 的 false→true 跳变；
+    // 必须先挂载(设 activeRef)、下一 tick 再开，否则挂载即 visible=true,watch 不触发。
     activeRef.value = refAttr
     await nextTick()
     pickerOpen.value = true

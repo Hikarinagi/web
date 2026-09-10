@@ -89,7 +89,7 @@
   let revealFrame: number | null = null
   let skeletonTimer: ReturnType<typeof setTimeout> | null = null
 
-  // 门禁判据集中在此:作品级 nsfw 或逐图分级(sexual/violence)任一命中即按 NSFW 处理。
+  // 门禁判据集中在此：作品级 nsfw 或逐图分级(sexual/violence)任一命中即按 NSFW 处理。
   // content_limit 策略仍由 useNsfwPolicy 统一裁决(block / blur / 显示)。
   const { shouldBlockNsfw, shouldBlurNsfw } = useNsfwPolicy()
   const sourceSrc = computed(() => imageSourceSrc(props.src))
@@ -125,8 +125,8 @@
       processing: mainProcessing.value,
     }),
   )
-  // nsfw 需模糊但该图无法走处理器(未登记外链等)→ 处理器加不上 blur,绝不直出原图;
-  // fail-closed 当作 block 处理(不加载原图,显示 fallback),避免静默裸露。
+  // nsfw 需模糊但该图无法走处理器(未登记外链等)→ 处理器加不上 blur,绝不直出原图；
+  // fail-closed 当作 block 处理(不加载原图，显示 fallback),避免静默裸露。
   const unsafeNsfwBlur = computed(
     () =>
       blurNsfw.value &&

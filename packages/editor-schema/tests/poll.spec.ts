@@ -10,7 +10,7 @@ function poll(attrs: object): object {
 
 const validAttrs = {
   poll_key: 'k1',
-  question: '你最喜欢哪部?',
+  question: '你最喜欢哪部？',
   options: ['A', 'B', 'C'],
   allow_multiple: false,
   closes_at: null,

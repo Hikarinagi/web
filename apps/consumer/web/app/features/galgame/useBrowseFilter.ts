@@ -39,14 +39,14 @@ export function useBrowseFilter(
       out.push({
         key: 'release-periods',
         kind: 'year',
-        label: `发售: ${releasePeriodsLabel(s.release_periods)}`,
+        label: `发售：${releasePeriodsLabel(s.release_periods)}`,
         remove: () => update({ release_periods: [] }),
       })
     } else if (s.release_from || s.release_to) {
       out.push({
         key: 'release',
         kind: 'year',
-        label: `发售: ${releaseRangeLabel(s.release_from, s.release_to)}`,
+        label: `发售：${releaseRangeLabel(s.release_from, s.release_to)}`,
         remove: () => update({ release_from: undefined, release_to: undefined }),
       })
     }

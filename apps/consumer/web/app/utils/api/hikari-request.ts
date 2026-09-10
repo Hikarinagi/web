@@ -103,7 +103,7 @@ export async function hikariRequest<TPath extends ApiPath, TMethod extends ApiMe
 
     return unwrapApiResponse<ApiData<TPath, TMethod>>(response)
   } catch (error) {
-    // 中断/取消的请求不是真失败:不弹 toast,原样重抛供上游识别。
+    // 中断/取消的请求不是真失败：不弹 toast,原样重抛供上游识别。
     const abort = abortErrorOf(error)
     if (abort) throw abort
 

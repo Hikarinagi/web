@@ -121,8 +121,8 @@ export function readingTimeHours(ms: number): string {
   return hours < 10 ? hours.toFixed(1) : String(Math.round(hours))
 }
 
-// 合并评分板(galgame + 轻小说)按 work_type 派发状态文案——这是个人主页特有的合并视图,
-// 各作品域自己的标签表只覆盖单一类型,这里需要按 work_type 选表。
+// 合并评分板(galgame + 轻小说)按 work_type 派发状态文案——这是个人主页特有的合并视图，
+// 各作品域自己的标签表只覆盖单一类型，这里需要按 work_type 选表。
 const GALGAME_STATUS: Record<string, string> = {
   PLAN: '想玩',
   GOING: '在玩',

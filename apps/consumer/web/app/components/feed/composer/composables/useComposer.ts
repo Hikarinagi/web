@@ -331,7 +331,7 @@ export function useComposer(
   }
 
   const prependFeed = usePrependFeed()
-  // 在话题/板块页发帖,乐观插入也要补到当前关系流(已 tag,刷新本会出现,这里即时呈现)。
+  // 在话题/板块页发帖，乐观插入也要补到当前关系流(已 tag,刷新本会出现，这里即时呈现)。
   const prependRelation = options.topic
     ? usePrependFeed(topicStoreId(options.topic.id))
     : options.sectionId

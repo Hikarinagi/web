@@ -1,7 +1,7 @@
 import { onMounted, ref } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
 
-// scroll-spy:观察各 heading 元素,高亮当前可视小节;点击平滑滚动(扣 header 高度)。
+// scroll-spy:观察各 heading 元素，高亮当前可视小节；点击平滑滚动(扣 header 高度)。
 export function useTocSpy(ids: () => string[]) {
   const activeId = ref<string | null>(null)
   const targets = ref<HTMLElement[]>([])

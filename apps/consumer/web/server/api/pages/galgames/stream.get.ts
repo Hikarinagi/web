@@ -4,7 +4,7 @@ import { bannerForPosition, type PromoBanner } from '~/features/promotion/placem
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
-const BANNER_EVERY = 2 // 每 2 批插一个运营 banner(一批最多 4 个模块,故约每 4~8 个模块一条)
+const BANNER_EVERY = 2 // 每 2 批插一个运营 banner(一批最多 4 个模块，故约每 4~8 个模块一条)
 
 async function handler(event: H3Event) {
   const cursor = Math.max(0, Math.floor(Number(getQuery(event).cursor) || 0))

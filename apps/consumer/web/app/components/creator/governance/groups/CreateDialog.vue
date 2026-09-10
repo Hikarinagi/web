@@ -63,7 +63,7 @@
       @submit="onSubmit"
     >
       <FormItem v-slot="{ id }" name="name" label="名称" required>
-        <InputText :id="id" autocomplete="off" fluid placeholder="如:Galgame 审核组" />
+        <InputText :id="id" autocomplete="off" fluid placeholder="如：Galgame 审核组" />
       </FormItem>
 
       <FormItem v-slot="{ id }" name="description" label="描述">

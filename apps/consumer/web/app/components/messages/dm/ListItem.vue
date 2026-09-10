@@ -41,7 +41,7 @@
           v-if="conversation.last_message?.from_me"
           class="text-surface-400 dark:text-surface-500"
         >
-          我:
+          我：
         </span>
         {{ conversation.last_message?.excerpt ?? '还没有消息' }}
       </p>

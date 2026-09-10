@@ -13,7 +13,7 @@ export function useOverlayHost(
   const { active, closeOverlay } = useEditorOverlays()
 
   // 本 host 所属编辑器实例的归属标识(由所在编辑器 provide)。host 只认属于自己实例(或未归属)的
-  // 弹层;别的编辑器打开的弹层一律视而不见 —— 同页多编辑器各管各的,无需上层 gate。
+  // 弹层；别的编辑器打开的弹层一律视而不见 —— 同页多编辑器各管各的，无需上层 gate。
   const ownerId = inject(EDITOR_PLUGIN_CONTEXT_KEY, null)?.ownerId
   const mineActive = computed(() => {
     const cur = active.value
@@ -24,7 +24,7 @@ export function useOverlayHost(
   const breakpoints = useBreakpoints(breakpointsTailwind)
   const isMobile = breakpoints.smaller('md')
 
-  // keepalive 下被缓存的 host(如首页内联编辑器)deactivate 后不再响应共享的 active 单例,
+  // keepalive 下被缓存的 host(如首页内联编辑器)deactivate 后不再响应共享的 active 单例，
   // 否则会与当前活跃页的编辑器抢 overlay 并残留 document 监听。
   const activated = ref(true)
   onActivated(() => {

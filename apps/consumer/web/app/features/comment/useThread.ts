@@ -251,7 +251,7 @@ export function useCommentThread(opts: ThreadOptions) {
       // 顶层无子 → 列表移除
       items.value = items.value.filter(i => i.id !== comment.id)
     } else {
-      // tombstone:顶层有子保留承载回复;回复就地标记,由 visibleChildren 过滤隐藏
+      // tombstone:顶层有子保留承载回复；回复就地标记，由 visibleChildren 过滤隐藏
       const node = findInList(comment.id)
       if (node) {
         node.is_deleted = true
@@ -323,7 +323,7 @@ export function useCommentThread(opts: ThreadOptions) {
   function collapseReplies(id: number) {
     const item = items.value.find(i => i.id === id)
     if (!item) return
-    // 展开是 append,切回预览基数即还原;child_total 不变,收起后展开按钮自动回归
+    // 展开是 append,切回预览基数即还原；child_total 不变，收起后展开按钮自动回归
     item.children = item.children.slice(0, replyPreviewCounts.value.get(id) ?? 0)
     expandedIds.value.delete(id)
   }

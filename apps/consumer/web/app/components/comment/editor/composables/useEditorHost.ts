@@ -38,7 +38,7 @@ export function useEditorHost(opts: UseEditorHostOptions) {
 
   const documentEmojiSetsRef = ref<EmojiSetDisplay[]>(opts.documentEmojiSets?.() ?? [])
   if (opts.documentEmojiSets) {
-    // 合并而非覆盖:picker 已 push 进来的本地快照(尚未保存的新选表情)不能被
+    // 合并而非覆盖：picker 已 push 进来的本地快照(尚未保存的新选表情)不能被
     // thread.emojiSets 的并发重写冲掉——编辑中途 loadMore(滚动)/ expandReplies 都会
     // 触发 absorb() 重新赋值该 ref,hard-overwrite 会丢掉本地快照导致保存后贴纸无 src。
     watch(opts.documentEmojiSets, next => {

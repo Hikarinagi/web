@@ -67,7 +67,7 @@
         <InputText
           :id="index === 0 ? inputId : undefined"
           :model-value="text(row, 'name')"
-          placeholder="来源标识,如 steam"
+          placeholder="来源标识，如 steam"
           size="small"
           :disabled="disabled"
           fluid

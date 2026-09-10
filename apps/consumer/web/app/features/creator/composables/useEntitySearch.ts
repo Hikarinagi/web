@@ -39,7 +39,7 @@ export async function fetchEntitySearch(
     }
   }
   switch (target) {
-    // 实体走 editor-search:包含 PENDING(provisional)供引用 + 打标;公开列表仍只 PUBLISHED。
+    // 实体走 editor-search:包含 PENDING(provisional)供引用 + 打标；公开列表仍只 PUBLISHED。
     case 'tag':
     case 'person':
     case 'producer':

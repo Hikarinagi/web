@@ -93,7 +93,7 @@ describe('limits: 各项越界检测', () => {
     expect(r.ok).toBe(false)
   })
 
-  it('text_length 用 code point 计数, 中日韩字符各计 1', () => {
+  it('text_length 用 code point 计数，中日韩字符各计 1', () => {
     const sentence = '光凪'.repeat(COMMENT_PRESET.limits.max_plain_text_chars + 1)
     const r = validateDocument(doc([p(text(sentence))]), COMMENT_PRESET)
     expect(r.ok).toBe(false)

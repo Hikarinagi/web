@@ -7,7 +7,7 @@ interface ActiveOverlay {
   ownerId?: symbol
 }
 
-// shallowRef:props 里嵌套的 Ref 不能被 reactive 自动解包,否则下游组件拿到 unwrap 后的值。
+// shallowRef:props 里嵌套的 Ref 不能被 reactive 自动解包，否则下游组件拿到 unwrap 后的值。
 const active: ShallowRef<ActiveOverlay | null> = shallowRef(null)
 
 export function useEditorOverlays() {

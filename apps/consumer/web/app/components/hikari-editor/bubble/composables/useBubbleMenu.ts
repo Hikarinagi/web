@@ -52,7 +52,7 @@ export function useBubbleMenu(
     animate(el, { x: Math.round(x), y: Math.round(y) }, instant ? { duration: 0 } : TRANSITION)
   }
 
-  // show 防抖:吞掉 focus → selectionUpdate-collapse 这类瞬态闪现。hide 即时。
+  // show 防抖：吞掉 focus → selectionUpdate-collapse 这类瞬态闪现。hide 即时。
   let showTimer: ReturnType<typeof setTimeout> | null = null
 
   function clearShowTimer() {

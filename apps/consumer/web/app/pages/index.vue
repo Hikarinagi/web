@@ -10,7 +10,7 @@
   const { request: requestFeedRefresh } = useFeedRefreshSignal()
   const { scope } = useFeedTabs(requestFeedRefresh)
 
-  // 首屏 seed 的是落地时那个 tab。这里刻意取快照而非响应式引用:BFF 的 key 跟着变会让
+  // 首屏 seed 的是落地时那个 tab。这里刻意取快照而非响应式引用：BFF 的 key 跟着变会让
   // 每次切 tab 都重拉一次侧栏。切 tab 后的流由 feed 接口自己拉。
   const landedScope = scope.value
   const { data, refresh } = await useHikariApiData(`/api/pages/home?tab=${landedScope}`)
@@ -36,8 +36,8 @@
   watch(
     () => auth.isAuthenticated,
     isAuthed => {
-      // 登出后关注流无意义,退回全站;清空 feed 桶以新身份重拉,并按登录态切换重拉一次 BFF。
-      // 列表内容整体换身份,深滚位置已无意义,直接回顶。
+      // 登出后关注流无意义，退回全站；清空 feed 桶以新身份重拉，并按登录态切换重拉一次 BFF。
+      // 列表内容整体换身份，深滚位置已无意义，直接回顶。
       if (!isAuthed && scope.value === 'following') void router.replace({ path: '/', query: {} })
       resetFeed()
       if (import.meta.client) window.scrollTo(0, 0)
@@ -49,7 +49,7 @@
 <template>
   <FeedPageShell v-if="data" lock-overscroll flush>
     <template #top>
-      <!-- 移动端拉满整屏:抵消 PageShell 的 px-4,再把内容边距补回来,
+      <!-- 移动端拉满整屏：抵消 PageShell 的 px-4,再把内容边距补回来，
            否则 sticky 的毛玻璃条两侧会漏出下面滚动的内容。 -->
       <FeedTabs
         class="-mx-4 w-[calc(100%+2rem)] px-4 sm:mx-0 sm:w-full sm:px-0 xl:hidden"

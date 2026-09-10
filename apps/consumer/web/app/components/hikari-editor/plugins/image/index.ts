@@ -57,7 +57,7 @@ const ImageBlock = ImageBlockExtension.extend({
   addNodeView() {
     return VueNodeViewRenderer(ImageBlockNodeView)
   },
-  // 粘贴上传:只在注册了 image 插件的 profile(community/文章)生效;post/comment 不含本插件。
+  // 粘贴上传：只在注册了 image 插件的 profile(community/文章)生效；post/comment 不含本插件。
   addProseMirrorPlugins() {
     const parentPlugins = this.parent?.() ?? []
     const editor = this.editor

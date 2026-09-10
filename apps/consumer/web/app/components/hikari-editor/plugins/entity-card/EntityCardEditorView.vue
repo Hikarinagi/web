@@ -20,7 +20,7 @@
 
   const props = defineProps(nodeViewProps)
 
-  // 让 Container 让出 my-[0.8em],NodeViewWrapper 接管,使 selected ring 紧贴卡片。
+  // 让 Container 让出 my-[0.8em],NodeViewWrapper 接管，使 selected ring 紧贴卡片。
   provide(ENTITY_CARD_IN_EDITOR_KEY, true)
 
   const NODE_VIEW_MAP: Record<string, Component> = {

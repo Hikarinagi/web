@@ -31,7 +31,7 @@ export function byteLengthUtf8(value: string): number {
 }
 
 // emoji set name: 2-16 chars; emoji name: 1-32 chars. 各允许 letters(含 CJK)/numbers/_/-。
-// 禁空格/控制字符/标点/HTML 元字符,防 tooltip 注入和路径攻击。
+// 禁空格/控制字符/标点/HTML 元字符，防 tooltip 注入和路径攻击。
 export const EMOJI_CODE_REGEX = /^[\p{L}\p{N}_-]{2,16}:[\p{L}\p{N}_-]{1,32}$/u
 
 export function isAllowedHref(href: unknown): boolean {

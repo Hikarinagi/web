@@ -24,13 +24,13 @@
     api.on('select', sync).on('reInit', sync)
   })
 
-  // slide 高固定 320(内联,绕开任何 class),宽 = 320 × 真实比例;缺尺寸兜底窄竖图。
+  // slide 高固定 320(内联，绕开任何 class),宽 = 320 × 真实比例；缺尺寸兜底窄竖图。
   const slideStyle = (c: { media: { width: number | null; height: number | null } }) => ({
     height: '320px',
     width: `${c.media.width && c.media.height ? (320 * c.media.width) / c.media.height : 240}px`,
   })
 
-  // chevron 的可见圆形按钮样式(定位交给外层 div 壳;Button 带 ripple 会内联 position:relative,不能直接绝对定位它)
+  // chevron 的可见圆形按钮样式(定位交给外层 div 壳；Button 带 ripple 会内联 position:relative,不能直接绝对定位它)
   const navBtn =
     'pointer-events-auto grid size-8 place-items-center rounded-full bg-white/90 text-surface-700 shadow-md transition hover:bg-white dark:bg-surface-800/90 dark:text-surface-200 dark:hover:bg-surface-700'
 </script>

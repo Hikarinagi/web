@@ -53,8 +53,8 @@ export function useFeedVirtualList(
   )
   const virtualItems = computed(() => clusters.value.slice(pinnedCount.value))
   const shouldClip = computed(() => mounted.value && virtualItems.value.length > MIN_VIRTUAL_ITEMS)
-  // v-show 隐藏时元素尺寸全是 0,liveWidths 会塌到 fallback;widths 只在激活时同步,
-  // 隐藏期间冻结最后一次真实值,避免高度估算抖动和误清测量缓存。
+  // v-show 隐藏时元素尺寸全是 0,liveWidths 会塌到 fallback;widths 只在激活时同步，
+  // 隐藏期间冻结最后一次真实值，避免高度估算抖动和误清测量缓存。
   const liveWidths = computed(() => ({
     rowWidth: mounted.value ? safeSize(width.value, FALLBACK_ROW_WIDTH) : FALLBACK_ROW_WIDTH,
     viewportWidth: mounted.value

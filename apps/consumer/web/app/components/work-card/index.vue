@@ -55,7 +55,7 @@
           {{ work.intro }}
         </p>
         <p v-if="work.aliases.length" class="text-muted-color/80 mt-1.5 line-clamp-1 text-[11px]">
-          别名:{{ work.aliases.join(' / ') }}
+          别名：{{ work.aliases.join(' / ') }}
         </p>
       </div>
     </NuxtLink>

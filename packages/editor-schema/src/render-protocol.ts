@@ -81,8 +81,8 @@ export const ALLOWED_LINK_URI_REGEXP =
 
 export const FORBIDDEN_MEDIA_SRC_SCHEME_REGEX = /^(?:javascript|data|vbscript|file):/i
 
-// 安全的内联颜色:hex / rgb(a) / 命名色。拒 var() / url() / 表达式 等含括号或元字符的注入向量
-// (rgb(a) 括号内只允许数字 . , % 空白 /)。text_style mark 与回填共用,作为 color 的唯一闸口。
+// 安全的内联颜色：hex / rgb(a) / 命名色。拒 var() / url() / 表达式 等含括号或元字符的注入向量
+// (rgb(a) 括号内只允许数字 . , % 空白 /)。text_style mark 与回填共用，作为 color 的唯一闸口。
 export const SAFE_CSS_COLOR_REGEX =
   /^(?:#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})|rgba?\(\s*[\d.,%\s/]+\)|[a-z]{3,20})$/i
 
@@ -90,7 +90,7 @@ export const TEXT_ALIGN_VALUES = ['left', 'center', 'right', 'justify'] as const
 export type TextAlignValue = (typeof TEXT_ALIGN_VALUES)[number]
 
 /**
- * 单一来源:每个 mark 在 sanitized HTML 中的渲染契约 (tag + class + 固定 attrs)。
+ * 单一来源：每个 mark 在 sanitized HTML 中的渲染契约 (tag + class + 固定 attrs)。
  * editor LinkMark 与 display Text marks 都从这里 import,保证编辑器与详情页输出一致。
  */
 export const MARK_RENDER_SPECS = {

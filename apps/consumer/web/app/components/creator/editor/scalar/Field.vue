@@ -15,7 +15,7 @@
   const model = defineModel<unknown>()
 
   // 子组件的 PrimeVue 输入由本组件手动桥接给外层 FormField。
-  // 否则 InputNumber 会同时被 FormField 注入和本组件 v-model 控制,清空 nullable 数字时会回弹旧值。
+  // 否则 InputNumber 会同时被 FormField 注入和本组件 v-model 控制，清空 nullable 数字时会回弹旧值。
   provide('$pcFormField', undefined)
   provide('$pcForm', undefined)
 
@@ -36,7 +36,7 @@
       (props.field.value_type ? CONTROL_HINT[props.field.value_type] : undefined),
   )
 
-  // 后端 Prisma 枚举:enum_values 是原始码,按 enum_name 映射可读 label。
+  // 后端 Prisma 枚举：enum_values 是原始码，按 enum_name 映射可读 label。
   const enumSelectOptions = computed(() =>
     enumOptions(props.field.enum_name, props.field.enum_values ?? []),
   )
