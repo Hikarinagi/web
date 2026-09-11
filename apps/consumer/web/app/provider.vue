@@ -40,6 +40,7 @@
     <Notification v-else :item="item" :theme="notivueTheme" class="mr-(--p-scrollbar-width)" />
   </Notivue>
   <ConfirmDialog />
+  <ConfirmHost />
   <PurchaseDialog />
   <DecorationDetailDialog />
   <AuthLogoutDialog />

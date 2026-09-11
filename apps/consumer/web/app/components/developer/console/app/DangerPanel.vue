@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Button, Inline, Panel, Stack, Text } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import { AlertTriangle } from '@lucide/vue'
 
@@ -8,7 +8,7 @@
   const props = defineProps<{ app: DeveloperAppPageData['app'] }>()
   const emit = defineEmits<{ changed: [] }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const busy = ref(false)
 
   async function toggleEnabled() {
@@ -30,13 +30,12 @@
   }
 
   function confirmRemove() {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除应用',
-      message: `删除后「${props.app.client_name}」的凭据立即失效且无法恢复`,
-      acceptProps: { label: '删除', severity: 'danger' },
-      rejectProps: { label: '取消', severity: 'secondary' },
-      accept: () => void remove(),
+    confirm({
+      title: '删除应用',
+      description: `删除后「${props.app.client_name}」的凭据立即失效且无法恢复`,
+      confirmText: '删除',
+      tone: 'danger',
+      onConfirm: () => remove(),
     })
   }
 
@@ -58,23 +57,19 @@
 <template>
   <Panel title="危险操作">
     <template #icon><AlertTriangle /></template>
-    <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
-      <div class="flex items-center justify-between gap-4 py-3">
-        <span class="text-sm font-medium text-color">
+    <Stack gap="none" class="divide-y divide-line">
+      <Inline gap="md" align="center" justify="between" class="py-3">
+        <Text as="span" size="sm" weight="medium">
           {{ app.enabled ? '停用应用' : '启用应用' }}
-        </span>
-        <Button
-          :label="app.enabled ? '停用' : '启用'"
-          severity="warn"
-          outlined
-          :loading="busy"
-          @click="toggleEnabled"
-        />
-      </div>
-      <div class="flex items-center justify-between gap-4 py-3">
-        <span class="text-sm font-medium text-color">删除应用</span>
-        <Button label="删除" severity="danger" :loading="busy" @click="confirmRemove" />
-      </div>
-    </div>
+        </Text>
+        <Button variant="outline" tone="neutral" :loading="busy" @click="toggleEnabled">
+          {{ app.enabled ? '停用' : '启用' }}
+        </Button>
+      </Inline>
+      <Inline gap="md" align="center" justify="between" class="py-3">
+        <Text as="span" size="sm" weight="medium">删除应用</Text>
+        <Button tone="danger" :loading="busy" @click="confirmRemove">删除</Button>
+      </Inline>
+    </Stack>
   </Panel>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import { Button, Card, Drawer, Empty, Inline, Stack, Text } from '@hina-ui/vue'
   import { Bookmark, BookmarkCheck, BookmarkPlus, Pencil, Trash2 } from '@lucide/vue'
   import type { ReaderBookmark } from '../composables/useReaderBookmarks'
-  import { cn } from '~/utils/cn'
   import { timeBrief } from '#imports'
 
   defineOptions({ name: 'HikariReaderBookmarkPanel' })
@@ -18,17 +18,15 @@
     addCurrent: []
   }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
 
   function confirmRemove(id: number) {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除书签',
-      message: '确定要删除这条书签吗？',
-      rejectLabel: '取消',
-      acceptLabel: '删除',
-      defaultFocus: 'reject',
-      accept: () => emit('remove', id),
+    confirm({
+      title: '删除书签',
+      description: '确定要删除这条书签吗？',
+      confirmText: '删除',
+      tone: 'danger',
+      onConfirm: () => emit('remove', id),
     })
   }
 
@@ -40,99 +38,88 @@
 </script>
 
 <template>
-  <Drawer v-model:visible="visible" position="left" class="w-full! max-w-100!">
-    <template #header>
-      <div class="flex items-center gap-2">
-        <h2 class="text-base font-semibold">书签</h2>
-        <span v-if="items.length" class="text-xs text-muted-color">{{ items.length }}</span>
-      </div>
-    </template>
-
-    <div v-if="items.length" class="flex flex-col gap-1.5">
-      <div
-        v-for="item in items"
-        :key="item.id"
-        :class="
-          cn(
-            'group rounded-md border border-surface-200 px-3 py-2.5',
-            'hover:border-primary/50 dark:border-surface-700',
-            'transition-colors',
-          )
-        "
-      >
-        <Button
-          unstyled
-          type="button"
-          class="flex w-full flex-col items-start gap-1 text-left"
-          @click="emit('jump', item)"
+  <Drawer v-model:open="visible" title="书签" side="start" size="md">
+    <template #content>
+      <Stack v-if="items.length" gap="sm">
+        <Card
+          v-for="item in items"
+          :key="item.id"
+          :padded="false"
+          class="group px-3 py-2.5 transition-colors hover:border-line-strong"
         >
-          <div class="flex w-full items-baseline justify-between gap-2">
-            <span class="line-clamp-1 text-sm font-medium">
-              {{ item.chapter_title || '未命名章节' }}
-            </span>
-            <span
-              v-if="progressLabel(item)"
-              class="shrink-0 text-[11px] text-muted-color tabular-nums"
+          <Stack
+            as="button"
+            type="button"
+            gap="xs"
+            align="start"
+            class="w-full hn-interactive text-start"
+            @click="emit('jump', item)"
+          >
+            <Inline gap="sm" align="baseline" justify="between" class="w-full">
+              <Text as="span" size="sm" weight="medium" class="line-clamp-1">
+                {{ item.chapter_title || '未命名章节' }}
+              </Text>
+              <Text
+                v-if="progressLabel(item)"
+                as="span"
+                size="xs"
+                tone="muted"
+                class="shrink-0 tabular-nums"
+              >
+                {{ progressLabel(item) }}
+              </Text>
+            </Inline>
+            <Text v-if="item.note" as="span" size="xs" tone="muted" class="line-clamp-2">
+              {{ item.note }}
+            </Text>
+            <Text as="span" size="xs" tone="faint">
+              {{ timeBrief(item.modified_at ?? item.created_at) }}
+            </Text>
+          </Stack>
+
+          <Inline
+            gap="xs"
+            justify="end"
+            class="mt-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
+          >
+            <Button
+              variant="ghost"
+              tone="neutral"
+              size="sm"
+              icon-only
+              pill
+              aria-label="编辑备注"
+              @click.stop="emit('edit', item)"
             >
-              {{ progressLabel(item) }}
-            </span>
-          </div>
-          <span v-if="item.note" class="line-clamp-2 text-xs leading-5 text-muted-color">
-            {{ item.note }}
-          </span>
-          <span class="text-[11px] text-muted-color">
-            {{ timeBrief(item.modified_at ?? item.created_at) }}
-          </span>
-        </Button>
+              <template #icon><Pencil /></template>
+            </Button>
+            <Button
+              variant="ghost"
+              tone="danger"
+              size="sm"
+              icon-only
+              pill
+              aria-label="删除书签"
+              @click.stop="confirmRemove(item.id)"
+            >
+              <template #icon><Trash2 /></template>
+            </Button>
+          </Inline>
+        </Card>
+      </Stack>
 
-        <div
-          class="mt-1 flex items-center justify-end gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
-        >
-          <Button
-            severity="secondary"
-            variant="text"
-            size="small"
-            rounded
-            aria-label="编辑备注"
-            @click.stop="emit('edit', item)"
-          >
+      <Empty v-else title="暂无书签">
+        <template #icon><Bookmark /></template>
+        <template #actions>
+          <Button size="sm" :disabled="hasCurrent" @click="emit('addCurrent')">
             <template #icon>
-              <Pencil :size="14" aria-hidden="true" />
+              <BookmarkCheck v-if="hasCurrent" />
+              <BookmarkPlus v-else />
             </template>
+            {{ hasCurrent ? '当前位置已添加' : '添加当前位置' }}
           </Button>
-          <Button
-            severity="danger"
-            variant="text"
-            size="small"
-            rounded
-            aria-label="删除书签"
-            @click.stop="confirmRemove(item.id)"
-          >
-            <template #icon>
-              <Trash2 :size="14" aria-hidden="true" />
-            </template>
-          </Button>
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-else
-      class="flex flex-col items-center justify-center gap-3 px-4 py-12 text-center text-sm text-muted-color"
-    >
-      <Bookmark :size="28" class="opacity-40" aria-hidden="true" />
-      <p>暂无书签</p>
-      <Button
-        :label="hasCurrent ? '当前位置已添加' : '添加当前位置'"
-        size="small"
-        :disabled="hasCurrent"
-        @click="emit('addCurrent')"
-      >
-        <template #icon>
-          <BookmarkCheck v-if="hasCurrent" :size="14" aria-hidden="true" />
-          <BookmarkPlus v-else :size="14" aria-hidden="true" />
         </template>
-      </Button>
-    </div>
+      </Empty>
+    </template>
   </Drawer>
 </template>

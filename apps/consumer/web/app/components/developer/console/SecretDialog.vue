@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Alert, Button, Dialog, Stack } from '@hina-ui/vue'
+  import { Alert, Button, CodeBlock, Dialog, Stack } from '@hina-ui/vue'
 
   defineOptions({ name: 'DeveloperConsoleSecretDialog' })
 
@@ -14,7 +14,7 @@
     <template #content>
       <Stack gap="md">
         <Alert tone="warning">请妥善保存以下信息，关闭弹窗后将不会再次显示</Alert>
-        <DeveloperCodeBlock :code="code" />
+        <CodeBlock :code="code" />
       </Stack>
     </template>
 

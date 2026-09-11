@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { LoaderCircle } from '@lucide/vue'
+  import { Center, Image, SimpleGrid, Skeleton, Spinner, Stack } from '@hina-ui/vue'
+  import type { ComponentPublicInstance } from 'vue'
   import { useMarqueeSelect } from './composables/useMarqueeSelect'
   import type { MediaValue, PendingUpload } from './types'
 
@@ -13,7 +14,10 @@
   }>()
   const emit = defineEmits<{
     toggle: [media: MediaValue]
-    remove: [media: MediaValue]
+    remove: [items: MediaValue[]]
+    download: [items: MediaValue[]]
+    copy: [media: MediaValue]
+    open: [media: MediaValue]
     files: [files: File[]]
     reachEnd: []
     marquee: [items: MediaValue[]]
@@ -23,12 +27,17 @@
     return props.selected.findIndex(item => item.id === id)
   }
 
+  function targetsOf(media: MediaValue): MediaValue[] {
+    return selectedIndex(media.id) >= 0 && props.selected.length > 1 ? props.selected : [media]
+  }
+
   const sentinel = useTemplateRef<HTMLElement>('sentinel')
   useIntersectionObserver(sentinel, entries => {
     if (entries.some(entry => entry.isIntersecting)) emit('reachEnd')
   })
 
-  const grid = useTemplateRef<HTMLElement>('grid')
+  const gridRef = useTemplateRef<ComponentPublicInstance>('grid')
+  const grid = computed<HTMLElement | null>(() => (gridRef.value?.$el as HTMLElement) ?? null)
   const { marquee, previewIds, onMouseDown, onClickCapture } = useMarqueeSelect({
     container: grid,
     enabled: () => !!props.multi,
@@ -45,10 +54,12 @@
 </script>
 
 <template>
-  <div>
-    <div
+  <Stack gap="none">
+    <SimpleGrid
       ref="grid"
-      class="relative grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-3 select-none"
+      min="8rem"
+      gap="sm"
+      class="relative select-none"
       @mousedown="onMouseDown"
       @click.capture="onClickCapture"
     >
@@ -63,37 +74,43 @@
           :uploading="pending.length > 0"
           @files="emit('files', $event)"
         />
-        <div
+        <Center
           v-for="item in pending"
           :key="item.id"
-          class="relative aspect-square overflow-hidden rounded-lg ring-1 ring-surface-200 dark:ring-surface-700"
+          class="relative aspect-square overflow-hidden rounded-lg ring-1 ring-line"
         >
-          <img :src="item.previewUrl" alt="" class="size-full object-cover" />
-          <div class="absolute inset-0 flex items-center justify-center bg-black/30">
-            <LoaderCircle class="size-6 animate-spin text-white" />
-          </div>
-        </div>
-        <MediaLibraryTile
+          <Image :src="item.previewUrl" alt="" fit="cover" :skeleton="false" class="size-full" />
+          <Center class="absolute inset-0 bg-black/30">
+            <Spinner class="text-white" />
+          </Center>
+        </Center>
+        <MediaLibraryTileMenu
           v-for="media in items"
           :key="media.id"
           :media="media"
-          :selected="selectedIndex(media.id) >= 0 || previewIds.has(media.id)"
-          :order="selectedIndex(media.id) + 1"
-          @click="emit('toggle', media)"
-          @remove="emit('remove', media)"
-        />
+          :targets="targetsOf(media)"
+          :selected="selectedIndex(media.id) >= 0"
+          @toggle="emit('toggle', $event)"
+          @open="emit('open', $event)"
+          @copy="emit('copy', $event)"
+          @download="emit('download', $event)"
+          @remove="emit('remove', $event)"
+        >
+          <MediaLibraryTile
+            :media="media"
+            :selected="selectedIndex(media.id) >= 0 || previewIds.has(media.id)"
+            :order="selectedIndex(media.id) + 1"
+            @click="emit('toggle', media)"
+            @remove="emit('remove', [media])"
+          />
+        </MediaLibraryTileMenu>
       </TransitionGroup>
       <template v-if="loading">
-        <Skeleton
-          v-for="i in 6"
-          :key="`loading-${i}`"
-          border-radius="0.5rem"
-          class="aspect-square h-auto! w-full!"
-        />
+        <Skeleton v-for="i in 6" :key="`loading-${i}`" class="aspect-square w-full rounded-lg" />
       </template>
-      <div
+      <Center
         v-if="marquee"
-        class="pointer-events-none absolute z-10 rounded border border-primary/60 bg-primary/10"
+        class="pointer-events-none absolute z-10 rounded border border-accent/60 bg-accent/10"
         :style="{
           left: marquee.x + 'px',
           top: marquee.y + 'px',
@@ -101,9 +118,9 @@
           height: marquee.h + 'px',
         }"
       />
-    </div>
+    </SimpleGrid>
     <div v-if="!done" ref="sentinel" class="h-px" />
-  </div>
+  </Stack>
 </template>
 
 <style scoped>

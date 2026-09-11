@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import { Button, Card, Drawer, Empty, Inline, Stack, Text } from '@hina-ui/vue'
   import { Highlighter, NotebookPen, NotebookText, Trash2, Underline } from '@lucide/vue'
   import type { ReaderAnnotation } from '../composables/useReaderAnnotations'
-  import { cn } from '~/utils/cn'
   import { timeBrief } from '#imports'
 
   defineOptions({ name: 'HikariReaderAnnotationPanel' })
@@ -19,121 +19,108 @@
     remove: [id: string]
   }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
 
   function confirmRemove(id: string) {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除标注',
-      message: '确定要删除这条标注吗？',
-      rejectLabel: '取消',
-      acceptLabel: '删除',
-      defaultFocus: 'reject',
-      accept: () => emit('remove', id),
+    confirm({
+      title: '删除标注',
+      description: '确定要删除这条标注吗？',
+      confirmText: '删除',
+      tone: 'danger',
+      onConfirm: () => emit('remove', id),
     })
   }
 </script>
 
 <template>
-  <Drawer v-model:visible="visible" position="left" class="w-full! max-w-100!">
-    <template #header>
-      <div class="flex items-center gap-2">
-        <h2 class="text-base font-semibold">标注</h2>
-        <span v-if="items.length" class="text-xs text-muted-color">{{ items.length }}</span>
-      </div>
+  <Drawer v-model:open="visible" title="标注" side="start" size="md">
+    <template #content>
+      <Stack v-if="items.length" gap="sm">
+        <Card
+          v-for="item in items"
+          :key="item.id"
+          :padded="false"
+          class="group px-3 py-2.5 transition-colors hover:border-line-strong"
+        >
+          <Stack
+            as="button"
+            type="button"
+            gap="xs"
+            align="start"
+            class="w-full hn-interactive text-start"
+            @click="emit('jump', item)"
+          >
+            <Inline gap="xs" align="center" class="w-full">
+              <Highlighter
+                v-if="item.kind === 'highlight'"
+                class="size-3.5 shrink-0"
+                :style="{ color: item.color ?? '#ffeb3b' }"
+                aria-hidden="true"
+              />
+              <Underline
+                v-else-if="item.kind === 'underline'"
+                class="size-3.5 shrink-0"
+                :style="{ color: item.color ?? '#ffeb3b' }"
+                aria-hidden="true"
+              />
+              <NotebookText v-else class="size-3.5 shrink-0 text-accent-text" aria-hidden="true" />
+              <Text as="span" size="xs" tone="muted" class="line-clamp-1">
+                {{ chapterTitle(item) || '未命名章节' }}
+              </Text>
+            </Inline>
+
+            <Text
+              as="span"
+              size="sm"
+              class="line-clamp-3 leading-6"
+              :class="item.kind !== 'note' ? 'border-l-2 pl-2' : ''"
+              :style="{ borderColor: item.color ?? '#ffeb3b' }"
+            >
+              {{ text(item) || '（无内容）' }}
+            </Text>
+
+            <Text v-if="item.note" as="span" size="xs" tone="muted" class="line-clamp-2">
+              {{ item.note }}
+            </Text>
+            <Text as="span" size="xs" tone="faint">
+              {{ timeBrief(item.modifiedAt ?? item.createdAt) }}
+            </Text>
+          </Stack>
+
+          <Inline
+            gap="xs"
+            justify="end"
+            class="mt-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
+          >
+            <Button
+              variant="ghost"
+              tone="neutral"
+              size="sm"
+              icon-only
+              pill
+              :aria-label="item.note ? '编辑标注' : '添加标注'"
+              @click.stop="emit('edit', item)"
+            >
+              <template #icon><NotebookPen /></template>
+            </Button>
+            <Button
+              variant="ghost"
+              tone="danger"
+              size="sm"
+              icon-only
+              pill
+              aria-label="删除标注"
+              @click.stop="confirmRemove(item.id)"
+            >
+              <template #icon><Trash2 /></template>
+            </Button>
+          </Inline>
+        </Card>
+      </Stack>
+
+      <Empty v-else title="暂无标注" description="在阅读区域选中文字后可以添加">
+        <template #icon><Highlighter /></template>
+      </Empty>
     </template>
-
-    <div v-if="items.length" class="flex flex-col gap-1.5">
-      <div
-        v-for="item in items"
-        :key="item.id"
-        :class="
-          cn(
-            'group rounded-md border border-surface-200 px-3 py-2.5',
-            'hover:border-primary/50 dark:border-surface-700',
-            'transition-colors',
-          )
-        "
-      >
-        <Button
-          unstyled
-          type="button"
-          class="flex w-full flex-col items-start gap-1.5 text-left"
-          @click="emit('jump', item)"
-        >
-          <div class="flex w-full items-center gap-1.5">
-            <Highlighter
-              v-if="item.kind === 'highlight'"
-              :size="13"
-              class="shrink-0"
-              :style="{ color: item.color ?? '#ffeb3b' }"
-              aria-hidden="true"
-            />
-            <Underline
-              v-else-if="item.kind === 'underline'"
-              :size="13"
-              class="shrink-0"
-              :style="{ color: item.color ?? '#ffeb3b' }"
-              aria-hidden="true"
-            />
-            <NotebookText v-else :size="13" class="shrink-0 text-primary" aria-hidden="true" />
-            <span class="line-clamp-1 text-xs text-muted-color">
-              {{ chapterTitle(item) || '未命名章节' }}
-            </span>
-          </div>
-          <span
-            class="line-clamp-3 text-sm leading-6"
-            :class="item.kind !== 'note' ? 'border-l-2 pl-2' : ''"
-            :style="{ borderColor: item.color ?? '#ffeb3b' }"
-          >
-            {{ text(item) || '（无内容）' }}
-          </span>
-          <span v-if="item.note" class="line-clamp-2 text-xs leading-5 text-muted-color">
-            {{ item.note }}
-          </span>
-          <span class="text-[11px] text-muted-color">
-            {{ timeBrief(item.modifiedAt ?? item.createdAt) }}
-          </span>
-        </Button>
-
-        <div
-          class="mt-1 flex items-center justify-end gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
-        >
-          <Button
-            severity="secondary"
-            variant="text"
-            size="small"
-            rounded
-            :aria-label="item.note ? '编辑标注' : '添加标注'"
-            @click.stop="emit('edit', item)"
-          >
-            <template #icon>
-              <NotebookPen :size="14" aria-hidden="true" />
-            </template>
-          </Button>
-          <Button
-            severity="danger"
-            variant="text"
-            size="small"
-            rounded
-            aria-label="删除标注"
-            @click.stop="confirmRemove(item.id)"
-          >
-            <template #icon>
-              <Trash2 :size="14" aria-hidden="true" />
-            </template>
-          </Button>
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-else
-      class="flex flex-col items-center justify-center gap-2 px-4 py-12 text-center text-sm text-muted-color"
-    >
-      <Highlighter :size="28" class="opacity-40" aria-hidden="true" />
-      <p>暂无标注</p>
-      <p class="text-xs">在阅读区域选中文字后可以添加</p>
-    </div>
   </Drawer>
 </template>
