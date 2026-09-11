@@ -16,7 +16,7 @@ const options = shallowRef<HikariConfirmOptions | null>(null)
 
 export function useHikariConfirm() {
   function confirm(next: HikariConfirmOptions) {
-    if (import.meta.client) (document.activeElement as HTMLElement | null)?.blur()
+    // if (import.meta.client) (document.activeElement as HTMLElement | null)?.blur()
     options.value = next
     open.value = true
   }
