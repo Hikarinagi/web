@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { Boxes, Plus } from '@lucide/vue'
   import type { DevelopersConsolePageData } from '~~/server/api/pages/developers/console.get'
 
@@ -33,7 +34,7 @@
 
 <template>
   <div class="flex flex-col gap-5">
-    <CardPanel title="我的应用" :count="props.apps.length" :description="limitHint">
+    <Panel title="我的应用" :count="props.apps.length" :description="limitHint">
       <template #actions>
         <Button label="创建应用" :disabled="atLimit" @click="createOpen = true">
           <template #icon><Plus class="size-4" /></template>
@@ -44,7 +45,7 @@
       <div v-else class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
         <DeveloperConsoleAppItem v-for="app in props.apps" :key="app.client_id" :app />
       </div>
-    </CardPanel>
+    </Panel>
 
     <DeveloperConsoleCreateDialog v-model:visible="createOpen" @created="onCreated" />
     <DeveloperConsoleSecretDialog v-model:visible="secretOpen" :secret />

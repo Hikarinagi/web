@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { useHomeStream } from '~/features/manga/useHomeStream'
 
   defineOptions({ name: 'MangaHomeStream' })
@@ -48,7 +49,7 @@
     <div>
       <div ref="sentinel" aria-hidden="true" class="h-px" />
       <div v-if="loading" class="flex justify-center py-4">
-        <Spinner :size="28" />
+        <Spinner size="lg" />
       </div>
       <p v-else-if="done && modules.length" class="py-4 text-center text-sm text-muted-color">
         没有更多了

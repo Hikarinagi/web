@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Divider, Panel } from '@hina-ui/vue'
   import Form, { type FormSubmitEvent } from '@primevue/forms/form'
   import { SquarePen } from '@lucide/vue'
   import { canImport, type ImportType } from '~/features/creator/editor/import'
@@ -31,11 +32,8 @@
 </script>
 
 <template>
-  <CardPanel
-    title="发起编辑"
-    :icon="SquarePen"
-    description="新建一个条目，或对已存在的条目发起变更请求"
-  >
+  <Panel title="发起编辑" description="新建一个条目，或对已存在的条目发起变更请求">
+    <template #icon><SquarePen /></template>
     <div class="flex flex-col gap-5">
       <SelectButton
         v-model="mode"
@@ -66,9 +64,7 @@
         <Button label="新建并打开编辑器" type="submit" />
 
         <template v-if="canImport($form.resource_type?.value)">
-          <Divider>
-            <span class="text-muted-color">或从外部数据源导入</span>
-          </Divider>
+          <Divider>或从外部数据源导入</Divider>
           <CreatorEditorImportPanel :type="$form.resource_type?.value as ImportType" />
         </template>
       </Form>
@@ -103,5 +99,5 @@
         <Button label="打开编辑器" type="submit" />
       </Form>
     </div>
-  </CardPanel>
+  </Panel>
 </template>

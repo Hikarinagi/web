@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import {
     JUST_SHOW_NSFW,
     NEVER_SHOW_NSFW,
@@ -31,7 +32,7 @@
 
 <template>
   <div class="flex flex-col gap-5">
-    <CardPanel title="内容偏好" description="控制成人 / 限制级(NSFW)内容的展示方式">
+    <Panel title="内容偏好" description="控制成人 / 限制级(NSFW)内容的展示方式">
       <div class="flex flex-col gap-2.5">
         <label
           v-for="opt in OPTIONS"
@@ -56,12 +57,9 @@
           </div>
         </label>
       </div>
-    </CardPanel>
+    </Panel>
 
-    <CardPanel
-      title="乙女 / BL 内容"
-      description="在浏览、图鉴、首页与社区动态中隐藏乙女 / BL 作品"
-    >
+    <Panel title="乙女 / BL 内容" description="在浏览、图鉴、首页与社区动态中隐藏乙女 / BL 作品">
       <label
         class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-surface-200 p-4 dark:border-surface-700"
       >
@@ -78,6 +76,6 @@
           @change="saveOtome(otomeHidden)"
         />
       </label>
-    </CardPanel>
+    </Panel>
   </div>
 </template>

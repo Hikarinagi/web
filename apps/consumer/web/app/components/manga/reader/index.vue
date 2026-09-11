@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { useMediaQuery } from '@vueuse/core'
   import { AnimatePresence, motion } from 'motion-v'
   import { push } from 'notivue'
@@ -245,7 +246,7 @@
       :class="backgroundClass"
     >
       <div class="flex flex-col items-center gap-4">
-        <Spinner :size="34" :label="null" />
+        <Spinner size="lg" aria-hidden="true" />
         <p class="text-sm" :class="lightBackground ? 'text-black/50' : 'text-[#8b95a6]'">
           {{ leavingLabel }}
         </p>

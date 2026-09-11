@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Center, Grid, Inline, Popconfirm, Stack, Text } from '@hina-ui/vue'
   import { CalendarDays, ChevronLeft, ChevronRight } from '@lucide/vue'
   import type { CheckInRecord, CheckInStatus } from '~/features/checkin/checkin'
   import { dayKeyOf, monthOf, pad2 } from '~/features/checkin/checkin'
@@ -11,10 +12,10 @@
     month: string
     recordsMonth: string
     loading: boolean
+    makeUp: (date: string) => Promise<void>
   }>()
-  const emit = defineEmits<{ changeMonth: [string]; makeUp: [string] }>()
+  const emit = defineEmits<{ changeMonth: [string] }>()
 
-  const confirm = useConfirm()
   const now = new Date()
   const todayKey = dayKeyOf(now)
   const currentMonth = monthOf(now)
@@ -75,13 +76,13 @@
   })
 
   const CELL_CLASS: Record<CellState, string> = {
-    signed: 'bg-primary/10 font-semibold text-primary',
+    signed: 'bg-accent/10 font-semibold text-accent-text',
     'make-up': 'bg-amber-500/15 font-semibold text-amber-600 dark:text-amber-400',
-    today: 'font-semibold text-color ring-2 ring-primary',
+    today: 'ring-accent font-semibold ring-2',
     missed: '',
-    future: 'text-surface-300 dark:text-surface-600',
-    normal: 'text-muted-color',
-    other: 'text-surface-300 dark:text-surface-700',
+    future: 'text-disabled',
+    normal: 'text-muted',
+    other: 'text-disabled opacity-60',
   }
 
   function shift(delta: number) {
@@ -95,88 +96,93 @@
     emit('changeMonth', currentMonth)
   }
 
-  function onCellClick(cell: Cell) {
-    if (cell.state !== 'missed') return
+  function makeUpHint(cell: Cell) {
     const cost = props.status?.make_up.next_cost ?? 0
     const remaining = props.status?.make_up.remaining ?? 0
-    confirm.require({
-      group: 'app-shell',
-      header: '补签',
-      message: `补签 ${cell.key}，将消耗 ${cost} 光点。本月剩余补签次数 ${remaining} 次。`,
-      acceptLabel: '补签',
-      rejectLabel: '取消',
-      onAccept: ({ close }) => {
-        close()
-        emit('makeUp', cell.key)
-      },
-    })
+    return `补签 ${cell.key}，将消耗 ${cost} 光点。本月剩余补签次数 ${remaining} 次。`
   }
 </script>
 
 <template>
-  <div class="px-4 select-none">
-    <div class="mb-2 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="text-sm font-semibold text-color">{{ monthLabel }}</span>
+  <Stack gap="sm" class="select-none">
+    <Inline justify="between">
+      <Inline gap="sm">
+        <Text as="span" size="sm" weight="semibold">{{ monthLabel }}</Text>
         <Button
           v-if="!inCurrentMonth"
           v-tooltip.top="'回到本月'"
-          unstyled
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          icon-only
+          class="size-6"
           :disabled="loading"
-          class="grid size-6 place-items-center rounded-md text-muted-color transition-colors hover:bg-emphasis hover:text-color disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-color"
           aria-label="回到本月"
           @click="backToCurrentMonth"
         >
-          <CalendarDays class="size-3.5" aria-hidden="true" />
+          <CalendarDays />
         </Button>
-      </div>
-      <div class="flex items-center gap-1">
+      </Inline>
+      <Inline gap="xs">
         <Button
-          unstyled
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          icon-only
           :disabled="loading"
-          class="grid size-7 place-items-center rounded-md text-muted-color transition-colors hover:bg-emphasis disabled:opacity-40 disabled:hover:bg-transparent"
           aria-label="上个月"
           @click="shift(-1)"
         >
-          <ChevronLeft class="size-4" aria-hidden="true" />
+          <ChevronLeft />
         </Button>
         <Button
-          unstyled
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          icon-only
           :disabled="loading || atCurrentMonth"
-          class="grid size-7 place-items-center rounded-md text-muted-color transition-colors hover:bg-emphasis disabled:opacity-40 disabled:hover:bg-transparent"
           aria-label="下个月"
           @click="shift(1)"
         >
-          <ChevronRight class="size-4" aria-hidden="true" />
+          <ChevronRight />
         </Button>
-      </div>
-    </div>
+      </Inline>
+    </Inline>
 
-    <div class="grid grid-cols-7 text-center">
-      <span v-for="weekday in WEEKDAYS" :key="weekday" class="pb-1.5 text-xs text-muted-color">
+    <Grid :cols="7" gap="none" class="text-center">
+      <Text v-for="weekday in WEEKDAYS" :key="weekday" as="span" size="xs" tone="muted">
         {{ weekday }}
-      </span>
-    </div>
+      </Text>
+    </Grid>
 
-    <div class="grid grid-cols-7">
-      <div v-for="cell in cells" :key="cell.key" class="flex items-center justify-center py-0.5">
-        <Button
+    <Grid :cols="7" gap="none">
+      <Center v-for="cell in cells" :key="cell.key" class="py-0.5">
+        <Popconfirm
           v-if="cell.state === 'missed'"
-          unstyled
-          class="inline-flex size-9 items-center justify-center rounded-full border border-dashed border-surface-300 text-sm text-muted-color transition-colors hover:bg-emphasis dark:border-surface-600"
-          :aria-label="`补签 ${cell.key}`"
-          @click="onCellClick(cell)"
+          title="补签"
+          :description="makeUpHint(cell)"
+          confirm-text="补签"
+          @confirm="() => props.makeUp(cell.key)"
         >
-          {{ cell.day }}
-        </Button>
-        <span
+          <Button
+            variant="ghost"
+            tone="neutral"
+            pill
+            class="size-9 border border-dashed border-line-strong text-sm"
+            :aria-label="`补签 ${cell.key}`"
+          >
+            {{ cell.day }}
+          </Button>
+        </Popconfirm>
+        <Center
           v-else
-          class="inline-flex size-9 items-center justify-center rounded-full text-sm"
+          as="span"
+          class="size-9 rounded-full text-sm"
           :class="CELL_CLASS[cell.state]"
         >
           {{ cell.day }}
-        </span>
-      </div>
-    </div>
-  </div>
+        </Center>
+      </Center>
+    </Grid>
+  </Stack>
 </template>

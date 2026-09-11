@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { CalendarRange } from '@lucide/vue'
   import type { BackendContributionStats } from '~/features/creator/contribution'
   import {
@@ -14,11 +15,8 @@
 </script>
 
 <template>
-  <CardPanel
-    title="贡献日历"
-    :description="`过去 1 年共 ${stats.range.count} 次贡献`"
-    :icon="CalendarRange"
-  >
+  <Panel title="贡献日历" :description="`过去 1 年共 ${stats.range.count} 次贡献`">
+    <template #icon><CalendarRange /></template>
     <div class="flex flex-col gap-3 select-none" :style="{ maxWidth: `${D.width}px` }">
       <div class="overflow-x-auto">
         <div
@@ -92,5 +90,5 @@
         </div>
       </div>
     </div>
-  </CardPanel>
+  </Panel>
 </template>

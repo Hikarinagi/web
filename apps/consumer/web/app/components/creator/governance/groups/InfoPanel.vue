@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Lock, Pencil, Shield, Trash2 } from '@lucide/vue'
   import type { BackendPermissionGroup } from '~/features/creator/governance'
@@ -43,7 +44,8 @@
 </script>
 
 <template>
-  <CardPanel title="基本信息" :icon="Shield">
+  <Panel title="基本信息">
+    <template #icon><Shield /></template>
     <template #actions>
       <div class="flex items-center gap-2">
         <Button
@@ -98,7 +100,7 @@
       <dt class="text-muted-color">最近更新</dt>
       <dd>{{ timeFormat(group.updated_at) }}</dd>
     </dl>
-  </CardPanel>
+  </Panel>
 
   <CreatorGovernanceGroupsEditDialog
     v-model:visible="editOpen"

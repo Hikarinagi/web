@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import type { FormInstance } from '@primevue/forms/form'
   import { push } from 'notivue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
@@ -82,7 +83,7 @@
 </script>
 
 <template>
-  <CardPanel
+  <Panel
     v-if="canAny(WIKI_PERMISSIONS.REVIEW) && rosterCapable"
     title="补全关联实体资料"
     :count="started ? visible.length : undefined"
@@ -117,5 +118,5 @@
         :running="running"
       />
     </div>
-  </CardPanel>
+  </Panel>
 </template>

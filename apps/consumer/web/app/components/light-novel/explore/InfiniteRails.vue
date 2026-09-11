@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { useExploreRails } from '~/features/light-novel/useExploreRails'
 
   defineOptions({ name: 'LightNovelExploreInfiniteRails' })
@@ -29,7 +30,7 @@
     </template>
     <div ref="sentinel" aria-hidden="true" class="h-px" />
     <div v-if="loading" class="flex justify-center py-4">
-      <Spinner :size="28" />
+      <Spinner size="lg" />
     </div>
     <p
       v-else-if="done && entries.length"

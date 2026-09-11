@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { BookCopy, ChevronDown } from '@lucide/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaVolumeLabel } from '~/utils/media/manga'
@@ -22,12 +23,8 @@
 </script>
 
 <template>
-  <CardPanel
-    title="单行本"
-    :icon="BookCopy"
-    :count="volumes.length"
-    :description="`共 ${volumes.length} 卷`"
-  >
+  <Panel title="单行本" :count="volumes.length" :description="`共 ${volumes.length} 卷`">
+    <template #icon><BookCopy /></template>
     <div class="grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-8">
       <NuxtLink
         v-for="volume in visible"
@@ -65,5 +62,5 @@
         <template #icon><ChevronDown class="size-4" /></template>
       </Button>
     </div>
-  </CardPanel>
+  </Panel>
 </template>

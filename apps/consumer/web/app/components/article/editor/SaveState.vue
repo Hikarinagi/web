@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { AlertCircle, Check, PencilLine } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { TRANSITION_FAST } from '~/lib/motion'
@@ -34,7 +35,7 @@
         :exit="{ opacity: 0, scale: 0.7 }"
         :transition="TRANSITION_FAST"
       >
-        <Spinner :size="14" :label="null" />
+        <Spinner size="sm" aria-hidden="true" />
       </motion.span>
       <motion.span
         v-else-if="state === 'error'"

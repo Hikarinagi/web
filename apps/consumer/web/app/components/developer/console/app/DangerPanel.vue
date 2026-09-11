@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import { AlertTriangle } from '@lucide/vue'
 
@@ -55,7 +56,8 @@
 </script>
 
 <template>
-  <CardPanel title="危险操作" :icon="AlertTriangle">
+  <Panel title="危险操作">
+    <template #icon><AlertTriangle /></template>
     <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
       <div class="flex items-center justify-between gap-4 py-3">
         <span class="text-sm font-medium text-color">
@@ -74,5 +76,5 @@
         <Button label="删除" severity="danger" :loading="busy" @click="confirmRemove" />
       </div>
     </div>
-  </CardPanel>
+  </Panel>
 </template>

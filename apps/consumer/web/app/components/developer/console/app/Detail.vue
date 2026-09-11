@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
 
@@ -37,7 +38,7 @@
       </div>
     </div>
 
-    <CardPanel title="应用设置">
+    <Panel title="应用设置">
       <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
         <DeveloperConsoleAppCredentialsPanel :app :oauth @rotated="onRotated" />
         <DeveloperConsoleAppProfilePanel :app @changed="emit('changed')" />
@@ -45,7 +46,7 @@
         <DeveloperConsoleAppScopesPanel :app @changed="emit('changed')" />
         <DeveloperConsoleAppRedirectPanel :app @changed="emit('changed')" />
       </div>
-    </CardPanel>
+    </Panel>
 
     <DeveloperConsoleAppDangerPanel :app @changed="emit('changed')" />
 

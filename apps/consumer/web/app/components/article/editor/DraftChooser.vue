@@ -1,12 +1,9 @@
 <script setup lang="ts">
-  import { breakpointsTailwind } from '@vueuse/core'
+  import { Button, Dialog, Stack } from '@hina-ui/vue'
 
   defineOptions({ name: 'ArticleEditorDraftChooser' })
 
   const emit = defineEmits<{ restore: [id: number] }>()
-
-  const breakpoints = useBreakpoints(breakpointsTailwind)
-  const isMobile = breakpoints.smaller('md')
 
   const { data, pending } = useHikariApiData('/api/v3/user/me/drafts', {
     query: { type: 'article', page: 1, page_size: 20 },
@@ -35,36 +32,22 @@
 </script>
 
 <template>
-  <Dialog
-    v-if="!isMobile"
-    v-model:visible="visible"
-    modal
-    header="从上次中断的地方继续"
-    :draggable="false"
-    :style="{ width: '34rem' }"
-  >
-    <ArticleEditorDraftChooserPanel
-      :drafts="drafts"
-      :selected-id="selectedId"
-      @select="selectedId = $event"
-      @confirm="confirm"
-      @cancel="visible = false"
-    />
-  </Dialog>
+  <Dialog v-model:open="visible" title="从上次中断的地方继续" size="lg">
+    <template #content>
+      <Stack gap="xs">
+        <ArticleEditorDraftChooserItem
+          v-for="draft in drafts"
+          :key="draft.id"
+          :draft="draft"
+          :selected="draft.id === selectedId"
+          @select="selectedId = draft.id"
+        />
+      </Stack>
+    </template>
 
-  <Drawer
-    v-else
-    v-model:visible="visible"
-    position="bottom"
-    header="从上次中断的地方继续"
-    :pt="{ root: { class: 'app-mobile-sheet h-auto! max-h-[82dvh]!' } }"
-  >
-    <ArticleEditorDraftChooserPanel
-      :drafts="drafts"
-      :selected-id="selectedId"
-      @select="selectedId = $event"
-      @confirm="confirm"
-      @cancel="visible = false"
-    />
-  </Drawer>
+    <template #footer>
+      <Button variant="ghost" tone="neutral" @click="visible = false">取消</Button>
+      <Button :disabled="selectedId === null" @click="confirm">确定</Button>
+    </template>
+  </Dialog>
 </template>

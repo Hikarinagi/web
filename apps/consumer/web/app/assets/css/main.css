@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
+@import '@hina-ui/vue/styles/tokens.css';
 @import './theme.css';
 @import './hikari-content.css';
 @import './scrollbar.css';

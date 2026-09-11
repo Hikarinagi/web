@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { useComposer } from '../composables/useComposer'
   import { usePostComposerDialog } from '../composables/usePostComposerDialog'
 
@@ -96,7 +97,7 @@
     </div>
 
     <div v-if="loading" class="grid h-40 place-items-center">
-      <Spinner :size="32" />
+      <Spinner size="lg" />
     </div>
     <ScrollArea v-show="!loading" class="max-h-[calc(80vh-6rem)]" shadow="none">
       <div class="flex items-start gap-3 px-4 py-4">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import type { SystemMessageItem } from '~/features/notifications/notifications'
 
   defineProps<{ items: SystemMessageItem[]; loading?: boolean }>()
@@ -13,7 +14,7 @@
     </div>
 
     <div v-if="loading" class="flex justify-center py-8">
-      <Spinner :size="28" />
+      <Spinner size="lg" />
     </div>
     <ScrollArea v-else-if="items.length" class="-mx-2 max-h-96">
       <div class="flex flex-col" @click="emit('close')">

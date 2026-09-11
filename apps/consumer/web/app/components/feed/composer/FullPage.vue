@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { motion } from 'motion-v'
   import { useComposer } from './composables/useComposer'
   import { TRANSITION } from '~/lib/motion'
@@ -105,7 +106,7 @@
     </div>
 
     <div v-if="loading" class="mx-auto flex w-full max-w-2xl flex-1 items-center justify-center">
-      <Spinner :size="32" />
+      <Spinner size="lg" />
     </div>
     <div v-show="!loading" class="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-y-auto">
       <div class="flex items-start gap-3 px-4 py-4">

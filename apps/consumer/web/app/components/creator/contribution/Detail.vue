@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { ClipboardCheck, FileDiff, History, Layers, Pencil, X } from '@lucide/vue'
@@ -124,17 +125,18 @@
       </template>
     </Card>
 
-    <CardPanel title="变更内容" :icon="FileDiff" :count="payload.length">
+    <Panel title="变更内容" :count="payload.length">
+      <template #icon><FileDiff /></template>
       <CreatorChangesetView :payload="payload" :resource-type="changeRequest.resource_type" />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel
+    <Panel
       v-if="batchMembers?.length"
       title="同批提交"
-      :icon="Layers"
       :count="batchMembers.length"
       description="同一次提交捆绑的变更请求，审核裁决会应用于整批。"
     >
+      <template #icon><Layers /></template>
       <div class="flex flex-col">
         <NuxtLink
           v-for="member in batchMembers"
@@ -156,24 +158,26 @@
           </span>
         </NuxtLink>
       </div>
-    </CardPanel>
+    </Panel>
 
-    <CardPanel v-if="canReview" title="审核" :icon="ClipboardCheck">
+    <Panel v-if="canReview" title="审核">
+      <template #icon><ClipboardCheck /></template>
       <CreatorReviewActions
         :change-request-id="changeRequest.id"
         :batch-id="changeRequest.batch_id"
         :batch-pending-count="pendingBatchCount"
         @reviewed="emit('reviewed')"
       />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel title="时间线" :icon="History">
+    <Panel title="时间线">
+      <template #icon><History /></template>
       <CreatorContributionTimeline
         v-if="changeRequest.events.length"
         :events="changeRequest.events"
         :resource-type="changeRequest.resource_type"
       />
       <CreatorEmpty v-else text="暂无记录" />
-    </CardPanel>
+    </Panel>
   </div>
 </template>

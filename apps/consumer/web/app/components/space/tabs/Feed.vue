@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { Activity } from '@lucide/vue'
   import type { BackendFeedItem, FeedResponse } from '~/features/feed/feed'
   import { useSpaceFeed } from '~/features/space/useSpaceFeed'
@@ -32,7 +33,7 @@
     </div>
     <div ref="sentinel" class="h-px" />
     <div v-if="loading" class="flex justify-center py-6">
-      <Spinner :size="28" />
+      <Spinner size="lg" />
     </div>
   </div>
   <SpaceEmptyState

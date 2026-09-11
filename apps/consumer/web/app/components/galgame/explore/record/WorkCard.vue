@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Check, CalendarDays } from '@lucide/vue'
+  import { Card, Center, Inline, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { CalendarDays, Check } from '@lucide/vue'
   import type { GalgameSummary } from '~/features/galgame/explore'
   import { producerText, titleOf, yearText } from '~/features/galgame/explore'
   import { cn } from '~/utils/cn'
@@ -18,62 +19,54 @@
 </script>
 
 <template>
-  <Button
-    unstyled
+  <Card
+    as="button"
     type="button"
+    :padded="false"
     :aria-label="`选择 ${title}`"
+    :aria-pressed="selected"
     :class="
       cn(
-        'group flex w-full items-center gap-3 rounded-lg border p-2.5 text-left transition',
-        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-        selected
-          ? 'border-primary bg-primary-50/70 dark:bg-primary-950/30'
-          : 'border-surface-200 bg-surface-0 hover:border-surface-300 hover:bg-surface-50 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700 dark:hover:bg-surface-800',
+        'hn-state-layer w-full hn-interactive p-2.5 text-start hn-press-lg',
+        selected && 'border-accent bg-accent-soft',
       )
     "
     @click="emit('select', item)"
   >
-    <div
-      class="h-18 w-13.5 shrink-0 overflow-hidden rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-800"
-    >
+    <Ripple />
+    <Inline gap="sm" align="center" class="min-w-0">
       <HikariImage
         :src="cover"
         :alt="title"
-        class="size-full"
+        class="h-18 w-13.5 shrink-0 overflow-hidden rounded-md border border-line bg-inset"
         image-class="size-full object-cover object-top"
         :processing="{ width: 160, height: 216, fit: 'cover', quality: 80 }"
         :lazy="true"
         :skeleton="false"
       />
-    </div>
 
-    <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <span
-        class="truncate text-[15px] font-semibold text-surface-900 transition-colors group-hover:text-primary dark:text-surface-100"
+      <Stack gap="xs" class="min-w-0 flex-1">
+        <Text as="span" weight="semibold" truncate>{{ title }}</Text>
+        <Text as="span" size="xs" weight="medium" tone="muted" truncate>
+          {{ producerText(item) }}
+        </Text>
+        <Inline as="span" gap="xs" align="center">
+          <CalendarDays class="size-3 text-faint" aria-hidden="true" />
+          <Text as="span" size="xs" tone="faint">{{ yearText(item) }}</Text>
+        </Inline>
+      </Stack>
+
+      <Center
+        aria-hidden="true"
+        :class="
+          cn(
+            'size-7 shrink-0 rounded-full border',
+            selected ? 'border-accent bg-accent text-accent-on' : 'border-line text-faint',
+          )
+        "
       >
-        {{ title }}
-      </span>
-      <span class="truncate text-xs font-medium text-surface-500 dark:text-surface-400">
-        {{ producerText(item) }}
-      </span>
-      <span class="inline-flex items-center gap-1 text-[11px] text-surface-400">
-        <CalendarDays class="size-3" />
-        {{ yearText(item) }}
-      </span>
-    </div>
-
-    <span
-      :class="
-        cn(
-          'flex size-7 shrink-0 items-center justify-center rounded-full border transition',
-          selected
-            ? 'border-primary bg-primary text-primary-contrast'
-            : 'border-surface-200 text-surface-300 group-hover:border-primary group-hover:text-primary dark:border-surface-700 dark:text-surface-500',
-        )
-      "
-      aria-hidden="true"
-    >
-      <Check class="size-4" />
-    </span>
-  </Button>
+        <Check class="size-4" />
+      </Center>
+    </Inline>
+  </Card>
 </template>

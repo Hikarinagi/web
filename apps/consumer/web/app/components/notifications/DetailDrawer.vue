@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
   import type { SystemMessageDetail } from '~/features/notifications/notifications'
@@ -78,7 +79,7 @@
     </template>
 
     <div v-if="loading" class="flex justify-center py-12">
-      <Spinner :size="28" />
+      <Spinner size="lg" />
     </div>
     <template v-else-if="detail">
       <HikariContent

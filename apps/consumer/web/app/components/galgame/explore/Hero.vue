@@ -104,7 +104,7 @@
         </h1>
         <Button
           login-required
-          label="记录进度"
+          label="记录状态"
           icon-pos="right"
           size="small"
           class="mt-3"

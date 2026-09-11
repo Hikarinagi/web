@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import { ChevronDown } from '@lucide/vue'
   import type { DmEmojiSet, ThreadMessage } from '~/features/messages/dm'
   import { dayLabel, isContinuation, showsMeta, startsDay } from '~/features/messages/dm'
@@ -28,7 +29,7 @@
 <template>
   <div class="relative min-h-0 flex-1">
     <div v-if="pending" class="absolute inset-0 flex items-center justify-center text-muted-color">
-      <Spinner :size="32" />
+      <Spinner size="lg" />
     </div>
     <div
       v-else
@@ -66,7 +67,7 @@
       class="pointer-events-none absolute inset-x-0 top-2 flex justify-center"
     >
       <div class="rounded-full bg-surface-0/90 p-1.5 shadow-sm dark:bg-surface-800/90">
-        <Spinner :size="18" />
+        <Spinner />
       </div>
     </div>
 
