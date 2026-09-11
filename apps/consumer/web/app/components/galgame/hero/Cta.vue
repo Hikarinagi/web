@@ -87,6 +87,7 @@
       :picker-title="pickerTitle"
     />
     <ShareButton :to="`/galgames/${galgameId}`" tooltip="分享" severity="secondary" outlined />
+    <WorkEditButton resource-type="galgame" :resource-id="galgameId" />
     <GalgameRateDialog
       v-model:visible="dialogOpen"
       :galgame-id="galgameId"

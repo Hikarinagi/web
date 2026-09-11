@@ -6,7 +6,8 @@
 </script>
 
 <template>
-  <div class="items-stretch justify-center gap-2.5 lg:justify-start">
+  <div class="flex flex-wrap items-stretch justify-center gap-2.5 lg:justify-start">
     <ShareButton :to="`/manga-volumes/${volume.id}`" tooltip="分享" severity="secondary" outlined />
+    <WorkEditButton resource-type="manga-volume" :resource-id="volume.id" />
   </div>
 </template>

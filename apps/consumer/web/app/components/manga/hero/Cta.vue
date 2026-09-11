@@ -113,6 +113,7 @@
       :picker-title="pickerTitle"
     />
     <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" severity="secondary" outlined />
+    <WorkEditButton resource-type="manga" :resource-id="mangaId" />
 
     <MangaRateDialog
       v-model:visible="dialogOpen"

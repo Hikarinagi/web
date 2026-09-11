@@ -1,27 +1,27 @@
 <script setup lang="ts">
   import { SquarePen } from '@lucide/vue'
+  import { getRevisionEditPath, type WorkResourceSlug } from '~/features/revision/resources'
 
-  defineProps<{
-    resourceType: 'galgame' | 'light-novel' | 'light-novel-volume'
+  const props = defineProps<{
+    resourceType: WorkResourceSlug
     resourceId: number
   }>()
 
-  const auth = useAuthStore()
+  const to = computed(() => getRevisionEditPath(props.resourceType, props.resourceId))
 </script>
 
 <template>
   <Button
-    v-if="auth.isAuthenticated"
+    v-tooltip.bottom="'修订此条目'"
     as="router-link"
-    :to="`/create/edit/${resourceType}/${resourceId}`"
-    label="编辑此页"
+    :to="to"
+    target="_blank"
+    aria-label="修订此条目"
     severity="secondary"
     outlined
-    size="small"
-    fluid
   >
     <template #icon>
-      <SquarePen :size="15" />
+      <SquarePen class="size-4" />
     </template>
   </Button>
 </template>

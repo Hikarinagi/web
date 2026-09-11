@@ -80,6 +80,8 @@
       :available="volume.online_reading_available"
     />
 
+    <WorkEditButton resource-type="light-novel-volume" :resource-id="volume.id" />
+
     <LightNovelVolumeRateDialog
       v-model:visible="dialogOpen"
       :rate="rateCtl.rate.value"

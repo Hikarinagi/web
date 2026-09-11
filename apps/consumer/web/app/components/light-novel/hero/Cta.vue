@@ -155,6 +155,7 @@
       severity="secondary"
       outlined
     />
+    <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" />
 
     <LightNovelRateDialog
       v-model:visible="dialogOpen"
