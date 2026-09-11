@@ -6,7 +6,7 @@
   defineOptions({ name: 'MediaLibraryTileMenu' })
 
   const props = defineProps<{
-    media: MediaValue
+    media: MediaValue | null
     targets: MediaValue[]
     selected: boolean
   }>()
@@ -26,7 +26,7 @@
   <ContextMenu label="图片操作">
     <slot />
 
-    <template #content>
+    <template v-if="media" #content>
       <ContextMenuItem @select="emit('toggle', media)">
         <template #icon>
           <X v-if="selected" />
