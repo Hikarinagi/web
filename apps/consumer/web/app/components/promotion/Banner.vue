@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IconButton, Tag } from '@hina-ui/vue'
   import { X } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { PromoBanner } from '~/features/promotion/placement'
@@ -11,9 +12,6 @@
 
   const { isDismissed, dismiss } = useBannerDismiss()
   const visible = computed(() => !isDismissed(props.banner.id))
-
-  const CLOSE_BTN =
-    'grid size-7 place-items-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/65'
 
   const aspectStyle = computed(() => {
     const { width, height } = props.banner.image
@@ -68,16 +66,19 @@
           />
         </NuxtLink>
 
-        <Tag
-          value="广告"
-          class="pointer-events-none absolute bottom-2 left-2 z-1 bg-black/55! text-white!"
-        />
+        <Tag class="pointer-events-none absolute bottom-2 left-2 z-1">广告</Tag>
 
-        <div class="absolute top-2 right-2 z-1">
-          <Button unstyled :class="CLOSE_BTN" aria-label="关闭广告" @click="close">
-            <template #icon><X :size="14" /></template>
-          </Button>
-        </div>
+        <IconButton
+          label="关闭广告"
+          variant="solid"
+          tone="neutral"
+          size="sm"
+          pill
+          class="absolute top-2 right-2 z-1"
+          @click="close"
+        >
+          <X />
+        </IconButton>
       </div>
     </motion.div>
   </AnimatePresence>

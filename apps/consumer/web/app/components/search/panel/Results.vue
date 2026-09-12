@@ -90,7 +90,6 @@
       v-if="search.hits.length"
       :id="searchOptionId(actionIndex)"
       :to="searchHref(search.query)"
-      as-button
       replace
       role="option"
       :aria-selected="actionIndex === search.activeIndex"

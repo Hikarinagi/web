@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline } from '@hina-ui/vue'
   import { ArrowRight, Pencil, Star } from '@lucide/vue'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
@@ -40,7 +41,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-stretch gap-3">
+  <Inline>
     <WorkStatusMenu
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
@@ -51,33 +52,24 @@
       @privacy="rateCtl.setPrivacy"
     />
 
-    <Button
-      v-if="rateMode === 'chip'"
-      severity="secondary"
-      outlined
-      class="border-surface-200! bg-surface-0! dark:border-surface-700! dark:bg-surface-900!"
-      @click="dialogOpen = true"
-    >
-      <span class="inline-flex items-center gap-1.5">
-        <Star class="size-4 fill-amber-500 text-amber-500" />
-        <span class="text-[15px] font-semibold text-color">
-          {{ rateCtl.score.value?.toFixed(1) }}
-        </span>
-        <Pencil class="size-3 text-muted-color" />
-      </span>
+    <Button v-if="rateMode === 'chip'" variant="outline" tone="neutral" @click="dialogOpen = true">
+      <template #icon>
+        <Star class="fill-amber-400 text-amber-400" />
+      </template>
+      {{ rateCtl.score.value?.toFixed(1) }}
+      <template #trailing>
+        <Pencil class="text-muted" />
+      </template>
     </Button>
-    <Button
+    <AuthGateButton
       v-else-if="rateMode === 'prompt'"
-      login-required
-      severity="secondary"
-      outlined
-      label="写个评分"
-      icon-pos="right"
-      class="border-surface-200! text-surface-700! dark:border-surface-700! dark:text-surface-300!"
+      variant="outline"
+      tone="neutral"
       @click="dialogOpen = true"
     >
-      <template #icon><ArrowRight class="size-3.5" /></template>
-    </Button>
+      写个评分
+      <template #trailing><ArrowRight /></template>
+    </AuthGateButton>
 
     <FavoriteToggle
       :id="galgameId"
@@ -86,7 +78,7 @@
       variant="icon"
       :picker-title="pickerTitle"
     />
-    <ShareButton :to="`/galgames/${galgameId}`" tooltip="分享" severity="secondary" outlined />
+    <ShareButton :to="`/galgames/${galgameId}`" tooltip="分享" variant="outline" />
     <WorkEditButton resource-type="galgame" :resource-id="galgameId" />
     <GalgameRateDialog
       v-model:visible="dialogOpen"
@@ -96,5 +88,5 @@
       :upsert="rateCtl.upsert"
       :remove="rateCtl.remove"
     />
-  </div>
+  </Inline>
 </template>

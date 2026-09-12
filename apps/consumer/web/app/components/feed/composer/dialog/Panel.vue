@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
+  import { Button, Center, Flex, Inline, Spinner, Stack } from '@hina-ui/vue'
   import { useComposer } from '../composables/useComposer'
   import { usePostComposerDialog } from '../composables/usePostComposerDialog'
 
@@ -77,30 +77,21 @@
 </script>
 
 <template>
-  <div class="flex max-h-[80vh] flex-col">
-    <div class="flex shrink-0 items-center justify-between border-b border-surface px-3 py-2.5">
-      <Button
-        label="取消"
-        text
-        severity="secondary"
-        size="small"
-        :disabled="submitting"
-        @click="close"
-      />
-      <Button
-        :label="submitLabel"
-        size="small"
-        :loading="submitting"
-        :disabled="!canPublish"
-        @click="onPublish"
-      />
-    </div>
+  <Stack gap="none" class="max-h-[80vh]">
+    <Inline justify="between" class="shrink-0 border-b border-line px-3 py-2.5">
+      <Button variant="ghost" tone="neutral" size="sm" :disabled="submitting" @click="close">
+        取消
+      </Button>
+      <Button size="sm" :loading="submitting" :disabled="!canPublish" @click="onPublish">
+        {{ submitLabel }}
+      </Button>
+    </Inline>
 
-    <div v-if="loading" class="grid h-40 place-items-center">
+    <Center v-if="loading" class="h-40">
       <Spinner size="lg" />
-    </div>
+    </Center>
     <ScrollArea v-show="!loading" class="max-h-[calc(80vh-6rem)]" shadow="none">
-      <div class="flex items-start gap-3 px-4 py-4">
+      <Flex gap="md" align="start" class="px-4 py-4">
         <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
         <FeedComposerBody
           v-model:title="title"
@@ -109,7 +100,7 @@
           fullscreen
           :title-over-limit="titleOverLimit"
         />
-      </div>
+      </Flex>
 
       <FeedComposerCovers
         :show="covers.length > 0"
@@ -144,7 +135,7 @@
       />
     </ScrollArea>
 
-    <div class="shrink-0">
+    <Stack gap="none" class="shrink-0">
       <FeedComposerToolbar
         :show="true"
         hide-publish
@@ -165,8 +156,8 @@
         @poll-click="openPoll"
         @entity-select="openEntityCard"
       />
-    </div>
+    </Stack>
 
     <HikariEditorOverlayHost :plugins="plugins" />
-  </div>
+  </Stack>
 </template>

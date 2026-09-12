@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
+  import { Button, Center, Inline, Spinner, Stack, Text, Time } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import { breakpointsTailwind } from '@vueuse/core'
   import type { SystemMessageDetail } from '~/features/notifications/notifications'
   import { useNotificationDrawer } from '~/features/notifications/useDrawer'
   import { notificationTarget } from '~/features/notifications/nav'
-  import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'NotificationsDetailDrawer' })
 
@@ -60,7 +60,7 @@
     }"
   >
     <template #header>
-      <div class="flex min-w-0 flex-1 items-center gap-3 overflow-hidden">
+      <Inline gap="md" class="min-w-0 flex-1 overflow-hidden">
         <NotificationsActorAvatars
           v-if="item"
           :actor="item.actor"
@@ -68,19 +68,19 @@
           :template-key="item.template_key"
           :type="item.type"
         />
-        <div class="min-w-0">
-          <p class="truncate text-sm text-color">
+        <Stack gap="none" class="min-w-0">
+          <Text as="p" size="sm" truncate>
             <UserName v-if="item?.actor" :user="item.actor" :handle="false" class="font-medium" />
             {{ item?.title }}
-          </p>
-          <p v-if="item" class="text-xs text-muted-color">{{ timeFromNow(item.sent_at) }}</p>
-        </div>
-      </div>
+          </Text>
+          <Time v-if="item" :value="item.sent_at" format="relative" class="text-xs text-muted" />
+        </Stack>
+      </Inline>
     </template>
 
-    <div v-if="loading" class="flex justify-center py-12">
+    <Center v-if="loading" class="py-12">
       <Spinner size="lg" />
-    </div>
+    </Center>
     <template v-else-if="detail">
       <HikariContent
         v-if="detail.content_json && hasBody"
@@ -91,26 +91,28 @@
       />
       <Button
         v-if="navWork"
-        as="router-link"
+        :as="NuxtLink"
         :to="navWork"
         :target="navWork.startsWith('/create') ? '_blank' : undefined"
-        size="small"
-        severity="secondary"
-        class="gap-1"
+        variant="soft"
+        tone="neutral"
+        size="sm"
         @click="close"
       >
         前往
-        <ArrowRight class="size-4" aria-hidden="true" />
+        <template #trailing><ArrowRight aria-hidden="true" /></template>
       </Button>
       <Button
         v-else-if="profileTo"
-        as="router-link"
+        :as="NuxtLink"
         :to="profileTo"
-        label="查看主页"
-        size="small"
-        severity="secondary"
+        variant="soft"
+        tone="neutral"
+        size="sm"
         @click="close"
-      />
+      >
+        查看主页
+      </Button>
     </template>
   </Drawer>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
+  import { Button, Card, Center, Spinner, Stack, Tag } from '@hina-ui/vue'
   import { ChevronDown } from '@lucide/vue'
   import type { DmEmojiSet, ThreadMessage } from '~/features/messages/dm'
   import { dayLabel, isContinuation, showsMeta, startsDay } from '~/features/messages/dm'
@@ -27,14 +27,15 @@
 </script>
 
 <template>
-  <div class="relative min-h-0 flex-1">
-    <div v-if="pending" class="absolute inset-0 flex items-center justify-center text-muted-color">
+  <Stack gap="none" class="relative min-h-0 flex-1">
+    <Center v-if="pending" class="absolute inset-0 text-muted">
       <Spinner size="lg" />
-    </div>
-    <div
+    </Center>
+    <Stack
       v-else
       ref="scroller"
-      class="dm-thread-scroll flex h-full flex-col-reverse gap-1 overflow-y-auto overscroll-contain px-4 py-3"
+      gap="none"
+      class="dm-thread-scroll h-full flex-col-reverse gap-1 overflow-y-auto overscroll-contain px-4 py-3"
       @scroll="onScroll"
     >
       <template v-for="(m, i) in ordered" :key="m.id">
@@ -45,31 +46,22 @@
           :class="{ 'mt-2.5': !isContinuation(ordered, i) && !startsDay(ordered, i) }"
           @retry="emit('retry', m)"
         />
-        <div v-if="startsDay(ordered, i)" class="flex justify-center py-1">
-          <span
-            class="rounded-full bg-surface-100 px-2.5 py-0.5 text-[11px] text-muted-color dark:bg-surface-800"
-          >
-            {{ dayLabel(m.sent_at) }}
-          </span>
-        </div>
+        <Center v-if="startsDay(ordered, i)" class="py-1">
+          <Tag size="sm" pill>{{ dayLabel(m.sent_at) }}</Tag>
+        </Center>
       </template>
 
-      <div
-        v-if="!messages.length"
-        class="flex flex-1 items-center justify-center text-[13px] text-muted-color"
-      >
-        给TA发点什么
-      </div>
-    </div>
+      <Center v-if="!messages.length" class="flex-1 text-xs text-muted">给TA发点什么</Center>
+    </Stack>
 
-    <div
-      v-if="loadingOlder"
-      class="pointer-events-none absolute inset-x-0 top-2 flex justify-center"
-    >
-      <div class="rounded-full bg-surface-0/90 p-1.5 shadow-sm dark:bg-surface-800/90">
+    <Center v-if="loadingOlder" class="pointer-events-none absolute inset-x-0 top-2">
+      <Card
+        :padded="false"
+        class="flex items-center justify-center rounded-full bg-surface/90 p-1.5"
+      >
         <Spinner />
-      </div>
-    </div>
+      </Card>
+    </Center>
 
     <Transition
       enter-active-class="transition duration-150"
@@ -79,24 +71,21 @@
     >
       <Button
         v-if="newCount > 0"
-        rounded
-        size="small"
+        pill
+        size="sm"
         class="absolute bottom-3 left-1/2 -translate-x-1/2 shadow-md"
         @click="toBottom(true)"
       >
-        <template #icon><ChevronDown class="size-4" /></template>
+        <template #icon><ChevronDown /></template>
         {{ newCount }} 条新消息
       </Button>
     </Transition>
-  </div>
+  </Stack>
 </template>
 
 <style scoped>
   .dm-thread-scroll {
     scrollbar-width: thin;
-    scrollbar-color: var(--p-surface-300) transparent;
-  }
-  :global(.dark) .dm-thread-scroll {
-    scrollbar-color: var(--p-surface-600) transparent;
+    scrollbar-color: var(--hn-border-strong) transparent;
   }
 </style>

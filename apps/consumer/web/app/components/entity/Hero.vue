@@ -91,7 +91,7 @@
             :src="image?.src"
             :alt="title"
             class="rounded-md bg-surface-950/5 dark:bg-surface-0/5"
-            :style="{ aspectRatio: coverLayout.aspectRatio }"
+            :ratio="coverLayout.ratio"
             image-class="object-cover object-top"
             :processing="coverLayout.processing"
             :preload="{ fetchPriority: 'high' }"
@@ -163,7 +163,7 @@
         <p v-if="meta" class="text-sm text-surface-600 dark:text-surface-300">{{ meta }}</p>
 
         <div class="flex flex-wrap items-stretch justify-center gap-3 lg:justify-start">
-          <ShareButton severity="secondary" outlined :tooltip="`分享${typeLabel}`" />
+          <ShareButton variant="outline" :tooltip="`分享${typeLabel}`" />
         </div>
       </div>
     </div>

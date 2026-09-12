@@ -1,16 +1,22 @@
 <script setup lang="ts">
+  import { IconButton, Inline, SegmentedControl } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { ChevronUp, Trash2 } from '@lucide/vue'
   import { TRANSITION } from '~/lib/motion'
+  import { COMPOSER_KIND_OPTIONS } from './composables/useComposer'
 
   defineOptions({ name: 'FeedComposerControls' })
 
   defineProps<{ expanded: boolean; hasContent: boolean }>()
-  defineEmits<{ clear: []; collapse: []; 'switch-article': [] }>()
+  const emit = defineEmits<{ clear: []; collapse: []; 'switch-article': [] }>()
+
+  function onKind(value: string | number | undefined) {
+    if (value === 'article') emit('switch-article')
+  }
 </script>
 
 <template>
-  <div class="flex min-h-9 shrink-0 items-center gap-1">
+  <Inline gap="xs" :wrap="false" class="min-h-9 shrink-0">
     <AnimatePresence>
       <motion.div
         v-if="expanded && hasContent"
@@ -21,17 +27,9 @@
         :transition="TRANSITION"
         class="overflow-hidden"
       >
-        <Button
-          v-tooltip.top="'清空草稿'"
-          unstyled
-          aria-label="清空草稿"
-          class="grid size-8 cursor-pointer place-items-center rounded-md text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
-          @click.stop="$emit('clear')"
-        >
-          <template #icon>
-            <Trash2 :size="17" />
-          </template>
-        </Button>
+        <IconButton label="清空草稿" tone="danger" size="sm" @click.stop="emit('clear')">
+          <Trash2 />
+        </IconButton>
       </motion.div>
     </AnimatePresence>
 
@@ -45,34 +43,20 @@
         :transition="TRANSITION"
         class="overflow-hidden"
       >
-        <Button
-          v-tooltip.top="'收起'"
-          unstyled
-          aria-label="收起"
-          class="grid size-8 cursor-pointer place-items-center rounded-md text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"
-          @click.stop="$emit('collapse')"
-        >
-          <template #icon>
-            <ChevronUp :size="18" />
-          </template>
-        </Button>
+        <IconButton label="收起" size="sm" @click.stop="emit('collapse')">
+          <ChevronUp />
+        </IconButton>
       </motion.div>
     </AnimatePresence>
 
-    <div class="flex items-center gap-0.5 rounded-lg bg-surface-100 p-0.5 dark:bg-surface-800">
-      <span
-        class="rounded-md bg-surface-0 px-3 py-1 text-xs font-bold text-color dark:bg-surface-900"
-      >
-        图文
-      </span>
-      <Button
-        unstyled
-        class="cursor-pointer rounded-md px-3 py-1 text-xs font-medium text-muted-color transition-colors hover:text-color"
-        @mousedown.prevent
-        @click.stop="$emit('switch-article')"
-      >
-        文章
-      </Button>
-    </div>
-  </div>
+    <SegmentedControl
+      model-value="post"
+      :options="COMPOSER_KIND_OPTIONS"
+      size="sm"
+      class="shrink-0"
+      @mousedown.prevent
+      @click.stop
+      @update:model-value="onKind"
+    />
+  </Inline>
 </template>

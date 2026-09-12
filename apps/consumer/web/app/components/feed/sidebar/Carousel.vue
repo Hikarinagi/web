@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import { Button, Card, Center, Flex, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import emblaCarouselVue from 'embla-carousel-vue'
+  import type { ComponentPublicInstance } from 'vue'
   import type { FeedSidebarData } from '~~/server/features/feed/sidebar'
 
   const props = defineProps<{ carousel: NonNullable<FeedSidebarData['carousel']> }>()
@@ -10,6 +12,9 @@
   const dotsShown = computed(() => props.carousel.show_dots && multi.value)
 
   const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true, align: 'center' })
+  function setViewport(el: Element | ComponentPublicInstance | null) {
+    emblaRef.value = unrefElement(el as ComponentPublicInstance | null) as HTMLElement | undefined
+  }
   const selected = ref(0)
 
   function sync() {
@@ -23,8 +28,8 @@
     api.on('select', sync).on('reInit', sync)
   })
 
-  const root = ref<HTMLElement>()
-  const hovered = useElementHover(root)
+  const root = ref<ComponentPublicInstance>()
+  const hovered = useElementHover(() => unrefElement(root))
   const reduced = usePreferredReducedMotion()
   const { pause, resume } = useIntervalFn(
     () => emblaApi.value?.scrollNext(),
@@ -39,14 +44,14 @@
     }
   })
 
-  const navBtn =
-    'pointer-events-auto grid size-7 place-items-center rounded-full bg-white/85 text-surface-700 shadow-md transition hover:bg-white dark:bg-surface-800/85 dark:text-surface-100 dark:hover:bg-surface-700'
+  const navBtn = 'pointer-events-auto size-7 bg-surface/85 shadow-md'
+  const navShell = 'pointer-events-none absolute inset-y-0 transition-opacity duration-200'
 </script>
 
 <template>
-  <div ref="root" class="relative">
-    <div ref="emblaRef" class="aspect-[16/9] overflow-hidden rounded-2xl border border-surface">
-      <div class="flex h-full">
+  <Stack ref="root" gap="none" class="relative">
+    <Card :ref="setViewport" :padded="false" class="aspect-video rounded-2xl">
+      <Flex class="h-full">
         <NuxtLink
           v-for="item in items"
           :key="item.id"
@@ -62,51 +67,72 @@
             :processing="{ w: 720, q: 85 }"
             :skeleton="false"
           />
-          <div
-            class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent pt-10 pb-2.5 pl-3"
-            :class="dotsShown ? 'pr-12' : 'pr-3'"
+          <Stack
+            gap="none"
+            :class="
+              cn(
+                'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent pt-10 pb-2.5 pl-3',
+                dotsShown ? 'pr-12' : 'pr-3',
+              )
+            "
           >
-            <p class="line-clamp-1 text-sm font-semibold text-white">{{ item.title }}</p>
-            <p v-if="item.description" class="line-clamp-1 text-xs text-white/85">
+            <Text size="sm" weight="semibold" class="line-clamp-1 text-white">
+              {{ item.title }}
+            </Text>
+            <Text v-if="item.description" size="xs" class="line-clamp-1 text-white/85">
               {{ item.description }}
-            </p>
-          </div>
+            </Text>
+          </Stack>
         </NuxtLink>
-      </div>
-    </div>
+      </Flex>
+    </Card>
 
     <template v-if="carousel.show_arrows && multi">
-      <div
-        class="pointer-events-none absolute inset-y-0 left-2 grid place-items-center transition-opacity duration-200"
-        :class="hovered ? 'opacity-100' : 'opacity-0'"
-      >
-        <Button unstyled aria-label="上一张" :class="navBtn" @click="emblaApi?.scrollPrev()">
-          <ChevronLeft :size="16" />
-        </Button>
-      </div>
-      <div
-        class="pointer-events-none absolute inset-y-0 right-2 grid place-items-center transition-opacity duration-200"
-        :class="hovered ? 'opacity-100' : 'opacity-0'"
-      >
-        <Button unstyled aria-label="下一张" :class="navBtn" @click="emblaApi?.scrollNext()">
-          <ChevronRight :size="16" />
-        </Button>
-      </div>
+      <Center :class="cn(navShell, 'left-2', hovered ? 'opacity-100' : 'opacity-0')">
+        <IconButton
+          label="上一张"
+          :tooltip="false"
+          size="sm"
+          pill
+          :class="navBtn"
+          @click="emblaApi?.scrollPrev()"
+        >
+          <ChevronLeft />
+        </IconButton>
+      </Center>
+      <Center :class="cn(navShell, 'right-2', hovered ? 'opacity-100' : 'opacity-0')">
+        <IconButton
+          label="下一张"
+          :tooltip="false"
+          size="sm"
+          pill
+          :class="navBtn"
+          @click="emblaApi?.scrollNext()"
+        >
+          <ChevronRight />
+        </IconButton>
+      </Center>
     </template>
 
-    <div
+    <Inline
       v-if="dotsShown"
-      class="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1.5"
+      gap="none"
+      class="pointer-events-none absolute right-3 bottom-3 gap-1.5"
     >
       <Button
         v-for="(item, i) in items"
         :key="item.id"
-        unstyled
+        variant="ghost"
+        tone="neutral"
         :aria-label="`第 ${i + 1} 张`"
-        class="pointer-events-auto size-1.5 cursor-pointer rounded-full shadow transition-colors"
-        :class="selected === i ? 'bg-white' : 'bg-white/50'"
+        :class="
+          cn(
+            'pointer-events-auto size-1.5 rounded-full p-0 shadow',
+            selected === i ? 'bg-white' : 'bg-white/50',
+          )
+        "
         @click="emblaApi?.scrollTo(i)"
       />
-    </div>
-  </div>
+    </Inline>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Tooltip } from '@hina-ui/vue'
   import type { AppPageData } from '~~/server/api/pages/app.get'
 
   defineOptions({ name: 'AppDownloadButtons' })
@@ -26,33 +27,36 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+  <Inline justify="center" class="lg:justify-start">
     <template v-for="platform in platforms" :key="platform.key">
       <Button
         v-if="platform.target && downloadable"
         as="a"
         :href="platform.target.url"
         download
-        :severity="platform.key === 'ios' ? 'secondary' : undefined"
-        :outlined="platform.key === 'ios'"
-        :label="`${platform.name} ${sizeLabel(platform.target.size)}`"
+        :variant="platform.key === 'ios' ? 'outline' : 'solid'"
+        :tone="platform.key === 'ios' ? 'neutral' : 'accent'"
       >
         <template #icon>
-          <Icon :name="platform.icon" class="size-4" />
+          <Icon :name="platform.icon" />
         </template>
+        {{ `${platform.name} ${sizeLabel(platform.target.size)}` }}
       </Button>
-      <span v-else v-tooltip.top="'敬请期待'" class="inline-flex">
-        <Button
-          disabled
-          :severity="platform.key === 'ios' ? 'secondary' : undefined"
-          :outlined="platform.key === 'ios'"
-          :label="platform.name"
-        >
-          <template #icon>
-            <Icon :name="platform.icon" class="size-4" />
-          </template>
-        </Button>
-      </span>
+
+      <Tooltip v-else content="敬请期待">
+        <span class="inline-flex">
+          <Button
+            disabled
+            :variant="platform.key === 'ios' ? 'outline' : 'solid'"
+            :tone="platform.key === 'ios' ? 'neutral' : 'accent'"
+          >
+            <template #icon>
+              <Icon :name="platform.icon" />
+            </template>
+            {{ platform.name }}
+          </Button>
+        </span>
+      </Tooltip>
     </template>
-  </div>
+  </Inline>
 </template>

@@ -79,7 +79,7 @@
     >
       <HikariImage
         :src="media.src"
-        alt=""
+        :alt="`已选图片 ${index + 1}`"
         preset="small"
         class="size-full"
         image-class="size-full object-cover"

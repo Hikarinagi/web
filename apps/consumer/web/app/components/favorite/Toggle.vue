@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { favoriteStateKey, type FavoriteEntityType } from '~/features/favorite/entity'
-  import FavoriteHeartIcon from '~/components/favorite/HeartIcon.vue'
+  import FavoriteStarIcon from '~/components/favorite/StarIcon.vue'
   import FavoritePickerOverlay from '~/components/favorite/picker/Overlay.vue'
 
   defineOptions({ name: 'FavoriteToggle', inheritAttrs: false })
@@ -21,34 +21,25 @@
 </script>
 
 <template>
-  <Button
+  <AuthGateButton
     v-if="variant === 'icon'"
-    v-tooltip.bottom="favorited ? '已收藏' : '收藏'"
     v-bind="$attrs"
-    login-required
-    severity="secondary"
-    outlined
-    :aria-label="favorited ? '已收藏' : '收藏'"
+    :label="favorited ? '已收藏' : '收藏'"
+    side="bottom"
+    variant="outline"
     @click="overlay?.open($event)"
   >
-    <template #icon>
-      <FavoriteHeartIcon :favorited="favorited" :variant="variant" />
-    </template>
-  </Button>
+    <FavoriteStarIcon :favorited="favorited" :variant="variant" />
+  </AuthGateButton>
 
-  <Button
+  <AuthGateButton
     v-else
     v-bind="$attrs"
-    login-required
-    text
-    severity="secondary"
-    :aria-label="favorited ? '已收藏' : '收藏'"
+    :label="favorited ? '已收藏' : '收藏'"
     @click="overlay?.open($event)"
   >
-    <template #icon>
-      <FavoriteHeartIcon :favorited="favorited" :variant="variant" />
-    </template>
-  </Button>
+    <FavoriteStarIcon :favorited="favorited" :variant="variant" />
+  </AuthGateButton>
 
   <FavoritePickerOverlay :id="id" ref="overlay" :type="type" :picker-title="pickerTitle" />
 </template>

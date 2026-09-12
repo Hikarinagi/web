@@ -6,17 +6,16 @@
 </script>
 
 <template>
-  <Button
-    :label="isFollowing ? '已关注' : '关注'"
-    :severity="isFollowing ? 'secondary' : undefined"
+  <AuthGateButton
+    :tone="isFollowing ? 'neutral' : 'accent'"
     :loading="toggling"
-    size="small"
-    rounded
-    login-required
+    size="sm"
+    pill
     @click="toggleFollow"
   >
-    <template v-if="!toggling" #icon>
-      <component :is="isFollowing ? UserCheck : UserPlus" class="size-4" />
+    <template #icon>
+      <component :is="isFollowing ? UserCheck : UserPlus" />
     </template>
-  </Button>
+    {{ isFollowing ? '已关注' : '关注' }}
+  </AuthGateButton>
 </template>

@@ -14,7 +14,6 @@
     fallbackImageClass?: string
     lazy?: boolean
     rootMargin?: string
-    skeletonClass?: string
     preset?: HikariImagePresetName
     processing?: HikariImageProcessing
     preload?: boolean | { fetchPriority: 'high' | 'low' | 'auto' }
@@ -40,7 +39,6 @@
     fallbackImageClass: 'object-contain',
     lazy: true,
     rootMargin: '200px 0px',
-    skeletonClass: '',
     preset: 'avatar',
     processing: undefined,
     preload: false,
@@ -50,8 +48,8 @@
 
   const attrs = useAttrs()
   const slots = useSlots()
-  const emit = defineEmits<{
-    error: [event: string | Event]
+  defineEmits<{
+    error: []
   }>()
 
   const resolvedImage = computed(() => props.image ?? props.user?.avatar?.src ?? undefined)
@@ -87,16 +85,11 @@
   )
   const imageAlt = computed(() => resolvedAriaLabel.value ?? '')
   const resolvedFallbackSrc = computed(() => props.fallbackSrc || defaultAvatarImage)
-  const skeletonShape = computed(() => (props.shape === 'circle' ? 'circle' : 'rectangle'))
   const cardUserId = computed(() => props.user?.id)
   const cardEnabled = computed(() => Boolean(props.card && cardUserId.value))
   const frame = computed(() => (props.decoration ? (props.user?.equipped_frame ?? null) : null))
   const FRAME_SCALE = 1.34
   const frameScale = computed(() => frame.value?.scale ?? FRAME_SCALE)
-
-  function handleImageError(event: string | Event) {
-    emit('error', event)
-  }
 </script>
 
 <template>
@@ -117,13 +110,11 @@
             :lazy="lazy"
             :root-margin="rootMargin"
             :skeleton="true"
-            :skeleton-shape="skeletonShape"
-            :skeleton-class="skeletonClass"
             :preset="preset"
             :processing="processing"
             :preload="preload"
             :class="cn('h-full w-full rounded-[inherit]', shape === 'circle' && 'rounded-full')"
-            @error="handleImageError"
+            @error="$emit('error')"
           />
         </template>
 

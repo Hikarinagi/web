@@ -6,7 +6,7 @@ export interface MediaDimensions {
 }
 
 export interface CoverMediaLayout {
-  aspectRatio: string
+  ratio: number
   width: string
   processing: HikariImageProcessingOptions
 }
@@ -21,7 +21,7 @@ export function getCoverMediaLayout(media: MediaDimensions | null): CoverMediaLa
   const min_width = Math.round(Math.max(118, Math.min(190, max_width * 0.72)))
 
   return {
-    aspectRatio: media?.width && media.height ? `${media.width} / ${media.height}` : '2 / 3',
+    ratio,
     width: `clamp(${min_width}px, ${getPreferredVw(ratio)}vw, ${max_width}px)`,
     processing: {
       width: Math.max(360, max_width * 2),

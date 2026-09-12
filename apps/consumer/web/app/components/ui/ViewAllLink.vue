@@ -11,7 +11,6 @@
   defineProps<{
     to: string
     iconClass?: ClassValue
-    asButton?: boolean
   }>()
 
   const attrs = useAttrs()
@@ -30,12 +29,8 @@
 </script>
 
 <template>
-  <NuxtLink v-if="!asButton" :to="to" v-bind="forwardedAttrs" :class="rootClass">
+  <NuxtLink :to="to" v-bind="forwardedAttrs" :class="rootClass">
     <slot>查看全部</slot>
     <ArrowRight :class="cn('size-4 transition-transform group-hover:translate-x-0.5', iconClass)" />
   </NuxtLink>
-  <Button v-else unstyled as="router-link" :to="to" v-bind="forwardedAttrs" :class="rootClass">
-    <slot>查看全部</slot>
-    <ArrowRight :class="cn('size-4 transition-transform group-hover:translate-x-0.5', iconClass)" />
-  </Button>
 </template>

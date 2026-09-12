@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IconButton } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { breakpointsTailwind } from '@vueuse/core'
   import { blockBodyScroll, unblockBodyScroll } from 'primevue/utils'
@@ -50,11 +51,11 @@
 </script>
 
 <template>
-  <div ref="triggerRef" class="size-10">
-    <Button aria-label="搜索" rounded severity="secondary" variant="text" @click="show">
-      <template #icon><Search class="text-color" /></template>
-    </Button>
-  </div>
+  <span ref="triggerRef" class="inline-flex">
+    <IconButton label="搜索" pill @click="show">
+      <Search />
+    </IconButton>
+  </span>
 
   <Teleport to="body">
     <AnimatePresence>
@@ -74,7 +75,7 @@
       <motion.div
         v-if="open && !isMobile"
         key="search"
-        class="fixed z-60 mr-(--p-scrollbar-width)"
+        class="fixed z-60 hn-scrollbar-safe"
         :style="overlayStyle"
         :initial="{ opacity: 0, y: -6 }"
         :animate="{ opacity: 1, y: 0 }"

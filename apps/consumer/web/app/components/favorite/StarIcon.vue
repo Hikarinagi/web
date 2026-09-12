@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { Heart } from '@lucide/vue'
+  import { Star, StarPlus } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { EASE, TRANSITION_FAST } from '~/lib/motion'
 
-  defineOptions({ name: 'FavoriteHeartIcon' })
+  defineOptions({ name: 'FavoriteStarIcon' })
 
   const props = withDefaults(
     defineProps<{
@@ -25,7 +25,7 @@
     { x: 10, y: 11 },
     { x: -11, y: 10 },
   ] as const
-  const HEART_POP = {
+  const STAR_POP = {
     duration: 0.42,
     ease: EASE,
     times: [0, 0.35, 0.68, 1],
@@ -33,15 +33,15 @@
   const BURST_TRANSITION = { duration: 0.46, ease: EASE }
 
   const activeClass = computed(() =>
-    props.favorited ? 'fill-red-500 text-red-500' : 'fill-transparent',
+    props.favorited ? 'fill-amber-400 text-amber-400' : 'fill-transparent',
   )
   const iconSizeClass = computed(() => (props.variant === 'icon' ? 'size-[18px]' : 'size-[1em]'))
-  const heartState = computed(() =>
+  const starState = computed(() =>
     props.favorited && burstVisible.value
       ? { scale: [1, 1.28, 0.94, 1], rotate: [0, -9, 4, 0] }
       : { scale: 1, rotate: 0 },
   )
-  const heartTransition = computed(() => (props.favorited ? HEART_POP : TRANSITION_FAST))
+  const starTransition = computed(() => (props.favorited ? STAR_POP : TRANSITION_FAST))
 
   watch(
     () => props.favorited,
@@ -78,7 +78,7 @@
         class="pointer-events-none absolute inset-0 flex items-center justify-center"
       >
         <motion.span
-          class="absolute size-[1.7em] rounded-full border border-red-400/55"
+          class="absolute size-[1.7em] rounded-full border border-amber-300/55"
           :initial="{ opacity: 0.5, scale: 0.55 }"
           :animate="{ opacity: 0, scale: 1.85 }"
           :exit="{ opacity: 0 }"
@@ -87,7 +87,7 @@
         <motion.span
           v-for="dot in BURST_DOTS"
           :key="`${dot.x}:${dot.y}`"
-          class="absolute size-[0.22em] rounded-full bg-red-400"
+          class="absolute size-[0.22em] rounded-full bg-amber-300"
           :initial="{ x: 0, y: 0, opacity: 0.9, scale: 1 }"
           :animate="{ x: dot.x, y: dot.y, opacity: 0, scale: 0 }"
           :exit="{ opacity: 0 }"
@@ -99,11 +99,15 @@
     <motion.span
       :key="burstKey"
       class="relative z-10 inline-flex size-full origin-center items-center justify-center"
-      :animate="heartState"
-      :transition="heartTransition"
+      :animate="starState"
+      :transition="starTransition"
       :while-press="{ scale: 0.86 }"
     >
-      <Heart class="size-full transition-colors duration-150" :class="activeClass" />
+      <component
+        :is="favorited ? Star : StarPlus"
+        class="size-full transition-colors duration-150"
+        :class="activeClass"
+      />
     </motion.span>
   </motion.span>
 </template>

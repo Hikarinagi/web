@@ -19,7 +19,7 @@
         :src="cover"
         :alt="title"
         class="rounded-md bg-surface-950/5 dark:bg-surface-0/5"
-        :style="{ aspectRatio: layout.aspectRatio }"
+        :ratio="layout.ratio"
         image-class="object-contain"
         :processing="layout.processing"
         :preload="{ fetchPriority: 'high' }"

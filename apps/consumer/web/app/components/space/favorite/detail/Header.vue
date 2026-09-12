@@ -86,7 +86,7 @@
             </span>
           </Button>
         </template>
-        <ShareButton text severity="secondary" size="small" tooltip="分享" :to="detailPath" />
+        <ShareButton size="sm" tooltip="分享" :to="detailPath" />
       </div>
     </div>
   </div>

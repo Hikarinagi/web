@@ -5,7 +5,7 @@
 
   const coverAspect = computed(() => {
     const m = props.covers[0]?.media
-    return m?.width && m?.height ? `${m.width} / ${m.height}` : '4 / 3'
+    return m?.width && m?.height ? m.width / m.height : 4 / 3
   })
 </script>
 
@@ -13,9 +13,9 @@
   <HikariImage
     v-if="covers.length === 1"
     :src="covers[0]!.media.src"
-    alt=""
+    alt="帖子配图"
     class="max-h-[500px] w-full overflow-hidden rounded-xl"
-    :style="{ aspectRatio: coverAspect }"
+    :ratio="coverAspect"
     image-class="size-full object-cover"
     :processing="{ q: 90 }"
     preview

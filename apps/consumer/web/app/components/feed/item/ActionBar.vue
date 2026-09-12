@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline } from '@hina-ui/vue'
   import { MessageSquare } from '@lucide/vue'
   import { COMMENT_SECTION_HASH, requestCommentFocus } from '~/features/comment/comment'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
@@ -10,11 +11,7 @@
   const LIKEABLE = ['post', 'article', 'galgame_rate', 'light_novel_rate', 'manga_rate']
   const canLike = LIKEABLE.includes(props.item.type)
   const kind = (canLike ? props.item.type : 'post') as
-    | 'post'
-    | 'article'
-    | 'galgame_rate'
-    | 'light_novel_rate'
-    | 'manga_rate'
+    'post' | 'article' | 'galgame_rate' | 'light_novel_rate' | 'manga_rate'
   const isRate = kind === 'galgame_rate' || kind === 'light_novel_rate' || kind === 'manga_rate'
   const { toggle, busy } = useLike(kind)
   const view = useLikeView(kind, props.item.id, () => ({
@@ -121,39 +118,37 @@
     requestCommentFocus()
   }
 
-  const btn =
-    'relative z-1 -mx-2 -my-1 w-auto! gap-1.5! px-2! py-1! hover:bg-transparent! active:bg-transparent! hover:text-color!'
+  const btn = 'relative z-1'
 </script>
 
 <template>
-  <div class="flex items-center gap-10 pt-1 text-muted-color">
-    <Button
+  <Inline gap="xl" class="pt-1">
+    <AuthGateButton
       v-if="canLike"
-      login-required
-      text
-      size="small"
-      :severity="view.liked ? undefined : 'secondary'"
+      variant="ghost"
+      :tone="view.liked ? 'accent' : 'neutral'"
+      size="sm"
       :loading="busy"
       :disabled="busy"
-      :label="view.like_count.toString()"
-      class="relative z-1 -mx-2 -my-1 gap-1.5! px-2! py-1! hover:bg-transparent! active:bg-transparent!"
-      :class="{ 'hover:text-color!': !view.liked }"
       aria-label="赞"
+      :class="btn"
       @click="like"
     >
       <template #icon><InteractionLikeIcon :active="view.liked" /></template>
-    </Button>
+      {{ view.like_count }}
+    </AuthGateButton>
     <Button
       v-if="commentCount != null"
-      text
-      size="small"
-      severity="secondary"
-      :label="commentCount > 0 ? commentCount.toString() : undefined"
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      :icon-only="commentCount === 0"
       :class="btn"
       aria-label="评论"
       @click="comment"
     >
-      <template #icon><MessageSquare class="size-[1em]" /></template>
+      <template #icon><MessageSquare /></template>
+      <template v-if="commentCount > 0" #default>{{ commentCount }}</template>
     </Button>
     <FavoriteToggle
       v-if="favoriteTarget"
@@ -161,18 +156,16 @@
       :type="favoriteTarget.type"
       :initial-favorited="initialFavorited"
       variant="bar"
-      size="small"
+      size="sm"
       :picker-title="favoriteTarget.pickerTitle"
       :class="btn"
     />
     <ShareButton
       v-if="canShare && shareTo"
       :to="shareTo"
-      text
-      size="small"
-      severity="secondary"
+      size="sm"
       aria-label="转发"
       :class="btn"
     />
-  </div>
+  </Inline>
 </template>

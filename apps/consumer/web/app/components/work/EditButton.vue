@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { IconButton } from '@hina-ui/vue'
   import { SquarePen } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import { getRevisionEditPath, type WorkResourceSlug } from '~/features/revision/resources'
 
   const props = defineProps<{
@@ -11,17 +13,14 @@
 </script>
 
 <template>
-  <Button
-    v-tooltip.bottom="'修订此条目'"
-    as="router-link"
+  <IconButton
+    :as="NuxtLink"
     :to="to"
     target="_blank"
-    aria-label="修订此条目"
-    severity="secondary"
-    outlined
+    label="修订此条目"
+    side="bottom"
+    variant="outline"
   >
-    <template #icon>
-      <SquarePen class="size-4" />
-    </template>
-  </Button>
+    <SquarePen />
+  </IconButton>
 </template>

@@ -34,7 +34,7 @@
           <HikariImage
             :src="candidate.media"
             preview
-            alt=""
+            alt="候选封面"
             class="size-full"
             image-class="object-cover"
             :processing="{ width: 480, quality: 88, fit: 'cover' }"

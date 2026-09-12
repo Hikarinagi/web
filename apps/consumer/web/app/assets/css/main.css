@@ -39,13 +39,12 @@ body {
   min-height: 100vh;
   margin: 0;
   touch-action: manipulation;
-  background: var(--p-surface-0);
+  background: var(--hn-bg-canvas);
   color: var(--p-surface-950);
   font-family: var(--font-sans);
 }
 
 html.dark body {
-  background: var(--p-surface-950);
   color: var(--p-surface-0);
 }
 

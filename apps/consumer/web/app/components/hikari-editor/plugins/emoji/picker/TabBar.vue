@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Skeleton } from '@hina-ui/vue'
   import { Clock } from '@lucide/vue'
   import type { UserCatalogSet } from '../composables/useUserEmojiCatalog'
 
@@ -55,7 +56,11 @@
         :processing="false"
         class="h-6 w-6"
         image-class="h-full w-full object-contain"
-      />
+      >
+        <template #skeleton>
+          <Skeleton class="size-full rounded-sm" />
+        </template>
+      </HikariImage>
       <span v-else class="text-xs text-muted-color">{{ set.name.slice(0, 2) }}</span>
     </Button>
 

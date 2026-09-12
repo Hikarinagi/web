@@ -151,7 +151,7 @@
 
   --editor-text-color: var(--color-hikari-surface-900);
   --editor-text-muted: var(--color-hikari-surface-500);
-  --editor-placeholder-color: var(--color-hikari-surface-400);
+  --editor-placeholder-color: var(--hn-fg-subtle);
 
   --editor-focus-ring: var(--color-hikari-primary-500);
   --editor-selection-bg: var(--color-hikari-primary-soft);
@@ -196,7 +196,6 @@ html.dark {
 
   --editor-text-color: var(--color-hikari-surface-100);
   --editor-text-muted: var(--color-hikari-surface-400);
-  --editor-placeholder-color: var(--color-hikari-surface-500);
 
   --editor-focus-ring: var(--color-hikari-primary-400);
 

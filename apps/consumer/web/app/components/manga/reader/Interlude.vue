@@ -113,10 +113,10 @@
         :id="mangaId"
         type="manga"
         variant="bar"
-        rounded
+        pill
         :picker-title="`将「${mangaTitle}」添加到收藏夹`"
       />
-      <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" rounded text severity="secondary" />
+      <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" pill />
     </div>
   </div>
 </template>

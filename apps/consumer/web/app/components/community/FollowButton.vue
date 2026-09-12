@@ -2,25 +2,25 @@
   import { Plus, UserCheck } from '@lucide/vue'
 
   const props = withDefaults(
-    defineProps<{ userId: number; initialFollowing?: boolean; size?: 'small' | 'large' }>(),
-    { initialFollowing: false, size: 'small' },
+    defineProps<{ userId: number; initialFollowing?: boolean; size?: 'sm' | 'md' | 'lg' }>(),
+    { initialFollowing: false, size: 'sm' },
   )
 
   const { following, pending, toggle } = useFollow(props.userId, props.initialFollowing)
 </script>
 
 <template>
-  <Button
-    login-required
+  <AuthGateButton
     :size="size"
-    :label="following ? '已关注' : '关注'"
-    :severity="following ? 'secondary' : undefined"
+    :variant="following ? 'soft' : 'solid'"
+    :tone="following ? 'neutral' : 'accent'"
     :loading="pending"
     class="shrink-0"
     @click="toggle"
   >
     <template #icon>
-      <component :is="following ? UserCheck : Plus" class="size-3.5" />
+      <component :is="following ? UserCheck : Plus" />
     </template>
-  </Button>
+    {{ following ? '已关注' : '关注' }}
+  </AuthGateButton>
 </template>
