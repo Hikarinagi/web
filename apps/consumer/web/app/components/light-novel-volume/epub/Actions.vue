@@ -8,18 +8,32 @@
 </script>
 
 <template>
-  <AuthGateButton
+  <Button
     v-if="available"
-    label="报告 EPUB 问题"
-    side="bottom"
-    variant="outline"
+    v-tooltip.bottom="'报告问题'"
+    login-required
+    severity="secondary"
+    outlined
+    aria-label="报告 EPUB 问题"
     @click="open = true"
   >
-    <Flag aria-hidden="true" />
-  </AuthGateButton>
-  <AuthGateButton v-else label="补充 EPUB" side="bottom" variant="outline" @click="open = true">
-    <FileUp aria-hidden="true" />
-  </AuthGateButton>
+    <template #icon>
+      <Flag class="size-[1em]" aria-hidden="true" />
+    </template>
+  </Button>
+  <Button
+    v-else
+    v-tooltip.bottom="'补充 EPUB'"
+    login-required
+    severity="secondary"
+    outlined
+    aria-label="补充 EPUB"
+    @click="open = true"
+  >
+    <template #icon>
+      <FileUp class="size-[1em]" aria-hidden="true" />
+    </template>
+  </Button>
 
   <LightNovelVolumeEpubFeedbackDialog
     v-if="available"

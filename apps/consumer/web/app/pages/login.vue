@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  import { Button, Stack } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
-
   const route = useRoute()
   const { toLogin } = useAuthGate()
   const authError = typeof route.query.auth_error === 'string'
@@ -22,17 +19,24 @@
     subtitle="当前为预发布环境，只有管理员账号可以登录。"
     title="仅管理员可登录"
   >
-    <Stack gap="sm">
-      <Button block @click="toLogin('login', redirectTo)">换账号登录</Button>
-      <Button :as="NuxtLink" to="/" block variant="outline" tone="neutral">返回首页</Button>
-    </Stack>
+    <div class="flex flex-col gap-2">
+      <Button class="w-full" label="换账号登录" @click="toLogin('login', redirectTo)" />
+      <Button
+        as="router-link"
+        class="w-full"
+        label="返回首页"
+        outlined
+        severity="secondary"
+        to="/"
+      />
+    </div>
   </AuthPageCard>
   <AuthPageCard
     v-else-if="authError"
     subtitle="刚才的登录没有完成，请重新尝试。"
     title="登录未完成"
   >
-    <Button block @click="toLogin('login', redirectTo)">重新登录</Button>
+    <Button class="w-full" label="重新登录" @click="toLogin('login', redirectTo)" />
   </AuthPageCard>
   <AuthRedirecting v-else text="正在前往登录…" />
 </template>

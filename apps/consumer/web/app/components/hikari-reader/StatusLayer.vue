@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
   import { Flag, RotateCcw } from '@lucide/vue'
   import { motion, AnimatePresence } from 'motion-v'
   import { cn } from '~/utils/cn'
@@ -66,7 +65,7 @@
           </template>
           <template #content>
             <div class="flex flex-col items-center gap-5 text-center">
-              <Spinner v-if="loading" size="lg" label="正在加载" />
+              <Spinner v-if="loading" :size="40" label="正在加载" />
               <div class="space-y-2">
                 <h2 class="text-lg font-semibold">{{ title }}</h2>
                 <p class="text-sm leading-6 text-surface-400">{{ description }}</p>

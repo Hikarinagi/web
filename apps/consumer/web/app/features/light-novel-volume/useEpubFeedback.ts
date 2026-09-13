@@ -28,7 +28,16 @@ async function validateEpub(picked: File): Promise<boolean> {
 }
 
 export function useEpubFeedback(volumeId: number) {
-  const file = ref<File | null>(null)
+  const {
+    files,
+    open: pickFile,
+    reset: resetPicker,
+  } = useFileDialog({
+    accept: '.epub,application/epub+zip',
+    multiple: false,
+    reset: true,
+  })
+  const file = computed(() => files.value?.item(0) ?? null)
 
   const submitting = ref(false)
   const review = ref<EpubReview | null>(null)
@@ -102,13 +111,14 @@ export function useEpubFeedback(volumeId: number) {
 
   function reset() {
     pause()
-    file.value = null
+    resetPicker()
     review.value = null
     submitting.value = false
   }
 
   return {
     file,
+    pickFile,
     submitting,
     review,
     status,

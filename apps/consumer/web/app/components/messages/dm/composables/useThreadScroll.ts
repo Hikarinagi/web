@@ -1,4 +1,3 @@
-import type { ComponentPublicInstance } from 'vue'
 import type { ThreadMessage } from '~/features/messages/dm'
 
 export function useThreadScroll(opts: {
@@ -8,16 +7,12 @@ export function useThreadScroll(opts: {
   peerId: () => number | null
   loadOlder: () => void
 }) {
-  const scroller = ref<ComponentPublicInstance | null>(null)
+  const scroller = ref<HTMLElement | null>(null)
   const newCount = ref(0)
   let atBottom = true
 
-  function viewport() {
-    return unrefElement(scroller) as HTMLElement | undefined
-  }
-
   function onScroll() {
-    const el = viewport()
+    const el = scroller.value
     if (!el) return
     atBottom = Math.abs(el.scrollTop) < 96
     if (atBottom) newCount.value = 0
@@ -26,15 +21,14 @@ export function useThreadScroll(opts: {
   }
 
   function toBottom(smooth = false) {
-    viewport()?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' })
+    scroller.value?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' })
     newCount.value = 0
   }
 
   watch(opts.peerId, () => {
     newCount.value = 0
     atBottom = true
-    const el = viewport()
-    if (el) el.scrollTop = 0
+    if (scroller.value) scroller.value.scrollTop = 0
   })
 
   watch(

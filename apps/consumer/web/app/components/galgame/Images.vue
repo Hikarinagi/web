@@ -44,7 +44,7 @@
             :key="cell.item.id"
             :src="cell.item"
             :alt="`${title} 截图`"
-            class="shrink-0 rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
+            class="shrink-0 overflow-hidden rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
             image-class="size-full object-cover"
             :style="{ width: `${cell.width}px`, height: `${cell.height}px` }"
             :processing="thumbProcessing"

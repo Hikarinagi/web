@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
   import { useGalgameHomeStream } from '~/features/galgame/useHomeStream'
 
   defineOptions({ name: 'GalgameExploreRecommendStream' })
@@ -43,7 +42,7 @@
     </template>
     <div ref="sentinel" aria-hidden="true" class="h-px" />
     <div v-if="loading" class="flex justify-center py-4">
-      <Spinner size="lg" />
+      <Spinner :size="28" />
     </div>
     <div v-else-if="failed" class="flex justify-center py-4">
       <Button label="重新加载" severity="secondary" variant="text" @click="loadMore" />

@@ -1,11 +1,8 @@
 <script setup lang="ts">
-  import { Button, Dialog, Progress, Stack, Text } from '@hina-ui/vue'
-  import { RotateCcw } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
-  import { NuxtLink } from '#components'
   import { TRANSITION } from '~/lib/motion'
-  import type { GalgameRateStatus } from '~/features/galgame/rate'
   import { useExploreRecordDialog } from '~/features/galgame/useExploreRecordDialog'
+  import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'GalgameExploreRecordDialog' })
 
@@ -30,15 +27,6 @@
     backToSearch,
     again,
   } = useExploreRecordDialog(visible)
-
-  const SUBMIT_LABEL: Record<GalgameRateStatus, string> = {
-    PLAN: '加入想玩',
-    GOING: '记录在玩',
-    COMPLETED: '记录通关',
-    ON_HOLD: '标记搁置',
-    DROPPED: '标记弃坑',
-  }
-
   const contentRef = ref<HTMLElement | null>(null)
   const contentHeight = ref(420)
   const contentAnimate = computed(() => ({ height: `${contentHeight.value}px` }))
@@ -46,11 +34,6 @@
     if (step.value === 'done') return 3
     if (step.value === 'record') return 2
     return 1
-  })
-  const stepProgressLabel = computed(() => {
-    if (activeStepNumber.value === 1) return '选择作品'
-    if (activeStepNumber.value === 2) return '记录状态'
-    return '完成'
   })
 
   useResizeObserver(contentRef, entries => {
@@ -64,88 +47,95 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="记录状态" size="xl" :locked="saving">
-    <template #content>
-      <Stack gap="md">
-        <Progress :value="activeStepNumber" :max="3" size="sm" :label="stepProgressLabel" />
-
-        <motion.div
-          class="-mx-3 overflow-hidden px-3"
-          :animate="contentAnimate"
-          :transition="TRANSITION"
-        >
-          <div ref="contentRef" class="py-1">
-            <AnimatePresence mode="wait" :initial="false">
-              <motion.div
-                v-if="step === 'search'"
-                key="search"
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: 1 }"
-                :exit="{ opacity: 0 }"
-                :transition="TRANSITION"
-              >
-                <GalgameExploreRecordSearchStep
-                  v-model:query="query"
-                  :results="results"
-                  :selected-id="selected?.id"
-                  :searching="searching"
-                  :searched="searched"
-                  @select="selectWork"
-                />
-              </motion.div>
-
-              <motion.div
-                v-else-if="step === 'record' && selected"
-                key="record"
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: 1 }"
-                :exit="{ opacity: 0 }"
-                :transition="TRANSITION"
-              >
-                <GalgameExploreRecordStep
-                  v-model:status="status"
-                  v-model:score="score"
-                  v-model:content="content"
-                  v-model:spoiler="spoiler"
-                  :selected="selected"
-                  :loading-rate="loadingRate"
-                  :saving="saving"
-                  @back="backToSearch"
-                />
-              </motion.div>
-
-              <motion.div
-                v-else
-                key="done"
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: 1 }"
-                :exit="{ opacity: 0 }"
-                :transition="TRANSITION"
-              >
-                <GalgameExploreRecordDoneStep :selected-title="selectedTitle" :status="status" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </motion.div>
-      </Stack>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    :dismissable-mask="!saving"
+    :close-on-escape="!saving"
+    :style="{ width: '92vw', maxWidth: '640px' }"
+    :pt="{ content: { class: 'px-0! pb-0!' } }"
+  >
+    <template #header>
+      <span class="text-[17px] font-bold text-color">记录进度</span>
     </template>
 
-    <template v-if="step !== 'search'" #footer>
-      <template v-if="step === 'record'">
-        <Text size="xs" tone="muted" class="min-w-0 flex-1 self-center text-start">
-          稍后可在作品页继续补充维度评分
-        </Text>
-        <Button :loading="saving" :disabled="loadingRate" @click="submit">
-          {{ SUBMIT_LABEL[status] }}
-        </Button>
-      </template>
-      <template v-else>
-        <Button variant="outline" tone="neutral" @click="again">
-          <template #icon><RotateCcw /></template>
-          继续记录
-        </Button>
-        <Button :as="NuxtLink" :to="doneRoute" @click="visible = false">查看作品</Button>
-      </template>
-    </template>
+    <div class="flex flex-col">
+      <div class="border-b border-surface-100 px-6 dark:border-surface-800">
+        <div class="grid grid-cols-3 gap-2 text-xs font-medium">
+          <span
+            v-for="index in 3"
+            :key="index"
+            :class="
+              cn(
+                'h-1 rounded-full transition-colors',
+                index <= activeStepNumber ? 'bg-primary' : 'bg-surface-200 dark:bg-surface-800',
+              )
+            "
+          />
+        </div>
+      </div>
+
+      <motion.div class="overflow-hidden" :animate="contentAnimate" :transition="TRANSITION">
+        <div ref="contentRef">
+          <AnimatePresence mode="wait" :initial="false">
+            <motion.div
+              v-if="step === 'search'"
+              key="search"
+              :initial="{ opacity: 0 }"
+              :animate="{ opacity: 1 }"
+              :exit="{ opacity: 0 }"
+              :transition="TRANSITION"
+            >
+              <GalgameExploreRecordSearchStep
+                v-model:query="query"
+                :results="results"
+                :selected-id="selected?.id"
+                :searching="searching"
+                :searched="searched"
+                @select="selectWork"
+              />
+            </motion.div>
+
+            <motion.div
+              v-else-if="step === 'record' && selected"
+              key="record"
+              :initial="{ opacity: 0 }"
+              :animate="{ opacity: 1 }"
+              :exit="{ opacity: 0 }"
+              :transition="TRANSITION"
+            >
+              <GalgameExploreRecordStep
+                v-model:status="status"
+                v-model:score="score"
+                v-model:content="content"
+                v-model:spoiler="spoiler"
+                :selected="selected"
+                :loading-rate="loadingRate"
+                :saving="saving"
+                @back="backToSearch"
+                @submit="submit"
+              />
+            </motion.div>
+
+            <motion.div
+              v-else
+              key="done"
+              :initial="{ opacity: 0 }"
+              :animate="{ opacity: 1 }"
+              :exit="{ opacity: 0 }"
+              :transition="TRANSITION"
+            >
+              <GalgameExploreRecordDoneStep
+                :selected-title="selectedTitle"
+                :status="status"
+                :done-route="doneRoute"
+                @again="again"
+                @close="visible = false"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </div>
   </Dialog>
 </template>

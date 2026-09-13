@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Center, Dialog, IconButton, Skeleton, Stack } from '@hina-ui/vue'
   import { RotateCcw } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { push } from 'notivue'
@@ -64,6 +63,11 @@
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.985 },
   }
+  const footerMotion = {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+  }
+
   watch([visible, src, () => props.aspectRatio], () => {
     ready.value = false
     failed.value = false
@@ -120,9 +124,17 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" :title="title" size="xl" :locked="saving">
-    <template #content>
-      <Stack gap="none" class="h-[min(62vh,30rem)] overflow-hidden rounded-lg bg-surface-950">
+  <Dialog
+    v-model:visible="visible"
+    modal
+    :header="title"
+    :dismissable-mask="!saving"
+    :close-on-escape="!saving"
+    :scroll="false"
+    :style="{ width: 'min(92vw, 48rem)' }"
+  >
+    <div class="flex flex-col gap-4">
+      <div class="h-[min(62vh,30rem)] overflow-hidden rounded-lg bg-surface-950">
         <ClientOnly>
           <AnimatePresence mode="wait">
             <motion.div
@@ -155,33 +167,31 @@
               key="empty"
               v-bind="stageMotion"
               :transition="TRANSITION"
-              class="size-full"
+              class="flex size-full items-center justify-center"
             >
-              <Center class="size-full"><Skeleton class="size-40" /></Center>
+              <Skeleton class="h-40 w-40!" />
             </motion.div>
           </AnimatePresence>
 
           <template #fallback>
-            <Center class="size-full"><Skeleton class="size-40" /></Center>
+            <div class="flex size-full items-center justify-center">
+              <Skeleton class="h-40 w-40!" />
+            </div>
           </template>
         </ClientOnly>
-      </Stack>
-    </template>
+      </div>
 
-    <template #footer>
-      <IconButton
-        label="重置"
-        variant="outline"
-        tone="neutral"
-        :disabled="!ready || saving"
-        @click="reset"
+      <motion.div
+        v-bind="footerMotion"
+        :transition="TRANSITION"
+        class="flex flex-col gap-3 sm:flex-row sm:justify-end"
       >
-        <RotateCcw />
-      </IconButton>
-      <Button variant="ghost" tone="neutral" :disabled="saving" @click="visible = false">
-        取消
-      </Button>
-      <Button :loading="saving" :disabled="!ready || failed" @click="save">确认</Button>
-    </template>
+        <Button severity="secondary" outlined :disabled="!ready || saving" @click="reset">
+          <template #icon><RotateCcw class="size-4" /></template>
+        </Button>
+        <Button label="取消" severity="secondary" :disabled="saving" @click="visible = false" />
+        <Button label="确认" :loading="saving" :disabled="!ready || failed" @click="save" />
+      </motion.div>
+    </div>
   </Dialog>
 </template>

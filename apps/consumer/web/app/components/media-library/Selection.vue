@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { Button, Center, SimpleGrid } from '@hina-ui/vue'
   import { GripVertical, X } from '@lucide/vue'
   import type { ClassValue } from 'clsx'
-  import type { ComponentPublicInstance } from 'vue'
   import Sortable from 'sortablejs'
   import { cn } from '~/utils/cn'
   import type { MediaValue } from './types'
@@ -30,13 +28,12 @@
     model.value = model.value.filter(m => m.id !== id)
   }
 
-  const gridRef = useTemplateRef<ComponentPublicInstance>('grid')
+  const grid = useTemplateRef<HTMLElement>('grid')
   let sortableInstance: Sortable | null = null
 
   function attachSortable() {
-    const el = gridRef.value?.$el as HTMLElement | undefined
-    if (!el || sortableInstance || !props.sortable || props.disabled) return
-    sortableInstance = Sortable.create(el, {
+    if (!grid.value || sortableInstance || !props.sortable || props.disabled) return
+    sortableInstance = Sortable.create(grid.value, {
       handle: '.media-drag-handle',
       animation: 150,
       draggable: '[data-media-tile]',
@@ -70,54 +67,60 @@
 </script>
 
 <template>
-  <SimpleGrid ref="grid" min="10rem" gap="sm" :class="cn(attrs.class as ClassValue)">
-    <Center
+  <div
+    ref="grid"
+    :class="
+      cn(
+        'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(10rem,1fr))]',
+        attrs.class as ClassValue,
+      )
+    "
+  >
+    <div
       v-for="(media, index) in model"
       :key="media.id"
       data-media-tile
-      class="group relative aspect-square w-full overflow-hidden rounded-lg border border-line"
+      class="group relative aspect-square w-full overflow-hidden rounded-lg border border-surface-200 dark:border-surface-700"
     >
       <HikariImage
         :src="media.src"
-        :alt="`已选图片 ${index + 1}`"
+        alt=""
         preset="small"
         class="size-full"
         image-class="size-full object-cover"
         preview
       >
-        <template #empty />
-        <template #error />
+        <template #empty><span /></template>
+        <template #error><span /></template>
       </HikariImage>
 
-      <Button
-        v-if="sortable && !disabled"
-        variant="solid"
-        tone="neutral"
-        size="sm"
-        icon-only
-        pill
-        aria-label="拖动排序"
-        class="media-drag-handle absolute top-1.5 left-1.5 size-6 cursor-grab active:cursor-grabbing md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-      >
-        <template #icon><GripVertical class="size-3.5" /></template>
-      </Button>
+      <div v-if="sortable && !disabled" class="absolute top-1.5 left-1.5">
+        <Button
+          unstyled
+          class="media-drag-handle flex size-6 cursor-grab items-center justify-center rounded-full bg-surface-900/60 text-white opacity-100 transition-opacity active:cursor-grabbing md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
+          aria-label="拖动排序"
+        >
+          <template #icon>
+            <GripVertical :size="14" />
+          </template>
+        </Button>
+      </div>
 
-      <Button
-        v-if="removable && !disabled"
-        variant="solid"
-        tone="danger"
-        size="sm"
-        icon-only
-        pill
-        aria-label="移除"
-        class="absolute top-1.5 right-1.5 size-6 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-        @click="remove(media.id)"
-      >
-        <template #icon><X class="size-3.5" /></template>
-      </Button>
+      <div v-if="removable && !disabled" class="absolute top-1.5 right-1.5">
+        <Button
+          unstyled
+          class="flex size-6 items-center justify-center rounded-full bg-surface-900/60 text-white opacity-100 transition-opacity hover:bg-red-500 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
+          aria-label="移除"
+          @click="remove(media.id)"
+        >
+          <template #icon>
+            <X :size="14" />
+          </template>
+        </Button>
+      </div>
 
       <slot name="overlay" :media="media" :index="index" />
-    </Center>
+    </div>
     <slot name="add" />
-  </SimpleGrid>
+  </div>
 </template>

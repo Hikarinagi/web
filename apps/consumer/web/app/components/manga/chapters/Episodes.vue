@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { ArrowDownUp, LibraryBig } from '@lucide/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
@@ -98,8 +97,12 @@
 </script>
 
 <template>
-  <Panel title="章节列表" :count="episodes.length + extras.length" :description="volumeDescription">
-    <template #icon><LibraryBig /></template>
+  <CardPanel
+    title="章节列表"
+    :icon="LibraryBig"
+    :count="episodes.length + extras.length"
+    :description="volumeDescription"
+  >
     <template #actions>
       <div class="flex items-center gap-1.5">
         <Button v-if="latest" variant="text" size="small" @click="jumpToLatest">
@@ -154,5 +157,5 @@
         />
       </div>
     </div>
-  </Panel>
+  </CardPanel>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { Logs } from '@lucide/vue'
   import type { BackendContributionActivityItem } from '~/features/creator/contribution'
 
@@ -36,8 +35,7 @@
 </script>
 
 <template>
-  <Panel title="动态">
-    <template #icon><Logs /></template>
+  <CardPanel title="动态" :icon="Logs">
     <template #actions>
       <SelectButton
         v-model="scope"
@@ -57,5 +55,5 @@
       />
     </div>
     <CreatorEmpty v-else :text="scope === 'mine' ? '你还没有贡献动态' : '还没有动态'" />
-  </Panel>
+  </CardPanel>
 </template>

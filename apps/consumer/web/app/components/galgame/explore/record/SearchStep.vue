@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Empty, IconButton, Input, InputGroup, Skeleton, Stack, Text } from '@hina-ui/vue'
   import { Search } from '@lucide/vue'
   import { motion } from 'motion-v'
   import { TRANSITION } from '~/lib/motion'
@@ -18,19 +17,22 @@
 </script>
 
 <template>
-  <Stack gap="md" class="min-h-105">
-    <Text size="sm" tone="muted">搜索要记录游玩状态的视觉小说</Text>
+  <div class="flex min-h-[420px] flex-col gap-4 px-6 py-5">
+    <div class="flex flex-col gap-1.5">
+      <h2 class="text-lg font-bold text-surface-950 dark:text-surface-50">选择作品</h2>
+      <p class="text-sm text-surface-500 dark:text-surface-400">搜索要记录游玩状态的视觉小说。</p>
+    </div>
 
     <InputGroup>
-      <Input v-model="query" autofocus placeholder="作品名 / 别名 / ID" />
-      <IconButton label="搜索" variant="ghost" tone="neutral" :loading="searching">
-        <Search />
-      </IconButton>
+      <InputText v-model="query" autofocus placeholder="作品名 / 别名 / ID" />
+      <Button severity="secondary" :loading="searching" aria-label="搜索">
+        <Search class="size-4" />
+      </Button>
     </InputGroup>
 
-    <Stack gap="sm">
+    <div class="flex flex-col gap-2.5">
       <template v-if="searching">
-        <Skeleton v-for="index in 4" :key="index" class="h-24 rounded-lg" />
+        <Skeleton v-for="index in 4" :key="index" height="94px" border-radius="8px" />
       </template>
       <template v-else>
         <motion.div
@@ -47,13 +49,10 @@
           />
         </motion.div>
       </template>
-    </Stack>
+    </div>
 
-    <Empty
-      v-if="searched && !searching && results.length === 0"
-      size="sm"
-      title="没有搜到匹配作品"
-      description="可以换原名、别名或数字 ID 再试"
-    />
-  </Stack>
+    <Message v-if="searched && !searching && results.length === 0" severity="secondary">
+      没有搜到匹配作品，可以换原名、别名或数字 ID 再试。
+    </Message>
+  </div>
 </template>

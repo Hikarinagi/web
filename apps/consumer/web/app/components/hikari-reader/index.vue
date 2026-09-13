@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Lightbox } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { TocEntry } from '@ritojs/core'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
@@ -158,7 +157,7 @@
     suppressTap: surfaceTap.suppressTap,
     initial: props.data.state.annotations,
   })
-  const imagePreview = useReaderImagePreview({
+  useReaderImagePreview({
     controller: reader.controller,
     suppressTap: surfaceTap.suppressTap,
   })
@@ -557,8 +556,6 @@
         </div>
       </div>
     </AnimatePresence>
-
-    <Lightbox v-model:open="imagePreview.open.value" :items="imagePreview.items.value" />
   </div>
 </template>
 

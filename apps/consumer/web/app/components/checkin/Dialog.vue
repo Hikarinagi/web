@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Dialog, Stack } from '@hina-ui/vue'
-
   defineOptions({ name: 'CheckinDialog' })
 
   const {
@@ -19,21 +17,30 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="签到" size="md" :locked="checking || makingUp">
-    <template #content>
-      <Stack gap="md">
-        <CheckinStreakHeader :status="status" :checking="checking" @check-in="checkIn" />
-        <CheckinCalendar
-          :records="records"
-          :status="status"
-          :month="month"
-          :records-month="recordsMonth"
-          :loading="recordsLoading"
-          :make-up="makeUp"
-          @change-month="changeMonth"
-        />
-        <CheckinMakeUpBar :status="status" />
-      </Stack>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    :dismissable-mask="!checking && !makingUp"
+    :close-on-escape="!checking && !makingUp"
+    :style="{ width: '92vw', maxWidth: '420px' }"
+    :pt="{ content: { class: 'px-0! pb-4!' } }"
+  >
+    <template #header>
+      <span class="text-[17px] font-bold text-color">签到</span>
     </template>
+
+    <div class="flex flex-col gap-4">
+      <CheckinStreakHeader :status="status" :checking="checking" @check-in="checkIn" />
+      <CheckinCalendar
+        :records="records"
+        :status="status"
+        :month="month"
+        :records-month="recordsMonth"
+        :loading="recordsLoading"
+        @change-month="changeMonth"
+        @make-up="makeUp"
+      />
+      <CheckinMakeUpBar :status="status" />
+    </div>
   </Dialog>
 </template>

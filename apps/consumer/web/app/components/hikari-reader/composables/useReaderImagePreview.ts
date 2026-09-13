@@ -1,6 +1,6 @@
 import type { ReaderController } from '@ritojs/kit'
-import type { LightboxItem } from '@hina-ui/vue'
-import { onBeforeUnmount, ref, shallowRef, watch, type ShallowRef } from 'vue'
+import { onBeforeUnmount, watch, type ShallowRef } from 'vue'
+import { useHikariImagePreview } from '~/components/ui/hikari-image/composables/usePreview'
 
 interface UseReaderImagePreviewOptions {
   controller: ShallowRef<ReaderController | null>
@@ -8,8 +8,7 @@ interface UseReaderImagePreviewOptions {
 }
 
 export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
-  const open = ref(false)
-  const items = shallowRef<LightboxItem[]>([])
+  const preview = useHikariImagePreview()
   let unsubscribe: (() => void) | null = null
 
   function detach() {
@@ -24,10 +23,18 @@ export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
       const displaySrc = blobUrl ?? src
       if (!displaySrc) return
 
-      items.value = [
-        { id: `reader-image:${src || displaySrc}`, src: displaySrc, alt: alt || '插图' },
-      ]
-      open.value = true
+      preview.open(
+        [
+          {
+            id: `reader-image:${src || displaySrc}`,
+            displaySrc,
+            originalSrc: displaySrc,
+            alt,
+            processing: false,
+          },
+        ],
+        0,
+      )
     })
   }
 
@@ -41,6 +48,4 @@ export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
   )
 
   onBeforeUnmount(detach)
-
-  return { open, items }
 }

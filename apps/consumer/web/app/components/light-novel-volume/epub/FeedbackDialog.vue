@@ -1,33 +1,29 @@
 <script setup lang="ts">
-  import { Button, Dialog, FileUpload, Form, FormField, Select, Textarea } from '@hina-ui/vue'
+  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
   import { push } from 'notivue'
+  import { EPUB_REPORT_REASON_OPTIONS } from '~/features/light-novel-volume/epub-report'
   import {
-    EPUB_REPORT_REASON_OPTIONS,
-    EPUB_REPORT_REASON_VALUES,
-  } from '~/features/light-novel-volume/epub-report'
-  import { epubReportSchema } from '~/features/light-novel-volume/schemas/epub-report.schema'
+    epubReportResolver,
+    type EpubReportFormValues,
+  } from '~/features/light-novel-volume/schemas/epub-report.schema'
   import { useEpubFeedback } from '~/features/light-novel-volume/useEpubFeedback'
-  import { getFieldErrors } from '~/utils/api/error'
 
   defineOptions({ name: 'LightNovelVolumeEpubFeedbackDialog' })
   const props = defineProps<{ volumeId: number }>()
   const visible = defineModel<boolean>('visible', { required: true })
 
-  const { file, submitting, review, status, isTerminal, submit, reset, pause } = useEpubFeedback(
-    props.volumeId,
-  )
+  const { file, pickFile, submitting, review, status, isTerminal, submit, reset, pause } =
+    useEpubFeedback(props.volumeId)
 
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
-  const values = reactive<{ reason: string | null; description: string }>({
-    reason: null,
-    description: '',
-  })
-  const requiresDescription = computed(() => values.reason === 'OTHER')
+  const formErrors = useFormErrors(epubReportResolver)
+  const form = useTemplateRef<FormInstance>('form')
+  const selectedReason = ref<string | null>(null)
+  const requiresDescription = computed(() => selectedReason.value === 'OTHER')
 
   function restart() {
+    formErrors.clear()
     form.value?.reset()
-    values.reason = null
-    values.description = ''
+    selectedReason.value = null
     reset()
   }
 
@@ -36,17 +32,20 @@
     else pause()
   })
 
-  async function onSubmit() {
-    const reason = EPUB_REPORT_REASON_VALUES.find(value => value === values.reason)
-    if (!reason || submitting.value) return
+  function syncReason(value: unknown) {
+    selectedReason.value = (value ?? null) as string | null
+  }
+
+  async function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid || submitting.value) return
     try {
-      const mode = await submit({ reason, description: values.description })
+      const mode = await submit(event.values as EpubReportFormValues)
       if (mode === 'reported') {
         push.success({ message: '已收到，我们会尽快核实' })
         visible.value = false
       }
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     }
   }
 
@@ -57,65 +56,82 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="报告 EPUB 问题" size="lg" :locked="submitting">
-    <template #content>
-      <Form
-        v-if="!review"
-        ref="form"
-        :values="values"
-        :rules="epubReportSchema"
-        :disabled="submitting"
-        @submit="onSubmit"
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="报告 EPUB 问题"
+    :dismissable-mask="!submitting"
+    :close-on-escape="!submitting"
+    :style="{ width: '92vw', maxWidth: '32rem' }"
+  >
+    <Form
+      v-if="!review"
+      ref="form"
+      :resolver="formErrors.resolver"
+      class="flex flex-col gap-4"
+      @input="formErrors.clear"
+      @submit="onSubmit"
+    >
+      <FormItem v-slot="{ id, errorId }" name="reason" label="问题类型" required>
+        <Select
+          :input-id="id"
+          :aria-describedby="errorId"
+          :options="EPUB_REPORT_REASON_OPTIONS"
+          option-label="label"
+          option-value="value"
+          placeholder="请选择问题类型"
+          fluid
+          @update:model-value="syncReason"
+        />
+      </FormItem>
+
+      <FormItem
+        v-slot="{ id, errorId }"
+        name="description"
+        label="补充说明"
+        :required="requiresDescription"
       >
-        <FormField name="reason" label="问题类型" required>
-          <Select
-            v-model="values.reason"
-            :options="EPUB_REPORT_REASON_OPTIONS"
-            placeholder="请选择问题类型"
-          />
-        </FormField>
+        <Textarea
+          :id="id"
+          :aria-describedby="errorId"
+          rows="3"
+          maxlength="500"
+          auto-resize
+          fluid
+          :placeholder="requiresDescription ? '请描述具体问题' : '可补充说明具体问题（选填）'"
+        />
+      </FormItem>
 
-        <FormField name="description" label="补充说明" :required="requiresDescription">
-          <Textarea
-            v-model="values.description"
-            autosize
-            maxlength="500"
-            :placeholder="requiresDescription ? '请描述具体问题' : '可补充说明具体问题（选填）'"
-          />
-        </FormField>
+      <LightNovelVolumeEpubUploadZone
+        :file="file"
+        label="有更正确的 EPUB?"
+        hint="一并上传，自动校验通过后会替换当前文件"
+        @pick="pickFile"
+      />
 
-        <FileUpload v-model="file" accept=".epub,application/epub+zip">
-          有更正确的 EPUB？一并上传，自动校验通过后会替换当前文件
-        </FileUpload>
-      </Form>
+      <div class="flex justify-end gap-3 pt-1">
+        <Button label="取消" severity="secondary" text :disabled="submitting" @click="close" />
+        <Button :label="file ? '提交并上传' : '提交报告'" type="submit" :loading="submitting" />
+      </div>
+    </Form>
 
+    <div v-else class="flex flex-col gap-4">
       <LightNovelVolumeEpubReviewResult
-        v-else
         :review="review"
         :is-terminal="isTerminal"
         :status="status"
         mode="fix"
       />
-    </template>
-
-    <template v-if="!review || isTerminal" #footer>
-      <template v-if="!review">
-        <Button variant="ghost" tone="neutral" :disabled="submitting" @click="close">取消</Button>
-        <Button :loading="submitting" @click="form?.submit()">
-          {{ file ? '提交并上传' : '提交报告' }}
-        </Button>
-      </template>
-      <template v-else>
+      <div v-if="isTerminal" class="flex justify-end gap-3 pt-1">
         <Button
           v-if="status === 'REJECTED' || status === 'FAILED'"
-          variant="outline"
-          tone="neutral"
+          label="重新提交"
+          severity="secondary"
+          outlined
           @click="restart"
-        >
-          重新提交
-        </Button>
-        <Button @click="visible = false">完成</Button>
-      </template>
-    </template>
+        />
+        <Button label="完成" @click="visible = false" />
+      </div>
+    </div>
   </Dialog>
 </template>

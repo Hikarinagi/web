@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Flex, Stack } from '@hina-ui/vue'
   import { useComposer, type ComposerTopic } from './composables/useComposer'
 
   defineOptions({ name: 'FeedComposerEditor' })
@@ -90,8 +89,8 @@
 </script>
 
 <template>
-  <Stack ref="boxRef" gap="none" class="cursor-text" @click="onShellClick">
-    <Flex gap="md" align="start" class="px-4 py-4">
+  <div ref="boxRef" class="cursor-text" @click="onShellClick">
+    <div class="flex items-start gap-3 px-4 py-4">
       <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
       <FeedComposerBody
         v-model:title="title"
@@ -106,7 +105,7 @@
         @collapse="collapse"
         @switch-article="onSwitchArticle"
       />
-    </Flex>
+    </div>
 
     <FeedComposerCovers
       :show="expanded && covers.length > 0"
@@ -162,5 +161,5 @@
     />
 
     <HikariEditorOverlayHost :plugins="plugins" />
-  </Stack>
+  </div>
 </template>

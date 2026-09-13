@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Heading, Stack } from '@hina-ui/vue'
   import { COMMENT_DETAIL_ACTIONS_KEY } from '~/features/comment/detailBar'
   import { commentFocusId } from '~/features/comment/comment'
   import { postSeo } from '~/features/seo/post'
@@ -51,17 +50,18 @@
 
 <template>
   <FeedPageShell v-if="data">
-    <Stack as="article" gap="none">
+    <article>
       <PostImages :covers="data.post.covers" />
 
-      <Heading v-if="data.post.title" :level="1" class="mt-6 leading-snug">
+      <h1 v-if="data.post.title" class="mt-6 text-[22px] leading-snug font-bold text-color">
         {{ data.post.title }}
-      </Heading>
+      </h1>
 
       <PostAuthorBar
         v-if="data.post.creator"
         class="mt-5"
         :author="data.author"
+        :stats="data.author_stats"
         :creator="data.post.creator"
         :created-at="data.post.created_at"
         :post-id="data.post.id"
@@ -94,7 +94,7 @@
         :allow-comment="data.post.allow_comment !== 'DISALLOW'"
         class="mt-10"
       />
-    </Stack>
+    </article>
 
     <template #sidebar>
       <FeedSidebar :data="data.sidebar" />

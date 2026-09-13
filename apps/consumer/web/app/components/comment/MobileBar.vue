@@ -84,29 +84,33 @@
       >
         {{ placeholder }}
       </button>
-      <AuthGateButton
-        variant="ghost"
-        :tone="view.liked ? 'accent' : 'neutral'"
+      <Button
+        login-required
+        text
+        :severity="view.liked ? undefined : 'secondary'"
         :loading="busy"
         :disabled="busy"
+        :label="view.like_count.toString()"
         aria-label="赞"
-        pill
-        class="h-9! shrink-0 px-3!"
+        class="h-9! shrink-0 gap-1! rounded-full! px-3!"
         @click="toggle(actions.id)"
       >
         <template #icon><InteractionLikeIcon :active="view.liked" /></template>
-        {{ view.like_count }}
-      </AuthGateButton>
+      </Button>
       <FavoriteToggle
         :id="actions.id"
         :type="actions.type"
         :initial-favorited="actions.favorited"
         variant="bar"
         :picker-title="actions.pickerTitle"
-        pill
-        class="size-9! shrink-0"
+        class="size-9! shrink-0 rounded-full!"
       />
-      <ShareButton :to="`/${actions.type}s/${actions.id}`" pill class="size-9! shrink-0" />
+      <ShareButton
+        text
+        severity="secondary"
+        :to="`/${actions.type}s/${actions.id}`"
+        class="size-9! shrink-0 rounded-full!"
+      />
     </div>
   </div>
 </template>

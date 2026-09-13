@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { ArrowUpRight } from '@lucide/vue'
 
   defineOptions({ name: 'SpaceSettingSecurityForm' })
@@ -8,7 +7,7 @@
 </script>
 
 <template>
-  <Panel title="账号安全" description="前往 Hikarinagi ID 管理中心管理你的账号信息">
+  <CardPanel title="账号安全" description="前往 Hikarinagi ID 管理中心管理你的账号信息">
     <div class="flex items-center justify-between gap-4">
       <div class="min-w-0">
         <p class="truncate text-sm font-medium text-color">{{ email }}</p>
@@ -18,5 +17,5 @@
         <template #icon><ArrowUpRight class="size-4" /></template>
       </Button>
     </div>
-  </Panel>
+  </CardPanel>
 </template>

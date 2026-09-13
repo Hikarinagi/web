@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Inline } from '@hina-ui/vue'
   import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
@@ -94,28 +93,25 @@
 </script>
 
 <template>
-  <Inline justify="center" class="lg:justify-start">
-    <Button v-if="continueInfo" @click="continueOpen = true">
+  <div class="flex flex-wrap items-stretch justify-center gap-3 lg:justify-start">
+    <Button v-if="continueInfo" label="继续阅读" @click="continueOpen = true">
       <template #icon>
-        <Play aria-hidden="true" />
+        <Play :size="17" aria-hidden="true" />
       </template>
-      继续阅读
     </Button>
-    <AuthGateButton v-else-if="canRead && startTarget" @click="readStart">
+    <Button v-else-if="canRead && startTarget" login-required label="开始阅读" @click="readStart">
       <template #icon>
-        <Play aria-hidden="true" />
+        <Play :size="17" aria-hidden="true" />
       </template>
-      开始阅读
-    </AuthGateButton>
-    <Button v-else disabled>
+    </Button>
+    <Button v-else disabled label="开始阅读">
       <template #icon>
-        <Play aria-hidden="true" />
+        <Play :size="17" aria-hidden="true" />
       </template>
-      开始阅读
     </Button>
 
     <WorkStatusMenu
-      tone="neutral"
+      tone="secondary"
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
@@ -125,24 +121,26 @@
       @privacy="rateCtl.setPrivacy"
     />
 
-    <Button v-if="rateMode === 'chip'" variant="outline" tone="neutral" @click="dialogOpen = true">
-      <template #icon>
-        <Star class="fill-amber-400 text-amber-400" />
-      </template>
-      {{ rateCtl.score.value?.toFixed(1) }}
-      <template #trailing>
-        <Pencil class="text-muted" />
-      </template>
+    <Button v-if="rateMode === 'chip'" severity="secondary" outlined @click="dialogOpen = true">
+      <span class="inline-flex items-center gap-1.5">
+        <Star class="size-4 fill-amber-500 text-amber-500" />
+        <span class="text-[15px] font-semibold text-color">
+          {{ rateCtl.score.value?.toFixed(1) }}
+        </span>
+        <Pencil class="size-3 text-muted-color" />
+      </span>
     </Button>
-    <AuthGateButton
+    <Button
       v-else-if="rateMode === 'prompt'"
-      variant="outline"
-      tone="neutral"
+      login-required
+      severity="secondary"
+      label="写个评分"
+      icon-pos="right"
+      outlined
       @click="dialogOpen = true"
     >
-      写个评分
-      <template #trailing><ArrowRight /></template>
-    </AuthGateButton>
+      <template #icon><ArrowRight class="size-3.5" /></template>
+    </Button>
 
     <FavoriteToggle
       :id="lightNovelId"
@@ -151,8 +149,12 @@
       variant="icon"
       :picker-title="pickerTitle"
     />
-    <ShareButton :to="`/light-novels/${lightNovelId}`" tooltip="分享" variant="outline" />
-    <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" />
+    <ShareButton
+      :to="`/light-novels/${lightNovelId}`"
+      tooltip="分享"
+      severity="secondary"
+      outlined
+    />
 
     <LightNovelRateDialog
       v-model:visible="dialogOpen"
@@ -172,5 +174,5 @@
       :chapter-title="continueInfo.chapterTitle"
       :percentage="continueInfo.percentage"
     />
-  </Inline>
+  </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { Chip, Inline, Popover } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
-  import { Hash } from '@lucide/vue'
+  import { Hash, X } from '@lucide/vue'
+  import type Popover from 'primevue/popover'
   import { TRANSITION } from '~/lib/motion'
   import type { ComposerTopic } from './composables/useComposer'
   import { useTopics, type TopicOption } from '~/components/topic/useTopics'
@@ -15,16 +15,15 @@
     create: [name: string]
   }>()
 
-  const pickerOpen = ref(false)
+  const op = ref<InstanceType<typeof Popover>>()
   const { query, kw, busy, sections, canCreate, selectedIds, ensureLoaded } = useTopics({
     selected: () => props.topics,
     full: () => props.topicsFull,
   })
 
-  watch(pickerOpen, open => {
-    if (open) void ensureLoaded()
-  })
-
+  function toggle(event: MouseEvent) {
+    op.value?.toggle(event)
+  }
   function pick(t: TopicOption) {
     if (selectedIds.value.has(t.id)) emit('remove', t.id)
     else if (!props.topicsFull) emit('add', { id: t.id, name: t.name })
@@ -47,32 +46,50 @@
       :transition="TRANSITION"
       class="overflow-hidden"
     >
-      <Inline gap="sm" class="px-4 pt-1 pb-2 pl-16">
-        <Chip v-for="t in topics" :key="t.id" size="sm" removable @remove="$emit('remove', t.id)">
-          <template #icon><Hash /></template>
+      <div class="flex flex-wrap items-center gap-2 px-4 pt-1 pb-2 pl-16">
+        <span
+          v-for="t in topics"
+          :key="t.id"
+          class="inline-flex items-center gap-1 rounded-lg bg-surface-100 py-1 pr-1.5 pl-2.5 text-xs font-medium text-color dark:bg-surface-800"
+        >
+          <span class="text-primary-600">#</span>
           {{ t.name }}
-        </Chip>
-
-        <Popover v-if="!topicsFull" v-model:open="pickerOpen" :padded="false">
-          <Chip as="button" variant="outline" size="sm" class="border-dashed text-muted">
-            <template #icon><Hash /></template>
-            话题
-          </Chip>
-
-          <template #content>
-            <TopicPicker
-              v-model:query="query"
-              :loading="busy"
-              :sections="sections"
-              :can-create="canCreate"
-              :kw="kw"
-              :selected-ids="selectedIds"
-              @pick="pick"
-              @create="create"
-            />
+          <Button
+            unstyled
+            aria-label="移除话题"
+            class="grid size-4 cursor-pointer place-items-center rounded text-muted-color transition-colors hover:bg-surface-200 hover:text-color dark:hover:bg-surface-700"
+            @click.stop="$emit('remove', t.id)"
+          >
+            <template #icon>
+              <X :size="11" />
+            </template>
+          </Button>
+        </span>
+        <Button
+          v-if="!topicsFull"
+          label="话题"
+          unstyled
+          class="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-dashed border-surface-300 px-2.5 py-0.5 text-xs font-medium text-muted-color transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-surface-600"
+          @click.stop="toggle"
+        >
+          <template #icon>
+            <Hash :size="12" />
           </template>
-        </Popover>
-      </Inline>
+        </Button>
+      </div>
+
+      <Popover ref="op" :pt="{ root: { class: 'popover-no-arrow' } }" @show="ensureLoaded">
+        <TopicPicker
+          v-model:query="query"
+          :loading="busy"
+          :sections="sections"
+          :can-create="canCreate"
+          :kw="kw"
+          :selected-ids="selectedIds"
+          @pick="pick"
+          @create="create"
+        />
+      </Popover>
     </motion.div>
   </AnimatePresence>
 </template>

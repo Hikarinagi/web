@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { Button, Dialog, Form, FormField, Input, RadioGroup } from '@hina-ui/vue'
+  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
   import { appFormOf, DEVELOPER_APP_FORMS } from '~/features/developer/appForms'
   import {
-    developerAppSchema,
+    developerAppResolver,
     type DeveloperAppValues,
   } from '~/features/developer/schemas/app.schema'
-  import { getFieldErrors } from '~/utils/api/error'
 
   defineOptions({ name: 'DeveloperConsoleCreateDialog' })
 
@@ -14,26 +13,22 @@
     created: [secret: { client_id: string; client_secret: string | null }]
   }>()
 
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
-  const formOptions = DEVELOPER_APP_FORMS.map(option => ({
-    value: option.value,
-    label: option.label,
-    description: option.hint,
-  }))
-  const values = reactive<DeveloperAppValues>({ client_name: '', form: 'server' })
+  const formErrors = useFormErrors(developerAppResolver)
+  const form = useTemplateRef<FormInstance>('form')
   const submitting = ref(false)
 
   watch(visible, next => {
-    if (!next) return
-    form.value?.reset()
-    values.client_name = ''
-    values.form = 'server'
+    if (next) {
+      formErrors.clear()
+      form.value?.reset()
+    }
   })
 
-  async function onSubmit() {
-    if (submitting.value) return
+  async function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid || submitting.value) return
     submitting.value = true
     try {
+      const values = event.values as DeveloperAppValues
       const shape = appFormOf(values.form)
       const created = await hikariRequest<'/api/v3/user/me/developer/apps', 'post'>(
         '/api/v3/user/me/developer/apps',
@@ -48,7 +43,7 @@
       )
       emit('created', { client_id: created.client_id, client_secret: created.client_secret })
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     } finally {
       submitting.value = false
     }
@@ -56,39 +51,56 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="创建应用" size="lg" :locked="submitting">
-    <template #content>
-      <Form
-        ref="form"
-        :values="values"
-        :rules="developerAppSchema"
-        :disabled="submitting"
-        @submit="onSubmit"
-      >
-        <FormField name="client_name" label="应用名称" required>
-          <Input
-            v-model="values.client_name"
-            autocomplete="off"
-            placeholder="如：我的收藏同步工具"
-          />
-        </FormField>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="创建应用"
+    :dismissable-mask="!submitting"
+    :close-on-escape="!submitting"
+    :style="{ width: '92vw', maxWidth: '32rem' }"
+  >
+    <Form
+      ref="form"
+      :resolver="formErrors.resolver"
+      :initial-values="{ form: 'server' }"
+      class="flex flex-col gap-4"
+      @input="formErrors.clear"
+      @submit="onSubmit"
+    >
+      <FormItem v-slot="{ id }" name="client_name" label="应用名称" required>
+        <InputText :id="id" autocomplete="off" fluid placeholder="如：我的收藏同步工具" />
+      </FormItem>
 
-        <FormField
-          name="form"
-          label="应用形态"
-          required
-          description="创建后可在应用设置中调整形态、回调地址与权限范围。"
-        >
-          <RadioGroup v-model="values.form" :options="formOptions" block />
-        </FormField>
-      </Form>
-    </template>
+      <FormItem v-slot="{ field }" name="form" label="应用形态" required>
+        <div class="flex flex-col gap-2">
+          <label
+            v-for="option in DEVELOPER_APP_FORMS"
+            :key="option.value"
+            class="flex cursor-pointer items-start gap-2.5 rounded-lg border border-surface p-3 transition-colors hover:bg-emphasis"
+            :class="field.value === option.value ? 'border-hikari-primary-500' : ''"
+          >
+            <RadioButton
+              :model-value="field.value"
+              :value="option.value"
+              :aria-label="option.label"
+              @update:model-value="field.props.onInput({ value: option.value })"
+            />
+            <span class="flex min-w-0 flex-col gap-1">
+              <span class="text-sm font-medium text-color">{{ option.label }}</span>
+              <span class="text-xs leading-relaxed text-muted-color">{{ option.hint }}</span>
+            </span>
+          </label>
+        </div>
+      </FormItem>
 
-    <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
-        取消
-      </Button>
-      <Button :loading="submitting" @click="form?.submit()">创建</Button>
-    </template>
+      <p class="text-xs leading-relaxed text-muted-color">
+        创建后可在应用设置中调整形态、回调地址与权限范围。
+      </p>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <Button label="取消" severity="secondary" :disabled="submitting" @click="visible = false" />
+        <Button label="创建" type="submit" :loading="submitting" />
+      </div>
+    </Form>
   </Dialog>
 </template>

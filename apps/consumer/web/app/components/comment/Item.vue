@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Button, Flex, Inline, Stack } from '@hina-ui/vue'
   import { ChevronRight, ChevronUp } from '@lucide/vue'
-  import { cn } from '~/utils/cn'
   import { COMMENT_THREAD_KEY } from '~/features/comment/useThread'
   import type { CommentItem, CommentNode } from '~/features/comment/comment'
 
@@ -34,17 +32,10 @@
 </script>
 
 <template>
-  <Flex
+  <article
     :id="`comment-${comment.id}`"
-    as="article"
-    align="start"
-    :class="
-      cn(
-        'scroll-mt-24 rounded-lg transition-shadow duration-700',
-        isReply ? 'gap-2.5' : 'gap-3.5',
-        highlighted && 'ring-2 ring-accent/60',
-      )
-    "
+    class="flex scroll-mt-24 items-start rounded-lg transition-shadow duration-700"
+    :class="[isReply ? 'gap-2.5' : 'gap-3.5', highlighted ? 'ring-2 ring-primary-400/60' : '']"
   >
     <Avatar
       :user="author"
@@ -54,8 +45,8 @@
       :class="isReply ? 'size-8!' : 'size-10!'"
     />
 
-    <Stack gap="none" class="min-w-0 flex-1">
-      <Stack gap="none" class="gap-1.5">
+    <div class="min-w-0 flex-1">
+      <div class="flex flex-col gap-1.5">
         <CommentItemHeader :comment="comment" :author-id="authorId" />
         <CommentItemBody :comment="comment" :editing="editing" />
         <CommentItemActions
@@ -64,13 +55,9 @@
           :author-id="authorId"
           :is-reply="isReply"
         />
-      </Stack>
+      </div>
 
-      <Stack
-        v-if="!isReply && (visibleChildren.length || hasMoreReplies)"
-        gap="none"
-        class="mt-3 gap-3"
-      >
+      <div v-if="!isReply && (visibleChildren.length || hasMoreReplies)" class="mt-3 space-y-3">
         <CommentItem
           v-for="child in visibleChildren"
           :key="child.id"
@@ -78,14 +65,13 @@
           :author-id="authorId"
           is-reply
         />
-        <Inline v-if="hasMoreReplies || hasExpanded" :wrap="false">
+        <div v-if="hasMoreReplies || hasExpanded" class="flex items-center gap-3">
           <Button
             v-if="hasMoreReplies"
-            variant="ghost"
-            tone="neutral"
-            size="sm"
+            text
+            size="small"
             :loading="repliesLoading"
-            class="text-xs text-muted"
+            class="gap-0.5! text-xs! text-muted-color! hover:text-color!"
             @click="thread.expandReplies(comment as CommentItem)"
           >
             {{
@@ -93,21 +79,20 @@
                 ? `继续展开剩余 ${remainingReplies} 条回复`
                 : `共 ${childTotal} 条回复，点击查看`
             }}
-            <template #trailing><ChevronRight /></template>
+            <ChevronRight class="size-3.5" />
           </Button>
           <Button
             v-if="hasExpanded"
-            variant="ghost"
-            tone="neutral"
-            size="sm"
-            class="text-xs text-muted"
+            text
+            size="small"
+            class="gap-0.5! text-xs! text-muted-color! hover:text-color!"
             @click="thread.collapseReplies(comment.id)"
           >
             收起
-            <template #trailing><ChevronUp /></template>
+            <ChevronUp class="size-3.5" />
           </Button>
-        </Inline>
-      </Stack>
-    </Stack>
-  </Flex>
+        </div>
+      </div>
+    </div>
+  </article>
 </template>

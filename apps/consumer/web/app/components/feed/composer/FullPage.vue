@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Center, Flex, Inline, Spinner, Stack } from '@hina-ui/vue'
   import { motion } from 'motion-v'
   import { useComposer } from './composables/useComposer'
   import { TRANSITION } from '~/lib/motion'
@@ -80,27 +79,36 @@
 
 <template>
   <motion.div
-    class="fixed inset-0 z-60 flex flex-col bg-canvas"
+    class="fixed inset-0 z-60 flex flex-col bg-surface-0 dark:bg-surface-950"
     :initial="{ y: '100%' }"
     :animate="{ y: visible ? 0 : '100%' }"
     :transition="TRANSITION"
   >
-    <Stack as="header" gap="none" class="border-b border-line">
-      <Inline justify="between" :wrap="false" class="mx-auto w-full max-w-2xl px-3 py-2.5">
-        <Button variant="ghost" tone="neutral" size="sm" :disabled="submitting" @click="leave">
-          取消
-        </Button>
-        <Button size="sm" :loading="submitting" :disabled="!canPublish" @click="onPublish">
-          {{ submitLabel }}
-        </Button>
-      </Inline>
-    </Stack>
+    <div class="border-b border-surface-200 dark:border-surface-800">
+      <div class="mx-auto flex max-w-2xl items-center justify-between px-3 py-2.5">
+        <Button
+          label="取消"
+          text
+          severity="secondary"
+          size="small"
+          :disabled="submitting"
+          @click="leave"
+        />
+        <Button
+          :label="submitLabel"
+          size="small"
+          :loading="submitting"
+          :disabled="!canPublish"
+          @click="onPublish"
+        />
+      </div>
+    </div>
 
-    <Center v-if="loading" class="mx-auto w-full max-w-2xl flex-1">
-      <Spinner size="lg" />
-    </Center>
-    <Stack v-show="!loading" gap="none" class="mx-auto w-full max-w-2xl flex-1 overflow-y-auto">
-      <Flex gap="md" align="start" class="px-4 py-4">
+    <div v-if="loading" class="mx-auto flex w-full max-w-2xl flex-1 items-center justify-center">
+      <Spinner :size="32" />
+    </div>
+    <div v-show="!loading" class="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-y-auto">
+      <div class="flex items-start gap-3 px-4 py-4">
         <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
         <FeedComposerBody
           v-model:title="title"
@@ -109,9 +117,9 @@
           fullscreen
           :title-over-limit="titleOverLimit"
         />
-      </Flex>
+      </div>
 
-      <Stack gap="none" class="mt-auto">
+      <div class="mt-auto">
         <FeedComposerCovers
           :show="covers.length > 0"
           :covers="covers"
@@ -143,10 +151,10 @@
           @edit="openPoll"
           @remove="removePoll"
         />
-      </Stack>
-    </Stack>
+      </div>
+    </div>
 
-    <Stack gap="none" class="mx-auto w-full max-w-2xl">
+    <div class="mx-auto w-full max-w-2xl">
       <FeedComposerToolbar
         :show="true"
         hide-publish
@@ -167,7 +175,7 @@
         @poll-click="openPoll"
         @entity-select="openEntityCard"
       />
-    </Stack>
+    </div>
   </motion.div>
 
   <HikariEditorOverlayHost :plugins="plugins" />

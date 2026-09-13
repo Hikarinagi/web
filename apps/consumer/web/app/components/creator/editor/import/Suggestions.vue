@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { push } from 'notivue'
   import {
     buildRosterActions,
@@ -87,7 +86,7 @@
 </script>
 
 <template>
-  <Panel
+  <CardPanel
     v-if="actions.length > 0"
     title="外部源关系对齐"
     :count="actions.length"
@@ -116,5 +115,5 @@
         />
       </section>
     </div>
-  </Panel>
+  </CardPanel>
 </template>

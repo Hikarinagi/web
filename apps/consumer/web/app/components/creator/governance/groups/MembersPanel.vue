@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Plus, Users, X } from '@lucide/vue'
   import type { BackendPermissionGroupMemberList } from '~/features/creator/governance'
@@ -43,8 +42,7 @@
 </script>
 
 <template>
-  <Panel title="成员" :count="list?.meta.total_items ?? 0">
-    <template #icon><Users /></template>
+  <CardPanel title="成员" :icon="Users" :count="list?.meta.total_items ?? 0">
     <template #actions>
       <Button label="添加" size="small" @click="addOpen = true">
         <template #icon>
@@ -86,7 +84,7 @@
         </Button>
       </li>
     </ul>
-  </Panel>
+  </CardPanel>
 
   <CreatorGovernanceGroupsAddMemberDialog
     v-model:visible="addOpen"

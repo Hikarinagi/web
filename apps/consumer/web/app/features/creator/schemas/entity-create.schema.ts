@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const entityCreateSchema = v.object({
@@ -11,3 +12,6 @@ export const producerCreateSchema = v.object({
 
 export type EntityCreateValues = v.InferOutput<typeof entityCreateSchema>
 export type ProducerCreateValues = v.InferOutput<typeof producerCreateSchema>
+
+export const entityCreateResolver = valibotResolver(entityCreateSchema)
+export const producerCreateResolver = valibotResolver(producerCreateSchema)

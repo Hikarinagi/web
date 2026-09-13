@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Inline } from '@hina-ui/vue'
   import { Home, RefreshCw } from '@lucide/vue'
   import type { NuxtError } from '#app'
   import { isRecord } from '#shared/utils/record'
@@ -105,20 +104,18 @@
         {{ detail }}
       </p>
 
-      <Inline class="mt-8">
-        <Button @click="goHome">
+      <div class="mt-8 flex w-auto items-center gap-3">
+        <Button label="返回首页" @click="goHome">
           <template #icon>
-            <Home aria-hidden="true" />
+            <Home :size="17" aria-hidden="true" />
           </template>
-          返回首页
         </Button>
-        <Button variant="outline" tone="neutral" @click="reloadPage">
+        <Button label="重新加载" severity="secondary" outlined @click="reloadPage">
           <template #icon>
-            <RefreshCw aria-hidden="true" />
+            <RefreshCw :size="17" aria-hidden="true" />
           </template>
-          重新加载
         </Button>
-      </Inline>
+      </div>
     </div>
 
     <div

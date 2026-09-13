@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, Ripple, Stack, Tag, Text } from '@hina-ui/vue'
   import type { BackendEntitySummary } from '~/features/creator/editor'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
   import { ENTITY_FALLBACK_IMAGE, ENTITY_KINDS } from '~/features/entity/entity'
@@ -19,48 +18,37 @@
 </script>
 
 <template>
-  <Card
-    as="button"
-    type="button"
-    :padded="false"
-    :aria-pressed="selected"
-    :class="
-      cn(
-        'hn-state-layer relative w-full hn-interactive p-2 text-start hn-press-lg',
-        selected && 'border-accent bg-accent-soft ring-2 ring-accent-soft',
-      )
-    "
+  <Button
+    unstyled
+    :class="[
+      'relative flex flex-col gap-1.5 rounded-lg border p-2 text-left transition-colors',
+      selected
+        ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 dark:bg-primary-950 dark:ring-primary-800'
+        : 'border-surface-200 hover:border-surface-300 dark:border-surface-700 dark:hover:border-surface-600',
+    ]"
   >
-    <Ripple />
-    <Stack gap="xs">
-      <HikariImage
-        :src="cover"
-        alt=""
-        preset="small"
-        class="aspect-square w-full rounded bg-inset"
-        :image-class="imageClass"
-      >
-        <template #empty><span /></template>
-        <template #error><span /></template>
-      </HikariImage>
-      <Text as="span" size="sm" weight="medium" truncate>{{ item.name }}</Text>
-      <Text as="span" size="xs" tone="muted" class="font-mono">#{{ item.id }}</Text>
-    </Stack>
-
-    <Tag
+    <HikariImage
+      :src="cover"
+      alt=""
+      preset="small"
+      class="aspect-square w-full rounded bg-surface-100 dark:bg-surface-800"
+      :image-class="imageClass"
+    >
+      <template #empty><span /></template>
+      <template #error><span /></template>
+    </HikariImage>
+    <span class="truncate text-sm font-medium">{{ item.name }}</span>
+    <span class="font-mono text-xs text-muted-color">#{{ item.id }}</span>
+    <Badge
       v-if="selected"
-      variant="solid"
-      tone="accent"
-      class="absolute top-0 left-0 rounded-tr-none rounded-bl-none"
-    >
-      已选
-    </Tag>
-    <Tag
+      value="已选"
+      class="absolute top-0 left-0 rounded-tr-none! rounded-bl-none! text-sm"
+    />
+    <Badge
       v-if="item.status === 'PENDING'"
-      tone="warning"
-      class="absolute top-0 right-0 rounded-tl-none rounded-br-none"
-    >
-      未核实
-    </Tag>
-  </Card>
+      value="未核实"
+      severity="warn"
+      class="absolute top-0 right-0 rounded-tl-none! rounded-br-none! text-xs"
+    />
+  </Button>
 </template>

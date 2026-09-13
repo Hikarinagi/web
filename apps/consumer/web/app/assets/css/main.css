@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
-@import '@hina-ui/vue/styles/tokens.css';
 @import './theme.css';
 @import './hikari-content.css';
 @import './scrollbar.css';
@@ -39,12 +38,13 @@ body {
   min-height: 100vh;
   margin: 0;
   touch-action: manipulation;
-  background: var(--hn-bg-canvas);
+  background: var(--p-surface-0);
   color: var(--p-surface-950);
   font-family: var(--font-sans);
 }
 
 html.dark body {
+  background: var(--p-surface-950);
   color: var(--p-surface-0);
 }
 

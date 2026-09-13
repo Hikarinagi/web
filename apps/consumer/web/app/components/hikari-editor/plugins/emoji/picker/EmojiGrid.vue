@@ -1,5 +1,4 @@
 <script setup lang="ts" generic="T extends Emoji">
-  import { Skeleton } from '@hina-ui/vue'
   import type { Emoji } from '../composables/useUserEmojiCatalog'
 
   defineOptions({ name: 'HikariEditorPluginsEmojiPickerEmojiGrid' })
@@ -28,11 +27,7 @@
         :processing="false"
         class="h-8 w-8"
         image-class="h-full w-full object-contain"
-      >
-        <template #skeleton>
-          <Skeleton class="size-full rounded-sm" />
-        </template>
-      </HikariImage>
+      />
     </Button>
   </div>
 </template>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Alert, Button, CodeBlock, Dialog, Stack } from '@hina-ui/vue'
-
   defineOptions({ name: 'DeveloperConsoleSecretDialog' })
 
   const visible = defineModel<boolean>('visible', { required: true })
@@ -10,16 +8,21 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="应用凭据" size="lg" locked>
-    <template #content>
-      <Stack gap="md">
-        <Alert tone="warning">请妥善保存以下信息，关闭弹窗后将不会再次显示</Alert>
-        <CodeBlock :code="code" />
-      </Stack>
-    </template>
-
-    <template #footer>
-      <Button @click="visible = false">我已保存</Button>
-    </template>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="应用凭据"
+    :dismissable-mask="false"
+    :style="{ width: '92vw', maxWidth: '34rem' }"
+  >
+    <div class="flex flex-col gap-4">
+      <Message severity="warn" :closable="false">
+        请妥善保存以下信息，关闭弹窗后将不会再次显示
+      </Message>
+      <DeveloperCodeBlock :code="code" />
+      <div class="flex justify-end">
+        <Button label="我已保存" @click="visible = false" />
+      </div>
+    </div>
   </Dialog>
 </template>

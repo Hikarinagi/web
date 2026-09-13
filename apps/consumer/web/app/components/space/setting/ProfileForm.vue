@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import Form from '@primevue/forms/form'
   import { useProfileForm } from '~/features/space/useProfileForm'
   import type { CurrentUser } from '~/types/auth'
@@ -14,7 +13,7 @@
 </script>
 
 <template>
-  <Panel
+  <CardPanel
     title="个人资料"
     description="在此页面更新你的个人资料，所有更改需点击 保存修改 按钮后才能生效"
   >
@@ -100,5 +99,5 @@
     </div>
 
     <UserChangeUsernameDialog v-model:visible="usernameDialog" :current="user.name" />
-  </Panel>
+  </CardPanel>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { Trash2 } from '@lucide/vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
@@ -140,28 +139,26 @@
 </script>
 
 <template>
-  <Card
+  <div
     ref="boxRef"
-    :padded="false"
+    class="flex flex-col rounded-(--editor-chrome-radius) border bg-surface-0 transition-[border-color,box-shadow] duration-200 dark:bg-surface-900"
     :class="
-      cn(
-        'flex flex-col rounded-(--editor-chrome-radius) transition-[border-color,box-shadow] duration-200',
-        focused ? 'border-accent ring-2 ring-accent-soft' : 'border-line',
-      )
+      focused
+        ? 'border-hikari-primary-400 ring-2 ring-hikari-primary-100 dark:border-hikari-primary-500 dark:ring-hikari-primary-900/40'
+        : 'border-surface-200 dark:border-surface-700'
     "
     :style="{ '--editor-input-min-h': inputMinH }"
   >
-    <Stack gap="none" class="comment-editor-input max-h-50 overflow-y-auto px-3 py-[9px]">
-      <Text
+    <div class="comment-editor-input max-h-[200px] overflow-y-auto px-3 py-[9px]">
+      <p
         v-if="!editor"
-        size="sm"
-        class="leading-normal text-(--editor-placeholder-color)"
+        class="text-sm leading-normal text-(--editor-placeholder-color)"
         :style="{ minHeight: 'var(--editor-input-min-h)' }"
       >
         {{ placeholder }}
-      </Text>
+      </p>
       <HikariEditor v-else :editor="editor" />
-    </Stack>
+    </div>
 
     <AnimatePresence>
       <motion.div
@@ -174,12 +171,11 @@
         class="overflow-hidden"
       >
         <ScrollArea axis="x" class="px-3 pb-2">
-          <Inline gap="sm" :wrap="false">
-            <Card
+          <div class="flex gap-2">
+            <div
               v-for="m in attachments"
               :key="m.id"
-              :padded="false"
-              class="group/thumb relative size-16 shrink-0 shadow-none"
+              class="group/thumb relative size-16 shrink-0 overflow-hidden rounded-lg border border-surface-200 dark:border-surface-700"
             >
               <HikariImage
                 :src="m.src"
@@ -188,22 +184,21 @@
                 class="size-full"
                 image-class="size-full object-cover"
               >
-                <template #empty />
-                <template #error />
+                <template #empty><span /></template>
+                <template #error><span /></template>
               </HikariImage>
-              <IconButton
-                label="移除"
-                :tooltip="false"
-                variant="solid"
-                tone="neutral"
-                size="sm"
-                class="absolute top-1 right-1 size-5 opacity-100 transition-opacity md:opacity-0 md:group-hover/thumb:opacity-100 md:focus-visible:opacity-100"
-                @click.stop="removeAttachment(m.id)"
-              >
-                <Trash2 :size="12" />
-              </IconButton>
-            </Card>
-          </Inline>
+              <div class="absolute top-1 right-1">
+                <Button
+                  unstyled
+                  aria-label="移除"
+                  class="flex size-5 items-center justify-center rounded-md bg-surface-900/60 text-white opacity-100 transition-opacity md:opacity-0 md:group-hover/thumb:opacity-100 md:focus-visible:opacity-100"
+                  @click.stop="removeAttachment(m.id)"
+                >
+                  <template #icon><Trash2 :size="12" /></template>
+                </Button>
+              </div>
+            </div>
+          </div>
         </ScrollArea>
       </motion.div>
     </AnimatePresence>
@@ -249,7 +244,7 @@
         </motion.div>
       </motion.div>
     </AnimatePresence>
-  </Card>
+  </div>
 </template>
 
 <style scoped>

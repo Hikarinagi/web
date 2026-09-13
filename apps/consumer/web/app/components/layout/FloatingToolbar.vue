@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { IconButton } from '@hina-ui/vue'
   import { ArrowLeft, ChevronUp } from '@lucide/vue'
   import { AnimatePresence, LayoutGroup, motion } from 'motion-v'
   import type { Component } from 'vue'
@@ -23,7 +22,7 @@
   const HOME_PATHS = new Set(['/', '/galgames', '/light-novels'])
   const SCROLL_THRESHOLD = 280
   const BUTTON_CLASS =
-    'pointer-events-auto size-10 bg-surface/90 text-muted shadow-[0_8px_24px_rgba(15,23,42,0.12)] backdrop-blur'
+    'pointer-events-auto grid size-10 cursor-pointer place-items-center rounded-lg border border-surface-200/75 bg-surface-0/90 text-muted-color shadow-[0_8px_24px_rgba(15,23,42,0.12)] backdrop-blur transition-colors hover:border-surface-300 hover:bg-surface-0 hover:text-color disabled:cursor-not-allowed disabled:opacity-45 dark:border-surface-700/75 dark:bg-surface-900/90 dark:hover:border-surface-600 dark:hover:bg-surface-900'
   const ICON_CLASS = 'size-4.5 transition-transform duration-200 ease-out'
   const ITEM_TRANSITION = {
     ...TRANSITION_FAST,
@@ -33,7 +32,7 @@
   const route = useRoute()
   const router = useRouter()
   const { y } = useWindowScroll()
-  const { actions, topHandlers, activeTop, elevated } = useFloatingToolbar()
+  const { actions, topHandlers, activeTop } = useFloatingToolbar()
 
   const routePath = computed(() => route.path.replace(/\/+$/, '') || '/')
   const showBack = computed(() => !HOME_PATHS.has(routePath.value))
@@ -130,12 +129,7 @@
   <Teleport to="body">
     <motion.aside
       v-if="!suppressed"
-      :class="
-        cn(
-          'pointer-events-none fixed hn-scrollbar-safe flex h-48 w-10 flex-col justify-end gap-2',
-          elevated ? 'z-60' : 'z-40',
-        )
-      "
+      class="pointer-events-none fixed z-40 mr-(--p-scrollbar-width) flex h-48 w-10 flex-col justify-end gap-2"
       :style="toolbarStyle"
       :initial="{ opacity: 1 }"
       :animate="{ opacity: 1 }"
@@ -147,6 +141,7 @@
           <motion.div
             v-for="item in visibleItems"
             :key="item.id"
+            v-tooltip.left="item.label"
             :layout="'position'"
             class="size-10"
             :initial="{ opacity: 0, scale: 0.92 }"
@@ -154,10 +149,9 @@
             :exit="{ opacity: 0, scale: 0.92 }"
             :transition="ITEM_TRANSITION"
           >
-            <IconButton
-              :label="item.label"
-              side="left"
-              variant="outline"
+            <Button
+              unstyled
+              :aria-label="item.label"
               :disabled="item.disabled"
               :class="buttonClass(item)"
               @click="click(item)"
@@ -174,7 +168,7 @@
                   <component :is="item.icon" :class="iconClass(item)" aria-hidden="true" />
                 </motion.span>
               </AnimatePresence>
-            </IconButton>
+            </Button>
           </motion.div>
         </AnimatePresence>
       </LayoutGroup>

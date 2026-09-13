@@ -1,22 +1,13 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Chip,
-    FormField,
-    Inline,
-    Popover,
-    SegmentedControl,
-    Select,
-    Stack,
-    Switch,
-  } from '@hina-ui/vue'
-  import { Hash, ImagePlus } from '@lucide/vue'
+  import { Hash, ImagePlus, X } from '@lucide/vue'
+  import type Popover from 'primevue/popover'
   import { useTopics, type TopicOption } from '~/components/topic/useTopics'
   import type { ArticleEditorHost } from '../composables/useArticleEditor'
 
   defineOptions({ name: 'ArticleEditorPublishForm' })
 
   const props = defineProps<{ host: ArticleEditorHost }>()
+  const emit = defineEmits<{ cancel: [] }>()
 
   const {
     cover,
@@ -25,28 +16,23 @@
     topicsFull,
     visible,
     allowComment,
+    publishing,
+    canPublish,
     openCoverLibrary,
     removeCover,
     addTopic,
     removeTopic,
     createTopic,
+    publish,
   } = props.host
 
   const { data: sections, pending: sectionsPending } = useHikariApiData('/api/v3/sections', {
     query: { page: 1, page_size: 50 },
     lazy: true,
   })
-  const sectionOptions = computed(() =>
-    (sections.value?.items ?? []).map(section => ({ value: section.id, label: section.name })),
-  )
-  const sectionValue = computed({
-    get: () => sectionId.value,
-    set: (value: string | number | null | undefined) => {
-      sectionId.value = typeof value === 'number' ? value : null
-    },
-  })
+  const sectionOptions = computed(() => sections.value?.items ?? [])
 
-  const topicsOpen = ref(false)
+  const op = ref<InstanceType<typeof Popover>>()
   const {
     query,
     kw,
@@ -57,15 +43,13 @@
     ensureLoaded,
   } = useTopics({ selected: () => topics.value, full: () => topicsFull.value })
 
-  watch(topicsOpen, open => {
-    if (open) void ensureLoaded()
-  })
-
-  function pickTopic(topic: TopicOption) {
-    if (selectedIds.value.has(topic.id)) removeTopic(topic.id)
-    else addTopic({ id: topic.id, name: topic.name })
+  function toggleTopics(event: MouseEvent) {
+    op.value?.toggle(event)
   }
-
+  function pickTopic(t: TopicOption) {
+    if (selectedIds.value.has(t.id)) removeTopic(t.id)
+    else addTopic({ id: t.id, name: t.name })
+  }
   function onCreateTopic() {
     if (!canCreate.value) return
     createTopic(kw.value)
@@ -73,80 +57,130 @@
   }
 
   const VISIBILITY = [
-    { value: 'PUBLIC', label: '公开' },
-    { value: 'PRIVATE', label: '私密' },
+    { label: '公开', value: 'PUBLIC' },
+    { label: '私密', value: 'PRIVATE' },
   ]
+
+  async function onConfirm() {
+    await publish()
+  }
 </script>
 
 <template>
-  <Stack gap="lg">
-    <FormField label="封面">
-      <Inline v-if="cover" gap="sm" align="center">
+  <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-color">封面</label>
+      <div v-if="cover" class="flex items-center gap-3">
         <HikariImage
           :src="cover.src"
           alt=""
-          class="aspect-8/5 h-12 shrink-0 overflow-hidden rounded-md border border-line"
+          class="aspect-8/5 h-12 shrink-0 overflow-hidden rounded-md border border-surface-200 dark:border-surface-800"
           image-class="size-full object-cover"
           :processing="{ q: 70 }"
         />
-        <Button variant="outline" size="sm" @click="openCoverLibrary">更换</Button>
-        <Button variant="outline" tone="neutral" size="sm" @click="removeCover">移除</Button>
-      </Inline>
+        <Button size="small" variant="outlined" @click="openCoverLibrary">更换</Button>
+        <Button size="small" variant="outlined" severity="secondary" @click="removeCover">
+          移除
+        </Button>
+      </div>
       <Button
         v-else
-        variant="outline"
-        tone="neutral"
-        size="sm"
-        class="w-fit border-dashed"
+        unstyled
+        class="inline-flex w-fit cursor-pointer items-center gap-1.5 rounded-lg border border-dashed border-surface-300 px-3 py-1.5 text-sm text-muted-color transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-surface-600"
         @click="openCoverLibrary"
       >
-        <template #icon><ImagePlus /></template>
-        添加封面
+        <ImagePlus :size="16" />
+        <span>添加封面</span>
       </Button>
-    </FormField>
+    </div>
 
-    <FormField label="板块">
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-color">板块</label>
       <Select
-        v-model="sectionValue"
+        v-model="sectionId"
         :options="sectionOptions"
-        :disabled="sectionsPending"
-        clearable
+        option-label="name"
+        option-value="id"
+        :loading="sectionsPending"
         placeholder="选择板块"
+        show-clear
+        fluid
       />
-    </FormField>
+    </div>
 
-    <FormField label="话题">
-      <Inline gap="sm" align="center" wrap>
-        <Chip v-for="topic in topics" :key="topic.id" removable @remove="removeTopic(topic.id)">
-          <template #icon><Hash /></template>
-          {{ topic.name }}
-        </Chip>
-
-        <Popover v-if="!topicsFull" v-model:open="topicsOpen" :padded="false" align="start">
-          <Button variant="outline" tone="neutral" size="sm" class="border-dashed">
-            <template #icon><Hash /></template>
-            话题
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-color">话题</label>
+      <div class="flex flex-wrap items-center gap-2">
+        <span
+          v-for="t in topics"
+          :key="t.id"
+          class="inline-flex items-center gap-1 rounded-lg bg-surface-100 py-1 pr-1.5 pl-2.5 text-xs font-medium text-color dark:bg-surface-800"
+        >
+          <span class="text-primary-600">#</span>
+          {{ t.name }}
+          <Button
+            unstyled
+            aria-label="移除话题"
+            class="grid size-4 cursor-pointer place-items-center rounded text-muted-color transition-colors hover:bg-surface-200 hover:text-color dark:hover:bg-surface-700"
+            @click="removeTopic(t.id)"
+          >
+            <template #icon>
+              <X :size="11" />
+            </template>
           </Button>
-          <template #content>
-            <TopicPicker
-              v-model:query="query"
-              :loading="busy"
-              :sections="topicSections"
-              :can-create="canCreate"
-              :kw="kw"
-              :selected-ids="selectedIds"
-              @pick="pickTopic"
-              @create="onCreateTopic"
-            />
+        </span>
+        <Button
+          v-if="!topicsFull"
+          label="话题"
+          unstyled
+          class="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-dashed border-surface-300 px-2.5 py-0.5 text-xs font-medium text-muted-color transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-surface-600"
+          @click="toggleTopics"
+        >
+          <template #icon>
+            <Hash :size="12" />
           </template>
-        </Popover>
-      </Inline>
-    </FormField>
+        </Button>
+      </div>
+      <Popover ref="op" :pt="{ root: { class: 'popover-no-arrow' } }" @show="ensureLoaded">
+        <TopicPicker
+          v-model:query="query"
+          :loading="busy"
+          :sections="topicSections"
+          :can-create="canCreate"
+          :kw="kw"
+          :selected-ids="selectedIds"
+          @pick="pickTopic"
+          @create="onCreateTopic"
+        />
+      </Popover>
+    </div>
 
-    <FormField label="可见性">
-      <SegmentedControl v-model="visible" :options="VISIBILITY" size="sm" />
-    </FormField>
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-color">可见性</label>
+      <SelectButton
+        v-model="visible"
+        :options="VISIBILITY"
+        option-label="label"
+        option-value="value"
+        :allow-empty="false"
+        size="small"
+      />
+    </div>
 
-    <Switch v-model="allowComment" control-placement="end" block>允许评论</Switch>
-  </Stack>
+    <div class="flex items-center justify-between">
+      <label class="text-sm font-medium text-color">允许评论</label>
+      <ToggleSwitch v-model="allowComment" />
+    </div>
+
+    <div class="mt-1 flex items-center justify-end gap-2">
+      <Button
+        label="取消"
+        severity="secondary"
+        text
+        :disabled="publishing"
+        @click="emit('cancel')"
+      />
+      <Button label="确认发布" :loading="publishing" :disabled="!canPublish" @click="onConfirm" />
+    </div>
+  </div>
 </template>

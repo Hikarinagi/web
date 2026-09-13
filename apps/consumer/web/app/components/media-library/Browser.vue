@@ -1,23 +1,19 @@
 <script setup lang="ts">
-  import { Button, Center, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import { CloudUpload } from '@lucide/vue'
   import { push } from 'notivue'
   import { useMediaCollection } from './composables/useMediaCollection'
   import { useMediaLibrary } from './composables/useMediaLibrary'
-  import { downloadMedia } from './lib/download'
   import { uploadImage } from './lib/upload'
-  import { resolveImageUrl } from '~/utils/media/image'
   import type { MediaValue, PendingUpload } from './types'
 
   const { mode, max, finish } = useMediaLibrary()
   const { items, loading, done, loadMore, ensureLoaded, prepend, remove } = useMediaCollection()
-  const { confirm } = useHikariConfirm()
-  const config = useRuntimeConfig()
-  const { copy } = useClipboard()
+  const confirm = useConfirm()
 
   const selected = ref<MediaValue[]>([])
   const pending = ref<PendingUpload[]>([])
   const dragging = ref(false)
+  const deleting = ref(false)
   let pendingSeq = 0
 
   onMounted(ensureLoaded)
@@ -104,57 +100,48 @@
     selected.value.length ? `添加 ${selected.value.length} 张` : '添加',
   )
 
-  function mediaUrl(media: MediaValue) {
-    return resolveImageUrl(media.src, {
-      cdnHost: config.public.cdnHost,
-      imageProcessorHost: config.public.imageProcessorHost,
-      processing: false,
+  function requestDelete(media: MediaValue) {
+    confirm.require({
+      group: 'app-shell',
+      header: '从媒体库移除',
+      message: '将这张图片从媒体库移除？',
+      rejectLabel: '取消',
+      acceptLabel: '移除',
+      defaultFocus: 'reject',
+      loading: () => deleting.value,
+      onAccept: ({ close }) => void deleteMedia(media, close),
     })
   }
 
-  function openOriginal(media: MediaValue) {
-    window.open(mediaUrl(media), '_blank', 'noopener')
-  }
-
-  async function copyLink(media: MediaValue) {
-    await copy(mediaUrl(media))
-    push.success({ message: '链接已复制' })
-  }
-
-  function requestDelete(items: MediaValue[]) {
-    if (!items.length) return
-    confirm({
-      title: items.length > 1 ? `从媒体库移除 ${items.length} 张` : '从媒体库移除',
-      description: items.length > 1 ? '将这些图片从媒体库移除？' : '将这张图片从媒体库移除？',
-      confirmText: '移除',
-      tone: 'danger',
-      onConfirm: () => deleteMedia(items),
-    })
-  }
-
-  async function deleteMedia(items: MediaValue[]) {
-    for (const media of items) {
+  async function deleteMedia(media: MediaValue, close: () => void) {
+    if (deleting.value) return
+    deleting.value = true
+    try {
       await hikariRequest('/api/v3/user/me/media/{id}', {
         method: 'DELETE',
         path: { id: media.id },
       })
       remove(media.id)
       selected.value = selected.value.filter(item => item.id !== media.id)
+      close()
+    } catch {
+      /* empty */
+    } finally {
+      deleting.value = false
     }
   }
 </script>
 
 <template>
-  <Stack
-    gap="none"
-    class="h-full md:h-[58vh] md:max-h-128"
+  <div
+    class="flex h-full flex-col md:h-[58vh] md:max-h-128"
     @dragover.prevent="dragging = true"
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <Stack gap="none" class="relative min-h-0 flex-1">
+    <div class="relative min-h-0 flex-1">
       <ScrollArea class="size-full">
-        <Stack gap="none" class="px-0.5 py-1">
+        <div class="px-0.5 py-1">
           <MediaLibraryGrid
             :items="items"
             :selected="selected"
@@ -163,15 +150,12 @@
             :done="done"
             :multi="mode === 'multiple'"
             @remove="requestDelete"
-            @download="items => downloadMedia(items, mediaUrl)"
-            @copy="copyLink"
-            @open="openOriginal"
             @toggle="toggle"
             @marquee="marqueeSelect"
             @files="addFiles"
             @reach-end="loadMore"
           />
-        </Stack>
+        </div>
       </ScrollArea>
 
       <Transition
@@ -180,22 +164,20 @@
         enter-from-class="opacity-0"
         leave-to-class="opacity-0"
       >
-        <Center
+        <div
           v-if="dragging"
-          class="pointer-events-none absolute inset-0 z-10 rounded-lg border-2 border-dashed border-accent bg-accent/10 text-accent-text backdrop-blur-sm"
+          class="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary bg-primary/10 text-primary backdrop-blur-sm"
         >
-          <Stack gap="sm" align="center">
-            <CloudUpload class="size-8" aria-hidden="true" />
-            <Text as="span" size="sm" weight="medium">松开以上传</Text>
-          </Stack>
-        </Center>
+          <CloudUpload class="size-8" />
+          <span class="text-sm font-medium">松开以上传</span>
+        </div>
       </Transition>
-    </Stack>
+    </div>
 
-    <Inline gap="sm" align="center" class="border-t border-line pt-3">
-      <Text as="span" size="sm" tone="muted" class="me-auto">已选 {{ selected.length }}</Text>
-      <Button variant="ghost" tone="neutral" @click="finish([])">取消</Button>
-      <Button :disabled="!selected.length" @click="finish(selected)">{{ confirmLabel }}</Button>
-    </Inline>
-  </Stack>
+    <div class="flex items-center gap-3 border-t border-surface-200 pt-3 dark:border-surface-800">
+      <span class="mr-auto text-sm text-muted-color">已选 {{ selected.length }}</span>
+      <Button label="取消" variant="text" severity="secondary" @click="finish([])" />
+      <Button :label="confirmLabel" :disabled="!selected.length" @click="finish(selected)" />
+    </div>
+  </div>
 </template>

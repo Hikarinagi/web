@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import type { BackendChangeRequestList } from '~/features/creator/contribution'
   import { CircleEllipsis } from '@lucide/vue'
 
@@ -7,8 +6,7 @@
 </script>
 
 <template>
-  <Panel title="进行中的变更请求" :count="list?.meta.total_items ?? 0">
-    <template #icon><CircleEllipsis /></template>
+  <CardPanel title="进行中的变更请求" :icon="CircleEllipsis" :count="list?.meta.total_items ?? 0">
     <template #actions>
       <Button
         as="router-link"
@@ -26,5 +24,5 @@
       />
     </div>
     <CreatorEmpty v-else text="没有进行中的变更请求" />
-  </Panel>
+  </CardPanel>
 </template>

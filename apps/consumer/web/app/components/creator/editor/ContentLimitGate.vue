@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
   import { ArrowLeft, Check, ShieldAlert } from '@lucide/vue'
   import {
     NEVER_SHOW_NSFW,
@@ -49,11 +48,11 @@
 
 <template>
   <div class="mx-auto flex max-w-2xl flex-col gap-5">
-    <Panel
+    <CardPanel
       title="确认内容显示等级"
+      :icon="ShieldAlert"
       description="Wiki编辑需要完整检索条目。继续前需要至少能看到 NSFW 条目（可带模糊遮罩），否则部分条目会被门禁过滤。"
     >
-      <template #icon><ShieldAlert /></template>
       <div class="flex flex-col gap-5">
         <Message severity="warn" variant="simple" size="small">
           确认后会将内容显示等级切换为「显示但带模糊遮罩」。编辑器内的搜索、关联和详情不再被 NSFW
@@ -69,6 +68,6 @@
           </Button>
         </div>
       </div>
-    </Panel>
+    </CardPanel>
   </div>
 </template>

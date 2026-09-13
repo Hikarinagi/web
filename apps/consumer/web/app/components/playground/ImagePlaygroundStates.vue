@@ -15,6 +15,17 @@
       <figure class="space-y-2">
         <HikariImage
           src="/favicon.ico"
+          alt="Custom skeleton"
+          class="aspect-16/10 w-full rounded-lg border border-surface-200 dark:border-surface-800"
+          image-class="object-contain p-8"
+          skeleton-class="bg-primary-100! dark:bg-primary-900!"
+        />
+        <figcaption class="text-xs text-muted-color">custom skeleton class</figcaption>
+      </figure>
+
+      <figure class="space-y-2">
+        <HikariImage
+          src="/favicon.ico"
           alt="Custom skeleton slot"
           class="aspect-16/10 w-full rounded-lg border border-surface-200 dark:border-surface-800"
           image-class="object-contain p-8"

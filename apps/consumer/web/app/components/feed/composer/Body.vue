@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import { Input, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { Editor } from '@tiptap/vue-3'
   import { TRANSITION } from '~/lib/motion'
-  import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'FeedComposerBody' })
 
@@ -17,7 +15,7 @@
 </script>
 
 <template>
-  <Stack gap="none" class="min-w-0 flex-1">
+  <div class="min-w-0 flex-1">
     <AnimatePresence>
       <motion.div
         v-if="expanded"
@@ -28,42 +26,38 @@
         :transition="TRANSITION"
         class="overflow-hidden"
       >
-        <Input
+        <InputText
           v-model="title"
-          variant="bare"
+          unstyled
           maxlength="200"
           placeholder="加个标题（选填）"
-          :class="
-            cn(
-              'h-auto pb-1.5 text-base font-semibold [--hn-input-px:0px]',
-              titleOverLimit && 'text-danger-text',
-            )
-          "
+          class="w-full border-0 bg-transparent pb-1.5 text-base font-semibold text-color outline-none placeholder:font-normal placeholder:text-(--editor-placeholder-color)"
+          :class="titleOverLimit ? 'text-red-500' : ''"
         />
       </motion.div>
     </AnimatePresence>
 
-    <Stack
-      gap="none"
+    <div
+      class="composer-input"
       :class="
-        cn(
-          'composer-input',
-          !fullscreen &&
-            (expanded ? 'max-h-[50dvh] overflow-y-auto' : 'max-h-[34px] overflow-hidden'),
-        )
+        fullscreen
+          ? ''
+          : expanded
+            ? 'max-h-[50dvh] overflow-y-auto'
+            : 'max-h-[34px] overflow-hidden'
       "
       :style="{ '--composer-min-h': fullscreen ? '40vh' : expanded ? '66px' : '24px' }"
     >
-      <Text
+      <p
         v-if="!editor"
         class="text-[15px] leading-[1.65] text-(--editor-placeholder-color)"
         :style="{ minHeight: 'var(--composer-min-h)' }"
       >
         分享你的发现、推荐、打卡…
-      </Text>
+      </p>
       <HikariEditor v-else :editor="editor" />
-    </Stack>
-  </Stack>
+    </div>
+  </div>
 </template>
 
 <style scoped>

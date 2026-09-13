@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, IconButton, Ripple, SimpleGrid, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { Plus, X } from '@lucide/vue'
   import { TRANSITION } from '~/lib/motion'
@@ -23,52 +22,48 @@
       :transition="TRANSITION"
       class="overflow-hidden"
     >
-      <SimpleGrid min="92px" gap="sm" class="py-2 pr-4 pl-16">
-        <Card
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(92px,1fr))] gap-2 py-2 pr-4 pl-16">
+        <div
           v-for="m in covers"
           :key="m.id"
-          :padded="false"
-          class="group/cover relative aspect-square shadow-none"
+          class="group/cover relative aspect-square overflow-hidden rounded-lg border border-surface-200 dark:border-surface-700"
         >
           <HikariImage
             :src="m.src"
-            alt="待发布配图"
+            alt=""
             preset="small"
             class="size-full"
             image-class="size-full object-cover"
             :lazy="false"
             preview
           >
-            <template #empty />
-            <template #error />
+            <template #empty><span /></template>
+            <template #error><span /></template>
           </HikariImage>
-          <IconButton
-            label="移除图片"
-            :tooltip="false"
-            variant="solid"
-            tone="neutral"
-            size="sm"
-            class="absolute top-1 right-1 size-5 opacity-100 transition-opacity md:opacity-0 md:group-hover/cover:opacity-100 md:focus-visible:opacity-100"
-            @click.stop="$emit('remove', m.id)"
-          >
-            <X :size="12" />
-          </IconButton>
-        </Card>
-        <Card
+          <div class="absolute top-1 right-1">
+            <Button
+              unstyled
+              aria-label="移除图片"
+              class="flex size-5 cursor-pointer items-center justify-center rounded-md bg-surface-900/55 text-white opacity-100 transition-opacity md:opacity-0 md:group-hover/cover:opacity-100 md:focus-visible:opacity-100"
+              @click.stop="$emit('remove', m.id)"
+            >
+              <template #icon><X :size="12" /></template>
+            </Button>
+          </div>
+        </div>
+        <button
           v-if="!coversFull"
-          as="button"
-          :padded="false"
-          class="hn-state-layer relative flex aspect-square hn-interactive flex-col items-center justify-center gap-1 border-dashed text-muted shadow-none"
+          type="button"
           aria-label="添加图片"
+          class="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-surface-300 text-muted-color transition-colors hover:border-primary-400 hover:text-primary-500 dark:border-surface-600"
           @click.stop="$emit('add')"
         >
-          <Ripple />
           <Plus :size="20" />
-          <Text as="span" size="xs" class="tabular-nums">
+          <span class="text-[11px] font-medium tabular-nums">
             {{ covers.length }}/{{ POST_MAX_COVERS }}
-          </Text>
-        </Card>
-      </SimpleGrid>
+          </span>
+        </button>
+      </div>
     </motion.div>
   </AnimatePresence>
 </template>

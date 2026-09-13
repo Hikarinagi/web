@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Empty, Heading, Inline, SegmentedControl, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
-  import type { ComponentPublicInstance } from 'vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
   import { COMMENT_THREAD_KEY, useCommentThread } from '~/features/comment/useThread'
   import { COMMENT_DETAIL_ACTIONS_KEY } from '~/features/comment/detailBar'
@@ -60,14 +58,14 @@
     setReplyTarget,
   } = thread
 
-  const sortTabs: { value: CommentSort; label: string }[] = [
-    { value: 'hot', label: '热门' },
-    { value: 'time_desc', label: '最新' },
+  const sortTabs: { key: CommentSort; label: string }[] = [
+    { key: 'hot', label: '热门' },
+    { key: 'time_desc', label: '最新' },
   ]
 
-  const sectionRef = ref<ComponentPublicInstance>()
-  const topRef = ref<ComponentPublicInstance>()
-  const listRef = ref<ComponentPublicInstance>()
+  const sectionRef = ref<HTMLElement>()
+  const topRef = ref<HTMLElement>()
+  const listRef = ref<HTMLElement>()
 
   const topAbove = ref(false)
   useIntersectionObserver(topRef, entries => {
@@ -97,7 +95,7 @@
   async function focusRoot(scroll: boolean) {
     if (!props.allowComment) return
     setReplyTarget(null)
-    if (scroll) unrefElement(sectionRef)?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    if (scroll) sectionRef.value?.scrollIntoView({ block: 'start', behavior: 'smooth' })
     await nextTick()
     rootComposer.value?.focus()
   }
@@ -146,36 +144,44 @@
 </script>
 
 <template>
-  <Stack
+  <section
     :id="COMMENT_SECTION_ID"
     ref="sectionRef"
-    as="section"
-    gap="none"
-    :class="
-      cn(
-        'scroll-mt-[calc(var(--app-header-height)+1rem)] border-t border-line pt-8',
-        detailActions && 'max-md:pb-[calc(4rem+env(safe-area-inset-bottom))]',
-      )
-    "
+    class="scroll-mt-[calc(var(--app-header-height)+1rem)] border-t border-surface-200 pt-8 dark:border-surface-800"
+    :class="detailActions ? 'max-md:pb-[calc(4rem+env(safe-area-inset-bottom))]' : null"
   >
-    <Inline justify="between" :wrap="false" class="mb-5">
-      <Heading :level="2" size="xl">
+    <div class="mb-5 flex items-center justify-between">
+      <h2 class="text-xl font-bold text-color">
         评论
-        <Text as="span" tone="muted">{{ total }}</Text>
-      </Heading>
-      <SegmentedControl
-        v-if="allowComment"
-        :model-value="sort"
-        :options="sortTabs"
-        size="sm"
-        @update:model-value="value => setSort(value as CommentSort)"
-      />
-    </Inline>
+        <span class="text-muted-color">{{ total }}</span>
+      </h2>
+      <div v-if="allowComment" class="flex items-center gap-1">
+        <Button
+          v-for="tab in sortTabs"
+          :key="tab.key"
+          unstyled
+          class="inline-flex items-center justify-center rounded-full px-3 py-1 text-sm transition-colors"
+          :class="
+            sort === tab.key
+              ? 'bg-hikari-primary-50 font-medium text-hikari-primary-700 dark:bg-hikari-primary-950 dark:text-hikari-primary-300'
+              : 'text-muted-color hover:text-color'
+          "
+          @click="setSort(tab.key)"
+        >
+          {{ tab.label }}
+        </Button>
+      </div>
+    </div>
 
-    <Empty v-if="!allowComment" title="评论已关闭" />
+    <p
+      v-if="!allowComment"
+      class="rounded-xl bg-surface-50 py-6 text-center text-sm text-muted-color dark:bg-surface-900"
+    >
+      评论已关闭
+    </p>
 
     <template v-else>
-      <Stack ref="topRef" gap="none">
+      <div ref="topRef">
         <CommentComposer
           ref="rootComposer"
           collapsible
@@ -185,11 +191,11 @@
           class="mb-6"
           @submit="onRoot"
         />
-      </Stack>
+      </div>
 
-      <Stack ref="listRef" gap="none">
+      <div ref="listRef">
         <CommentList :author-id="authorId" />
-      </Stack>
+      </div>
 
       <AnimatePresence>
         <motion.div
@@ -199,12 +205,8 @@
           :animate="{ y: '0%' }"
           :exit="{ y: '100%' }"
           :transition="TRANSITION"
-          :class="
-            cn(
-              'sticky bottom-0 z-10 mt-6 -ml-3 border-t border-line bg-canvas py-4 pl-3 shadow-[0_-6px_20px_-20px_rgba(15,23,41,0.16)]',
-              detailActions && 'max-md:hidden',
-            )
-          "
+          class="sticky bottom-0 z-10 mt-6 border-t border-surface-200 bg-surface-0 py-4 shadow-[0_-6px_20px_-20px_rgba(15,23,41,0.16)] dark:border-surface-700 dark:bg-surface-950"
+          :class="detailActions ? 'max-md:hidden' : null"
         >
           <CommentComposer
             ref="dockRef"
@@ -221,5 +223,5 @@
       </AnimatePresence>
       <CommentMobileBar v-if="detailActions" />
     </template>
-  </Stack>
+  </section>
 </template>

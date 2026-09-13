@@ -1,18 +1,5 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Card,
-    Center,
-    Dialog,
-    Empty,
-    Grid,
-    Ripple,
-    SearchInput,
-    SegmentedControl,
-    Skeleton,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
+  import Dialog from 'primevue/dialog'
   import { Plus } from '@lucide/vue'
   import type { BackendEntitySummary } from '~/features/creator/editor'
   import { CREATABLE_ENTITY } from '~/features/creator/editor/entity-create'
@@ -20,7 +7,6 @@
     useEntitySearch,
     type EntityTarget,
   } from '~/features/creator/composables/useEntitySearch'
-  import type CreatorEditorRelationPickerCreate from './Create.vue'
 
   const props = defineProps<{
     target: EntityTarget
@@ -30,6 +16,9 @@
   }>()
   const visible = defineModel<boolean>('visible', { default: false })
   const emit = defineEmits<{ select: [items: BackendEntitySummary[]] }>()
+
+  provide('$pcFormField', undefined)
+  provide('$pcForm', undefined)
 
   const tab = ref<'all' | 'selected'>('all')
   const staged = ref<BackendEntitySummary[]>([])
@@ -45,7 +34,6 @@
   })
   const createLabel = computed(() => `新建「${query.value.trim()}」`)
   const creating = ref(false)
-  const create = useTemplateRef<InstanceType<typeof CreatorEditorRelationPickerCreate>>('create')
 
   watch(visible, async v => {
     if (!v) return
@@ -59,8 +47,8 @@
   })
 
   const tabOptions = computed(() => [
-    { value: 'all', label: '全部' },
-    { value: 'selected', label: `已选 ${selectedIds.value.size}` },
+    { id: 'all', label: '全部' },
+    { id: 'selected', label: `已选 ${selectedIds.value.size}` },
   ])
 
   const visibleItems = computed(() => {
@@ -122,84 +110,85 @@
 
 <template>
   <Dialog
-    v-model:open="visible"
-    :title="title || (mode === 'single' ? '选择' : '选择多个')"
-    size="xl"
+    v-model:visible="visible"
+    modal
+    :header="title || (mode === 'single' ? '选择' : '选择多个')"
+    dismissable-mask
+    :scroll="false"
+    :style="{ width: '92vw', maxWidth: '46rem' }"
   >
-    <template #content>
+    <div class="flex flex-col gap-3">
       <CreatorEditorRelationPickerCreate
         v-if="creating"
-        ref="create"
         :target="target"
         :preset-name="query"
         @created="onCreated"
+        @cancel="creating = false"
       />
-
-      <Stack v-else gap="sm">
-        <SearchInput v-model="query" placeholder="搜索 名字 / 别名 / ID…" />
-
-        <SegmentedControl v-if="mode === 'multi'" v-model="tab" :options="tabOptions" size="sm" />
-
-        <Grid v-if="showSkeleton" :cols="3" gap="sm">
-          <Stack v-for="index in 9" :key="index" gap="xs" class="rounded-lg border border-line p-2">
-            <Skeleton class="aspect-square w-full rounded" />
-            <Skeleton class="h-3.5 w-3/5" />
-            <Skeleton class="h-3 w-1/3" />
-          </Stack>
-        </Grid>
-
-        <Grid v-else-if="visibleItems.length || showCreate" :cols="3" gap="sm">
-          <Card
-            v-if="showCreate"
-            as="button"
-            type="button"
-            :padded="false"
-            :class="'hn-state-layer w-full hn-interactive border-dashed p-2 text-start hn-press-lg'"
-            @click="creating = true"
-          >
-            <Ripple />
-            <Stack gap="xs">
-              <Center class="aspect-square w-full rounded bg-inset">
-                <Plus class="size-6 text-muted" aria-hidden="true" />
-              </Center>
-              <Text as="span" size="sm" weight="medium" truncate>{{ createLabel }}</Text>
-              <Text as="span" size="xs" tone="muted">{{ createConfig?.label }}</Text>
-            </Stack>
-          </Card>
-
-          <CreatorEditorRelationPickerCard
-            v-for="item in visibleItems"
-            :key="item.id"
-            :item="item"
-            :target="target"
-            :selected="selectedIds.has(item.id)"
-            @click="toggle(item)"
-          />
-        </Grid>
-
-        <Empty v-else size="sm" :title="emptyText" />
-      </Stack>
-    </template>
-
-    <template #footer>
-      <template v-if="creating">
-        <Button
-          variant="ghost"
-          tone="neutral"
-          :disabled="create?.submitting"
-          @click="creating = false"
-        >
-          返回
-        </Button>
-        <Button :loading="create?.submitting" @click="create?.submit()">创建并选择</Button>
-      </template>
       <template v-else>
-        <Text size="sm" tone="muted" class="min-w-0 flex-1 self-center text-start">
-          已选 {{ selectedIds.size }} 项
-        </Text>
-        <Button variant="ghost" tone="neutral" @click="visible = false">取消</Button>
-        <Button v-if="mode === 'multi'" @click="confirm">确认</Button>
+        <InputText v-model="query" placeholder="搜索 名字 / 别名 / ID…" fluid />
+        <SelectButton
+          v-if="mode === 'multi'"
+          v-model="tab"
+          :options="tabOptions"
+          option-label="label"
+          option-value="id"
+          :allow-empty="false"
+          size="small"
+        />
+        <div class="h-[55vh]">
+          <ScrollArea v-if="showSkeleton || visibleItems.length || showCreate" class="size-full">
+            <div class="grid grid-cols-3 gap-3 px-0.5 py-1">
+              <template v-if="showSkeleton">
+                <div
+                  v-for="i in 9"
+                  :key="`sk-${i}`"
+                  class="flex flex-col gap-1.5 rounded-lg border border-surface-200 p-2 dark:border-surface-700"
+                >
+                  <Skeleton class="aspect-square h-auto! w-full!" border-radius="0.25rem" />
+                  <Skeleton width="60%" height="0.875rem" />
+                  <Skeleton width="35%" height="0.75rem" />
+                </div>
+              </template>
+              <template v-else>
+                <Button
+                  v-if="showCreate"
+                  unstyled
+                  class="flex flex-col gap-1.5 rounded-lg border border-dashed border-surface-200 p-2 text-left transition-colors hover:border-surface-300 dark:border-surface-700 dark:hover:border-surface-600"
+                  @click="creating = true"
+                >
+                  <span
+                    class="flex aspect-square w-full items-center justify-center rounded bg-surface-100 dark:bg-surface-800"
+                  >
+                    <Plus :size="24" class="text-muted-color" />
+                  </span>
+                  <span class="truncate text-sm font-medium">{{ createLabel }}</span>
+                  <span class="text-xs text-muted-color">{{ createConfig?.label }}</span>
+                </Button>
+                <CreatorEditorRelationPickerCard
+                  v-for="item in visibleItems"
+                  :key="item.id"
+                  :item="item"
+                  :target="target"
+                  :selected="selectedIds.has(item.id)"
+                  @click="toggle(item)"
+                />
+              </template>
+            </div>
+          </ScrollArea>
+          <div v-else class="flex h-full items-center justify-center">
+            <CreatorEmpty :text="emptyText" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-sm text-muted-color">已选 {{ selectedIds.size }} 项</span>
+          <div class="flex items-center gap-3">
+            <Button label="取消" severity="secondary" @click="visible = false" />
+            <Button v-if="mode === 'multi'" label="确认" @click="confirm" />
+          </div>
+        </div>
       </template>
-    </template>
+    </div>
   </Dialog>
 </template>

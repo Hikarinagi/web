@@ -25,7 +25,6 @@ export interface FloatingToolbarAction {
 
 const actions = shallowReactive(new Map<string, FloatingToolbarAction>())
 const topCallbacks = shallowReactive(new Map<string, TopEntry>())
-const elevated = ref(false)
 
 export function useFloatingToolbar() {
   const items = computed(() =>
@@ -94,7 +93,6 @@ export function useFloatingToolbar() {
     actions: items,
     topHandlers,
     activeTop,
-    elevated,
     add,
     addTopHandler,
     remove,

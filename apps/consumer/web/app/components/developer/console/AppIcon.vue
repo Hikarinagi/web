@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Center, Text } from '@hina-ui/vue'
-
   defineOptions({ name: 'DeveloperConsoleAppIcon' })
 
   const props = withDefaults(
@@ -14,13 +12,9 @@
 </script>
 
 <template>
-  <Center
-    :class="
-      cn(
-        'shrink-0 overflow-hidden rounded-full border border-line bg-inset',
-        size === 'lg' ? 'size-14' : 'size-10',
-      )
-    "
+  <div
+    class="shrink-0 overflow-hidden rounded-full border border-surface bg-surface-100 dark:bg-surface-800"
+    :class="size === 'lg' ? 'size-14' : 'size-10'"
   >
     <HikariImage
       v-if="src"
@@ -30,8 +24,12 @@
       image-class="size-full object-cover"
       :processing="{ q: 85 }"
     />
-    <Text v-else as="span" tone="muted" weight="semibold" :size="size === 'lg' ? 'xl' : 'sm'">
+    <span
+      v-else
+      class="flex size-full items-center justify-center font-semibold text-muted-color"
+      :class="size === 'lg' ? 'text-xl' : 'text-sm'"
+    >
       {{ initial }}
-    </Text>
-  </Center>
+    </span>
+  </div>
 </template>

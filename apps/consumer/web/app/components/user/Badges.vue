@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Skeleton } from '@hina-ui/vue'
   import type { EquippedBadge, EquippedDecoration } from '~/utils/user'
   import { useDecorationDetail } from '~/features/decoration/useDetail'
 
@@ -15,10 +14,10 @@
   const { open } = useDecorationDetail()
   const items = computed(() => props.badges ?? badgesOf(props.user))
 
-  function ratioOf(badge: EquippedDecoration) {
+  function ratioStyle(badge: EquippedDecoration) {
     const { width, height } = badge.image
     if (!width || !height) return undefined
-    return Math.min(width / height, 4)
+    return { aspectRatio: width / height > 4 ? '4' : `${width} / ${height}` }
   }
 </script>
 
@@ -38,15 +37,11 @@
         :alt="badge.name"
         :preview="false"
         :image-class="
-          ratioOf(badge) ? 'h-full w-full object-contain' : 'h-full w-auto object-contain'
+          ratioStyle(badge) ? 'h-full w-full object-contain' : 'h-full w-auto object-contain'
         "
         class="inline-block h-full w-auto"
-        :ratio="ratioOf(badge)"
-      >
-        <template #skeleton>
-          <Skeleton class="size-full rounded-md" />
-        </template>
-      </HikariImage>
+        :style="ratioStyle(badge)"
+      />
     </button>
   </span>
 </template>

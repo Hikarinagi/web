@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import type { VNodeChild } from 'vue'
-  import { Image } from '@hina-ui/vue'
+  import type { SkeletonProps } from 'primevue/skeleton'
   import defaultFallbackImage from '~/assets/images/404/shion-image-404.webp'
+  import { cn } from '~/utils/cn'
   import type {
     HikariImagePresetName,
     HikariImageProcessing,
@@ -14,6 +15,10 @@
     imageSourceSrc,
     resolveImageUrl,
   } from '~/utils/media/image'
+  import {
+    HIKARI_IMAGE_GROUP_KEY,
+    useHikariImagePreview,
+  } from './hikari-image/composables/usePreview'
 
   const NSFW_SPOILER_BLUR = 100
 
@@ -33,8 +38,10 @@
       fallbackImageClass?: string
       lazy?: boolean
       rootMargin?: string
-      ratio?: number
       skeleton?: boolean
+      skeletonClass?: string
+      skeletonShape?: SkeletonProps['shape']
+      skeletonRadius?: string | undefined
       preset?: HikariImagePresetName
       processing?: HikariImageProcessing
       preload?: boolean | { fetchPriority: 'high' | 'low' | 'auto' }
@@ -52,8 +59,10 @@
       fallbackImageClass: 'object-contain',
       lazy: true,
       rootMargin: '200px 0px',
-      ratio: undefined,
       skeleton: true,
+      skeletonClass: '',
+      skeletonRadius: undefined,
+      skeletonShape: 'rectangle',
       preset: undefined,
       processing: undefined,
       preload: false,
@@ -64,13 +73,21 @@
     },
   )
 
-  const emit = defineEmits<{
-    load: [size: { width: number; height: number }]
-    error: []
-  }>()
-
+  const attrs = useAttrs()
   const config = useRuntimeConfig()
+  const rootRef = ref<HTMLElement | null>(null)
+  const entered = ref(!props.lazy)
+  const imageVisible = ref(false)
+  const skeletonVisible = ref(true)
+  const failed = ref(false)
   const fallbackActive = ref(false)
+  const emit = defineEmits<{
+    load: [event: Event]
+    error: [event: string | Event]
+  }>()
+  let observer: IntersectionObserver | null = null
+  let revealFrame: number | null = null
+  let skeletonTimer: ReturnType<typeof setTimeout> | null = null
 
   // 门禁判据集中在此：作品级 nsfw 或逐图分级(sexual/violence)任一命中即按 NSFW 处理。
   // content_limit 策略仍由 useNsfwPolicy 统一裁决(block / blur / 显示)。
@@ -126,6 +143,45 @@
       processing: false,
     }),
   )
+  const showEmpty = computed(() => !mainSrc.value && Boolean(slots.empty))
+  const resolvedSrc = computed(() => {
+    if (showEmpty.value) return ''
+    if (fallbackActive.value || !mainSrc.value) return fallbackSrc.value
+    return mainSrc.value
+  })
+  const imageAttrs = computed(() => {
+    const { class: _class, style: _style, ...rest } = attrs
+
+    return {
+      loading: props.lazy ? 'lazy' : 'eager',
+      decoding: props.lazy ? 'async' : 'sync',
+      ...rest,
+    }
+  })
+  const showImage = computed(() => Boolean(resolvedSrc.value) && entered.value && !failed.value)
+  const showSkeleton = computed(
+    () => props.skeleton && Boolean(resolvedSrc.value) && skeletonVisible.value && !failed.value,
+  )
+  const isFallbackImage = computed(
+    () => Boolean(fallbackSrc.value) && resolvedSrc.value === fallbackSrc.value,
+  )
+  const imageTransitionClass = computed(() =>
+    props.lazy
+      ? [
+          'transition-opacity duration-300 ease-out',
+          imageVisible.value ? 'opacity-100' : 'opacity-0',
+        ]
+      : [],
+  )
+  const resolvedImageClass = computed(() =>
+    isFallbackImage.value ? props.fallbackImageClass : props.imageClass,
+  )
+
+  const previewId = useId()
+  const group = inject(HIKARI_IMAGE_GROUP_KEY, null)
+  const soloPreview = useHikariImagePreview()
+  const naturalWidth = ref<number | undefined>(undefined)
+  const naturalHeight = ref<number | undefined>(undefined)
   const originalSrc = computed(() =>
     resolveImageUrl(sourceSrc.value, {
       cdnHost: config.public.cdnHost,
@@ -133,75 +189,184 @@
       processing: false,
     }),
   )
-  const showEmpty = computed(() => !mainSrc.value && Boolean(slots.empty))
-  const resolvedSrc = computed(() => {
-    if (showEmpty.value) return ''
-    if (fallbackActive.value || !mainSrc.value) return fallbackSrc.value
-    return mainSrc.value
-  })
-  const isFallbackImage = computed(
-    () => Boolean(fallbackSrc.value) && resolvedSrc.value === fallbackSrc.value,
+  const previewItem = computed(() => ({
+    id: previewId,
+    displaySrc: mainSrc.value,
+    originalSrc: originalSrc.value || mainSrc.value,
+    alt: props.alt,
+    processing: props.processing,
+    naturalWidth: naturalWidth.value,
+    naturalHeight: naturalHeight.value,
+  }))
+  const canPreview = computed(
+    () =>
+      props.preview &&
+      Boolean(mainSrc.value) &&
+      imageVisible.value &&
+      !fallbackActive.value &&
+      !failed.value &&
+      !blurNsfw.value,
   )
-  const resolvedImageClass = computed(() =>
-    isFallbackImage.value ? props.fallbackImageClass : props.imageClass,
-  )
-  const eager = computed(() => !props.lazy || Boolean(props.preload))
-  const previewSrc = computed<string | false>(() => {
-    if (!props.preview || blurNsfw.value || fallbackActive.value || !mainSrc.value) return false
-    return originalSrc.value || mainSrc.value
+
+  watchEffect(() => {
+    if (!group) return
+    if (canPreview.value) group.register(previewItem.value)
+    else group.unregister(previewId)
   })
 
-  watch(mainSrc, () => {
-    fallbackActive.value = false
+  onBeforeUnmount(() => {
+    group?.unregister(previewId)
   })
 
-  if (props.preload) {
-    const fetchpriority =
-      typeof props.preload === 'object' ? props.preload.fetchPriority : undefined
-    useHead(() => ({
-      link: resolvedSrc.value
-        ? [{ rel: 'preload', as: 'image', href: resolvedSrc.value, fetchpriority }]
-        : [],
-    }))
+  function openPreview(event: MouseEvent) {
+    if (!canPreview.value) return
+    event.preventDefault()
+    event.stopPropagation()
+    if (group) group.open(previewId)
+    else soloPreview.open([previewItem.value], 0)
   }
 
-  function onError() {
-    if (!fallbackActive.value && fallbackSrc.value && resolvedSrc.value !== fallbackSrc.value) {
-      fallbackActive.value = true
+  watch(
+    () => [mainSrc.value, fallbackSrc.value],
+    () => {
+      if (revealFrame !== null) window.cancelAnimationFrame(revealFrame)
+      if (skeletonTimer !== null) clearTimeout(skeletonTimer)
+      revealFrame = null
+      skeletonTimer = null
+      imageVisible.value = false
+      skeletonVisible.value = true
+      failed.value = false
+      fallbackActive.value = false
+      naturalWidth.value = undefined
+      naturalHeight.value = undefined
+      if (!props.lazy) entered.value = true
+    },
+  )
+
+  watch(
+    () => props.lazy,
+    lazy => {
+      if (!lazy) entered.value = true
+    },
+    { immediate: true },
+  )
+
+  onMounted(() => {
+    if (!props.lazy || entered.value) return
+    if (!('IntersectionObserver' in window)) {
+      entered.value = true
       return
     }
 
-    emit('error')
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        entered.value = true
+        observer?.disconnect()
+        observer = null
+      },
+      { rootMargin: props.rootMargin },
+    )
+
+    if (rootRef.value) observer.observe(rootRef.value)
+  })
+
+  onBeforeUnmount(() => {
+    observer?.disconnect()
+    if (revealFrame !== null) window.cancelAnimationFrame(revealFrame)
+    if (skeletonTimer !== null) clearTimeout(skeletonTimer)
+  })
+
+  function handleLoad(event: Event) {
+    if (revealFrame !== null) window.cancelAnimationFrame(revealFrame)
+    if (skeletonTimer !== null) clearTimeout(skeletonTimer)
+    revealFrame = null
+    skeletonTimer = null
+    failed.value = false
+
+    const img = event.target as HTMLImageElement
+    if (img?.naturalWidth && img?.naturalHeight) {
+      naturalWidth.value = img.naturalWidth
+      naturalHeight.value = img.naturalHeight
+    }
+
+    if (!props.lazy) {
+      imageVisible.value = true
+      skeletonVisible.value = false
+      emit('load', event)
+      return
+    }
+
+    revealFrame = window.requestAnimationFrame(() => {
+      revealFrame = window.requestAnimationFrame(() => {
+        imageVisible.value = true
+        revealFrame = null
+        skeletonTimer = setTimeout(() => {
+          skeletonVisible.value = false
+          skeletonTimer = null
+        }, 220)
+      })
+    })
+
+    emit('load', event)
+  }
+
+  function handleError(event: string | Event) {
+    if (!fallbackActive.value && fallbackSrc.value && resolvedSrc.value !== fallbackSrc.value) {
+      fallbackActive.value = true
+      imageVisible.value = false
+      skeletonVisible.value = true
+      return
+    }
+
+    failed.value = true
+    imageVisible.value = false
+    emit('error', event)
   }
 </script>
 
 <template>
-  <Image
-    class="isolate"
-    v-bind="$attrs"
-    :src="resolvedSrc"
-    :alt="alt"
-    :image-class="resolvedImageClass"
-    :lazy="lazy"
-    :root-margin="rootMargin"
-    :ratio="ratio"
-    :skeleton="skeleton"
-    :eager="eager"
-    :preview="previewSrc"
-    :draggable="draggable"
-    @load="size => emit('load', size)"
-    @error="onError"
+  <span
+    ref="rootRef"
+    :class="cn('relative block overflow-hidden', canPreview && 'cursor-zoom-in', attrs.class)"
+    :style="attrs.style"
+    :data-hikari-image-id="canPreview ? previewId : undefined"
+    @click="openPreview"
   >
-    <template v-if="$slots.empty" #empty>
-      <slot name="empty" />
-    </template>
+    <slot v-if="showEmpty" name="empty" />
 
-    <template v-if="$slots.error" #error>
-      <slot name="error" />
-    </template>
+    <span
+      v-if="showSkeleton"
+      aria-hidden="true"
+      :class="
+        cn(
+          'pointer-events-none absolute inset-0 transition-opacity duration-200 ease-out',
+          imageVisible ? 'opacity-0' : 'opacity-100',
+        )
+      "
+    >
+      <slot name="skeleton">
+        <Skeleton
+          :shape="skeletonShape"
+          :class="cn('h-full! w-full!', skeletonClass)"
+          :border-radius="skeletonRadius"
+        />
+      </slot>
+    </span>
 
-    <template v-if="$slots.skeleton" #skeleton>
-      <slot name="skeleton" />
-    </template>
-  </Image>
+    <NuxtImg
+      v-if="showImage"
+      v-bind="imageAttrs"
+      provider="none"
+      :src="resolvedSrc"
+      :alt="alt"
+      :preload="preload"
+      :draggable="draggable"
+      :class="cn('block h-full w-full', imageTransitionClass, resolvedImageClass)"
+      @load="handleLoad"
+      @error="handleError"
+    />
+
+    <slot v-else-if="failed" name="error" />
+  </span>
 </template>

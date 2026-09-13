@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Skeleton } from '@hina-ui/vue'
   import appIcon from '~/assets/images/app/app-icon.webp'
 
   defineOptions({ name: 'AppDownloadQrCode' })
@@ -19,11 +18,7 @@
         class="size-20"
         image-class="size-20"
         :class="usable ? null : 'opacity-20 blur-[3px]'"
-      >
-        <template #skeleton>
-          <Skeleton class="size-full rounded-sm" />
-        </template>
-      </HikariImage>
+      />
       <div v-else class="size-20 rounded-sm bg-surface-200" />
       <HikariImage
         :src="appIcon"

@@ -1,14 +1,11 @@
 <script setup lang="ts">
-  import { Button, Dialog } from '@hina-ui/vue'
   import type { PollEditorDef } from '~/features/interaction/usePollEditor'
   import { usePollEditor } from '~/features/interaction/usePollEditor'
-  import type PollBuilderForm from './BuilderForm.vue'
 
   defineOptions({ name: 'PollEditDialog' })
 
   const { state, close } = usePollEditor()
   const submitting = ref(false)
-  const form = useTemplateRef<InstanceType<typeof PollBuilderForm>>('form')
 
   const visible = computed({
     get: () => state.value.visible,
@@ -33,24 +30,20 @@
 
 <template>
   <Dialog
-    v-model:open="visible"
-    :title="state.mode === 'edit' ? '编辑投票' : '创建投票'"
-    size="md"
-    :locked="submitting"
+    v-model:visible="visible"
+    modal
+    :header="state.mode === 'edit' ? '编辑投票' : '创建投票'"
+    class="w-full max-w-md"
+    :dismissable-mask="!submitting"
+    :close-on-escape="!submitting"
   >
-    <template #content>
-      <PollBuilderForm
-        ref="form"
-        :initial="state.initial"
-        :locked="state.locked"
-        :submitting="submitting"
-        @submit="onSubmit"
-      />
-    </template>
-
-    <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="close">取消</Button>
-      <Button :loading="submitting" @click="form?.submit()">保存</Button>
-    </template>
+    <PollBuilderForm
+      v-if="state.visible"
+      :initial="state.initial"
+      :locked="state.locked"
+      :submitting="submitting"
+      @submit="onSubmit"
+      @cancel="close"
+    />
   </Dialog>
 </template>
