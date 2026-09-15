@@ -1,17 +1,14 @@
 <script setup lang="ts">
+  import { Button, Card, IconButton, Inline, Input, Stack, Text } from '@hina-ui/vue'
   import { GripVertical, Plus, X } from '@lucide/vue'
   import Sortable from 'sortablejs'
   import type { BackendEditorField } from '~/features/creator/editor'
 
   const props = defineProps<{
     field: BackendEditorField
-    inputId?: string
     disabled?: boolean
   }>()
   const model = defineModel<Record<string, unknown>[]>({ default: () => [] })
-
-  provide('$pcFormField', undefined)
-  provide('$pcForm', undefined)
 
   const rows = computed(() =>
     model.value.map(row => ({
@@ -70,11 +67,12 @@
     )
   }
 
-  const list = ref<HTMLElement | null>(null)
+  const list = useTemplateRef<{ $el: HTMLElement }>('list')
   let sortable: Sortable | null = null
   onMounted(() => {
-    if (!list.value) return
-    sortable = Sortable.create(list.value, {
+    const el = list.value?.$el
+    if (!(el instanceof HTMLElement)) return
+    sortable = Sortable.create(el, {
       handle: '.label-drag-handle',
       draggable: '[data-label-row]',
       animation: 150,
@@ -100,78 +98,65 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div ref="list" class="flex flex-col gap-2">
-      <div
-        v-for="(row, index) in rows"
-        :key="rowKeys[index]"
-        data-label-row
-        class="flex items-center gap-2 rounded-lg border p-2"
-        :class="
-          isDuplicate(row.key)
-            ? 'border-red-300 dark:border-red-700'
-            : 'border-(--p-form-field-border-color)'
-        "
-      >
-        <Button
-          unstyled
-          class="label-drag-handle flex size-7 shrink-0 cursor-grab items-center justify-center rounded-md text-muted-color hover:bg-surface-100 active:cursor-grabbing dark:hover:bg-surface-800"
-          :aria-label="`拖动第 ${index + 1} 行`"
-          :disabled="disabled"
-        >
-          <GripVertical :size="14" />
-        </Button>
-        <div class="min-w-0 flex-2">
-          <InputText
-            :id="index === 0 ? inputId : undefined"
+  <Stack gap="sm" align="stretch">
+    <Stack ref="list" gap="sm" align="stretch">
+      <Card v-for="(row, index) in rows" :key="rowKeys[index]" data-label-row :padded="false">
+        <Inline gap="sm" align="center" :wrap="false" class="p-2">
+          <IconButton
+            :label="`拖动第 ${index + 1} 行`"
+            variant="ghost"
+            tone="neutral"
+            size="sm"
+            :disabled="disabled"
+            class="label-drag-handle shrink-0 cursor-grab active:cursor-grabbing"
+          >
+            <GripVertical />
+          </IconButton>
+          <Input
             :model-value="row.key"
             placeholder="字段名"
-            size="small"
+            size="sm"
             :disabled="disabled"
             :invalid="isDuplicate(row.key)"
-            fluid
-            @update:model-value="
-              value => setRow(index, 'key', typeof value === 'string' ? value : '')
-            "
+            class="min-w-0 flex-2"
+            @update:model-value="value => setRow(index, 'key', value ?? '')"
           />
-        </div>
-        <div class="min-w-0 flex-3">
-          <InputText
+          <Input
             :model-value="row.value"
             placeholder="内容"
-            size="small"
+            size="sm"
             :disabled="disabled"
-            fluid
-            @update:model-value="
-              value => setRow(index, 'value', typeof value === 'string' ? value : '')
-            "
+            class="min-w-0 flex-3"
+            @update:model-value="value => setRow(index, 'value', value ?? '')"
           />
-        </div>
-        <Button
-          type="button"
-          unstyled
-          class="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
-          :aria-label="`移除第 ${index + 1} 行`"
-          :disabled="disabled"
-          @click="removeRow(index)"
-        >
-          <template #icon><X :size="14" /></template>
-        </Button>
-      </div>
-    </div>
+          <IconButton
+            :label="`移除第 ${index + 1} 行`"
+            variant="ghost"
+            tone="danger"
+            size="sm"
+            pill
+            :disabled="disabled"
+            class="shrink-0"
+            @click="removeRow(index)"
+          >
+            <X />
+          </IconButton>
+        </Inline>
+      </Card>
+    </Stack>
 
     <Button
-      type="button"
-      severity="secondary"
-      variant="outlined"
-      label="添加"
+      variant="outline"
+      tone="neutral"
+      size="sm"
       class="self-start"
       :disabled="disabled || !canAdd"
       @click="addRow"
     >
-      <template #icon><Plus :size="14" /></template>
+      <template #icon><Plus /></template>
+      添加
     </Button>
 
-    <span class="text-xs text-muted-color">{{ model.length }} / {{ maxRows }}</span>
-  </div>
+    <Text size="xs" tone="muted">{{ model.length }} / {{ maxRows }}</Text>
+  </Stack>
 </template>

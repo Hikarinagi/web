@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Sheet } from '@hina-ui/vue'
   import { ListTree } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
   import { GUIDE_SECTIONS } from '~/features/developer/guide'
@@ -48,24 +49,15 @@
       <slot />
     </div>
 
-    <Drawer
-      v-model:visible="open"
-      position="bottom"
-      :pt="{
-        root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
-        content: { class: 'p-2!' },
-      }"
-    >
-      <template #header>
-        <h2 class="text-base font-semibold text-color">文档目录</h2>
+    <Sheet v-model:open="open" title="文档目录" class="h-[60dvh]">
+      <template #content>
+        <DeveloperDocsNav
+          :groups
+          :active-id="activeId"
+          scroll-class="max-h-none"
+          @navigate="open = false"
+        />
       </template>
-
-      <DeveloperDocsNav
-        :groups
-        :active-id="activeId"
-        scroll-class="max-h-[calc(72vh-10.5rem)]"
-        @navigate="open = false"
-      />
-    </Drawer>
+    </Sheet>
   </div>
 </template>

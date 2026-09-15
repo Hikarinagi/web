@@ -48,23 +48,6 @@ html.dark body {
   color: var(--p-surface-0);
 }
 
-.app-mobile-sheet {
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-
-.popover-no-arrow::before,
-.popover-no-arrow::after {
-  display: none !important;
-}
-.popover-no-arrow {
-  margin-block-start: 4px;
-}
-.popover-no-arrow.p-popover-flipped {
-  margin-block-start: -4px;
-  margin-block-end: 4px;
-}
-
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 767px) {
     input:not([type='button']):not([type='checkbox']):not([type='color']):not([type='file']):not(

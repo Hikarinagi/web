@@ -1,26 +1,13 @@
-import type { TreeNode } from 'primevue/treenode'
+import type { TreeNode, TreeValue } from '@hina-ui/vue'
 import type { BackendPermissionCatalogEntry } from '~/features/creator/governance'
 
-export interface PermissionTreeNode extends TreeNode {
-  key: string
-  label: string
-  data: { key: string }
-  children?: PermissionTreeNode[]
-}
-
-export function buildPermissionTree(
-  entries: readonly BackendPermissionCatalogEntry[],
-): PermissionTreeNode[] {
+export function buildPermissionTree(entries: readonly BackendPermissionCatalogEntry[]): TreeNode[] {
   const wikiEntries = entries.filter(e => e.key === 'wiki' || e.key.startsWith('wiki.'))
-  const byKey = new Map<string, PermissionTreeNode>()
+  const byKey = new Map<string, TreeNode>()
   for (const entry of wikiEntries) {
-    byKey.set(entry.key, {
-      key: entry.key,
-      label: leafLabel(entry),
-      data: { key: entry.key },
-    })
+    byKey.set(entry.key, { value: entry.key, label: leafLabel(entry) })
   }
-  const roots: PermissionTreeNode[] = []
+  const roots: TreeNode[] = []
   for (const entry of wikiEntries) {
     const dot = entry.key.lastIndexOf('.')
     if (dot < 0) {
@@ -35,36 +22,39 @@ export function buildPermissionTree(
       roots.push(byKey.get(entry.key)!)
     }
   }
-  return roots.find(r => r.key === 'wiki')?.children ?? roots
+  return roots.find(r => r.value === 'wiki')?.children ?? roots
 }
 
-export function selectionRecordFromKeys(
-  keys: readonly string[] | null | undefined,
-  tree: readonly PermissionTreeNode[],
-): Record<string, { checked: boolean; partialChecked: boolean }> {
-  const selectedSet = new Set(Array.isArray(keys) ? keys : [])
-  const record: Record<string, { checked: boolean; partialChecked: boolean }> = {}
+export function permissionLeafKeys(tree: readonly TreeNode[]): Set<string> {
+  const out = new Set<string>()
   for (const node of walk(tree)) {
-    if (!node.children || node.children.length === 0) {
-      if (selectedSet.has(node.key)) record[node.key] = { checked: true, partialChecked: false }
-    }
+    if (!node.children?.length) out.add(String(node.value))
   }
-  applyParentState(tree, record)
-  return record
+  return out
 }
 
-export function keysFromSelectionRecord(
-  record: Record<string, { checked: boolean; partialChecked: boolean }>,
-  tree: readonly PermissionTreeNode[],
-): string[] {
-  const out: string[] = []
-  for (const node of walk(tree)) {
-    if (!node.children || node.children.length === 0) {
-      const state = record[node.key]
-      if (state?.checked) out.push(node.key)
+export function expandedForKeys(tree: readonly TreeNode[], keys: readonly string[]): TreeValue[] {
+  const selected = new Set(keys)
+  const out: TreeValue[] = []
+  collectAncestors(tree, selected, [], out)
+  return out
+}
+
+function collectAncestors(
+  nodes: readonly TreeNode[],
+  selected: ReadonlySet<string>,
+  ancestors: TreeValue[],
+  into: TreeValue[],
+) {
+  for (const node of nodes) {
+    if (node.children?.length) {
+      collectAncestors(node.children, selected, [...ancestors, node.value], into)
+    } else if (selected.has(String(node.value))) {
+      for (const key of ancestors) {
+        if (!into.includes(key)) into.push(key)
+      }
     }
   }
-  return out.sort()
 }
 
 function leafLabel(entry: BackendPermissionCatalogEntry): string {
@@ -72,35 +62,9 @@ function leafLabel(entry: BackendPermissionCatalogEntry): string {
   return dot < 0 ? entry.label : entry.label.slice(dot + 3)
 }
 
-function* walk(nodes: readonly PermissionTreeNode[]): Generator<PermissionTreeNode> {
+function* walk(nodes: readonly TreeNode[]): Generator<TreeNode> {
   for (const node of nodes) {
     yield node
     if (node.children) yield* walk(node.children)
   }
-}
-
-function applyParentState(
-  nodes: readonly PermissionTreeNode[],
-  record: Record<string, { checked: boolean; partialChecked: boolean }>,
-): { checked: number; total: number } {
-  let checked = 0
-  let total = 0
-  for (const node of nodes) {
-    if (node.children && node.children.length > 0) {
-      const child = applyParentState(node.children, record)
-      total += child.total
-      checked += child.checked
-      if (child.total > 0) {
-        if (child.checked === child.total) {
-          record[node.key] = { checked: true, partialChecked: false }
-        } else if (child.checked > 0) {
-          record[node.key] = { checked: false, partialChecked: true }
-        }
-      }
-    } else {
-      total += 1
-      if (record[node.key]?.checked) checked += 1
-    }
-  }
-  return { checked, total }
 }

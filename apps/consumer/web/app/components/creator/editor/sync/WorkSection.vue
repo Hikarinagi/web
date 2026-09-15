@@ -1,6 +1,9 @@
 <script setup lang="ts">
-  import type { FormInstance } from '@primevue/forms/form'
-  import { REF_APPLY_KEY } from '~/features/creator/composables/useChangeRequestEditor'
+  import { Checkbox, CheckboxGroup, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
+  import {
+    EDITOR_VALUES_KEY,
+    REF_APPLY_KEY,
+  } from '~/features/creator/composables/useChangeRequestEditor'
   import { importProvisionalEntity } from '~/features/creator/editor/create-entity'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
   import type {
@@ -24,7 +27,6 @@
     tags: TagCandidate[]
     presentation: Record<string, { label?: string }>
     fields: SyncField[]
-    formEl: FormInstance | null
     comparedSources: string
     relationField: string | null
   }>()
@@ -41,6 +43,7 @@
   const pickedTags = ref(props.tags.map(tag => tag.matched_id))
   const applying = ref(false)
   const refApply = inject(REF_APPLY_KEY, null)
+  const values = inject(EDITOR_VALUES_KEY, {})
 
   const dateFields = computed(
     () => new Set(props.fields.filter(f => f.value_type === 'date').map(f => f.field)),
@@ -50,6 +53,24 @@
     () => (props.relationField && props.presentation[props.relationField]?.label) || '关联作品',
   )
   const sourceLabel = (s?: string) => (s === 'vndb' ? 'VNDB' : s === 'bangumi' ? 'Bangumi' : '')
+
+  const tagOptions = computed(() =>
+    props.tags.map(tag => ({ value: tag.matched_id, label: tag.name })),
+  )
+
+  function toggleScalar(field: string, on: boolean | 'indeterminate') {
+    pickedScalars.value =
+      on === true
+        ? [...pickedScalars.value, field]
+        : pickedScalars.value.filter(picked => picked !== field)
+  }
+
+  function toggleRel(targetId: number, on: boolean | 'indeterminate') {
+    pickedRels.value =
+      on === true
+        ? [...pickedRels.value, targetId]
+        : pickedRels.value.filter(picked => picked !== targetId)
+  }
 
   function scalarOp(c: ScalarCandidate) {
     return { kind: 'scalar', field: c.field, from: c.from, to: c.to, value_type: c.value_type }
@@ -73,7 +94,7 @@
         if (!pickedScalars.value.includes(c.field)) continue
         const value =
           dateFields.value.has(c.field) && typeof c.to === 'string' ? new Date(c.to) : c.to
-        props.formEl?.setFieldValue(c.field, value)
+        values[c.field] = value
       }
       if (props.relationField) {
         for (const r of props.rels) {
@@ -90,7 +111,7 @@
           method: 'POST',
           body: { url: props.cover },
         })
-        props.formEl?.setFieldValue(props.coverField, { id: media.id, src: media.src })
+        values[props.coverField] = { id: media.id, src: media.src }
       }
       for (const tag of props.tags) {
         if (!pickedTags.value.includes(tag.matched_id)) continue
@@ -154,80 +175,63 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
-    <p class="text-xs text-muted-color">
-      已对比外部源：{{ comparedSources }}（仅列出有差异的字段）
-    </p>
+  <Stack gap="lg">
+    <Text size="xs" tone="muted">已对比外部源：{{ comparedSources }}（仅列出有差异的字段）</Text>
 
-    <section v-if="scalars.length" class="flex flex-col gap-3">
-      <p class="text-xs text-muted-color">
+    <Stack v-if="scalars.length" as="section" gap="sm">
+      <Text size="xs" tone="muted">
         勾选要采用外部源值的字段。空字段默认勾选；已有值的字段（冲突）默认不勾，需手动确认覆盖。
-      </p>
-      <label v-for="c in scalars" :key="c.field" class="flex cursor-pointer items-start gap-2">
-        <Checkbox v-model="pickedScalars" :value="c.field" class="mt-3 shrink-0" />
-        <div class="pointer-events-none min-w-0 flex-1">
+      </Text>
+      <Inline v-for="c in scalars" :key="c.field" gap="sm" align="start" :wrap="false">
+        <Checkbox
+          :model-value="pickedScalars.includes(c.field)"
+          :aria-label="labelOf(c.field)"
+          class="mt-3 shrink-0"
+          @update:model-value="on => toggleScalar(c.field, on)"
+        />
+        <Stack gap="none" class="pointer-events-none min-w-0 flex-1">
           <CreatorChangesetFieldDiff :op="scalarOp(c)" :label="labelOf(c.field)" />
-        </div>
-        <Tag
-          v-if="sourceLabel(c.source)"
-          :value="sourceLabel(c.source)"
-          severity="secondary"
-          class="mt-2 shrink-0"
-        />
-      </label>
-    </section>
+        </Stack>
+        <Tag v-if="sourceLabel(c.source)" size="sm" tone="neutral" class="mt-2 shrink-0">
+          {{ sourceLabel(c.source) }}
+        </Tag>
+      </Inline>
+    </Stack>
 
-    <section v-if="cover" class="flex flex-col gap-2">
-      <label class="flex cursor-pointer items-center gap-2 text-sm">
-        <Checkbox v-model="coverPicked" binary class="shrink-0" />
-        使用外部源图片作为条目图
-      </label>
-    </section>
+    <Stack v-if="cover" as="section" gap="xs">
+      <Checkbox v-model="coverPicked">使用外部源图片作为条目图</Checkbox>
+    </Stack>
 
-    <section v-if="tags.length" class="flex flex-col gap-3">
-      <h3 class="text-sm font-semibold">标签</h3>
-      <div class="flex flex-wrap gap-2">
-        <label
-          v-for="tag in tags"
-          :key="tag.matched_id"
-          class="flex cursor-pointer items-center gap-1.5 rounded-full border border-surface py-1 pr-3 pl-2 text-sm"
-        >
-          <Checkbox v-model="pickedTags" :value="tag.matched_id" class="shrink-0" />
-          {{ tag.name }}
-        </label>
-      </div>
-    </section>
+    <Stack v-if="tags.length" as="section" gap="sm">
+      <Heading :level="3" size="sm">标签</Heading>
+      <CheckboxGroup v-model="pickedTags" :options="tagOptions" orientation="horizontal" />
+    </Stack>
 
-    <section v-if="screenshots.length" class="flex flex-col gap-2">
-      <label class="flex cursor-pointer items-center gap-2 text-sm">
-        <Checkbox v-model="screenshotsPicked" binary class="shrink-0" />
+    <Stack v-if="screenshots.length" as="section" gap="xs">
+      <Checkbox v-model="screenshotsPicked">
         导入 {{ screenshots.length }} 张游戏截图（VNDB，含分级）
-      </label>
-    </section>
+      </Checkbox>
+    </Stack>
 
-    <section v-if="author" class="flex flex-col gap-2">
-      <label class="flex cursor-pointer items-center gap-2 text-sm">
-        <Checkbox v-model="authorPicked" binary class="shrink-0" />
-        <span>设置作者为</span>
-        <span class="font-medium">{{ author.name }}</span>
-        <Tag
-          v-if="author.matched_id == null"
-          value="待导入"
-          severity="warn"
-          class="shrink-0 text-[10px]!"
+    <Inline v-if="author" as="section" gap="sm" align="center">
+      <Checkbox v-model="authorPicked">设置作者为 {{ author.name }}</Checkbox>
+      <Tag v-if="author.matched_id == null" size="sm" tone="warning" class="shrink-0">待导入</Tag>
+    </Inline>
+
+    <Stack v-if="rels.length" as="section" gap="sm">
+      <Heading :level="3" size="sm">{{ relationLabel }}</Heading>
+      <Inline v-for="r in rels" :key="r.target_id" gap="sm" align="start" :wrap="false">
+        <Checkbox
+          :model-value="pickedRels.includes(r.target_id)"
+          :aria-label="r.name"
+          class="mt-3 shrink-0"
+          @update:model-value="on => toggleRel(r.target_id, on)"
         />
-      </label>
-    </section>
-
-    <section v-if="rels.length" class="flex flex-col gap-3">
-      <h3 class="text-sm font-semibold">{{ relationLabel }}</h3>
-      <label v-for="r in rels" :key="r.target_id" class="flex cursor-pointer items-start gap-2">
-        <Checkbox v-model="pickedRels" :value="r.target_id" class="mt-3 shrink-0" />
-        <div class="pointer-events-none min-w-0 flex-1">
+        <Stack gap="none" class="pointer-events-none min-w-0 flex-1">
           <CreatorChangesetFieldDiff :op="relationOp(r)" :label="relationLabel" />
-        </div>
-        <Tag :value="sourceLabel(r.source)" severity="secondary" class="mt-2 shrink-0" />
-      </label>
-    </section>
-  </div>
+        </Stack>
+        <Tag size="sm" tone="neutral" class="mt-2 shrink-0">{{ sourceLabel(r.source) }}</Tag>
+      </Inline>
+    </Stack>
+  </Stack>
 </template>

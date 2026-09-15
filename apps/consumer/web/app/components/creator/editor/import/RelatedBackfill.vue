@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { Panel } from '@hina-ui/vue'
-  import type { FormInstance } from '@primevue/forms/form'
   import { push } from 'notivue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
+  import { EDITOR_VALUES_KEY } from '~/features/creator/composables/useChangeRequestEditor'
   import { useEntityBackfill } from '~/features/creator/composables/useEntityBackfill'
   import { WORKSPACE_SESSION_KEY } from '~/features/creator/composables/useWorkspaceSession'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
@@ -11,12 +11,12 @@
 
   const props = defineProps<{
     resourceType: string
-    formEl: FormInstance | null
     current?: Record<string, EditorRelationRow[]>
   }>()
 
   const { canAny } = useCreatorPermissions()
   const session = inject(WORKSPACE_SESSION_KEY)!
+  const values = inject(EDITOR_VALUES_KEY, {})
 
   const rosterCapable = computed(
     () => props.resourceType === 'galgame' || props.resourceType === 'light-novel',
@@ -41,10 +41,6 @@
     if (loading.value || started.value) return
     loading.value = true
     try {
-      const states = props.formEl?.states ?? {}
-      const values = Object.fromEntries(
-        Object.entries(states).map(([key, state]) => [key, (state as { value?: unknown })?.value]),
-      )
       const ids = readExternalIds(props.resourceType, values)
       if (!ids) {
         push.warning({ message: '此条目没有登记 Bangumi / VNDB 外部源 ID，无法补全关联实体' })

@@ -5719,6 +5719,7 @@
             "type": "string"
           },
           "rule": {
+            "additionalProperties": true,
             "type": "object"
           },
           "rule_description": {
@@ -6587,6 +6588,7 @@
             "type": "string"
           },
           "rule": {
+            "additionalProperties": true,
             "type": "object"
           }
         },
@@ -7897,6 +7899,7 @@
             "type": "object"
           },
           "snapshot": {
+            "additionalProperties": true,
             "type": "object"
           }
         },
@@ -8730,8 +8733,16 @@
             "nullable": true,
             "type": "string"
           },
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
           "name": {
             "type": "string"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
           }
         },
         "required": [
@@ -24953,12 +24964,25 @@
             "nullable": true,
             "type": "string"
           },
+          "current_volume_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "current_volume_id": {
             "type": "number"
           },
           "current_volume_number": {
             "nullable": true,
             "type": "number"
+          },
+          "current_volume_title": {
+            "nullable": true,
+            "type": "string"
           },
           "is_finished": {
             "type": "boolean"
@@ -24988,6 +25012,8 @@
           "total_volumes",
           "current_volume_id",
           "current_volume_number",
+          "current_volume_title",
+          "current_volume_cover",
           "percentage",
           "current_chapter_title",
           "is_finished",
@@ -28634,6 +28660,7 @@
             "type": "string"
           },
           "rule": {
+            "additionalProperties": true,
             "type": "object"
           }
         },
@@ -31075,6 +31102,7 @@
       "WikiSnapshotDto": {
         "properties": {
           "snapshot": {
+            "additionalProperties": true,
             "description": "Full editable snapshot of the resource in contribution-registry shape.",
             "type": "object"
           }

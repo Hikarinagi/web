@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Form, { type FormInstance } from '@primevue/forms/form'
+  import { Alert, Button, Form, Inline, Text } from '@hina-ui/vue'
   import type { BackendChangeRequestDetail } from '~/features/creator/contribution'
   import type { BackendEditorRef, BackendEditorSchema } from '~/features/creator/editor'
   import type { Changeset } from '~/features/creator/editor/changeset'
@@ -31,8 +31,8 @@
   const footerEl = inject(ENTITY_DRAWER_FOOTER_KEY, ref(null))
 
   const {
-    resolver,
-    initialValues,
+    rules,
+    values,
     snapshotValues,
     snapshotRelations,
     initialRefs,
@@ -66,59 +66,49 @@
     fieldIdPrefix,
   })
 
-  const formEl = ref<FormInstance>()
-
   function onAddRelation(field: string, row: EditorRelationRow) {
     relations.value[field] = [...(relations.value[field] ?? []), row]
   }
 </script>
 
 <template>
-  <Form
-    :id="formDomId"
-    ref="formEl"
-    v-slot="$form"
-    :initial-values="initialValues"
-    :resolver="resolver"
-    class="flex flex-col gap-5"
-    @submit="review"
-  >
-    <Message v-if="isContinue" severity="warn" variant="simple" size="small">
+  <Form :id="formDomId" :values="values" :rules="rules" @submit="review">
+    <Alert v-if="isContinue" tone="warning">
       你正在续编自己进行中的变更请求，提交后将更新该请求
-    </Message>
+    </Alert>
 
     <CreatorEditorFormFields
       v-model:relations="relations"
+      v-model:values="values"
       :fields="fields"
       :presentation="presentation"
       :relation-errors="relationErrors"
       :initial-relations="snapshotRelations"
       :initial-values="snapshotValues"
       :initial-refs="initialRefs"
-      :form-state="$form"
       :id-prefix="fieldIdPrefix"
     />
 
     <Teleport :to="footerEl ?? 'body'" :disabled="!footerEl">
-      <div class="flex items-center gap-3">
+      <Inline gap="sm" align="center" :wrap="false">
         <CreatorEditorSyncTrigger
           :resource-type="slug"
           :resource-id="resourceId"
-          :form-el="formEl ?? null"
           :fields="fields"
           :presentation="presentation"
           :relations="relations"
           @add="onAddRelation"
         />
-        <span class="ml-auto text-sm text-muted-color">{{ changedCount($form) }} 项修改</span>
+        <Text size="sm" tone="muted" class="ms-auto">{{ changedCount }} 项修改</Text>
         <Button
-          :label="staged ? '暂存修改' : '提交变更请求'"
           type="submit"
           :form="formDomId"
-          :disabled="submitting || changedCount($form) === 0"
+          :disabled="submitting || changedCount === 0"
           :loading="submitting"
-        />
-      </div>
+        >
+          {{ staged ? '暂存修改' : '提交变更请求' }}
+        </Button>
+      </Inline>
     </Teleport>
 
     <CreatorEditorSubmitDialog

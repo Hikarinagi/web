@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Tag } from '@hina-ui/vue'
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { MediaValue } from '~/components/media-library/types'
   import { toRelationRows, type EditorRelationRow } from '~/features/creator/editor/relation'
@@ -26,24 +27,25 @@
     }))
   }
 
+  function toRow(media: MediaValue): EditorRelationRow {
+    return {
+      target_id: media.id,
+      target: { name: '', cover: media.src, width: media.width, height: media.height },
+      attributes: {},
+    }
+  }
+
   const medias = computed<MediaValue[]>({
     get: () =>
       rows.value.map(row => ({
         id: row.target_id,
         src: row.target.cover ?? '',
-        width: null,
-        height: null,
+        width: row.target.width,
+        height: row.target.height,
       })),
     set: next => {
       const byId = new Map(rows.value.map(r => [r.target_id, r]))
-      const reconciled = next.map(
-        media =>
-          byId.get(media.id) ?? {
-            target_id: media.id,
-            target: { name: '', cover: media.src },
-            attributes: {},
-          },
-      )
+      const reconciled = next.map(media => byId.get(media.id) ?? toRow(media))
       model.value = renumber(reconciled)
     },
   })
@@ -52,14 +54,7 @@
     const existing = new Set(rows.value.map(row => row.target_id))
     const fresh = picks.filter(media => !existing.has(media.id))
     if (!fresh.length) return
-    model.value = renumber([
-      ...rows.value,
-      ...fresh.map(media => ({
-        target_id: media.id,
-        target: { name: '', cover: media.src },
-        attributes: {},
-      })),
-    ])
+    model.value = renumber([...rows.value, ...fresh.map(toRow)])
   }
 
   function rowOf(id: number): EditorRelationRow | undefined {
@@ -89,56 +84,56 @@
     model.value = rows.value.map(row => (row.target_id === next.target_id ? next : row))
   }
 
-  const SEXUAL_TONE = [
-    'bg-surface-900/55 text-white',
-    'bg-amber-500/85 text-white',
-    'bg-rose-500/90 text-white',
-  ] as const
-  const VIOLENCE_TONE = [
-    'bg-surface-900/55 text-white',
-    'bg-orange-500/85 text-white',
-    'bg-red-600/90 text-white',
-  ] as const
+  const LEVEL_TONE = ['neutral', 'warning', 'danger'] as const
+
+  function levelTone(row: EditorRelationRow, key: 'sexual' | 'violence') {
+    return LEVEL_TONE[readLevel(row, key)]
+  }
 </script>
 
 <template>
   <MediaLibrarySelection v-model="medias" :sortable="orderable">
     <template v-if="hasSexual || hasViolence" #overlay="{ media }">
-      <div
+      <Inline
         v-if="rowOf(media.id)"
-        class="absolute inset-x-1.5 bottom-1.5 flex min-w-0 items-center gap-1.5 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
+        gap="xs"
+        align="center"
+        :wrap="false"
+        class="absolute inset-x-1.5 bottom-1.5 min-w-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-within:opacity-100"
       >
-        <Button
+        <Tag
           v-if="hasSexual"
           v-tooltip="attrHelp.get('sexual') ?? null"
-          unstyled
-          :class="[
-            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
-            SEXUAL_TONE[readLevel(rowOf(media.id)!, 'sexual')],
-          ]"
+          as="button"
+          type="button"
+          size="sm"
+          variant="solid"
+          :tone="levelTone(rowOf(media.id)!, 'sexual')"
+          class="hn-state-layer hn-interactive"
           @click="cycleLevel(media.id, 'sexual')"
         >
           Se {{ readLevel(rowOf(media.id)!, 'sexual') }}
-        </Button>
-        <Button
+        </Tag>
+        <Tag
           v-if="hasViolence"
           v-tooltip="attrHelp.get('violence') ?? null"
-          unstyled
-          :class="[
-            'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
-            VIOLENCE_TONE[readLevel(rowOf(media.id)!, 'violence')],
-          ]"
+          as="button"
+          type="button"
+          size="sm"
+          variant="solid"
+          :tone="levelTone(rowOf(media.id)!, 'violence')"
+          class="hn-state-layer hn-interactive"
           @click="cycleLevel(media.id, 'violence')"
         >
           Vi {{ readLevel(rowOf(media.id)!, 'violence') }}
-        </Button>
+        </Tag>
         <MediaAttrPopover
           v-if="metaAttrs.length"
           :attributes="metaAttrs"
           :row="rowOf(media.id)!"
           @update:row="replaceRow"
         />
-      </div>
+      </Inline>
     </template>
     <template #add>
       <MediaLibraryAdd mode="multiple" @pick="addMany" />

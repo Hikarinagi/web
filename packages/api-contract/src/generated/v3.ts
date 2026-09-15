@@ -12736,7 +12736,9 @@ export interface components {
             id: number;
             is_active: boolean;
             name: string;
-            rule: Record<string, never>;
+            rule: {
+                [key: string]: unknown;
+            };
             rule_description: string | null;
             /** Format: date-time */
             updated_at: string;
@@ -12936,7 +12938,9 @@ export interface components {
             description?: string | null;
             is_active?: boolean;
             name: string;
-            rule: Record<string, never>;
+            rule: {
+                [key: string]: unknown;
+            };
         };
         CreateDecorationDto: {
             /** @enum {string} */
@@ -13326,7 +13330,9 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             resource_type: Record<string, never>;
-            snapshot: Record<string, never>;
+            snapshot: {
+                [key: string]: unknown;
+            };
         };
         DraftListItemDto: {
             char_count: number;
@@ -13544,7 +13550,9 @@ export interface components {
         };
         EntityRefSummaryDto: {
             cover: string | null;
+            height?: number | null;
             name: string;
+            width?: number | null;
         };
         EntitySummariesResDto: {
             articles: components["schemas"]["ArticleCardSummaryResDto"][];
@@ -17774,8 +17782,10 @@ export interface components {
             author: string | null;
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             current_chapter_title: string | null;
+            current_volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             current_volume_id: number;
             current_volume_number: number | null;
+            current_volume_title: string | null;
             is_finished: boolean;
             /** Format: date-time */
             last_read: string;
@@ -18639,7 +18649,9 @@ export interface components {
             description?: string | null;
             is_active?: boolean;
             name?: string;
-            rule?: Record<string, never>;
+            rule?: {
+                [key: string]: unknown;
+            };
         };
         UpdateDecorationDto: {
             /** @enum {string} */
@@ -19310,7 +19322,9 @@ export interface components {
         VolumeType: "MAIN" | "EXTRA";
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
-            snapshot: Record<string, never>;
+            snapshot: {
+                [key: string]: unknown;
+            };
         };
         WorkCardDto: {
             aliases: string[];

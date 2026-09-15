@@ -1,5 +1,3 @@
-import type { FormSubmitEvent } from '@primevue/forms/form'
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import { push } from 'notivue'
 import type { InjectionKey, Ref } from 'vue'
 import type { BackendChangeRequestDetail } from '~/features/creator/contribution'
@@ -24,6 +22,9 @@ export interface RefApplyPayload {
 }
 
 export const REF_APPLY_KEY: InjectionKey<Ref<RefApplyPayload | null>> = Symbol('hikari-ref-apply')
+
+export const EDITOR_VALUES_KEY: InjectionKey<Record<string, unknown>> =
+  Symbol('hikari-editor-values')
 
 interface ChangeRequestBody {
   summary: string
@@ -90,9 +91,9 @@ export function useChangeRequestEditor(params: {
   const submitAttempted = ref(false)
 
   const openCr = params.openChangeRequest
-  const resolver = valibotResolver(schemaToValibot(params.schema, params.presentation))
+  const rules = schemaToValibot(params.schema, params.presentation)
   // JSON 在线缆把 Date 序列化成 ISO 字符串，本机收到后在 form 入口一次性还原回 Date,
-  // 让 DatePicker / valibot / diff 在 PrimeVue Forms 子树里全程跑 Date 语义。
+  // 让 DatePicker / valibot / diff 全程跑 Date 语义。
   const dateFields = new Set(
     params.schema.fields
       .filter(field => field.kind === 'scalar' && field.value_type === 'date')
@@ -160,8 +161,13 @@ export function useChangeRequestEditor(params: {
   const refApply = ref<RefApplyPayload | null>(null)
   provide(REF_APPLY_KEY, refApply)
 
-  // 关系字段不进 PrimeVue Form:FormField 会让子树里所有 PrimeVue 输入自动绑定到字段值，
-  // 而关系字段内含多个输入控件。改由这里单独持有关系草稿。
+  const values = reactive<Record<string, unknown>>({})
+  for (const field of params.schema.fields) {
+    if (field.kind === 'relation') continue
+    values[field.field] = initialValues[field.field]
+  }
+  provide(EDITOR_VALUES_KEY, values)
+
   const relations = ref<Record<string, EditorRelationRow[]>>(
     Object.fromEntries(
       params.schema.fields
@@ -193,43 +199,31 @@ export function useChangeRequestEditor(params: {
   const { can } = useCreatorPermissions()
   const needsReview = computed(() => needsReviewFor(changeset.value, params.schema.fields, can))
 
-  function buildChangeset(fieldValues: Record<string, unknown>): Changeset {
+  function buildChangeset(): Changeset {
     return diffSnapshot(
       snapshot,
-      { ...snapshot, ...fieldValues, ...relations.value },
+      { ...snapshot, ...values, ...relations.value },
       params.schema.fields,
       { initial: params.snapshotRefs, current: pickedRefs.value },
     )
   }
 
-  function buildFromForm(formState: Record<string, { value?: unknown } | undefined>): Changeset {
-    const fieldValues: Record<string, unknown> = {}
-    for (const [name, state] of Object.entries(formState)) {
-      fieldValues[name] = state?.value
-    }
-    return buildChangeset(fieldValues)
-  }
+  const liveChangeset = computed(() => buildChangeset())
+  const changedCount = computed(() => liveChangeset.value.length)
+  const changedFields = computed(
+    () => new Set(liveChangeset.value.map(op => (op.kind === 'scalar' ? op.field : op.relation))),
+  )
 
-  function changedCount(formState: Record<string, { value?: unknown } | undefined>): number {
-    return buildFromForm(formState).length
-  }
-
-  function changedFields(formState: Record<string, { value?: unknown } | undefined>): Set<string> {
-    return new Set(
-      buildFromForm(formState).map(op => (op.kind === 'scalar' ? op.field : op.relation)),
-    )
-  }
-
-  function review(event: FormSubmitEvent) {
+  function review() {
     if (submitting.value) return
     submitAttempted.value = true
     const errors = runRelationValidation(params.schema.fields, relations.value)
     relationErrors.value = errors
-    if (!event.valid || Object.keys(errors).length > 0) {
-      scrollToFirstError(params.schema.fields, event.states, errors, params.fieldIdPrefix)
+    if (Object.keys(errors).length > 0) {
+      scrollToFirstError(params.schema.fields, errors, params.fieldIdPrefix)
       return
     }
-    const next = buildChangeset(event.values as Record<string, unknown>)
+    const next = liveChangeset.value
     changeset.value = next
     if (params.onReview?.(next, needsReview.value)) return
     if (next.length === 0) {
@@ -264,7 +258,8 @@ export function useChangeRequestEditor(params: {
   }
 
   return {
-    resolver,
+    rules,
+    values,
     initialValues,
     initialRelations,
     snapshotValues: snapshot,

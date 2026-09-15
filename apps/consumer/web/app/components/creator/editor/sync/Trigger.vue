@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { Alert, Button, Dialog, Empty, Skeleton, Stack, Text } from '@hina-ui/vue'
-  import type { FormInstance } from '@primevue/forms/form'
   import { RefreshCw } from '@lucide/vue'
   import WorkSection from './WorkSection.vue'
+  import { EDITOR_VALUES_KEY } from '~/features/creator/composables/useChangeRequestEditor'
   import { useSyncDraft } from '~/features/creator/composables/useSyncDraft'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
   import type { SyncField, SyncRoster } from '~/features/creator/editor/sync'
@@ -10,7 +10,6 @@
   const props = defineProps<{
     resourceType: string
     resourceId?: number | null
-    formEl: FormInstance | null
     fields: SyncField[]
     presentation: Record<string, { label?: string }>
     relations: Record<string, EditorRelationRow[]>
@@ -19,6 +18,8 @@
     add: [field: string, row: EditorRelationRow]
     roster: [roster: SyncRoster]
   }>()
+
+  const values = inject(EDITOR_VALUES_KEY, {})
 
   const {
     cfg,
@@ -39,7 +40,7 @@
   } = useSyncDraft({
     resourceType: () => props.resourceType,
     resourceId: () => props.resourceId,
-    formEl: () => props.formEl,
+    values: () => values,
     fields: () => props.fields,
     relations: () => props.relations,
     onRoster: roster => emit('roster', roster),
@@ -79,7 +80,6 @@
         :tags="tags"
         :presentation="presentation"
         :fields="fields"
-        :form-el="formEl"
         :compared-sources="comparedSources"
         :relation-field="cfg?.relationField ?? null"
         @add="(field, row) => emit('add', field, row)"
