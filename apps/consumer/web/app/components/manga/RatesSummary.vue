@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Rating } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaRatesSummary' })
@@ -14,11 +14,10 @@
     const read = `${props.stats.played_count} 人看过`
     return avg == null ? read : `${read} · 平均 ${avg.toFixed(1)} / 10`
   })
-  const filledStars = computed(() => Math.round(props.stats.average ?? 0))
 </script>
 
 <template>
-  <MangaSection
+  <WorkSection
     title="安利墙"
     :meta="meta"
     :empty="stats.played_count === 0 && stats.rated_count === 0"
@@ -36,18 +35,7 @@
           </span>
           <span class="text-sm text-surface-500 dark:text-surface-400">/ 10</span>
         </div>
-        <div class="flex gap-0.5">
-          <Star
-            v-for="i in 10"
-            :key="i"
-            class="size-3.5"
-            :class="
-              i <= filledStars
-                ? 'fill-amber-400 text-amber-400'
-                : 'fill-surface-200 text-surface-200 dark:fill-surface-700 dark:text-surface-700'
-            "
-          />
-        </div>
+        <Rating :model-value="stats.average ?? 0" :max="10" readonly size="sm" />
         <p class="text-xs text-surface-500 dark:text-surface-400">
           {{ stats.rated_count }} 条评分 · {{ stats.status_counts.completed }} 人看完
         </p>
@@ -59,5 +47,5 @@
         :manga-id="mangaId"
       />
     </div>
-  </MangaSection>
+  </WorkSection>
 </template>

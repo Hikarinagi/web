@@ -1,6 +1,7 @@
-import type { FormInstance, FormSubmitEvent } from '@primevue/forms/form'
-import { mangaRateResolver, type MangaRateValues } from './schemas/rate.schema'
+import type { Form } from '@hina-ui/vue'
+import { mangaRateSchema, type MangaRateValues } from './schemas/rate.schema'
 import type { MangaRate, UpsertMangaRateBody } from './rate'
+import { getFieldErrors } from '~/utils/api/error'
 
 interface RateFormOptions {
   rate: () => MangaRate | null
@@ -11,10 +12,16 @@ interface RateFormOptions {
 }
 
 export function useRateForm(opts: RateFormOptions) {
-  const confirm = useConfirm()
-  const formErrors = useFormErrors(mangaRateResolver)
-  const form = useTemplateRef<FormInstance>('form')
+  const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
+
+  const values = reactive<MangaRateValues>({
+    status: 'GOING',
+    rate: null,
+    rate_content: '',
+    is_spoiler: false,
+    status_private: false,
+  })
 
   const isEdit = computed(() => {
     const r = opts.rate()
@@ -22,76 +29,56 @@ export function useRateForm(opts: RateFormOptions) {
   })
   const title = computed(() => `编辑《${opts.workTitle()}》的状态`)
 
-  const initialValues = computed(() => {
+  async function prepare() {
     const r = opts.rate()
-    return {
-      status: r?.status && r.status !== 'PLAN' ? r.status : 'GOING',
-      rate: r?.rate ?? null,
-      rate_content: r?.rate_content ?? '',
-      is_spoiler: r?.is_spoiler ?? false,
-      status_private: r?.status_private ?? false,
-    }
-  })
+    values.status = r?.status && r.status !== 'PLAN' ? r.status : 'GOING'
+    values.rate = r?.rate ?? null
+    values.rate_content = r?.rate_content ?? ''
+    values.is_spoiler = r?.is_spoiler ?? false
+    values.status_private = r?.status_private ?? false
+    await nextTick()
+    form.value?.reset()
+  }
 
-  async function submit(event: FormSubmitEvent) {
-    if (!event.valid || submitting.value) return
+  async function submit() {
+    if (submitting.value) return
     submitting.value = true
     try {
-      const values = event.values as MangaRateValues
       await opts.upsert({
         status: values.status,
         rate: values.rate,
-        rate_content: values.rate_content ?? '',
+        rate_content: values.rate_content.trim(),
         is_spoiler: values.is_spoiler,
         status_private: values.status_private,
       })
       opts.close()
     } catch (error) {
-      await formErrors.apply(error, form.value)
+      form.value?.setErrors(getFieldErrors(error))
     } finally {
       submitting.value = false
     }
   }
 
-  function confirmClearScore() {
-    confirm.require({
-      group: 'app-shell',
-      header: '清除评分',
-      message: '清除后只保留标记，评分与短评会移除。确定吗？',
-      acceptLabel: '清除',
-      rejectLabel: '再想想',
-      onAccept: async ({ close }: { close: () => void }) => {
-        close()
-        await opts.upsert({ rate: null, rate_content: '', is_spoiler: false })
-        opts.close()
-      },
-    })
+  async function clearScore() {
+    await opts.upsert({ rate: null, rate_content: '', is_spoiler: false })
+    opts.close()
   }
 
-  function confirmDelete() {
-    confirm.require({
-      group: 'app-shell',
-      header: '移除状态',
-      message: '移除后，你对这部作品的标记、评分与短评都会删除。确定吗？',
-      acceptLabel: '移除',
-      rejectLabel: '再想想',
-      onAccept: async ({ close }: { close: () => void }) => {
-        close()
-        await opts.remove()
-        opts.close()
-      },
-    })
+  async function removeStatus() {
+    await opts.remove()
+    opts.close()
   }
 
   return {
-    formErrors,
     form,
+    values,
+    rules: mangaRateSchema,
     submitting,
     isEdit,
     title,
-    initialValues,
+    prepare,
     submit,
-    confirmClearScore,
-    confirmDelete,
+    clearScore,
+    removeStatus,
   }
 }

@@ -110,7 +110,7 @@
       >
         <Button
           v-if="hasSexual"
-          v-tooltip.top="attrHelp.get('sexual') ?? null"
+          v-tooltip="attrHelp.get('sexual') ?? null"
           unstyled
           :class="[
             'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',
@@ -122,7 +122,7 @@
         </Button>
         <Button
           v-if="hasViolence"
-          v-tooltip.top="attrHelp.get('violence') ?? null"
+          v-tooltip="attrHelp.get('violence') ?? null"
           unstyled
           :class="[
             'flex h-6 shrink-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium whitespace-nowrap transition-colors',

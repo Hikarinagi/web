@@ -425,3 +425,20 @@
   border-radius: 2px;
   padding: 0 1px;
 }
+
+.hikari-editor-surface .ProseMirror {
+  outline: none;
+}
+
+.hikari-editor-surface .ProseMirror,
+.hikari-editor-surface .ProseMirror * {
+  overflow-anchor: none;
+}
+
+.hikari-editor-surface .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--hn-fg-subtle);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

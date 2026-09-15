@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Lock, Pencil, Shield, Trash2 } from '@lucide/vue'
   import type { BackendPermissionGroup } from '~/features/creator/governance'
@@ -8,9 +9,9 @@
 
   const editOpen = ref(false)
   const deleting = ref(false)
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
 
-  async function performDelete(close?: () => void) {
+  async function performDelete() {
     if (deleting.value) return
     deleting.value = true
     try {
@@ -21,7 +22,6 @@
           path: { id: props.group.id },
         },
       )
-      close?.()
       emit('deleted')
     } finally {
       deleting.value = false
@@ -29,21 +29,20 @@
   }
 
   function confirmDelete() {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除权限组',
-      message: `确认删除「${props.group.name}」？此操作不可撤销，组内成员会被同时移除。`,
-      acceptLabel: '删除',
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => deleting.value,
-      onAccept: ({ close }) => void performDelete(close).catch(() => {}),
+    confirm({
+      title: '删除权限组',
+      description: `确认删除「${props.group.name}」？此操作不可撤销，组内成员会被同时移除。`,
+      confirmText: '删除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => performDelete(),
     })
   }
 </script>
 
 <template>
-  <CardPanel title="基本信息" :icon="Shield">
+  <Panel title="基本信息">
+    <template #icon><Shield /></template>
     <template #actions>
       <div class="flex items-center gap-2">
         <Button
@@ -78,7 +77,7 @@
         {{ group.name }}
         <Lock
           v-if="group.is_system"
-          v-tooltip.top="'系统权限组，不可编辑'"
+          v-tooltip="'系统权限组，不可编辑'"
           :size="14"
           class="text-muted-color"
         />
@@ -98,7 +97,7 @@
       <dt class="text-muted-color">最近更新</dt>
       <dd>{{ timeFormat(group.updated_at) }}</dd>
     </dl>
-  </CardPanel>
+  </Panel>
 
   <CreatorGovernanceGroupsEditDialog
     v-model:visible="editOpen"

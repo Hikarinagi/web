@@ -16,7 +16,7 @@ type ManagedType = 'post' | 'article'
 
 export function useManagedContent(initial: ManagedContentPage, type: ManagedType) {
   const router = useRouter()
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const composerDialog = usePostComposerDialog()
   const postActions = usePostOwnerActions()
   const articleActions = useArticleOwnerActions()
@@ -86,14 +86,13 @@ export function useManagedContent(initial: ManagedContentPage, type: ManagedType
   }
 
   function remove(item: ManagedContentItem) {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除',
-      message: `确定删除《${item.title || '未命名'}》吗？删除后无法恢复。`,
-      acceptLabel: '删除',
-      rejectLabel: '取消',
-      onAccept: async ({ close }) => {
-        close()
+    confirm({
+      title: '删除',
+      description: `确定删除《${item.title || '未命名'}》吗？删除后无法恢复。`,
+      confirmText: '删除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: async () => {
         try {
           if (item.content_type === 'post') {
             await hikariRequest('/api/v3/posts/{id}', { method: 'delete', path: { id: item.id } })

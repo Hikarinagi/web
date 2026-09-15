@@ -17,19 +17,13 @@
   <div v-if="data" class="-mt-(--app-header-height)">
     <MangaHomeHeroBand :slides="data.hero.slides" />
     <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-10">
-      <MangaHomeRail
-        title="热门连载"
-        to="/mangas/browse?status=serializing&sort=heat:desc"
-        :items="data.hot"
-        ranked
-      />
+      <MangaHomeRankBoard :board="data.board" />
       <MangaHomeUpdatesGrid
         title="新刊"
         meta="按发行时间排序"
         to="/mangas/browse"
         :items="data.updates.items"
       />
-      <MangaHomeRankBoard :board="data.board" />
       <MangaHomeRail
         title="新作"
         meta="最近开始连载"

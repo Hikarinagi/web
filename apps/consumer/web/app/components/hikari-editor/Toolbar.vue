@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Divider, Inline } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import Button from './toolbar/Button.vue'
   import Dropdown from './toolbar/Dropdown.vue'
@@ -36,7 +37,7 @@
     if (!props.editor || !plugin.toolbarItem) return
     const trigger = event.currentTarget as HTMLElement
     if (plugin.toolbarItem.variant === 'dropdown') {
-      dropdownRef.value?.open(plugin.toolbarItem.dropdownItems ?? [], trigger, event)
+      dropdownRef.value?.open(plugin.toolbarItem.dropdownItems ?? [], trigger)
       return
     }
     plugin.toolbarItem.onClick?.(props.editor, props.context, trigger)
@@ -54,11 +55,11 @@
 </script>
 
 <template>
-  <div class="editor-toolbar">
-    <ScrollArea visibility="hidden" axis="x" shadow="both" class="editor-toolbar__scroll">
-      <div class="editor-toolbar__row">
+  <Inline gap="none" :wrap="false" class="max-w-full min-w-0 px-3 py-2">
+    <ScrollArea visibility="hidden" axis="x" shadow="both" class="min-w-0 flex-1">
+      <Inline align="center" gap="md" :wrap="false" class="w-max">
         <template v-for="(group, idx) in renderedGroups" :key="group.key">
-          <div class="toolbar-group">
+          <Inline align="center" gap="xs" :wrap="false">
             <Button
               v-for="plugin in group.plugins"
               :key="plugin.id"
@@ -69,38 +70,15 @@
               :is-dropdown="plugin.toolbarItem!.variant === 'dropdown'"
               @press="handleClick(plugin, $event)"
             />
-          </div>
-          <div v-if="idx < renderedGroups.length - 1" class="toolbar-divider" />
+          </Inline>
+          <Divider
+            v-if="idx < renderedGroups.length - 1"
+            orientation="vertical"
+            class="h-5 self-center"
+          />
         </template>
-      </div>
+      </Inline>
     </ScrollArea>
     <Dropdown ref="dropdownRef" :editor="editor" :context="context" />
-  </div>
+  </Inline>
 </template>
-
-<style scoped>
-  .editor-toolbar {
-    padding: 8px 12px;
-    background: var(--editor-toolbar-bg);
-    border-bottom: 1px solid var(--editor-toolbar-border);
-  }
-  .editor-toolbar__scroll {
-    width: 100%;
-  }
-  .editor-toolbar__row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: max-content;
-  }
-  .toolbar-group {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .toolbar-divider {
-    width: 1px;
-    height: 20px;
-    background: var(--editor-toolbar-divider);
-  }
-</style>

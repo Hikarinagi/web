@@ -34,7 +34,7 @@
     <motion.div
       v-if="visible"
       key="manga-reader-top"
-      class="absolute inset-x-0 top-0 z-20"
+      class="pointer-events-none absolute inset-x-0 top-0 z-20"
       :initial="{ opacity: 0, y: -10 }"
       :animate="{ opacity: 1, y: 0 }"
       :exit="{ opacity: 0, y: -10 }"
@@ -52,7 +52,7 @@
     <motion.div
       v-if="visible"
       key="manga-reader-bottom"
-      class="absolute inset-x-0 bottom-0 z-20"
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-20"
       :initial="{ opacity: 0, y: 10 }"
       :animate="{ opacity: 1, y: 0 }"
       :exit="{ opacity: 0, y: 10 }"

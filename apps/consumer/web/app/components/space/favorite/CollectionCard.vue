@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Bookmark, Lock, MoreHorizontal, Pencil, Trash2 } from '@lucide/vue'
-  import type { MenuItem } from 'primevue/menuitem'
+  import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, IconButton } from '@hina-ui/vue'
+  import { Bookmark, Ellipsis, Lock, Pencil, Trash2 } from '@lucide/vue'
   import type { SpaceCollectionCard } from '~/features/space/space'
 
   defineOptions({ name: 'SpaceFavoriteCollectionCard' })
@@ -12,25 +12,8 @@
   }>()
   const emit = defineEmits<{ edit: []; delete: [] }>()
 
-  const menu = useTemplateRef<{ toggle: (event: Event) => void }>('menu')
   const detailPath = computed(() => `/space/${props.ownerId}/favorites/${props.collection.id}`)
   const covers = computed(() => props.collection.cover_previews.slice(0, 4))
-
-  const menuItems = computed<MenuItem[]>(() => [
-    { label: '编辑', iconComponent: Pencil, command: () => emit('edit') },
-    { separator: true },
-    {
-      label: '删除',
-      iconComponent: Trash2,
-      danger: true,
-      disabled: props.collection.is_default,
-      command: () => emit('delete'),
-    },
-  ])
-
-  function openMenu(event: Event) {
-    menu.value?.toggle(event)
-  }
 </script>
 
 <template>
@@ -83,29 +66,33 @@
       v-if="isSelf"
       class="absolute top-2 right-2 opacity-100 transition-opacity md:opacity-0 md:group-hover/card:opacity-100 md:focus-within:opacity-100"
     >
-      <button
-        type="button"
-        aria-label="管理收藏夹"
-        class="grid size-7 place-items-center rounded-full bg-surface-0/90 text-color shadow-sm ring-1 ring-surface-200 backdrop-blur hover:bg-emphasis dark:bg-surface-900/90 dark:ring-surface-700"
-        @click="openMenu"
-      >
-        <MoreHorizontal :size="16" />
-      </button>
-      <Menu ref="menu" :model="menuItems" popup :pt="{ list: { class: 'py-1!' } }">
-        <template #item="{ item, props: itemProps }">
-          <a
-            v-bind="itemProps.action"
-            :class="[
-              'flex items-center gap-2.5 px-3 py-2 text-sm',
-              item.danger ? 'text-red-500!' : '',
-              item.disabled ? 'pointer-events-none opacity-45' : '',
-            ]"
+      <DropdownMenu label="管理收藏夹" align="end" class="w-32">
+        <IconButton
+          label="管理收藏夹"
+          variant="soft"
+          tone="neutral"
+          size="sm"
+          pill
+          class="bg-surface/90 shadow-sm ring-1 ring-line backdrop-blur"
+        >
+          <Ellipsis />
+        </IconButton>
+        <template #content>
+          <DropdownMenuItem @select="emit('edit')">
+            <template #icon><Pencil /></template>
+            编辑
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            tone="danger"
+            :disabled="collection.is_default"
+            @select="emit('delete')"
           >
-            <component :is="item.iconComponent" class="size-4 shrink-0" aria-hidden="true" />
-            <span>{{ item.label }}</span>
-          </a>
+            <template #icon><Trash2 /></template>
+            删除
+          </DropdownMenuItem>
         </template>
-      </Menu>
+      </DropdownMenu>
     </div>
   </div>
 </template>

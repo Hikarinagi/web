@@ -1,11 +1,7 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 
 export type WorkResourceSlug =
-  | 'galgame'
-  | 'light-novel'
-  | 'light-novel-volume'
-  | 'manga'
-  | 'manga-volume'
+  'galgame' | 'light-novel' | 'light-novel-volume' | 'manga' | 'manga-volume'
 export type EntityResourceSlug = 'person' | 'character' | 'producer'
 export type RevisionResourceSlug = WorkResourceSlug | EntityResourceSlug
 export type BackendRevisionList = ApiData<'/api/v3/revisions', 'get'>

@@ -25,7 +25,7 @@
 <template>
   <NuxtLink :to="`/create/contributions/${item.change_request.id}`" class="group flex gap-3">
     <div class="flex flex-col items-center pt-1">
-      <Avatar v-if="item.actor" :user="item.actor" card shape="circle" class="size-8! shrink-0" />
+      <Avatar v-if="item.actor" :user="item.actor" card class="size-8! shrink-0" />
       <span
         v-else
         class="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-100 text-muted-color dark:bg-surface-800"

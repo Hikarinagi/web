@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const collectionSchema = v.object({
@@ -17,4 +16,3 @@ export const collectionSchema = v.object({
 })
 
 export type CollectionValues = v.InferOutput<typeof collectionSchema>
-export const collectionResolver = valibotResolver(collectionSchema)

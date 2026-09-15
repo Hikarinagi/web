@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Heading, Link, Stack } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import { galgameDownloadSeo } from '~/features/seo/galgame-download'
 
@@ -20,13 +21,13 @@
 
   const seo = computed(() => (data.value ? galgameDownloadSeo(data.value) : null))
 
-  const resources = useTemplateRef<HTMLElement>('resources')
+  const resources = useTemplateRef('resources')
   const reducedMotion = usePreferredReducedMotion()
 
   onMounted(async () => {
     await nextTick()
     requestAnimationFrame(() => {
-      resources.value?.scrollIntoView({
+      unrefElement(resources)?.scrollIntoView({
         behavior: reducedMotion.value === 'reduce' ? 'auto' : 'smooth',
         block: 'start',
       })
@@ -43,7 +44,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameHero
       :galgame="data.galgame"
       :producers="data.producers"
@@ -52,23 +53,29 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <div
+    <Stack
       ref="resources"
-      class="mx-auto flex max-w-app scroll-mt-(--app-header-height) flex-col gap-6 px-6 py-10"
+      gap="lg"
+      class="mx-auto w-full max-w-app scroll-mt-(--app-header-height) px-6 py-10"
     >
-      <NuxtLink
-        :to="`/galgames/${galgameId}`"
-        class="inline-flex w-fit items-center gap-1.5 text-sm text-muted-color transition-colors hover:text-color"
-      >
-        <ArrowLeft class="size-3.5" />
-        返回《{{ galgameName }}》的详情页
+      <NuxtLink v-slot="{ href, navigate }" :to="`/galgames/${galgameId}`" custom>
+        <Link
+          :href="href ?? undefined"
+          tone="neutral"
+          :underline="false"
+          class="inline-flex w-fit items-center gap-1.5 text-sm text-muted hover:text-fg"
+          @click="navigate"
+        >
+          <ArrowLeft class="size-3.5" />
+          返回《{{ galgameName }}》的详情页
+        </Link>
       </NuxtLink>
 
-      <h1 class="text-xl font-semibold text-color">{{ galgameName }} 资源下载</h1>
+      <Heading :level="1" size="xl">{{ galgameName }} 资源下载</Heading>
 
       <GalgameDownloadsList :galgame-id="galgameId" :resources="data.resources" />
 
       <PromotionBanner v-if="data.banners[0]" :banner="data.banners[0]" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

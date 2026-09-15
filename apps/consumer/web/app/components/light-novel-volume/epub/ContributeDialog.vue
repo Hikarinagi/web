@@ -1,11 +1,12 @@
 <script setup lang="ts">
+  import { Button, Dialog, FileUpload, Stack, Text } from '@hina-ui/vue'
   import { useEpubFeedback } from '~/features/light-novel-volume/useEpubFeedback'
 
   defineOptions({ name: 'LightNovelVolumeEpubContributeDialog' })
   const props = defineProps<{ volumeId: number }>()
   const visible = defineModel<boolean>('visible', { required: true })
 
-  const { file, pickFile, submitting, review, status, isTerminal, contribute, reset, pause } =
+  const { file, submitting, review, status, isTerminal, contribute, reset, pause } =
     useEpubFeedback(props.volumeId)
 
   watch(visible, next => {
@@ -24,44 +25,43 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    header="补充 EPUB"
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    :style="{ width: '92vw', maxWidth: '32rem' }"
-  >
-    <div v-if="!review" class="flex flex-col gap-4">
-      <p class="text-sm leading-relaxed text-muted-color">
-        这一卷还没有人贡献EPUB！你可以在此上传此卷的汉化EPUB文件，简中和繁中均可
-      </p>
+  <Dialog v-model:open="visible" title="补充 EPUB" size="lg" :locked="submitting">
+    <template #content>
+      <Stack v-if="!review" gap="md">
+        <Text size="sm" tone="muted">
+          这一卷还没有人贡献 EPUB！你可以在此上传此卷的本地化 EPUB 文件，简中和繁中均可
+        </Text>
 
-      <LightNovelVolumeEpubUploadZone :file="file" @pick="pickFile" />
+        <FileUpload v-model="file" accept=".epub,application/epub+zip">
+          选择或拖入 EPUB 文件
+        </FileUpload>
+      </Stack>
 
-      <div class="flex justify-end gap-3 pt-1">
-        <Button label="取消" severity="secondary" text :disabled="submitting" @click="close" />
-        <Button label="上传" :disabled="!file" :loading="submitting" @click="contribute" />
-      </div>
-    </div>
-
-    <div v-else class="flex flex-col gap-4">
       <LightNovelVolumeEpubReviewResult
+        v-else
         :review="review"
         :is-terminal="isTerminal"
         :status="status"
         mode="fill"
       />
-      <div v-if="isTerminal" class="flex justify-end gap-3 pt-1">
+    </template>
+
+    <template v-if="!review || isTerminal" #footer>
+      <template v-if="!review">
+        <Button variant="ghost" tone="neutral" :disabled="submitting" @click="close">取消</Button>
+        <Button :disabled="!file" :loading="submitting" @click="contribute">上传</Button>
+      </template>
+      <template v-else>
         <Button
           v-if="status === 'REJECTED' || status === 'FAILED'"
-          label="重新上传"
-          severity="secondary"
-          outlined
+          variant="outline"
+          tone="neutral"
           @click="reset"
-        />
-        <Button label="完成" @click="visible = false" />
-      </div>
-    </div>
+        >
+          重新上传
+        </Button>
+        <Button @click="visible = false">完成</Button>
+      </template>
+    </template>
   </Dialog>
 </template>

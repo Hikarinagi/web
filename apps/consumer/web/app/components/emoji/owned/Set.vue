@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline } from '@hina-ui/vue'
   import type { MyEmojiSet } from '~/features/emoji/composables/useMySets'
 
   defineOptions({ name: 'EmojiOwnedSet' })
@@ -10,7 +11,7 @@
     'catalog-changed': []
   }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const visibilityPublic = ref(props.set.visibility === 'PUBLIC')
   const togglingVisibility = ref(false)
   const deleting = ref(false)
@@ -44,7 +45,7 @@
     }
   }
 
-  async function performDelete(close?: () => void) {
+  async function performDelete() {
     if (deleting.value) return
     deleting.value = true
     try {
@@ -52,7 +53,6 @@
         method: 'delete',
         path: { id: props.set.id },
       })
-      close?.()
       emit('remove', props.set.id)
       emit('catalog-changed')
     } finally {
@@ -61,40 +61,36 @@
   }
 
   function confirmDelete() {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除贴纸包',
-      message: `确认删除「${props.set.name}」？此名字永远无法重复使用，订阅了该贴纸包的用户会失去访问。`,
-      acceptLabel: '删除',
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      countdown: 3,
-      loading: () => deleting.value,
-      onAccept: ({ close }) => void performDelete(close).catch(() => {}),
+    confirm({
+      title: '删除贴纸包',
+      description: `确认删除「${props.set.name}」？此名字永远无法重复使用，订阅了该贴纸包的用户会失去访问。`,
+      confirmText: '删除',
+      cancelText: '取消',
+      tone: 'danger',
+      confirmDelay: 3,
+      onConfirm: () => performDelete(),
     })
   }
 </script>
 
 <template>
-  <Card :pt="{ body: { class: 'p-4!' }, content: { class: 'p-0!' } }">
-    <template #content>
-      <div class="flex items-center justify-between gap-3">
-        <EmojiOwnedSetHeader
-          :name="set.name"
-          :visibility-public="visibilityPublic"
-          :emoji-count="set.emoji_count"
-          :subscriber-count="set.subscriber_count"
-        />
-        <EmojiOwnedSetActions
-          :visibility-public="visibilityPublic"
-          :toggling-visibility="togglingVisibility"
-          :deleting="deleting"
-          @update:visibility-public="onUpdateVisibility"
-          @edit-request="editOpen = true"
-          @delete-request="confirmDelete"
-        />
-      </div>
-    </template>
+  <Card>
+    <Inline justify="between" align="center" gap="sm" :wrap="false">
+      <EmojiOwnedSetHeader
+        :name="set.name"
+        :visibility-public="visibilityPublic"
+        :emoji-count="set.emoji_count"
+        :subscriber-count="set.subscriber_count"
+      />
+      <EmojiOwnedSetActions
+        :visibility-public="visibilityPublic"
+        :toggling-visibility="togglingVisibility"
+        :deleting="deleting"
+        @update:visibility-public="onUpdateVisibility"
+        @edit-request="editOpen = true"
+        @delete-request="confirmDelete"
+      />
+    </Inline>
   </Card>
 
   <EmojiOwnedSetEditDialog

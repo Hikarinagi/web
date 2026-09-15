@@ -1,7 +1,11 @@
+<script setup lang="ts">
+  import { Skeleton, Stack } from '@hina-ui/vue'
+</script>
+
 <template>
-  <div class="flex flex-col gap-1.5">
-    <Skeleton width="120px" height="18px" />
-    <Skeleton width="80px" height="14px" />
-    <Skeleton width="100%" height="14px" class="mt-2" />
-  </div>
+  <Stack gap="none" class="gap-1.5">
+    <Skeleton class="h-4 w-30" />
+    <Skeleton class="h-3.5 w-20" />
+    <Skeleton class="mt-2 h-3.5 w-full" />
+  </Stack>
 </template>

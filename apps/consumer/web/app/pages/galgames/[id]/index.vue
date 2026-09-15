@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { galgameSeo } from '~/features/seo/galgame'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -27,7 +28,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameHero
       :galgame="data.galgame"
       :producers="data.producers"
@@ -36,7 +37,7 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <GalgameRatesSummary
         :stats="data.rate_stats"
         :top-rates="data.top_rates"
@@ -51,15 +52,13 @@
         :contributors="data.contributors"
       />
 
-      <GalgameLongReviews :articles="data.articles" />
-
-      <GalgameMentions :posts="data.posts" />
+      <WorkLongReviews :articles="data.articles" />
 
       <GalgameImages :galgame="data.galgame" />
 
       <GalgameRelations :relations="data.relations" />
 
       <GalgameCrew :producers="data.producers" :staff="data.staff" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

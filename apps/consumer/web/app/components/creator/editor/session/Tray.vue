@@ -7,7 +7,7 @@
   import { RESOURCE_TYPE_LABEL } from '~/features/creator/labels'
 
   const session = inject(WORKSPACE_SESSION_KEY)!
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
 
   const TARGET_LABEL: Record<WorkspaceMember['target'], string> = {
     person: RESOURCE_TYPE_LABEL.PERSON ?? '人物',
@@ -16,16 +16,13 @@
   }
 
   function confirmDiscard(member: WorkspaceMember) {
-    confirm.require({
-      group: 'app-shell',
-      header: '丢弃暂存修改',
-      message: `确定丢弃「${member.name || `#${member.id}`}」的 ${member.changeset.length} 项暂存修改？`,
-      acceptLabel: '丢弃',
-      rejectLabel: '取消',
-      onAccept: ({ close }) => {
-        session.discard(member.target, member.id)
-        close()
-      },
+    confirm({
+      title: '丢弃暂存修改',
+      description: `确定丢弃「${member.name || `#${member.id}`}」的 ${member.changeset.length} 项暂存修改？`,
+      confirmText: '丢弃',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => session.discard(member.target, member.id),
     })
   }
 </script>

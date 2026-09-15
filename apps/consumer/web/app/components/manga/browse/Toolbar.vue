@@ -1,4 +1,14 @@
 <script setup lang="ts">
+  import {
+    Card,
+    IconButton,
+    Inline,
+    Input,
+    InputGroup,
+    SegmentedControl,
+    Select,
+    Text,
+  } from '@hina-ui/vue'
   import { Search } from '@lucide/vue'
   import type { MangaBrowseState } from '~/features/manga/explore'
   import {
@@ -13,6 +23,10 @@
   defineOptions({ name: 'MangaBrowseToolbar' })
   const props = defineProps<{ state: MangaBrowseState; total: number; disabled?: boolean }>()
   const emit = defineEmits<{ update: [value: Partial<MangaBrowseState>] }>()
+
+  function loadMagazines(search?: string) {
+    return hikariRequest('/api/v3/mangas/magazines', { query: { search } })
+  }
 
   const search = ref(props.state.search ?? '')
   const sort = ref(sortValue(props.state))
@@ -43,101 +57,86 @@
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-3 rounded-xl border border-surface-200 bg-surface-0 px-5 py-4 dark:border-surface-800 dark:bg-surface-900"
-  >
-    <div class="flex items-center gap-3">
-      <InputGroup class="min-w-0 flex-1">
-        <InputText
+  <Card :padded="false" class="flex flex-col gap-3 rounded-xl px-5 py-4 shadow-none">
+    <Inline gap="md" :wrap="false">
+      <InputGroup :disabled="disabled" class="min-w-0 flex-1">
+        <Input
           v-model="search"
-          size="small"
           placeholder="作品名 / 别名"
           class="min-w-0"
-          :disabled="disabled"
           @keyup.enter="submitSearch"
         />
-        <Button
-          v-tooltip.top="'搜索'"
-          severity="secondary"
-          size="small"
-          :disabled="disabled"
-          aria-label="搜索"
-          @click="submitSearch"
-        >
-          <Search class="size-4" />
-        </Button>
+        <IconButton label="搜索" :disabled="disabled" @click="submitSearch">
+          <Search />
+        </IconButton>
       </InputGroup>
 
       <Select
         v-model="sort"
         :options="MANGA_SORT_OPTIONS"
-        option-label="label"
-        option-value="value"
         :disabled="disabled"
-        size="small"
         class="w-44 shrink-0"
-        @change="changeSort"
+        @update:model-value="changeSort"
       />
-      <span class="shrink-0 text-xs whitespace-nowrap text-surface-500 dark:text-surface-400">
+      <Text size="xs" tone="muted" class="shrink-0 whitespace-nowrap">
         共 {{ total.toLocaleString() }} 部
-      </span>
-    </div>
+      </Text>
+    </Inline>
 
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-2.5">
-      <SelectButton
+    <Inline gap="none" class="gap-x-3 gap-y-2.5">
+      <SegmentedControl
         :model-value="state.region ?? ALL"
         :options="regionOptions"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
         :disabled="disabled"
-        size="small"
         aria-label="地区"
-        @change="event => patch({ region: event.value === ALL ? undefined : event.value })"
+        @update:model-value="
+          value =>
+            patch({ region: value === ALL ? undefined : (value as MangaBrowseState['region']) })
+        "
       />
-      <SelectButton
+      <SegmentedControl
         :model-value="state.audience ?? ALL"
         :options="audienceOptions"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
         :disabled="disabled"
-        size="small"
         aria-label="受众"
-        @change="event => patch({ audience: event.value === ALL ? undefined : event.value })"
+        @update:model-value="
+          value =>
+            patch({ audience: value === ALL ? undefined : (value as MangaBrowseState['audience']) })
+        "
       />
-      <SelectButton
+      <SegmentedControl
         :model-value="state.serial_status ?? ALL"
         :options="statusOptions"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
         :disabled="disabled"
-        size="small"
         aria-label="连载状态"
-        @change="event => patch({ serial_status: event.value === ALL ? undefined : event.value })"
+        @update:model-value="
+          value =>
+            patch({
+              serial_status:
+                value === ALL ? undefined : (value as MangaBrowseState['serial_status']),
+            })
+        "
       />
       <Select
         :model-value="state.decade ?? ALL"
         :options="decadeOptions"
-        option-label="label"
-        option-value="value"
         :disabled="disabled"
-        size="small"
         class="w-32"
         aria-label="年代"
-        @update:model-value="value => patch({ decade: value === ALL ? undefined : value })"
+        @update:model-value="
+          value =>
+            patch({ decade: value === ALL ? undefined : (value as MangaBrowseState['decade']) })
+        "
       />
-      <MangaBrowseMagazinePopover
+      <BrowseEntityPickerPopover
+        kind="magazine"
+        noun="杂志"
+        :load="loadMagazines"
         :model-value="state.magazine_id"
         :disabled="disabled"
         @update:model-value="value => patch({ magazine_id: value })"
       />
-      <MangaBrowseTagFilterPopover
-        :groups="state.tag_groups"
-        :disabled="disabled"
-        @update="patch"
-      />
-    </div>
-  </div>
+      <BrowseTagFilterPopover :groups="state.tag_groups" :disabled="disabled" @update="patch" />
+    </Inline>
+  </Card>
 </template>

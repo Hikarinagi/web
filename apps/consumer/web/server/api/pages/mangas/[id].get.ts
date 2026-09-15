@@ -19,7 +19,6 @@ async function handler(event: H3Event) {
     my_rate,
     progress,
     favorite,
-    posts,
     contributors,
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/mangas/{id}', { path: { id } }),
@@ -42,10 +41,6 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/user/me/favorite/mangas/{manga_id}', {
       path: { manga_id: id },
     }).catch(() => null),
-    fetchBackendData(event, '/api/v3/mangas/{id}/posts', {
-      path: { id },
-      query: { page: 1, page_size: 6 },
-    }),
     fetchBackendData(event, '/api/v3/mangas/{id}/contributors', { path: { id } }),
   ])
 
@@ -63,7 +58,6 @@ async function handler(event: H3Event) {
     my_rate,
     progress,
     favorite,
-    posts,
     contributors,
   }
 }

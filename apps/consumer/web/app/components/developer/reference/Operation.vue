@@ -28,7 +28,7 @@
         <div class="flex items-center gap-1.5">
           <h3 class="text-lg font-semibold text-color">{{ operation.summary }}</h3>
           <Button
-            v-tooltip.top="copied ? '链接已复制' : '复制链接'"
+            v-tooltip="copied ? '链接已复制' : '复制链接'"
             unstyled
             class="inline-flex items-center justify-center rounded p-1 text-muted-color opacity-0 transition-opacity group-hover/op:opacity-100 hover:text-color focus-visible:opacity-100 max-lg:opacity-100"
             :aria-label="copied ? '链接已复制' : '复制该端点链接'"
@@ -52,7 +52,7 @@
           <Button
             v-for="scope in operation.scopes"
             :key="scope"
-            v-tooltip.top="'查看该 scope 的说明'"
+            v-tooltip="'查看该 scope 的说明'"
             unstyled
             as="router-link"
             to="/developers/docs#scopes"

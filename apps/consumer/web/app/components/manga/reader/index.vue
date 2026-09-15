@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Flex, Spinner, Stack, Text } from '@hina-ui/vue'
   import { useMediaQuery } from '@vueuse/core'
   import { AnimatePresence, motion } from 'motion-v'
   import { push } from 'notivue'
@@ -52,7 +53,12 @@
 
   const settingsOpen = ref(false)
   const catalogOpen = ref(false)
-  const settingsPopover = ref()
+  const settingsAnchor = ref<HTMLElement | null>(null)
+
+  function openSettings(event: Event) {
+    settingsAnchor.value = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+    settingsOpen.value = !settingsOpen.value
+  }
 
   const chrome = useReaderChrome({
     panelOpen: () => settingsOpen.value || catalogOpen.value,
@@ -104,7 +110,9 @@
     if (settings.value.background === 'white') return true
     return settings.value.background === 'system' && colorMode.value !== 'dark'
   })
-  const backgroundClass = computed(() => (lightBackground.value ? 'bg-white' : 'bg-[#06080c]'))
+  const backgroundClass = computed(() =>
+    lightBackground.value ? 'bg-neutral-0' : 'bg-neutral-950',
+  )
 
   const pageLabel = computed(() => `${reader.maxVisiblePage.value} / ${reader.totalPages.value}`)
   const showFloatingPageNumber = computed(
@@ -137,6 +145,7 @@
     educationVisible: education.visible,
     next: reader.next,
     previous: reader.previous,
+    showChrome: chrome.show,
     hideChrome: chrome.hide,
     toggleChrome: chrome.toggle,
   })
@@ -156,7 +165,7 @@
 </script>
 
 <template>
-  <div
+  <Flex
     class="manga-reader-root fixed inset-0 overflow-hidden"
     :class="backgroundClass"
     @contextmenu="interactions.onContextMenu"
@@ -174,7 +183,6 @@
       @previous="reader.previous"
       @tap="interactions.onChromeIntent"
       @retry-page="page => loader.retry(page)"
-      @pointer-move="chrome.onStagePointerMove"
     >
       <template #interlude>
         <MangaReaderInterlude
@@ -212,45 +220,41 @@
       @jump="page => reader.goToPage(page)"
       @toggle-layout="toggleLayout"
       @cycle-fit="cycleFit"
-      @open-settings="event => settingsPopover?.toggle(event)"
+      @open-settings="openSettings"
     />
 
-    <p
+    <Text
       v-if="showFloatingPageNumber"
-      class="absolute right-4 bottom-3 z-10 text-xs tabular-nums"
-      :class="lightBackground ? 'text-black/45' : 'text-white/45'"
+      size="xs"
+      class="absolute right-4 bottom-3 z-10 tabular-nums"
+      :class="lightBackground ? 'text-neutral-1000/45' : 'text-neutral-0/45'"
     >
       {{ pageLabel }}
-    </p>
+    </Text>
 
     <MangaReaderSettingsPopover
-      ref="settingsPopover"
+      v-model:open="settingsOpen"
       v-model:settings="settings"
+      :anchor="settingsAnchor"
       :show-layout-controls="!isMobile"
-      @show="settingsOpen = true"
-      @hide="settingsOpen = false"
       @replay-education="education.replay()"
     />
 
     <MangaReaderChapterDrawer
-      v-model:visible="catalogOpen"
+      v-model:open="catalogOpen"
       :chapters="data.chapters"
       :current-chapter-id="chapter.id"
       @select="openChapter"
     />
 
-    <div
-      v-if="leavingLabel"
-      class="absolute inset-0 z-30 flex items-center justify-center"
-      :class="backgroundClass"
-    >
-      <div class="flex flex-col items-center gap-4">
-        <Spinner :size="34" :label="null" />
-        <p class="text-sm" :class="lightBackground ? 'text-black/50' : 'text-[#8b95a6]'">
+    <Center v-if="leavingLabel" class="absolute inset-0 z-30" :class="backgroundClass">
+      <Stack align="center" class="gap-4">
+        <Spinner size="lg" aria-hidden="true" />
+        <Text size="sm" :class="lightBackground ? 'text-neutral-1000/50' : 'text-neutral-400'">
           {{ leavingLabel }}
-        </p>
-      </div>
-    </div>
+        </Text>
+      </Stack>
+    </Center>
 
     <AnimatePresence>
       <motion.div
@@ -264,7 +268,7 @@
         <ReaderEducationOverlay :hints="educationHints" @dismiss="dismissEducation" />
       </motion.div>
     </AnimatePresence>
-  </div>
+  </Flex>
 </template>
 
 <style scoped>

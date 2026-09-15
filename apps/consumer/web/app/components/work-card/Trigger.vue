@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline } from '@hina-ui/vue'
   import type { WorkType } from '#shared/utils/work'
   import { useWorkCard } from './composables/useWorkCard'
 
@@ -8,25 +9,29 @@
     showOnClick?: boolean
   }>()
 
-  const { requestShow, showNow, requestHide, hideForAnchor } = useWorkCard()
-  const rootRef = useTemplateRef<HTMLElement>('rootRef')
+  const { requestShow, showNow, abortShow, hideForAnchor } = useWorkCard()
+  const rootRef = useTemplateRef('rootRef')
   const noHover = useNoHover()
+  const anchor = computed(() => {
+    const el = unrefElement(rootRef)
+    return el instanceof HTMLElement ? el : null
+  })
 
   function onEnter() {
-    if (!props.workId || !rootRef.value) return
-    requestShow(props.workType, props.workId, rootRef.value)
+    if (!props.workId || !anchor.value) return
+    requestShow(props.workType, props.workId, anchor.value)
   }
   function onLeave() {
-    requestHide()
+    abortShow()
   }
   function onClick(event: Event) {
-    if (!(props.showOnClick || noHover.value) || !props.workId || !rootRef.value) return
+    if (!(props.showOnClick || noHover.value) || !props.workId || !anchor.value) return
     event.preventDefault()
     event.stopPropagation()
-    showNow(props.workType, props.workId, rootRef.value)
+    showNow(props.workType, props.workId, anchor.value)
   }
   function hideSelf() {
-    if (rootRef.value) hideForAnchor(rootRef.value)
+    if (anchor.value) hideForAnchor(anchor.value)
   }
 
   watch(
@@ -39,8 +44,12 @@
 </script>
 
 <template>
-  <span
+  <Inline
     ref="rootRef"
+    as="span"
+    gap="none"
+    :wrap="false"
+    class="inline"
     @mouseenter="onEnter"
     @mouseleave="onLeave"
     @focusin="onEnter"
@@ -48,5 +57,5 @@
     @click.capture="onClick"
   >
     <slot />
-  </span>
+  </Inline>
 </template>

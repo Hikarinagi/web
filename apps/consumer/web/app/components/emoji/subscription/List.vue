@@ -7,7 +7,7 @@
   const store = useEmojiManageStore()
   const { subscriptions, loaded, refresh, remove } = useMySubscriptions()
   const { refresh: refreshCatalog } = useUserEmojiCatalog()
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const unsubscribingId = ref<number | null>(null)
 
   watch(
@@ -17,7 +17,7 @@
     },
   )
 
-  async function performUnsubscribe(setId: number, close?: () => void) {
+  async function performUnsubscribe(setId: number) {
     if (unsubscribingId.value !== null) return
     unsubscribingId.value = setId
     try {
@@ -25,7 +25,6 @@
         '/api/v3/emoji/my-subscriptions/{emojiSetId}',
         { method: 'delete', path: { emojiSetId: setId } },
       )
-      close?.()
       remove(setId)
       void refreshCatalog()
     } finally {
@@ -34,15 +33,12 @@
   }
 
   function onUnsubscribeRequest(id: number, name: string) {
-    confirm.require({
-      group: 'app-shell',
-      header: '取消订阅',
-      message: `确认取消订阅「${name}」？取消后该贴纸包将不再出现在编辑器中。`,
-      acceptLabel: '取消订阅',
-      rejectLabel: '保留',
-      closeOnEscape: false,
-      loading: () => unsubscribingId.value === id,
-      onAccept: ({ close }) => void performUnsubscribe(id, close).catch(() => {}),
+    confirm({
+      title: '取消订阅',
+      description: `确认取消订阅「${name}」？取消后该贴纸包将不再出现在编辑器中。`,
+      confirmText: '取消订阅',
+      cancelText: '保留',
+      onConfirm: () => performUnsubscribe(id),
     })
   }
 </script>

@@ -117,7 +117,7 @@
       ]"
     >
       <Button
-        v-tooltip.top="'编辑'"
+        v-tooltip="'编辑'"
         unstyled
         type="button"
         class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-150 hover:bg-black/75"
@@ -127,7 +127,7 @@
         <Pencil class="size-4" />
       </Button>
       <Button
-        v-tooltip.top="'删除'"
+        v-tooltip="'删除'"
         unstyled
         type="button"
         class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-150 hover:bg-hikari-red-500"

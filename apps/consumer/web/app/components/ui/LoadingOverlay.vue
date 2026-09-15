@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spinner } from '@hina-ui/vue'
   import type { ClassValue } from 'clsx'
   import { AnimatePresence, motion } from 'motion-v'
   import { TRANSITION_FAST } from '~/lib/motion'
@@ -54,7 +55,7 @@
         aria-live="polite"
         :aria-label="label"
       >
-        <Spinner v-if="showSpinner" :size="28" :label="null" />
+        <Spinner v-if="showSpinner" size="lg" aria-hidden="true" />
       </motion.div>
     </AnimatePresence>
   </div>

@@ -50,7 +50,7 @@
         <HikariImage
           v-for="a in comment.attachments"
           :key="a.media.id"
-          :src="a.media.src"
+          :src="a.media"
           :alt="''"
           preview
           class="size-[132px] shrink-0 overflow-hidden rounded-lg"

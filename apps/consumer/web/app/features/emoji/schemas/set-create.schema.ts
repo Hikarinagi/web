@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 import { EMOJI_SET_NAME_REGEX } from '../constants'
 
@@ -12,4 +11,3 @@ export const setCreateSchema = v.object({
   visibility: v.picklist(['PUBLIC', 'PRIVATE'], '请选择可见性'),
 })
 export type SetCreateValues = v.InferOutput<typeof setCreateSchema>
-export const setCreateResolver = valibotResolver(setCreateSchema)

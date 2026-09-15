@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Heading, Inline, Stack, Tag } from '@hina-ui/vue'
   import { languageLabel, type GalgameDownloadResource } from '~/features/galgame/download'
   import { platformLabel } from '~/features/galgame/platforms'
 
@@ -9,36 +10,29 @@
 
 <template>
   <Card>
-    <template #content>
-      <div class="flex flex-col gap-4">
-        <div class="flex flex-col gap-2">
-          <h2 v-if="resource.note" class="text-base font-semibold text-color">
-            {{ resource.note }}
-          </h2>
+    <Stack>
+      <Stack gap="sm">
+        <Heading v-if="resource.note" :level="2" size="base">{{ resource.note }}</Heading>
 
-          <div class="flex flex-wrap items-center gap-2">
-            <Tag v-for="code in resource.platform" :key="code" :value="platformLabel(code)" />
-            <Tag
-              v-for="code in resource.language"
-              :key="code"
-              severity="secondary"
-              :value="languageLabel(code)"
-            />
-            <Tag v-if="resource.simulator" severity="info" :value="resource.simulator" />
-          </div>
-        </div>
+        <Inline gap="sm">
+          <Tag v-for="code in resource.platform" :key="code" tone="accent">
+            {{ platformLabel(code) }}
+          </Tag>
+          <Tag v-for="code in resource.language" :key="code">{{ languageLabel(code) }}</Tag>
+          <Tag v-if="resource.simulator" tone="info">{{ resource.simulator }}</Tag>
+        </Inline>
+      </Stack>
 
-        <div class="flex flex-col gap-3">
-          <GalgameDownloadsFileItem
-            v-for="file in resource.files"
-            :key="file.id"
-            :file="file"
-            :pending-file-id="pendingFileId"
-            @download="$emit('download', $event)"
-            @copy="$emit('copy', $event)"
-          />
-        </div>
-      </div>
-    </template>
+      <Stack gap="sm">
+        <GalgameDownloadsFileItem
+          v-for="file in resource.files"
+          :key="file.id"
+          :file="file"
+          :pending-file-id="pendingFileId"
+          @download="$emit('download', $event)"
+          @copy="$emit('copy', $event)"
+        />
+      </Stack>
+    </Stack>
   </Card>
 </template>

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { Inline, SegmentedControl, Text } from '@hina-ui/vue'
+  import { COMPOSER_KIND_OPTIONS } from './composables/useComposer'
+
   defineOptions({ name: 'FeedComposerTrigger' })
 
   const auth = useAuthStore()
@@ -6,26 +9,16 @@
 </script>
 
 <template>
-  <div class="flex cursor-text items-center gap-3 px-4 py-4" @click="$emit('compose')">
-    <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
-    <p class="flex-1 text-[15px] leading-relaxed text-(--editor-placeholder-color)">
+  <Inline gap="md" :wrap="false" class="cursor-text px-4 py-4" @click="$emit('compose')">
+    <Avatar :user="auth.user" class="size-9! shrink-0" />
+    <Text class="flex-1 text-[15px] leading-relaxed text-(--editor-placeholder-color)">
       分享你最近的想法、推荐、打卡
-    </p>
-    <div
-      class="flex shrink-0 items-center gap-0.5 rounded-lg bg-surface-100 p-0.5 dark:bg-surface-800"
-    >
-      <span
-        class="rounded-md bg-surface-0 px-3 py-1 text-xs font-bold text-color dark:bg-surface-900"
-      >
-        图文
-      </span>
-      <Button
-        unstyled
-        login-required
-        class="cursor-pointer rounded-md px-3 py-1 text-xs font-medium text-muted-color transition-colors hover:text-color"
-      >
-        文章
-      </Button>
-    </div>
-  </div>
+    </Text>
+    <SegmentedControl
+      :options="COMPOSER_KIND_OPTIONS"
+      size="sm"
+      class="shrink-0"
+      @click.stop="$emit('compose')"
+    />
+  </Inline>
 </template>

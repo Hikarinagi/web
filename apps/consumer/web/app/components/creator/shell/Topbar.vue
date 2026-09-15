@@ -33,7 +33,7 @@
       </template>
     </Button>
     <Button
-      v-tooltip.bottom="sidebarToggleLabel"
+      v-tooltip="{ content: sidebarToggleLabel, side: 'bottom' }"
       unstyled
       type="button"
       class="-ml-1 hidden size-9 items-center justify-center rounded-lg text-surface-600 transition-colors hover:bg-surface-100 md:inline-flex dark:text-surface-300 dark:hover:bg-surface-800"

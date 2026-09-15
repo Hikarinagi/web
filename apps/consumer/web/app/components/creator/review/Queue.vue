@@ -49,7 +49,7 @@
     <Column header="提交者" class="w-40">
       <template #body="{ data: row }">
         <span class="flex items-center gap-1.5">
-          <Avatar :user="row.primary.author" card shape="circle" class="size-5!" />
+          <Avatar :user="row.primary.author" card class="size-5!" />
           <UserName :user="row.primary.author" :handle="false" class="truncate" />
         </span>
       </template>

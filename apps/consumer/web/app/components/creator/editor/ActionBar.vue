@@ -30,7 +30,7 @@
 
 <template>
   <div
-    class="fixed right-0 bottom-0 left-0 z-20 mr-(--p-scrollbar-width) flex flex-col gap-3 border-t border-surface-200 bg-surface-0/95 px-5 py-4 backdrop-blur-sm transition-[left] duration-200 dark:border-surface-800 dark:bg-surface-950/95"
+    class="fixed right-0 bottom-0 left-0 z-20 hn-scrollbar-safe flex flex-col gap-3 border-t border-surface-200 bg-surface-0/95 px-5 py-4 backdrop-blur-sm transition-[left] duration-200 dark:border-surface-800 dark:bg-surface-950/95"
     :class="collapsed ? 'md:left-[72px]' : 'md:left-[256px]'"
     :style="{ transitionTimingFunction: EASE_CSS }"
   >

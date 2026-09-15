@@ -32,7 +32,7 @@
           <p>
             © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
             <button
-              v-tooltip.top="buildLabel"
+              v-tooltip="buildLabel"
               type="button"
               class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
               @click="changelogOpen = true"

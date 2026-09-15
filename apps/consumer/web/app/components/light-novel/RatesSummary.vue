@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Card, Flex, Inline, Rating, Text } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   defineOptions({ name: 'LightNovelRatesSummary' })
@@ -14,50 +14,38 @@
     const read = `${props.stats.played_count} 人读过`
     return avg == null ? read : `${read} · 平均 ${avg.toFixed(1)} / 10`
   })
-  const filledStars = computed(() => Math.round(props.stats.average ?? 0))
 </script>
 
 <template>
-  <LightNovelSection
+  <WorkSection
     title="安利墙"
     :meta="meta"
     :empty="stats.played_count === 0 && stats.rated_count === 0"
     empty-text="还没有人评分"
   >
-    <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
-      <div
-        class="flex flex-col gap-3 rounded-xl border border-surface-200 bg-surface-0 p-5 lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-[220px] lg:shrink-0 dark:border-surface-800 dark:bg-surface-900"
+    <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start">
+      <Card
+        class="flex flex-col gap-3 rounded-xl lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-[220px] lg:shrink-0"
       >
-        <div class="flex items-baseline gap-1">
-          <span
-            class="text-5xl leading-none font-bold text-surface-900 tabular-nums dark:text-surface-0"
-          >
+        <Inline align="baseline" gap="none" class="gap-1">
+          <Text as="span" class="text-5xl leading-none font-bold tabular-nums">
             {{ stats.average != null ? stats.average.toFixed(1) : '—' }}
-          </span>
-          <span class="text-sm text-surface-500 dark:text-surface-400">/ 10</span>
-        </div>
-        <div class="flex gap-0.5">
-          <Star
-            v-for="i in 10"
-            :key="i"
-            class="size-3.5"
-            :class="
-              i <= filledStars
-                ? 'fill-amber-400 text-amber-400'
-                : 'fill-surface-200 text-surface-200 dark:fill-surface-700 dark:text-surface-700'
-            "
-          />
-        </div>
-        <p class="text-xs text-surface-500 dark:text-surface-400">
+          </Text>
+          <Text as="span" size="sm" tone="muted">/ 10</Text>
+        </Inline>
+
+        <Rating :model-value="stats.average ?? 0" :max="10" readonly size="sm" />
+
+        <Text size="xs" tone="muted">
           {{ stats.rated_count }} 条评分 · {{ stats.status_counts.completed }} 人读完
-        </p>
-      </div>
+        </Text>
+      </Card>
 
       <LightNovelRatesTopReviews
         :rates="topRates.items"
         :total="stats.content_count"
         :light-novel-id="lightNovelId"
       />
-    </div>
-  </LightNovelSection>
+    </Flex>
+  </WorkSection>
 </template>

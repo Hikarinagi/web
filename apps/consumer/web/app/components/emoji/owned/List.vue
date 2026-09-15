@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Empty, Inline, Skeleton, Stack, Text } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
   import { useMySets, type MyEmojiSet } from '~/features/emoji/composables/useMySets'
   import { useUserEmojiCatalog } from '~/components/hikari-editor/plugins/emoji/composables/useUserEmojiCatalog'
@@ -27,29 +28,22 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <div class="flex items-center justify-between gap-2">
-      <p class="text-sm text-muted-color">
+  <Stack gap="sm">
+    <Inline justify="between" align="center" gap="sm" :wrap="false">
+      <Text size="sm" tone="muted">
         在这里创建、编辑和删除你自己的贴纸包，公开后其他用户可订阅。
-      </p>
-      <Button label="新建" size="small" class="shrink-0" @click="createOpen = true">
-        <template #icon>
-          <Plus class="size-4" />
-        </template>
+      </Text>
+      <Button size="sm" class="shrink-0" @click="createOpen = true">
+        <template #icon><Plus /></template>
+        新建
       </Button>
-    </div>
+    </Inline>
 
-    <div v-if="!loaded" class="flex flex-col gap-2">
-      <Skeleton height="5rem" />
-      <Skeleton height="5rem" />
-    </div>
+    <Stack v-if="!loaded" gap="sm">
+      <Skeleton v-for="index in 2" :key="index" class="h-20" />
+    </Stack>
 
-    <div
-      v-else-if="sets.length === 0"
-      class="flex flex-col items-center gap-3 rounded-lg border border-dashed border-surface-200 py-10 text-center dark:border-surface-700"
-    >
-      <p class="text-sm text-muted-color">还没有创建任何贴纸包</p>
-    </div>
+    <Empty v-else-if="sets.length === 0" size="sm" title="还没有创建任何贴纸包" />
 
     <EmojiOwnedSet
       v-for="set in sets"
@@ -61,5 +55,5 @@
       @catalog-changed="onCatalogChanged"
     />
     <EmojiSetCreateDialog v-model:open="createOpen" @created="onCreated" />
-  </div>
+  </Stack>
 </template>

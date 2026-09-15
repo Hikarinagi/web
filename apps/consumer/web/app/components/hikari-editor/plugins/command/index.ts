@@ -28,7 +28,7 @@ import { ENTITY_CARD_TYPES, type EntityCardType } from '../entity-card/types'
 import { openPollInsert } from '../poll'
 import { insertTable } from '../table'
 import { insertAfterTable } from '../table/insert'
-import { createCommandMenuRenderer, type CommandMenuState } from './composables/useCommandMenu'
+import { useCommandMenu, type CommandMenuState } from './composables/useCommandMenu'
 import type { CommandActionContext, CommandMenuItem } from './types'
 
 const MAX_COMMAND_ITEMS = 32
@@ -386,8 +386,21 @@ const CommandExtension = Extension.create<CommandExtensionOptions>({
   addProseMirrorPlugins() {
     const editor = this.editor
     const { items, pluginContext } = this.options
-    const rendererRef: { current: ReturnType<typeof createCommandMenuRenderer> | null } = {
-      current: null,
+    const menu = useCommandMenu()
+
+    function sync(state: CommandPluginState) {
+      if (!state.active || !state.range) {
+        menu.hide(editor)
+        return
+      }
+      menu.show({
+        ownerId: pluginContext.ownerId,
+        editor,
+        pluginContext,
+        query: state.query,
+        range: state.range,
+        items: state.items,
+      })
     }
 
     return [
@@ -427,24 +440,30 @@ const CommandExtension = Extension.create<CommandExtensionOptions>({
               view.dispatch(view.state.tr.setMeta(commandPluginKey, { dismiss: true }))
               return true
             }
+            if (event.isComposing || event.keyCode === 229) return false
 
-            return rendererRef.current?.keydown(event) ?? false
+            switch (event.key) {
+              case 'ArrowDown':
+                return menu.move(1)
+              case 'ArrowUp':
+                return menu.move(-1)
+              case 'Enter':
+              case 'Tab':
+                return menu.commit()
+            }
+
+            return false
           },
         },
         view: view => {
-          rendererRef.current = createCommandMenuRenderer(editor, pluginContext)
-          rendererRef.current.update(commandPluginKey.getState(view.state) ?? inactive(), view)
+          sync(commandPluginKey.getState(view.state) ?? inactive())
 
           return {
             update(nextView) {
-              rendererRef.current?.update(
-                commandPluginKey.getState(nextView.state) ?? inactive(),
-                nextView,
-              )
+              sync(commandPluginKey.getState(nextView.state) ?? inactive())
             },
             destroy() {
-              rendererRef.current?.destroy()
-              rendererRef.current = null
+              menu.hide(editor)
             },
           }
         },

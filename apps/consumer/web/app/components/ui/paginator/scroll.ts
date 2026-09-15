@@ -1,14 +1,7 @@
 import { EASE } from '~/lib/motion'
 
 export type PaginatorScrollTarget =
-  | boolean
-  | 'auto'
-  | 'window'
-  | 'parent'
-  | string
-  | HTMLElement
-  | null
-  | undefined
+  boolean | 'auto' | 'window' | 'parent' | string | HTMLElement | null | undefined
 
 export function scrollPageTop(
   root: HTMLElement | null,

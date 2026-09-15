@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { Button, Inline } from '@hina-ui/vue'
   import { Images, ImagePlus } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import { getRevisionEditPath, type WorkResourceSlug } from '~/features/revision/resources'
   import {
     useCoverVote,
@@ -27,14 +29,10 @@
 
   const open = ref(false)
   const { vote, retract, busy } = useCoverVote(props.work, props.workId)
-  const state = useCoverVoteView(
-    props.work,
-    props.workId,
-    (): CoverVoteState => ({
-      my_media_id: props.myMediaId,
-      covers: props.covers.map(cover => ({ media_id: cover.media.id, votes: cover.votes })),
-    }),
-  )
+  const state = useCoverVoteView(props.work, props.workId, (): CoverVoteState => ({
+    my_media_id: props.myMediaId,
+    covers: props.covers.map(cover => ({ media_id: cover.media.id, votes: cover.votes })),
+  }))
   const candidates = computed(() => toCoverCandidates(props.covers, state.value))
   const editPath = computed(
     () => `${getRevisionEditPath(REVISION_SLUG[props.work], props.workId)}#editor-field-covers`,
@@ -42,28 +40,28 @@
 </script>
 
 <template>
-  <div class="absolute top-full left-1/2 mt-2 -translate-x-1/2 whitespace-nowrap">
-    <Button
-      v-if="covers.length >= 2"
-      unstyled
-      class="inline-flex items-center gap-1 rounded p-1 text-xs font-medium text-muted-color transition-colors hover:text-color"
-      @click="open = true"
-    >
-      <Images class="size-3.5" />
-      <span>封面投票</span>
+  <Inline
+    justify="center"
+    :wrap="false"
+    class="absolute top-full left-1/2 mt-2 -translate-x-1/2 whitespace-nowrap"
+  >
+    <Button v-if="covers.length >= 2" variant="link" tone="neutral" size="sm" @click="open = true">
+      <template #icon><Images /></template>
+      封面投票
     </Button>
     <Button
       v-else
-      as="router-link"
+      :as="NuxtLink"
       :to="editPath"
       target="_blank"
-      unstyled
-      class="inline-flex items-center gap-1 rounded p-1 text-xs font-medium text-muted-color transition-colors hover:text-color"
+      variant="link"
+      tone="neutral"
+      size="sm"
     >
-      <ImagePlus class="size-3.5" />
-      <span>添加封面</span>
+      <template #icon><ImagePlus /></template>
+      添加封面
     </Button>
-  </div>
+  </Inline>
 
   <WorkCoverVoteDialog
     v-if="covers.length >= 2"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Plus, Users, X } from '@lucide/vue'
   import type { BackendPermissionGroupMemberList } from '~/features/creator/governance'
@@ -7,11 +8,11 @@
   const props = defineProps<{ groupId: number; list?: BackendPermissionGroupMemberList }>()
   const emit = defineEmits<{ changed: [] }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const addOpen = ref(false)
   const removing = ref<number | null>(null)
 
-  async function removeMember(userId: number, name: string, close?: () => void) {
+  async function removeMember(userId: number) {
     if (removing.value !== null) return
     removing.value = userId
     try {
@@ -19,30 +20,27 @@
         method: 'DELETE',
         path: { id: props.groupId, user_id: userId },
       })
-      close?.()
       emit('changed')
     } finally {
       removing.value = null
     }
-    void name
   }
 
   function confirmRemove(userId: number, name: string) {
-    confirm.require({
-      group: 'app-shell',
-      header: '移除成员',
-      message: `确认将 ${name} 从该权限组移除？`,
-      acceptLabel: '移除',
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => removing.value === userId,
-      onAccept: ({ close }) => void removeMember(userId, name, close).catch(() => {}),
+    confirm({
+      title: '移除成员',
+      description: `确认将 ${name} 从该权限组移除？`,
+      confirmText: '移除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => removeMember(userId),
     })
   }
 </script>
 
 <template>
-  <CardPanel title="成员" :icon="Users" :count="list?.meta.total_items ?? 0">
+  <Panel title="成员" :count="list?.meta.total_items ?? 0">
+    <template #icon><Users /></template>
     <template #actions>
       <Button label="添加" size="small" @click="addOpen = true">
         <template #icon>
@@ -56,7 +54,6 @@
         <Avatar
           :user="member.user"
           card
-          shape="circle"
           class="size-9! shrink-0 bg-surface-200 text-sm font-medium dark:bg-surface-700"
         />
         <div class="min-w-0 flex-1">
@@ -71,7 +68,7 @@
           </p>
         </div>
         <Button
-          v-tooltip.top="'移除'"
+          v-tooltip="'移除'"
           unstyled
           aria-label="移除成员"
           class="inline-flex size-8 items-center justify-center rounded text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
@@ -84,7 +81,7 @@
         </Button>
       </li>
     </ul>
-  </CardPanel>
+  </Panel>
 
   <CreatorGovernanceGroupsAddMemberDialog
     v-model:visible="addOpen"

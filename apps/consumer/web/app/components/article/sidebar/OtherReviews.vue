@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spoiler } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import { workPath } from '#shared/utils/work'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
@@ -27,7 +28,7 @@
         <ul class="flex flex-col gap-2.5">
           <li v-for="r in g.reviews" :key="r.id" class="flex flex-col gap-1">
             <div class="flex items-center gap-2">
-              <Avatar :user="r.rater" card shape="circle" class="size-5! shrink-0" />
+              <Avatar :user="r.rater" card class="size-5! shrink-0" />
               <UserName :user="r.rater" class="min-w-0 text-xs font-medium text-color" />
               <span
                 v-if="r.rate != null"

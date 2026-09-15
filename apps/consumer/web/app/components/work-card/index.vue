@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { WorkCardData } from './composables/useWorkCard'
@@ -16,9 +17,7 @@
 </script>
 
 <template>
-  <div
-    class="w-80 overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-[0_16px_48px_rgba(0,0,0,0.18)] dark:border-surface-700 dark:bg-surface-900"
-  >
+  <Stack gap="none">
     <WorkCardSkeleton v-if="!work" />
     <NuxtLink
       v-else
@@ -59,5 +58,5 @@
         </p>
       </div>
     </NuxtLink>
-  </div>
+  </Stack>
 </template>

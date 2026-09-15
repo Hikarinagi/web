@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import type { PageResult } from '@hikarinagi/shared'
   import { CATALOG_SORTS, type CatalogSort } from '~/features/manga/catalog'
-  import type { MangaSummary } from '~/features/manga/explore'
+  import { overlayText, subText, titleOf, type MangaSummary } from '~/features/manga/explore'
+  import { topVotedMedia } from '~/utils/media/image'
   import { usePagedList } from '~/features/space/usePagedList'
 
   defineOptions({ name: 'MangaCatalog' })
@@ -59,7 +60,15 @@
       :loading="pending"
       content-class="grid grid-cols-2 gap-x-5 gap-y-7 sm:grid-cols-3 lg:grid-cols-6"
     >
-      <MangaBrowseCard v-for="item in list.items" :key="item.manga.id" :item="item.manga" />
+      <BrowseWorkCard
+        v-for="item in list.items"
+        :key="item.manga.id"
+        :to="`/mangas/${item.manga.id}`"
+        :title="titleOf(item.manga)"
+        :sub="subText(item.manga)"
+        :cover="topVotedMedia(item.manga.covers)"
+        :overlay="overlayText(item.manga)"
+      />
     </LoadingOverlay>
     <p v-else class="py-16 text-center text-sm text-surface-500 dark:text-surface-400">
       还没有收录作品

@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import { Button, Inline, Skeleton, Text } from '@hina-ui/vue'
   import { Clock } from '@lucide/vue'
   import type { UserCatalogSet } from '../composables/useUserEmojiCatalog'
+  import { EMOJI_PICKER_IMAGE } from './image'
 
   defineOptions({ name: 'HikariEditorPluginsEmojiPickerTabBar' })
 
@@ -11,55 +13,55 @@
 
   const emit = defineEmits<{ (e: 'select', id: string): void }>()
 
-  // id 形态:'recent' 或 'set-<id>',与 EmojiPicker 父侧 sectionIds 对齐
   const RECENT_ID = 'recent'
 </script>
 
 <template>
-  <div
-    class="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-b-surface-300 pb-1 dark:border-b-surface-700"
-  >
-    <Button
-      v-tooltip.bottom="'最近使用'"
-      unstyled
-      type="button"
-      :class="[
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded transition-colors',
-        activeId === RECENT_ID
-          ? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-          : 'text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800',
-      ]"
-      @click="emit('select', RECENT_ID)"
-    >
-      <Clock :size="16" />
-    </Button>
+  <Inline :wrap="false" gap="none" align="center" class="shrink-0 border-line">
+    <ScrollArea axis="x" visibility="hidden" class="min-w-0 flex-1">
+      <Inline :wrap="false" gap="xs" align="center" class="w-max">
+        <Button
+          v-tooltip="{ content: '最近使用', side: 'bottom' }"
+          :variant="activeId === RECENT_ID ? 'soft' : 'ghost'"
+          :tone="activeId === RECENT_ID ? 'accent' : 'neutral'"
+          size="sm"
+          icon-only
+          aria-label="最近使用"
+          @click="emit('select', RECENT_ID)"
+        >
+          <template #icon><Clock /></template>
+        </Button>
 
-    <Button
-      v-for="set in sets"
-      :key="set.id"
-      v-tooltip.bottom="set.name"
-      unstyled
-      type="button"
-      :class="[
-        'flex h-9 w-9 shrink-0 items-center justify-center rounded transition-colors',
-        activeId === `set-${set.id}`
-          ? 'bg-primary-50 dark:bg-primary-950'
-          : 'hover:bg-surface-100 dark:hover:bg-surface-800',
-      ]"
-      @click="emit('select', `set-${set.id}`)"
-    >
-      <HikariImage
-        v-if="set.emojis[0]?.src"
-        :src="set.emojis[0].src.src"
-        :alt="set.name"
-        :processing="false"
-        class="h-6 w-6"
-        image-class="h-full w-full object-contain"
-      />
-      <span v-else class="text-xs text-muted-color">{{ set.name.slice(0, 2) }}</span>
-    </Button>
+        <Button
+          v-for="set in sets"
+          :key="set.id"
+          v-tooltip="{ content: set.name, side: 'bottom' }"
+          :variant="activeId === `set-${set.id}` ? 'soft' : 'ghost'"
+          :tone="activeId === `set-${set.id}` ? 'accent' : 'neutral'"
+          size="sm"
+          icon-only
+          :aria-label="set.name"
+          @click="emit('select', `set-${set.id}`)"
+        >
+          <template #icon>
+            <HikariImage
+              v-if="set.emojis[0]?.src"
+              :src="set.emojis[0].src.src"
+              :alt="set.name"
+              :processing="EMOJI_PICKER_IMAGE"
+              class="size-5"
+              image-class="size-full object-contain"
+            >
+              <template #skeleton>
+                <Skeleton class="size-full rounded-sm" />
+              </template>
+            </HikariImage>
+            <Text v-else as="span" size="xs" tone="muted">{{ set.name.slice(0, 2) }}</Text>
+          </template>
+        </Button>
+      </Inline>
+    </ScrollArea>
 
-    <span class="grow" />
     <slot name="trailing" />
-  </div>
+  </Inline>
 </template>

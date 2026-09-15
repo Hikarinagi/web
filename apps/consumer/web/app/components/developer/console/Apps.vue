@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Empty, Panel, Stack } from '@hina-ui/vue'
   import { Boxes, Plus } from '@lucide/vue'
   import type { DevelopersConsolePageData } from '~~/server/api/pages/developers/console.get'
 
@@ -32,21 +33,24 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
-    <CardPanel title="我的应用" :count="props.apps.length" :description="limitHint">
+  <Stack gap="lg">
+    <Panel title="我的应用" :count="props.apps.length" :description="limitHint">
       <template #actions>
-        <Button label="创建应用" :disabled="atLimit" @click="createOpen = true">
-          <template #icon><Plus class="size-4" /></template>
+        <Button :disabled="atLimit" @click="createOpen = true">
+          <template #icon><Plus /></template>
+          创建应用
         </Button>
       </template>
 
-      <CreatorEmpty v-if="!props.apps.length" text="还没有应用" :icon="Boxes" />
-      <div v-else class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
+      <Empty v-if="!props.apps.length" title="还没有应用">
+        <template #icon><Boxes /></template>
+      </Empty>
+      <Stack v-else gap="none" class="divide-y divide-line">
         <DeveloperConsoleAppItem v-for="app in props.apps" :key="app.client_id" :app />
-      </div>
-    </CardPanel>
+      </Stack>
+    </Panel>
 
     <DeveloperConsoleCreateDialog v-model:visible="createOpen" @created="onCreated" />
     <DeveloperConsoleSecretDialog v-model:visible="secretOpen" :secret />
-  </div>
+  </Stack>
 </template>

@@ -5,13 +5,7 @@ import { topVotedMedia } from '~/utils/media/image'
 export type ProducerType = components['schemas']['ProducerType']
 
 export type EntityTarget =
-  | 'tag'
-  | 'person'
-  | 'producer'
-  | 'character'
-  | 'galgame'
-  | 'light_novel'
-  | 'manga'
+  'tag' | 'person' | 'producer' | 'character' | 'galgame' | 'light_novel' | 'manga'
 
 export async function fetchEntitySearch(
   target: EntityTarget,

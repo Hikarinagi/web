@@ -19,11 +19,13 @@ export function useHomeStream(initialCursor: number | null) {
   const modules = useState<StreamModule[]>('manga:home:modules', () => [])
   const cursor = useState<number | null>('manga:home:cursor', () => initialCursor)
   const loading = useState('manga:home:loading', () => false)
+  const failed = useState('manga:home:failed', () => false)
   const done = computed(() => cursor.value === null)
 
   async function loadMore() {
     if (loading.value || cursor.value === null) return
     loading.value = true
+    failed.value = false
     try {
       const data = await $fetch<MangaStreamBatch>('/api/pages/mangas', {
         query: { cursor: cursor.value },
@@ -51,11 +53,11 @@ export function useHomeStream(initialCursor: number | null) {
       }
       cursor.value = data.next_cursor
     } catch {
-      cursor.value = null
+      failed.value = true
     } finally {
       loading.value = false
     }
   }
 
-  return { modules, loading, done, loadMore }
+  return { modules, loading, failed, done, loadMore }
 }

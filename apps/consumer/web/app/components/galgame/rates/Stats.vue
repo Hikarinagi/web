@@ -1,14 +1,13 @@
 <script setup lang="ts">
-  import { Hash, Star } from '@lucide/vue'
+  import { Rating } from '@hina-ui/vue'
+  import { Hash } from '@lucide/vue'
   import type { GalgameRateKeyword, GalgameRateStats } from '~/features/galgame/rate'
 
   defineOptions({ name: 'GalgameRatesStats' })
-  const props = defineProps<{
+  defineProps<{
     stats: GalgameRateStats
     keywords: GalgameRateKeyword[]
   }>()
-
-  const filledStars = computed(() => Math.round(props.stats.average ?? 0))
 </script>
 
 <template>
@@ -25,18 +24,7 @@
           </span>
           <span class="text-base text-surface-500 dark:text-surface-400">/ 10</span>
         </div>
-        <div class="flex gap-0.5">
-          <Star
-            v-for="i in 10"
-            :key="i"
-            class="size-3.5"
-            :class="
-              i <= filledStars
-                ? 'fill-amber-400 text-amber-400'
-                : 'fill-surface-200 text-surface-200 dark:fill-surface-700 dark:text-surface-700'
-            "
-          />
-        </div>
+        <Rating :model-value="stats.average ?? 0" :max="10" readonly size="sm" />
         <p class="text-xs text-surface-600 dark:text-surface-400">{{ stats.rated_count }} 人评分</p>
       </div>
 

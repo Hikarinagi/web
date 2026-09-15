@@ -31,6 +31,10 @@ import type { FeedItemByType } from '~/features/feed/feed'
 export const POST_MAX_COVERS = 9
 export const POST_MAX_TOPICS = 5
 export const POST_MAX_RELATED_WORKS = 10
+export const COMPOSER_KIND_OPTIONS = [
+  { value: 'post', label: '图文' },
+  { value: 'article', label: '文章' },
+]
 const TITLE_MAX = 200
 
 export interface ComposerTopic {

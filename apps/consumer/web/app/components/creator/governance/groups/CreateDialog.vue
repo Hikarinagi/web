@@ -1,38 +1,40 @@
 <script setup lang="ts">
-  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
+  import { Button, Dialog, Form, FormField, Input, ScrollArea, Textarea } from '@hina-ui/vue'
   import { usePermissionCatalog } from '~/features/creator/composables/usePermissionCatalog'
-  import {
-    permissionGroupResolver,
-    type PermissionGroupValues,
-  } from '~/features/creator/schemas/governance.schema'
+  import { permissionGroupSchema } from '~/features/creator/schemas/governance.schema'
+  import { getFieldErrors } from '~/utils/api/error'
 
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ created: [id: number] }>()
 
   const { entries } = usePermissionCatalog()
-  const formErrors = useFormErrors(permissionGroupResolver)
-  const form = useTemplateRef<FormInstance>('form')
+  const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
-
-  watch(visible, next => {
-    if (next) {
-      formErrors.clear()
-      form.value?.reset()
-    }
+  const values = reactive<{ name: string; description: string; permissions: string[] }>({
+    name: '',
+    description: '',
+    permissions: [],
   })
 
-  async function onSubmit(event: FormSubmitEvent) {
-    if (!event.valid || submitting.value) return
+  watch(visible, next => {
+    if (!next) return
+    form.value?.reset()
+    values.name = ''
+    values.description = ''
+    values.permissions = []
+  })
+
+  async function onSubmit() {
+    if (submitting.value) return
     submitting.value = true
     try {
-      const values = event.values as PermissionGroupValues
       const created = await hikariRequest<'/api/v3/permission-groups', 'post'>(
         '/api/v3/permission-groups',
         {
           method: 'POST',
           body: {
-            name: values.name,
-            description: values.description?.length ? values.description : undefined,
+            name: values.name.trim(),
+            description: values.description.trim() || undefined,
             permissions: values.permissions,
           },
         },
@@ -40,7 +42,7 @@
       visible.value = false
       emit('created', created.id)
     } catch (error) {
-      await formErrors.apply(error, form.value)
+      form.value?.setErrors(getFieldErrors(error))
     } finally {
       submitting.value = false
     }
@@ -48,42 +50,36 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    header="新建权限组"
-    :dismissable-mask="!submitting"
-    :style="{ width: '92vw', maxWidth: '40rem' }"
-  >
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      class="flex flex-col gap-4"
-      @input="formErrors.clear"
-      @submit="onSubmit"
-    >
-      <FormItem v-slot="{ id }" name="name" label="名称" required>
-        <InputText :id="id" autocomplete="off" fluid placeholder="如：Galgame 审核组" />
-      </FormItem>
+  <Dialog v-model:open="visible" title="新建权限组" size="xl" :locked="submitting">
+    <template #content>
+      <Form
+        ref="form"
+        :values="values"
+        :rules="permissionGroupSchema"
+        :disabled="submitting"
+        @submit="onSubmit"
+      >
+        <FormField name="name" label="名称" required>
+          <Input v-model="values.name" autocomplete="off" placeholder="如：Galgame 审核组" />
+        </FormField>
 
-      <FormItem v-slot="{ id }" name="description" label="描述">
-        <Textarea :id="id" rows="2" fluid placeholder="说明此权限组的职责" />
-      </FormItem>
+        <FormField name="description" label="描述">
+          <Textarea v-model="values.description" autosize placeholder="说明此权限组的职责" />
+        </FormField>
 
-      <FormItem v-slot="{ field }" name="permissions" label="权限" required :initial-value="[]">
-        <ScrollArea class="max-h-[40vh] rounded-md ring-1 ring-surface-200 dark:ring-surface-700">
-          <CreatorGovernancePermissionTree
-            :model-value="field.value as string[]"
-            :entries="entries"
-            @update:model-value="value => field.props.onInput({ value })"
-          />
-        </ScrollArea>
-      </FormItem>
+        <FormField name="permissions" label="权限" required>
+          <ScrollArea class="max-h-96 rounded-md border border-line">
+            <CreatorGovernancePermissionTree v-model="values.permissions" :entries="entries" />
+          </ScrollArea>
+        </FormField>
+      </Form>
+    </template>
 
-      <div class="flex justify-end gap-3 pt-2">
-        <Button label="取消" severity="secondary" :disabled="submitting" @click="visible = false" />
-        <Button label="创建" type="submit" :loading="submitting" />
-      </div>
-    </Form>
+    <template #footer>
+      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
+        取消
+      </Button>
+      <Button :loading="submitting" @click="form?.submit()">创建</Button>
+    </template>
   </Dialog>
 </template>

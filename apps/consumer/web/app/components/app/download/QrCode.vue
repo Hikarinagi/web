@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Skeleton } from '@hina-ui/vue'
   import appIcon from '~/assets/images/app/app-icon.webp'
 
   defineOptions({ name: 'AppDownloadQrCode' })
@@ -9,7 +10,7 @@
 </script>
 
 <template>
-  <div v-tooltip.top="usable ? undefined : '敬请期待'" class="hidden items-center gap-3 lg:flex">
+  <div v-tooltip="usable ? null : '敬请期待'" class="hidden items-center gap-3 lg:flex">
     <div class="relative rounded-lg bg-surface-0 p-2 shadow-md dark:bg-white">
       <HikariImage
         v-if="src"
@@ -18,7 +19,11 @@
         class="size-20"
         image-class="size-20"
         :class="usable ? null : 'opacity-20 blur-[3px]'"
-      />
+      >
+        <template #skeleton>
+          <Skeleton class="size-full rounded-sm" />
+        </template>
+      </HikariImage>
       <div v-else class="size-20 rounded-sm bg-surface-200" />
       <HikariImage
         :src="appIcon"

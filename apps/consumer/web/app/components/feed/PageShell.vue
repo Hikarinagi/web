@@ -13,7 +13,7 @@
     },
   )
 
-  useHead({ htmlAttrs: { class: props.lockOverscroll ? 'overscroll-none' : undefined } })
+  useHead({ htmlAttrs: { class: props.lockOverscroll ? 'overscroll-y-none' : undefined } })
 </script>
 
 <template>

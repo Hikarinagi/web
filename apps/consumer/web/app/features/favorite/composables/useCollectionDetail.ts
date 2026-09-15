@@ -20,7 +20,7 @@ export function useCollectionDetail(data: {
   const editOpen = ref(false)
   const deleting = ref(false)
   const activeType = ref<CollectionTypeFilterKey>('all')
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const backPath = computed(() => `/space/${data.owner_id}?tab=collections`)
 
   const { list, pending, loadPage } = usePagedList(data.items, page =>
@@ -57,7 +57,7 @@ export function useCollectionDetail(data: {
     return item.galgame?.id ?? item.light_novel?.id ?? item.article?.id ?? item.post?.id
   }
 
-  async function performRemoveItem(item: SpaceCollectionItem, close?: () => void) {
+  async function performRemoveItem(item: SpaceCollectionItem) {
     const id = resourceId(item)
     if (!id) return
     const path =
@@ -76,21 +76,20 @@ export function useCollectionDetail(data: {
         [item.type]: Math.max(0, list.value.type_counts[item.type] - 1),
       },
     }
-    close?.()
   }
 
   function confirmRemoveItem(item: SpaceCollectionItem) {
-    confirm.require({
-      group: 'app-shell',
-      header: '移除收藏',
-      message: `确认将这条移出「${collection.value.name}」？作品本身不受影响。`,
-      acceptLabel: '移除',
-      rejectLabel: '取消',
-      onAccept: ({ close }) => void performRemoveItem(item, close).catch(() => {}),
+    confirm({
+      title: '移除收藏',
+      description: `确认将这条移出「${collection.value.name}」？作品本身不受影响。`,
+      confirmText: '移除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => performRemoveItem(item),
     })
   }
 
-  async function performDeleteCollection(close?: () => void) {
+  async function performDeleteCollection() {
     if (deleting.value) return
     deleting.value = true
     try {
@@ -98,7 +97,6 @@ export function useCollectionDetail(data: {
         '/api/v3/favorite-collections/{collection_id}',
         { method: 'DELETE', path: { collection_id: collection.value.id } },
       )
-      close?.()
       await navigateTo(backPath.value)
     } finally {
       deleting.value = false
@@ -106,15 +104,13 @@ export function useCollectionDetail(data: {
   }
 
   function confirmDeleteCollection() {
-    confirm.require({
-      group: 'app-shell',
-      header: '删除收藏夹',
-      message: `确认删除「${collection.value.name}」？夹内 ${counts.value.total} 项收藏将移出本夹，作品本身保留。`,
-      acceptLabel: '删除',
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => deleting.value,
-      onAccept: ({ close }) => void performDeleteCollection(close).catch(() => {}),
+    confirm({
+      title: '删除收藏夹',
+      description: `确认删除「${collection.value.name}」？夹内 ${counts.value.total} 项收藏将移出本夹，作品本身保留。`,
+      confirmText: '删除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => performDeleteCollection(),
     })
   }
 

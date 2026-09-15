@@ -95,7 +95,7 @@ export function readerEducationHints(
         key: 'chrome',
         placement: 'center',
         title: '单击 呼出工具栏',
-        description: '目录、书签、设置都在这里',
+        description: '查看目录、书签以及设置',
       },
     ]
   }
@@ -116,7 +116,7 @@ export function readerEducationHints(
       placement: 'center',
       icon: MousePointer2,
       title: '右键 呼出菜单',
-      description: '目录、书签、设置、工具栏都在这里',
+      description: '查看目录、书签、设置以及工具栏',
     },
   ]
 }

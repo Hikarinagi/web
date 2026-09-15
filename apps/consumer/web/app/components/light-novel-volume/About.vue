@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <LightNovelSection title="关于本卷">
+  <WorkSection title="关于本卷">
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
       <LightNovelVolumeAboutIntro v-if="hasSummary" :volume="volume" />
       <LightNovelVolumeAboutArchive
@@ -22,5 +22,5 @@
         "
       />
     </div>
-  </LightNovelSection>
+  </WorkSection>
 </template>

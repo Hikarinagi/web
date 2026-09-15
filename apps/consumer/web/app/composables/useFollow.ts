@@ -1,7 +1,7 @@
 export function useFollow(userId: number, initial: boolean) {
   const following = useState(`follow:${userId}`, () => initial)
   const pending = ref(false)
-  const confirm = useConfirm()
+  const confirmOpen = ref(false)
 
   async function apply(next: boolean) {
     pending.value = true
@@ -20,22 +20,9 @@ export function useFollow(userId: number, initial: boolean) {
 
   function toggle() {
     if (pending.value) return
-    if (!following.value) {
-      void apply(true)
-      return
-    }
-    confirm.require({
-      group: 'app-shell',
-      header: '取消关注',
-      message: '取消关注后，TA 的更新将不再出现在你的关注流里。',
-      acceptLabel: '取消关注',
-      rejectLabel: '再想想',
-      onAccept: ({ close }) => {
-        close()
-        void apply(false)
-      },
-    })
+    if (following.value) confirmOpen.value = true
+    else void apply(true)
   }
 
-  return { following, pending, toggle }
+  return { following, pending, confirmOpen, toggle, unfollow: () => apply(false) }
 }

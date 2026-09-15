@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Search } from '@lucide/vue'
+  import { Empty, Inline, SearchInput, Skeleton, Stack, Text } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import type { Ref } from 'vue'
   import type { EntitySummaries } from '~/components/hikari-content/composables/useContentSummaries'
@@ -160,161 +160,69 @@
 </script>
 
 <template>
-  <div class="entity-card-popover">
-    <div class="entity-card-popover__search">
-      <Search class="size-4 shrink-0 text-muted-color" />
-      <InputText
-        v-model="query"
-        autofocus
-        fluid
-        size="small"
-        :placeholder="meta.searchPlaceholder"
-        :pt="{ root: { class: 'pl-1! !border-0 !ring-0 !shadow-none !p-0 !bg-transparent' } }"
-        @keydown="onKeydown"
-      />
-    </div>
+  <Stack gap="md">
+    <SearchInput
+      v-model="query"
+      autofocus
+      :placeholder="meta.searchPlaceholder"
+      class="w-full"
+      @keydown="onKeydown"
+    />
 
-    <div v-if="state === 'idle'" class="entity-card-popover__hint">
-      请输入关键词搜索 {{ meta.label }}
-    </div>
+    <ScrollArea class="min-h-0 grow sm:h-96 sm:grow-0">
+      <Empty v-if="state === 'idle'" :description="`输入关键词搜索${meta.label}`" />
 
-    <div v-else-if="state === 'loading'" class="entity-card-popover__list">
-      <div v-for="i in 4" :key="i" class="entity-card-popover__row entity-card-popover__row--skel">
-        <Skeleton size="40px" />
-        <div class="entity-card-popover__row-text">
-          <Skeleton height="14px" width="60%" />
-          <Skeleton height="12px" width="40%" />
-        </div>
-      </div>
-    </div>
+      <Empty v-else-if="state === 'empty'" :description="emptyText" />
 
-    <div v-else-if="state === 'empty'" class="entity-card-popover__hint">
-      {{ emptyText }}
-    </div>
+      <Stack v-else-if="state === 'loading'" gap="xs">
+        <Inline v-for="i in 6" :key="i" align="center" gap="md" :wrap="false" class="p-2">
+          <Skeleton class="h-16 w-12 shrink-0 rounded" />
+          <Stack gap="xs" class="min-w-0 flex-1">
+            <Skeleton class="h-4 w-3/5" />
+            <Skeleton class="h-3 w-2/5" />
+          </Stack>
+        </Inline>
+      </Stack>
 
-    <div v-else class="entity-card-popover__list">
-      <Button
-        v-for="(item, idx) in items"
-        :key="item.entity_id"
-        unstyled
-        type="button"
-        :class="[
-          'entity-card-popover__row',
-          { 'entity-card-popover__row--active': idx === activeIndex },
-        ]"
-        @click="insertItem(item)"
-        @mouseenter="activeIndex = idx"
-      >
-        <HikariImage
-          :src="item.display.cover ?? ''"
-          alt=""
-          preset="small"
-          class="entity-card-popover__cover"
-          image-class="size-full object-cover"
+      <Stack v-else gap="xs">
+        <Inline
+          v-for="(item, idx) in items"
+          :key="item.entity_id"
+          as="button"
+          type="button"
+          align="center"
+          gap="md"
+          :wrap="false"
+          :class="
+            cn(
+              'w-full hn-interactive rounded-lg p-2 text-left hn-press-none',
+              idx === activeIndex && 'bg-subtle',
+            )
+          "
+          @click="insertItem(item)"
+          @mouseenter="activeIndex = idx"
         >
-          <template #empty><span /></template>
-          <template #error><span /></template>
-        </HikariImage>
-        <div class="entity-card-popover__row-text">
-          <span class="entity-card-popover__title">{{ item.display.title }}</span>
-          <span v-if="item.display.subtitle" class="entity-card-popover__subtitle">
-            {{ item.display.subtitle }}
-          </span>
-          <span v-if="item.display.meta" class="entity-card-popover__meta">
-            {{ item.display.meta }}
-          </span>
-        </div>
-      </Button>
-    </div>
-  </div>
+          <HikariImage
+            :src="item.display.cover ?? ''"
+            alt=""
+            preset="small"
+            class="h-16 w-12 shrink-0 overflow-hidden rounded bg-subtle"
+            image-class="size-full object-cover"
+          >
+            <template #empty><span /></template>
+            <template #error><span /></template>
+          </HikariImage>
+          <Stack gap="none" class="min-w-0 flex-1">
+            <Text weight="medium" truncate>{{ item.display.title }}</Text>
+            <Text v-if="item.display.subtitle" size="sm" tone="muted" truncate>
+              {{ item.display.subtitle }}
+            </Text>
+            <Text v-if="item.display.meta" size="xs" tone="faint" truncate>
+              {{ item.display.meta }}
+            </Text>
+          </Stack>
+        </Inline>
+      </Stack>
+    </ScrollArea>
+  </Stack>
 </template>
-
-<style scoped>
-  .entity-card-popover {
-    width: 100%;
-    max-height: min(60dvh, 480px);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  @media (min-width: 768px) {
-    .entity-card-popover {
-      width: 480px;
-    }
-  }
-  .entity-card-popover__search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 4px 10px;
-    border-bottom: 1px solid var(--editor-toolbar-border);
-  }
-  .entity-card-popover__hint {
-    padding: 24px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--editor-text-muted);
-  }
-  .entity-card-popover__hint--small {
-    padding: 8px;
-    font-size: 12px;
-  }
-  .entity-card-popover__list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding-top: 6px;
-    overflow-y: auto;
-  }
-  .entity-card-popover__row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    background: transparent;
-    text-align: left;
-    transition: background 80ms ease-out;
-    cursor: pointer;
-  }
-  .entity-card-popover__row--active {
-    background: var(--editor-toolbar-item-hover);
-  }
-  .entity-card-popover__row--skel {
-    cursor: default;
-  }
-  .entity-card-popover__cover {
-    flex: 0 0 40px;
-    height: 40px;
-    border-radius: 4px;
-    overflow: hidden;
-    background: var(--editor-toolbar-item-hover);
-  }
-  .entity-card-popover__row-text {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .entity-card-popover__title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--editor-text-color);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .entity-card-popover__subtitle {
-    font-size: 12px;
-    color: var(--editor-text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .entity-card-popover__meta {
-    font-size: 11px;
-    color: var(--editor-text-muted);
-  }
-</style>

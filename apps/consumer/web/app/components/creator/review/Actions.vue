@@ -8,11 +8,11 @@
   }>()
   const emit = defineEmits<{ reviewed: [] }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const body = ref('')
   const submitting = ref(false)
 
-  async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT', close?: () => void) {
+  async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT') {
     if (submitting.value) return
     submitting.value = true
     try {
@@ -30,7 +30,6 @@
         })
       }
       body.value = ''
-      close?.()
       emit('reviewed')
     } catch (error) {
       emit('reviewed')
@@ -48,22 +47,19 @@
     const meta =
       decision === 'APPROVE'
         ? {
-            header: '通过并合并',
-            message: `确认通过此变更请求？合并后修改将立即生效。${batchNote}`,
-            acceptLabel: '确认合并',
+            title: '通过并合并',
+            description: `确认通过此变更请求？合并后修改将立即生效。${batchNote}`,
+            confirmText: '确认合并',
           }
         : {
-            header: '驳回变更请求',
-            message: `确认驳回此变更请求？驳回后该请求将关闭，作者需重新发起新的变更请求。${batchNote}`,
-            acceptLabel: '确认驳回',
+            title: '驳回变更请求',
+            description: `确认驳回此变更请求？驳回后该请求将关闭，作者需重新发起新的变更请求。${batchNote}`,
+            confirmText: '确认驳回',
           }
-    confirm.require({
-      group: 'app-shell',
+    confirm({
       ...meta,
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => submitting.value,
-      onAccept: ({ close }) => void submitReview(decision, close).catch(() => {}),
+      cancelText: '取消',
+      onConfirm: () => submitReview(decision),
     })
   }
 </script>

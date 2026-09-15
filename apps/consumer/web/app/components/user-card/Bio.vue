@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Text } from '@hina-ui/vue'
   import type { UserCardData } from './composables/useUserCard'
 
   defineProps<{
@@ -7,10 +8,12 @@
 </script>
 
 <template>
-  <div
+  <Text
     v-if="user.signature || user.bio"
-    class="mt-1.5 line-clamp-3 text-[13px] leading-relaxed text-muted-color"
+    size="sm"
+    tone="muted"
+    class="mt-1.5 line-clamp-3 leading-relaxed"
   >
     {{ user.signature || user.bio }}
-  </div>
+  </Text>
 </template>

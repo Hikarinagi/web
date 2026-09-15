@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Alert, Button, Center, Dialog, Inline, Stack, Text } from '@hina-ui/vue'
   import { usePurchaseDialog } from '~/features/decoration/usePurchaseDialog'
 
   defineOptions({ name: 'UiPurchaseDialog' })
@@ -11,80 +12,70 @@
 
 <template>
   <Dialog
-    :visible="state.open"
-    modal
-    :draggable="false"
-    :dismissable-mask="!state.submitting"
-    :close-on-escape="!state.submitting"
-    :header="state.title"
-    :style="{ width: '24rem' }"
-    @update:visible="value => !value && cancel()"
+    :open="state.open"
+    :title="state.title"
+    size="sm"
+    :locked="state.submitting"
+    @update:open="value => !value && cancel()"
   >
-    <div v-if="state.item" class="flex flex-col gap-5">
-      <div class="flex items-center gap-4">
-        <div
-          class="bg-emphasis/40 grid size-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-surface"
-        >
-          <HikariImage
-            v-if="state.item.image"
-            :src="state.item.image.src"
-            alt=""
-            :preview="false"
-            image-class="object-contain"
-            class="size-16"
-          />
-        </div>
-        <div class="min-w-0 flex-1">
-          <p class="text-base font-semibold text-color">{{ state.item.name }}</p>
-          <p v-if="state.item.description" class="mt-1 line-clamp-2 text-sm text-muted-color">
-            {{ state.item.description }}
-          </p>
-        </div>
-      </div>
+    <template #content>
+      <Stack v-if="state.item" gap="lg">
+        <Inline gap="md" align="center">
+          <Center class="size-20 shrink-0 overflow-hidden rounded-2xl border border-line bg-inset">
+            <HikariImage
+              v-if="state.item.image"
+              :src="state.item.image.src"
+              alt=""
+              :preview="false"
+              image-class="object-contain"
+              class="size-16"
+            />
+          </Center>
+          <Stack gap="xs" class="min-w-0 flex-1">
+            <Text weight="semibold">{{ state.item.name }}</Text>
+            <Text v-if="state.item.description" size="sm" tone="muted" class="line-clamp-2">
+              {{ state.item.description }}
+            </Text>
+          </Stack>
+        </Inline>
 
-      <dl class="flex flex-col gap-2 rounded-xl p-4 text-sm bg-emphasis">
-        <div class="flex items-center justify-between">
-          <dt class="text-muted-color">价格</dt>
-          <dd class="inline-flex items-center gap-1 font-medium text-color">
-            <HikariPoint class="size-4" aria-hidden="true" />
-            {{ state.item.price }}
-          </dd>
-        </div>
-        <div class="flex items-center justify-between">
-          <dt class="text-muted-color">当前光点</dt>
-          <dd class="inline-flex items-center gap-1 text-color">
-            <HikariPoint class="size-4" aria-hidden="true" />
-            {{ state.balance }}
-          </dd>
-        </div>
-        <div class="flex items-center justify-between border-t border-surface pt-2">
-          <dt class="text-muted-color">兑换后</dt>
-          <dd
-            class="inline-flex items-center gap-1 font-medium"
-            :class="affordable ? 'text-color' : 'text-red-500'"
-          >
-            <HikariPoint class="size-4" aria-hidden="true" />
-            {{ afterBalance }}
-          </dd>
-        </div>
-      </dl>
-      <Message v-if="!affordable" severity="error" :closable="false">光点不足</Message>
-    </div>
+        <Stack gap="sm" class="rounded-xl bg-subtle p-4">
+          <Inline align="center" justify="between">
+            <Text as="span" size="sm" tone="muted">价格</Text>
+            <Inline gap="xs" align="center">
+              <HikariPoint class="size-4" aria-hidden="true" />
+              <Text as="span" size="sm" weight="medium">{{ state.item.price }}</Text>
+            </Inline>
+          </Inline>
+          <Inline align="center" justify="between">
+            <Text as="span" size="sm" tone="muted">当前光点</Text>
+            <Inline gap="xs" align="center">
+              <HikariPoint class="size-4" aria-hidden="true" />
+              <Text as="span" size="sm">{{ state.balance }}</Text>
+            </Inline>
+          </Inline>
+          <Inline align="center" justify="between" class="border-t border-line pt-2">
+            <Text as="span" size="sm" tone="muted">兑换后</Text>
+            <Inline gap="xs" align="center">
+              <HikariPoint class="size-4" aria-hidden="true" />
+              <Text as="span" size="sm" weight="medium" :tone="affordable ? 'default' : 'danger'">
+                {{ afterBalance }}
+              </Text>
+            </Inline>
+          </Inline>
+        </Stack>
+
+        <Alert v-if="!affordable" tone="danger">光点不足</Alert>
+      </Stack>
+    </template>
 
     <template #footer>
-      <Button
-        label="取消"
-        variant="text"
-        severity="secondary"
-        :disabled="state.submitting"
-        @click="cancel"
-      />
-      <Button
-        :label="state.confirmLabel"
-        :loading="state.submitting"
-        :disabled="!affordable"
-        @click="confirm"
-      />
+      <Button variant="ghost" tone="neutral" :disabled="state.submitting" @click="cancel">
+        取消
+      </Button>
+      <Button :loading="state.submitting" :disabled="!affordable" @click="confirm">
+        {{ state.confirmLabel }}
+      </Button>
     </template>
   </Dialog>
 </template>

@@ -20,7 +20,7 @@
       :src="cover"
       :alt="title"
       class="rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/10"
-      :style="{ aspectRatio: layout.aspectRatio }"
+      :ratio="layout.ratio"
       image-class="object-cover"
       :processing="layout.processing"
       :preload="{ fetchPriority: 'high' }"

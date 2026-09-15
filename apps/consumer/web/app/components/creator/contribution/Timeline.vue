@@ -26,7 +26,7 @@
       <div class="flex flex-col gap-2 pb-5">
         <div class="flex flex-wrap items-center gap-2">
           <template v-if="item.actor">
-            <Avatar :user="item.actor" card shape="circle" class="size-5!" />
+            <Avatar :user="item.actor" card class="size-5!" />
             <UserName :user="item.actor" class="font-medium" />
           </template>
           <span v-else class="font-medium text-muted-color">系统</span>

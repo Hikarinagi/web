@@ -25,6 +25,9 @@ const TAP_MAX_DURATION_MS = 350
 /** A second tap inside this window is a zoom gesture, not two toggles. */
 const DOUBLE_TAP_MS = 280
 const DOUBLE_TAP_MAX_DISTANCE = 32
+const WHEEL_ZOOM_DAMPING = 300
+const WHEEL_LINE_PX = 16
+const WHEEL_PAGE_PX = 100
 
 type Commit = 'next' | 'previous' | null
 type Mode = 'idle' | 'pinch' | 'pan' | 'page'
@@ -291,7 +294,23 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     releasePointer(event, true)
   }
 
+  function onWheel(event: WheelEvent) {
+    if (!options.zoomable() || (!event.ctrlKey && !event.metaKey)) return
+    event.preventDefault()
+    const delta =
+      event.deltaMode === 1
+        ? event.deltaY * WHEEL_LINE_PX
+        : event.deltaMode === 2
+          ? event.deltaY * WHEEL_PAGE_PX
+          : event.deltaY
+    options.zoom.zoomBy(Math.exp(-delta / WHEEL_ZOOM_DAMPING), {
+      x: event.clientX,
+      y: event.clientY,
+    })
+  }
+
   useEventListener(options.viewport, 'touchmove', onTouchMove, { passive: false })
+  useEventListener(options.viewport, 'wheel', onWheel, { passive: false })
   onBeforeUnmount(clearTapTimer)
 
   return {

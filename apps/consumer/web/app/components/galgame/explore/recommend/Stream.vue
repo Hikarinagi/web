@@ -1,30 +1,14 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { useGalgameHomeStream } from '~/features/galgame/useHomeStream'
 
   defineOptions({ name: 'GalgameExploreRecommendStream' })
 
   const { modules, loading, failed, done, loadMore } = useGalgameHomeStream()
-  const sentinel = ref<HTMLElement | null>(null)
-  const nearEnd = ref(false)
-
-  useIntersectionObserver(
-    sentinel,
-    ([entry]) => {
-      nearEnd.value = !!entry?.isIntersecting
-    },
-    { rootMargin: '600px' },
-  )
-
-  watchEffect(
-    () => {
-      if (nearEnd.value && !loading.value && !failed.value && !done.value) void loadMore()
-    },
-    { flush: 'post' },
-  )
 </script>
 
 <template>
-  <div class="flex flex-col gap-14">
+  <Stack gap="none" class="gap-14">
     <template v-for="module in modules" :key="module.key">
       <PromotionBanner v-if="module.kind === 'banner'" :banner="module.banner" />
       <GalgameExploreRecommendFeature
@@ -40,12 +24,13 @@
       />
       <GalgameExploreRecommendGrid v-else :items="module.items" />
     </template>
-    <div ref="sentinel" aria-hidden="true" class="h-px" />
-    <div v-if="loading" class="flex justify-center py-4">
-      <Spinner :size="28" />
-    </div>
-    <div v-else-if="failed" class="flex justify-center py-4">
-      <Button label="重新加载" severity="secondary" variant="text" @click="loadMore" />
-    </div>
-  </div>
+
+    <StreamTail
+      :loading="loading"
+      :failed="failed"
+      :done="done"
+      :has-items="modules.length > 0"
+      @load="loadMore"
+    />
+  </Stack>
 </template>

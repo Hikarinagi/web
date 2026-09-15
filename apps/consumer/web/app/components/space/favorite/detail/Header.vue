@@ -43,7 +43,6 @@
             :user="owner"
             card
             :aria-label="displayName(owner)"
-            shape="circle"
             class="size-6! shrink-0 bg-surface-100 dark:bg-surface-800"
             :processing="{ q: 70 }"
           />
@@ -86,7 +85,7 @@
             </span>
           </Button>
         </template>
-        <ShareButton text severity="secondary" size="small" tooltip="分享" :to="detailPath" />
+        <ShareButton size="sm" tooltip="分享" :to="detailPath" />
       </div>
     </div>
   </div>

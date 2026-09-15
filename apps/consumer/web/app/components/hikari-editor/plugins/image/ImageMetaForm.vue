@@ -28,7 +28,7 @@
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-3 md:w-[360px]">
+  <div class="flex w-full flex-col gap-3 sm:w-90">
     <div class="flex flex-col gap-1">
       <label for="image-meta-alt" class="text-sm font-medium text-muted-color">
         alt（可访问性描述）

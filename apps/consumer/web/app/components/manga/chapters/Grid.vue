@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Grid, Inline, Tag, Text } from '@hina-ui/vue'
   import { cn } from '~/utils/cn'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
@@ -24,11 +25,12 @@
   function cellClass(chapter: MangaPageData['chapters'][number]) {
     const current = chapter.id === props.currentChapterId
     return cn(
-      'flex min-w-0 flex-col gap-0.5 rounded-lg border px-3 py-2 text-left transition-[color,background-color,border-color,opacity]',
-      current ? 'border-hikari-primary-500 dark:border-hikari-primary-600' : 'border-surface',
-      props.volumeIds.has(chapter.id) && 'bg-hikari-primary-50/60 dark:bg-hikari-primary-950/40',
+      'flex min-w-0 flex-col gap-0.5 px-3 py-2 text-left shadow-none',
+      'transition-[color,background-color,border-color,opacity]',
+      current && 'border-accent',
+      props.volumeIds.has(chapter.id) && 'bg-accent-soft',
       !chapter.readable && 'cursor-default opacity-55',
-      chapter.readable && 'hover:bg-emphasis',
+      chapter.readable && 'hn-state-layer hn-interactive hn-press-none',
       chapter.readable &&
         !current &&
         props.readIds.has(chapter.id) &&
@@ -43,36 +45,36 @@
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-    <Button
+  <Grid :cols="2" class="gap-2 sm:grid-cols-3 lg:grid-cols-4">
+    <Card
       v-for="chapter in chapters"
       :key="chapter.id"
-      unstyled
+      as="button"
+      :padded="false"
       :class="cellClass(chapter)"
       :disabled="!chapter.readable"
       @click="open(chapter)"
     >
-      <span class="flex w-full min-w-0 items-center gap-1.5">
-        <span
-          class="truncate text-sm font-semibold"
-          :class="
-            chapter.id === currentChapterId
-              ? 'text-hikari-primary-800 dark:text-hikari-primary-300'
-              : 'text-color'
-          "
+      <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
+        <Text
+          as="span"
+          size="sm"
+          weight="semibold"
+          truncate
+          :class="chapter.id === currentChapterId ? 'text-accent-text' : undefined"
         >
           {{ getMangaEpisodeLabel(chapter) }}
-        </span>
-        <Tag
-          v-if="chapter.id === newChapterId"
-          value="新"
-          class="shrink-0 px-1.5! py-0! text-[10px]!"
-        />
-      </span>
-      <span class="flex w-full min-w-0 items-center gap-1.5 text-xs text-muted-color">
-        <span v-if="subtitle(chapter)" class="min-w-0 truncate">{{ subtitle(chapter) }}</span>
-        <span v-if="chapter.page_count" class="ml-auto shrink-0">{{ chapter.page_count }} P</span>
-      </span>
-    </Button>
-  </div>
+        </Text>
+        <Tag v-if="chapter.id === newChapterId" tone="accent" class="shrink-0">新</Tag>
+      </Inline>
+      <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
+        <Text v-if="subtitle(chapter)" as="span" size="xs" tone="muted" truncate class="min-w-0">
+          {{ subtitle(chapter) }}
+        </Text>
+        <Text v-if="chapter.page_count" as="span" size="xs" tone="muted" class="ms-auto shrink-0">
+          {{ chapter.page_count }} P
+        </Text>
+      </Inline>
+    </Card>
+  </Grid>
 </template>

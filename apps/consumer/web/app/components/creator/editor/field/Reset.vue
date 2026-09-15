@@ -22,7 +22,7 @@
   >
     <Button
       v-if="visible"
-      v-tooltip.top="'还原此字段'"
+      v-tooltip="'还原此字段'"
       unstyled
       aria-label="还原此字段"
       class="ml-1 inline-flex size-5 items-center justify-center rounded text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"

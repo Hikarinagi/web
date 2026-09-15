@@ -1,23 +1,36 @@
 <script setup lang="ts">
-  import Form from '@primevue/forms/form'
+  import {
+    Button,
+    Divider,
+    Form,
+    FormField,
+    Inline,
+    Input,
+    Panel,
+    Stack,
+    Textarea,
+  } from '@hina-ui/vue'
+  import { profileSchema } from '~/features/space/schemas/setting.schema'
   import { useProfileForm } from '~/features/space/useProfileForm'
   import type { CurrentUser } from '~/types/auth'
 
   defineOptions({ name: 'SpaceSettingProfileForm' })
 
   const props = defineProps<{ user: CurrentUser }>()
-  const { formErrors, submitting, avatar, headCover, initialValues, submit, reset } =
-    useProfileForm(props.user)
+  const { form, values, submitting, avatar, headCover, submit, reset } = useProfileForm(props.user)
 
   const usernameDialog = ref(false)
+  const usernameHint = computed(() =>
+    props.user.username_changed ? '你的唯一标识，无法再次更改' : '你的唯一标识，你有一次修改机会',
+  )
 </script>
 
 <template>
-  <CardPanel
+  <Panel
     title="个人资料"
     description="在此页面更新你的个人资料，所有更改需点击 保存修改 按钮后才能生效"
   >
-    <div class="flex flex-col gap-6">
+    <Stack gap="lg">
       <SpaceSettingImageField
         v-model="avatar"
         shape="circle"
@@ -26,7 +39,7 @@
         button-label="更换头像"
       />
 
-      <div class="border-t border-surface-100 dark:border-surface-800" />
+      <Divider />
 
       <SpaceSettingImageField
         v-model="headCover"
@@ -36,68 +49,68 @@
         button-label="更换封面"
       />
 
-      <div class="border-t border-surface-100 dark:border-surface-800" />
+      <Divider />
 
-      <div class="flex flex-col gap-2">
-        <label class="text-sm font-medium text-color">用户名</label>
-        <div class="flex items-center gap-2">
-          <InputText :model-value="user.name" disabled fluid />
+      <FormField label="用户名" :description="usernameHint" description-placement="control">
+        <Inline gap="sm" align="center" :wrap="false">
+          <Input :model-value="user.name" disabled class="flex-1" />
           <Button
             v-if="!user.username_changed"
-            label="修改"
-            severity="secondary"
-            variant="outlined"
+            variant="outline"
+            tone="neutral"
             class="shrink-0"
             @click="usernameDialog = true"
-          />
-        </div>
-        <p class="text-xs text-muted-color">
-          {{
-            user.username_changed ? '你的唯一标识，无法再次更改' : '你的唯一标识，你有一次修改机会'
-          }}
-        </p>
-      </div>
+          >
+            修改
+          </Button>
+        </Inline>
+      </FormField>
 
-      <div class="border-t border-surface-100 dark:border-surface-800" />
+      <Divider />
 
       <Form
         ref="form"
-        :resolver="formErrors.resolver"
-        :initial-values="initialValues"
-        class="flex flex-col gap-5"
-        @input="formErrors.clear"
+        :values="values"
+        :rules="profileSchema"
+        :disabled="submitting"
         @submit="submit"
       >
-        <FormItem v-slot="{ id, errorId }" name="nickname" label="昵称">
-          <InputText :id="id" :aria-describedby="errorId" fluid autocomplete="off" />
-          <p class="text-xs text-muted-color">展示在主页和动态，可随时修改；留空则显示用户名</p>
-        </FormItem>
-
-        <FormItem v-slot="{ id, errorId }" name="signature" label="个性签名">
-          <InputText :id="id" :aria-describedby="errorId" fluid autocomplete="off" />
-          <p class="text-xs text-muted-color">显示在你名字下方，最多 120 字</p>
-        </FormItem>
-
-        <FormItem v-slot="{ id, errorId }" name="bio" label="简介">
-          <Textarea :id="id" :aria-describedby="errorId" rows="4" fluid auto-resize />
-          <p class="text-xs text-muted-color">介绍一下自己，会显示在动态侧的资料区</p>
-        </FormItem>
-
-        <div
-          class="flex items-center gap-3 border-t border-surface-100 pt-5 dark:border-surface-800"
+        <FormField
+          name="nickname"
+          label="昵称"
+          description="展示在主页和动态，可随时修改；留空则显示用户名"
+          description-placement="control"
         >
-          <Button label="保存修改" type="submit" :loading="submitting" />
-          <Button
-            label="取消"
-            severity="secondary"
-            variant="text"
-            :disabled="submitting"
-            @click="reset"
-          />
-        </div>
+          <Input v-model="values.nickname" autocomplete="off" />
+        </FormField>
+
+        <FormField
+          name="signature"
+          label="个性签名"
+          description="显示在你名字下方，最多 120 字"
+          description-placement="control"
+        >
+          <Input v-model="values.signature" autocomplete="off" />
+        </FormField>
+
+        <FormField
+          name="bio"
+          label="简介"
+          description="介绍一下自己，会显示在动态侧的资料区"
+          description-placement="control"
+        >
+          <Textarea v-model="values.bio" :autosize="{ minRows: 4 }" />
+        </FormField>
+
+        <Divider />
+
+        <Inline gap="sm">
+          <Button type="submit" :loading="submitting">保存修改</Button>
+          <Button variant="ghost" tone="neutral" :disabled="submitting" @click="reset">取消</Button>
+        </Inline>
       </Form>
-    </div>
+    </Stack>
 
     <UserChangeUsernameDialog v-model:visible="usernameDialog" :current="user.name" />
-  </CardPanel>
+  </Panel>
 </template>

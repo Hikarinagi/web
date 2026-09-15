@@ -16,7 +16,6 @@ async function handler(event: H3Event) {
     rate_stats,
     top_rates,
     articles,
-    posts,
     contributors,
     my_rate,
     favorite,
@@ -38,10 +37,6 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/light-novels/{id}/articles', {
       path: { id },
       query: { page: 1, page_size: 6 },
-    }),
-    fetchBackendData(event, '/api/v3/light-novels/{id}/posts', {
-      path: { id },
-      query: { page: 1, page_size: 8 },
     }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/contributors', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/rate', { path: { id } }).catch(() => null),
@@ -67,7 +62,6 @@ async function handler(event: H3Event) {
     rate_stats,
     top_rates,
     articles,
-    posts,
     contributors,
     my_rate,
     favorite,

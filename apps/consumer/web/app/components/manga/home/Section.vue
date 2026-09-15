@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Heading, Inline, Stack, Text } from '@hina-ui/vue'
+
   defineOptions({ name: 'MangaHomeSection' })
   defineProps<{
     title: string
@@ -8,14 +10,14 @@
 </script>
 
 <template>
-  <section class="flex flex-col gap-4">
-    <div class="flex items-baseline gap-3">
-      <h2 class="text-2xl font-bold text-surface-950 dark:text-white">{{ title }}</h2>
-      <p v-if="meta" class="text-sm text-muted-color">{{ meta }}</p>
+  <Stack as="section" gap="md">
+    <Inline align="baseline" :wrap="false">
+      <Heading :level="2" size="2xl">{{ title }}</Heading>
+      <Text v-if="meta" size="sm" tone="muted">{{ meta }}</Text>
       <slot name="actions">
-        <ViewAllLink v-if="to" :to="to" class="ml-auto" />
+        <ViewAllLink v-if="to" :to="to" class="ms-auto" />
       </slot>
-    </div>
+    </Inline>
     <slot />
-  </section>
+  </Stack>
 </template>

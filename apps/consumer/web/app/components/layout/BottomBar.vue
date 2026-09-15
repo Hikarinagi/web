@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Center, Flex, Ripple, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import {
     BookImage,
@@ -49,9 +50,9 @@
 
   function tabClass(active: boolean) {
     return cn(
-      'flex flex-1 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors duration-200',
+      'flex flex-1 flex-col items-center justify-center gap-1 transition-colors duration-200',
       'focus-visible:outline-none',
-      active ? 'text-primary' : 'text-muted-color',
+      active ? 'text-accent-text' : 'text-muted',
     )
   }
 
@@ -66,12 +67,19 @@
 </script>
 
 <template>
-  <nav
-    class="fixed inset-x-0 bottom-0 z-50 border-t border-surface bg-surface-0/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-[1.8] md:hidden dark:bg-surface-950/85"
+  <Stack
+    as="nav"
+    gap="none"
+    :class="
+      cn(
+        'fixed inset-x-0 bottom-0 z-50 border-t border-line bg-surface/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-[1.8] md:hidden',
+        composeOpen && 'z-60',
+      )
+    "
     aria-label="移动端主导航"
   >
-    <div class="mx-auto flex h-(--app-bottombar-height) max-w-md items-stretch px-1">
-      <div class="flex flex-1 items-stretch">
+    <Flex class="mx-auto h-(--app-bottombar-height) w-full max-w-md px-1">
+      <Flex class="flex-1">
         <NuxtLink
           v-for="item in leadingItems"
           :key="item.to"
@@ -80,33 +88,35 @@
           :aria-current="isActive(item) ? 'page' : undefined"
         >
           <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
-          <span class="leading-none">{{ item.label }}</span>
+          <Text as="span" class="text-[10px] leading-none font-medium text-inherit">
+            {{ item.label }}
+          </Text>
         </NuxtLink>
-      </div>
+      </Flex>
 
-      <div class="flex shrink-0 items-center justify-center px-3">
-        <Button
-          rounded
-          login-required
-          aria-label="发布"
+      <Center class="shrink-0 px-3">
+        <AuthGateButton
+          label="发布"
+          :tooltip="false"
+          variant="solid"
+          tone="accent"
+          pill
           aria-haspopup="menu"
           :aria-expanded="composeOpen"
           class="size-11!"
           @click="onPlus"
         >
-          <template #icon>
-            <Plus
-              :size="26"
-              :stroke-width="2.75"
-              class="transition-transform duration-200"
-              :class="{ 'rotate-45': composeOpen }"
-              aria-hidden="true"
-            />
-          </template>
-        </Button>
-      </div>
+          <Plus
+            :size="26"
+            :stroke-width="2.75"
+            class="transition-transform duration-200"
+            :class="{ 'rotate-45': composeOpen }"
+            aria-hidden="true"
+          />
+        </AuthGateButton>
+      </Center>
 
-      <div class="flex flex-1 items-stretch">
+      <Flex class="flex-1">
         <NuxtLink
           v-for="item in trailingItems"
           :key="item.to"
@@ -115,11 +125,13 @@
           :aria-current="isActive(item) ? 'page' : undefined"
         >
           <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
-          <span class="leading-none">{{ item.label }}</span>
+          <Text as="span" class="text-[10px] leading-none font-medium text-inherit">
+            {{ item.label }}
+          </Text>
         </NuxtLink>
-      </div>
-    </div>
-  </nav>
+      </Flex>
+    </Flex>
+  </Stack>
 
   <Teleport to="body">
     <AnimatePresence>
@@ -127,39 +139,39 @@
         v-if="composeOpen"
         key="compose-menu"
         role="menu"
-        class="fixed left-1/2 z-50 flex w-max -translate-x-1/2 flex-col items-center gap-2.5 md:hidden"
+        class="fixed left-1/2 z-70 flex w-max -translate-x-1/2 flex-col items-center gap-2.5 md:hidden"
         :style="composeMenuStyle"
         :initial="{ opacity: 0, y: 10 }"
         :animate="{ opacity: 1, y: 0 }"
         :exit="{ opacity: 0, y: 10 }"
         :transition="TRANSITION"
       >
-        <Button
-          unstyled
+        <Card
+          as="button"
           role="menuitem"
-          class="flex cursor-pointer items-center gap-2.5 rounded-full bg-surface-0 py-1.5 pr-1.5 pl-4 text-sm font-medium text-color shadow-lg dark:bg-surface-800"
+          :padded="false"
+          class="hn-state-layer flex hn-interactive items-center gap-2.5 rounded-full py-1.5 pr-1.5 pl-4 text-sm font-medium shadow-lg"
           @click="go('/articles/new')"
         >
+          <Ripple />
           写文章
-          <span
-            class="grid size-9 place-items-center rounded-full bg-surface-100 text-primary-600 dark:bg-surface-700"
-          >
+          <Center class="size-9 rounded-full bg-subtle text-accent-text">
             <FileText :size="17" />
-          </span>
-        </Button>
-        <Button
-          unstyled
+          </Center>
+        </Card>
+        <Card
+          as="button"
           role="menuitem"
-          class="flex cursor-pointer items-center gap-2.5 rounded-full bg-surface-0 py-1.5 pr-1.5 pl-4 text-sm font-medium text-color shadow-lg dark:bg-surface-800"
+          :padded="false"
+          class="hn-state-layer flex hn-interactive items-center gap-2.5 rounded-full py-1.5 pr-1.5 pl-4 text-sm font-medium shadow-lg"
           @click="go('/posts/new')"
         >
+          <Ripple />
           图文
-          <span
-            class="grid size-9 place-items-center rounded-full bg-surface-100 text-primary-600 dark:bg-surface-700"
-          >
+          <Center class="size-9 rounded-full bg-subtle text-accent-text">
             <ImageIcon :size="17" />
-          </span>
-        </Button>
+          </Center>
+        </Card>
       </motion.div>
     </AnimatePresence>
 
@@ -169,9 +181,10 @@
       enter-from-class="opacity-0"
       leave-to-class="opacity-0"
     >
-      <div
+      <Stack
         v-if="composeOpen"
-        class="fixed inset-0 z-40 bg-surface-950/15 md:hidden"
+        gap="none"
+        class="hn-scrim fixed inset-0 z-59 md:hidden"
         @click="composeOpen = false"
       />
     </Transition>

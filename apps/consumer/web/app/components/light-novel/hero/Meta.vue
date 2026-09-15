@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Text } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   const props = defineProps<{
@@ -28,7 +29,5 @@
 </script>
 
 <template>
-  <p v-if="parts.length" class="text-[15px] text-surface-600 dark:text-surface-300">
-    {{ parts.join('  ·  ') }}
-  </p>
+  <Text v-if="parts.length" tone="muted">{{ parts.join('  ·  ') }}</Text>
 </template>

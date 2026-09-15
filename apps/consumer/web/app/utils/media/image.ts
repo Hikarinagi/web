@@ -19,6 +19,8 @@ export type {
 
 export interface HikariImageMediaSource {
   src?: string | null
+  width?: number | null
+  height?: number | null
   nsfw?: boolean | null
   sexual?: number | null
   violence?: number | null
@@ -31,12 +33,13 @@ export interface HikariImageRelationSource {
   violence?: number | null
 }
 
+export interface HikariImageSize {
+  width: number
+  height: number
+}
+
 export type HikariImageSource =
-  | string
-  | HikariImageMediaSource
-  | HikariImageRelationSource
-  | null
-  | undefined
+  string | HikariImageMediaSource | HikariImageRelationSource | null | undefined
 
 export interface HikariImageSafety {
   nsfw: boolean
@@ -62,6 +65,19 @@ export function imageSourceSafety(source: HikariImageSource): HikariImageSafety 
       readScore(readField(media, 'violence')),
     ),
   }
+}
+
+export function imageSourceSize(source: HikariImageSource): HikariImageSize | undefined {
+  if (typeof source === 'string' || source == null) return undefined
+
+  const target = readMedia(source) ?? source
+  const width = readSide(readField(target, 'width'))
+  const height = readSide(readField(target, 'height'))
+  return width && height ? { width, height } : undefined
+}
+
+function readSide(value: unknown) {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0
 }
 
 function readMedia(source: HikariImageMediaSource | HikariImageRelationSource) {

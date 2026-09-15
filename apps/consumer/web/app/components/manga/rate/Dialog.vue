@@ -1,9 +1,29 @@
 <script setup lang="ts">
-  import Form from '@primevue/forms/form'
+  import {
+    Button,
+    Checkbox,
+    Dialog,
+    Form,
+    FormField,
+    FormLayout,
+    Space,
+    Stack,
+    Textarea,
+  } from '@hina-ui/vue'
   import { useRateForm } from '~/features/manga/useRateForm'
-  import type { MangaRate, UpsertMangaRateBody } from '~/features/manga/rate'
+  import {
+    MANGA_STATUS_LABEL,
+    MANGA_STATUS_ORDER,
+    type MangaRate,
+    type UpsertMangaRateBody,
+  } from '~/features/manga/rate'
 
   defineOptions({ name: 'MangaRateDialog' })
+
+  const statusOptions = MANGA_STATUS_ORDER.filter(value => value !== 'PLAN').map(value => ({
+    value,
+    label: MANGA_STATUS_LABEL[value],
+  }))
 
   const props = defineProps<{
     rate: MangaRate | null
@@ -14,15 +34,16 @@
   const visible = defineModel<boolean>('visible', { required: true })
 
   const {
-    formErrors,
     form,
+    values,
+    rules,
     submitting,
     isEdit,
     title,
-    initialValues,
+    prepare,
     submit,
-    confirmClearScore,
-    confirmDelete,
+    clearScore,
+    removeStatus,
   } = useRateForm({
     rate: () => props.rate,
     workTitle: () => props.workTitle,
@@ -33,97 +54,46 @@
     },
   })
 
-  watch(visible, async next => {
-    if (!next) return
-    formErrors.clear()
-    await nextTick()
-    form.value?.reset()
+  watch(visible, next => {
+    if (next) void prepare()
   })
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    :style="{ width: '92vw', maxWidth: '480px' }"
-    :pt="{ content: { class: 'px-0! pb-0!' } }"
-  >
-    <template #header>
-      <span class="text-[17px] font-bold text-color">{{ title }}</span>
+  <Dialog v-model:open="visible" :title="title" :locked="submitting">
+    <template #content>
+      <Form ref="form" :values="values" :rules="rules" @submit="submit">
+        <FormLayout>
+          <WorkRateStatusPills v-model="values.status" :options="statusOptions" />
+          <WorkRateScore v-model="values.rate" />
+
+          <FormField name="rate_content" label="短评">
+            <Textarea
+              v-model="values.rate_content"
+              :rows="3"
+              autosize
+              placeholder="聊聊剧情、作画、最戳你的桥段…一句话也行"
+              class="w-full"
+            />
+          </FormField>
+
+          <Stack gap="sm">
+            <Checkbox v-model="values.is_spoiler">包含剧透</Checkbox>
+            <Checkbox v-model="values.status_private">状态仅自己可见</Checkbox>
+          </Stack>
+        </FormLayout>
+      </Form>
     </template>
 
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      :initial-values="initialValues"
-      class="flex flex-col"
-      @input="formErrors.clear"
-      @submit="submit"
-    >
-      <div class="flex flex-col gap-[22px] px-6 pb-6">
-        <MangaRateStatusPills />
-        <MangaRateScore />
-
-        <FormItem v-slot="{ id }" name="rate_content" label="短评">
-          <Textarea
-            :id="id"
-            rows="3"
-            fluid
-            auto-resize
-            placeholder="聊聊剧情、作画、最戳你的桥段…一句话也行"
-          />
-        </FormItem>
-
-        <FormItem v-slot="{ id }" name="is_spoiler">
-          <div class="flex items-center gap-2.5">
-            <Checkbox :input-id="id" binary />
-            <label
-              :for="id"
-              class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
-            >
-              包含剧透
-            </label>
-          </div>
-        </FormItem>
-
-        <FormItem v-slot="{ id }" name="status_private">
-          <div class="flex items-center gap-2.5">
-            <Checkbox :input-id="id" binary />
-            <label
-              :for="id"
-              class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
-            >
-              状态仅自己可见
-            </label>
-          </div>
-        </FormItem>
-      </div>
-
-      <div
-        class="flex items-center gap-3 border-t border-surface-100 px-6 py-4 dark:border-surface-800"
-      >
-        <Button
-          v-if="isEdit"
-          label="清除评分"
-          text
-          severity="secondary"
-          :disabled="submitting"
-          class="text-surface-500!"
-          @click="confirmClearScore"
-        />
-        <Button
-          v-if="isEdit"
-          label="移除状态"
-          text
-          severity="danger"
-          :disabled="submitting"
-          @click="confirmDelete"
-        />
-        <span class="flex-1" />
-        <Button label="更新状态" type="submit" :loading="submitting" :disabled="submitting" />
-      </div>
-    </Form>
+    <template #footer>
+      <WorkRateDangerActions
+        v-if="isEdit"
+        :clear="clearScore"
+        :remove="removeStatus"
+        :disabled="submitting"
+      />
+      <Space size="flex" />
+      <Button :loading="submitting" :disabled="submitting" @click="form?.submit()">更新状态</Button>
+    </template>
   </Dialog>
 </template>

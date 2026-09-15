@@ -4,7 +4,6 @@ import { fetchBackendData } from '../../utils/backend-api'
 import { definePageBffHandler } from '../../utils/page-bff'
 import { bucketSeed, pickRotating, seededShuffle } from '../../utils/rotation'
 
-const HOT_SIZE = 10
 const RAIL_SIZE = 8
 const GRID_SIZE = 12
 const BOARD_SIZE = 10
@@ -414,7 +413,6 @@ async function buildHome(event: H3Event) {
 
   return {
     hero: { slides: await buildHeroSlides(event, featured, spotlight, serialRank.items) },
-    hot: serialRank.items.slice(0, HOT_SIZE),
     updates,
     board: {
       serializing: serialRank.items,

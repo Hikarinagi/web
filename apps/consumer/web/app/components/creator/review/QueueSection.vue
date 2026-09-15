@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { ClipboardCheck } from '@lucide/vue'
   import type { CreatorOverviewPageData } from '~~/server/api/pages/create/overview.get'
@@ -8,7 +9,8 @@
 </script>
 
 <template>
-  <CardPanel v-if="canAny(WIKI_PERMISSIONS.REVIEW)" title="待你审核" :icon="ClipboardCheck">
+  <Panel v-if="canAny(WIKI_PERMISSIONS.REVIEW)" title="待你审核">
+    <template #icon><ClipboardCheck /></template>
     <template #actions>
       <Button as="router-link" to="/create/review" label="查看全部" size="small" variant="text" />
     </template>
@@ -24,5 +26,5 @@
       </div>
     </div>
     <CreatorEmpty v-else text="没有待审核的变更请求" />
-  </CardPanel>
+  </Panel>
 </template>

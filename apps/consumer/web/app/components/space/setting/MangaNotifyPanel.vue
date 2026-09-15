@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { useMangaNotify } from '~/features/space/useMangaNotify'
   import type { NotificationPageData } from '~~/server/api/pages/setting/notification.get'
 
@@ -25,7 +26,7 @@
 
 <template>
   <div class="flex flex-col gap-5">
-    <CardPanel title="追更提醒" description="关注的漫画有新章节时，给你发一条站内通知">
+    <Panel title="追更提醒" description="关注的漫画有新章节时，给你发一条站内通知">
       <div class="flex flex-col gap-2.5">
         <label
           class="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-surface-200 p-4 dark:border-surface-700"
@@ -64,9 +65,9 @@
           />
         </label>
       </div>
-    </CardPanel>
+    </Panel>
 
-    <CardPanel title="按状态筛选" description="只有被标成这些状态的作品才会触发提醒">
+    <Panel title="按状态筛选" description="只有被标成这些状态的作品才会触发提醒">
       <MultiSelect
         v-model="setting.statuses"
         :options="STATUS_OPTIONS"
@@ -82,6 +83,6 @@
       <p class="mt-2 text-xs text-muted-color">
         连载中的作品被标为「看过」通常意味着已追平，所以默认也会提醒。
       </p>
-    </CardPanel>
+    </Panel>
   </div>
 </template>

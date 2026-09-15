@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex, Heading, Stack, Text } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
 
@@ -34,8 +35,10 @@
 </script>
 
 <template>
-  <section
-    class="relative isolate overflow-hidden border-b border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-950"
+  <Stack
+    as="section"
+    gap="none"
+    class="relative isolate overflow-hidden border-b border-line bg-surface"
   >
     <HikariImage
       :src="banner"
@@ -47,12 +50,15 @@
       <template #empty><span /></template>
       <template #error><span /></template>
     </HikariImage>
-    <div class="absolute inset-0 -z-10 bg-surface-0/80 dark:bg-surface-950/76" />
+    <div class="absolute inset-0 -z-10 bg-surface/80" aria-hidden="true" />
     <div
-      class="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--p-surface-0)_0%,rgba(255,255,255,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(57,197,187,0.18),transparent_32%)] dark:bg-[linear-gradient(115deg,var(--p-surface-950)_0%,rgba(3,7,18,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(124,235,224,0.14),transparent_34%)]"
+      class="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--color-neutral-0)_0%,rgba(255,255,255,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(57,197,187,0.18),transparent_32%)] dark:bg-[linear-gradient(115deg,var(--color-neutral-950)_0%,rgba(3,7,18,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(124,235,224,0.14),transparent_34%)]"
+      aria-hidden="true"
     />
-    <div
-      class="mx-auto flex max-w-app flex-col gap-8 px-5 pt-[calc(var(--app-header-height)+2rem)] pb-10 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:pt-[calc(var(--app-header-height)+2.5rem)] lg:pb-12"
+    <Flex
+      direction="col"
+      gap="none"
+      class="mx-auto w-full max-w-app gap-8 px-5 pt-[calc(var(--app-header-height)+2rem)] pb-10 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:pt-[calc(var(--app-header-height)+2.5rem)] lg:pb-12"
     >
       <LightNovelHeroCover :cover="cover" :title="title">
         <WorkCoverVoteEntry
@@ -63,18 +69,14 @@
         />
       </LightNovelHeroCover>
 
-      <div class="w-full min-w-0 flex-1 space-y-4 text-center lg:text-left">
-        <div class="space-y-3">
+      <Stack gap="none" class="w-full min-w-0 flex-1 gap-4 text-center lg:text-left">
+        <Stack gap="none" class="gap-3">
           <LightNovelHeroBadges :light-novel="lightNovel" :bunko="bunko" />
-          <h1
-            class="text-3xl leading-tight font-semibold text-surface-950 md:text-4xl dark:text-surface-0"
-          >
-            {{ title }}
-          </h1>
-          <p v-if="originalTitle" class="text-lg leading-7 text-surface-600 dark:text-surface-300">
+          <Heading :level="1" class="text-3xl leading-tight md:text-4xl">{{ title }}</Heading>
+          <Text v-if="originalTitle" size="lg" tone="muted" class="leading-7">
             {{ originalTitle }}
-          </p>
-        </div>
+          </Text>
+        </Stack>
 
         <LightNovelHeroMeta
           :light-novel="lightNovel"
@@ -90,7 +92,7 @@
           :favorited="favorited"
           :progress="progress"
         />
-      </div>
-    </div>
-  </section>
+      </Stack>
+    </Flex>
+  </Stack>
 </template>

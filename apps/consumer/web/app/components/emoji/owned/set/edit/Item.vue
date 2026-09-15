@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Skeleton } from '@hina-ui/vue'
   import { MoreHorizontal } from '@lucide/vue'
   import type { MyEmojiSet } from '~/features/emoji/composables/useMySets'
 
@@ -20,7 +21,11 @@
       :processing="false"
       class="size-8 shrink-0"
       image-class="h-full w-full object-contain"
-    />
+    >
+      <template #skeleton>
+        <Skeleton class="size-full rounded-sm" />
+      </template>
+    </HikariImage>
     <span class="min-w-0 flex-1 truncate font-mono text-sm">{{ emoji.name }}</span>
     <Button
       aria-label="更多操作"

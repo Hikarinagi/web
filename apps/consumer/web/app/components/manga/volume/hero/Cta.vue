@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline } from '@hina-ui/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
 
   defineOptions({ name: 'MangaVolumeHeroCta' })
@@ -6,7 +7,8 @@
 </script>
 
 <template>
-  <div class="items-stretch justify-center gap-2.5 lg:justify-start">
-    <ShareButton :to="`/manga-volumes/${volume.id}`" tooltip="分享" severity="secondary" outlined />
-  </div>
+  <Inline gap="sm" justify="center" class="lg:justify-start">
+    <ShareButton :to="`/manga-volumes/${volume.id}`" tooltip="分享" size="lg" />
+    <WorkEditButton resource-type="manga-volume" :resource-id="volume.id" size="lg" />
+  </Inline>
 </template>

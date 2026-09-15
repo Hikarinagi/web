@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
+  import { Button, Dialog, Form, FormField, Select, Textarea } from '@hina-ui/vue'
   import { push } from 'notivue'
   import {
     REPORT_REASON_OPTIONS,
@@ -7,7 +7,8 @@
     type ReportBody,
     type ReportReason,
   } from '~/features/report/report'
-  import { reportResolver, type ReportFormValues } from '~/features/report/schemas/report.schema'
+  import { reportSchema } from '~/features/report/schemas/report.schema'
+  import { getFieldErrors } from '~/utils/api/error'
 
   defineOptions({ name: 'ReportDialog' })
 
@@ -20,32 +21,31 @@
   )
   const visible = defineModel<boolean>('visible', { required: true })
 
-  const formErrors = useFormErrors(reportResolver)
-  const form = useTemplateRef<FormInstance>('form')
+  const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
-  const selectedReason = ref<ReportReason | null>(null)
-  const requiresDescription = computed(() => selectedReason.value === 'OTHER')
+  const values = reactive<{ reason: ReportReason | null; description: string }>({
+    reason: null,
+    description: '',
+  })
+  const requiresDescription = computed(() => values.reason === 'OTHER')
 
   watch(visible, next => {
     if (!next) return
-    formErrors.clear()
     form.value?.reset()
-    selectedReason.value = null
+    values.reason = null
+    values.description = ''
   })
 
-  function syncReason(value: unknown) {
-    selectedReason.value = (value ?? null) as ReportReason | null
-  }
-
-  async function onSubmit(event: FormSubmitEvent) {
-    if (!event.valid || submitting.value) return
+  async function onSubmit() {
+    const reason = values.reason
+    if (!reason || submitting.value) return
     submitting.value = true
     try {
-      await props.submit(toReportBody(event.values as ReportFormValues))
+      await props.submit(toReportBody({ reason, description: values.description }))
       push.success({ message: '举报已提交' })
       visible.value = false
     } catch (error) {
-      await formErrors.apply(error, form.value)
+      form.value?.setErrors(getFieldErrors(error))
     } finally {
       submitting.value = false
     }
@@ -53,55 +53,39 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :header="title"
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    :style="{ width: '92vw', maxWidth: '30rem' }"
-  >
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      class="flex flex-col gap-4"
-      @input="formErrors.clear"
-      @submit="onSubmit"
-    >
-      <FormItem v-slot="{ id, errorId }" name="reason" label="举报原因" required>
-        <Select
-          :input-id="id"
-          :aria-describedby="errorId"
-          :options="REPORT_REASON_OPTIONS"
-          option-label="label"
-          option-value="value"
-          placeholder="请选择举报原因"
-          fluid
-          @update:model-value="syncReason"
-        />
-      </FormItem>
-
-      <FormItem
-        v-slot="{ id, errorId }"
-        name="description"
-        label="补充说明"
-        :required="requiresDescription"
+  <Dialog v-model:open="visible" :title="title" size="md" :locked="submitting">
+    <template #content>
+      <Form
+        ref="form"
+        :values="values"
+        :rules="reportSchema"
+        :disabled="submitting"
+        @submit="onSubmit"
       >
-        <Textarea
-          :id="id"
-          :aria-describedby="errorId"
-          rows="4"
-          maxlength="500"
-          auto-resize
-          fluid
-          :placeholder="requiresDescription ? '请填写具体原因' : '可补充说明具体原因'"
-        />
-      </FormItem>
+        <FormField name="reason" label="举报原因" required>
+          <Select
+            v-model="values.reason"
+            :options="REPORT_REASON_OPTIONS"
+            placeholder="请选择举报原因"
+          />
+        </FormField>
 
-      <div class="flex justify-end gap-3 pt-2">
-        <Button label="取消" severity="secondary" :disabled="submitting" @click="visible = false" />
-        <Button label="提交举报" type="submit" severity="danger" :loading="submitting" />
-      </div>
-    </Form>
+        <FormField name="description" label="补充说明" :required="requiresDescription">
+          <Textarea
+            v-model="values.description"
+            autosize
+            maxlength="500"
+            :placeholder="requiresDescription ? '请填写具体原因' : '可补充说明具体原因'"
+          />
+        </FormField>
+      </Form>
+    </template>
+
+    <template #footer>
+      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
+        取消
+      </Button>
+      <Button tone="danger" :loading="submitting" @click="form?.submit()">提交举报</Button>
+    </template>
   </Dialog>
 </template>

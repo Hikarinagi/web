@@ -76,8 +76,6 @@ export const PLATFORM_GROUPS: PlatformGroup[] = [
   { key: 'other', label: '其他', codes: ['dvd', 'bdp', 'oth'] },
 ]
 
-export const PLATFORM_DEEMPHASIZED: Set<PlatformCode> = new Set(['win'])
-
 export function platformLabel(code: string): string {
   return PLATFORM_LABELS[code as PlatformCode] ?? code
 }

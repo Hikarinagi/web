@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { CornerDownRight } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
@@ -57,7 +58,7 @@
 </script>
 
 <template>
-  <div>
+  <Stack gap="none">
     <AnimatePresence>
       <motion.div
         v-if="replyToName"
@@ -68,28 +69,30 @@
         :transition="TRANSITION"
         class="overflow-hidden"
       >
-        <div class="mb-2 flex items-center gap-1.5 text-xs text-muted-color">
+        <Inline gap="xs" class="mb-2 text-xs text-muted">
           <CornerDownRight class="size-3.5 shrink-0" />
-          <span>
+          <Text as="span" size="xs">
             回复
-            <span class="font-medium text-hikari-primary-600">@{{ replyToName }}</span>
-          </span>
-        </div>
+            <Text as="span" size="xs" tone="accent" weight="medium">@{{ replyToName }}</Text>
+          </Text>
+        </Inline>
       </motion.div>
     </AnimatePresence>
 
-    <div class="flex items-start gap-3">
-      <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
-      <div class="min-w-0 flex-1">
-        <Button
+    <Inline gap="md" align="start">
+      <Avatar :user="auth.user" class="size-9! shrink-0" />
+      <Stack gap="none" class="min-w-0 flex-1">
+        <AuthGateButton
           v-if="!auth.isAuthenticated"
           ref="loginButtonRef"
-          login-required
-          unstyled
-          class="flex h-9 w-full items-center rounded-(--editor-chrome-radius) border border-surface-200 px-3 text-sm text-muted-color transition-colors hover:border-surface-300 dark:border-surface-700 dark:hover:border-surface-600"
+          variant="outline"
+          tone="neutral"
+          size="sm"
+          block
+          class="justify-start rounded-(--editor-chrome-radius) px-3 text-muted"
         >
           {{ placeholder }}
-        </Button>
+        </AuthGateButton>
         <CommentEditor
           v-else
           ref="editorRef"
@@ -106,7 +109,7 @@
           @submit="(json, sets, atts, summaries) => emit('submit', json, sets, atts, summaries)"
           @cancel="emit('cancel')"
         />
-      </div>
-    </div>
-  </div>
+      </Stack>
+    </Inline>
+  </Stack>
 </template>

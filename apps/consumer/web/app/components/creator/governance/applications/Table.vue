@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Drawer } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { BadgeCheck } from '@lucide/vue'
   import type {
@@ -92,16 +93,13 @@
     </Column>
   </CreatorDataTable>
 
-  <Drawer
-    v-model:visible="drawerOpen"
-    position="right"
-    header="申请详情"
-    :pt="{ root: { class: 'w-[min(92vw,32rem)]!' } }"
-  >
-    <CreatorGovernanceApplicationsDetail
-      v-if="activeApplication"
-      :application="activeApplication"
-      @changed="onChanged"
-    />
+  <Drawer v-model:open="drawerOpen" side="end" size="lg" title="申请详情">
+    <template #content>
+      <CreatorGovernanceApplicationsDetail
+        v-if="activeApplication"
+        :application="activeApplication"
+        @changed="onChanged"
+      />
+    </template>
   </Drawer>
 </template>

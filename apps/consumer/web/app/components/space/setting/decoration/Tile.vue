@@ -27,7 +27,7 @@
 
 <template>
   <div class="flex flex-col items-center gap-2 px-3 py-3">
-    <Avatar v-if="isFrame" :user="previewUser" shape="circle" class="size-16!" />
+    <Avatar v-if="isFrame" :user="previewUser" class="size-16!" />
     <div v-else class="flex h-16 w-full items-center justify-center">
       <HikariImage
         :src="decoration?.image.src"

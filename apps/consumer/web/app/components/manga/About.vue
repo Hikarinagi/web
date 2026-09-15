@@ -16,7 +16,7 @@
 </script>
 
 <template>
-  <MangaSection title="关于本作">
+  <WorkSection title="关于本作">
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
       <MangaAboutIntro :manga="manga" :tags="tags" />
       <MangaAboutArchive
@@ -28,5 +28,5 @@
       />
     </div>
     <MangaAboutStaff :people="people" />
-  </MangaSection>
+  </WorkSection>
 </template>

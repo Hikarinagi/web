@@ -31,7 +31,7 @@
 
 <template>
   <div class="flex items-center gap-5 rounded-2xl border border-surface p-5">
-    <Avatar :user="previewUser" shape="circle" class="size-24!" />
+    <Avatar :user="previewUser" class="size-24!" />
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-1.5">
         <p class="truncate text-lg font-semibold text-color">{{ displayedName }}</p>

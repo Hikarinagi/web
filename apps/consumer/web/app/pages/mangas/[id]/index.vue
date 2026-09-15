@@ -51,8 +51,6 @@
 
       <MangaRatesSummary :stats="data.rate_stats" :top-rates="data.top_rates" :manga-id="mangaId" />
 
-      <MangaMentions :posts="data.posts" />
-
       <MangaAbout
         :manga="data.manga"
         :tags="data.tags"

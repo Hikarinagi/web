@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Badge, IconButton, Indicator, Inline, Stack, Text } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import type { DmPeer } from '~/features/messages/dm'
   import { usePresence } from '~/features/messages/usePresence'
@@ -11,35 +12,28 @@
 </script>
 
 <template>
-  <header
-    class="flex h-14 shrink-0 items-center gap-2 border-b border-surface-200 px-3 dark:border-surface-800"
-  >
-    <Button
-      rounded
-      text
-      severity="secondary"
-      aria-label="返回"
-      class="size-9! shrink-0 p-0! lg:hidden!"
-      @click="emit('back')"
-    >
-      <template #icon><ArrowLeft class="size-5" /></template>
-    </Button>
+  <Inline as="header" gap="sm" class="h-14 shrink-0 border-b border-line px-3">
+    <IconButton label="返回" :tooltip="false" pill class="shrink-0 lg:hidden" @click="emit('back')">
+      <ArrowLeft />
+    </IconButton>
     <NuxtLink :to="`/space/${peer.id}`" class="flex min-w-0 items-center gap-2.5">
-      <div class="relative shrink-0">
-        <Avatar :user="peer" shape="circle" class="size-9!" />
-        <span
-          class="absolute right-0 bottom-0 size-2.5 rounded-full border-2 border-surface-0 dark:border-surface-900"
-          :class="online ? 'bg-green-500' : 'bg-surface-300 dark:bg-surface-600'"
-        />
-      </div>
-      <div class="min-w-0">
-        <UserName
-          :user="peer"
-          :handle="false"
-          class="block truncate text-sm font-bold text-color"
-        />
-        <span class="text-xs text-muted-color">{{ online ? '在线' : '离线' }}</span>
-      </div>
+      <Badge
+        :content="online ? 'online' : 'offline'"
+        bare
+        :label="online ? '在线' : '离线'"
+        placement="bottom-end"
+        shape="circle"
+        class="shrink-0"
+      >
+        <template #content>
+          <Indicator :tone="online ? 'success' : 'neutral'" size="lg" />
+        </template>
+        <Avatar :user="peer" class="size-9!" />
+      </Badge>
+      <Stack gap="none" class="min-w-0">
+        <UserName :user="peer" :handle="false" class="block truncate text-sm font-bold text-fg" />
+        <Text as="span" size="xs" tone="muted">{{ online ? '在线' : '离线' }}</Text>
+      </Stack>
     </NuxtLink>
-  </header>
+  </Inline>
 </template>

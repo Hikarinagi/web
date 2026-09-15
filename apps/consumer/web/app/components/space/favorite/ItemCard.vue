@@ -94,7 +94,7 @@
 
     <button
       v-if="isSelf"
-      v-tooltip.top="'移除收藏'"
+      v-tooltip="'移除收藏'"
       type="button"
       aria-label="移除收藏"
       class="absolute top-2 right-2 grid size-7 place-items-center rounded-full bg-surface-0/90 text-color opacity-100 shadow-sm ring-1 ring-surface-200 backdrop-blur transition-opacity hover:bg-emphasis md:opacity-0 md:group-hover/item:opacity-100 md:focus-visible:opacity-100 dark:bg-surface-900/90 dark:ring-surface-700"

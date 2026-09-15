@@ -59,7 +59,7 @@
       <NuxtLink
         v-for="(item, itemIndex) in group.items"
         :key="item.to"
-        v-tooltip.right="collapsed ? item.label : null"
+        v-tooltip="collapsed ? { content: item.label, side: 'right' } : null"
         :to="item.to"
         :class="[itemClass(isActive(item.to)), itemIndex > 0 ? (collapsed ? 'mt-2' : 'mt-1') : '']"
         :aria-label="collapsed ? item.label : undefined"

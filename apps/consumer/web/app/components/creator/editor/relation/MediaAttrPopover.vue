@@ -41,7 +41,7 @@
 
 <template>
   <Button
-    v-tooltip.top="summary || '标注封面语言与类型'"
+    v-tooltip="summary || '标注封面语言与类型'"
     unstyled
     :class="[
       'flex h-6 min-w-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',

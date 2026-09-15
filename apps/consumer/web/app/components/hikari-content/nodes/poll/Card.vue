@@ -33,7 +33,7 @@
   >
     <div v-if="canEdit" class="absolute top-4 right-4 z-10">
       <Button
-        v-tooltip.top="'编辑投票'"
+        v-tooltip="'编辑投票'"
         unstyled
         type="button"
         class="inline-flex size-7 items-center justify-center rounded-md text-muted-color transition-colors hover:bg-emphasis hover:text-color"
@@ -67,7 +67,6 @@
           :key="v.id"
           :user="v"
           card
-          shape="circle"
           class="size-5! ring-2 ring-surface-0 dark:ring-surface-900"
           :class="i > 0 ? '-ms-2' : ''"
           :style="{ zIndex: voters.length - i }"

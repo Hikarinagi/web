@@ -59,19 +59,18 @@ export function useWorkspaceSession(params: {
     return rosterLoad
   }
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   onBeforeRouteLeave(() => {
     if (members.value.size === 0 || submitting.value) return true
     return new Promise<boolean>(resolve => {
-      confirm.require({
-        group: 'app-shell',
-        header: '离开编辑器',
-        message: `还有 ${members.value.size} 个条目的暂存修改未提交，离开将全部丢弃。`,
-        acceptLabel: '离开并丢弃',
-        rejectLabel: '留在此页',
-        closeOnEscape: false,
-        accept: () => resolve(true),
-        reject: () => resolve(false),
+      confirm({
+        title: '离开编辑器',
+        description: `还有 ${members.value.size} 个条目的暂存修改未提交，离开将全部丢弃。`,
+        confirmText: '离开并丢弃',
+        cancelText: '留在此页',
+        tone: 'danger',
+        onConfirm: () => resolve(true),
+        onCancel: () => resolve(false),
       })
     })
   })

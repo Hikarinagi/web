@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Link, Stack } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import { useGalgameRates } from '~/features/galgame/useGalgameRates'
 
@@ -35,7 +36,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameHero
       :galgame="data.galgame"
       :producers="data.producers"
@@ -44,13 +45,18 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <div class="mx-auto flex max-w-app flex-col gap-6 px-6 py-10">
-      <NuxtLink
-        :to="`/galgames/${galgameId}`"
-        class="inline-flex w-fit items-center gap-1.5 text-sm text-surface-500 transition-colors hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200"
-      >
-        <ArrowLeft class="size-3.5" />
-        返回《{{ galgameName }}》的详情页
+    <Stack gap="lg" class="mx-auto w-full max-w-app px-6 py-10">
+      <NuxtLink v-slot="{ href, navigate }" :to="`/galgames/${galgameId}`" custom>
+        <Link
+          :href="href ?? undefined"
+          tone="neutral"
+          :underline="false"
+          class="inline-flex w-fit items-center gap-1.5 text-sm text-muted hover:text-fg"
+          @click="navigate"
+        >
+          <ArrowLeft class="size-3.5" />
+          返回《{{ galgameName }}》的详情页
+        </Link>
       </NuxtLink>
 
       <GalgameRatesStats :stats="data.statistics" :keywords="data.keywords.keywords" />
@@ -73,6 +79,6 @@
         :pending="pending"
         @load-more="loadMore"
       />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

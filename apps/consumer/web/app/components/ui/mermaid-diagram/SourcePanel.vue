@@ -25,8 +25,7 @@
     <ScrollArea axis="both" class="h-full">
       <pre
         class="px-4 py-3.5 font-mono text-xs leading-6 text-surface-800 sm:text-sm dark:text-surface-100"
-        >{{ source.trim() }}</pre
-      >
+        >{{ source.trim() }}</pre>
     </ScrollArea>
   </div>
 </template>

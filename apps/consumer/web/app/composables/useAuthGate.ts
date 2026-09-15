@@ -2,6 +2,7 @@ import type { AuthMode } from '~/types/auth'
 
 export function useAuthGate() {
   const route = useRoute()
+  const auth = useAuthStore()
 
   function toLogin(mode: AuthMode = 'login', returnTo?: string) {
     if (!import.meta.client) return
@@ -21,5 +22,11 @@ export function useAuthGate() {
     form.submit()
   }
 
-  return { toLogin }
+  function requireLogin() {
+    if (auth.isAuthenticated) return true
+    toLogin('login')
+    return false
+  }
+
+  return { toLogin, requireLogin }
 }

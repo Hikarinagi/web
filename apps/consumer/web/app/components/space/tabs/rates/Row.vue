@@ -54,7 +54,7 @@
           </template>
           <Button
             v-if="isSelf"
-            v-tooltip.top="'编辑'"
+            v-tooltip="'编辑'"
             text
             rounded
             severity="secondary"

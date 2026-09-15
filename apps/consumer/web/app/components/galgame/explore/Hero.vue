@@ -42,9 +42,9 @@
 
   function aspectRatioOf(item: MosaicItem) {
     const { width, height } = item
-    if (!width || !height) return `${DESIGN_COLUMN_WIDTH} / 329`
+    if (!width || !height) return DESIGN_COLUMN_WIDTH / 329
 
-    return `${width} / ${height}`
+    return width / height
   }
 
   function processingOf(item: MosaicItem, width: number) {
@@ -77,7 +77,7 @@
             :src="item.source"
             :alt="item.alt"
             class="w-full shrink-0 overflow-hidden bg-surface-100 dark:bg-surface-800"
-            :style="{ aspectRatio: aspectRatioOf(item) }"
+            :ratio="aspectRatioOf(item)"
             image-class="size-full object-cover"
             :processing="processingOf(item, 320)"
             :lazy="true"
@@ -104,7 +104,7 @@
         </h1>
         <Button
           login-required
-          label="记录进度"
+          label="记录状态"
           icon-pos="right"
           size="small"
           class="mt-3"

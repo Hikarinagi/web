@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spoiler } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
@@ -30,7 +31,7 @@
         :key="`${r.volume ? 'v' : 's'}${r.id}`"
         class="flex items-start gap-2.5"
       >
-        <Avatar :user="r.rater" card shape="circle" class="size-7! shrink-0" />
+        <Avatar :user="r.rater" card class="size-7! shrink-0" />
         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
           <div class="flex items-center gap-1.5">
             <UserName

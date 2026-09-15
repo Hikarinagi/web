@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { TooltipProvider } from '@hina-ui/vue'
   import { MotionConfig } from 'motion-v'
   import HikariProvider from './provider.vue'
   import { SITE_CONFIG } from '~/config/site'
@@ -20,17 +21,19 @@
 
 <template>
   <MotionConfig :transition="TRANSITION" reduced-motion="user">
-    <HikariProvider />
-    <NuxtErrorBoundary>
-      <ErrorRecoverableGuard>
-        <NuxtLayout>
-          <NuxtPage :keepalive="{ include: ['HomePage'] }" />
-        </NuxtLayout>
-      </ErrorRecoverableGuard>
-      <template #error="{ error, clearError: reset }">
-        <ErrorPage :error="error" :reset="reset" :show-header="false" />
-      </template>
-    </NuxtErrorBoundary>
-    <MediaLibrary />
+    <TooltipProvider>
+      <HikariProvider />
+      <NuxtErrorBoundary>
+        <ErrorRecoverableGuard>
+          <NuxtLayout>
+            <NuxtPage :keepalive="{ include: ['HomePage'] }" />
+          </NuxtLayout>
+        </ErrorRecoverableGuard>
+        <template #error="{ error, clearError: reset }">
+          <ErrorPage :error="error" :reset="reset" :show-header="false" />
+        </template>
+      </NuxtErrorBoundary>
+      <MediaLibrary />
+    </TooltipProvider>
   </MotionConfig>
 </template>

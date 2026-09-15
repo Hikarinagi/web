@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spoiler } from '@hina-ui/vue'
   import { BookText, Clock, Star } from '@lucide/vue'
   import {
     LIGHT_NOVEL_RATE_DIMENSIONS,
@@ -33,7 +34,7 @@
     class="mb-4 flex break-inside-avoid flex-col gap-3.5 rounded-xl border border-surface-200 bg-surface-0 p-4 dark:border-surface-800 dark:bg-surface-900"
   >
     <div class="flex items-center gap-3">
-      <Avatar :user="rate.rater" card shape="circle" class="size-10! shrink-0" />
+      <Avatar :user="rate.rater" card class="size-10! shrink-0" />
       <div class="flex min-w-0 flex-1 flex-col gap-1">
         <div class="flex flex-wrap items-center gap-2">
           <UserName

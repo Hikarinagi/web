@@ -10,7 +10,7 @@
   provide('$pcFormField', undefined)
   provide('$pcForm', undefined)
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const bangumi = ref<SearchItem | null>(null)
   const vndb = ref<SearchItem | null>(null)
   const importing = ref(false)
@@ -48,16 +48,12 @@
     })
     if (result.change_request_id || result.existing_id) return go(result)
     if (result.sources_match === false) {
-      confirm.require({
-        group: 'app-shell',
-        header: '两源可能不是同一作品',
-        message: 'Bangumi 与 VNDB 选中的条目标题差异较大，确认仍要合并导入吗？',
-        acceptLabel: '仍要合并',
-        rejectLabel: '取消',
-        onAccept: ({ close }: { close: () => void }) => {
-          close()
-          void oneClick(true)
-        },
+      confirm({
+        title: '两源可能不是同一作品',
+        description: 'Bangumi 与 VNDB 选中的条目标题差异较大，确认仍要合并导入吗？',
+        confirmText: '仍要合并',
+        cancelText: '取消',
+        onConfirm: () => oneClick(true),
       })
     }
   }

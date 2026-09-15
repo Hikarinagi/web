@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { Button, Inline } from '@hina-ui/vue'
   import { ExternalLink, HardDriveDownload } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineProps<{
@@ -8,21 +10,21 @@
 </script>
 
 <template>
-  <div
+  <Inline
     v-if="galgame.homepage || galgame.download_resource_count > 0"
-    class="flex flex-wrap justify-center gap-3 lg:justify-start"
+    justify="center"
+    class="lg:justify-start"
   >
     <Button
       v-if="galgame.download_resource_count > 0"
-      as="router-link"
+      :as="NuxtLink"
       :to="`/galgames/${galgame.id}/downloads`"
-      label="资源下载"
-      severity="info"
-      outlined
+      variant="outline"
     >
       <template #icon>
-        <HardDriveDownload :size="16" aria-hidden="true" />
+        <HardDriveDownload aria-hidden="true" />
       </template>
+      资源下载
     </Button>
 
     <Button
@@ -31,13 +33,13 @@
       :href="galgame.homepage"
       target="_blank"
       rel="noopener noreferrer"
-      label="官方网站"
-      severity="secondary"
-      outlined
+      variant="outline"
+      tone="neutral"
     >
       <template #icon>
-        <ExternalLink :size="16" aria-hidden="true" />
+        <ExternalLink aria-hidden="true" />
       </template>
+      官方网站
     </Button>
-  </div>
+  </Inline>
 </template>

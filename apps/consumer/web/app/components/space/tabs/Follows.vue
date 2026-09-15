@@ -80,7 +80,6 @@
           <Avatar
             :user="u"
             card
-            shape="circle"
             class="size-11! shrink-0"
             :processing="{ width: 88, height: 88, fit: 'cover', quality: 86 }"
           />

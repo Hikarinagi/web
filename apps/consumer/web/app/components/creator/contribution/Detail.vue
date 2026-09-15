@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { ClipboardCheck, FileDiff, History, Layers, Pencil, X } from '@lucide/vue'
@@ -22,7 +23,7 @@
   )
 
   const auth = useAuthStore()
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const { canAny } = useCreatorPermissions()
   const isMine = computed(() => props.changeRequest.author.id === auth.user?.id)
   const canReview = computed(
@@ -39,7 +40,7 @@
 
   const closing = ref(false)
 
-  async function performClose(close?: () => void) {
+  async function performClose() {
     if (closing.value) return
     closing.value = true
     try {
@@ -47,7 +48,6 @@
         method: 'POST',
         path: { id: props.changeRequest.id },
       })
-      close?.()
       emit('closed')
     } finally {
       closing.value = false
@@ -55,16 +55,13 @@
   }
 
   function confirmClose() {
-    confirm.require({
-      group: 'app-shell',
-      header: '关闭变更请求',
-      message:
+    confirm({
+      title: '关闭变更请求',
+      description:
         '确定要关闭这个变更请求吗？关闭后将不再进入审核队列，你可以为该条目重新发起新的变更请求。',
-      acceptLabel: '关闭',
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => closing.value,
-      onAccept: ({ close }) => void performClose(close).catch(() => {}),
+      confirmText: '关闭',
+      cancelText: '取消',
+      onConfirm: () => performClose(),
     })
   }
 </script>
@@ -112,7 +109,7 @@
           <h2 class="text-lg font-semibold">{{ changeRequest.summary }}</h2>
           <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-color">
             <span class="flex items-center gap-1.5">
-              <Avatar :user="changeRequest.author" card shape="circle" class="size-5!" />
+              <Avatar :user="changeRequest.author" card class="size-5!" />
               <UserName :user="changeRequest.author" />
             </span>
             <span>提交于 {{ timeFormat(changeRequest.created_at) }}</span>
@@ -124,17 +121,18 @@
       </template>
     </Card>
 
-    <CardPanel title="变更内容" :icon="FileDiff" :count="payload.length">
+    <Panel title="变更内容" :count="payload.length">
+      <template #icon><FileDiff /></template>
       <CreatorChangesetView :payload="payload" :resource-type="changeRequest.resource_type" />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel
+    <Panel
       v-if="batchMembers?.length"
       title="同批提交"
-      :icon="Layers"
       :count="batchMembers.length"
       description="同一次提交捆绑的变更请求，审核裁决会应用于整批。"
     >
+      <template #icon><Layers /></template>
       <div class="flex flex-col">
         <NuxtLink
           v-for="member in batchMembers"
@@ -156,24 +154,26 @@
           </span>
         </NuxtLink>
       </div>
-    </CardPanel>
+    </Panel>
 
-    <CardPanel v-if="canReview" title="审核" :icon="ClipboardCheck">
+    <Panel v-if="canReview" title="审核">
+      <template #icon><ClipboardCheck /></template>
       <CreatorReviewActions
         :change-request-id="changeRequest.id"
         :batch-id="changeRequest.batch_id"
         :batch-pending-count="pendingBatchCount"
         @reviewed="emit('reviewed')"
       />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel title="时间线" :icon="History">
+    <Panel title="时间线">
+      <template #icon><History /></template>
       <CreatorContributionTimeline
         v-if="changeRequest.events.length"
         :events="changeRequest.events"
         :resource-type="changeRequest.resource_type"
       />
       <CreatorEmpty v-else text="暂无记录" />
-    </CardPanel>
+    </Panel>
   </div>
 </template>

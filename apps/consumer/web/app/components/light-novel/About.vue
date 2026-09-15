@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   defineOptions({ name: 'LightNovelAbout' })
@@ -13,8 +14,8 @@
 </script>
 
 <template>
-  <LightNovelSection title="关于本作">
-    <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
+  <WorkSection title="关于本作">
+    <Flex direction="col" gap="none" class="gap-8 lg:flex-row lg:items-start">
       <LightNovelAboutIntro :light-novel="lightNovel" :tags="tags" />
       <LightNovelAboutArchive
         :light-novel="lightNovel"
@@ -22,8 +23,8 @@
         :contributors="contributors"
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />
-    </div>
+    </Flex>
     <LightNovelAboutStaff :people="people" />
     <LightNovelAboutCharacters :characters="characters" />
-  </LightNovelSection>
+  </WorkSection>
 </template>

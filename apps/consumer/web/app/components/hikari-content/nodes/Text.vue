@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Spoiler } from '@hina-ui/vue'
   import {
     MARK_RENDER_SPECS,
     sanitizeCssColor,
@@ -53,7 +54,6 @@
         continue
       }
       if (mark.type === 'spoiler') {
-        const Spoiler = resolveComponent('HikariContentNodesSpoiler') as Component
         result = h(Spoiler, null, { default: () => [child] })
         continue
       }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+  import { Button, Inline, NumberFormat, Stack, Text, Time } from '@hina-ui/vue'
   import { Eye, Pencil } from '@lucide/vue'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
   import { useArticleOwnerActions } from '~/features/article/useArticleOwnerActions'
-  import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
 
   const props = defineProps<{
     author: ArticlePageData['author']
@@ -15,35 +15,33 @@
   const auth = useAuthStore()
   const { edit } = useArticleOwnerActions()
   const isOwner = computed(() => auth.user?.id != null && auth.user.id === props.creator.id)
-
-  const dateLabel = computed(() => datePartFormat(props.createdAt, TimeFormatEnum.YYYY_M_D_CN))
-  const views = computed(() => String(props.viewCount).replace(/\B(?=(\d{3})+(?!\d))/g, ','))
 </script>
 
 <template>
-  <div class="flex items-center gap-3">
-    <Avatar :user="creator" card shape="circle" class="size-11! shrink-0" />
-    <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-      <div class="flex items-center gap-1.5">
-        <UserName :user="creator" class="text-sm font-semibold text-color" />
+  <Inline gap="md">
+    <Avatar :user="creator" card class="size-11! shrink-0" />
+    <Stack gap="none" class="min-w-0 flex-1 gap-0.5">
+      <Inline gap="sm" class="text-sm">
+        <UserName :user="creator" class="font-semibold text-fg" />
         <UserBadges :user="creator" />
-      </div>
-      <div class="flex items-center gap-2 text-[13px] text-muted-color">
-        <time :datetime="createdAt">{{ dateLabel }}</time>
-        <span>·</span>
-        <span class="inline-flex items-center gap-1">
+      </Inline>
+      <Inline gap="sm" class="text-xs text-muted">
+        <Time :value="createdAt" format="date" />
+        <Text as="span" size="xs" tone="muted">·</Text>
+        <Inline as="span" gap="xs">
           <Eye class="size-3.5" />
-          {{ views }}
-        </span>
-      </div>
-    </div>
-    <Button v-if="isOwner" label="编辑" size="small" severity="secondary" @click="edit(articleId)">
-      <template #icon><Pencil class="size-4" /></template>
+          <NumberFormat :value="viewCount" />
+        </Inline>
+      </Inline>
+    </Stack>
+    <Button v-if="isOwner" variant="soft" tone="neutral" size="sm" @click="edit(articleId)">
+      <template #icon><Pencil /></template>
+      编辑
     </Button>
     <CommunityFollowButton
       v-else
       :user-id="creator.id"
       :initial-following="author?.is_following ?? false"
     />
-  </div>
+  </Inline>
 </template>

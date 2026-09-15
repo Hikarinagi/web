@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Flex } from '@hina-ui/vue'
+
   defineOptions({ name: 'LightNovelExploreRailViewport' })
   withDefaults(
     defineProps<{
@@ -12,8 +14,8 @@
 
 <template>
   <ScrollArea axis="x" shadow="end" arrows class="-mx-6">
-    <div :class="contentClass">
+    <Flex gap="none" :class="contentClass">
       <slot />
-    </div>
+    </Flex>
   </ScrollArea>
 </template>

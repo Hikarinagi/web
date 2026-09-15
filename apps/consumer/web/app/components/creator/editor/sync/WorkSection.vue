@@ -149,6 +149,8 @@
       applying.value = false
     }
   }
+
+  defineExpose({ apply, applying })
 </script>
 
 <template>
@@ -227,9 +229,5 @@
         <Tag :value="sourceLabel(r.source)" severity="secondary" class="mt-2 shrink-0" />
       </label>
     </section>
-
-    <div class="flex justify-end gap-3">
-      <Button label="应用所选" :loading="applying" @click="apply" />
-    </div>
   </div>
 </template>

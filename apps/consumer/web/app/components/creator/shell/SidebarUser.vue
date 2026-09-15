@@ -54,7 +54,7 @@
 <template>
   <div v-if="user" class="shrink-0 border-t border-surface-200 pt-3 dark:border-surface-800">
     <Button
-      v-tooltip.right="collapsed ? displayName(user) : null"
+      v-tooltip="collapsed ? { content: displayName(user), side: 'right' } : null"
       unstyled
       type="button"
       :aria-label="`${displayName(user)} 的账号菜单`"
@@ -69,7 +69,7 @@
         :animate="contentMotion"
         :transition="TRANSITION"
       >
-        <Avatar :user="user" shape="circle" class="size-9! shrink-0" />
+        <Avatar :user="user" class="size-9! shrink-0" />
         <motion.span
           class="flex min-w-0 flex-1 flex-col overflow-hidden"
           :initial="labelMotion"

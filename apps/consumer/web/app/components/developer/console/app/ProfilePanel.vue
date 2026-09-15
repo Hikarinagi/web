@@ -1,19 +1,19 @@
 <script setup lang="ts">
-  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
+  import { Button, Form, FormField, Heading, Inline, Input, Section, Stack } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import type { MediaValue } from '~/components/media-library/types'
   import {
-    developerAppProfileResolver,
+    developerAppProfileSchema,
     type DeveloperAppProfileValues,
   } from '~/features/developer/schemas/app.schema'
+  import { getFieldErrors } from '~/utils/api/error'
 
   defineOptions({ name: 'DeveloperConsoleAppProfilePanel' })
 
   const props = defineProps<{ app: DeveloperAppPageData['app'] }>()
   const emit = defineEmits<{ changed: [] }>()
 
-  const formErrors = useFormErrors(developerAppProfileResolver)
-  const form = useTemplateRef<FormInstance>('form')
+  const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const logo = ref<MediaValue | null | undefined>()
 
@@ -21,16 +21,23 @@
     logo.value === undefined ? props.app.logo : (logo.value?.src ?? null),
   )
 
-  const initialValues = computed(() => ({
+  const values = reactive<DeveloperAppProfileValues>({
     client_name: props.app.client_name,
     client_uri: props.app.client_uri ?? '',
-  }))
+  })
 
-  async function onSubmit(event: FormSubmitEvent) {
-    if (!event.valid || submitting.value) return
+  watch(
+    () => props.app,
+    app => {
+      values.client_name = app.client_name
+      values.client_uri = app.client_uri ?? ''
+    },
+  )
+
+  async function onSubmit() {
+    if (submitting.value) return
     submitting.value = true
     try {
-      const values = event.values as DeveloperAppProfileValues
       await hikariRequest<'/api/v3/user/me/developer/apps/{client_id}', 'patch'>(
         '/api/v3/user/me/developer/apps/{client_id}',
         {
@@ -47,7 +54,7 @@
       push.success({ message: '应用信息已更新' })
       emit('changed')
     } catch (error) {
-      await formErrors.apply(error, form.value)
+      form.value?.setErrors(getFieldErrors(error))
     } finally {
       submitting.value = false
     }
@@ -55,33 +62,35 @@
 </script>
 
 <template>
-  <section class="flex flex-col gap-4 py-6 first:pt-0 last:pb-0">
-    <h3 class="text-sm font-semibold text-color">基本信息</h3>
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      :initial-values="initialValues"
-      class="flex flex-col gap-4"
-      @input="formErrors.clear"
-      @submit="onSubmit"
-    >
-      <DeveloperConsoleAppIconField
-        :src="logoSrc"
-        :name="app.client_name"
-        @picked="media => (logo = media)"
-      />
+  <Section class="py-6 first:pt-0 last:pb-0">
+    <Stack gap="md">
+      <Heading :level="3" size="base">基本信息</Heading>
 
-      <FormItem v-slot="{ id }" name="client_name" label="应用名称" required>
-        <InputText :id="id" autocomplete="off" fluid />
-      </FormItem>
+      <Form
+        ref="form"
+        :values="values"
+        :rules="developerAppProfileSchema"
+        :disabled="submitting"
+        @submit="onSubmit"
+      >
+        <DeveloperConsoleAppIconField
+          :src="logoSrc"
+          :name="app.client_name"
+          @picked="media => (logo = media)"
+        />
 
-      <FormItem v-slot="{ id }" name="client_uri" label="主页地址">
-        <InputText :id="id" autocomplete="off" fluid placeholder="https://" />
-      </FormItem>
+        <FormField name="client_name" label="应用名称" required>
+          <Input v-model="values.client_name" autocomplete="off" />
+        </FormField>
 
-      <div class="flex justify-end">
-        <Button label="保存" type="submit" :loading="submitting" />
-      </div>
-    </Form>
-  </section>
+        <FormField name="client_uri" label="主页地址">
+          <Input v-model="values.client_uri" autocomplete="off" placeholder="https://" />
+        </FormField>
+
+        <Inline justify="end">
+          <Button type="submit" :loading="submitting">保存</Button>
+        </Inline>
+      </Form>
+    </Stack>
+  </Section>
 </template>

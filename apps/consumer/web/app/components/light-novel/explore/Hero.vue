@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Grid, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import { BookOpen, RefreshCw } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { LightNovelsLandingData } from '~~/server/api/pages/light-novels.get'
@@ -91,15 +92,18 @@
 </script>
 
 <template>
-  <section
+  <Stack
+    as="section"
+    gap="none"
     aria-label="可在线阅读作品"
     :aria-busy="pending"
-    class="border-b border-surface bg-surface-50 dark:bg-surface-950"
+    class="border-b border-line bg-canvas"
   >
-    <div
-      class="mx-auto box-content max-w-app px-6 pt-[calc(var(--app-header-height)+1.5rem)] pb-7 md:pt-[calc(var(--app-header-height)+2rem)] md:pb-8"
+    <Stack
+      gap="none"
+      class="mx-auto box-content w-full max-w-app px-6 pt-[calc(var(--app-header-height)+1.5rem)] pb-7 md:pt-[calc(var(--app-header-height)+2rem)] md:pb-8"
     >
-      <div class="grid">
+      <Grid :cols="1">
         <AnimatePresence :initial="false">
           <motion.div
             :key="current.item.id"
@@ -109,63 +113,60 @@
             :exit="{ opacity: 0 }"
             :transition="TRANSITION"
           >
-            <Button
-              unstyled
-              as="router-link"
+            <NuxtLink
               :to="`/light-novels/${current.item.id}`"
-              class="block w-full rounded-sm shadow-lg dark:shadow-black/40"
+              class="block w-full hn-interactive rounded-sm shadow-lg hn-press-none"
               :aria-label="`查看 ${title}`"
             >
               <HikariImage
                 :src="topVotedMedia(current.item.covers)"
                 :alt="title"
-                class="aspect-7/10 w-full overflow-hidden rounded-sm bg-emphasis ring-1 ring-surface-200/80 dark:ring-surface-800"
+                class="aspect-7/10 w-full overflow-hidden rounded-sm bg-subtle ring-1 ring-line"
                 image-class="size-full object-contain"
                 preset="medium"
               />
-            </Button>
+            </NuxtLink>
 
-            <div class="min-w-0 py-1 md:py-2">
-              <p class="truncate text-xs leading-5 text-muted-color sm:text-sm">{{ meta }}</p>
-              <h1
-                class="mt-1.5 line-clamp-3 text-2xl leading-tight font-bold text-color md:mt-2 md:text-3xl lg:text-4xl"
+            <Stack gap="none" class="min-w-0 py-1 md:py-2">
+              <Text size="xs" tone="muted" truncate class="leading-5 sm:text-sm">{{ meta }}</Text>
+              <Heading
+                :level="1"
+                size="2xl"
+                class="mt-1.5 line-clamp-3 leading-tight font-bold md:mt-2 md:text-3xl lg:text-4xl"
               >
                 {{ title }}
-              </h1>
-              <p
+              </Heading>
+              <Text
                 v-if="summary"
-                class="mt-3 line-clamp-2 max-w-3xl text-sm leading-6 text-muted-color md:line-clamp-3"
+                size="sm"
+                tone="muted"
+                class="mt-3 line-clamp-2 max-w-3xl leading-6 md:line-clamp-3"
               >
                 {{ summary }}
-              </p>
+              </Text>
 
-              <div class="mt-4 flex flex-wrap items-center gap-2 md:mt-5">
+              <Inline align="center" gap="sm" class="mt-4 md:mt-5">
+                <AuthGateButton v-if="startVolume" as-child>
+                  <NuxtLink :to="`/light-novel-volumes/${startVolume.id}/read`">
+                    <BookOpen aria-hidden="true" />
+                    开始阅读
+                  </NuxtLink>
+                </AuthGateButton>
                 <Button
-                  v-if="startVolume"
-                  login-required
-                  as="router-link"
-                  :to="`/light-novel-volumes/${startVolume.id}/read`"
-                  label="开始阅读"
-                  size="small"
-                >
-                  <template #icon><BookOpen class="size-4" aria-hidden="true" /></template>
-                </Button>
-                <Button
-                  label="换一本"
-                  severity="secondary"
-                  outlined
-                  size="small"
+                  variant="outline"
+                  tone="neutral"
                   :loading="pending"
                   :disabled="hero.candidate_ids.length < 2"
                   @click="swap"
                 >
-                  <template #icon><RefreshCw class="size-4" aria-hidden="true" /></template>
+                  <template #icon><RefreshCw aria-hidden="true" /></template>
+                  换一本
                 </Button>
-              </div>
-            </div>
+              </Inline>
+            </Stack>
           </motion.div>
         </AnimatePresence>
-      </div>
-    </div>
-  </section>
+      </Grid>
+    </Stack>
+  </Stack>
 </template>

@@ -24,6 +24,6 @@ export const emoji: EditorPlugin = {
     },
   },
   overlays: {
-    'emoji-picker': EmojiPicker,
+    'emoji-picker': { component: EmojiPicker, scroll: 'self' },
   },
 }

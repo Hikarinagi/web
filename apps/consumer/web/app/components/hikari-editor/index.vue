@@ -9,20 +9,3 @@
 <template>
   <EditorContent v-if="editor" :editor="editor" class="hikari-content hikari-editor-surface" />
 </template>
-
-<style scoped>
-  :deep(.ProseMirror) {
-    outline: none;
-  }
-  :deep(.ProseMirror),
-  :deep(.ProseMirror *) {
-    overflow-anchor: none;
-  }
-  :deep(.ProseMirror p.is-editor-empty:first-child::before) {
-    content: attr(data-placeholder);
-    color: var(--editor-placeholder-color);
-    float: left;
-    height: 0;
-    pointer-events: none;
-  }
-</style>

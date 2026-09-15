@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 import { EPUB_REPORT_REASON_VALUES } from '../epub-report'
 
@@ -23,4 +22,3 @@ export const epubReportSchema = v.pipe(
 )
 
 export type EpubReportFormValues = v.InferOutput<typeof epubReportSchema>
-export const epubReportResolver = valibotResolver(epubReportSchema)

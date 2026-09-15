@@ -27,9 +27,7 @@
         <div class="relative z-10 -mt-14 shrink-0 sm:-mt-18">
           <Avatar
             :user="profile"
-            shape="circle"
-            class="size-28! bg-surface-100 ring-4 ring-surface-0 sm:size-36! dark:ring-surface-950"
-            :pt="{ root: { class: 'shadow-[0_8px_28px_rgba(15,23,42,0.16)]' } }"
+            class="size-28! bg-surface-100 shadow-[0_8px_28px_rgba(15,23,42,0.16)] ring-4 ring-surface-0 sm:size-36! dark:ring-surface-950"
           />
         </div>
 

@@ -1,53 +1,55 @@
 <script setup lang="ts">
+  import { Button, Dialog, Stack, Text } from '@hina-ui/vue'
   import { LogOut, ShieldCheck } from '@lucide/vue'
 
   const { visible, pending, pendingScope, submit } = useLogout()
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    header="退出登录"
-    :style="{ width: '24rem' }"
-    :dismissable-mask="!pending"
-    :close-on-escape="!pending"
-  >
-    <div class="flex flex-col gap-3">
-      <p class="text-sm text-muted-color">选择登出范围</p>
+  <Dialog v-model:open="visible" title="退出登录" size="sm" :locked="pending">
+    <template #content>
+      <Stack gap="sm">
+        <Text tone="muted" size="sm">选择登出范围</Text>
 
-      <Button
-        class="w-full"
-        autofocus
-        :loading="pendingScope === 'global'"
-        :disabled="pending"
-        @click="submit('global')"
-      >
-        <span class="flex w-full items-center gap-3">
-          <ShieldCheck class="size-5 shrink-0" aria-hidden="true" />
-          <span class="flex min-w-0 flex-col text-left">
-            <span class="font-medium">登出全部</span>
-            <span class="text-xs opacity-80">撤销本设备所有站点的 Hikarinagi ID 登录态</span>
-          </span>
-        </span>
-      </Button>
+        <Button
+          block
+          autofocus
+          size="lg"
+          class="h-auto justify-start py-3"
+          :loading="pendingScope === 'global'"
+          :disabled="pending"
+          @click="submit('global')"
+        >
+          <template #icon>
+            <ShieldCheck />
+          </template>
+          <Stack gap="none" align="start" class="min-w-0">
+            <Text as="span" weight="medium" class="text-inherit">登出全部</Text>
+            <Text as="span" size="xs" class="text-inherit opacity-80">
+              撤销本设备所有站点的 Hikarinagi ID 登录态
+            </Text>
+          </Stack>
+        </Button>
 
-      <Button
-        class="w-full"
-        severity="secondary"
-        outlined
-        :loading="pendingScope === 'local'"
-        :disabled="pending"
-        @click="submit('local')"
-      >
-        <span class="flex w-full items-center gap-3">
-          <LogOut class="size-5 shrink-0" aria-hidden="true" />
-          <span class="flex min-w-0 flex-col text-left">
-            <span class="font-medium">仅退出本站</span>
-            <span class="text-xs text-muted-color">下次可无需密码快速登录</span>
-          </span>
-        </span>
-      </Button>
-    </div>
+        <Button
+          block
+          variant="outline"
+          tone="neutral"
+          size="lg"
+          class="h-auto justify-start py-3"
+          :loading="pendingScope === 'local'"
+          :disabled="pending"
+          @click="submit('local')"
+        >
+          <template #icon>
+            <LogOut />
+          </template>
+          <Stack gap="none" align="start" class="min-w-0">
+            <Text as="span" weight="medium" class="text-inherit">仅退出本站</Text>
+            <Text as="span" size="xs" tone="muted">下次可无需密码快速登录</Text>
+          </Stack>
+        </Button>
+      </Stack>
+    </template>
   </Dialog>
 </template>

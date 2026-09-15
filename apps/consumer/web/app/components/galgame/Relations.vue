@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <GalgameSection v-if="hasContent" title="相关作品" :meta="`${relations.length} 部`">
+  <WorkSection v-if="hasContent" title="相关作品" :meta="`${relations.length} 部`">
     <div class="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6">
       <GalgameRelationsCard
         v-for="r in relations"
@@ -16,5 +16,5 @@
         :item="r"
       />
     </div>
-  </GalgameSection>
+  </WorkSection>
 </template>

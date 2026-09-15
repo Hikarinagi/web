@@ -155,7 +155,7 @@
 
     <Button
       v-if="editable"
-      v-tooltip.top="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : '编辑条目'"
+      v-tooltip="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : '编辑条目'"
       unstyled
       class="relative flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"
       :aria-label="dirtyCount ? `编辑条目（已暂存 ${dirtyCount} 项修改）` : '编辑条目'"

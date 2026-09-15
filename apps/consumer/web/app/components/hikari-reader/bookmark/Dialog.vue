@@ -1,6 +1,7 @@
 <script setup lang="ts">
+  import { computed, ref, watch } from 'vue'
+  import { Button, Dialog, Textarea } from '@hina-ui/vue'
   import { BookmarkPlus, Pencil } from '@lucide/vue'
-  import { ref, watch } from 'vue'
 
   defineOptions({ name: 'HikariReaderBookmarkDialog' })
 
@@ -21,6 +22,7 @@
   }>()
 
   const note = ref('')
+  const creating = computed(() => props.mode === 'create')
 
   watch(visible, value => {
     if (value) note.value = props.initialNote ?? ''
@@ -39,44 +41,28 @@
 
 <template>
   <Dialog
-    v-model:visible="visible"
-    modal
-    :draggable="false"
-    :close-on-escape="true"
-    :dismissable-mask="true"
-    class="mx-4 w-[calc(100vw-2rem)] max-w-md"
+    v-model:open="visible"
+    :title="creating ? '添加书签' : '编辑书签'"
+    :description="creating ? '写点什么，留空也可以直接添加' : '修改书签备注，清空可以移除原有备注'"
   >
-    <template #header>
-      <div class="flex items-center gap-2">
-        <BookmarkPlus v-if="mode === 'create'" :size="18" class="text-primary" aria-hidden="true" />
-        <Pencil v-else :size="18" class="text-primary" aria-hidden="true" />
-        <span class="text-base font-semibold">
-          {{ mode === 'create' ? '添加书签' : '编辑书签' }}
-        </span>
-      </div>
+    <template #icon>
+      <BookmarkPlus v-if="creating" />
+      <Pencil v-else />
     </template>
 
-    <div class="space-y-2">
-      <p class="text-sm text-muted-color">
-        {{
-          mode === 'create' ? '写点什么，留空也可以直接添加' : '修改书签备注，清空可以移除原有备注'
-        }}
-      </p>
+    <template #content>
       <Textarea
         v-model="note"
-        rows="3"
-        auto-resize
-        class="w-full"
-        placeholder="记录点什么..."
+        autosize
         autofocus
+        aria-label="书签备注"
+        placeholder="记录点什么..."
       />
-    </div>
+    </template>
 
     <template #footer>
-      <div class="flex justify-end gap-2">
-        <Button label="取消" severity="secondary" variant="text" @click="cancel" />
-        <Button :label="mode === 'create' ? '添加' : '保存'" @click="submit" />
-      </div>
+      <Button variant="ghost" tone="neutral" @click="cancel">取消</Button>
+      <Button @click="submit">{{ creating ? '添加' : '保存' }}</Button>
     </template>
   </Dialog>
 </template>
