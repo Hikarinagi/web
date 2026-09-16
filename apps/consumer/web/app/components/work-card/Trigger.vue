@@ -30,6 +30,11 @@
     event.stopPropagation()
     showNow(props.workType, props.workId, anchor.value)
   }
+  function onFocusIn(event: FocusEvent) {
+    const target = event.target
+    if (target instanceof Element && !target.matches(':focus-visible')) return
+    onEnter()
+  }
   function hideSelf() {
     if (anchor.value) hideForAnchor(anchor.value)
   }
@@ -52,7 +57,7 @@
     class="inline"
     @mouseenter="onEnter"
     @mouseleave="onLeave"
-    @focusin="onEnter"
+    @focusin="onFocusIn"
     @focusout="onLeave"
     @click.capture="onClick"
   >

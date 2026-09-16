@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
+  import { Link, Spoiler } from '@hina-ui/vue'
   import { BookText, Clock, Star } from '@lucide/vue'
   import {
     LIGHT_NOVEL_RATE_DIMENSIONS,
@@ -10,10 +10,12 @@
   import { pickRateDimensions } from '~/features/rate/dimensions'
   import { LIGHT_NOVEL_STATUS_ICON as STATUS_ICON } from '~/features/rate/status-icon'
   import { useRateVote } from '~/features/light-novel/useRateVote'
+  import { ratePath } from '~/features/rate/permalink'
   import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'LightNovelRatesItem' })
   const props = defineProps<{ rate: LightNovelRateListItem; lightNovelId: number }>()
+  const permalink = computed(() => ratePath('LIGHT_NOVEL', props.lightNovelId, props.rate.id))
 
   const { vote, votingKind } = useRateVote(props.lightNovelId)
 
@@ -68,7 +70,11 @@
             {{ LIGHT_NOVEL_STATUS_LABEL[rate.status] }}
           </span>
           <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
-          <span>{{ timeFromNow(rate.created_at) }}</span>
+          <NuxtLink v-slot="{ href, navigate }" :to="permalink" custom>
+            <Link :href="href ?? undefined" tone="neutral" :underline="false" @click="navigate">
+              {{ timeFromNow(rate.created_at) }}
+            </Link>
+          </NuxtLink>
         </div>
       </div>
       <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1">

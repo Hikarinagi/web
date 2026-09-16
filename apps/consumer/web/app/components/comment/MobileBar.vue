@@ -13,11 +13,19 @@
   const thread = inject(COMMENT_THREAD_KEY)!
   const { emojiSets, posting, replyTarget, postRoot, postReply, setReplyTarget } = thread
 
-  const { toggle, busy } = useLike(actions.type)
-  const view = useLikeView(actions.type, actions.id, () => ({
-    like_count: actions.likeCount,
-    liked: actions.liked,
+  const { toggle, busy } = useLike(actions.like.kind)
+  const view = useLikeView(actions.like.kind, actions.like.id, () => ({
+    like_count: actions.like.count,
+    liked: actions.like.liked,
   }))
+
+  function like() {
+    const parentId = actions.like.parentId
+    void toggle(
+      actions.like.id,
+      parentId != null ? { parentId, liked: view.value.liked } : undefined,
+    )
+  }
 
   const expanded = ref(false)
   const composerRef = ref<{ focus: () => void; reset: () => void }>()
@@ -92,21 +100,21 @@
         aria-label="赞"
         pill
         class="h-9! shrink-0 px-3!"
-        @click="toggle(actions.id)"
+        @click="like"
       >
         <template #icon><InteractionLikeIcon :active="view.liked" /></template>
         {{ view.like_count }}
       </AuthGateButton>
       <FavoriteToggle
-        :id="actions.id"
-        :type="actions.type"
-        :initial-favorited="actions.favorited"
+        :id="actions.favorite.id"
+        :type="actions.favorite.type"
+        :initial-favorited="actions.favorite.favorited"
         variant="bar"
-        :picker-title="actions.pickerTitle"
+        :picker-title="actions.favorite.pickerTitle"
         pill
         class="size-9! shrink-0"
       />
-      <ShareButton :to="`/${actions.type}s/${actions.id}`" pill class="size-9! shrink-0" />
+      <ShareButton :to="actions.shareTo" pill class="size-9! shrink-0" />
     </div>
   </div>
 </template>

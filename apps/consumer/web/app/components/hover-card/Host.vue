@@ -12,7 +12,16 @@
   const loading = ref(false)
 
   const route = useRoute()
-  watch(() => route.fullPath, hideNow)
+  const mounted = ref(true)
+  watch(
+    () => route.fullPath,
+    async () => {
+      hideNow()
+      mounted.value = false
+      await nextTick()
+      mounted.value = true
+    },
+  )
 
   const open = computed({
     get: () => state.value !== null,
@@ -48,6 +57,7 @@
 
 <template>
   <HoverCard
+    v-if="mounted"
     v-model:open="open"
     :anchor="anchor"
     side="bottom"

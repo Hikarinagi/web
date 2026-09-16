@@ -29,7 +29,7 @@
   >
     <NuxtLink
       :to="to"
-      class="flex items-start gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-[0_1px_1.5px_rgba(15,23,42,0.05)] transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
+      class="relative z-1 flex items-start gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-[0_1px_1.5px_rgba(15,23,42,0.05)] transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
     >
       <HikariImage
         :src="workRef.cover"

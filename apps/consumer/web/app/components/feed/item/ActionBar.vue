@@ -3,7 +3,7 @@
   import { MessageSquare } from '@lucide/vue'
   import { COMMENT_SECTION_HASH, requestCommentFocus } from '~/features/comment/comment'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
-  import type { BackendFeedItem } from '~/features/feed/feed'
+  import { feedItemPath, type BackendFeedItem } from '~/features/feed/feed'
   import { useLike, useLikeView } from '~/features/interaction/useLike'
 
   const props = defineProps<{ item: BackendFeedItem }>()
@@ -48,23 +48,7 @@
         return null
     }
   })
-  const shareTo = computed(() => {
-    switch (props.item.type) {
-      case 'post':
-        return `/posts/${props.item.id}`
-      case 'article':
-        return `/articles/${props.item.id}`
-      case 'galgame_rate':
-        return `/galgames/${props.item.work_ref.id}`
-      case 'manga_rate':
-        return `/mangas/${props.item.work_ref.id}`
-      case 'light_novel_rate':
-      case 'light_novel_volume_rate':
-        return `/light-novels/${props.item.work_ref.id}`
-      default:
-        return null
-    }
-  })
+  const shareTo = computed(() => feedItemPath(props.item))
 
   const favoriteTarget = computed<{
     type: FavoriteEntityType

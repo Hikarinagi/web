@@ -39,12 +39,19 @@
 
   if (data.value) {
     provide(COMMENT_DETAIL_ACTIONS_KEY, {
-      type: 'post',
-      id: data.value.post.id,
-      likeCount: data.value.post.like_count,
-      liked: data.value.post.liked,
-      favorited: data.value.favorite?.favorited ?? false,
-      pickerTitle: `将这篇${data.value.post.covers.length > 0 ? '图文' : '短文'}添加到收藏夹`,
+      like: {
+        kind: 'post',
+        id: data.value.post.id,
+        count: data.value.post.like_count,
+        liked: data.value.post.liked,
+      },
+      favorite: {
+        type: 'post',
+        id: data.value.post.id,
+        favorited: data.value.favorite?.favorited ?? false,
+        pickerTitle: `将这篇${data.value.post.covers.length > 0 ? '图文' : '短文'}添加到收藏夹`,
+      },
+      shareTo: `/posts/${data.value.post.id}`,
     })
   }
 </script>

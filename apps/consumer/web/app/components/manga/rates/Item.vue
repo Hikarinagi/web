@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
+  import { Link, Spoiler } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import {
     MANGA_STATUS_LABEL,
@@ -8,10 +8,12 @@
   } from '~/features/manga/rate'
   import { MANGA_STATUS_ICON as STATUS_ICON } from '~/features/rate/status-icon'
   import { useRateVote } from '~/features/manga/useRateVote'
+  import { ratePath } from '~/features/rate/permalink'
   import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'MangaRatesItem' })
   const props = defineProps<{ rate: MangaRateListItem; mangaId: number }>()
+  const permalink = computed(() => ratePath('MANGA', props.mangaId, props.rate.id))
 
   const { vote, votingKind } = useRateVote(props.mangaId)
 
@@ -44,7 +46,11 @@
             {{ MANGA_STATUS_LABEL[rate.status] }}
           </span>
           <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
-          <span>{{ timeFromNow(rate.created_at) }}</span>
+          <NuxtLink v-slot="{ href, navigate }" :to="permalink" custom>
+            <Link :href="href ?? undefined" tone="neutral" :underline="false" @click="navigate">
+              {{ timeFromNow(rate.created_at) }}
+            </Link>
+          </NuxtLink>
         </div>
       </div>
       <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1">

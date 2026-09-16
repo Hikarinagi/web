@@ -32,12 +32,14 @@
   if (data.value) {
     const a = data.value.article
     provide(COMMENT_DETAIL_ACTIONS_KEY, {
-      type: 'article',
-      id: a.id,
-      likeCount: a.like_count,
-      liked: a.liked,
-      favorited: data.value.favorite?.favorited ?? false,
-      pickerTitle: `将这篇${a.related_galgame_rate_id || a.related_light_novel_rate_id ? '长评' : '文章'}添加到收藏夹`,
+      like: { kind: 'article', id: a.id, count: a.like_count, liked: a.liked },
+      favorite: {
+        type: 'article',
+        id: a.id,
+        favorited: data.value.favorite?.favorited ?? false,
+        pickerTitle: `将这篇${a.related_galgame_rate_id || a.related_light_novel_rate_id ? '长评' : '文章'}添加到收藏夹`,
+      },
+      shareTo: `/articles/${a.id}`,
     })
   }
 </script>

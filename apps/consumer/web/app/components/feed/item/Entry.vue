@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { feedItemBlocksNsfw, type FeedRow } from '~/features/feed/feed'
+  import { feedItemBlocksNsfw, feedItemPath, type FeedRow } from '~/features/feed/feed'
 
   const props = defineProps<{ row: FeedRow; hideName?: boolean }>()
 
@@ -7,16 +7,17 @@
   const blocked = computed(
     () => props.row.kind === 'item' && shouldBlockNsfw(feedItemBlocksNsfw(props.row.item)),
   )
-  const detailTo = computed(() =>
-    props.row.kind === 'item' && props.row.item.type === 'post'
-      ? `/posts/${props.row.item.id}`
-      : null,
-  )
-  const detailLabel = computed(() =>
-    props.row.kind === 'item' && props.row.item.type === 'post'
-      ? props.row.item.title || '查看图文'
-      : '查看',
-  )
+  const detailTo = computed(() => {
+    if (props.row.kind !== 'item') return null
+    const item = props.row.item
+    return item.type === 'article' ? null : feedItemPath(item)
+  })
+  const detailLabel = computed(() => {
+    if (props.row.kind !== 'item') return '查看'
+    const item = props.row.item
+    if (item.type === 'post') return item.title || '查看图文'
+    return '查看评分'
+  })
   const hotComment = computed(() =>
     props.row.kind === 'item' &&
     (props.row.item.type === 'post' || props.row.item.type === 'article')
