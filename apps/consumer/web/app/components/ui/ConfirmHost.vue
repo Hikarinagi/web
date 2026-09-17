@@ -22,14 +22,13 @@
 
 <template>
   <AlertDialog
-    v-if="options"
     v-model:open="open"
-    :title="options.title"
-    :description="options.description"
-    :confirm-text="options.confirmText"
-    :cancel-text="options.cancelText"
-    :tone="options.tone"
-    :confirm-delay="options.confirmDelay"
+    :title="options?.title ?? ''"
+    :description="options?.description"
+    :confirm-text="options?.confirmText"
+    :cancel-text="options?.cancelText"
+    :tone="options?.tone"
+    :confirm-delay="options?.confirmDelay"
     :on-confirm="onConfirm"
     @error="() => {}"
   />

@@ -6,7 +6,6 @@
     Form,
     FormField,
     Inline,
-    ScrollArea,
     Stack,
     Tag,
     Text,
@@ -77,43 +76,41 @@
           共 {{ sectionCount }} 个条目的修改将作为一批提交，各自生成独立的变更请求
         </Text>
 
-        <ScrollArea class="max-h-[50vh]">
-          <Stack gap="md" class="pe-1">
-            <Stack v-if="workChangeset.length" as="section" gap="sm">
-              <Inline as="h3" gap="sm" align="center" :wrap="false">
-                <Text as="span" size="sm" weight="semibold">{{ workLabel }}</Text>
-                <Tag size="sm" :tone="workQueued ? 'warning' : 'success'">
-                  {{ workQueued ? '将进入审核' : '将即时生效' }}
-                </Tag>
-              </Inline>
-              <Alert :open="Boolean(session.itemErrors.value.work)" tone="danger">
-                {{ session.itemErrors.value.work }}
-              </Alert>
-              <CreatorChangesetView :payload="workChangeset" :resource-type="workResourceType" />
-            </Stack>
-
-            <Stack v-for="member in members" :key="memberKey(member)" as="section" gap="sm">
-              <Inline as="h3" gap="sm" align="center" :wrap="false">
-                <Text as="span" size="sm" tone="muted">
-                  {{ RESOURCE_TYPE_LABEL[ENTITY_RESOURCE_TYPE[member.target]] }}
-                </Text>
-                <Text as="span" size="sm" weight="semibold">
-                  {{ member.name || `#${member.id}` }}
-                </Text>
-                <Tag size="sm" :tone="memberQueued(member) ? 'warning' : 'success'">
-                  {{ memberQueued(member) ? '将进入审核' : '将即时生效' }}
-                </Tag>
-              </Inline>
-              <Alert :open="Boolean(session.itemErrors.value[memberKey(member)])" tone="danger">
-                {{ session.itemErrors.value[memberKey(member)] }}
-              </Alert>
-              <CreatorChangesetView
-                :payload="member.changeset as unknown as Record<string, unknown>[]"
-                :resource-type="ENTITY_RESOURCE_TYPE[member.target]"
-              />
-            </Stack>
+        <Stack gap="md">
+          <Stack v-if="workChangeset.length" as="section" gap="sm">
+            <Inline as="h3" gap="sm" align="center" :wrap="false">
+              <Text as="span" size="sm" weight="semibold">{{ workLabel }}</Text>
+              <Tag size="sm" :tone="workQueued ? 'warning' : 'success'">
+                {{ workQueued ? '将进入审核' : '将即时生效' }}
+              </Tag>
+            </Inline>
+            <Alert :open="Boolean(session.itemErrors.value.work)" tone="danger">
+              {{ session.itemErrors.value.work }}
+            </Alert>
+            <CreatorChangesetView :payload="workChangeset" :resource-type="workResourceType" />
           </Stack>
-        </ScrollArea>
+
+          <Stack v-for="member in members" :key="memberKey(member)" as="section" gap="sm">
+            <Inline as="h3" gap="sm" align="center" :wrap="false">
+              <Text as="span" size="sm" tone="muted">
+                {{ RESOURCE_TYPE_LABEL[ENTITY_RESOURCE_TYPE[member.target]] }}
+              </Text>
+              <Text as="span" size="sm" weight="semibold">
+                {{ member.name || `#${member.id}` }}
+              </Text>
+              <Tag size="sm" :tone="memberQueued(member) ? 'warning' : 'success'">
+                {{ memberQueued(member) ? '将进入审核' : '将即时生效' }}
+              </Tag>
+            </Inline>
+            <Alert :open="Boolean(session.itemErrors.value[memberKey(member)])" tone="danger">
+              {{ session.itemErrors.value[memberKey(member)] }}
+            </Alert>
+            <CreatorChangesetView
+              :payload="member.changeset as unknown as Record<string, unknown>[]"
+              :resource-type="ENTITY_RESOURCE_TYPE[member.target]"
+            />
+          </Stack>
+        </Stack>
 
         <Form
           ref="form"

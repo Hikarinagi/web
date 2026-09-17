@@ -33,7 +33,7 @@
           </Text>
           <Text size="sm" tone="muted" class="mt-1">{{ entry.total.toLocaleString() }} 部</Text>
         </Stack>
-        <Stack gap="none" class="relative h-[76px] w-[100px] shrink-0">
+        <Stack gap="none" class="relative h-19 w-25 shrink-0">
           <Card
             v-for="(work, index) in entry.covers"
             :key="work.id"

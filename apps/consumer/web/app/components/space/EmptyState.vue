@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Empty } from '@hina-ui/vue'
   import type { Component } from 'vue'
 
   defineOptions({ name: 'SpaceEmptyState' })
@@ -17,11 +18,9 @@
 </script>
 
 <template>
-  <div class="flex min-h-32 flex-col items-center justify-center gap-2.5 py-10 text-center">
-    <component :is="icon" v-if="icon" :size="26" class="text-muted-color opacity-55" />
-    <div class="flex flex-col gap-1">
-      <p class="text-sm font-medium text-muted-color">{{ text }}</p>
-      <p v-if="description" class="text-muted-color/80 text-xs leading-5">{{ description }}</p>
-    </div>
-  </div>
+  <Empty :title="text" :description="description" :icon="false" size="sm" class="min-h-32 py-10">
+    <template v-if="icon" #icon>
+      <component :is="icon" class="size-6 text-muted opacity-55" />
+    </template>
+  </Empty>
 </template>

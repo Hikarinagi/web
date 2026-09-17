@@ -38,7 +38,7 @@
         <HikariImage
           :src="cover"
           :alt="title"
-          class="aspect-3/4 w-full overflow-hidden rounded-lg shadow-[0_12px_32px_rgba(13,26,31,0.24)]"
+          class="aspect-3/4 w-full overflow-hidden rounded-lg shadow-xl"
           image-class="size-full object-cover object-top"
           preset="medium"
         />

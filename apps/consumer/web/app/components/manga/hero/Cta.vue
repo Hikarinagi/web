@@ -88,7 +88,7 @@
       @click="dialogOpen = true"
     >
       <template #icon>
-        <Star class="fill-amber-400 text-amber-400" />
+        <Star class="fill-current text-warning" />
       </template>
       {{ rateCtl.score.value?.toFixed(1) }}
       <template #trailing>

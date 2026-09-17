@@ -18,7 +18,7 @@
 
 <template>
   <Stack gap="none" class="min-w-0 flex-1">
-    <AnimatePresence>
+    <AnimatePresence :initial="false">
       <motion.div
         v-if="expanded"
         key="title"
@@ -48,18 +48,17 @@
       :class="
         cn(
           'composer-input',
-          !fullscreen &&
-            (expanded ? 'max-h-[50dvh] overflow-y-auto' : 'max-h-[34px] overflow-hidden'),
+          !fullscreen && (expanded ? 'max-h-[50dvh] overflow-y-auto' : 'max-h-8.5 overflow-hidden'),
         )
       "
       :style="{ '--composer-min-h': fullscreen ? '40vh' : expanded ? '66px' : '24px' }"
     >
       <Text
         v-if="!editor"
-        class="text-[15px] leading-[1.65] text-(--editor-placeholder-color)"
+        class="leading-relaxed text-(--editor-placeholder-color)"
         :style="{ minHeight: 'var(--composer-min-h)' }"
       >
-        分享你的发现、推荐、打卡…
+        分享你的发现、推荐…
       </Text>
       <HikariEditor v-else :editor="editor" />
     </Stack>

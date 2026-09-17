@@ -33,6 +33,19 @@
   const failed = computed(() =>
     props.mode === 'fix' ? '校验失败，请稍后重试；你的报告已记录。' : '校验失败，请稍后重试。',
   )
+
+  const result = computed(() => {
+    switch (props.status) {
+      case 'PASSED':
+        return { tone: 'success' as const, text: passed.value }
+      case 'NEEDS_HUMAN':
+        return { tone: 'info' as const, text: needsHuman.value }
+      case 'REJECTED':
+        return { tone: 'warning' as const, text: rejected.value }
+      default:
+        return { tone: 'danger' as const, text: failed.value }
+    }
+  })
 </script>
 
 <template>
@@ -43,17 +56,12 @@
       <Text size="xs" tone="muted">{{ pendingHint }}</Text>
     </Stack>
 
-    <template v-else>
-      <Alert v-if="status === 'PASSED'" tone="success">{{ passed }}</Alert>
-      <Alert v-else-if="status === 'NEEDS_HUMAN'" tone="info">{{ needsHuman }}</Alert>
-      <Alert v-else-if="status === 'REJECTED'" tone="warning">{{ rejected }}</Alert>
-      <Alert v-else tone="danger">{{ failed }}</Alert>
+    <Alert :open="isTerminal" :tone="result.tone">{{ result.text }}</Alert>
 
-      <List v-if="review?.reasons?.length && status !== 'PASSED'">
-        <ListItem v-for="(reason, index) in review?.reasons ?? []" :key="index">
-          <Text as="span" size="sm" tone="muted">{{ reason }}</Text>
-        </ListItem>
-      </List>
-    </template>
+    <List v-if="isTerminal && review?.reasons?.length && status !== 'PASSED'">
+      <ListItem v-for="(reason, index) in review?.reasons ?? []" :key="index">
+        <Text as="span" size="sm" tone="muted">{{ reason }}</Text>
+      </ListItem>
+    </List>
   </Stack>
 </template>

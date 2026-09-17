@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Stack, Textarea } from '@hina-ui/vue'
   import { Check, MessageSquare, X } from '@lucide/vue'
 
   const props = defineProps<{
@@ -65,34 +66,30 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <Textarea v-model="body" rows="3" placeholder="审核意见（可选，驳回时建议填写理由）" fluid />
-    <div class="flex flex-wrap justify-end gap-2">
+  <Stack gap="sm">
+    <Textarea
+      v-model="body"
+      :rows="3"
+      placeholder="审核意见（可选，驳回时建议填写理由）"
+      class="w-full"
+    />
+    <Inline gap="sm" justify="end">
       <Button
-        label="评论"
-        severity="secondary"
+        tone="neutral"
         :disabled="submitting || !body.trim()"
         @click="submitReview('COMMENT')"
       >
-        <template #icon>
-          <MessageSquare :size="15" />
-        </template>
+        <template #icon><MessageSquare /></template>
+        评论
       </Button>
-      <Button
-        label="驳回"
-        severity="danger"
-        :disabled="submitting"
-        @click="confirmReview('REJECT')"
-      >
-        <template #icon>
-          <X :size="15" />
-        </template>
+      <Button tone="danger" :disabled="submitting" @click="confirmReview('REJECT')">
+        <template #icon><X /></template>
+        驳回
       </Button>
-      <Button label="通过并合并" :disabled="submitting" @click="confirmReview('APPROVE')">
-        <template #icon>
-          <Check :size="15" />
-        </template>
+      <Button :disabled="submitting" @click="confirmReview('APPROVE')">
+        <template #icon><Check /></template>
+        通过并合并
       </Button>
-    </div>
-  </div>
+    </Inline>
+  </Stack>
 </template>

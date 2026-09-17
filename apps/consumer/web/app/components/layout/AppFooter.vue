@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import logoUrl from '~/assets/images/logo.png'
+  import logoUrl from '~/assets/images/wordmark.svg'
   import { SITE_CONFIG } from '~/config/site'
 
   const flags = useFeatureFlags()
@@ -19,7 +19,7 @@
           <HikariImage
             :src="logoUrl"
             :alt="SITE_CONFIG.name"
-            class="aspect-963/183 h-6"
+            class="aspect-792/191 h-6"
             image-class="object-contain"
             :skeleton="false"
           />

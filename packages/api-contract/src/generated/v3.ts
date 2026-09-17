@@ -18285,6 +18285,7 @@ export interface components {
             render_mode: "TEMPLATE" | "RICH";
             /** Format: date-time */
             sent_at: string;
+            target: components["schemas"]["SystemMessageTargetDto"] | null;
             template_key: string | null;
             title: string | null;
             /** @enum {string} */
@@ -18299,10 +18300,18 @@ export interface components {
             render_mode: "TEMPLATE" | "RICH";
             /** Format: date-time */
             sent_at: string;
+            target: components["schemas"]["SystemMessageTargetDto"] | null;
             template_key: string | null;
             title: string | null;
             /** @enum {string} */
             type: "SYSTEM" | "NOTIFICATION" | "INTERACTION";
+        };
+        SystemMessageTargetDto: {
+            comment_id: number | null;
+            id: number | null;
+            /** @enum {string} */
+            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm";
+            work_id: number | null;
         };
         TagDetailDto: {
             aliases: string[];

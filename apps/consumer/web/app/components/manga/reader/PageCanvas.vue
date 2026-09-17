@@ -24,7 +24,7 @@
     switch (props.fit) {
       case 'screen':
         return props.double
-          ? 'h-auto max-h-dvh w-auto max-w-[50%]'
+          ? 'h-auto max-h-dvh w-auto max-w-1/2'
           : 'h-auto max-h-dvh w-auto max-w-full'
       case 'width':
         return props.double ? 'h-auto w-1/2' : 'h-auto w-full'

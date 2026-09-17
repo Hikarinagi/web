@@ -1,4 +1,15 @@
 <script setup lang="ts">
+  import {
+    Button,
+    Callout,
+    DescriptionDetails,
+    DescriptionList,
+    DescriptionTerm,
+    Inline,
+    Link,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Check, ExternalLink, X } from '@lucide/vue'
   import type { BackendReviewGroupApplication } from '~/features/creator/membership'
@@ -39,94 +50,86 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
-    <div class="flex flex-wrap items-center gap-3">
+  <Stack gap="md">
+    <Inline gap="sm" align="center">
       <Avatar
         :user="application.requester"
         card
-        class="size-12! shrink-0 bg-surface-200 font-semibold dark:bg-surface-700"
+        class="size-12! shrink-0 bg-subtle font-semibold"
       />
-      <div class="min-w-0">
+      <Stack gap="none" class="min-w-0">
         <UserName :user="application.requester" class="text-base font-semibold" />
-        <p class="text-sm text-muted-color">
+        <Text size="sm" tone="muted">
           申请加入 ·
-          <span class="font-medium text-color">{{ application.permission_group.name }}</span>
-        </p>
-      </div>
-      <div class="ml-auto">
-        <CreatorGovernanceApplicationsStatusBadge :status="application.status" />
-      </div>
-    </div>
+          <Text as="span" size="sm" class="font-medium text-fg">
+            {{ application.permission_group.name }}
+          </Text>
+        </Text>
+      </Stack>
+      <CreatorGovernanceApplicationsStatusBadge :status="application.status" class="ms-auto" />
+    </Inline>
 
-    <div class="flex flex-col gap-2">
-      <p class="text-sm font-medium">申请理由</p>
-      <p class="rounded-md bg-surface-50 px-4 py-3 text-sm leading-6 dark:bg-surface-900">
-        {{ application.reason }}
-      </p>
-    </div>
+    <Stack gap="sm">
+      <Text size="sm" weight="medium">申请理由</Text>
+      <Callout :icon="false">
+        <Text size="sm">{{ application.reason }}</Text>
+      </Callout>
+    </Stack>
 
-    <div v-if="application.homepage" class="flex flex-col gap-2">
-      <p class="text-sm font-medium">个人主页</p>
-      <Button
-        as="a"
+    <Stack v-if="application.homepage" gap="sm">
+      <Text size="sm" weight="medium">个人主页</Text>
+      <Link
         :href="application.homepage"
         target="_blank"
         rel="noopener noreferrer"
-        variant="link"
-        size="small"
-        :label="application.homepage"
-        class="self-start p-0!"
+        class="w-fit text-sm"
       >
-        <template #icon>
-          <ExternalLink :size="13" />
-        </template>
-      </Button>
-    </div>
+        <Inline gap="xs" align="center" :wrap="false">
+          <ExternalLink class="size-3.5 shrink-0" />
+          {{ application.homepage }}
+        </Inline>
+      </Link>
+    </Stack>
 
-    <div v-if="application.images.length" class="flex flex-col gap-2">
-      <p class="text-sm font-medium">附图({{ application.images.length }})</p>
+    <Stack v-if="application.images.length" gap="sm">
+      <Text size="sm" weight="medium">附图（{{ application.images.length }}）</Text>
       <MediaLibrarySelection
         :model-value="application.images.map(image => image.media)"
         disabled
         class="sm:grid-cols-4"
       />
-    </div>
+    </Stack>
 
-    <div
-      v-if="application.status === 'REJECTED' && application.rejection_reason"
-      class="flex flex-col gap-2"
-    >
-      <p class="text-sm font-medium">驳回理由</p>
-      <p
-        class="rounded-md bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:bg-red-900/40 dark:text-red-200"
-      >
-        {{ application.rejection_reason }}
-      </p>
-    </div>
+    <Stack v-if="application.status === 'REJECTED' && application.rejection_reason" gap="sm">
+      <Text size="sm" weight="medium">驳回理由</Text>
+      <Callout tone="danger" :icon="false">
+        <Text size="sm">{{ application.rejection_reason }}</Text>
+      </Callout>
+    </Stack>
 
-    <dl class="grid grid-cols-1 gap-y-2 text-sm sm:grid-cols-[5rem_1fr]">
-      <dt class="text-muted-color">申请时间</dt>
-      <dd>{{ timeFormat(application.created_at) }}</dd>
-      <dt class="text-muted-color">最近更新</dt>
-      <dd>{{ timeFormat(application.updated_at) }}</dd>
-    </dl>
+    <DescriptionList>
+      <DescriptionTerm>申请时间</DescriptionTerm>
+      <DescriptionDetails>{{ timeFormat(application.created_at) }}</DescriptionDetails>
+      <DescriptionTerm>最近更新</DescriptionTerm>
+      <DescriptionDetails>{{ timeFormat(application.updated_at) }}</DescriptionDetails>
+    </DescriptionList>
 
-    <div
+    <Inline
       v-if="!readonly && application.status === 'PENDING'"
-      class="flex flex-wrap justify-end gap-2 border-t border-surface-200 pt-4 dark:border-surface-800"
+      gap="sm"
+      justify="end"
+      class="border-t border-line pt-4"
     >
-      <Button label="驳回" severity="danger" :disabled="approving" @click="rejectOpen = true">
-        <template #icon>
-          <X :size="15" />
-        </template>
+      <Button tone="danger" :disabled="approving" @click="rejectOpen = true">
+        <template #icon><X /></template>
+        驳回
       </Button>
-      <Button label="通过" :disabled="approving" @click="confirmApprove">
-        <template #icon>
-          <Check :size="15" />
-        </template>
+      <Button :disabled="approving" @click="confirmApprove">
+        <template #icon><Check /></template>
+        通过
       </Button>
-    </div>
-  </div>
+    </Inline>
+  </Stack>
 
   <CreatorGovernanceApplicationsRejectDialog
     v-model:visible="rejectOpen"

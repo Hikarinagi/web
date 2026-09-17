@@ -20,7 +20,7 @@
   <WorkSection
     title="安利墙"
     :meta="meta"
-    :empty="stats.played_count === 0 && stats.rated_count === 0"
+    :empty="stats.rated_count === 0"
     empty-text="还没有人评分"
   >
     <div class="flex flex-col gap-6 lg:flex-row lg:items-start">

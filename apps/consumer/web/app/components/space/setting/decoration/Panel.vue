@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Panel, Stack } from '@hina-ui/vue'
   import { useDecoration, type DecorationData } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
 
@@ -32,7 +32,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <Stack gap="lg">
     <SpaceSettingDecorationPreview
       :me="me"
       :frame="selectedFrame"
@@ -73,5 +73,5 @@
         @buy="purchase"
       />
     </Panel>
-  </div>
+  </Stack>
 </template>

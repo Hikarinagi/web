@@ -65,7 +65,7 @@
           </Inline>
         </Stack>
 
-        <Alert v-if="!affordable" tone="danger">光点不足</Alert>
+        <Alert :open="!affordable" tone="danger">光点不足</Alert>
       </Stack>
     </template>
 

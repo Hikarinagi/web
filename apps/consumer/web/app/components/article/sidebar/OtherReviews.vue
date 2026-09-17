@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
-  import { Star } from '@lucide/vue'
+  import { Rating, Spoiler } from '@hina-ui/vue'
   import { workPath } from '#shared/utils/work'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
 
@@ -34,7 +33,7 @@
                 v-if="r.rate != null"
                 class="ml-auto inline-flex shrink-0 items-center gap-0.5 text-xs font-semibold text-amber-500"
               >
-                <Star class="size-3 fill-amber-400 text-amber-400" />
+                <Rating :model-value="r.rate" :max="10" :stars="5" readonly size="sm" />
                 {{ r.rate.toFixed(1) }}
               </span>
             </div>

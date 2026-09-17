@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
-  import { Star } from '@lucide/vue'
+  import { Rating, Spoiler } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameRatesTopReviews' })
@@ -38,7 +37,7 @@
             <span
               class="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-surface-700 tabular-nums dark:text-surface-300"
             >
-              <Star class="size-3 fill-amber-400 text-amber-400" />
+              <Rating :model-value="r.rate ?? 0" :max="10" :stars="5" readonly size="sm" />
               {{ r.rate }}
             </span>
           </div>

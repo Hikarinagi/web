@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, SimpleGrid, Stack, Text } from '@hina-ui/vue'
   import { Bookmark, Plus } from '@lucide/vue'
   import { useCollectionManage } from '~/features/favorite/composables/useCollectionManage'
   import type { SpaceCollectionCard } from '~/features/space/space'
@@ -20,21 +21,16 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 pt-2">
-    <div v-if="collections.length || isSelf" class="flex items-center gap-3">
-      <span class="flex-1 text-sm text-muted-color">{{ collections.length }} 个收藏夹</span>
-      <Button v-if="isSelf" size="small" @click="openCreate">
-        <span class="inline-flex items-center gap-1.5">
-          <Plus :size="16" />
-          新建收藏夹
-        </span>
+  <Stack gap="md" class="pt-2">
+    <Inline v-if="collections.length || isSelf" gap="sm" justify="between">
+      <Text size="sm" tone="muted">{{ collections.length }} 个收藏夹</Text>
+      <Button v-if="isSelf" size="sm" @click="openCreate">
+        <template #icon><Plus /></template>
+        新建收藏夹
       </Button>
-    </div>
+    </Inline>
 
-    <div
-      v-if="collections.length"
-      class="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-4"
-    >
+    <SimpleGrid v-if="collections.length" min="11rem" gap="md">
       <SpaceFavoriteCollectionCard
         v-for="collection in collections"
         :key="collection.id"
@@ -44,7 +40,7 @@
         @edit="openEdit(collection)"
         @delete="confirmRemove(collection)"
       />
-    </div>
+    </SimpleGrid>
 
     <SpaceEmptyState v-else :icon="Bookmark" :text="emptyText" />
 
@@ -54,5 +50,5 @@
       :collection="editing"
       @saved="onSaved"
     />
-  </div>
+  </Stack>
 </template>

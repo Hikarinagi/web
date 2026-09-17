@@ -1,36 +1,42 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import type { RefDisplayValue } from '../helpers'
 
-  defineProps<{
+  const props = defineProps<{
     values: RefDisplayValue[]
     variant?: 'add' | 'remove' | 'plain'
   }>()
+
+  const tone = computed(() => {
+    if (props.variant === 'add') return 'bg-success-soft text-success-text'
+    if (props.variant === 'remove') return 'bg-danger-soft text-danger-text line-through'
+    return 'bg-subtle text-fg'
+  })
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-1.5">
-    <span
+  <Inline gap="xs">
+    <Inline
       v-for="value in values"
       :key="value.id"
-      class="inline-flex items-center gap-1.5 rounded-full py-0.5 pr-2 pl-0.5"
-      :class="{
-        'bg-green-500/10 text-green-700 dark:text-green-300': variant === 'add',
-        'bg-red-500/10 text-red-700 line-through dark:text-red-300': variant === 'remove',
-        'bg-surface-100 text-surface-700 dark:bg-surface-800 dark:text-surface-200':
-          !variant || variant === 'plain',
-      }"
+      as="span"
+      gap="xs"
+      align="center"
+      :wrap="false"
+      class="rounded-full py-0.5 pr-2 pl-0.5"
+      :class="tone"
     >
       <HikariImage
         :src="value.cover ?? ''"
         alt=""
         preset="small"
-        class="size-5 shrink-0 rounded-full bg-surface-200 dark:bg-surface-700"
+        class="size-5 shrink-0 rounded-full bg-inset"
         image-class="size-full object-cover object-top"
       >
-        <template #empty><span /></template>
-        <template #error><span /></template>
+        <template #empty />
+        <template #error />
       </HikariImage>
-      <span class="text-xs">{{ value.name || `#${value.id}` }}</span>
-    </span>
-  </div>
+      <Text as="span" size="xs" class="text-inherit">{{ value.name || `#${value.id}` }}</Text>
+    </Inline>
+  </Inline>
 </template>

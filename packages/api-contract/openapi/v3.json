@@ -27135,6 +27135,15 @@
             "format": "date-time",
             "type": "string"
           },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SystemMessageTargetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "template_key": {
             "nullable": true,
             "type": "string"
@@ -27160,6 +27169,7 @@
           "title",
           "actor",
           "actors",
+          "target",
           "is_read",
           "sent_at",
           "change_request_id",
@@ -27204,6 +27214,15 @@
             "format": "date-time",
             "type": "string"
           },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SystemMessageTargetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "template_key": {
             "nullable": true,
             "type": "string"
@@ -27229,8 +27248,52 @@
           "title",
           "actor",
           "actors",
+          "target",
           "is_read",
           "sent_at"
+        ],
+        "type": "object"
+      },
+      "SystemMessageTargetDto": {
+        "properties": {
+          "comment_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "light_novel_volume",
+              "manga",
+              "person",
+              "producer",
+              "character",
+              "post",
+              "article",
+              "galgame_rate",
+              "light_novel_rate",
+              "manga_rate",
+              "change_request",
+              "decoration",
+              "dm"
+            ],
+            "type": "string"
+          },
+          "work_id": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "work_id",
+          "comment_id"
         ],
         "type": "object"
       },

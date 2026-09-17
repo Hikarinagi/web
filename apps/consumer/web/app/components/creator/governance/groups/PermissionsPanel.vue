@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Card, Panel } from '@hina-ui/vue'
   import { KeyRound } from '@lucide/vue'
   import type { BackendPermissionCatalog } from '~/features/creator/governance'
 
@@ -17,12 +17,12 @@
   >
     <template #icon><KeyRound /></template>
     <CreatorEmpty v-if="permissions.length === 0" text="还没有授予任何权限" />
-    <div v-else class="rounded-md ring-1 ring-surface-200 dark:ring-surface-700">
+    <Card v-else :padded="false" class="shadow-none">
       <CreatorGovernancePermissionTree
         :entries="catalog.permissions"
         :model-value="[...permissions]"
         readonly
       />
-    </div>
+    </Card>
   </Panel>
 </template>

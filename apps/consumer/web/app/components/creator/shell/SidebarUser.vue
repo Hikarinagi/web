@@ -10,7 +10,7 @@
     Text,
     type SidebarState,
   } from '@hina-ui/vue'
-  import { LogOut, Settings, UserRound } from '@lucide/vue'
+  import { ChevronUp, LogOut, Settings, UserRound } from '@lucide/vue'
   import { cn } from '~/utils/cn'
   import { displayName } from '~/utils/user'
 

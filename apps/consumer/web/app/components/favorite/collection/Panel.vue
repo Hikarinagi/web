@@ -1,12 +1,8 @@
 <script setup lang="ts">
   import { Alert, Button, Divider, Inline, ScrollArea, Skeleton, Stack, Text } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
-  import { AnimatePresence, motion } from 'motion-v'
-  import { push } from 'notivue'
-  import { TRANSITION } from '~/lib/motion'
   import { useFavoriteCollections } from '~/features/favorite/composables/useFavoriteCollections'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
-  import type { CollectionValues } from '~/features/favorite/schemas/collection.schema'
 
   defineOptions({ name: 'FavoriteCollectionPanel' })
 
@@ -14,32 +10,17 @@
     defineProps<{ type: FavoriteEntityType; id: number; showDone?: boolean; heading?: string }>(),
     { heading: '收藏到收藏夹' },
   )
-  const emit = defineEmits<{ done: [] }>()
+  const emit = defineEmits<{ done: []; create: [] }>()
 
-  const { rows, pending, failed, savingIds, load, toggleIn, create } = useFavoriteCollections(
+  const { rows, pending, failed, savingIds, load, toggleIn } = useFavoriteCollections(
     props.type,
     props.id,
   )
-  const creating = ref(false)
 
   load()
 
   async function onToggle(collectionId: number) {
     await toggleIn(collectionId).catch(() => {})
-  }
-
-  async function onCreate(values: CollectionValues) {
-    await create(values)
-    closeCreate()
-    push.success({ message: '已新建并收藏' })
-  }
-
-  function openCreate() {
-    creating.value = true
-  }
-
-  function closeCreate() {
-    creating.value = false
   }
 </script>
 
@@ -83,42 +64,16 @@
     </ScrollArea>
 
     <Divider />
-    <AnimatePresence :initial="false">
-      <motion.div
-        v-if="creating"
-        key="form"
-        :initial="{ height: 0, opacity: 0 }"
-        :animate="{ height: 'auto', opacity: 1 }"
-        :exit="{ height: 0, opacity: 0 }"
-        :transition="TRANSITION"
-        class="overflow-hidden"
-      >
-        <FavoriteCollectionCreateForm :submit="onCreate" @cancel="closeCreate" />
-      </motion.div>
-    </AnimatePresence>
-
-    <AnimatePresence :initial="false">
-      <motion.div
-        v-if="!creating"
-        key="trigger"
-        :initial="{ height: 0, opacity: 0 }"
-        :animate="{ height: 'auto', opacity: 1 }"
-        :exit="{ height: 0, opacity: 0 }"
-        :transition="TRANSITION"
-        class="overflow-hidden"
-      >
-        <Button
-          variant="ghost"
-          tone="accent"
-          block
-          class="h-auto justify-start px-4 py-3"
-          @click="openCreate"
-        >
-          <template #icon><Plus /></template>
-          新建收藏夹
-        </Button>
-      </motion.div>
-    </AnimatePresence>
+    <Button
+      variant="ghost"
+      tone="accent"
+      block
+      class="h-auto justify-start px-4 py-3"
+      @click="emit('create')"
+    >
+      <template #icon><Plus /></template>
+      新建收藏夹
+    </Button>
 
     <template v-if="showDone">
       <Divider />

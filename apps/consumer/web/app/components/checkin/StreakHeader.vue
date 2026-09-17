@@ -34,7 +34,7 @@
           <Text v-if="status" as="span" size="lg" weight="semibold" class="leading-none">
             {{ status.streak }}
           </Text>
-          <Skeleton v-else class="h-[1.125rem] w-6" />
+          <Skeleton v-else class="h-4.5 w-6" />
           <Inline gap="xs">
             <Text as="span" size="xs" tone="muted">当前连续签到</Text>
             <Question title="连续签到奖励说明" aria-label="查看连续签到奖励说明">
@@ -72,7 +72,7 @@
         <Text v-if="status" as="span" size="lg" weight="semibold" class="leading-none">
           {{ status.longest_streak }}
         </Text>
-        <Skeleton v-else class="h-[1.125rem] w-6" />
+        <Skeleton v-else class="h-4.5 w-6" />
         <Text as="span" size="xs" tone="muted">最长连续签到</Text>
       </Stack>
     </Inline>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
 
   defineOptions({ name: 'SpaceHeroStats' })
@@ -26,14 +27,14 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 pt-0.5 text-sm">
+  <Inline gap="sm" class="gap-y-1 pt-0.5">
     <template v-for="(stat, i) in stats" :key="stat.key">
-      <span v-if="i" class="text-surface-300 dark:text-surface-600">·</span>
-      <span class="flex items-center gap-1">
-        <span v-if="stat.prefix" class="text-muted-color">{{ stat.prefix }}</span>
-        <span class="font-semibold text-surface-900 dark:text-surface-100">{{ stat.value }}</span>
-        <span class="text-muted-color">{{ stat.label }}</span>
-      </span>
+      <Text v-if="i" as="span" size="sm" tone="faint">·</Text>
+      <Inline as="span" gap="xs">
+        <Text v-if="stat.prefix" as="span" size="sm" tone="muted">{{ stat.prefix }}</Text>
+        <Text as="span" size="sm" weight="semibold">{{ stat.value }}</Text>
+        <Text as="span" size="sm" tone="muted">{{ stat.label }}</Text>
+      </Inline>
     </template>
-  </div>
+  </Inline>
 </template>

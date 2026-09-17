@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Rating } from '@hina-ui/vue'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { FeedWorkRef } from '~/features/feed/feed'
 
@@ -41,9 +41,9 @@
       <div class="flex min-w-0 flex-1 flex-col gap-1">
         <p class="truncate text-sm font-bold text-color">{{ workRef.title }}</p>
         <p class="truncate text-xs text-muted-color">{{ meta }}</p>
-        <div v-if="score != null" class="flex items-center gap-1">
-          <Star class="size-3.5 fill-amber-400 text-amber-400" />
-          <span class="text-[13px] font-medium text-color">{{ score.toFixed(1) }}</span>
+        <div v-if="score != null" class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+          <Rating :model-value="score" :max="10" :stars="5" readonly size="sm" />
+          <span class="text-sm font-medium text-color">{{ score.toFixed(1) }}</span>
         </div>
       </div>
     </NuxtLink>

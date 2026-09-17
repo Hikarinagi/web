@@ -94,8 +94,14 @@
   const dialogMode = ref<'create' | 'edit'>('create')
   const dialogInitialNote = ref<string | null>(null)
   const editingBookmarkId = ref<number | null>(null)
+  const imagePreviewOpen = ref(false)
   const anyPanelOpen = computed(
-    () => catalogOpen.value || settingsOpen.value || bookmarksOpen.value || annotationsOpen.value,
+    () =>
+      catalogOpen.value ||
+      settingsOpen.value ||
+      bookmarksOpen.value ||
+      annotationsOpen.value ||
+      imagePreviewOpen.value,
   )
   const activeHref = computed(() => {
     const pageIndex = currentPosition.value?.projection.pageIndex
@@ -161,6 +167,7 @@
   const imagePreview = useReaderImagePreview({
     controller: reader.controller,
     suppressTap: surfaceTap.suppressTap,
+    open: imagePreviewOpen,
   })
   const linkPrompts = useReaderLinkPrompts({
     controller: reader.controller,

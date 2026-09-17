@@ -14,15 +14,15 @@
         v-for="(item, index) in items"
         :key="item.id"
         :to="`/light-novels/${item.id}`"
-        class="group flex w-[206px] shrink-0 hn-interactive flex-col gap-2 rounded-lg hn-press-none"
+        class="group flex w-52 shrink-0 hn-interactive flex-col gap-2 rounded-lg hn-press-none"
       >
         <Inline align="end" gap="none" :wrap="false" class="gap-1.5">
-          <Text as="span" class="text-6xl leading-[0.8] font-bold" :class="rankTone(index)">
+          <Text as="span" class="text-6xl leading-none font-bold" :class="rankTone(index)">
             {{ index + 1 }}
           </Text>
           <AspectRatio
             :ratio="7 / 10"
-            class="w-[132px] overflow-hidden rounded-lg border border-line bg-subtle"
+            class="w-33 overflow-hidden rounded-lg border border-line bg-subtle"
           >
             <HikariImage
               :src="topVotedMedia(item.covers)"

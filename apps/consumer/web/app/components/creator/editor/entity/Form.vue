@@ -73,7 +73,7 @@
 
 <template>
   <Form :id="formDomId" :values="values" :rules="rules" @submit="review">
-    <Alert v-if="isContinue" tone="warning">
+    <Alert :open="isContinue" tone="warning">
       你正在续编自己进行中的变更请求，提交后将更新该请求
     </Alert>
 

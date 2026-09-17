@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Panel, SegmentedControl, Stack } from '@hina-ui/vue'
   import { Logs } from '@lucide/vue'
   import type { BackendContributionActivityItem } from '~/features/creator/contribution'
 
@@ -39,23 +39,16 @@
   <Panel title="动态">
     <template #icon><Logs /></template>
     <template #actions>
-      <SelectButton
-        v-model="scope"
-        :options="scopeOptions"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
-        size="small"
-      />
+      <SegmentedControl v-model="scope" :options="scopeOptions" size="sm" aria-label="动态范围" />
     </template>
-    <div v-if="items.length" class="flex flex-col">
+    <Stack v-if="items.length" gap="none">
       <CreatorContributionActivityItem
         v-for="(item, index) in items"
         :key="item.id"
         :item="item"
         :is-last="index === items.length - 1"
       />
-    </div>
+    </Stack>
     <CreatorEmpty v-else :text="scope === 'mine' ? '你还没有贡献动态' : '还没有动态'" />
   </Panel>
 </template>

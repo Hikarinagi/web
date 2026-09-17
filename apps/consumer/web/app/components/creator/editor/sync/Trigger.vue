@@ -48,6 +48,20 @@
 
   const section = useTemplateRef<InstanceType<typeof WorkSection>>('section')
   const ready = computed(() => !loading.value && !noIds.value && !failed.value && !nothing.value)
+
+  const notice = computed(() => {
+    if (noIds.value)
+      return {
+        tone: 'warning' as const,
+        text: '此条目没有登记 Bangumi / VNDB 外部源 ID，无法同步。先在外部源 ID 字段填入后再试。',
+      }
+    if (failed.value) return { tone: 'danger' as const, text: '拉取外部源数据失败，关闭后重试' }
+    return null
+  })
+  const noticeText = ref('')
+  watch(notice, value => {
+    if (value) noticeText.value = value.text
+  })
 </script>
 
 <template>
@@ -58,18 +72,15 @@
 
   <Dialog v-model:open="visible" title="从外部源同步" size="2xl">
     <template #content>
+      <Alert :open="!!notice" :tone="notice?.tone ?? 'warning'">{{ noticeText }}</Alert>
       <Stack v-if="loading" gap="sm">
         <Skeleton v-for="i in 4" :key="i" class="h-16" />
       </Stack>
-      <Alert v-else-if="noIds" tone="warning">
-        此条目没有登记 Bangumi / VNDB 外部源 ID，无法同步。先在外部源 ID 字段填入后再试。
-      </Alert>
-      <Alert v-else-if="failed" tone="danger">拉取外部源数据失败，关闭后重试</Alert>
       <Empty v-else-if="nothing" size="sm" title="当前数据已与外部源一致，没有可同步的内容">
         <Text size="xs" tone="muted">已对比：{{ comparedSources }}</Text>
       </Empty>
       <WorkSection
-        v-else
+        v-else-if="ready"
         ref="section"
         :scalars="scalars"
         :rels="rels"

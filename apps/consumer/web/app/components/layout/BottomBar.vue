@@ -72,7 +72,7 @@
     gap="none"
     :class="
       cn(
-        'fixed inset-x-0 bottom-0 z-50 border-t border-line bg-surface/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-[1.8] md:hidden',
+        'fixed inset-x-0 bottom-0 z-50 border-t border-line bg-surface/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-200 md:hidden',
         composeOpen && 'z-60',
       )
     "
@@ -88,7 +88,7 @@
           :aria-current="isActive(item) ? 'page' : undefined"
         >
           <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
-          <Text as="span" class="text-[10px] leading-none font-medium text-inherit">
+          <Text as="span" size="xs" class="leading-none font-medium text-inherit">
             {{ item.label }}
           </Text>
         </NuxtLink>
@@ -125,7 +125,7 @@
           :aria-current="isActive(item) ? 'page' : undefined"
         >
           <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
-          <Text as="span" class="text-[10px] leading-none font-medium text-inherit">
+          <Text as="span" size="xs" class="leading-none font-medium text-inherit">
             {{ item.label }}
           </Text>
         </NuxtLink>

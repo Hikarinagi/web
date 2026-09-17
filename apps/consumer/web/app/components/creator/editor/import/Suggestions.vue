@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Button, Heading, Panel, Stack } from '@hina-ui/vue'
   import { push } from 'notivue'
   import {
     buildRosterActions,
@@ -95,16 +95,17 @@
   >
     <template #actions>
       <Button
-        size="small"
-        :label="`应用所选（${selectedCount}）`"
+        size="sm"
         :loading="running"
         :disabled="running || selectedCount === 0"
         @click="applySelected"
-      />
+      >
+        应用所选（{{ selectedCount }}）
+      </Button>
     </template>
-    <div class="flex flex-col gap-5">
-      <section v-for="[group, list] in grouped" :key="group" class="flex flex-col gap-2">
-        <h3 class="text-sm font-semibold">{{ group }}（{{ list.length }}）</h3>
+    <Stack gap="md">
+      <Stack v-for="[group, list] in grouped" :key="group" as="section" gap="sm">
+        <Heading :level="3" size="sm">{{ group }}（{{ list.length }}）</Heading>
         <CreatorEditorImportActionRow
           v-for="action in list"
           :key="action.key"
@@ -114,7 +115,7 @@
           :running="running"
           @toggle="toggle(action.key)"
         />
-      </section>
-    </div>
+      </Stack>
+    </Stack>
   </Panel>
 </template>

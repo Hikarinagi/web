@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { FormField, Popover, Select, Stack, Tag } from '@hina-ui/vue'
+  import { FormField, Popover, Select, Stack, Tag, Text } from '@hina-ui/vue'
   import { Tags } from '@lucide/vue'
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
@@ -49,7 +49,7 @@
       class="hn-state-layer min-w-0 hn-interactive"
     >
       <Tags aria-hidden="true" />
-      <span class="truncate">{{ summary || '标注' }}</span>
+      <Text as="span" size="xs" truncate class="text-inherit">{{ summary || '标注' }}</Text>
     </Tag>
 
     <template #content>

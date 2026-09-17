@@ -16,7 +16,7 @@
     <HikariImage
       :src="cover"
       :alt="title"
-      class="rounded-xl shadow-[0_14px_44px_rgba(15,23,42,0.22)] ring-1 ring-line"
+      class="rounded-xl shadow-xl ring-1 ring-line"
       :ratio="layout.ratio"
       image-class="object-cover"
       :processing="layout.processing"

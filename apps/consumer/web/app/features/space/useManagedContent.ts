@@ -24,19 +24,18 @@ export function useManagedContent(initial: ManagedContentPage, type: ManagedType
   const list = ref<ManagedContentPage>(initial)
   const status = ref<ManagedStatusFilterKey>('all')
   const search = ref('')
-  const updatedRange = ref<Date[] | null>(null)
+  const updatedRange = ref<{ start: string | null; end: string | null } | null>(null)
   const page = ref(initial.meta.page)
   const pending = ref(false)
   let requestSeq = 0
 
   const hasFilters = computed(
-    () => status.value !== 'all' || search.value.trim().length > 0 || !!updatedRange.value?.[0],
+    () => status.value !== 'all' || search.value.trim().length > 0 || !!updatedRange.value?.start,
   )
 
   const query = computed<ManagedContentQuery>(() => {
-    const [from, to] = updatedRange.value ?? []
-    const end = to ? new Date(to) : null
-    if (end) end.setHours(23, 59, 59, 999)
+    const from = updatedRange.value?.start ? new Date(`${updatedRange.value.start}T00:00:00`) : null
+    const end = updatedRange.value?.end ? new Date(`${updatedRange.value.end}T23:59:59.999`) : null
 
     return {
       type,

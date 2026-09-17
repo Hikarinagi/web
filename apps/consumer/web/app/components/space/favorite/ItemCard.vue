@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, IconButton, Stack, Tag, Text } from '@hina-ui/vue'
   import {
     BookImage,
     BookOpen,
@@ -16,12 +17,12 @@
   const props = defineProps<{ item: SpaceCollectionItem; isSelf: boolean }>()
   const emit = defineEmits<{ remove: [] }>()
 
-  const TYPE_META: Record<string, { label: string; dot: string; icon: Component }> = {
-    galgame: { label: 'Galgame', dot: 'bg-blue-500', icon: GamepadDirectional },
-    light_novel: { label: '轻小说', dot: 'bg-purple-500', icon: BookOpen },
-    manga: { label: '漫画', dot: 'bg-teal-500', icon: BookImage },
-    article: { label: '文章', dot: 'bg-green-500', icon: FileText },
-    post: { label: '图文', dot: 'bg-orange-500', icon: MessageSquare },
+  const TYPE_META: Record<string, { label: string; icon: Component }> = {
+    galgame: { label: 'Galgame', icon: GamepadDirectional },
+    light_novel: { label: '轻小说', icon: BookOpen },
+    manga: { label: '漫画', icon: BookImage },
+    article: { label: '文章', icon: FileText },
+    post: { label: '图文', icon: MessageSquare },
   }
 
   const meta = computed(() => {
@@ -65,10 +66,10 @@
 </script>
 
 <template>
-  <div class="group/item relative">
+  <Stack gap="none" class="group/item relative">
     <NuxtLink :to="meta.href" class="flex flex-col gap-2">
-      <div
-        class="aspect-3/4 overflow-hidden rounded-lg bg-surface-100 ring-1 ring-surface-200 transition-colors group-hover/item:ring-surface-300 dark:bg-surface-800 dark:ring-surface-700 dark:group-hover/item:ring-surface-600"
+      <Center
+        class="aspect-3/4 overflow-hidden rounded-lg bg-inset ring-1 ring-line transition-colors group-hover/item:ring-line-strong"
       >
         <HikariImage
           v-if="meta.cover"
@@ -78,29 +79,28 @@
           image-class="size-full object-cover"
           :processing="{ width: 360, height: 480, fit: 'cover', quality: 80 }"
         />
-        <div v-else class="flex size-full items-center justify-center">
-          <component :is="typeMeta?.icon" :size="28" class="text-muted-color opacity-50" />
-        </div>
-      </div>
-      <div class="flex flex-col gap-1">
-        <span class="inline-flex w-fit items-center gap-1.5 text-[11px] text-muted-color">
-          <span class="size-1.5 rounded-full" :class="typeMeta?.dot" />
-          {{ typeMeta?.label }}
-        </span>
-        <span class="line-clamp-2 text-[13px] font-medium text-color">{{ meta.title }}</span>
-        <span v-if="item.note" class="line-clamp-1 text-xs text-muted-color">{{ item.note }}</span>
-      </div>
+        <component :is="typeMeta?.icon" v-else :size="28" class="text-muted opacity-50" />
+      </Center>
+      <Stack gap="xs">
+        <Tag v-if="typeMeta" size="sm" class="self-start">{{ typeMeta.label }}</Tag>
+        <Text as="span" size="sm" weight="medium" class="line-clamp-2">{{ meta.title }}</Text>
+        <Text v-if="item.note" as="span" size="xs" tone="muted" class="line-clamp-1">
+          {{ item.note }}
+        </Text>
+      </Stack>
     </NuxtLink>
 
-    <button
+    <IconButton
       v-if="isSelf"
-      v-tooltip="'移除收藏'"
-      type="button"
-      aria-label="移除收藏"
-      class="absolute top-2 right-2 grid size-7 place-items-center rounded-full bg-surface-0/90 text-color opacity-100 shadow-sm ring-1 ring-surface-200 backdrop-blur transition-opacity hover:bg-emphasis md:opacity-0 md:group-hover/item:opacity-100 md:focus-visible:opacity-100 dark:bg-surface-900/90 dark:ring-surface-700"
+      label="移除收藏"
+      variant="soft"
+      tone="neutral"
+      size="sm"
+      pill
+      class="absolute top-2 right-2 bg-surface/90 shadow-sm ring-1 ring-line backdrop-blur transition-opacity md:opacity-0 md:group-hover/item:opacity-100 md:focus-visible:opacity-100"
       @click="emit('remove')"
     >
-      <BookmarkMinus :size="15" />
-    </button>
-  </div>
+      <BookmarkMinus />
+    </IconButton>
+  </Stack>
 </template>

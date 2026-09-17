@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Link, Spoiler } from '@hina-ui/vue'
+  import { Link, Rating, Spoiler } from '@hina-ui/vue'
   import { ArrowRight, Clock, Star } from '@lucide/vue'
   import {
     GALGAME_RATE_DIMENSIONS,
@@ -64,8 +64,8 @@
           </NuxtLink>
         </div>
       </div>
-      <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1">
-        <Star class="size-3.5 fill-amber-400 text-amber-400" />
+      <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1.5">
+        <Rating :model-value="rate.rate" :max="10" :stars="5" readonly size="sm" />
         <span class="text-base font-semibold text-surface-900 tabular-nums dark:text-surface-0">
           {{ rate.rate }}
         </span>
@@ -76,7 +76,7 @@
 
     <p
       v-if="rate.rate_content"
-      class="text-sm leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
+      class="text-sm leading-[22px] wrap-anywhere whitespace-pre-wrap text-surface-700 dark:text-surface-300"
     >
       <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
       <template v-else>{{ rate.rate_content }}</template>

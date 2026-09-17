@@ -40,7 +40,7 @@
       :hours="hours"
     />
 
-    <Text v-if="rate.rate_content" class="text-[15px] leading-relaxed wrap-anywhere">
+    <Text v-if="rate.rate_content" class="leading-relaxed wrap-anywhere whitespace-pre-wrap">
       <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
       <template v-else>{{ rate.rate_content }}</template>
     </Text>

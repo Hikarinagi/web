@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Chip, Inline, Stack, Text } from '@hina-ui/vue'
   import { Users } from '@lucide/vue'
   import type { PaginatorPageInput } from '~/components/ui/paginator/types'
   import { SPACE_FOLLOW_PAGE_SIZE, type SpaceFollowPage } from '~/features/space/space'
@@ -56,25 +57,27 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 pt-2">
-    <div class="flex items-center gap-2">
-      <Button
+  <Stack gap="md" class="pt-2">
+    <Inline gap="sm">
+      <Chip
         v-for="s in ['following', 'followers'] as const"
         :key="s"
-        unstyled
-        class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-        :class="sub === s ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'"
-        @click="sub = s"
+        selectable
+        :selected="sub === s"
+        :tone="sub === s ? 'accent' : 'neutral'"
+        @update:selected="sub = s"
       >
         {{ s === 'following' ? `关注 ${followingCount}` : `粉丝 ${followerCount}` }}
-      </Button>
-    </div>
+      </Chip>
+    </Inline>
 
     <LoadingOverlay v-if="list?.items.length" :loading="pending" content-class="flex flex-col">
-      <div
+      <Inline
         v-for="u in list.items"
         :key="u.id"
-        class="flex items-center gap-3 border-b border-surface-100 py-3 last:border-b-0 dark:border-surface-800/60"
+        gap="sm"
+        :wrap="false"
+        class="border-b border-line py-3 last:border-b-0"
       >
         <NuxtLink :to="`/space/${u.id}`" class="flex min-w-0 flex-1 items-center gap-3">
           <Avatar
@@ -83,15 +86,15 @@
             class="size-11! shrink-0"
             :processing="{ width: 88, height: 88, fit: 'cover', quality: 86 }"
           />
-          <div class="min-w-0">
-            <p class="truncate font-medium text-color">{{ displayName(u) }}</p>
-            <p v-if="displayName(u) !== u.name" class="truncate text-xs text-muted-color">
+          <Stack gap="none" class="min-w-0">
+            <Text weight="medium" truncate>{{ displayName(u) }}</Text>
+            <Text v-if="displayName(u) !== u.name" size="xs" tone="muted" truncate>
               @{{ u.name }}
-            </p>
-          </div>
+            </Text>
+          </Stack>
         </NuxtLink>
         <CommunityFollowButton :user-id="u.id" />
-      </div>
+      </Inline>
     </LoadingOverlay>
     <SpaceEmptyState v-else-if="pending" :icon="Users" text="加载中" />
     <SpaceEmptyState
@@ -106,5 +109,5 @@
       route="replace"
       @change="onPage"
     />
-  </div>
+  </Stack>
 </template>

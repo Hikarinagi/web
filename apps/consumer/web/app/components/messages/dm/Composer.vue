@@ -78,7 +78,7 @@
       :style="{ height: `${editorHeight}px` }"
       @click="editor?.commands.focus()"
     >
-      <Text v-if="!editor" tone="muted" class="text-[15px]">发消息…</Text>
+      <Text v-if="!editor" tone="muted">发消息…</Text>
       <HikariEditor v-else :editor="editor" />
     </Stack>
 

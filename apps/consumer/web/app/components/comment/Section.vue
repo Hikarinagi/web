@@ -201,7 +201,7 @@
           :transition="TRANSITION"
           :class="
             cn(
-              'sticky bottom-0 z-10 mt-6 -ml-3 border-t border-line bg-canvas py-4 pl-3 shadow-[0_-6px_20px_-20px_rgba(15,23,41,0.16)]',
+              'sticky bottom-0 z-10 mt-6 -ml-3 border-t border-line bg-canvas py-4 pl-3',
               detailActions && 'max-md:hidden',
             )
           "

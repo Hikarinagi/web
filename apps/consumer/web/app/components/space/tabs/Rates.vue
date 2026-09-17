@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Chip, Inline, Stack } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import type { GalgameRate } from '~/features/galgame/rate'
   import type { LightNovelRate } from '~/features/light-novel/rate'
@@ -87,40 +88,36 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 pt-2">
-    <div class="flex flex-col gap-2">
-      <div class="flex flex-wrap items-center gap-2">
-        <Button
+  <Stack gap="md" class="pt-2">
+    <Stack gap="sm">
+      <Inline gap="sm">
+        <Chip
           v-for="f in RATE_WORK_FILTERS"
           :key="f.key"
-          unstyled
-          class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-          :class="
-            work === f.key ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'
-          "
-          @click="selectWork(f.key)"
+          selectable
+          :selected="work === f.key"
+          :tone="work === f.key ? 'accent' : 'neutral'"
+          @update:selected="selectWork(f.key)"
         >
           {{ f.label }} {{ rateStatusBuckets(counts, f.key).all }}
-        </Button>
-      </div>
+        </Chip>
+      </Inline>
 
-      <div class="flex flex-wrap items-center gap-2">
-        <Button
+      <Inline gap="sm">
+        <Chip
           v-for="f in RATE_STATUS_FILTERS"
           :key="f.key"
-          unstyled
-          class="cursor-pointer rounded-lg px-2.5 py-1 text-[13px] transition-colors"
-          :class="
-            status === f.key
-              ? 'font-medium bg-emphasis text-color'
-              : 'text-muted-color hover:text-color'
-          "
-          @click="selectStatus(f.key)"
+          selectable
+          size="sm"
+          variant="outline"
+          :selected="status === f.key"
+          :tone="status === f.key ? 'accent' : 'neutral'"
+          @update:selected="selectStatus(f.key)"
         >
           {{ rateStatusFilterLabel(work, f.key) }} {{ buckets[f.key] }}
-        </Button>
-      </div>
-    </div>
+        </Chip>
+      </Inline>
+    </Stack>
 
     <LoadingOverlay v-if="list.items.length" :loading="pending" content-class="flex flex-col">
       <SpaceTabsRatesRow
@@ -169,5 +166,5 @@
         :remove="manage.drop"
       />
     </template>
-  </div>
+  </Stack>
 </template>

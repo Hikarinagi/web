@@ -20,12 +20,12 @@
   <WorkSection
     title="安利墙"
     :meta="meta"
-    :empty="stats.played_count === 0 && stats.rated_count === 0"
+    :empty="stats.rated_count === 0"
     empty-text="还没有人评分"
   >
     <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start">
       <Card
-        class="flex flex-col gap-3 rounded-xl lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-[220px] lg:shrink-0"
+        class="flex flex-col gap-3 rounded-xl lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-55 lg:shrink-0"
       >
         <Inline align="baseline" gap="none" class="gap-1">
           <Text as="span" class="text-5xl leading-none font-bold tabular-nums">

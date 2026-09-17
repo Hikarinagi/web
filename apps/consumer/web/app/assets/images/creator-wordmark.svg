@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="973" height="191" viewBox="-12 -25 973 191" role="img" aria-labelledby="hikarinagi-id-title">
-  <title id="hikarinagi-id-title">Hikarinagi ID wordmark</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1130.031250" height="190.000000" viewBox="-12 -25 1130.031250 190.000000" role="img" aria-labelledby="creator-title">
+  <title id="creator-title">Hikarinagi Creator Center wordmark</title>
   <g id="letter-H" transform="translate(0 0)" fill="#39C5BB">
     <path fill-rule="evenodd" d="M5.5 8 H25.5 Q31 8 31 13.5 V61.5 Q31 63 32.4 62.42 L75.6 44.58 Q77 44 77 42.5 V13.5 Q77 8 82.5 8 H102.5 Q108 8 108 13.5 V118.5 Q108 124 102.5 124 H82.5 Q77 124 77 118.5 V68.5 Q77 67 75.6 67.58 L32.4 85.42 Q31 86 31 87.5 V118.5 Q31 124 25.5 124 H5.5 Q0 124 0 118.5 V13.5 Q0 8 5.5 8 Z" />
   </g>
@@ -34,10 +34,13 @@
     <path fill-rule="evenodd" d="M5.5 25 H25.5 Q31 25 31 30.5 V118.5 Q31 124 25.5 124 H5.5 Q0 124 0 118.5 V30.5 Q0 25 5.5 25 Z" />
     <path fill-rule="evenodd" d="M31 2.5 C31 11.0604 24.0604 18 15.5 18 C6.9396 18 0 11.0604 0 2.5 C0 -6.0604 6.9396 -13 15.5 -13 C24.0604 -13 31 -6.0604 31 2.5 Z" />
   </g>
-  <g id="id-badge" fill="#7668FA" transform="translate(805 0)">
-    <path id="frame" fill-rule="evenodd" d="M93 16 H40 C16.2518 16 -3 35.2518 -3 59 V91 C-3 114.7482 16.2518 134 40 134 H95 C118.7482 134 138 114.7482 138 91 V61 C138 59.3431 136.6569 58 135 58 C133.3431 58 132 59.3431 132 61 V91 C132 111.4345 115.4345 128 95 128 H40 C19.5655 128 3 111.4345 3 91 V59 C3 38.5655 19.5655 22 40 22 H93 C94.6569 22 96 20.6569 96 19 C96 17.3431 94.6569 16 93 16 Z" />
-    <path id="letter-I" fill-rule="evenodd" d="M34.5 43 H37.5 Q42 43 42 47.5 V98.5 Q42 103 37.5 103 H34.5 Q30 103 30 98.5 V47.5 Q30 43 34.5 43 Z" />
-    <path id="letter-D" fill-rule="evenodd" d="M60.5 43 H77 C97 43 112 54 112 73 C112 92 97 103 77 103 H60.5 Q56 103 56 98.5 V47.5 Q56 43 60.5 43 Z M71.5 54.5 Q68 54.5 68 58 V88 Q68 91.5 71.5 91.5 H77 C91 91.5 100 84.5 100 73 C100 61.5 91 54.5 77 54.5 Z" />
-    <path id="shield-keyhole" fill-rule="evenodd" d="M126 5.5 C121 7.8 114 10 110 10.9 Q108 11.6 108 14.8 V25 C108 34.5 113.5 42 124.5 48.1 Q126 49 127.5 48.1 C138.5 42 144 34.5 144 25 V14.8 Q144 11.6 142 10.9 C135 9 131 7.8 126 5.5 Z M126 18.5 C122.95 18.5 120.5 20.95 120.5 24 C120.5 26 121.6 27.8 123.3 28.8 L122 34.5 Q121.7 36 123.2 36 H128.8 Q130.3 36 130 34.5 L128.7 28.8 C130.4 27.8 131.5 26 131.5 24 C131.5 20.95 129.05 18.5 126 18.5 Z" />
+  <g id="product-name" fill="#475569" transform="translate(797.00000000 60.20000000) scale(0.99687500)">
+    <path id="product-letter-0-C" transform="translate(0 0)" fill-rule="evenodd" d="M48 5 Q50 6.5 48.5 9 L46 13 Q44.8 15 42.5 13.5 C38 10.5 34 9 28 9 C16 9 10 17 10 32 C10 47 16 55 28 55 C34 55 38 53.5 42.5 50.5 Q44.8 49 46 51 L48.5 55 Q50 57.5 48 59 C42 63 36 65 28 65 C10 65 0 53 0 32 C0 11 10 -1 28 -1 C36 -1 42 1 48 5 Z" />
+    <path id="product-letter-1-r" transform="translate(58 0)" fill-rule="evenodd" d="M2.5 64 Q0 64 0 61.5 V39 C0 24 10 17 23.5 17 Q26 17 26 19.5 V24 Q26 26.5 23.5 26.5 C14 26.5 10 31 10 40 V61.5 Q10 64 7.5 64 Z" />
+    <path id="product-letter-2-e" transform="translate(92 0)" fill-rule="evenodd" d="M42.5 44 H10.5 C11.5 52 16.5 56 24 56 C30 56 34.5 54.5 38 52 Q40 50.5 41.2 52.7 L43 56 Q44 58 42 59.5 C37 63 31 65 24 65 C9 65 0 56 0 41 C0 26 8.5 17 22 17 C36 17 45 26 45 40 V41.5 Q45 44 42.5 44 Z M10.5 36 H34 C33 29 29 25 22 25 C16 25 12 29 10.5 36 Z" />
+    <path id="product-letter-3-a" transform="translate(144 0)" fill-rule="evenodd" d="M5 21 C11 18 17 17 23 17 C36 17 43 24 43 36 V58.5 Q43 61 40.5 62 C35 64 28 65 21 65 C7 65 0 59 0 50 C0 39 9 33 27 33 H31 Q33 33 33 31 C32 27 28 25.5 23 25.5 C18 25.5 13 27 9 29 Q6.5 30 5.5 27.5 L3.5 24 Q2.5 22 5 21 Z M33 43 Q33 41 31 41 H27 C16 41 10 44 10 50 C10 55 14 57 21 57 C25 57 29 56 31 55 Q33 54 33 52 Z" />
+    <path id="product-letter-4-t" transform="translate(194 0)" fill-rule="evenodd" d="M10.5 4 H15.5 Q18 4 18 6.5 V18 H27.5 Q30 18 30 20.5 V24 Q30 26.5 27.5 26.5 H18 V48 C18 54 20 56 25 56 H27.5 Q30 56 30 58.5 V62 Q30 64 27.5 64.5 C15 66 8 61 8 49 V26.5 H2.5 Q0 26.5 0 24 V20.5 Q0 18 2.5 18 H8 V6.5 Q8 4 10.5 4 Z" />
+    <path id="product-letter-5-o" transform="translate(231 0)" fill-rule="evenodd" d="M23 17 C38 17 46 26 46 41 C46 56 38 65 23 65 C8 65 0 56 0 41 C0 26 8 17 23 17 Z M23 26 C14 26 10 31 10 41 C10 51 14 56 23 56 C32 56 36 51 36 41 C36 31 32 26 23 26 Z" />
+    <path id="product-letter-6-r" transform="translate(284 0)" fill-rule="evenodd" d="M2.5 64 Q0 64 0 61.5 V39 C0 24 10 17 23.5 17 Q26 17 26 19.5 V24 Q26 26.5 23.5 26.5 C14 26.5 10 31 10 40 V61.5 Q10 64 7.5 64 Z" />
   </g>
 </svg>

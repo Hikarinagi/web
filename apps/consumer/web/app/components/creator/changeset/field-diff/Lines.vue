@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Text } from '@hina-ui/vue'
   import { diffLines } from '~/features/creator/changeset/diff'
 
   const props = defineProps<{
@@ -6,23 +7,31 @@
   }>()
 
   const lines = computed(() => diffLines(String(props.op.from ?? ''), String(props.op.to ?? '')))
+
+  const TONE = {
+    add: 'bg-success-soft text-success-text',
+    remove: 'bg-danger-soft text-danger-text',
+  } as const
+
+  const MARKER = { add: '+', remove: '−' } as const
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-lg border border-surface-200 dark:border-surface-800">
-    <div
+  <Card :padded="false" class="shadow-none">
+    <Inline
       v-for="(line, index) in lines"
       :key="index"
-      :class="[
-        'flex gap-2 px-3 py-0.5',
-        line.type === 'add' && 'bg-green-500/10 text-green-700 dark:text-green-300',
-        line.type === 'remove' && 'bg-red-500/10 text-red-700 dark:text-red-300',
-      ]"
+      gap="sm"
+      :wrap="false"
+      class="px-3 py-0.5"
+      :class="TONE[line.type as keyof typeof TONE]"
     >
-      <span class="w-3 shrink-0 text-center text-muted-color select-none">
-        {{ line.type === 'add' ? '+' : line.type === 'remove' ? '−' : '' }}
-      </span>
-      <span class="wrap-break-word whitespace-pre-wrap">{{ line.text || ' ' }}</span>
-    </div>
-  </div>
+      <Text as="span" class="w-3 shrink-0 text-center text-inherit opacity-60 select-none">
+        {{ MARKER[line.type as keyof typeof MARKER] ?? '' }}
+      </Text>
+      <Text as="span" class="wrap-break-word whitespace-pre-wrap text-inherit">
+        {{ line.text || ' ' }}
+      </Text>
+    </Inline>
+  </Card>
 </template>

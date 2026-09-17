@@ -3,7 +3,7 @@
   import { CircleQuestionMark } from '@lucide/vue'
   import type { PropType } from 'vue'
 
-  defineOptions({ name: 'UiQuestion' })
+  defineOptions({ name: 'UiQuestion', inheritAttrs: false })
 
   const props = defineProps({
     title: {
@@ -44,6 +44,7 @@
 <template>
   <Button
     v-tooltip="tooltip"
+    v-bind="$attrs"
     variant="ghost"
     tone="neutral"
     size="sm"

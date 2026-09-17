@@ -4,7 +4,7 @@
   import { ArrowLeft, LogIn } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { NuxtLink } from '#components'
-  import logoUrl from '~/assets/images/logo.png'
+  import logoUrl from '~/assets/images/wordmark.svg'
   import { HEADER_NAV_ITEMS, SITE_CONFIG } from '~/config/site'
   import { TRANSITION_FAST } from '~/lib/motion'
   import { cn } from '~/utils/cn'
@@ -75,7 +75,7 @@
           <HikariImage
             :src="logoUrl"
             :alt="SITE_CONFIG.name"
-            class="aspect-963/183 h-5 md:h-7"
+            class="aspect-792/191 h-5 md:h-7"
             image-class="object-contain"
             :lazy="false"
             :skeleton="false"

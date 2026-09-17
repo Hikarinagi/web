@@ -21,7 +21,7 @@
           v-for="row in pick.works.items"
           :key="row.light_novel.id"
           :item="row.light_novel"
-          class="w-[136px]"
+          class="w-34"
         />
       </LightNovelExploreRailViewport>
     </Stack>

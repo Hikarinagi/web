@@ -9,7 +9,7 @@
     Tag,
     Text,
   } from '@hina-ui/vue'
-  import { Ellipsis, Eye, Pencil, ThumbsUp, Trash2 } from '@lucide/vue'
+  import { Ellipsis, Eye, Heart, Pencil, Trash2 } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import {
     formatMonthDay,
@@ -53,7 +53,7 @@
           <Text size="xs" tone="muted" class="tabular-nums">{{ item.view_count }}</Text>
         </Inline>
         <Inline align="center" gap="xs" :wrap="false">
-          <ThumbsUp class="size-3.5 text-muted" />
+          <Heart class="size-3.5 text-muted" />
           <Text size="xs" tone="muted" class="tabular-nums">{{ item.like_count }}</Text>
         </Inline>
         <Text size="xs" tone="muted">{{ formatMonthDay(item.updated_at) }}</Text>

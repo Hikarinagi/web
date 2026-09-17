@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
-  import { Star } from '@lucide/vue'
+  import { Rating, Stack } from '@hina-ui/vue'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { WorkCardData } from './composables/useWorkCard'
 
@@ -38,8 +37,11 @@
             {{ work.original_title }}
           </p>
           <p v-if="meta" class="line-clamp-1 text-xs text-muted-color">{{ meta }}</p>
-          <div v-if="work.average_rate != null" class="mt-auto flex items-center gap-1 pt-1">
-            <Star class="size-3.5 fill-amber-400 text-amber-400" />
+          <div
+            v-if="work.average_rate != null"
+            class="mt-auto flex flex-wrap items-center gap-x-1.5 gap-y-0.5 pt-1"
+          >
+            <Rating :model-value="work.average_rate" :max="10" :stars="5" readonly size="sm" />
             <span class="text-sm font-semibold text-color">{{ work.average_rate.toFixed(1) }}</span>
             <span class="text-xs text-muted-color">· {{ work.rated_count }} 人评分</span>
           </div>

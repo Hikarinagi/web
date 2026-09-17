@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { Button, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { ChevronLeft, Lock, Pencil, Trash2 } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { SpaceCollectionDetailPageData } from '~~/server/api/pages/space/[id]/favorites/[cid].get'
   import { displayName } from '~/utils/user'
 
@@ -20,73 +22,56 @@
 </script>
 
 <template>
-  <div>
-    <Button
-      as="router-link"
-      :to="backPath"
-      severity="secondary"
-      variant="outlined"
-      size="small"
-      label="收藏"
-      class="mb-4"
-    >
+  <Stack gap="md">
+    <Button :as="NuxtLink" :to="backPath" variant="outline" tone="neutral" size="sm" class="w-fit">
       <template #icon><ChevronLeft /></template>
+      收藏
     </Button>
 
-    <div class="flex items-start justify-between gap-4">
-      <div class="min-w-0">
+    <Inline gap="md" align="start" justify="between" :wrap="false">
+      <Stack gap="xs" class="min-w-0">
         <NuxtLink
           :to="ownerSpacePath"
-          class="mb-2 inline-flex items-center gap-2 text-sm text-muted-color transition-colors hover:text-color"
+          class="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-fg"
         >
           <Avatar
             :user="owner"
             card
             :aria-label="displayName(owner)"
-            class="size-6! shrink-0 bg-surface-100 dark:bg-surface-800"
+            class="size-6! shrink-0 bg-inset"
             :processing="{ q: 70 }"
           />
           <UserName :user="owner" :handle="false" />
           的收藏夹
         </NuxtLink>
-        <div class="flex items-center gap-2">
-          <h1 class="truncate text-xl font-semibold text-color">{{ collection.name }}</h1>
-          <span
-            v-if="collection.is_default"
-            class="shrink-0 rounded bg-surface-100 px-1.5 py-0.5 text-[11px] text-muted-color dark:bg-surface-800"
-          >
-            默认
-          </span>
-          <Lock v-if="collection.is_private" :size="14" class="shrink-0 text-muted-color" />
-        </div>
-        <p class="mt-1 text-sm text-muted-color">{{ total }} 项</p>
-        <p v-if="collection.description" class="text-color/80 mt-2 text-sm">
-          {{ collection.description }}
-        </p>
-      </div>
-      <div class="flex shrink-0 items-stretch gap-1">
+        <Inline gap="sm" :wrap="false">
+          <Heading :level="1" size="xl" truncate>{{ collection.name }}</Heading>
+          <Tag v-if="collection.is_default" class="shrink-0">默认</Tag>
+          <Lock v-if="collection.is_private" :size="14" class="shrink-0 text-muted" />
+        </Inline>
+        <Text size="sm" tone="muted">{{ total }} 项</Text>
+        <Text v-if="collection.description" size="sm">{{ collection.description }}</Text>
+      </Stack>
+
+      <Inline gap="xs" align="stretch" class="shrink-0" :wrap="false">
         <template v-if="isSelf">
-          <Button text size="small" severity="secondary" @click="$emit('edit')">
-            <span class="inline-flex items-center gap-1.5">
-              <Pencil :size="15" />
-              编辑
-            </span>
+          <Button variant="ghost" tone="neutral" size="sm" @click="$emit('edit')">
+            <template #icon><Pencil /></template>
+            编辑
           </Button>
           <Button
             v-if="!collection.is_default"
-            text
-            size="small"
-            severity="secondary"
+            variant="ghost"
+            tone="neutral"
+            size="sm"
             @click="$emit('delete')"
           >
-            <span class="inline-flex items-center gap-1.5">
-              <Trash2 :size="15" />
-              删除
-            </span>
+            <template #icon><Trash2 /></template>
+            删除
           </Button>
         </template>
         <ShareButton size="sm" tooltip="分享" :to="detailPath" />
-      </div>
-    </div>
-  </div>
+      </Inline>
+    </Inline>
+  </Stack>
 </template>

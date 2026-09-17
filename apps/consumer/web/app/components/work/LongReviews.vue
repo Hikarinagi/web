@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Card, Heading, Inline, Ripple, Stack, Text } from '@hina-ui/vue'
-  import { Eye, Star, ThumbsUp } from '@lucide/vue'
+  import { Card, Heading, Inline, Rating, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { Eye, Heart } from '@lucide/vue'
   import type { BackendWorkArticleList } from '~/features/work/article'
 
   defineOptions({ name: 'WorkLongReviews' })
@@ -30,15 +30,11 @@
           <Inline align="center" gap="sm">
             <Avatar :user="a.creator" card class="size-6! shrink-0" />
             <UserName :user="a.creator" class="text-sm font-medium" />
-            <Inline
-              v-if="a.rate != null"
-              as="span"
-              gap="none"
-              :wrap="false"
-              class="gap-0.5 text-sm font-semibold text-amber-500"
-            >
-              <Star class="size-3.5 fill-amber-400 text-amber-400" />
-              {{ a.rate }}/10
+            <Inline v-if="a.rate != null" as="span" gap="xs" :wrap="false" class="text-sm">
+              <Rating :model-value="a.rate" :max="10" :stars="5" readonly size="sm" />
+              <Text as="span" size="sm" weight="semibold" class="tabular-nums">
+                {{ a.rate }}/10
+              </Text>
             </Inline>
           </Inline>
 
@@ -54,7 +50,7 @@
               {{ fmt(a.view_count) }}
             </Text>
             <Text as="span" size="xs" tone="muted" class="inline-flex items-center gap-1">
-              <ThumbsUp class="size-3.5" />
+              <Heart class="size-3.5" />
               {{ fmt(a.like_count) }}
             </Text>
           </Inline>

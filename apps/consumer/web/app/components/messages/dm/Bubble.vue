@@ -31,7 +31,7 @@
 
 <template>
   <Inline :justify="message.from_me ? 'end' : 'start'">
-    <Stack gap="xs" :align="message.from_me ? 'end' : 'start'" class="max-w-[78%]">
+    <Stack gap="xs" :align="message.from_me ? 'end' : 'start'" class="max-w-4/5">
       <Stack v-if="message.attachments.length" gap="xs" align="end">
         <HikariImage
           v-for="a in message.attachments"
@@ -48,7 +48,7 @@
       <Text
         v-if="docForRender || message.content.trim()"
         as="div"
-        class="rounded-2xl px-3.5 py-2 text-[15px] leading-relaxed wrap-anywhere"
+        class="rounded-2xl px-3.5 py-2 leading-relaxed wrap-anywhere"
         :class="message.from_me ? 'rounded-br-md bg-accent-soft' : 'rounded-bl-md bg-subtle'"
       >
         <HikariContent

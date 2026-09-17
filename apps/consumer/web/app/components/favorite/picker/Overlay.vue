@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Popover, Sheet } from '@hina-ui/vue'
+  import { push } from 'notivue'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
 
   defineOptions({ name: 'FavoritePickerOverlay' })
@@ -13,6 +14,7 @@
   const anchor = shallowRef<HTMLElement | null>(null)
   const popoverOpen = ref(false)
   const sheetOpen = ref(false)
+  const createOpen = ref(false)
   const sessionKey = ref(0)
 
   const heading = computed(() => props.pickerTitle ?? '收藏到收藏夹')
@@ -32,6 +34,10 @@
     popoverOpen.value = false
   }
 
+  function onCreated() {
+    push.success({ message: '已新建并收藏' })
+  }
+
   defineExpose({ open })
 </script>
 
@@ -44,6 +50,7 @@
         :type="type"
         :heading="heading"
         show-done
+        @create="createOpen = true"
         @done="close"
       />
     </template>
@@ -64,7 +71,15 @@
         :type="type"
         :heading="heading"
         class="max-h-96"
+        @create="createOpen = true"
       />
     </template>
   </Popover>
+
+  <FavoriteCollectionCreateDialog
+    v-model:visible="createOpen"
+    :type="type"
+    :id="id"
+    @created="onCreated"
+  />
 </template>

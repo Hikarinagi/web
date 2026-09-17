@@ -83,8 +83,8 @@
           class="size-7 shrink-0 rounded"
           image-class="object-cover"
         >
-          <template #empty><span /></template>
-          <template #error><span /></template>
+          <template #empty />
+          <template #error />
         </HikariImage>
         <Text as="span" truncate>{{ option.label }}</Text>
         <Text as="span" size="xs" tone="muted" class="ms-auto shrink-0 font-mono">

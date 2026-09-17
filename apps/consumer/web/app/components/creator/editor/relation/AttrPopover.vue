@@ -139,8 +139,8 @@
             class="size-8 shrink-0 rounded bg-subtle"
             :image-class="imageClass"
           >
-            <template #empty><span /></template>
-            <template #error><span /></template>
+            <template #empty />
+            <template #error />
           </HikariImage>
           <Stack gap="none" class="min-w-0">
             <Text as="span" size="sm" weight="semibold" truncate>
@@ -212,8 +212,8 @@
                   class="size-5 shrink-0 rounded-full bg-subtle"
                   image-class="size-full object-cover object-top"
                 >
-                  <template #empty><span /></template>
-                  <template #error><span /></template>
+                  <template #empty />
+                  <template #error />
                 </HikariImage>
               </template>
               {{ value.name || `#${value.id}` }}

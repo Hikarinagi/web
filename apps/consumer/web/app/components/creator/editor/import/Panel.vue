@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Card, Grid, Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { hasVndb, oneClickEndpoint, type ImportType } from '~/features/creator/editor/import'
@@ -6,9 +7,6 @@
   type SearchItem = ApiData<'/api/v3/external-source/{source}/search', 'get'>[number]
 
   const props = defineProps<{ type: ImportType }>()
-
-  provide('$pcFormField', undefined)
-  provide('$pcForm', undefined)
 
   const { confirm } = useHikariConfirm()
   const bangumi = ref<SearchItem | null>(null)
@@ -79,37 +77,42 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 rounded-lg border border-surface-200 p-4 dark:border-surface-800">
-    <p class="text-sm text-muted-color">
-      <template v-if="showVndb">我们会自动合并两个数据源的数据</template>
-      <template v-else>从 Bangumi 书籍条目获取数据</template>
-    </p>
-    <div class="grid gap-4" :class="showVndb ? 'sm:grid-cols-2' : ''">
-      <CreatorEditorImportSourceSearch
-        v-model="bangumi"
-        source="bangumi"
-        label="Bangumi"
-        :type="type"
-      />
-      <CreatorEditorImportSourceSearch
-        v-if="showVndb"
-        v-model="vndb"
-        source="vndb"
-        label="VNDB"
-        :type="type"
-      />
-    </div>
-    <div class="flex flex-wrap items-center justify-end gap-3">
-      <Button label="预填编辑器" :disabled="!hasAny || importing" @click="toEditor" />
-      <Button
-        v-if="oneClickUrl"
-        label="一键导入"
-        severity="secondary"
-        outlined
-        :disabled="!hasAny"
-        :loading="importing"
-        @click="oneClick()"
-      />
-    </div>
-  </div>
+  <Card>
+    <Stack gap="md">
+      <Text size="sm" tone="muted">
+        <template v-if="showVndb">我们会自动合并两个数据源的数据</template>
+        <template v-else>从 Bangumi 书籍条目获取数据</template>
+      </Text>
+
+      <Grid :cols="showVndb ? 2 : 1" gap="md" class="max-sm:grid-cols-1">
+        <CreatorEditorImportSourceSearch
+          v-model="bangumi"
+          source="bangumi"
+          label="Bangumi"
+          :type="type"
+        />
+        <CreatorEditorImportSourceSearch
+          v-if="showVndb"
+          v-model="vndb"
+          source="vndb"
+          label="VNDB"
+          :type="type"
+        />
+      </Grid>
+
+      <Inline gap="sm" align="center" justify="end">
+        <Button :disabled="!hasAny || importing" @click="toEditor">预填编辑器</Button>
+        <Button
+          v-if="oneClickUrl"
+          variant="outline"
+          tone="neutral"
+          :disabled="!hasAny"
+          :loading="importing"
+          @click="oneClick()"
+        >
+          一键导入
+        </Button>
+      </Inline>
+    </Stack>
+  </Card>
 </template>

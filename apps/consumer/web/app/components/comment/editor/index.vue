@@ -151,7 +151,7 @@
     "
     :style="{ '--editor-input-min-h': inputMinH }"
   >
-    <Stack gap="none" class="comment-editor-input max-h-50 overflow-y-auto px-3 py-[9px]">
+    <Stack gap="none" class="comment-editor-input max-h-50 overflow-y-auto px-3 py-2.25">
       <Text
         v-if="!editor"
         size="sm"

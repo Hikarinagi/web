@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Skeleton } from '@hina-ui/vue'
+  import { Inline, Skeleton } from '@hina-ui/vue'
+  import { cn } from '~/utils/cn'
   import type { EquippedBadge, EquippedDecoration } from '~/utils/user'
   import { useDecorationDetail } from '~/features/decoration/useDetail'
 
@@ -23,14 +24,28 @@
 </script>
 
 <template>
-  <span v-if="items.length" class="inline-flex shrink-0 items-center gap-1 align-middle">
-    <button
+  <Inline
+    v-if="items.length"
+    as="span"
+    gap="xs"
+    align="center"
+    :wrap="false"
+    class="shrink-0 align-middle"
+  >
+    <Inline
       v-for="(badge, index) in items"
       :key="badge.id"
       v-tooltip="badge.name"
+      as="button"
+      gap="none"
       type="button"
-      class="cursor-pointer rounded-md p-0"
-      :class="[height ?? 'h-4', !full && index > 0 ? 'hidden sm:inline-flex' : 'inline-flex']"
+      :class="
+        cn(
+          'hn-interactive rounded-md p-0',
+          height ?? 'h-4',
+          !full && index > 0 ? 'hidden sm:inline-flex' : 'inline-flex',
+        )
+      "
       @click="open(badge.id)"
     >
       <HikariImage
@@ -47,6 +62,6 @@
           <Skeleton class="size-full rounded-md" />
         </template>
       </HikariImage>
-    </button>
-  </span>
+    </Inline>
+  </Inline>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ThumbsUp } from '@lucide/vue'
+  import { Heart } from '@lucide/vue'
   import type { FeedHotComment } from '~/features/feed/feed'
 
   defineProps<{ comment: FeedHotComment; to: string }>()
@@ -16,7 +16,7 @@
       {{ comment.excerpt }}
     </span>
     <span class="flex shrink-0 items-center gap-1 text-muted-color tabular-nums">
-      <ThumbsUp class="size-3.5" />
+      <Heart class="size-3.5" />
       {{ comment.like_count }}
     </span>
   </NuxtLink>

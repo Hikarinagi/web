@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { workPath as toWorkPath, workTypeLabel } from '#shared/utils/work'
   import type { SidebarRateItem } from '~/features/feed/sidebar'
   import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
@@ -16,31 +17,27 @@
 </script>
 
 <template>
-  <ul class="pb-1.5">
-    <li v-for="item in items" :key="`${item.work_type}:${item.id}`">
-      <NuxtLink
-        :to="workPath(item)"
-        class="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-surface-50 dark:hover:bg-surface-800/50"
-      >
-        <HikariImage
-          :src="item.cover"
-          :alt="item.title"
-          class="h-13 w-9 shrink-0 rounded"
-          image-class="size-full object-cover"
-          :processing="{ q: 90 }"
-        />
-        <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-          <p class="truncate text-[13px] font-medium text-color">{{ item.title }}</p>
-          <div class="flex items-center gap-1.5">
-            <span
-              class="shrink-0 rounded bg-surface-50 px-1.5 py-px text-[11px] text-muted-color dark:bg-surface-800"
-            >
-              {{ typeLabel(item) }}
-            </span>
-            <span class="truncate text-[11px] text-muted-color">{{ activity(item) }}</span>
-          </div>
-        </div>
-      </NuxtLink>
-    </li>
-  </ul>
+  <Stack gap="none" class="pb-1.5">
+    <NuxtLink
+      v-for="item in items"
+      :key="`${item.work_type}:${item.id}`"
+      :to="workPath(item)"
+      class="hn-state-layer flex hn-interactive items-center gap-3 px-(--hn-panel-p) py-2.5"
+    >
+      <HikariImage
+        :src="item.cover"
+        :alt="item.title"
+        class="h-13 w-9 shrink-0 rounded"
+        image-class="size-full object-cover"
+        :processing="{ q: 90 }"
+      />
+      <Stack gap="xs" class="min-w-0 flex-1">
+        <Text size="sm" weight="medium" truncate>{{ item.title }}</Text>
+        <Inline gap="xs" align="center" :wrap="false" class="min-w-0">
+          <Tag size="sm" class="shrink-0">{{ typeLabel(item) }}</Tag>
+          <Text size="xs" tone="muted" truncate>{{ activity(item) }}</Text>
+        </Inline>
+      </Stack>
+    </NuxtLink>
+  </Stack>
 </template>

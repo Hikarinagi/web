@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import { Space, Stack } from '@hina-ui/vue'
+  import type { ComponentPublicInstance } from 'vue'
+
   defineProps<{ follow?: boolean; footer?: boolean }>()
 
   const BOTTOM_MARGIN = 24
 
-  const host = ref<HTMLElement | null>(null)
-  const inner = ref<HTMLElement | null>(null)
+  const host = ref<ComponentPublicInstance | HTMLElement | null>(null)
+  const inner = ref<ComponentPublicInstance | HTMLElement | null>(null)
   const { height: sidebarH } = useElementSize(inner)
   const { height: viewportH } = useWindowSize()
 
@@ -17,9 +20,11 @@
   const fits = computed(() => sidebarH.value + maxTop + BOTTOM_MARGIN <= viewportH.value)
 
   function flip(next: 'down' | 'up') {
-    if (!inner.value || !host.value) return
-    const hostRect = host.value.getBoundingClientRect()
-    const rect = inner.value.getBoundingClientRect()
+    const innerEl = unrefElement(inner)
+    const hostEl = unrefElement(host)
+    if (!innerEl || !hostEl) return
+    const hostRect = hostEl.getBoundingClientRect()
+    const rect = innerEl.getBoundingClientRect()
     freeY.value = Math.max(0, Math.min(rect.top - hostRect.top, hostRect.height - rect.height))
     mode.value = next
   }
@@ -36,7 +41,8 @@
   useEventListener(window, 'scroll', onScroll, { passive: true })
 
   onMounted(() => {
-    if (inner.value) maxTop = parseFloat(getComputedStyle(inner.value).top) || maxTop
+    const innerEl = unrefElement(inner)
+    if (innerEl) maxTop = parseFloat(getComputedStyle(innerEl).top) || maxTop
     lastY = window.scrollY
   })
   onActivated(() => {
@@ -67,26 +73,29 @@
 </script>
 
 <template>
-  <aside
+  <Stack
     ref="host"
+    as="aside"
+    gap="none"
     class="relative hidden w-90 shrink-0 lg:block"
     :style="follow && sidebarH ? { minHeight: `${sidebarH}px` } : undefined"
   >
     <template v-if="follow">
-      <div :style="spacerStyle" />
-      <div ref="inner" class="sticky" :style="innerStyle">
+      <Space size="xs" class="w-full" :style="spacerStyle" />
+      <Stack ref="inner" gap="none" class="sticky" :style="innerStyle">
         <slot />
         <LayoutSidebarFooter v-if="footer" class="my-4" />
-      </div>
+      </Stack>
     </template>
-    <div
+    <Stack
       v-else
-      class="sticky top-[calc(var(--app-header-height)+1.5rem)] flex h-[calc(100dvh-var(--app-header-height)-3rem)] flex-col"
+      gap="none"
+      class="sticky top-[calc(var(--app-header-height)+1.5rem)] h-[calc(100dvh-var(--app-header-height)-3rem)]"
     >
       <ScrollArea class="min-h-0">
         <slot />
       </ScrollArea>
       <LayoutSidebarFooter v-if="footer" class="mt-4 shrink-0" />
-    </div>
-  </aside>
+    </Stack>
+  </Stack>
 </template>

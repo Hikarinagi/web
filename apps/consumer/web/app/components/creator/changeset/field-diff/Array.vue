@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
+
   const props = defineProps<{
     op: Record<string, unknown>
   }>()
@@ -12,21 +14,31 @@
       added: b.filter(item => !a.includes(item)),
     }
   })
+
+  const ROWS = [
+    { key: 'removed', marker: '−', tone: 'text-danger-text', strike: true },
+    { key: 'added', marker: '+', tone: 'text-success-text', strike: false },
+    { key: 'kept', marker: '·', tone: 'text-muted', strike: false },
+  ] as const
 </script>
 
 <template>
-  <ul class="flex flex-col gap-1">
-    <li v-for="item in diff.removed" :key="`r-${item}`" class="text-red-700 dark:text-red-300">
-      <span class="select-none">−</span>
-      <span class="line-through">{{ item }}</span>
-    </li>
-    <li v-for="item in diff.added" :key="`a-${item}`" class="text-green-700 dark:text-green-300">
-      <span class="select-none">+</span>
-      {{ item }}
-    </li>
-    <li v-for="item in diff.kept" :key="`k-${item}`" class="text-muted-color">
-      <span class="select-none">·</span>
-      {{ item }}
-    </li>
-  </ul>
+  <Stack as="ul" gap="xs">
+    <template v-for="row in ROWS" :key="row.key">
+      <Inline
+        v-for="item in diff[row.key]"
+        :key="`${row.key}-${item}`"
+        as="li"
+        gap="xs"
+        align="center"
+        :wrap="false"
+        :class="row.tone"
+      >
+        <Text as="span" class="shrink-0 text-inherit opacity-60 select-none">{{ row.marker }}</Text>
+        <Text as="span" class="text-inherit" :class="row.strike ? 'line-through' : ''">
+          {{ item }}
+        </Text>
+      </Inline>
+    </template>
+  </Stack>
 </template>

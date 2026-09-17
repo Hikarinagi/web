@@ -23,7 +23,7 @@
   const HOME_PATHS = new Set(['/', '/galgames', '/light-novels'])
   const SCROLL_THRESHOLD = 280
   const BUTTON_CLASS =
-    'pointer-events-auto size-10 bg-surface/90 text-muted shadow-[0_8px_24px_rgba(15,23,42,0.12)] backdrop-blur'
+    'pointer-events-auto size-10 bg-surface/90 text-muted shadow-lg backdrop-blur'
   const ICON_CLASS = 'size-4.5 transition-transform duration-200 ease-out'
   const ITEM_TRANSITION = {
     ...TRANSITION_FAST,

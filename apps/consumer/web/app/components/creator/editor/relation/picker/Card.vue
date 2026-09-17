@@ -40,8 +40,8 @@
         class="aspect-square w-full rounded bg-inset"
         :image-class="imageClass"
       >
-        <template #empty><span /></template>
-        <template #error><span /></template>
+        <template #empty />
+        <template #error />
       </HikariImage>
       <Text as="span" size="sm" weight="medium" truncate>{{ item.name }}</Text>
       <Text as="span" size="xs" tone="muted" class="font-mono">#{{ item.id }}</Text>

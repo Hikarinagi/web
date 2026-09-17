@@ -23,7 +23,7 @@
           :item="item"
           :rank="ranked ? index + 1 : undefined"
           :hide-status="hideStatus"
-          class="w-[150px]"
+          class="w-37.5"
         />
       </Inline>
     </ScrollArea>

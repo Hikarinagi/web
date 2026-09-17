@@ -229,7 +229,7 @@ export function useComposer(
     plugins,
     summariesRef,
     documentEmojiSetsRef,
-    placeholder: '分享你的发现、推荐、打卡…',
+    placeholder: '分享你的发现、推荐…',
     editorProps: {
       handleKeyDown(_view, event) {
         if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) return trySubmit()

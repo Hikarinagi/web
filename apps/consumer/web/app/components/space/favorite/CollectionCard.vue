@@ -1,5 +1,18 @@
 <script setup lang="ts">
-  import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, IconButton } from '@hina-ui/vue'
+  import {
+    Card,
+    Center,
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    Flex,
+    Grid,
+    IconButton,
+    Inline,
+    Stack,
+    Tag,
+    Text,
+  } from '@hina-ui/vue'
   import { Bookmark, Ellipsis, Lock, Pencil, Trash2 } from '@lucide/vue'
   import type { SpaceCollectionCard } from '~/features/space/space'
 
@@ -17,52 +30,40 @@
 </script>
 
 <template>
-  <div class="group/card relative">
-    <NuxtLink
-      :to="detailPath"
-      class="block overflow-hidden rounded-xl ring-1 ring-surface-200 transition-colors hover:ring-surface-300 dark:ring-surface-700 dark:hover:ring-surface-600"
-    >
-      <div
-        v-if="covers.length"
-        class="grid aspect-3/2 grid-cols-2 grid-rows-2 gap-0.5 bg-surface-200 dark:bg-surface-700"
-      >
-        <div v-for="i in 4" :key="i" class="overflow-hidden bg-surface-100 dark:bg-surface-800">
-          <HikariImage
-            v-if="covers[i - 1]"
-            :src="covers[i - 1]"
-            alt=""
-            class="size-full"
-            image-class="size-full object-cover"
-            :processing="{ width: 260, height: 174, fit: 'cover', quality: 68 }"
-          >
-            <template #empty><span /></template>
-            <template #error><span /></template>
-          </HikariImage>
-        </div>
-      </div>
-      <div
-        v-else
-        class="flex aspect-3/2 items-center justify-center bg-surface-50 dark:bg-surface-900"
-      >
-        <Bookmark :size="26" class="text-muted-color opacity-50" />
-      </div>
+  <Flex class="group/card relative">
+    <Card as-child :padded="false" class="w-full transition-colors hover:border-line-strong">
+      <NuxtLink :to="detailPath">
+        <Grid v-if="covers.length" :cols="2" class="aspect-3/2 grid-rows-2 gap-0.5 bg-line">
+          <Center v-for="i in 4" :key="i" class="overflow-hidden bg-inset">
+            <HikariImage
+              v-if="covers[i - 1]"
+              :src="covers[i - 1]"
+              alt=""
+              class="size-full"
+              image-class="size-full object-cover"
+              :processing="{ width: 260, height: 174, fit: 'cover', quality: 68 }"
+            >
+              <template #empty />
+              <template #error />
+            </HikariImage>
+          </Center>
+        </Grid>
+        <Center v-else class="aspect-3/2 bg-subtle">
+          <Bookmark :size="26" class="text-muted opacity-50" />
+        </Center>
 
-      <div class="flex flex-col gap-1 px-3 pt-2.5 pb-3">
-        <div class="flex items-center gap-1.5">
-          <span class="truncate text-sm font-medium text-color">{{ collection.name }}</span>
-          <span
-            v-if="collection.is_default"
-            class="shrink-0 rounded bg-surface-100 px-1.5 py-0.5 text-[11px] text-muted-color dark:bg-surface-800"
-          >
-            默认
-          </span>
-          <Lock v-if="collection.is_private" :size="13" class="shrink-0 text-muted-color" />
-        </div>
-        <span class="text-[13px] text-muted-color">{{ collection.item_count }} 项</span>
-      </div>
-    </NuxtLink>
+        <Stack gap="xs" class="px-3 pt-2.5 pb-3">
+          <Inline gap="xs" :wrap="false">
+            <Text as="span" size="sm" weight="medium" truncate>{{ collection.name }}</Text>
+            <Tag v-if="collection.is_default" class="shrink-0">默认</Tag>
+            <Lock v-if="collection.is_private" :size="13" class="shrink-0 text-muted" />
+          </Inline>
+          <Text as="span" size="xs" tone="muted">{{ collection.item_count }} 项</Text>
+        </Stack>
+      </NuxtLink>
+    </Card>
 
-    <div
+    <Flex
       v-if="isSelf"
       class="absolute top-2 right-2 opacity-100 transition-opacity md:opacity-0 md:group-hover/card:opacity-100 md:focus-within:opacity-100"
     >
@@ -93,6 +94,6 @@
           </DropdownMenuItem>
         </template>
       </DropdownMenu>
-    </div>
-  </div>
+    </Flex>
+  </Flex>
 </template>

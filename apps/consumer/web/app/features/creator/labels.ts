@@ -56,37 +56,23 @@ export const RESOURCE_TYPE_ICON: Record<string, Component> = icons
 
 export const CHANGE_REQUEST_EVENT_META: Record<
   string,
-  { label: string; dot: string; text: string }
+  { label: string; tone: 'accent' | 'muted' | 'success' | 'danger' }
 > = {
-  CREATED: { label: '发起编辑', dot: 'bg-primary', text: 'text-primary' },
-  UPDATED: { label: '继续编辑', dot: 'bg-primary', text: 'text-primary' },
-  COMMENTED: { label: '评论', dot: 'bg-surface-400', text: 'text-muted-color' },
-  REJECTED: { label: '驳回', dot: 'bg-red-500', text: 'text-red-600 dark:text-red-400' },
-  APPROVED: {
-    label: '通过并合并',
-    dot: 'bg-green-500',
-    text: 'text-green-600 dark:text-green-400',
-  },
-  AUTO_MERGED: {
-    label: '自动合并',
-    dot: 'bg-green-500',
-    text: 'text-green-600 dark:text-green-400',
-  },
-  CLOSED: { label: '关闭', dot: 'bg-surface-400', text: 'text-muted-color' },
+  CREATED: { label: '发起编辑', tone: 'accent' },
+  UPDATED: { label: '继续编辑', tone: 'accent' },
+  COMMENTED: { label: '评论', tone: 'muted' },
+  REJECTED: { label: '驳回', tone: 'danger' },
+  APPROVED: { label: '通过并合并', tone: 'success' },
+  AUTO_MERGED: { label: '自动合并', tone: 'success' },
+  CLOSED: { label: '关闭', tone: 'muted' },
 }
 
-export const CHANGE_REQUEST_STATUS_META: Record<string, { label: string; badge: string }> = {
-  PENDING: {
-    label: '待审核',
-    badge: 'border-amber-300 text-amber-600 dark:border-amber-700/60 dark:text-amber-400',
-  },
-  MERGED: {
-    label: '已合并',
-    badge: 'border-green-300 text-green-600 dark:border-green-800 dark:text-green-400',
-  },
-  REJECTED: {
-    label: '已驳回',
-    badge: 'border-red-300 text-red-600 dark:border-red-800 dark:text-red-400',
-  },
-  CLOSED: { label: '已关闭', badge: 'border-surface-300 text-muted-color dark:border-surface-600' },
+export const CHANGE_REQUEST_STATUS_META: Record<
+  string,
+  { label: string; tone: 'neutral' | 'success' | 'warning' | 'danger' }
+> = {
+  PENDING: { label: '待审核', tone: 'warning' },
+  MERGED: { label: '已合并', tone: 'success' },
+  REJECTED: { label: '已驳回', tone: 'danger' },
+  CLOSED: { label: '已关闭', tone: 'neutral' },
 }

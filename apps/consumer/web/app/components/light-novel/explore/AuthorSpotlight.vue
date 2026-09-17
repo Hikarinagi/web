@@ -16,7 +16,7 @@
     <Card
       as-child
       :padded="false"
-      class="group hn-state-layer flex shrink-0 hn-interactive flex-col gap-2 rounded-xl p-5 hn-press-none lg:w-[240px]"
+      class="group hn-state-layer flex shrink-0 hn-interactive flex-col gap-2 rounded-xl p-5 hn-press-none lg:w-60"
     >
       <NuxtLink :to="`/light-novels/author/${spotlight.person.id}`">
         <Tag class="w-fit">作者</Tag>
@@ -37,12 +37,7 @@
       class="lg:-mr-6 lg:ml-0 lg:flex-1"
       content-class="flex min-w-max gap-4 px-6 pb-2 lg:pr-6 lg:pl-0"
     >
-      <LightNovelExploreSeriesCard
-        v-for="work in works"
-        :key="work.id"
-        :item="work"
-        class="w-[136px]"
-      />
+      <LightNovelExploreSeriesCard v-for="work in works" :key="work.id" :item="work" class="w-34" />
     </LightNovelExploreRailViewport>
   </Flex>
 </template>

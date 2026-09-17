@@ -57,7 +57,7 @@
           :key="item.id"
           :to="item.link"
           :target="item.open_in_new ? '_blank' : undefined"
-          class="relative block h-full min-w-0 flex-[0_0_100%]"
+          class="relative block h-full min-w-0 shrink-0 grow-0 basis-full"
         >
           <HikariImage
             :src="item.image"
