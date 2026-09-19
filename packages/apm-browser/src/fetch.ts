@@ -25,13 +25,21 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
     const url = urlOf(input, options.origin)
     if (options.ignore?.(url)) return original.call(this, input, init)
     const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
-    const { path } = pathOf(url, options.origin)
-    const span = apm.startSpan(`${method} ${path}`, {
-      kind: 'client',
-      attributes: { 'http.request.method': method, 'url.path': path },
-    })
+    const target = targetOf(url, options.origin)
+    const same = target?.origin === options.origin
+    const path = target ? target.pathname : pathOf(url, options.origin).path
+    const attributes: Attributes = { 'http.request.method': method, 'url.path': path }
+    if (target) {
+      attributes['server.address'] = target.hostname
+      attributes['url.scheme'] = target.protocol.slice(0, -1)
+      if (target.port) attributes['server.port'] = Number(target.port)
+    }
+    const span = apm.startSpan(
+      same || !target ? `${method} ${path}` : `${method} ${target.host}${path}`,
+      { kind: 'client', attributes },
+    )
     let request = init
-    if (sameOrigin(url, options.origin)) {
+    if (same) {
       const headers = new Headers(
         init?.headers ?? (input instanceof Request ? input.headers : undefined),
       )
@@ -90,11 +98,11 @@ function urlOf(input: RequestInfo | URL, origin: string): string {
   return input.url
 }
 
-function sameOrigin(url: string, origin: string): boolean {
+function targetOf(url: string, origin: string): URL | null {
   try {
-    return new URL(url, origin).origin === origin
+    return new URL(url, origin)
   } catch {
-    return false
+    return null
   }
 }
 

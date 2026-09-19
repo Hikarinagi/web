@@ -93,7 +93,25 @@ describe('instrumentFetch', () => {
     expect((calls[1]!.input as Request).headers.get('baggage')).toBeNull()
     await fetch('https://apm.test/v1/traces', { method: 'POST' })
     await apm.flush()
-    expect(spansOf(sent).map((s: any) => s.name)).toEqual(['GET /a.png', 'GET /b.png'])
+    expect(spansOf(sent).map((s: any) => s.name)).toEqual([
+      'GET cdn.example/a.png',
+      'GET cdn.example/b.png',
+    ])
+  })
+
+  it('names cross-origin requests with their host and records the target', async () => {
+    await fetch('https://op.example.com:8443/api/track', { method: 'POST' })
+    await fetch('/api/v3/user/me')
+    await apm.flush()
+    const [external, own] = spansOf(sent)
+    expect(external.name).toBe('POST op.example.com:8443/api/track')
+    expect(attr(external, 'server.address')).toEqual({ stringValue: 'op.example.com' })
+    expect(attr(external, 'server.port')).toEqual({ intValue: '8443' })
+    expect(attr(external, 'url.scheme')).toEqual({ stringValue: 'https' })
+    expect(attr(external, 'url.path')).toEqual({ stringValue: '/api/track' })
+    expect(own.name).toBe('GET /api/v3/user/me')
+    expect(attr(own, 'server.address')).toEqual({ stringValue: 'www.hikarinagi.org' })
+    expect(attr(own, 'server.port')).toBeUndefined()
   })
 
   it('marks api failures with the biz code from the envelope', async () => {
