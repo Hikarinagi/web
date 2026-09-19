@@ -3,6 +3,7 @@
     Button,
     IconButton,
     Inline,
+    ScrollArea,
     Stack,
     Tabs,
     TabsContent,
@@ -92,7 +93,7 @@
     </Inline>
 
     <TabsContent :value="state.type" class="flex min-h-0 flex-1 flex-col">
-      <ScrollArea ref="listScroll" shadow="none" class="min-h-0 flex-1">
+      <ScrollArea ref="listScroll" :shadow="false" class="min-h-0 flex-1">
         <Stack gap="none" class="px-3 py-3">
           <LoadingOverlay
             v-if="page.items.length"

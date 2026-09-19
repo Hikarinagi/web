@@ -8,7 +8,7 @@
 
 <template>
   <Card :padded="false">
-    <ScrollArea axis="x" wheel-to-horizontal>
+    <ScrollArea direction="horizontal">
       <Inline gap="none" align="stretch" :wrap="false" class="min-w-max divide-x divide-line py-4">
         <Statistic
           v-for="cell in cells"

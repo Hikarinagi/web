@@ -8189,7 +8189,7 @@ export interface paths {
             cookie?: never;
         };
         /** 角色详情 */
-        get: operations["OpenCharacterController_getById"];
+        get: operations["character.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8206,7 +8206,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 详情 */
-        get: operations["OpenGalgameController_getById"];
+        get: operations["galgame.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8223,7 +8223,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 角色 */
-        get: operations["OpenGalgameController_getCharacters"];
+        get: operations["galgame.characters.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8240,7 +8240,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 开发商 */
-        get: operations["OpenGalgameController_getDevelopers"];
+        get: operations["galgame.developers.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8257,7 +8257,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 厂商 */
-        get: operations["OpenGalgameController_getProducers"];
+        get: operations["galgame.producers.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8274,7 +8274,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 相关作品 */
-        get: operations["OpenGalgameController_getRelations"];
+        get: operations["galgame.relations.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8291,7 +8291,7 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame Staff */
-        get: operations["OpenGalgameController_getStaff"];
+        get: operations["galgame.staff.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8308,7 +8308,7 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说详情 */
-        get: operations["OpenLightNovelController_getById"];
+        get: operations["light-novel.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8325,7 +8325,7 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说角色 */
-        get: operations["OpenLightNovelController_getCharacters"];
+        get: operations["light-novel.characters.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8342,7 +8342,7 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说人物 */
-        get: operations["OpenLightNovelController_getPeople"];
+        get: operations["light-novel.people.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8359,7 +8359,7 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说厂商 */
-        get: operations["OpenLightNovelController_getProducers"];
+        get: operations["light-novel.producers.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8376,7 +8376,7 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说分卷 */
-        get: operations["OpenLightNovelController_getVolumes"];
+        get: operations["light-novel.volumes.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8393,7 +8393,7 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画详情 */
-        get: operations["OpenMangaController_getById"];
+        get: operations["manga.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8410,7 +8410,7 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画角色 */
-        get: operations["OpenMangaController_getCharacters"];
+        get: operations["manga.characters.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8427,7 +8427,7 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画人物 */
-        get: operations["OpenMangaController_getPeople"];
+        get: operations["manga.people.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8444,7 +8444,7 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画厂商 */
-        get: operations["OpenMangaController_getProducers"];
+        get: operations["manga.producers.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8461,7 +8461,7 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画单行本 */
-        get: operations["OpenMangaController_getVolumes"];
+        get: operations["manga.volumes.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8478,7 +8478,7 @@ export interface paths {
             cookie?: never;
         };
         /** 人物详情 */
-        get: operations["OpenPersonController_getById"];
+        get: operations["person.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8495,7 +8495,7 @@ export interface paths {
             cookie?: never;
         };
         /** 厂商详情 */
-        get: operations["OpenProducerController_getById"];
+        get: operations["producer.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8512,7 +8512,7 @@ export interface paths {
             cookie?: never;
         };
         /** 条目搜索 */
-        get: operations["OpenSearchController_search"];
+        get: operations["search"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8529,7 +8529,7 @@ export interface paths {
             cookie?: never;
         };
         /** 公开资料 */
-        get: operations["OpenUserController_getMe"];
+        get: operations["user.profile.get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8546,10 +8546,10 @@ export interface paths {
             cookie?: never;
         };
         /** 收藏夹列表 */
-        get: operations["OpenUserCollectionController_list"];
+        get: operations["user.collection.list"];
         put?: never;
         /** 创建收藏夹 */
-        post: operations["OpenUserCollectionController_create"];
+        post: operations["user.collection.create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8564,15 +8564,15 @@ export interface paths {
             cookie?: never;
         };
         /** 收藏夹详情 */
-        get: operations["OpenUserCollectionController_get"];
+        get: operations["user.collection.get"];
         put?: never;
         post?: never;
         /** 删除收藏夹 */
-        delete: operations["OpenUserCollectionController_remove"];
+        delete: operations["user.collection.remove"];
         options?: never;
         head?: never;
         /** 修改收藏夹 */
-        patch: operations["OpenUserCollectionController_update"];
+        patch: operations["user.collection.update"];
         trace?: never;
     };
     "/api/v3/open/user/me/collections/{id}/galgames/{work_id}": {
@@ -8584,10 +8584,10 @@ export interface paths {
         };
         get?: never;
         /** 将 Galgame 收入收藏夹 */
-        put: operations["OpenUserCollectionController_addGalgame"];
+        put: operations["user.collection.galgame.add"];
         post?: never;
         /** 从收藏夹移除 Galgame */
-        delete: operations["OpenUserCollectionController_removeGalgame"];
+        delete: operations["user.collection.galgame.remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8601,7 +8601,7 @@ export interface paths {
             cookie?: never;
         };
         /** 收藏夹内的条目 */
-        get: operations["OpenUserCollectionController_items"];
+        get: operations["user.collection.items.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8619,10 +8619,10 @@ export interface paths {
         };
         get?: never;
         /** 将轻小说收入收藏夹 */
-        put: operations["OpenUserCollectionController_addLightNovel"];
+        put: operations["user.collection.light-novel.add"];
         post?: never;
         /** 从收藏夹移除轻小说 */
-        delete: operations["OpenUserCollectionController_removeLightNovel"];
+        delete: operations["user.collection.light-novel.remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8637,10 +8637,10 @@ export interface paths {
         };
         get?: never;
         /** 将漫画收入收藏夹 */
-        put: operations["OpenUserCollectionController_addManga"];
+        put: operations["user.collection.manga.add"];
         post?: never;
         /** 从收藏夹移除漫画 */
-        delete: operations["OpenUserCollectionController_removeManga"];
+        delete: operations["user.collection.manga.remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8654,7 +8654,7 @@ export interface paths {
             cookie?: never;
         };
         /** 状态与评分记录 */
-        get: operations["OpenUserRateController_list"];
+        get: operations["user.rate.list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -8671,12 +8671,12 @@ export interface paths {
             cookie?: never;
         };
         /** Galgame 的状态与评分 */
-        get: operations["OpenUserRateController_getGalgame"];
+        get: operations["user.rate.galgame.get"];
         /** 记录 Galgame 的状态与评分 */
-        put: operations["OpenUserRateController_upsertGalgame"];
+        put: operations["user.rate.galgame.upsert"];
         post?: never;
         /** 撤回 Galgame 的记录 */
-        delete: operations["OpenUserRateController_withdrawGalgame"];
+        delete: operations["user.rate.galgame.withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8690,12 +8690,12 @@ export interface paths {
             cookie?: never;
         };
         /** 轻小说的状态与评分 */
-        get: operations["OpenUserRateController_getLightNovel"];
+        get: operations["user.rate.light-novel.get"];
         /** 记录轻小说的状态与评分 */
-        put: operations["OpenUserRateController_upsertLightNovel"];
+        put: operations["user.rate.light-novel.upsert"];
         post?: never;
         /** 撤回轻小说的记录 */
-        delete: operations["OpenUserRateController_withdrawLightNovel"];
+        delete: operations["user.rate.light-novel.withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8709,12 +8709,12 @@ export interface paths {
             cookie?: never;
         };
         /** 漫画的状态与评分 */
-        get: operations["OpenUserRateController_getManga"];
+        get: operations["user.rate.manga.get"];
         /** 记录漫画的状态与评分 */
-        put: operations["OpenUserRateController_upsertManga"];
+        put: operations["user.rate.manga.upsert"];
         post?: never;
         /** 撤回漫画的记录 */
-        delete: operations["OpenUserRateController_withdrawManga"];
+        delete: operations["user.rate.manga.withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -33329,7 +33329,7 @@ export interface operations {
             };
         };
     };
-    OpenCharacterController_getById: {
+    "character.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33350,7 +33350,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getById: {
+    "galgame.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33371,7 +33371,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getCharacters: {
+    "galgame.characters.list": {
         parameters: {
             query?: {
                 role?: components["schemas"]["CharacterRole"];
@@ -33394,7 +33394,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getDevelopers: {
+    "galgame.developers.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33415,7 +33415,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getProducers: {
+    "galgame.producers.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33436,7 +33436,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getRelations: {
+    "galgame.relations.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33457,7 +33457,7 @@ export interface operations {
             };
         };
     };
-    OpenGalgameController_getStaff: {
+    "galgame.staff.list": {
         parameters: {
             query?: {
                 role?: components["schemas"]["GalgameStaffRole"];
@@ -33480,7 +33480,7 @@ export interface operations {
             };
         };
     };
-    OpenLightNovelController_getById: {
+    "light-novel.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33501,7 +33501,7 @@ export interface operations {
             };
         };
     };
-    OpenLightNovelController_getCharacters: {
+    "light-novel.characters.list": {
         parameters: {
             query?: {
                 role?: components["schemas"]["CharacterRole"];
@@ -33524,7 +33524,7 @@ export interface operations {
             };
         };
     };
-    OpenLightNovelController_getPeople: {
+    "light-novel.people.list": {
         parameters: {
             query?: {
                 relation?: "author" | "illustrator";
@@ -33547,7 +33547,7 @@ export interface operations {
             };
         };
     };
-    OpenLightNovelController_getProducers: {
+    "light-novel.producers.list": {
         parameters: {
             query?: {
                 relation?: "bunko" | "publisher";
@@ -33570,7 +33570,7 @@ export interface operations {
             };
         };
     };
-    OpenLightNovelController_getVolumes: {
+    "light-novel.volumes.list": {
         parameters: {
             query?: {
                 sort?: "volume_number" | "recent";
@@ -33593,7 +33593,7 @@ export interface operations {
             };
         };
     };
-    OpenMangaController_getById: {
+    "manga.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33614,7 +33614,7 @@ export interface operations {
             };
         };
     };
-    OpenMangaController_getCharacters: {
+    "manga.characters.list": {
         parameters: {
             query?: {
                 role?: components["schemas"]["CharacterRole"];
@@ -33637,7 +33637,7 @@ export interface operations {
             };
         };
     };
-    OpenMangaController_getPeople: {
+    "manga.people.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33658,7 +33658,7 @@ export interface operations {
             };
         };
     };
-    OpenMangaController_getProducers: {
+    "manga.producers.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33679,7 +33679,7 @@ export interface operations {
             };
         };
     };
-    OpenMangaController_getVolumes: {
+    "manga.volumes.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33700,7 +33700,7 @@ export interface operations {
             };
         };
     };
-    OpenPersonController_getById: {
+    "person.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33721,7 +33721,7 @@ export interface operations {
             };
         };
     };
-    OpenProducerController_getById: {
+    "producer.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33742,7 +33742,7 @@ export interface operations {
             };
         };
     };
-    OpenSearchController_search: {
+    search: {
         parameters: {
             query: {
                 /** @description 搜索关键词 */
@@ -33770,7 +33770,7 @@ export interface operations {
             };
         };
     };
-    OpenUserController_getMe: {
+    "user.profile.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33789,7 +33789,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_list: {
+    "user.collection.list": {
         parameters: {
             query?: never;
             header?: never;
@@ -33808,7 +33808,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_create: {
+    "user.collection.create": {
         parameters: {
             query?: never;
             header?: never;
@@ -33831,7 +33831,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_get: {
+    "user.collection.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -33852,7 +33852,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_remove: {
+    "user.collection.remove": {
         parameters: {
             query?: never;
             header?: never;
@@ -33871,7 +33871,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_update: {
+    "user.collection.update": {
         parameters: {
             query?: never;
             header?: never;
@@ -33896,7 +33896,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_addGalgame: {
+    "user.collection.galgame.add": {
         parameters: {
             query?: never;
             header?: never;
@@ -33922,7 +33922,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_removeGalgame: {
+    "user.collection.galgame.remove": {
         parameters: {
             query?: never;
             header?: never;
@@ -33942,7 +33942,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_items: {
+    "user.collection.items.list": {
         parameters: {
             query: {
                 type?: "galgame" | "light_novel" | "manga" | "article" | "post";
@@ -33968,7 +33968,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_addLightNovel: {
+    "user.collection.light-novel.add": {
         parameters: {
             query?: never;
             header?: never;
@@ -33994,7 +33994,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_removeLightNovel: {
+    "user.collection.light-novel.remove": {
         parameters: {
             query?: never;
             header?: never;
@@ -34014,7 +34014,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_addManga: {
+    "user.collection.manga.add": {
         parameters: {
             query?: never;
             header?: never;
@@ -34040,7 +34040,7 @@ export interface operations {
             };
         };
     };
-    OpenUserCollectionController_removeManga: {
+    "user.collection.manga.remove": {
         parameters: {
             query?: never;
             header?: never;
@@ -34060,7 +34060,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_list: {
+    "user.rate.list": {
         parameters: {
             query: {
                 status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN";
@@ -34089,7 +34089,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_getGalgame: {
+    "user.rate.galgame.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -34110,7 +34110,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_upsertGalgame: {
+    "user.rate.galgame.upsert": {
         parameters: {
             query?: never;
             header?: never;
@@ -34135,7 +34135,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_withdrawGalgame: {
+    "user.rate.galgame.withdraw": {
         parameters: {
             query?: never;
             header?: never;
@@ -34154,7 +34154,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_getLightNovel: {
+    "user.rate.light-novel.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -34175,7 +34175,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_upsertLightNovel: {
+    "user.rate.light-novel.upsert": {
         parameters: {
             query?: never;
             header?: never;
@@ -34200,7 +34200,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_withdrawLightNovel: {
+    "user.rate.light-novel.withdraw": {
         parameters: {
             query?: never;
             header?: never;
@@ -34219,7 +34219,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_getManga: {
+    "user.rate.manga.get": {
         parameters: {
             query?: never;
             header?: never;
@@ -34240,7 +34240,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_upsertManga: {
+    "user.rate.manga.upsert": {
         parameters: {
             query?: never;
             header?: never;
@@ -34265,7 +34265,7 @@ export interface operations {
             };
         };
     };
-    OpenUserRateController_withdrawManga: {
+    "user.rate.manga.withdraw": {
         parameters: {
             query?: never;
             header?: never;

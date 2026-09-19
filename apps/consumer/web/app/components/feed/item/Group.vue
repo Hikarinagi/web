@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ScrollArea } from '@hina-ui/vue'
   import { timeFromNow } from '#imports'
   import { workPath as toWorkPath } from '#shared/utils/work'
   import type { FeedGroup } from '~/features/feed/feed'
@@ -39,7 +40,7 @@
       <span>{{ summary }}</span>
     </p>
 
-    <ScrollArea axis="x" shadow="end">
+    <ScrollArea direction="horizontal">
       <div class="flex min-w-max gap-2 pb-1">
         <WorkCardTrigger
           v-for="item in covers"

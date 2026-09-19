@@ -1,6 +1,18 @@
 <script setup lang="ts">
-  import { Drawer } from '@hina-ui/vue'
+  import {
+    Button,
+    Drawer,
+    Grid,
+    Heading,
+    Inline,
+    Select,
+    Slider,
+    Stack,
+    Switch,
+    Text,
+  } from '@hina-ui/vue'
   import type { BackendReaderSettings } from '~/components/hikari-reader/types'
+  import { cn } from '~/utils/cn'
   import type { HikariReaderDeviceSettings } from '../lib/device-settings'
   import {
     READER_FONT_FAMILIES,
@@ -18,6 +30,27 @@
   const settings = defineModel<BackendReaderSettings>('settings', { required: true })
   const device = defineModel<HikariReaderDeviceSettings>('device', { required: true })
   const visible = defineModel<boolean>('visible', { required: true })
+
+  const EYEBROW = 'tracking-wide text-muted uppercase'
+
+  // Select 把空串保留给「清空选择」，而「跟随书籍」在后端就存空串
+  const FONT_FAMILY_INHERIT = 'book'
+  const fontFamilyOptions = READER_FONT_FAMILIES.map(item => ({
+    ...item,
+    value: item.value || FONT_FAMILY_INHERIT,
+  }))
+  const fontFamily = computed(() => settings.value.font_family || FONT_FAMILY_INHERIT)
+
+  function setFontFamily(value: string | number | null | undefined) {
+    patch('font_family', value === FONT_FAMILY_INHERIT ? '' : String(value ?? ''))
+  }
+
+  function swatchClass(selected: boolean) {
+    return cn(
+      'hn-state-layer aspect-square hn-interactive justify-center rounded-lg border text-xs font-medium',
+      selected ? 'border-accent ring-2 ring-accent/30' : 'border-line',
+    )
+  }
 
   function applyPreset(index: number) {
     const preset = READER_THEME_PRESETS.find(item => item.index === index)
@@ -44,171 +77,165 @@
   ) {
     device.value = { ...device.value, [key]: value }
   }
+
+  function showEducation() {
+    visible.value = false
+    emit('replayEducation')
+  }
 </script>
 
 <template>
   <Drawer v-model:open="visible" side="end" size="md" title="阅读设置">
     <template #content>
-      <div class="flex flex-col gap-6">
-        <section class="space-y-2">
-          <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">主题</h3>
-          <div class="grid grid-cols-4 gap-2">
-            <Button
+      <Stack gap="lg">
+        <Stack as="section" gap="sm">
+          <Heading :level="3" size="xs" :class="EYEBROW">主题</Heading>
+          <Grid :cols="4" gap="sm">
+            <Inline
               v-tooltip="'跟随系统'"
-              unstyled
+              as="button"
               type="button"
-              class="relative flex aspect-square items-center justify-center overflow-hidden rounded-lg border text-xs font-medium transition-all"
-              :class="
-                settings.theme_index === READER_SYSTEM_THEME_INDEX
-                  ? 'border-primary ring-2 ring-primary/30'
-                  : 'border-surface-200 dark:border-surface-700'
-              "
+              gap="none"
+              :class="swatchClass(settings.theme_index === READER_SYSTEM_THEME_INDEX)"
               :style="{
                 backgroundImage: 'linear-gradient(135deg, #ffffff 0 50%, #1f2227 50% 100%)',
               }"
               @click="applySystem"
             >
-              <span class="text-white mix-blend-difference">系统</span>
-            </Button>
-            <Button
+              <Text as="span" size="xs" weight="medium" class="text-white mix-blend-difference">
+                系统
+              </Text>
+            </Inline>
+            <Inline
               v-for="preset in READER_THEME_PRESETS"
               :key="preset.index"
-              unstyled
+              as="button"
               type="button"
-              class="relative flex aspect-square items-center justify-center rounded-lg border text-xs font-medium transition-all"
-              :class="
-                settings.theme_index === preset.index
-                  ? 'border-primary ring-2 ring-primary/30'
-                  : 'border-surface-200 dark:border-surface-700'
-              "
-              :style="{
-                backgroundColor: preset.backgroundColor,
-                color: preset.textColor,
-              }"
+              gap="none"
+              :class="swatchClass(settings.theme_index === preset.index)"
+              :style="{ backgroundColor: preset.backgroundColor, color: preset.textColor }"
               @click="applyPreset(preset.index)"
             >
               {{ preset.label }}
-            </Button>
-          </div>
-        </section>
+            </Inline>
+          </Grid>
+        </Stack>
 
-        <section class="space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">字号</h3>
-            <span class="text-xs text-muted-color tabular-nums">{{ settings.font_size }}px</span>
-          </div>
+        <Stack as="section" gap="sm">
+          <Inline justify="between" align="center">
+            <Heading :level="3" size="xs" :class="EYEBROW">字号</Heading>
+            <Text size="xs" tone="muted" class="tabular-nums">{{ settings.font_size }}px</Text>
+          </Inline>
           <Slider
             :model-value="settings.font_size"
             :min="READER_FONT_SIZE_RANGE.min"
             :max="READER_FONT_SIZE_RANGE.max"
             :step="READER_FONT_SIZE_RANGE.step"
-            @update:model-value="
-              value => patch('font_size', Array.isArray(value) ? value[0]! : value)
-            "
+            @update:model-value="value => patch('font_size', value ?? settings.font_size)"
           />
-        </section>
+        </Stack>
 
-        <section class="space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">行距</h3>
-            <span class="text-xs text-muted-color tabular-nums">
+        <Stack as="section" gap="sm">
+          <Inline justify="between" align="center">
+            <Heading :level="3" size="xs" :class="EYEBROW">行距</Heading>
+            <Text size="xs" tone="muted" class="tabular-nums">
               {{ settings.line_height.toFixed(1) }}
-            </span>
-          </div>
+            </Text>
+          </Inline>
           <Slider
             :model-value="settings.line_height"
             :min="READER_LINE_HEIGHT_RANGE.min"
             :max="READER_LINE_HEIGHT_RANGE.max"
             :step="READER_LINE_HEIGHT_RANGE.step"
-            @update:model-value="
-              value => patch('line_height', Array.isArray(value) ? value[0]! : value)
-            "
+            @update:model-value="value => patch('line_height', value ?? settings.line_height)"
           />
-        </section>
+        </Stack>
 
-        <section class="space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">页边距</h3>
-            <span class="text-xs text-muted-color tabular-nums">{{ settings.margins }}px</span>
-          </div>
+        <Stack as="section" gap="sm">
+          <Inline justify="between" align="center">
+            <Heading :level="3" size="xs" :class="EYEBROW">页边距</Heading>
+            <Text size="xs" tone="muted" class="tabular-nums">{{ settings.margins }}px</Text>
+          </Inline>
           <Slider
             :model-value="settings.margins"
             :min="READER_MARGIN_RANGE.min"
             :max="READER_MARGIN_RANGE.max"
             :step="READER_MARGIN_RANGE.step"
-            @update:model-value="
-              value => patch('margins', Array.isArray(value) ? value[0]! : value)
-            "
+            @update:model-value="value => patch('margins', value ?? settings.margins)"
           />
-        </section>
+        </Stack>
 
-        <section class="space-y-2">
-          <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">字体</h3>
+        <Stack as="section" gap="sm">
+          <Heading :level="3" size="xs" :class="EYEBROW">字体</Heading>
           <Select
-            :model-value="settings.font_family"
-            :options="READER_FONT_FAMILIES"
-            option-label="label"
-            option-value="value"
+            :model-value="fontFamily"
+            :options="fontFamilyOptions"
             class="w-full"
-            @update:model-value="value => patch('font_family', value)"
+            @update:model-value="setFontFamily"
           />
-        </section>
+        </Stack>
 
-        <section class="space-y-3">
-          <HikariReaderSettingsToggleRow
+        <Stack as="section" gap="md">
+          <Switch
+            block
+            control-placement="end"
             :model-value="settings.show_progress"
-            label="显示进度"
             description="底部工具栏显示阅读进度"
             @update:model-value="value => patch('show_progress', value)"
-          />
-          <HikariReaderSettingsToggleRow
+          >
+            显示进度
+          </Switch>
+          <Switch
+            block
+            control-placement="end"
             :model-value="settings.show_time"
-            label="显示时间"
             description="底部工具栏显示当前时间"
             @update:model-value="value => patch('show_time', value)"
-          />
-          <HikariReaderSettingsToggleRow
+          >
+            显示时间
+          </Switch>
+          <Switch
+            block
+            control-placement="end"
             :model-value="settings.keep_screen_on"
-            label="保持屏幕常亮"
             description="在支持的浏览器上阅读时防止息屏"
             @update:model-value="value => patch('keep_screen_on', value)"
-          />
-        </section>
+          >
+            保持屏幕常亮
+          </Switch>
+        </Stack>
 
-        <section class="space-y-3">
-          <div class="space-y-1">
-            <h3 class="text-xs font-semibold tracking-wide text-muted-color uppercase">本设备</h3>
-            <p class="text-xs text-muted-color">以下选项只在当前设备生效，不会同步到其他设备</p>
-          </div>
-          <HikariReaderSettingsToggleRow
+        <Stack as="section" gap="md">
+          <Stack gap="xs">
+            <Heading :level="3" size="xs" :class="EYEBROW">本设备</Heading>
+            <Text size="xs" tone="muted">以下选项只在当前设备生效，不会同步到其他设备</Text>
+          </Stack>
+          <Switch
+            block
+            control-placement="end"
             :model-value="device.page_animation"
-            label="翻页动画"
             description="关闭后翻页直接切换，适合水墨屏等低刷新率设备"
             @update:model-value="value => patchDevice('page_animation', value)"
-          />
-          <HikariReaderSettingsToggleRow
+          >
+            翻页动画
+          </Switch>
+          <Switch
+            block
+            control-placement="end"
             :model-value="device.tap_zones"
-            label="点击区域翻页"
-            description="左侧 1/3 上一页，右侧 1/3 下一页，中间呼出工具栏"
+            description="左侧 1/3 上一页，右侧 1/3 下一页"
             @update:model-value="value => patchDevice('tap_zones', value)"
-          />
-        </section>
+          >
+            点击区域翻页
+          </Switch>
+        </Stack>
 
-        <section>
-          <Button
-            text
-            size="small"
-            label="操作说明"
-            class="px-0!"
-            @click="
-              () => {
-                visible = false
-                emit('replayEducation')
-              }
-            "
-          />
-        </section>
-      </div>
+        <Stack as="section" gap="none">
+          <Button variant="link" tone="neutral" size="sm" class="self-start" @click="showEducation">
+            操作说明
+          </Button>
+        </Stack>
+      </Stack>
     </template>
   </Drawer>
 </template>

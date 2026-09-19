@@ -30,6 +30,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
   && cp -R apps/consumer/web/.output /prod/frontend/.output \
   && rm -rf \
     /prod/frontend/app \
+    /prod/frontend/content \
+    /prod/frontend/content.config.ts \
     /prod/frontend/public \
     /prod/frontend/server \
     /prod/frontend/shared \

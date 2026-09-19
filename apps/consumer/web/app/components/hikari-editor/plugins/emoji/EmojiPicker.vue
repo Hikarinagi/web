@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Center, Popover, SimpleGrid, Skeleton, Stack } from '@hina-ui/vue'
+  import { Center, Popover, ScrollArea, SimpleGrid, Skeleton, Stack } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import { useEditorOverlays } from '../../composables/useEditorOverlays'
   import { EDITOR_PLUGIN_CONTEXT_KEY } from '../../plugins/types'

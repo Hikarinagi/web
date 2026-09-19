@@ -51,7 +51,7 @@
   <Panel
     title="确认内容显示等级"
     description="Wiki编辑需要完整检索条目。继续前需要至少能看到 NSFW 条目（可带模糊遮罩），否则部分条目会被门禁过滤。"
-    class="mx-auto max-w-2xl"
+    class="mx-auto w-full max-w-2xl"
   >
     <template #icon><ShieldAlert /></template>
     <Stack gap="md">

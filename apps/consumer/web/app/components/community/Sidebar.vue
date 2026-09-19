@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Space, Stack } from '@hina-ui/vue'
+  import { ScrollArea, Space, Stack } from '@hina-ui/vue'
   import type { ComponentPublicInstance } from 'vue'
 
   defineProps<{ follow?: boolean; footer?: boolean }>()

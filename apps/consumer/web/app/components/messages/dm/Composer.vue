@@ -82,7 +82,7 @@
       <HikariEditor v-else :editor="editor" />
     </Stack>
 
-    <ScrollArea v-if="attachments.length" axis="x" wheel-to-horizontal>
+    <ScrollArea v-if="attachments.length" direction="horizontal">
       <Inline gap="sm" :wrap="false" class="px-1 py-1.5">
         <Card
           v-for="m in attachments"

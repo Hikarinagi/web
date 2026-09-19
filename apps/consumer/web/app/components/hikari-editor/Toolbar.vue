@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Divider, Inline } from '@hina-ui/vue'
+  import { Divider, Inline, ScrollArea } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import Button from './toolbar/Button.vue'
   import Dropdown from './toolbar/Dropdown.vue'
@@ -56,7 +56,7 @@
 
 <template>
   <Inline gap="none" :wrap="false" class="max-w-full min-w-0 px-3 py-2">
-    <ScrollArea visibility="hidden" axis="x" shadow="both" class="min-w-0 flex-1">
+    <ScrollArea :scrollbar="false" direction="horizontal" class="min-w-0 flex-1">
       <Inline align="center" gap="md" :wrap="false" class="w-max">
         <template v-for="(group, idx) in renderedGroups" :key="group.key">
           <Inline align="center" gap="xs" :wrap="false">

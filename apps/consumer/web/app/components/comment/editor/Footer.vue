@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, IconButton, Inline, Text } from '@hina-ui/vue'
+  import { Button, IconButton, Inline, ScrollArea, Text } from '@hina-ui/vue'
   import { AtSign, Boxes, EyeOff, Image, Smile } from '@lucide/vue'
   import { cn } from '~/utils/cn'
 
@@ -39,13 +39,7 @@
 
 <template>
   <Inline gap="sm" :wrap="false" class="px-2 py-1.5">
-    <ScrollArea
-      axis="x"
-      shadow="end"
-      visibility="hidden"
-      wheel-to-horizontal
-      class="min-w-0 flex-1"
-    >
+    <ScrollArea direction="horizontal" :scrollbar="false" class="min-w-0 flex-1">
       <Inline gap="xs" class="min-w-max">
         <IconButton
           label="插入贴纸"

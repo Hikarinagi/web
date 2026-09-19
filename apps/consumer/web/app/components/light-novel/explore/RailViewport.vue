@@ -13,9 +13,9 @@
 </script>
 
 <template>
-  <ScrollArea axis="x" shadow="end" arrows class="-mx-6">
+  <ScrollRail class="-mx-6">
     <Flex gap="none" :class="contentClass">
       <slot />
     </Flex>
-  </ScrollArea>
+  </ScrollRail>
 </template>

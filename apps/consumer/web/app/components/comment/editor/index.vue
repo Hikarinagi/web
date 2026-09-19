@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Card, IconButton, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { Trash2 } from '@lucide/vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
@@ -173,7 +173,7 @@
         :transition="TRANSITION"
         class="overflow-hidden"
       >
-        <ScrollArea axis="x" class="px-3 pb-2">
+        <ScrollArea direction="horizontal" class="px-3 pb-2">
           <Inline gap="sm" :wrap="false">
             <Card
               v-for="m in attachments"

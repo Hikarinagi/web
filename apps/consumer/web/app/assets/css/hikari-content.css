@@ -121,8 +121,14 @@
 }
 .hikari-content .hikari-table-scroll {
   max-height: 70vh;
-  --hikari-scroll-shadow-inset-y: var(--hikari-table-head-h, 0px);
-  --hikari-scroll-shadow-inset-x: var(--hikari-table-head-w, 0px);
+}
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-start'],
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-end'] {
+  inset-inline-start: var(--hikari-table-head-w, 0px);
+}
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-start'],
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-end'] {
+  inset-block-start: var(--hikari-table-head-h, 0px);
 }
 .hikari-content table {
   table-layout: fixed;

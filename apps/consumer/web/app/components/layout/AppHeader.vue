@@ -55,16 +55,16 @@
             <ArrowLeft aria-hidden="true" />
           </IconButton>
           <AnimatePresence mode="wait" :initial="false">
-            <motion.h1
+            <motion.span
               :key="headerTitle"
-              class="truncate text-base font-semibold text-color"
+              class="truncate text-base font-semibold text-fg"
               :initial="{ opacity: 0, y: 8 }"
               :animate="{ opacity: 1, y: 0 }"
               :exit="{ opacity: 0, y: -8 }"
               :transition="TRANSITION_FAST"
             >
               {{ headerTitle }}
-            </motion.h1>
+            </motion.span>
           </AnimatePresence>
         </div>
         <NuxtLink

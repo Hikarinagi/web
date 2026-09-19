@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Center, Flex, Inline, Spinner, Stack } from '@hina-ui/vue'
+  import { Button, Center, Flex, Inline, ScrollArea, Spinner, Stack } from '@hina-ui/vue'
   import { useComposer } from '../composables/useComposer'
   import { usePostComposerDialog } from '../composables/usePostComposerDialog'
 
@@ -90,7 +90,7 @@
     <Center v-if="loading" class="h-40">
       <Spinner size="lg" />
     </Center>
-    <ScrollArea v-show="!loading" class="max-h-[calc(80vh-6rem)]" shadow="none">
+    <ScrollArea v-show="!loading" class="max-h-[calc(80vh-6rem)]" :shadow="false">
       <Flex gap="md" align="start" class="px-4 py-4">
         <Avatar :user="auth.user" class="size-9! shrink-0" />
         <FeedComposerBody

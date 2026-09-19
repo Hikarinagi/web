@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ScrollArea } from '@hina-ui/vue'
   import type { Conversation, DmPeer } from '~/features/messages/dm'
 
   defineOptions({ name: 'MessagesDmList' })

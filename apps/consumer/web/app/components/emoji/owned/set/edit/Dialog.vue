@@ -6,6 +6,7 @@
     DropdownMenuItem,
     Empty,
     Inline,
+    ScrollArea,
     Stack,
     Text,
   } from '@hina-ui/vue'

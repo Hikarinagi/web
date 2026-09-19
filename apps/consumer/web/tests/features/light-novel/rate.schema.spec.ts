@@ -25,19 +25,19 @@ describe('lightNovelRateSchema', () => {
   })
 
   // shares the `hours` schema with galgame; see tests/features/galgame/rate.schema.spec.ts
-  // for the full matrix of what PrimeVue's InputNumber emits under a mobile IME
+  // for the full matrix
   describe('time_to_finish_hours', () => {
     const parse = (time_to_finish_hours: unknown) =>
       v.safeParse(lightNovelRateSchema, { status: 'GOING', rate: 8, time_to_finish_hours })
 
-    it('coerces the raw string an IME commit produces', () => {
-      const result = parse('2.5')
+    it('takes the number the widget emits', () => {
+      const result = parse(2.5)
       expect(result.success).toBe(true)
       if (result.success) expect(result.output.time_to_finish_hours).toBe(2.5)
     })
 
-    it('rejects a grouped string instead of turning it into NaN', () => {
-      const result = parse('1,234')
+    it('rejects a string instead of coercing it', () => {
+      const result = parse('2.5')
       expect(result.success).toBe(false)
       if (!result.success) expect(result.issues[0]?.message).toBe('时长应为数字')
     })

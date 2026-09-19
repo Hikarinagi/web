@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Skeleton, Text } from '@hina-ui/vue'
+  import { Button, Inline, ScrollArea, Skeleton, Text } from '@hina-ui/vue'
   import { Clock } from '@lucide/vue'
   import type { UserCatalogSet } from '../composables/useUserEmojiCatalog'
   import { EMOJI_PICKER_IMAGE } from './image'
@@ -18,7 +18,7 @@
 
 <template>
   <Inline :wrap="false" gap="none" align="center" class="shrink-0 border-line">
-    <ScrollArea axis="x" visibility="hidden" class="min-w-0 flex-1">
+    <ScrollArea direction="horizontal" :scrollbar="false" class="min-w-0 flex-1">
       <Inline :wrap="false" gap="xs" align="center" class="w-max">
         <Button
           v-tooltip="{ content: '最近使用', side: 'bottom' }"

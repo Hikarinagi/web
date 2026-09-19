@@ -4,6 +4,7 @@
     Inline,
     Listbox,
     Popover,
+    ScrollArea,
     SearchInput,
     Sheet,
     Skeleton,

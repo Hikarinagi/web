@@ -1,11 +1,16 @@
 import type { ReadingPosition, ReaderController } from '@ritojs/kit'
 import type { Ref, ShallowRef } from 'vue'
-import { DEFAULT_READER_ERROR } from './session'
+import { DEFAULT_RUNTIME_ERROR } from './session'
+
+export interface ReaderRuntimeError {
+  message: string
+  source: string
+}
 
 interface ReaderEventTargets {
   currentPosition: ShallowRef<ReadingPosition | null>
   currentSpread: Ref<number>
-  error: Ref<string | null>
+  runtimeError: ShallowRef<ReaderRuntimeError | null>
   transitioning: Ref<boolean>
   totalSpreads: Ref<number>
 }
@@ -27,9 +32,9 @@ export function bindReaderEvents(controller: ReaderController, targets: ReaderEv
     controller.on('transitionEnd', () => {
       targets.transitioning.value = false
     }),
-    controller.on('error', ({ message }) => {
+    controller.on('error', ({ message, source }) => {
       targets.transitioning.value = false
-      targets.error.value = message || DEFAULT_READER_ERROR
+      targets.runtimeError.value = { message: message || DEFAULT_RUNTIME_ERROR, source }
     }),
   ]
 

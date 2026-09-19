@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Empty, Inline, SearchInput, Skeleton, Stack, Text } from '@hina-ui/vue'
+  import { Empty, Inline, ScrollArea, SearchInput, Skeleton, Stack, Text } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import type { Ref } from 'vue'
   import type { EntitySummaries } from '~/components/hikari-content/composables/useContentSummaries'

@@ -29,7 +29,7 @@
         </Link>
       </NuxtLink>
     </template>
-    <ScrollArea axis="x" shadow="both" arrows class="-mx-6">
+    <ScrollRail class="-mx-6">
       <Flex align="start" gap="none" class="min-w-max gap-3 px-6 pt-1 pb-3">
         <div
           v-for="item in volumes"
@@ -74,6 +74,6 @@
           </NuxtLink>
         </div>
       </Flex>
-    </ScrollArea>
+    </ScrollRail>
   </WorkSection>
 </template>

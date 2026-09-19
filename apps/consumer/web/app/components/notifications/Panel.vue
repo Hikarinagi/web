@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
+  import { ScrollArea, Spinner } from '@hina-ui/vue'
   import type { SystemMessageItem } from '~/features/notifications/notifications'
 
   defineProps<{ items: SystemMessageItem[]; loading?: boolean }>()

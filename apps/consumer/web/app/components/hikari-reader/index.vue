@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Lightbox } from '@hina-ui/vue'
+  import { Lightbox, Stack } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { TocEntry } from '@ritojs/core'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
@@ -13,7 +13,6 @@
   import { useReaderBookmarks } from './composables/useReaderBookmarks'
   import { useReaderClock } from './composables/useReaderClock'
   import { useReaderContextItems } from './composables/useReaderContextItems'
-  import { useReaderContextMenu } from './composables/useReaderContextMenu'
   import { useReaderControls } from './composables/useReaderControls'
   import { useReaderFootnotes } from './composables/useReaderFootnotes'
   import { useReaderImagePreview } from './composables/useReaderImagePreview'
@@ -62,18 +61,21 @@
     canGoPrevious,
     currentPosition,
     currentSpread,
+    dismissRuntimeError,
+    downloadProgress,
     error,
     goTo,
     goToPosition,
     goToSpread,
     isLoaded,
-    jumpToSpread,
     isLoading,
     load,
+    loadPhase,
     next,
     previous,
     progressPercentage,
     retry: retryReader,
+    runtimeError,
     surface,
     toc,
     totalSpreads,
@@ -133,19 +135,13 @@
   )
   const surfaceTap = useReaderTapNavigation({
     device,
-    isCoarsePointer: controls.isCoarsePointer,
     isLoaded,
     surface,
-    currentSpread,
-    jumpToSpread,
-    toggleToolbar: controls.toggle,
     next,
     previous,
     blocked: education.visible,
   })
 
-  const contextMenuEl = ref<HTMLElement | null>(null)
-  const contextMenu = useReaderContextMenu(contextMenuEl)
   const clock = useReaderClock()
   const bookmarks = useReaderBookmarks({
     volumeId: props.data.volume.id,
@@ -341,13 +337,7 @@
     exit: goBack,
   })
 
-  function onContextMenu(event: MouseEvent) {
-    if (education.visible.value) return
-    contextMenu.show(event)
-  }
-
   function onRootClick(event: MouseEvent) {
-    contextMenu.handleOutsidePointer(event.target)
     // The tap detector already acted on this gesture; the trailing compatibility
     // click must not be read as "pointer went down outside the toolbar".
     if (surfaceTap.consumeGhostClick()) return
@@ -372,31 +362,36 @@
   <div
     class="hikari-reader-root relative h-dvh overflow-hidden"
     :style="themeStyle"
-    @contextmenu="onContextMenu"
     @pointerdown.capture="onRootPointerDown"
     @click="onRootClick"
   >
-    <main class="relative h-dvh w-full overflow-hidden">
-      <div
-        ref="surface"
-        data-hikari-reader-surface
-        class="relative z-1 flex h-full w-full items-center justify-center overflow-hidden"
-        @pointerdown.capture="surfaceTap.onPointerDown"
-        @pointerup="surfaceTap.onPointerUp"
-        @pointercancel="surfaceTap.onPointerCancel"
-        @touchstart="surfaceTap.onTouchStart"
-        @touchend="surfaceTap.onTouchEnd"
-        @touchcancel="surfaceTap.onTouchCancel"
-      />
-      <HikariReaderStatusLayer
-        :loaded="isLoaded"
-        :loading="isLoading"
-        :error="error"
-        :online-reading-available="data.volume.online_reading_available"
-        @retry="retry"
-        @report="openReport"
-      />
-    </main>
+    <HikariReaderContextMenu :items="contextItems" :disabled="education.visible.value">
+      <Stack as="main" gap="none" class="relative h-dvh w-full overflow-hidden">
+        <div
+          ref="surface"
+          data-hikari-reader-surface
+          class="relative z-1 flex h-full w-full items-center justify-center overflow-hidden"
+          @pointerdown.capture="surfaceTap.onPointerDown"
+          @pointerup="surfaceTap.onPointerUp"
+          @pointercancel="surfaceTap.onPointerCancel"
+          @touchstart="surfaceTap.onTouchStart"
+          @touchend="surfaceTap.onTouchEnd"
+          @touchcancel="surfaceTap.onTouchCancel"
+        />
+        <HikariReaderStatusLayer
+          :loaded="isLoaded"
+          :loading="isLoading"
+          :error="error"
+          :runtime-error="runtimeError"
+          :phase="loadPhase"
+          :download="downloadProgress"
+          :online-reading-available="data.volume.online_reading_available"
+          @retry="retry"
+          @report="openReport"
+          @dismiss="dismissRuntimeError"
+        />
+      </Stack>
+    </HikariReaderContextMenu>
 
     <HikariReaderControllerFrame
       :visible="controls.visible.value"
@@ -543,26 +538,6 @@
       >
         <ReaderEducationOverlay :hints="educationHints" @dismiss="education.dismiss" />
       </motion.div>
-    </AnimatePresence>
-
-    <AnimatePresence>
-      <div
-        v-if="contextMenu.visible.value"
-        key="reader-context-menu"
-        data-reader-context-menu
-        class="pointer-events-none fixed inset-0 z-30"
-      >
-        <div
-          ref="contextMenuEl"
-          class="pointer-events-auto absolute"
-          :style="{
-            top: `${contextMenu.anchor.value.y}px`,
-            left: `${contextMenu.anchor.value.x}px`,
-          }"
-        >
-          <HikariReaderContextMenu :items="contextItems" @dismiss="contextMenu.dismiss" />
-        </div>
-      </div>
     </AnimatePresence>
 
     <Lightbox v-model:open="imagePreview.open.value" :items="imagePreview.items.value" />

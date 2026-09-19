@@ -15,7 +15,7 @@
 
 <template>
   <MangaHomeSection v-if="items.length" :title="title" :meta="meta" :to="to">
-    <ScrollArea axis="x" shadow="end" arrows class="-mx-6">
+    <ScrollRail class="-mx-6">
       <Inline gap="none" :wrap="false" align="stretch" class="min-w-max gap-4 px-6 pb-2">
         <MangaHomeCard
           v-for="(item, index) in items"
@@ -26,6 +26,6 @@
           class="w-37.5"
         />
       </Inline>
-    </ScrollArea>
+    </ScrollRail>
   </MangaHomeSection>
 </template>

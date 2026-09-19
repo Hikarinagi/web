@@ -40,12 +40,14 @@
         ? `${s.current_spread + 1} / ${s.total_spreads}`
         : '—'
     const progress = typeof s.progress === 'number' ? `${(s.progress * 100).toFixed(1)}%` : '—'
+    const runtime = s.runtime_error as { message?: string; source?: string } | null
     return {
       chapter: chapter?.title || '—',
       spread,
       progress,
       rito: ritoVersion?.core ? `Rito ${ritoVersion.core}` : '—',
-      error: (s.error as string | null) || null,
+      error: (s.error as string | null) || runtime?.message || null,
+      source: runtime?.source || null,
     }
   })
 
@@ -84,6 +86,12 @@
             <DescriptionTerm>报错</DescriptionTerm>
             <DescriptionDetails>
               <Text as="span" tone="danger" size="sm" class="break-all">{{ summary.error }}</Text>
+            </DescriptionDetails>
+          </template>
+          <template v-if="summary.source">
+            <DescriptionTerm>来源</DescriptionTerm>
+            <DescriptionDetails>
+              <Text as="span" tone="muted" size="sm" class="break-all">{{ summary.source }}</Text>
             </DescriptionDetails>
           </template>
         </DescriptionList>
