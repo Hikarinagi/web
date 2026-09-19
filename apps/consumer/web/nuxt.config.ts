@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     'nuxt-schema-org',
     '@nuxt/content',
+    '@hikarinagi/apm-browser/nuxt',
   ],
 
   site: { url: 'https://www.hikarinagi.org', name: 'Hikarinagi' },

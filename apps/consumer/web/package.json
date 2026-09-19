@@ -20,6 +20,8 @@
     "@floating-ui/dom": "^1.7.6",
     "@floating-ui/vue": "^1.1.11",
     "@hikarinagi/api-contract": "workspace:*",
+    "@hikarinagi/apm-browser": "workspace:*",
+    "@hikarinagi/apm-node": "workspace:*",
     "@hikarinagi/config": "workspace:*",
     "@hikarinagi/editor-schema": "workspace:*",
     "@hikarinagi/shared": "workspace:*",

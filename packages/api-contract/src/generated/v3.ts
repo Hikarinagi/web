@@ -6629,6 +6629,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/apm/issues/assigned": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InternalApmController_assigned"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/apm/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalApmController_listAssignees"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/catalog/changes": {
         parameters: {
             query?: never;
@@ -11958,6 +11990,28 @@ export interface components {
             rybbit_host: string | null;
             rybbit_site_id: string | null;
         };
+        ApmAssigneeDto: {
+            /** @description 头像对象存储路径 */
+            avatar: string | null;
+            id: number;
+            name: string;
+            nickname: string | null;
+        };
+        ApmAssigneesDto: {
+            items: components["schemas"]["ApmAssigneeDto"][];
+        };
+        ApmIssueAssignedDto: {
+            actor_id: number;
+            assignee_id: number;
+            error_name: string;
+            fingerprint: string;
+            message?: string;
+            /** Format: uri */
+            url: string;
+        };
+        ApmNotifyQueuedDto: {
+            queued: boolean;
+        };
         AppReleaseAndroidDto: {
             abi: string;
             sha256: string;
@@ -13329,7 +13383,8 @@ export interface components {
         };
         DirectEditDto: {
             resource_id: number;
-            resource_type: Record<string, never>;
+            /** @enum {string} */
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -16147,7 +16202,8 @@ export interface components {
             /** Format: date-time */
             created_before?: string;
             reasons?: string[];
-            status?: Record<string, never>;
+            /** @enum {string} */
+            status?: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             target_type?: string;
         };
         ModerationBulkDto: {
@@ -16406,7 +16462,6 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             submitter: components["schemas"]["UserRefDto"];
         };
-        Object: Record<string, never>;
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -16627,8 +16682,11 @@ export interface components {
             note: string;
             /** @description 简介译文 */
             trans_intro: string | null;
-            /** @description 厂商类型 */
-            type: string;
+            /**
+             * @description 厂商类型
+             * @enum {string}
+             */
+            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
             /** @description 官方网站 */
             website: string | null;
         };
@@ -16977,8 +17035,11 @@ export interface components {
             revised_at: string | null;
             /** @description 简介译文 */
             trans_intro: string | null;
-            /** @description 厂商类型 */
-            type: string;
+            /**
+             * @description 厂商类型
+             * @enum {string}
+             */
+            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
             /**
              * Format: date-time
              * @description 条目最后更新时间
@@ -18267,7 +18328,8 @@ export interface components {
             sub: number;
         };
         SyncStatusDto: {
-            status: Record<string, never>;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE" | "BANNED";
             sub: number;
         };
         SystemMessageDetailDto: {
@@ -19078,7 +19140,8 @@ export interface components {
             epub_curated: boolean;
         };
         UpdateWikiStatusDto: {
-            status: Record<string, never>;
+            /** @enum {string} */
+            status: "PENDING" | "REJECTED" | "PUBLISHED" | "DRAFT";
         };
         UpdateWorkFlagsDto: {
             locked?: boolean;
@@ -30825,6 +30888,48 @@ export interface operations {
             };
         };
     };
+    InternalApmController_assigned: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApmIssueAssignedDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApmNotifyQueuedDto"];
+                };
+            };
+        };
+    };
+    InternalApmController_listAssignees: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApmAssigneesDto"];
+                };
+            };
+        };
+    };
     InternalCatalogController_changes: {
         parameters: {
             query?: {
@@ -30941,7 +31046,7 @@ export interface operations {
                 /** @description 只看站内有下载资源的作品 */
                 downloadable?: boolean;
                 exclude_rated_covers?: boolean;
-                content_limit: components["schemas"]["Object"];
+                content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
                 character_id?: number;
                 tags?: string[];
                 exclude_tags?: string[];
@@ -31018,7 +31123,7 @@ export interface operations {
                 page: number;
                 page_size: number;
                 q: string;
-                content_limit: components["schemas"]["Object"];
+                content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             };
             header?: never;
             path?: never;

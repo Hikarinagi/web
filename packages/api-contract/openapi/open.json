@@ -1928,6 +1928,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "website": {
@@ -2970,6 +2976,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "updated_at": {

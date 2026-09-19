@@ -2381,6 +2381,94 @@
         ],
         "type": "object"
       },
+      "ApmAssigneeDto": {
+        "properties": {
+          "avatar": {
+            "description": "头像对象存储路径",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nickname": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "nickname",
+          "avatar"
+        ],
+        "type": "object"
+      },
+      "ApmAssigneesDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ApmAssigneeDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ApmIssueAssignedDto": {
+        "properties": {
+          "actor_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "assignee_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "error_name": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "fingerprint": {
+            "maxLength": 32,
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "maxLength": 2048,
+            "type": "string"
+          }
+        },
+        "required": [
+          "assignee_id",
+          "actor_id",
+          "fingerprint",
+          "error_name",
+          "url"
+        ],
+        "type": "object"
+      },
+      "ApmNotifyQueuedDto": {
+        "properties": {
+          "queued": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "queued"
+        ],
+        "type": "object"
+      },
       "AppReleaseAndroidDto": {
         "properties": {
           "abi": {
@@ -7896,7 +7984,18 @@
             "type": "number"
           },
           "resource_type": {
-            "type": "object"
+            "enum": [
+              "MANGA",
+              "LIGHT_NOVEL",
+              "CHARACTER",
+              "PRODUCER",
+              "PERSON",
+              "GALGAME",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA_VOLUME",
+              "TAG"
+            ],
+            "type": "string"
           },
           "snapshot": {
             "additionalProperties": true,
@@ -19076,7 +19175,15 @@
             "type": "array"
           },
           "status": {
-            "type": "object"
+            "enum": [
+              "PENDING",
+              "RUNNING",
+              "PASSED",
+              "REJECTED",
+              "NEEDS_HUMAN",
+              "FAILED"
+            ],
+            "type": "string"
           },
           "target_type": {
             "maxLength": 50,
@@ -20075,10 +20182,6 @@
         ],
         "type": "object"
       },
-      "Object": {
-        "properties": {},
-        "type": "object"
-      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -20716,6 +20819,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "website": {
@@ -21775,6 +21884,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "updated_at": {
@@ -27053,7 +27168,12 @@
       "SyncStatusDto": {
         "properties": {
           "status": {
-            "type": "object"
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "BANNED"
+            ],
+            "type": "string"
           },
           "sub": {
             "minimum": 1,
@@ -30246,7 +30366,13 @@
       "UpdateWikiStatusDto": {
         "properties": {
           "status": {
-            "type": "object"
+            "enum": [
+              "PENDING",
+              "REJECTED",
+              "PUBLISHED",
+              "DRAFT"
+            ],
+            "type": "string"
           }
         },
         "required": [
@@ -51003,6 +51129,58 @@
         ]
       }
     },
+    "/api/v3/internal/apm/issues/assigned": {
+      "post": {
+        "operationId": "InternalApmController_assigned",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApmIssueAssignedDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApmNotifyQueuedDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalApm"
+        ]
+      }
+    },
+    "/api/v3/internal/apm/users": {
+      "get": {
+        "operationId": "InternalApmController_listAssignees",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApmAssigneesDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalApm"
+        ]
+      }
+    },
     "/api/v3/internal/catalog/changes": {
       "get": {
         "operationId": "InternalCatalogController_changes",
@@ -51356,12 +51534,13 @@
             "name": "content_limit",
             "required": true,
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Object"
-                }
+              "default": "NEVER_SHOW_NSFW_CONTENT",
+              "enum": [
+                "NEVER_SHOW_NSFW_CONTENT",
+                "SHOW_WITH_SPOILER",
+                "JUST_SHOW"
               ],
-              "default": "NEVER_SHOW_NSFW_CONTENT"
+              "type": "string"
             }
           },
           {
@@ -51596,12 +51775,13 @@
             "name": "content_limit",
             "required": true,
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Object"
-                }
+              "default": "NEVER_SHOW_NSFW_CONTENT",
+              "enum": [
+                "NEVER_SHOW_NSFW_CONTENT",
+                "SHOW_WITH_SPOILER",
+                "JUST_SHOW"
               ],
-              "default": "NEVER_SHOW_NSFW_CONTENT"
+              "type": "string"
             }
           }
         ],

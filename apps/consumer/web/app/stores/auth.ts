@@ -15,7 +15,10 @@ export const useAuthStore = defineStore('auth', () => {
     const nextId = nextUser?.id ?? null
     user.value = nextUser
     loaded.value = true
-    if (prevId !== nextId) emitAuthChange()
+    if (prevId !== nextId) {
+      emitAuthChange()
+      useApm().identify(nextId === null ? null : String(nextId))
+    }
   }
 
   function setLoading(nextLoading: boolean) {

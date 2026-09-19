@@ -67,4 +67,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=5 \
   CMD node -e "fetch('http://127.0.0.1:' + (process.env.NITRO_PORT || '3000') + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 ENTRYPOINT ["tini", "--"]
-CMD ["node", ".output/server/index.mjs"]
+CMD ["node", "--import", "@hikarinagi/apm-node/preload", ".output/server/index.mjs"]
