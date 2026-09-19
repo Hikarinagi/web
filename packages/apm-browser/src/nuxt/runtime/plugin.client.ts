@@ -4,6 +4,7 @@ import { createApm } from '../../apm.js'
 import { instrumentFetch } from '../../fetch.js'
 import type { Apm } from '../../types.js'
 import type { ApmRuntimeConfig } from '../module.js'
+import { installApm } from './composables.js'
 import { environmentOf } from './environment.js'
 
 export default defineNuxtPlugin({
@@ -21,6 +22,7 @@ export default defineNuxtPlugin({
       environment: environmentOf(window.location.hostname),
       sampleRate: Number(config.sampleRate ?? 0.05),
     })
+    installApm(apm)
     apm.installGlobalHandlers()
     instrumentFetch(apm, {
       origin: window.location.origin,
