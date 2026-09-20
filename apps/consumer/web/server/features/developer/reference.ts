@@ -1,20 +1,11 @@
 import { highlightCode } from '../../utils/code-highlight'
 import openSpec from '@hikarinagi/api-contract/openapi/open.json'
 
-export type ReferenceControl =
-  | { kind: 'string'; maxLength?: number }
-  | { kind: 'number'; min?: number; max?: number }
-  | { kind: 'boolean' }
-  | { kind: 'enum'; multiple: boolean; options: ReferenceEnumValue[] }
-
 export interface ReferenceParam {
   name: string
-  in: string
   required: boolean
   type: string
   description?: string
-  defaultValue?: string
-  control: ReferenceControl
 }
 
 export interface ReferenceEnumValue {
@@ -75,10 +66,6 @@ interface SpecSchema {
   'x-enum-descriptions'?: Record<string, string>
   description?: string
   additionalProperties?: SpecSchema | boolean
-  default?: string | number | boolean
-  minimum?: number
-  maximum?: number
-  maxLength?: number
 }
 
 interface SpecOperation {
@@ -158,38 +145,6 @@ function typeLabel(schema: SpecSchema): string {
   }
   const base = schema.type ?? 'object'
   return schema.nullable ? `${base} | null` : base
-}
-
-function enumOptions(schema: SpecSchema): ReferenceEnumValue[] {
-  const { schema: resolved } = resolveRef(schema)
-  const labels = schema['x-enum-descriptions'] ?? resolved['x-enum-descriptions']
-  const values = resolved.enum ?? schema.enum ?? []
-  return values.map(value => ({
-    value: String(value),
-    label: labels?.[String(value)] ?? String(value),
-  }))
-}
-
-function controlOf(schema: SpecSchema): ReferenceControl {
-  if (schema.type === 'array') {
-    const options = enumOptions(schema.items ?? {})
-    if (options.length) return { kind: 'enum', multiple: true, options }
-    return { kind: 'string' }
-  }
-  const options = enumOptions(schema)
-  if (options.length) return { kind: 'enum', multiple: false, options }
-  if (schema.type === 'boolean') return { kind: 'boolean' }
-  if (schema.type === 'number' || schema.type === 'integer') {
-    return {
-      kind: 'number',
-      ...(schema.minimum !== undefined ? { min: schema.minimum } : {}),
-      ...(schema.maximum !== undefined ? { max: schema.maximum } : {}),
-    }
-  }
-  return {
-    kind: 'string',
-    ...(schema.maxLength !== undefined ? { maxLength: schema.maxLength } : {}),
-  }
 }
 
 function fieldsOf(schema: SpecSchema, depth = 0): ReferenceField[] {
@@ -314,14 +269,9 @@ function toOperation(
     description: op.description,
     params: (op.parameters ?? []).map(parameter => ({
       name: parameter.name,
-      in: parameter.in,
       required: parameter.required ?? false,
       type: typeLabel(parameter.schema ?? {}),
       description: parameter.description,
-      ...(parameter.schema?.default !== undefined
-        ? { defaultValue: String(parameter.schema.default) }
-        : {}),
-      control: controlOf(parameter.schema ?? {}),
     })),
     ...(requestSchema ? { request: fieldsOf(requestSchema) } : {}),
     paginated,
@@ -342,42 +292,25 @@ function toOperation(
   }
 }
 
-export async function highlightOperation(
-  operation: ReferenceOperation,
-): Promise<ReferenceOperation> {
-  return {
-    ...operation,
-    curlHtml: await highlightCode(operation.curl, 'bash'),
-    jsHtml: await highlightCode(operation.js, 'javascript'),
-    ...(operation.responseExample
-      ? { responseHtml: await highlightCode(operation.responseExample, 'json') }
-      : {}),
-  }
-}
-
-export interface ReferenceNavGroup {
-  tag: string
-  title: string
-  auth: ReferenceAuth
-  operations: { id: string; method: string; path: string; summary?: string; scopes: string[] }[]
-}
-
-export function referenceNav(base: string): ReferenceNavGroup[] {
-  return referenceGroups(base).map(group => ({
-    tag: group.tag,
-    title: group.title,
-    auth: group.auth,
-    operations: group.operations.map(operation => ({
-      id: operation.id,
-      method: operation.method,
-      path: operation.path,
-      summary: operation.summary,
-      scopes: operation.scopes,
+export async function highlightGroups(groups: ReferenceGroup[]): Promise<ReferenceGroup[]> {
+  return Promise.all(
+    groups.map(async group => ({
+      ...group,
+      operations: await Promise.all(
+        group.operations.map(async operation => ({
+          ...operation,
+          curlHtml: await highlightCode(operation.curl, 'bash'),
+          jsHtml: await highlightCode(operation.js, 'javascript'),
+          ...(operation.responseExample
+            ? { responseHtml: await highlightCode(operation.responseExample, 'json') }
+            : {}),
+        })),
+      ),
     })),
-  }))
+  )
 }
 
-function buildGroups(base: string): ReferenceGroup[] {
+export function referenceGroups(base: string): ReferenceGroup[] {
   const tags = spec.tags ?? []
   return tags.map(tag => {
     const auth = TAG_AUTH[tag.name] ?? 'app'
@@ -393,59 +326,4 @@ function buildGroups(base: string): ReferenceGroup[] {
       ),
     }
   })
-}
-
-const groupsByBase = new Map<string, ReferenceGroup[]>()
-
-export function referenceGroups(base: string): ReferenceGroup[] {
-  const cached = groupsByBase.get(base)
-  if (cached) return cached
-  const groups = buildGroups(base)
-  groupsByBase.set(base, groups)
-  return groups
-}
-
-export interface ReferenceEntry {
-  id: string
-  method: string
-  path: string
-  summary?: string
-  tag: string
-  groupTitle: string
-  auth: ReferenceAuth
-  scopes: string[]
-  paginated: boolean
-}
-
-export function referenceIndex(base: string): ReferenceEntry[] {
-  return referenceGroups(base).flatMap(group =>
-    group.operations.map(operation => ({
-      id: operation.id,
-      method: operation.method,
-      path: operation.path,
-      summary: operation.summary,
-      tag: group.tag,
-      groupTitle: group.title,
-      auth: group.auth,
-      scopes: operation.scopes,
-      paginated: operation.paginated,
-    })),
-  )
-}
-
-export function referenceOperation(base: string, id: string) {
-  for (const group of referenceGroups(base)) {
-    const operation = group.operations.find(item => item.id === id)
-    if (operation) return { group, operation }
-  }
-  return null
-}
-
-export function referenceOperationIds(): string[] {
-  return Object.values(spec.paths).flatMap(methods =>
-    Object.values(methods)
-      .filter(op => op.tags?.some(tag => TAG_TITLE[tag] !== undefined))
-      .map(op => op.operationId)
-      .filter((id): id is string => Boolean(id)),
-  )
 }

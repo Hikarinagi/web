@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { Button, Dialog, Form, FormField, Input, Switch, Textarea } from '@hina-ui/vue'
+  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { collectionSchema } from '~/features/favorite/schemas/collection.schema'
-  import { getFieldErrors } from '~/utils/api/error'
+  import {
+    type CollectionValues,
+    collectionResolver,
+  } from '~/features/favorite/schemas/collection.schema'
 
   defineOptions({ name: 'SpaceFavoriteEditDialog' })
 
@@ -19,26 +21,36 @@
   const emit = defineEmits<{ saved: [collection: SavedCollection, isNew: boolean] }>()
 
   const isEdit = computed(() => Boolean(props.collection))
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
+  const formErrors = useFormErrors(collectionResolver)
+  const form = useTemplateRef<FormInstance>('form')
   const submitting = ref(false)
-  const values = reactive({ name: '', description: '', is_private: false })
+
+  const initialValues = computed(() =>
+    props.collection
+      ? {
+          name: props.collection.name,
+          description: props.collection.description ?? '',
+          is_private: props.collection.is_private,
+        }
+      : undefined,
+  )
 
   watch(visible, next => {
-    if (!next) return
-    form.value?.reset()
-    values.name = props.collection?.name ?? ''
-    values.description = props.collection?.description ?? ''
-    values.is_private = props.collection?.is_private ?? false
+    if (next) {
+      formErrors.clear()
+      form.value?.reset()
+    }
   })
 
-  async function onSubmit() {
-    if (submitting.value) return
+  async function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid || submitting.value) return
     submitting.value = true
     try {
+      const values = event.values as CollectionValues
       const body = {
-        name: values.name.trim(),
-        description: values.description.trim() || undefined,
-        is_private: values.is_private,
+        name: values.name,
+        description: values.description?.length ? values.description : undefined,
+        is_private: values.is_private ?? false,
       }
       if (props.collection) {
         const saved = (await hikariRequest<'/api/v3/favorite-collections/{collection_id}', 'patch'>(
@@ -55,7 +67,7 @@
       }
       visible.value = false
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     } finally {
       submitting.value = false
     }
@@ -64,38 +76,39 @@
 
 <template>
   <Dialog
-    v-model:open="visible"
-    :title="isEdit ? '编辑收藏夹' : '新建收藏夹'"
-    size="sm"
-    :locked="submitting"
+    v-model:visible="visible"
+    modal
+    :header="isEdit ? '编辑收藏夹' : '新建收藏夹'"
+    :dismissable-mask="!submitting"
+    :close-on-escape="!submitting"
+    :style="{ width: '92vw', maxWidth: '26rem' }"
   >
-    <template #content>
-      <Form
-        ref="form"
-        :values="values"
-        :rules="collectionSchema"
-        :disabled="submitting"
-        @submit="onSubmit"
-      >
-        <FormField name="name" label="名称" required>
-          <Input v-model="values.name" autocomplete="off" placeholder="例如：今年最爱" />
-        </FormField>
-
-        <FormField name="description" label="简介">
-          <Textarea v-model="values.description" autosize placeholder="这个收藏夹收什么（可选）" />
-        </FormField>
-
-        <FormField name="is_private">
-          <Switch v-model="values.is_private" control-placement="end" block>设为私密</Switch>
-        </FormField>
-      </Form>
-    </template>
-
-    <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
-        取消
-      </Button>
-      <Button :loading="submitting" @click="form?.submit()">{{ isEdit ? '保存' : '创建' }}</Button>
-    </template>
+    <Form
+      ref="form"
+      :initial-values="initialValues"
+      :resolver="formErrors.resolver"
+      class="flex flex-col gap-4"
+      @input="formErrors.clear"
+      @submit="onSubmit"
+    >
+      <FormItem v-slot="{ id }" name="name" label="名称" required>
+        <InputText :id="id" autocomplete="off" fluid placeholder="例如:今年最爱" />
+      </FormItem>
+      <FormItem v-slot="{ id }" name="description" label="简介">
+        <Textarea :id="id" auto-resize rows="2" fluid placeholder="这个收藏夹收什么（可选）" />
+      </FormItem>
+      <FormItem v-slot="{ id }" name="is_private" label="设为私密">
+        <ToggleSwitch :input-id="id" />
+      </FormItem>
+      <div class="flex justify-end gap-2 pt-1">
+        <Button label="取消" text size="small" :disabled="submitting" @click="visible = false" />
+        <Button
+          type="submit"
+          :label="isEdit ? '保存' : '创建'"
+          size="small"
+          :loading="submitting"
+        />
+      </div>
+    </Form>
   </Dialog>
 </template>

@@ -69,6 +69,7 @@ export function useReaderControls(options: UseReaderControlsOptions) {
     if (mode.value === 'hidden') return
     if (!(target instanceof HTMLElement)) return
     if (target.closest('[data-reader-ui]')) return
+    if (target.closest('[data-reader-context-menu]')) return
     hide()
   }
 

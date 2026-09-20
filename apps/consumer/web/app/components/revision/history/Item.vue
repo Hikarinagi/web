@@ -63,7 +63,7 @@
       class="flex min-w-0 items-center gap-2 border-t border-surface-100 px-4 py-3 text-xs md:justify-end md:border-t-0 md:border-l md:border-surface-200 md:py-4 dark:border-surface-800"
     >
       <UserCardTrigger :user-id="revision.editor.id">
-        <Avatar :user="revision.editor" class="size-6!" />
+        <Avatar :user="revision.editor" shape="circle" class="size-6!" />
       </UserCardTrigger>
       <UserName :user="revision.editor" class="min-w-0 text-surface-700 dark:text-surface-200" />
     </div>

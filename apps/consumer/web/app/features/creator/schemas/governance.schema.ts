@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const permissionGroupSchema = v.object({
@@ -15,6 +16,7 @@ export const permissionGroupSchema = v.object({
   permissions: v.pipe(v.array(v.string()), v.minLength(1, '至少勾选一项权限'), v.maxLength(200)),
 })
 export type PermissionGroupValues = v.InferOutput<typeof permissionGroupSchema>
+export const permissionGroupResolver = valibotResolver(permissionGroupSchema)
 
 export const addPermissionGroupMemberSchema = v.object({
   user_id: v.pipe(
@@ -24,6 +26,7 @@ export const addPermissionGroupMemberSchema = v.object({
   ),
 })
 export type AddPermissionGroupMemberValues = v.InferOutput<typeof addPermissionGroupMemberSchema>
+export const addPermissionGroupMemberResolver = valibotResolver(addPermissionGroupMemberSchema)
 
 export const rejectReviewGroupApplicationSchema = v.object({
   rejection_reason: v.pipe(
@@ -36,6 +39,9 @@ export const rejectReviewGroupApplicationSchema = v.object({
 export type RejectReviewGroupApplicationValues = v.InferOutput<
   typeof rejectReviewGroupApplicationSchema
 >
+export const rejectReviewGroupApplicationResolver = valibotResolver(
+  rejectReviewGroupApplicationSchema,
+)
 
 export const applyReviewGroupSchema = v.object({
   permission_group_id: v.pipe(v.number('请选择审核组'), v.integer(), v.minValue(1, '请选择审核组')),
@@ -57,3 +63,4 @@ export const applyReviewGroupSchema = v.object({
   images: v.optional(v.pipe(v.array(v.number()), v.maxLength(20))),
 })
 export type ApplyReviewGroupValues = v.InferOutput<typeof applyReviewGroupSchema>
+export const applyReviewGroupResolver = valibotResolver(applyReviewGroupSchema)

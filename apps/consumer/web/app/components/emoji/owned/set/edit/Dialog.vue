@@ -1,16 +1,7 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Dialog,
-    DropdownMenu,
-    DropdownMenuItem,
-    Empty,
-    Inline,
-    ScrollArea,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
   import { ImageUp, Trash2, Upload } from '@lucide/vue'
+  import type Menu from 'primevue/menu'
+  import type { MenuItem } from 'primevue/menuitem'
   import type { MyEmojiSet } from '~/features/emoji/composables/useMySets'
 
   type Emoji = MyEmojiSet['emojis'][number]
@@ -24,12 +15,11 @@
     'catalog-changed': []
   }>()
 
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
   const uploadDialogOpen = ref(false)
   const uploadDialogTarget = ref<Emoji | null>(null)
   const deletingEmojiId = ref<number | null>(null)
-  const menuOpen = ref(false)
-  const menuAnchor = shallowRef<HTMLElement | null>(null)
+  const menu = ref<InstanceType<typeof Menu> | null>(null)
   const activeEmojiId = ref<number | null>(null)
   const activeEmoji = computed(() =>
     activeEmojiId.value !== null
@@ -37,9 +27,23 @@
       : null,
   )
 
-  const menuBusy = computed(() => {
+  const menuItems = computed<MenuItem[]>(() => {
     const emoji = activeEmoji.value
-    return !emoji || deletingEmojiId.value === emoji.id
+    return [
+      {
+        label: '替换图片',
+        iconComponent: ImageUp,
+        disabled: !emoji || deletingEmojiId.value === emoji?.id,
+        command: () => emoji && openReplace(emoji),
+      },
+      {
+        label: '删除',
+        iconComponent: Trash2,
+        danger: true,
+        disabled: !emoji || deletingEmojiId.value === emoji.id,
+        command: () => emoji && confirmDeleteEmoji(emoji),
+      },
+    ]
   })
 
   function openCreate() {
@@ -69,24 +73,24 @@
   }
 
   function onMoreClick(event: MouseEvent, emojiId: number) {
-    const trigger = event.currentTarget ?? event.target
     activeEmojiId.value = emojiId
-    menuAnchor.value = trigger instanceof HTMLElement ? trigger : null
-    menuOpen.value = true
+    menu.value?.show(event)
   }
 
   function confirmDeleteEmoji(emoji: Emoji) {
-    confirm({
-      title: '删除贴纸',
-      description: `确认删除「${emoji.name}」？此名字永远无法在该贴纸包中重复使用，历史文章中仍会保留此贴纸渲染。`,
-      confirmText: '删除',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: () => performDeleteEmoji(emoji.id),
+    confirm.require({
+      group: 'app-shell',
+      header: '删除贴纸',
+      message: `确认删除「${emoji.name}」？此名字永远无法在该贴纸包中重复使用，历史文章中仍会保留此贴纸渲染。`,
+      acceptLabel: '删除',
+      rejectLabel: '取消',
+      closeOnEscape: false,
+      loading: () => deletingEmojiId.value === emoji.id,
+      onAccept: ({ close }) => void performDeleteEmoji(emoji.id, close).catch(() => {}),
     })
   }
 
-  async function performDeleteEmoji(emojiId: number) {
+  async function performDeleteEmoji(emojiId: number, close?: () => void) {
     if (deletingEmojiId.value !== null) return
     deletingEmojiId.value = emojiId
     try {
@@ -94,6 +98,7 @@
         '/api/v3/emoji/sets/{setId}/emojis/{emojiId}',
         { method: 'delete', path: { setId: props.set.id, emojiId } },
       )
+      close?.()
       emit('replace', {
         ...props.set,
         emojis: props.set.emojis.filter(e => e.id !== emojiId),
@@ -107,62 +112,69 @@
 </script>
 
 <template>
-  <Dialog v-model:open="open" size="lg" :title="`编辑 ${set.name}`">
-    <template #content>
-      <Stack gap="sm">
-        <Inline align="center" justify="between" :wrap="false">
-          <Text size="xs" tone="muted">{{ set.emojis.length }} 个贴纸（上限 200）</Text>
-          <Button variant="outline" tone="neutral" size="sm" @click="openCreate">
-            <template #icon><Upload /></template>
-            上传贴纸
-          </Button>
-        </Inline>
-
-        <Empty v-if="set.emojis.length === 0" description="还没有贴纸，点击上方按钮上传第一个" />
-        <ScrollArea v-else class="max-h-[60vh]">
-          <Stack gap="none">
-            <EmojiOwnedSetEditItem
-              v-for="emoji in set.emojis"
-              :key="emoji.id"
-              :emoji="emoji"
-              :deleting="deletingEmojiId === emoji.id"
-              @more-click="onMoreClick"
-            />
-          </Stack>
-        </ScrollArea>
-      </Stack>
-    </template>
-  </Dialog>
-
-  <DropdownMenu
-    v-model:open="menuOpen"
-    :anchor="menuAnchor"
-    label="贴纸操作"
-    align="end"
-    class="w-36"
+  <Dialog
+    v-model:visible="open"
+    modal
+    :header="`编辑 ${set.name}`"
+    :scroll="false"
+    :style="{ width: '92vw', maxWidth: '32rem' }"
+    :pt="{ content: { class: '!flex !min-h-0 !flex-col' } }"
   >
-    <template #content>
-      <DropdownMenuItem :disabled="menuBusy" @select="activeEmoji && openReplace(activeEmoji)">
-        <template #icon><ImageUp /></template>
-        替换图片
-      </DropdownMenuItem>
-      <DropdownMenuItem
-        tone="danger"
-        :disabled="menuBusy"
-        @select="activeEmoji && confirmDeleteEmoji(activeEmoji)"
-      >
-        <template #icon><Trash2 /></template>
-        删除
-      </DropdownMenuItem>
-    </template>
-  </DropdownMenu>
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <p class="text-xs text-muted-color">{{ set.emojis.length }} 个贴纸（上限 200）</p>
+        <Button label="上传贴纸" size="small" severity="secondary" @click="openCreate">
+          <template #icon>
+            <Upload class="size-3.5" />
+          </template>
+        </Button>
+      </div>
 
-  <EmojiUploadDialog
-    :key="uploadDialogTarget ? `replace-${uploadDialogTarget.id}` : 'create'"
-    v-model:open="uploadDialogOpen"
-    :set-id="set.id"
-    :set-name="set.name"
-    :emoji="uploadDialogTarget"
-    @done="onUploadDone"
-  />
+      <p
+        v-if="set.emojis.length === 0"
+        class="rounded-lg border border-dashed border-surface-200 py-10 text-center text-xs text-muted-color dark:border-surface-700"
+      >
+        还没有贴纸，点击上方按钮上传第一个
+      </p>
+      <ScrollArea v-else class="max-h-[60vh]">
+        <div class="flex flex-col">
+          <EmojiOwnedSetEditItem
+            v-for="emoji in set.emojis"
+            :key="emoji.id"
+            :emoji="emoji"
+            :deleting="deletingEmojiId === emoji.id"
+            @more-click="onMoreClick"
+          />
+        </div>
+      </ScrollArea>
+    </div>
+
+    <Menu
+      ref="menu"
+      :model="menuItems"
+      popup
+      aria-label="贴纸操作"
+      :pt="{ root: { class: 'w-36!' }, list: { class: 'py-1!' } }"
+    >
+      <template #item="{ item, props: itemProps }">
+        <a
+          v-ripple
+          v-bind="itemProps.action"
+          :class="['flex items-center gap-2 px-3 py-2 text-sm', item.danger ? 'text-red-500!' : '']"
+        >
+          <component :is="item.iconComponent" class="size-4 shrink-0" aria-hidden="true" />
+          <span class="truncate">{{ item.label }}</span>
+        </a>
+      </template>
+    </Menu>
+
+    <EmojiUploadDialog
+      :key="uploadDialogTarget ? `replace-${uploadDialogTarget.id}` : 'create'"
+      v-model:open="uploadDialogOpen"
+      :set-id="set.id"
+      :set-name="set.name"
+      :emoji="uploadDialogTarget"
+      @done="onUploadDone"
+    />
+  </Dialog>
 </template>

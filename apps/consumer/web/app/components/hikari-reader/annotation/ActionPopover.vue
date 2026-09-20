@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Divider, IconButton, Inline, Text } from '@hina-ui/vue'
   import { NotebookPen, Trash2 } from '@lucide/vue'
   import { motion } from 'motion-v'
   import { computed } from 'vue'
@@ -42,49 +41,50 @@
     :animate="{ opacity: 1, scale: 1, y: 0 }"
     :exit="{ opacity: 0, scale: 0.85, y: exitY }"
   >
-    <Inline justify="between" align="center" gap="xs" :wrap="false" class="px-1">
+    <div class="flex items-center justify-between gap-1 px-1">
       <HikariReaderAnnotationColorPicker
         size="sm"
         :model-value="annotation.color"
         @update:model-value="emit('changeColor', $event)"
       />
-    </Inline>
+    </div>
 
-    <Text
+    <p
       v-if="annotation.note"
-      size="xs"
-      class="line-clamp-3 px-1 leading-5 text-(--reader-text-muted)"
+      class="line-clamp-3 px-1 text-xs leading-5"
+      :style="{ color: 'var(--reader-text-muted)' }"
     >
       {{ annotation.note }}
-    </Text>
+    </p>
 
-    <Divider decorative class="-mx-0.5 w-auto bg-(--reader-bar-border)" />
+    <div class="reader-action-divider" />
 
-    <Inline justify="end" align="center" gap="xs" :wrap="false">
-      <IconButton
-        :label="annotation.note ? '编辑笔记' : '添加标注'"
-        :tooltip="false"
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        pill
-        class="text-(--reader-icon)"
+    <div class="flex items-center justify-end gap-1">
+      <Button
+        severity="secondary"
+        variant="text"
+        size="small"
+        rounded
+        :aria-label="annotation.note ? '编辑笔记' : '添加标注'"
         @click="emit('editNote')"
       >
-        <NotebookPen />
-      </IconButton>
-      <IconButton
-        label="删除标注"
-        :tooltip="false"
-        variant="ghost"
-        tone="danger"
-        size="sm"
-        pill
+        <template #icon>
+          <NotebookPen :size="14" aria-hidden="true" />
+        </template>
+      </Button>
+      <Button
+        severity="danger"
+        variant="text"
+        size="small"
+        rounded
+        aria-label="删除标注"
         @click="emit('remove')"
       >
-        <Trash2 />
-      </IconButton>
-    </Inline>
+        <template #icon>
+          <Trash2 :size="14" aria-hidden="true" />
+        </template>
+      </Button>
+    </div>
   </motion.div>
 </template>
 
@@ -99,12 +99,19 @@
     backdrop-filter: blur(18px) saturate(1.6);
   }
 
-  .reader-action-popover :deep(button) {
+  .reader-action-divider {
+    height: 1px;
+    background: var(--reader-bar-border);
+    margin: 0 -2px;
+  }
+
+  .reader-action-popover :deep(.p-button) {
+    color: var(--reader-icon);
     transition: background-color 140ms ease;
   }
 
-  .reader-action-popover :deep(button:not(:disabled):hover),
-  .reader-action-popover :deep(button:not(:disabled):focus-visible) {
+  .reader-action-popover :deep(.p-button:not(:disabled):hover),
+  .reader-action-popover :deep(.p-button:not(:disabled):focus-visible) {
     background: var(--reader-icon-hover-bg);
   }
 </style>

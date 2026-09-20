@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const mangaRateSchema = v.object({
@@ -21,3 +22,4 @@ export const mangaRateSchema = v.object({
 })
 
 export type MangaRateValues = v.InferOutput<typeof mangaRateSchema>
+export const mangaRateResolver = valibotResolver(mangaRateSchema)

@@ -1,16 +1,5 @@
 <script setup lang="ts">
-  import {
-    Card,
-    Checkbox,
-    Code,
-    CopyButton,
-    Grid,
-    Heading,
-    Inline,
-    Section,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
+  import { Check, Copy } from '@lucide/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import { DEVELOPER_SCOPES, developerScopeGroups } from '~/features/developer/scopes'
 
@@ -25,6 +14,13 @@
   const hasRedirect = computed(() => props.app.redirect_uris.length > 0)
   const lockedByRedirect = (group: { requires_user: boolean }) =>
     group.requires_user && !hasRedirect.value
+
+  const { copy, copied } = useClipboard()
+  const lastCopied = ref('')
+  function copyScope(scope: string) {
+    copy(scope)
+    lastCopied.value = scope
+  }
 
   async function toggle(scope: string, next: boolean) {
     if (busy.value) return
@@ -45,51 +41,56 @@
 </script>
 
 <template>
-  <Section class="py-6 first:pt-0 last:pb-0">
-    <Stack gap="md">
-      <Heading :level="3" size="base">授权</Heading>
+  <section class="flex flex-col gap-4 py-6 first:pt-0 last:pb-0">
+    <h3 class="text-sm font-semibold text-color">授权</h3>
 
-      <Stack v-for="group in groups" :key="group.domain" gap="sm">
-        <Text
-          as="span"
-          size="xs"
-          weight="semibold"
-          tone="muted"
-          class="font-mono tracking-widest uppercase"
+    <div v-for="group in groups" :key="group.domain" class="flex flex-col gap-2">
+      <p class="font-mono text-xs font-semibold tracking-widest text-muted-color uppercase">
+        {{ group.label }}
+      </p>
+      <p v-if="lockedByRedirect(group)" class="text-xs text-muted-color">
+        该组权限代表用户执行操作，需通过授权码流程取得。请先在下方「回调地址」中添加至少一条地址。
+      </p>
+      <div class="grid gap-2 sm:grid-cols-2">
+        <div
+          v-for="entry in group.entries"
+          :key="entry.scope"
+          class="flex items-start gap-2.5 rounded-lg border border-surface p-3 transition-colors hover:bg-emphasis"
         >
-          {{ group.label }}
-        </Text>
-        <Text v-if="lockedByRedirect(group)" size="xs" tone="muted">
-          该组权限代表用户执行操作，需通过授权码流程取得。请先在下方「回调地址」中添加至少一条地址。
-        </Text>
-
-        <Grid :cols="1" gap="sm" class="sm:grid-cols-2">
-          <Card v-for="entry in group.entries" :key="entry.scope" :padded="false" class="p-3">
-            <Inline gap="sm" align="start">
-              <Checkbox
-                block
-                :model-value="granted.has(entry.scope)"
-                :disabled="busy || (lockedByRedirect(group) && !granted.has(entry.scope))"
-                class="min-w-0 flex-1"
-                @update:model-value="value => toggle(entry.scope, value === true)"
-              >
-                <Stack as="span" gap="xs" align="start" class="min-w-0">
-                  <Code>{{ entry.scope }}</Code>
-                  <Inline as="span" gap="xs" align="center">
-                    <Text as="span" size="xs" tone="muted">{{ entry.label }}</Text>
-                    <Question
-                      v-if="entry.description"
-                      :show-dialog="false"
-                      :tooltip="entry.description"
-                    />
-                  </Inline>
-                </Stack>
-              </Checkbox>
-              <CopyButton :text="entry.scope" :label="`复制 ${entry.scope}`" size="sm" />
-            </Inline>
-          </Card>
-        </Grid>
-      </Stack>
-    </Stack>
-  </Section>
+          <label class="flex min-w-0 flex-1 cursor-pointer items-start gap-2.5">
+            <Checkbox
+              binary
+              :model-value="granted.has(entry.scope)"
+              :disabled="busy || (lockedByRedirect(group) && !granted.has(entry.scope))"
+              :aria-label="entry.label"
+              @update:model-value="(value: boolean) => toggle(entry.scope, value)"
+            />
+            <span class="flex min-w-0 flex-col gap-1">
+              <code class="font-mono text-sm font-medium text-color">{{ entry.scope }}</code>
+              <span class="flex items-center gap-1 text-xs text-muted-color">
+                {{ entry.label }}
+                <Question
+                  v-if="entry.description"
+                  :show-dialog="false"
+                  :tooltip="entry.description"
+                />
+              </span>
+            </span>
+          </label>
+          <Button
+            unstyled
+            class="inline-flex shrink-0 items-center justify-center rounded p-1 text-muted-color transition-colors hover:text-color"
+            :aria-label="copied && lastCopied === entry.scope ? '已复制' : `复制 ${entry.scope}`"
+            @click="copyScope(entry.scope)"
+          >
+            <Check
+              v-if="copied && lastCopied === entry.scope"
+              class="size-3.5 text-hikari-primary-500"
+            />
+            <Copy v-else class="size-3.5" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { Tree, type TreeValue } from '@hina-ui/vue'
   import type { BackendPermissionCatalogEntry } from '~/features/creator/governance'
   import {
     buildPermissionTree,
-    expandedForKeys,
-    permissionLeafKeys,
+    keysFromSelectionRecord,
+    selectionRecordFromKeys,
+    type PermissionTreeNode,
   } from '~/features/creator/governance/permissionTree'
 
   const props = defineProps<{
@@ -13,45 +13,72 @@
   }>()
   const model = defineModel<string[]>({ default: () => [] })
 
+  provide('$pcForm', undefined)
+  provide('$pcFormField', undefined)
+
   const safeModel = computed(() => (Array.isArray(model.value) ? model.value : []))
   const tree = computed(() => buildPermissionTree(props.entries))
-  const leaves = computed(() => permissionLeafKeys(tree.value))
+  const selectionKeys = ref<Record<string, { checked: boolean; partialChecked: boolean }>>(
+    selectionRecordFromKeys(safeModel.value, tree.value),
+  )
 
-  const checked = computed<TreeValue[]>({
-    get: () => safeModel.value,
-    set: next => {
-      if (props.readonly) return
-      const keys = next
-        .map(String)
-        .filter(key => leaves.value.has(key))
-        .sort()
-      if (JSON.stringify(keys) !== JSON.stringify([...safeModel.value].sort())) {
-        model.value = keys
+  watch(
+    [tree, safeModel],
+    ([nextTree, nextModel]) => {
+      const incoming = selectionRecordFromKeys(nextModel, nextTree)
+      if (JSON.stringify(incoming) !== JSON.stringify(selectionKeys.value)) {
+        selectionKeys.value = incoming
       }
     },
-  })
+    { deep: true },
+  )
 
-  const expanded = ref<TreeValue[]>([])
-  let seeded = false
+  function collectCheckedAncestors(
+    nodes: readonly PermissionTreeNode[],
+    checked: Set<string>,
+    into: Record<string, boolean> = {},
+    ancestors: string[] = [],
+  ) {
+    for (const node of nodes) {
+      if (node.children?.length) {
+        collectCheckedAncestors(node.children, checked, into, [...ancestors, node.key])
+      } else if (checked.has(node.key)) {
+        for (const key of ancestors) into[key] = true
+      }
+    }
+    return into
+  }
+
+  const expandedKeys = ref<Record<string, boolean>>({})
+  let initialized = false
   watch(
     tree,
     next => {
-      if (seeded || !next.length) return
-      expanded.value = expandedForKeys(next, safeModel.value)
-      seeded = true
+      if (initialized || !next.length) return
+      expandedKeys.value = collectCheckedAncestors(next, new Set(safeModel.value))
+      initialized = true
     },
     { immediate: true },
   )
+
+  function onSelectionChange(next: Record<string, { checked: boolean; partialChecked: boolean }>) {
+    if (props.readonly) return
+    selectionKeys.value = next
+    const keys = keysFromSelectionRecord(next, tree.value)
+    if (JSON.stringify(keys) !== JSON.stringify([...safeModel.value].sort())) {
+      model.value = keys
+    }
+  }
 </script>
 
 <template>
   <Tree
-    v-model="checked"
-    v-model:expanded="expanded"
-    multiple
-    :items="tree"
-    :disabled="readonly"
-    aria-label="权限"
-    class="w-full"
+    v-model:expanded-keys="expandedKeys"
+    :value="tree"
+    :selection-keys="selectionKeys"
+    selection-mode="checkbox"
+    :class="['w-full border-0 p-0!', readonly && 'select-none']"
+    :pt="{ root: { class: 'bg-transparent' } }"
+    @update:selection-keys="onSelectionChange"
   />
 </template>

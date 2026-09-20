@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <WorkSection v-if="hasContent" title="工作人员">
+  <GalgameSection v-if="hasContent" title="工作人员">
     <div v-if="studios.length" class="flex flex-col gap-4">
       <h3 class="text-[15px] font-bold text-surface-700 dark:text-surface-200">开发商/发行商</h3>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -33,5 +33,5 @@
       <h3 class="text-[15px] font-bold text-surface-700 dark:text-surface-200">Staff</h3>
       <GalgameCrewStaffCredits :staff="staff" />
     </div>
-  </WorkSection>
+  </GalgameSection>
 </template>

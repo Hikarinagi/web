@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { IconButton, Inline, Progress, Text } from '@hina-ui/vue'
   import { ChevronLeft, ChevronRight, Settings2 } from '@lucide/vue'
   import { motion } from 'motion-v'
   import { cn } from '~/utils/cn'
@@ -23,8 +22,6 @@
     hoverStart: []
     hoverEnd: []
   }>()
-
-  const LABEL = 'reader-bar-label shrink-0 tabular-nums'
 </script>
 
 <template>
@@ -32,75 +29,80 @@
     data-reader-ui
     :class="
       cn(
-        'reader-bar absolute inset-x-3 bottom-[max(env(safe-area-inset-bottom),0.75rem)] z-20 flex items-center gap-3 sm:gap-4',
-        'pointer-events-auto mx-auto max-w-2xl',
+        'reader-bar absolute bottom-[max(env(safe-area-inset-bottom),0.75rem)] left-1/2 z-20 flex items-center gap-3 sm:gap-4',
+        'pointer-events-auto w-[calc(100vw-1.5rem)] max-w-[calc(100vw-1.5rem)] sm:w-full sm:max-w-2xl',
         'rounded-full px-3 py-2 sm:px-4',
       )
     "
+    :style="{ translate: '-50% 0' }"
     :initial="{ opacity: 0, y: 16 }"
     :animate="{ opacity: 1, y: 0 }"
     :exit="{ opacity: 0, y: 16 }"
     @pointerenter="emit('hoverStart')"
     @pointerleave="emit('hoverEnd')"
   >
-    <Text v-if="showTime" as="span" size="xs" weight="medium" :class="LABEL">
+    <span
+      v-if="showTime"
+      class="reader-bar-label shrink-0 text-[11px] font-medium tabular-nums sm:text-xs"
+    >
       {{ timeLabel }}
-    </Text>
+    </span>
 
     <template v-if="showProgress">
-      <Text as="span" size="xs" :class="LABEL">{{ progressLabel }}</Text>
-      <Progress
+      <span class="reader-bar-label shrink-0 text-[11px] tabular-nums sm:text-xs">
+        {{ progressLabel }}
+      </span>
+      <ProgressBar
         :value="progressValue"
-        size="sm"
-        aria-label="阅读进度"
-        class="reader-progress min-w-0 flex-1"
+        class="reader-progress h-1! min-w-0 flex-1"
+        :show-value="false"
       />
-      <Text as="span" size="xs" :class="cn(LABEL, 'hidden sm:inline')">{{ spreadLabel }}</Text>
+      <span class="reader-bar-label hidden shrink-0 text-xs tabular-nums sm:inline">
+        {{ spreadLabel }}
+      </span>
     </template>
 
-    <Inline
-      gap="xs"
-      align="center"
-      :wrap="false"
-      :class="showProgress ? 'shrink-0' : 'ml-auto shrink-0'"
-    >
-      <IconButton
+    <div :class="cn('flex shrink-0 items-center gap-1', showProgress ? '' : 'ml-auto')">
+      <Button
         v-if="showSettingsButton"
-        label="阅读设置"
-        :tooltip="false"
-        variant="ghost"
-        tone="neutral"
-        pill
+        rounded
+        severity="secondary"
+        variant="text"
         class="reader-bar-button"
+        aria-label="阅读设置"
         @click="emit('openSettings')"
       >
-        <Settings2 />
-      </IconButton>
-      <IconButton
-        label="上一页"
-        :tooltip="false"
-        variant="ghost"
-        tone="neutral"
-        pill
+        <template #icon>
+          <Settings2 :size="18" aria-hidden="true" />
+        </template>
+      </Button>
+      <Button
+        rounded
+        severity="secondary"
+        variant="text"
         class="reader-bar-button"
         :disabled="!canGoPrevious"
+        aria-label="上一页"
         @click="emit('previous')"
       >
-        <ChevronLeft />
-      </IconButton>
-      <IconButton
-        label="下一页"
-        :tooltip="false"
-        variant="ghost"
-        tone="neutral"
-        pill
+        <template #icon>
+          <ChevronLeft :size="18" aria-hidden="true" />
+        </template>
+      </Button>
+      <Button
+        rounded
+        severity="secondary"
+        variant="text"
         class="reader-bar-button"
         :disabled="!canGoNext"
+        aria-label="下一页"
         @click="emit('next')"
       >
-        <ChevronRight />
-      </IconButton>
-    </Inline>
+        <template #icon>
+          <ChevronRight :size="18" aria-hidden="true" />
+        </template>
+      </Button>
+    </div>
   </motion.div>
 </template>
 
@@ -113,13 +115,13 @@
     backdrop-filter: blur(18px) saturate(1.6);
   }
 
-  .reader-bar-button {
+  .reader-bar :deep(.p-button) {
     color: var(--reader-icon);
     transition: background-color 140ms ease;
   }
 
-  .reader-bar-button:not(:disabled):hover,
-  .reader-bar-button:not(:disabled):focus-visible {
+  .reader-bar :deep(.p-button:not(:disabled):hover),
+  .reader-bar :deep(.p-button:not(:disabled):focus-visible) {
     background: var(--reader-icon-hover-bg);
   }
 
@@ -127,11 +129,11 @@
     color: var(--reader-text-muted);
   }
 
-  .reader-progress :deep([role='progressbar']) {
-    background: color-mix(in srgb, var(--reader-text), transparent 86%);
+  .reader-progress {
+    background: color-mix(in srgb, var(--reader-text), transparent 86%) !important;
   }
 
-  .reader-progress :deep([role='progressbar'] > *) {
-    background: var(--reader-text);
+  .reader-progress :deep(.p-progressbar-value) {
+    background: var(--reader-text) !important;
   }
 </style>

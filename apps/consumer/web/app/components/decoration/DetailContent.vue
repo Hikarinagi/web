@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Center, Stack, Text } from '@hina-ui/vue'
   import type { components } from '@hikarinagi/api-contract/v3'
 
   defineOptions({ name: 'DecorationDetailContent' })
@@ -29,11 +28,11 @@
 </script>
 
 <template>
-  <Stack gap="md">
-    <Stack gap="sm" align="center">
-      <Center v-if="isFrame" class="size-36 shrink-0">
-        <Avatar :user="previewUser" class="size-24!" />
-      </Center>
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col items-center gap-2">
+      <div v-if="isFrame" class="grid size-36 shrink-0 place-items-center">
+        <Avatar :user="previewUser" shape="circle" class="size-24!" />
+      </div>
       <HikariImage
         v-else
         :src="decoration.image.src"
@@ -42,16 +41,18 @@
         image-class="h-full w-auto object-contain"
         class="inline-block h-12 w-auto max-w-full"
       />
-      <Text v-if="decoration.description" size="sm" tone="muted" class="text-center">
+      <p v-if="decoration.description" class="text-center text-sm text-muted-color">
         {{ decoration.description }}
-      </Text>
-    </Stack>
+      </p>
+    </div>
 
-    <Text v-if="decoration.lore" class="whitespace-pre-wrap">{{ decoration.lore }}</Text>
+    <p v-if="decoration.lore" class="text-[15px] leading-7 whitespace-pre-wrap text-color">
+      {{ decoration.lore }}
+    </p>
 
-    <Stack v-if="acquire" gap="xs" class="rounded-xl bg-subtle p-3">
-      <Text as="span" size="xs" weight="medium" tone="muted">获取方式</Text>
-      <Text as="span">{{ acquire }}</Text>
-    </Stack>
-  </Stack>
+    <div v-if="acquire" class="rounded-xl p-3 bg-emphasis">
+      <p class="text-xs font-medium text-muted-color">获取方式</p>
+      <p class="mt-1 text-color">{{ acquire }}</p>
+    </div>
+  </div>
 </template>

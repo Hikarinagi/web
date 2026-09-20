@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { ScrollArea } from '@hina-ui/vue'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
   import { cn } from '~/utils/cn'
   import { extractToc } from '~/features/article/toc'

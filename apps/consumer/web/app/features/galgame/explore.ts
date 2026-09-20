@@ -1,6 +1,5 @@
 import type { ApiData, ApiQuery, components } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
 
 export const GALGAME_BROWSE_PAGE_SIZE = 24
 export const GALGAME_EXPLORE_MOSAIC_SIZE = 36
@@ -11,7 +10,14 @@ export type GalgameHistogram = ApiData<'/api/v3/galgames/histogram', 'get'>
 export type GalgameSortField = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_field']>
 export type GalgameSortOrder = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_order']>
 export type ReleaseFilterMode = 'range' | 'periods'
-export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export type TagFilterOp = 'include' | 'exclude'
+export type TagMatchMode = 'and' | 'or'
+
+export interface TagFilterGroup {
+  op: TagFilterOp
+  match: TagMatchMode
+  tag_ids: number[]
+}
 
 export interface GalgameBrowseState {
   page: number

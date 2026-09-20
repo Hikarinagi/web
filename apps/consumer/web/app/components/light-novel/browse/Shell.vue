@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import type { LightNovelsBrowsePageData } from '~~/server/api/pages/light-novels/browse.get'
   import type { LightNovelBrowseState } from '~/features/light-novel/explore'
-  import { BookOpen } from '@lucide/vue'
-  import { overlayText, subText, titleOf } from '~/features/light-novel/explore'
-  import { topVotedMedia } from '~/utils/media/image'
   import { BROWSE_FILTER_KEY, useBrowseFilter } from '~/features/light-novel/useBrowseFilter'
-  import { BROWSE_FILTER_RECALL_KEY } from '~/features/browse/filter'
 
   defineOptions({ name: 'LightNovelBrowseShell' })
   const props = defineProps<{
@@ -28,7 +24,6 @@
     { immediate: true },
   )
   provide(BROWSE_FILTER_KEY, filter)
-  provide(BROWSE_FILTER_RECALL_KEY, filter)
 
   function clearFilters() {
     emit('update', {
@@ -43,34 +38,33 @@
 </script>
 
 <template>
-  <BrowsePageShell
-    title="轻小说图鉴"
-    description="浏览 Hikarinagi 数据库中的所有轻小说条目"
-    list-id="light-novel-browse-list"
-    :items="data.list.items"
-    :meta="data.list.meta"
-    :icon="BookOpen"
-    empty-title="没有符合条件的轻小说"
-    :pending="pending"
-    @clear="clearFilters"
-  >
-    <template #filters>
-      <LightNovelBrowseToolbar
-        :state="state"
-        :total="data.list.meta.total_items"
-        :disabled="pending"
-        @update="emit('update', $event)"
-      />
-    </template>
+  <div class="mx-auto flex max-w-app flex-col gap-5 px-6 py-10">
+    <div class="flex flex-col gap-1">
+      <h1 class="text-2xl font-bold text-surface-950 dark:text-white">轻小说图鉴</h1>
+      <p class="text-sm text-surface-600 dark:text-surface-400">
+        浏览 Hikarinagi 数据库中的所有轻小说条目
+      </p>
+    </div>
 
-    <template #card="{ item }">
-      <BrowseWorkCard
-        :to="`/light-novels/${item.id}`"
-        :title="titleOf(item)"
-        :sub="subText(item)"
-        :cover="topVotedMedia(item.covers)"
-        :overlay="overlayText(item)"
+    <LightNovelBrowseToolbar
+      :state="state"
+      :total="data.list.meta.total_items"
+      :disabled="pending"
+      @update="emit('update', $event)"
+    />
+
+    <LightNovelBrowseChipsBar />
+
+    <div id="light-novel-browse-list" data-list-wrapper class="flex flex-col gap-5">
+      <LightNovelBrowseGrid :list="data.list" :pending="pending" @clear="clearFilters" />
+
+      <Paginator
+        :meta="data.list.meta"
+        :loading="pending"
+        route="push"
+        align="center"
+        scroll-target="#light-novel-browse-list"
       />
-    </template>
-  </BrowsePageShell>
+    </div>
+  </div>
 </template>

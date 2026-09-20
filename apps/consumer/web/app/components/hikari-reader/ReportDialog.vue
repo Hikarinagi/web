@@ -1,16 +1,5 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue'
-  import {
-    Button,
-    DescriptionDetails,
-    DescriptionList,
-    DescriptionTerm,
-    Dialog,
-    FormField,
-    Stack,
-    Text,
-    Textarea,
-  } from '@hina-ui/vue'
   import { Flag } from '@lucide/vue'
 
   defineOptions({ name: 'HikariReaderReportDialog' })
@@ -40,14 +29,12 @@
         ? `${s.current_spread + 1} / ${s.total_spreads}`
         : '—'
     const progress = typeof s.progress === 'number' ? `${(s.progress * 100).toFixed(1)}%` : '—'
-    const runtime = s.runtime_error as { message?: string; source?: string } | null
     return {
       chapter: chapter?.title || '—',
       spread,
       progress,
       rito: ritoVersion?.core ? `Rito ${ritoVersion.core}` : '—',
-      error: (s.error as string | null) || runtime?.message || null,
-      source: runtime?.source || null,
+      error: (s.error as string | null) || null,
     }
   })
 
@@ -64,52 +51,66 @@
 
 <template>
   <Dialog
-    v-model:open="visible"
-    title="报告渲染问题"
-    description="提交后会附带当前页面的渲染快照（章节、页码、进度、视口、阅读设置等），帮助我们定位并修复 Rito 排版问题。"
-    :locked="submitting"
+    v-model:visible="visible"
+    modal
+    :draggable="false"
+    :close-on-escape="!submitting"
+    :dismissable-mask="!submitting"
+    class="mx-4 w-[calc(100vw-2rem)] max-w-md"
   >
-    <template #icon><Flag /></template>
-
-    <template #content>
-      <Stack gap="md">
-        <DescriptionList class="rounded-md bg-subtle p-3 text-sm">
-          <DescriptionTerm>章节</DescriptionTerm>
-          <DescriptionDetails class="truncate">{{ summary.chapter }}</DescriptionDetails>
-          <DescriptionTerm>页码</DescriptionTerm>
-          <DescriptionDetails>{{ summary.spread }}</DescriptionDetails>
-          <DescriptionTerm>进度</DescriptionTerm>
-          <DescriptionDetails>{{ summary.progress }}</DescriptionDetails>
-          <DescriptionTerm>版本</DescriptionTerm>
-          <DescriptionDetails>{{ summary.rito }}</DescriptionDetails>
-          <template v-if="summary.error">
-            <DescriptionTerm>报错</DescriptionTerm>
-            <DescriptionDetails>
-              <Text as="span" tone="danger" size="sm" class="break-all">{{ summary.error }}</Text>
-            </DescriptionDetails>
-          </template>
-          <template v-if="summary.source">
-            <DescriptionTerm>来源</DescriptionTerm>
-            <DescriptionDetails>
-              <Text as="span" tone="muted" size="sm" class="break-all">{{ summary.source }}</Text>
-            </DescriptionDetails>
-          </template>
-        </DescriptionList>
-
-        <FormField label="补充说明（可选）">
-          <Textarea
-            v-model="note"
-            autosize
-            maxlength="1000"
-            placeholder="描述一下哪里渲染不对，比如文字重叠、图片缺失、空白页…"
-          />
-        </FormField>
-      </Stack>
+    <template #header>
+      <div class="flex items-center gap-2">
+        <Flag :size="18" class="text-primary" aria-hidden="true" />
+        <span class="text-base font-semibold">报告渲染问题</span>
+      </div>
     </template>
 
+    <div class="space-y-4">
+      <p class="text-sm leading-6 text-muted-color">
+        提交后会附带当前页面的渲染快照（章节、页码、进度、视口、阅读设置等），帮助我们定位并修复
+        Rito 排版问题。
+      </p>
+
+      <dl class="grid grid-cols-[4rem_1fr] gap-x-3 gap-y-1.5 rounded-md p-3 text-sm bg-emphasis">
+        <dt class="text-muted-color">章节</dt>
+        <dd class="truncate">{{ summary.chapter }}</dd>
+        <dt class="text-muted-color">页码</dt>
+        <dd>{{ summary.spread }}</dd>
+        <dt class="text-muted-color">进度</dt>
+        <dd>{{ summary.progress }}</dd>
+        <dt class="text-muted-color">版本</dt>
+        <dd>{{ summary.rito }}</dd>
+        <template v-if="summary.error">
+          <dt class="text-muted-color">报错</dt>
+          <dd class="break-all text-red-500">{{ summary.error }}</dd>
+        </template>
+      </dl>
+
+      <div class="space-y-1.5">
+        <label for="reader-report-note" class="text-sm font-medium">补充说明（可选）</label>
+        <Textarea
+          id="reader-report-note"
+          v-model="note"
+          rows="3"
+          auto-resize
+          maxlength="1000"
+          class="w-full"
+          placeholder="描述一下哪里渲染不对，比如文字重叠、图片缺失、空白页…"
+        />
+      </div>
+    </div>
+
     <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="cancel">取消</Button>
-      <Button :loading="submitting" @click="submit">提交反馈</Button>
+      <div class="flex justify-end gap-2">
+        <Button
+          label="取消"
+          severity="secondary"
+          variant="text"
+          :disabled="submitting"
+          @click="cancel"
+        />
+        <Button label="提交反馈" :loading="submitting" @click="submit" />
+      </div>
     </template>
   </Dialog>
 </template>

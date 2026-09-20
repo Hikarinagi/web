@@ -54,12 +54,7 @@
 
 <template>
   <NodeViewWrapper as="div">
-    <HikariContentNodesImage
-      ref="imageRef"
-      :node="adaptedNode"
-      :selected="selected"
-      :preview="false"
-    >
+    <HikariContentNodesImage ref="imageRef" :node="adaptedNode" :selected="selected">
       <template #chrome>
         <div
           ref="actionsRef"
@@ -71,7 +66,7 @@
           "
         >
           <Button
-            v-tooltip="'编辑'"
+            v-tooltip.top="'编辑'"
             unstyled
             type="button"
             class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-120 ease-out hover:bg-black/75"
@@ -81,7 +76,7 @@
             <Pencil class="size-4" />
           </Button>
           <Button
-            v-tooltip="'删除'"
+            v-tooltip.top="'删除'"
             unstyled
             type="button"
             class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-120 ease-out hover:bg-hikari-red-500"

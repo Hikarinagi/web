@@ -1,103 +1,130 @@
 <script setup lang="ts">
-  import {
-    Button,
-    FormField,
-    Heading,
-    Popover,
-    SegmentedControl,
-    Stack,
-    Switch,
-  } from '@hina-ui/vue'
+  import { cn } from '~/utils/cn'
   import {
     MANGA_READER_BACKGROUND_OPTIONS,
     MANGA_READER_FIT_OPTIONS,
     MANGA_READER_LAYOUT_OPTIONS,
-    type MangaReaderBackground,
-    type MangaReaderFit,
-    type MangaReaderLayout,
     type MangaReaderSettings,
   } from './lib/settings'
 
   defineOptions({ name: 'MangaReaderSettingsPopover' })
 
   const settings = defineModel<MangaReaderSettings>('settings', { required: true })
-  const open = defineModel<boolean>('open', { required: true })
 
-  defineProps<{
-    anchor: HTMLElement | null
-    showLayoutControls: boolean
+  defineProps<{ showLayoutControls: boolean }>()
+
+  const emit = defineEmits<{
+    show: []
+    hide: []
+    replayEducation: []
   }>()
 
-  const emit = defineEmits<{ replayEducation: [] }>()
+  const popover = ref()
 
-  function update(patch: Partial<MangaReaderSettings>) {
-    settings.value = { ...settings.value, ...patch }
+  function toggle(event: Event) {
+    popover.value?.toggle(event)
+  }
+
+  defineExpose({ toggle })
+
+  const optionClass =
+    'flex-1 cursor-pointer rounded-md px-3 py-1.5 text-center text-[13px] transition-colors'
+
+  function optionStateClass(active: boolean) {
+    return active ? 'bg-primary/20 text-primary' : 'text-[#b8c2d1] hover:text-white'
   }
 
   function replay() {
-    open.value = false
+    popover.value?.hide()
     emit('replayEducation')
   }
 </script>
 
 <template>
-  <Popover v-model:open="open" :anchor="anchor" side="top" align="end" class="w-80">
-    <template #content>
-      <Stack>
-        <Heading :level="3" size="sm">阅读设置</Heading>
+  <Popover
+    ref="popover"
+    :pt="{
+      root: {
+        class: '!rounded-2xl !border !border-white/10 !bg-[#10141b] before:!hidden after:!hidden',
+      },
+      content: { class: '!w-80' },
+    }"
+    @show="emit('show')"
+    @hide="emit('hide')"
+  >
+    <div class="flex flex-col gap-4">
+      <h3 class="text-sm font-semibold text-white">阅读设置</h3>
 
-        <FormField v-if="showLayoutControls" label="页面布局">
-          <SegmentedControl
-            :model-value="settings.layout"
-            :options="MANGA_READER_LAYOUT_OPTIONS"
-            size="sm"
-            block
-            @update:model-value="value => update({ layout: value as MangaReaderLayout })"
-          />
-        </FormField>
+      <div v-if="showLayoutControls" class="flex flex-col gap-2">
+        <p class="text-xs text-[#8b95a6]">页面布局</p>
+        <div class="flex gap-1 rounded-lg bg-white/6 p-1">
+          <Button
+            v-for="option in MANGA_READER_LAYOUT_OPTIONS"
+            :key="option.value"
+            unstyled
+            :class="cn(optionClass, optionStateClass(settings.layout === option.value))"
+            @click="settings = { ...settings, layout: option.value }"
+          >
+            {{ option.label }}
+          </Button>
+        </div>
+      </div>
 
-        <FormField v-if="showLayoutControls" label="图片适应">
-          <SegmentedControl
-            :model-value="settings.fit"
-            :options="MANGA_READER_FIT_OPTIONS"
-            size="sm"
-            block
-            @update:model-value="value => update({ fit: value as MangaReaderFit })"
-          />
-        </FormField>
+      <div v-if="showLayoutControls" class="flex flex-col gap-2">
+        <p class="text-xs text-[#8b95a6]">图片适应</p>
+        <div class="flex gap-1 rounded-lg bg-white/6 p-1">
+          <Button
+            v-for="option in MANGA_READER_FIT_OPTIONS"
+            :key="option.value"
+            unstyled
+            :class="cn(optionClass, 'px-2', optionStateClass(settings.fit === option.value))"
+            @click="settings = { ...settings, fit: option.value }"
+          >
+            {{ option.label }}
+          </Button>
+        </div>
+      </div>
 
-        <FormField label="背景">
-          <SegmentedControl
-            :model-value="settings.background"
-            :options="MANGA_READER_BACKGROUND_OPTIONS"
-            size="sm"
-            block
-            @update:model-value="value => update({ background: value as MangaReaderBackground })"
-          />
-        </FormField>
+      <div class="flex flex-col gap-2">
+        <p class="text-xs text-[#8b95a6]">背景</p>
+        <div class="flex gap-1 rounded-lg bg-white/6 p-1">
+          <Button
+            v-for="option in MANGA_READER_BACKGROUND_OPTIONS"
+            :key="option.value"
+            unstyled
+            :class="cn(optionClass, optionStateClass(settings.background === option.value))"
+            @click="settings = { ...settings, background: option.value }"
+          >
+            {{ option.label }}
+          </Button>
+        </div>
+      </div>
 
-        <Switch
+      <div class="flex items-center justify-between">
+        <label for="manga-reader-show-page-number" class="text-[13px] text-white">显示页码</label>
+        <ToggleSwitch
+          input-id="manga-reader-show-page-number"
           :model-value="settings.show_page_number"
-          size="sm"
-          control-placement="end"
-          block
-          @update:model-value="value => update({ show_page_number: value })"
-        >
-          显示页码
-        </Switch>
+          @update:model-value="value => (settings = { ...settings, show_page_number: value })"
+        />
+      </div>
 
-        <Switch
+      <div class="flex items-center justify-between">
+        <label for="manga-reader-page-animation" class="text-[13px] text-white">翻页动画</label>
+        <ToggleSwitch
+          input-id="manga-reader-page-animation"
           :model-value="settings.page_animation"
-          size="sm"
-          control-placement="end"
-          block
-          @update:model-value="value => update({ page_animation: value })"
-        >
-          翻页动画
-        </Switch>
+          @update:model-value="value => (settings = { ...settings, page_animation: value })"
+        />
+      </div>
 
-        <Button variant="link" size="sm" class="self-start" @click="replay">操作说明</Button>
-      </Stack>
-    </template>
+      <Button
+        unstyled
+        class="cursor-pointer self-start text-[13px] text-primary transition-colors hover:text-primary/80"
+        @click="replay"
+      >
+        操作说明
+      </Button>
+    </div>
   </Popover>
 </template>

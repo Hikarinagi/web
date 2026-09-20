@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Button, Divider, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
-  import { History, X } from '@lucide/vue'
+  import { X } from '@lucide/vue'
   import type { useSearch } from '~/features/search/composables/useSearch'
   import { searchOptionId } from '~/features/search/search'
 
@@ -9,86 +8,76 @@
 </script>
 
 <template>
-  <Stack gap="none">
-    <Stack v-if="search.recent.length" as="section" gap="none">
-      <Inline justify="between" align="center" class="px-3 pt-2 pb-1">
-        <Text as="span" size="xs" weight="semibold" tone="muted">最近搜索</Text>
-        <Button variant="link" tone="neutral" size="sm" @click="search.clearRecent()">清除</Button>
-      </Inline>
-      <Inline
-        v-for="(kw, i) in search.recent"
-        :key="kw"
-        gap="none"
-        align="center"
-        :wrap="false"
-        class="pe-1.5"
-      >
-        <Inline
-          :id="searchOptionId(i)"
-          as="button"
-          type="button"
-          role="option"
-          :aria-selected="i === search.activeIndex"
-          gap="sm"
-          :wrap="false"
-          class="hn-state-layer min-w-0 flex-1 hn-interactive rounded-md px-3 py-2 text-left hn-press-none"
-          @click="emit('pick', kw)"
+  <div class="flex flex-col">
+    <section v-if="search.recent.length" class="pb-1">
+      <header class="flex items-center justify-between px-3 pt-2 pb-2">
+        <span class="text-xs font-semibold text-muted-color">最近搜索</span>
+        <Button
+          unstyled
+          class="text-xs text-muted-color hover:text-color"
+          @click="search.clearRecent()"
         >
-          <History class="size-4 shrink-0 text-muted" />
-          <Text as="span" size="sm" truncate class="min-w-0 flex-1 text-left text-inherit">
+          清除
+        </Button>
+      </header>
+      <div class="flex flex-wrap gap-2 px-3">
+        <div v-for="kw in search.recent" :key="kw" class="group relative inline-flex">
+          <Button
+            unstyled
+            class="max-w-44 truncate rounded-full border border-surface bg-surface-50 px-3 py-1 text-[13px] text-color hover:bg-emphasis dark:bg-surface-800/60"
+            @click="emit('pick', kw)"
+          >
             {{ kw }}
-          </Text>
-        </Inline>
-        <IconButton
-          size="sm"
-          :tooltip="false"
-          :label="`删除搜索记录：${kw}`"
-          @click="search.removeRecent(kw)"
-        >
-          <X />
-        </IconButton>
-      </Inline>
-    </Stack>
+          </Button>
+          <div
+            class="absolute top-1 right-0 translate-x-1/2 -translate-y-1/2 transition-opacity md:pointer-events-none md:opacity-0 md:group-hover:pointer-events-auto md:group-hover:opacity-100"
+          >
+            <Button
+              unstyled
+              aria-label="移除"
+              class="inline-flex size-[18px] items-center justify-center rounded-full border border-surface bg-surface-0 text-muted-color shadow-sm hover:text-color dark:bg-surface-800"
+              @click.stop="search.removeRecent(kw)"
+            >
+              <X class="size-3" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <Divider v-if="search.recent.length && search.trending.length" class="my-1" />
+    <div
+      v-if="search.recent.length && search.trending.length"
+      class="mx-3 my-1 border-t border-surface"
+    />
 
-    <Stack v-if="search.trending.length" as="section" gap="none">
-      <Text size="xs" weight="semibold" tone="muted" class="px-3 pt-2 pb-1">大家都在搜</Text>
-      <Inline
+    <section v-if="search.trending.length">
+      <p class="px-3 pt-2 pb-1 text-xs font-semibold text-muted-color">大家都在搜</p>
+      <Button
         v-for="(t, i) in search.trending"
-        :id="searchOptionId(search.recent.length + i)"
+        :id="searchOptionId(i)"
         :key="t.keyword"
-        as="button"
-        type="button"
         role="option"
-        :aria-selected="search.recent.length + i === search.activeIndex"
-        gap="sm"
-        :wrap="false"
-        class="hn-state-layer w-full hn-interactive rounded-md px-3 py-2 text-left hn-press-none"
+        :aria-selected="i === search.activeIndex"
+        unstyled
+        class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left"
+        :class="i === search.activeIndex ? 'bg-emphasis' : 'hover:bg-emphasis'"
         @click="emit('pick', t.keyword)"
       >
-        <Text
-          as="span"
-          size="sm"
-          weight="semibold"
-          class="w-5 shrink-0 text-center tabular-nums"
-          :class="rankTone(i)"
+        <span
+          class="w-4 shrink-0 text-center text-sm font-bold"
+          :class="i < 3 ? 'text-primary' : 'text-muted-color'"
         >
           {{ i + 1 }}
-        </Text>
-        <Text as="span" size="sm" truncate class="min-w-0 flex-1 text-left text-inherit">
-          {{ t.keyword }}
-        </Text>
-      </Inline>
-    </Stack>
+        </span>
+        <span class="truncate text-sm text-color">{{ t.keyword }}</span>
+      </Button>
+    </section>
 
-    <Text
+    <p
       v-if="!search.recent.length && !search.trending.length"
-      size="sm"
-      tone="muted"
-      class="px-3 py-6 text-center"
+      class="px-3 py-6 text-center text-sm text-muted-color"
     >
       输入作品 / 角色 / 人物名开始搜索
-    </Text>
-  </Stack>
+    </p>
+  </div>
 </template>

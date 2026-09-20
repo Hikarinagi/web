@@ -8,7 +8,7 @@ export function useCollectionManage(initial: SpaceCollectionCard[]) {
   const dialogOpen = ref(false)
   const editing = ref<SpaceCollectionCard | null>(null)
   const removingId = ref<number | null>(null)
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
 
   function openCreate() {
     editing.value = null
@@ -37,7 +37,7 @@ export function useCollectionManage(initial: SpaceCollectionCard[]) {
     )
   }
 
-  async function performRemove(collection: SpaceCollectionCard) {
+  async function performRemove(collection: SpaceCollectionCard, close?: () => void) {
     if (removingId.value) return
     removingId.value = collection.id
     try {
@@ -46,19 +46,22 @@ export function useCollectionManage(initial: SpaceCollectionCard[]) {
         { method: 'DELETE', path: { collection_id: collection.id } },
       )
       collections.value = collections.value.filter(item => item.id !== collection.id)
+      close?.()
     } finally {
       removingId.value = null
     }
   }
 
   function confirmRemove(collection: SpaceCollectionCard) {
-    confirm({
-      title: '删除收藏夹',
-      description: `确认删除「${collection.name}」？夹内 ${collection.item_count} 项收藏将移出本夹，作品本身保留。此操作不可撤销。`,
-      confirmText: '删除',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: () => performRemove(collection),
+    confirm.require({
+      group: 'app-shell',
+      header: '删除收藏夹',
+      message: `确认删除「${collection.name}」？夹内 ${collection.item_count} 项收藏将移出本夹，作品本身保留。此操作不可撤销。`,
+      acceptLabel: '删除',
+      rejectLabel: '取消',
+      closeOnEscape: false,
+      loading: () => removingId.value === collection.id,
+      onAccept: ({ close }) => void performRemove(collection, close).catch(() => {}),
     })
   }
 

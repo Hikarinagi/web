@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
+  import type { FormInstance } from '@primevue/forms/form'
   import { useCreatorSidebar } from '~/features/creator/composables/useCreatorSidebar'
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { EditorFieldPresentation } from '~/features/creator/editor/presentation'
@@ -11,6 +11,7 @@
   defineProps<{
     resourceType: string
     resourceId: number | null
+    formEl: FormInstance | null
     fields: BackendEditorField[]
     presentation: Record<string, EditorFieldPresentation>
     relations: Record<string, EditorRelationRow[]>
@@ -24,49 +25,42 @@
     openNav: []
   }>()
 
-  const { state } = useCreatorSidebar()
-  const offsetClass = computed(() => {
-    if (state.value === 'expanded') return 'lg:left-64'
-    return state.value === 'rail' ? 'lg:left-14' : 'lg:left-0'
-  })
+  const { collapsed } = useCreatorSidebar()
 </script>
 
 <template>
-  <Stack
-    gap="sm"
-    :class="
-      cn(
-        'fixed right-0 bottom-0 left-0 z-20 hn-scrollbar-safe border-line bg-surface/95',
-        'border-t px-5 py-4 backdrop-blur-sm transition-[left] duration-200',
-        offsetClass,
-      )
-    "
+  <div
+    class="fixed right-0 bottom-0 left-0 z-20 mr-(--p-scrollbar-width) flex flex-col gap-3 border-t border-surface-200 bg-surface-0/95 px-5 py-4 backdrop-blur-sm transition-[left] duration-200 dark:border-surface-800 dark:bg-surface-950/95"
+    :class="collapsed ? 'md:left-[72px]' : 'md:left-[256px]'"
     :style="{ transitionTimingFunction: EASE_CSS }"
   >
     <CreatorEditorSessionTray />
-    <Inline gap="sm" align="center" :wrap="false">
+    <div class="flex items-center gap-3">
       <CreatorEditorSyncTrigger
         v-if="resourceId != null"
         :resource-type="resourceType"
         :resource-id="resourceId"
+        :form-el="formEl"
         :fields="fields"
         :presentation="presentation"
         :relations="relations"
         @add="(field, row) => emit('add', field, row)"
         @roster="roster => emit('roster', roster)"
       />
-      <IconButton
-        label="跳转到字段"
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        class="lg:hidden"
+      <Button
+        type="button"
+        variant="text"
+        severity="secondary"
+        class="lg:hidden!"
+        aria-label="跳转到字段"
         @click="emit('openNav')"
       >
-        <List />
-      </IconButton>
-      <Text size="sm" tone="muted" class="ms-auto">{{ changedCount }} 项修改</Text>
-      <Button type="submit" :disabled="disabled" :loading="submitting">提交变更请求</Button>
-    </Inline>
-  </Stack>
+        <template #icon>
+          <List />
+        </template>
+      </Button>
+      <span class="ml-auto text-sm text-muted-color">{{ changedCount }} 项修改</span>
+      <Button label="提交变更请求" type="submit" :disabled="disabled" :loading="submitting" />
+    </div>
+  </div>
 </template>

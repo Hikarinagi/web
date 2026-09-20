@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Card, Center, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Building2, UserRound } from '@lucide/vue'
-  import { cn } from '~/utils/cn'
   import type { EntityDetail, EntityKind } from '~/features/entity/entity'
   import {
     cleanAliases,
@@ -49,77 +47,75 @@
     quality: 72,
     blur: 40,
   } as const
+  const chipClass =
+    'rounded-md bg-surface-100 px-2.5 py-1 text-xs font-medium text-surface-600 dark:bg-surface-800 dark:text-surface-300'
+  const aliasClass =
+    'rounded-md bg-surface-100/80 px-2 py-0.5 text-xs text-surface-600 dark:bg-surface-800/80 dark:text-surface-300'
 </script>
 
 <template>
-  <Stack as="section" gap="none" class="relative isolate overflow-hidden border-b border-line">
+  <section
+    class="relative isolate overflow-hidden border-b border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-950"
+  >
     <template v-if="!isLogo && image?.src">
       <HikariImage
-        :src="image"
+        :src="image.src"
         alt=""
         class="absolute inset-0 -z-20 h-full w-full"
         image-class="object-cover"
         :processing="bannerProcessing"
       />
-      <Stack gap="none" class="absolute inset-0 -z-10 bg-canvas/80" />
+      <div class="absolute inset-0 -z-10 bg-surface-0/80 dark:bg-surface-950/80" />
     </template>
-    <Stack
-      gap="none"
-      class="absolute inset-0 -z-10 bg-linear-to-r from-canvas via-canvas/78 to-accent/8"
+    <div
+      class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,var(--p-surface-0)_0%,rgba(255,255,255,0.78)_46%,rgba(57,197,187,0.08)_100%)] dark:bg-[linear-gradient(90deg,var(--p-surface-950)_0%,rgba(3,7,18,0.82)_46%,rgba(57,197,187,0.08)_100%)]"
     />
 
-    <Inline
-      gap="none"
-      align="center"
-      :wrap="false"
+    <div
+      class="mx-auto flex max-w-app flex-col justify-end gap-8 px-5 pt-[calc(var(--app-header-height)+2.25rem)] pb-12 sm:px-6 sm:pt-[calc(var(--app-header-height)+3rem)] lg:flex-row lg:items-center lg:justify-start lg:gap-10 lg:py-14"
       :class="
-        cn(
-          'mx-auto w-full max-w-app flex-col justify-end gap-8 px-5 pt-[calc(var(--app-header-height)+2.25rem)] pb-12',
-          'sm:px-6 sm:pt-[calc(var(--app-header-height)+3rem)]',
-          'lg:flex-row lg:items-center lg:justify-start lg:gap-10 lg:py-14',
-          hasImage
-            ? 'min-h-[calc(500px+var(--app-header-height))] lg:min-h-[calc(520px+var(--app-header-height))]'
-            : 'lg:pt-[calc(var(--app-header-height)+3.5rem)]',
-        )
+        hasImage
+          ? 'min-h-[calc(500px+var(--app-header-height))] lg:min-h-[calc(520px+var(--app-header-height))]'
+          : 'lg:pt-[calc(var(--app-header-height)+3.5rem)]'
       "
     >
-      <Stack
+      <div
         v-if="!isLogo && hasImage"
-        gap="none"
         class="mx-auto shrink-0"
         :style="{ width: coverLayout.width }"
       >
-        <Card :padded="false" class="bg-veil p-2 shadow-lg">
+        <div
+          class="rounded-lg border border-white/80 bg-white/70 p-2 shadow-[0_24px_80px_rgba(15,23,42,0.18)] dark:border-white/10 dark:bg-surface-900/72 dark:shadow-black/40"
+        >
           <HikariImage
-            :src="image"
+            :src="image?.src"
             :alt="title"
-            class="rounded-md bg-subtle"
-            :ratio="coverLayout.ratio"
+            class="rounded-md bg-surface-950/5 dark:bg-surface-0/5"
+            :style="{ aspectRatio: coverLayout.aspectRatio }"
             image-class="object-cover object-top"
             :processing="coverLayout.processing"
             :preload="{ fetchPriority: 'high' }"
             preview
           >
             <template #empty>
-              <Center class="size-full text-faint">
+              <span class="flex size-full items-center justify-center text-surface-400">
                 <component :is="fallbackIcon" :size="48" />
-              </Center>
+              </span>
             </template>
             <template #error>
-              <Center class="size-full text-faint">
+              <span class="flex size-full items-center justify-center text-surface-400">
                 <component :is="fallbackIcon" :size="48" />
-              </Center>
+              </span>
             </template>
           </HikariImage>
-        </Card>
-      </Stack>
-      <Card
+        </div>
+      </div>
+      <div
         v-else-if="hasImage"
-        :padded="false"
-        class="mx-auto flex shrink-0 items-center justify-center rounded-xl bg-veil p-2 shadow-lg"
+        class="mx-auto flex shrink-0 items-center justify-center rounded-xl bg-surface-0/85 p-2 shadow-[0_18px_50px_rgba(15,23,42,0.10)] dark:bg-surface-900/72"
       >
         <HikariImage
-          :src="image"
+          :src="image?.src"
           :alt="title"
           class="rounded-lg"
           :style="logoBox"
@@ -128,41 +124,48 @@
           preview
         >
           <template #empty>
-            <Center class="size-full text-faint">
+            <span class="flex size-full items-center justify-center text-surface-400">
               <Building2 :size="44" />
-            </Center>
+            </span>
           </template>
           <template #error>
-            <Center class="size-full text-faint">
+            <span class="flex size-full items-center justify-center text-surface-400">
               <Building2 :size="44" />
-            </Center>
+            </span>
           </template>
         </HikariImage>
-      </Card>
+      </div>
 
-      <Stack gap="lg" class="w-full min-w-0 flex-1 text-center lg:text-left">
-        <Stack gap="sm">
-          <Inline justify="center" gap="sm" class="lg:justify-start">
-            <Tag v-if="typeLabel">{{ typeLabel }}</Tag>
-            <Tag v-if="gender">{{ gender }}</Tag>
-          </Inline>
-          <Heading :level="1" size="2xl" class="leading-tight md:text-4xl lg:text-5xl">
+      <div class="w-full min-w-0 flex-1 space-y-6 text-center lg:text-left">
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+            <span v-if="typeLabel" :class="chipClass">{{ typeLabel }}</span>
+            <span v-if="gender" :class="chipClass">{{ gender }}</span>
+          </div>
+          <h1
+            class="text-3xl leading-tight font-semibold text-surface-950 md:text-4xl lg:text-5xl dark:text-surface-0"
+          >
             {{ title }}
-          </Heading>
-          <Text v-if="sub" size="lg" tone="muted" class="leading-7">{{ sub }}</Text>
-        </Stack>
+          </h1>
+          <p v-if="sub" class="text-lg leading-7 text-surface-600 dark:text-surface-300">
+            {{ sub }}
+          </p>
+        </div>
 
-        <Inline v-if="aliases.shown.length" justify="center" gap="sm" class="lg:justify-start">
-          <Tag v-for="alias in aliases.shown" :key="alias" size="sm">{{ alias }}</Tag>
-          <Tag v-if="aliases.overflow" size="sm">+{{ aliases.overflow }}</Tag>
-        </Inline>
+        <div
+          v-if="aliases.shown.length"
+          class="flex flex-wrap items-center justify-center gap-2 lg:justify-start"
+        >
+          <span v-for="alias in aliases.shown" :key="alias" :class="aliasClass">{{ alias }}</span>
+          <span v-if="aliases.overflow" :class="aliasClass">+{{ aliases.overflow }}</span>
+        </div>
 
-        <Text v-if="meta" size="sm" tone="muted">{{ meta }}</Text>
+        <p v-if="meta" class="text-sm text-surface-600 dark:text-surface-300">{{ meta }}</p>
 
-        <Inline justify="center" align="stretch" gap="md" class="lg:justify-start">
-          <ShareButton variant="outline" :tooltip="`分享${typeLabel}`" />
-        </Inline>
-      </Stack>
-    </Inline>
-  </Stack>
+        <div class="flex flex-wrap items-stretch justify-center gap-3 lg:justify-start">
+          <ShareButton severity="secondary" outlined :tooltip="`分享${typeLabel}`" />
+        </div>
+      </div>
+    </div>
+  </section>
 </template>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
-  import { Rating } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import type { MangaRateStats } from '~/features/manga/rate'
 
   defineOptions({ name: 'MangaRatesStats' })
-  defineProps<{ stats: MangaRateStats }>()
+  const props = defineProps<{ stats: MangaRateStats }>()
+
+  const filledStars = computed(() => Math.round(props.stats.average ?? 0))
 </script>
 
 <template>
@@ -20,7 +22,18 @@
           </span>
           <span class="text-base text-surface-500 dark:text-surface-400">/ 10</span>
         </div>
-        <Rating :model-value="stats.average ?? 0" :max="10" readonly size="sm" />
+        <div class="flex gap-0.5">
+          <Star
+            v-for="i in 10"
+            :key="i"
+            class="size-3.5"
+            :class="
+              i <= filledStars
+                ? 'fill-amber-400 text-amber-400'
+                : 'fill-surface-200 text-surface-200 dark:fill-surface-700 dark:text-surface-700'
+            "
+          />
+        </div>
         <p class="text-xs text-surface-600 dark:text-surface-400">{{ stats.rated_count }} 人评分</p>
       </div>
 

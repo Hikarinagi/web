@@ -16,6 +16,7 @@ async function handler(event: H3Event) {
     rate_stats,
     top_rates,
     articles,
+    posts,
     my_rate,
     favorite,
     my_cover_vote,
@@ -35,6 +36,10 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/galgames/{id}/articles', {
       path: { id },
       query: { page: 1, page_size: 6 },
+    }),
+    fetchBackendData(event, '/api/v3/galgames/{id}/posts', {
+      path: { id },
+      query: { page: 1, page_size: 8 },
     }),
     fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
     fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
@@ -56,6 +61,7 @@ async function handler(event: H3Event) {
     rate_stats,
     top_rates,
     articles,
+    posts,
     my_rate,
     favorite,
     my_cover_vote,

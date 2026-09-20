@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { HeartCrack } from '@lucide/vue'
+  import { ThumbsDown } from '@lucide/vue'
   import { motion } from 'motion-v'
   import { EASE, TRANSITION_FAST } from '~/lib/motion'
 
@@ -17,6 +17,7 @@
     times: [0, 0.42, 0.76, 1],
   }
 
+  const activeClass = computed(() => (props.active ? 'fill-current' : 'fill-transparent'))
   const iconState = computed(() =>
     props.active && feedbackVisible.value
       ? { y: [0, 2, 0, 0], rotate: [0, 5, -2, 0] }
@@ -54,6 +55,6 @@
     :animate="iconState"
     :transition="iconTransition"
   >
-    <HeartCrack class="size-full transition-colors duration-150" />
+    <ThumbsDown class="size-full transition-colors duration-150" :class="activeClass" />
   </motion.span>
 </template>

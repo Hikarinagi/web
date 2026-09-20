@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
-
   defineOptions({ name: 'DevelopersPage' })
   definePageMeta({ container: 'full' })
 
@@ -12,11 +10,11 @@
 </script>
 
 <template>
-  <Stack gap="none" class="-mt-(--app-header-height)">
+  <div class="-mt-(--app-header-height)">
     <DeveloperLandingHero />
 
-    <Stack gap="none" class="mx-auto box-content w-full max-w-app px-6 py-14">
+    <div class="mx-auto box-content max-w-app px-6 py-14">
       <DeveloperLandingFlow />
-    </Stack>
-  </Stack>
+    </div>
+  </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Container, Flex, Stack } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
   import { readSpaceRouteQuery, spacePageBffPath } from '~/features/space/route'
 
@@ -20,14 +19,14 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
+  <div v-if="data" class="-mt-(--app-header-height)">
     <SpaceHero :profile="data.profile" :statistics="data.statistics" :is-self="data.is_self" />
 
-    <Container size="lg" class="py-8">
-      <Flex direction="col" gap="lg" class="lg:flex-row lg:gap-8">
+    <div class="mx-auto max-w-app px-5 py-8 sm:px-6">
+      <div class="flex flex-col gap-6 lg:flex-row lg:gap-8">
         <SpaceTabSection :user-id="id" :initial="data" />
 
-        <CommunitySidebar follow class="lg:w-85">
+        <CommunitySidebar follow class="lg:w-[340px]">
           <SpaceSidebar
             :statistics="data.statistics"
             :going="data.going"
@@ -35,7 +34,7 @@
             :is-self="data.is_self"
           />
         </CommunitySidebar>
-      </Flex>
-    </Container>
-  </Stack>
+      </div>
+    </div>
+  </div>
 </template>

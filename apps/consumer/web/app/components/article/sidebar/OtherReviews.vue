@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Rating, Spoiler } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import { workPath } from '#shared/utils/work'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
 
@@ -27,13 +27,13 @@
         <ul class="flex flex-col gap-2.5">
           <li v-for="r in g.reviews" :key="r.id" class="flex flex-col gap-1">
             <div class="flex items-center gap-2">
-              <Avatar :user="r.rater" card class="size-5! shrink-0" />
+              <Avatar :user="r.rater" card shape="circle" class="size-5! shrink-0" />
               <UserName :user="r.rater" class="min-w-0 text-xs font-medium text-color" />
               <span
                 v-if="r.rate != null"
                 class="ml-auto inline-flex shrink-0 items-center gap-0.5 text-xs font-semibold text-amber-500"
               >
-                <Rating :model-value="r.rate" :max="10" :stars="5" readonly size="sm" />
+                <Star class="size-3 fill-amber-400 text-amber-400" />
                 {{ r.rate.toFixed(1) }}
               </span>
             </div>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Link, Rating, Spoiler } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import {
     MANGA_STATUS_LABEL,
@@ -8,12 +7,10 @@
   } from '~/features/manga/rate'
   import { MANGA_STATUS_ICON as STATUS_ICON } from '~/features/rate/status-icon'
   import { useRateVote } from '~/features/manga/useRateVote'
-  import { ratePath } from '~/features/rate/permalink'
   import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'MangaRatesItem' })
   const props = defineProps<{ rate: MangaRateListItem; mangaId: number }>()
-  const permalink = computed(() => ratePath('MANGA', props.mangaId, props.rate.id))
 
   const { vote, votingKind } = useRateVote(props.mangaId)
 
@@ -25,7 +22,7 @@
     class="mb-4 flex break-inside-avoid flex-col gap-3.5 rounded-xl border border-surface-200 bg-surface-0 p-4 dark:border-surface-800 dark:bg-surface-900"
   >
     <div class="flex items-center gap-3">
-      <Avatar :user="rate.rater" card class="size-10! shrink-0" />
+      <Avatar :user="rate.rater" card shape="circle" class="size-10! shrink-0" />
       <div class="flex min-w-0 flex-1 flex-col gap-1">
         <div class="flex flex-wrap items-center gap-2">
           <UserName
@@ -46,15 +43,11 @@
             {{ MANGA_STATUS_LABEL[rate.status] }}
           </span>
           <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
-          <NuxtLink v-slot="{ href, navigate }" :to="permalink" custom>
-            <Link :href="href ?? undefined" tone="neutral" :underline="false" @click="navigate">
-              {{ timeFromNow(rate.created_at) }}
-            </Link>
-          </NuxtLink>
+          <span>{{ timeFromNow(rate.created_at) }}</span>
         </div>
       </div>
-      <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1.5">
-        <Rating :model-value="rate.rate" :max="10" :stars="5" readonly size="sm" />
+      <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1">
+        <Star class="size-3.5 fill-amber-400 text-amber-400" />
         <span class="text-base font-semibold text-surface-900 tabular-nums dark:text-surface-0">
           {{ rate.rate }}
         </span>
@@ -63,7 +56,7 @@
 
     <p
       v-if="rate.rate_content"
-      class="text-sm leading-[22px] wrap-anywhere whitespace-pre-wrap text-surface-700 dark:text-surface-300"
+      class="text-sm leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
     >
       <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
       <template v-else>{{ rate.rate_content }}</template>

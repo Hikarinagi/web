@@ -2,33 +2,25 @@
   import { Plus, UserCheck } from '@lucide/vue'
 
   const props = withDefaults(
-    defineProps<{ userId: number; initialFollowing?: boolean; size?: 'sm' | 'md' | 'lg' }>(),
-    { initialFollowing: false, size: 'md' },
+    defineProps<{ userId: number; initialFollowing?: boolean; size?: 'small' | 'large' }>(),
+    { initialFollowing: false, size: 'small' },
   )
 
-  defineOptions({ inheritAttrs: false })
-
-  const { following, pending, confirmOpen, toggle, unfollow } = useFollow(
-    props.userId,
-    props.initialFollowing,
-  )
+  const { following, pending, toggle } = useFollow(props.userId, props.initialFollowing)
 </script>
 
 <template>
-  <AuthGateButton
-    v-bind="$attrs"
+  <Button
+    login-required
     :size="size"
-    :variant="following ? 'soft' : 'solid'"
-    :tone="following ? 'neutral' : 'accent'"
+    :label="following ? '已关注' : '关注'"
+    :severity="following ? 'secondary' : undefined"
     :loading="pending"
     class="shrink-0"
     @click="toggle"
   >
     <template #icon>
-      <component :is="following ? UserCheck : Plus" />
+      <component :is="following ? UserCheck : Plus" class="size-3.5" />
     </template>
-    {{ following ? '已关注' : '关注' }}
-  </AuthGateButton>
-
-  <UserUnfollowDialog v-model:open="confirmOpen" :confirm="unfollow" />
+  </Button>
 </template>

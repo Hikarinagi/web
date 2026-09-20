@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Flex } from '@hina-ui/vue'
   import type { EntityContributors, EntityDetail, EntityKind } from '~/features/entity/entity'
 
   defineOptions({ name: 'EntityAbout' })
@@ -24,8 +23,8 @@
 
 <template>
   <EntitySection title="简介">
-    <Flex direction="col" gap="none" class="gap-8 lg:flex-row lg:items-start">
-      <WorkIntro :text="intro" :original="origin" empty-text="暂无简介" />
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
+      <EntityIntro :text="intro" :original="origin" />
       <EntityLabelsPanel
         :kind="kind"
         :entity="entity"
@@ -33,6 +32,6 @@
         :updated-at="entity.revised_at ?? entity.created_at"
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />
-    </Flex>
+    </div>
   </EntitySection>
 </template>

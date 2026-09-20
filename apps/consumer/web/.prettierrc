@@ -7,7 +7,7 @@
   "arrowParens": "avoid",
   "endOfLine": "lf",
   "proseWrap": "preserve",
-  "htmlWhitespaceSensitivity": "css",
+  "htmlWhitespaceSensitivity": "ignore",
   "vueIndentScriptAndStyle": true,
   "singleAttributePerLine": false,
   "printWidth": 100,

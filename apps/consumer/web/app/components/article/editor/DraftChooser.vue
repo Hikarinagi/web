@@ -1,20 +1,16 @@
 <script setup lang="ts">
-  import { Button, Dialog, Sheet, Stack } from '@hina-ui/vue'
+  import { breakpointsTailwind } from '@vueuse/core'
 
   defineOptions({ name: 'ArticleEditorDraftChooser' })
 
-  const narrow = useNarrow()
-  const mounted = useMounted()
-  const asSheet = computed(() => mounted.value && narrow.value)
-  const panel = computed(() => (asSheet.value ? Sheet : Dialog))
-  const panelProps = computed(() => (asSheet.value ? { class: 'h-[60dvh]' } : { size: 'lg' }))
-
   const emit = defineEmits<{ restore: [id: number] }>()
+
+  const breakpoints = useBreakpoints(breakpointsTailwind)
+  const isMobile = breakpoints.smaller('md')
 
   const { data, pending } = useHikariApiData('/api/v3/user/me/drafts', {
     query: { type: 'article', page: 1, page_size: 20 },
     lazy: true,
-    server: false,
   })
   const drafts = computed(() => data.value?.items ?? [])
 
@@ -39,22 +35,36 @@
 </script>
 
 <template>
-  <component :is="panel" v-model:open="visible" title="从上次中断的地方继续" v-bind="panelProps">
-    <template #content>
-      <Stack gap="xs">
-        <ArticleEditorDraftChooserItem
-          v-for="draft in drafts"
-          :key="draft.id"
-          :draft="draft"
-          :selected="draft.id === selectedId"
-          @select="selectedId = draft.id"
-        />
-      </Stack>
-    </template>
+  <Dialog
+    v-if="!isMobile"
+    v-model:visible="visible"
+    modal
+    header="从上次中断的地方继续"
+    :draggable="false"
+    :style="{ width: '34rem' }"
+  >
+    <ArticleEditorDraftChooserPanel
+      :drafts="drafts"
+      :selected-id="selectedId"
+      @select="selectedId = $event"
+      @confirm="confirm"
+      @cancel="visible = false"
+    />
+  </Dialog>
 
-    <template #footer>
-      <Button variant="ghost" tone="neutral" @click="visible = false">取消</Button>
-      <Button :disabled="selectedId === null" @click="confirm">确定</Button>
-    </template>
-  </component>
+  <Drawer
+    v-else
+    v-model:visible="visible"
+    position="bottom"
+    header="从上次中断的地方继续"
+    :pt="{ root: { class: 'app-mobile-sheet h-auto! max-h-[82dvh]!' } }"
+  >
+    <ArticleEditorDraftChooserPanel
+      :drafts="drafts"
+      :selected-id="selectedId"
+      @select="selectedId = $event"
+      @confirm="confirm"
+      @cancel="visible = false"
+    />
+  </Drawer>
 </template>

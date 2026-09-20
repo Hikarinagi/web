@@ -9,16 +9,6 @@ const ritoVersion = {
   kit: (requirePkg('@ritojs/kit/package.json') as { version: string }).version,
 }
 
-const openSpec = requirePkg('@hikarinagi/api-contract/openapi/open.json') as {
-  paths: Record<string, Record<string, { operationId?: string }>>
-}
-const apiReferenceRoutes = Object.values(openSpec.paths).flatMap(methods =>
-  Object.values(methods)
-    .map(operation => operation.operationId)
-    .filter((id): id is string => Boolean(id))
-    .map(id => `/developers/api/${id}`),
-)
-
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -37,8 +27,6 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
     'nuxt-schema-org',
-    '@nuxt/content',
-    '@hikarinagi/apm-browser/nuxt',
   ],
 
   site: { url: 'https://www.hikarinagi.org', name: 'Hikarinagi' },
@@ -74,13 +62,6 @@ export default defineNuxtConfig({
     disallow: ['/auth', '/login', '/register'],
   },
 
-  nitro: {
-    prerender: {
-      crawlLinks: false,
-      routes: ['/developers/api', ...apiReferenceRoutes],
-    },
-  },
-
   icon: {
     serverBundle: {
       collections: ['simple-icons'],
@@ -104,17 +85,7 @@ export default defineNuxtConfig({
     ],
   },
 
-  content: {
-    renderer: { anchorLinks: false },
-  },
-
   components: [
-    {
-      path: '~/components/content',
-      pathPrefix: false,
-      global: true,
-      pattern: '*.vue',
-    },
     {
       path: '~/components/ui',
       pathPrefix: false,
@@ -123,7 +94,7 @@ export default defineNuxtConfig({
     {
       path: '~/components',
       pattern: '**/*.vue',
-      ignore: ['ui/**', 'content/**', 'hikari-editor/legacy/**'],
+      ignore: ['ui/**', 'hikari-editor/legacy/**'],
     },
   ],
 

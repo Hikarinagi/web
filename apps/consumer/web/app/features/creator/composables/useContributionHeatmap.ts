@@ -8,7 +8,6 @@ const COLUMNS = 53
 const ROWS = 7
 const WEEK_LABEL_W = 20
 const MONTH_LABEL_H = 16
-const LABEL_FONT = 10
 
 const WEEK_LABELS = ['', '一', '', '三', '', '五', ''] as const
 const MONTH_LABELS = [
@@ -27,7 +26,7 @@ const MONTH_LABELS = [
 ] as const
 
 const LEVEL_CLASSES = [
-  'bg-inset',
+  'bg-surface-200 dark:bg-surface-800',
   'bg-primary-200 dark:bg-primary-900',
   'bg-primary-400 dark:bg-primary-700',
   'bg-primary-500 dark:bg-primary-500',
@@ -52,7 +51,6 @@ export const HEATMAP_DIMENSIONS = {
   step: STEP,
   weekLabelW: WEEK_LABEL_W,
   monthLabelH: MONTH_LABEL_H,
-  labelFont: LABEL_FONT,
   width: WEEK_LABEL_W + COLUMNS * STEP - GAP,
   height: MONTH_LABEL_H + ROWS * STEP - GAP,
 } as const

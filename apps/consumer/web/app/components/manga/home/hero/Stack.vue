@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, Grid, Stack } from '@hina-ui/vue'
   import { motion } from 'motion-v'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { EASE } from '~/lib/motion'
@@ -35,8 +34,8 @@
 </script>
 
 <template>
-  <Stack gap="none" class="h-82.5 w-96.5 pt-2.25 pl-21.5">
-    <Grid :cols="1" class="h-75 w-50">
+  <div class="h-82.5 w-96.5 pt-2.25 pl-21.5">
+    <div class="grid h-75 w-50">
       <motion.div
         v-for="(slide, index) in slides"
         :key="slide.manga.id"
@@ -62,11 +61,10 @@
             preset="medium"
           />
         </NuxtLink>
-        <Card
+        <Button
           v-else
-          as="button"
-          :padded="false"
-          class="block aspect-2/3 w-full cursor-pointer border-0 shadow-[0px_10px_28px_0px_rgba(13,26,31,0.22)]"
+          unstyled
+          class="block aspect-2/3 w-full cursor-pointer overflow-hidden rounded-lg shadow-[0px_10px_28px_0px_rgba(13,26,31,0.22)]"
           :aria-label="`切换到 ${titleOf(slide.manga)}`"
           :tabindex="offsetOf(index) < poses.length ? undefined : -1"
           @click="emit('select', index)"
@@ -78,8 +76,8 @@
             image-class="size-full object-cover object-top"
             preset="medium"
           />
-        </Card>
+        </Button>
       </motion.div>
-    </Grid>
-  </Stack>
+    </div>
+  </div>
 </template>

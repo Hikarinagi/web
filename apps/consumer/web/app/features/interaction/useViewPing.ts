@@ -1,5 +1,11 @@
 export type ViewPingKind =
-  'galgame' | 'light_novel' | 'light_novel_volume' | 'manga' | 'manga_volume' | 'post' | 'article'
+  | 'galgame'
+  | 'light_novel'
+  | 'light_novel_volume'
+  | 'manga'
+  | 'manga_volume'
+  | 'post'
+  | 'article'
 
 export function useViewPing(kind: ViewPingKind, id: number) {
   onMounted(() => {

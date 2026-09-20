@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Button, Inline, Progress, Stack, Text } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
   import { Play, RotateCcw } from '@lucide/vue'
   import type { SpaceMangaShelfItem } from '~/features/space/space'
   import { timeFromNow } from '~/utils/time-format'
@@ -56,50 +54,56 @@
 </script>
 
 <template>
-  <Inline gap="md" align="start" :wrap="false" class="border-b border-line py-4 last:border-b-0">
+  <div
+    class="flex gap-4 border-b border-surface-100 py-4 last:border-b-0 dark:border-surface-800/60"
+  >
     <NuxtLink :to="`/mangas/${item.manga_id}`" class="shrink-0">
       <HikariImage
         :src="item.cover"
         :alt="item.title"
-        class="h-21 w-15 rounded-md bg-inset"
+        class="h-[84px] w-[60px] rounded-md bg-surface-100 dark:bg-surface-800"
         image-class="size-full object-cover"
         :processing="{ width: 120, height: 168, fit: 'cover', quality: 80 }"
       />
     </NuxtLink>
 
-    <Stack gap="xs" class="min-w-0 flex-1">
-      <Inline gap="sm" align="start" justify="between" :wrap="false">
-        <Stack gap="none" class="min-w-0">
+    <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
           <NuxtLink
             :to="`/mangas/${item.manga_id}`"
-            class="block truncate font-semibold transition-colors hover:text-accent-text"
+            class="block truncate font-semibold text-color transition-colors hover:text-primary"
           >
             {{ item.title }}
           </NuxtLink>
-          <Text size="xs" tone="muted" truncate>{{ metaLine }}</Text>
-        </Stack>
+          <p class="truncate text-xs text-muted-color">{{ metaLine }}</p>
+        </div>
         <Button
-          :as="NuxtLink"
+          :label="ctaLabel"
+          size="small"
+          :severity="item.is_finished ? 'secondary' : undefined"
+          :outlined="item.is_finished"
+          as="router-link"
           :to="readTarget"
-          size="sm"
-          :variant="item.is_finished ? 'outline' : 'solid'"
-          :tone="item.is_finished ? 'neutral' : 'accent'"
           class="shrink-0"
         >
           <template #icon>
-            <component :is="item.is_finished ? RotateCcw : Play" />
+            <component :is="item.is_finished ? RotateCcw : Play" class="size-4" />
           </template>
-          {{ ctaLabel }}
         </Button>
-      </Inline>
+      </div>
 
-      <Text size="sm" tone="muted" truncate>{{ statusLine }}</Text>
-      <Inline gap="sm" :wrap="false">
-        <Progress :value="pct" size="sm" aria-label="阅读进度" class="max-w-sm flex-1" />
-        <Text as="span" size="xs" weight="medium" class="shrink-0">
+      <p class="truncate text-[13px] text-muted-color">{{ statusLine }}</p>
+      <div class="flex items-center gap-2">
+        <div
+          class="h-1.5 max-w-sm flex-1 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800"
+        >
+          <div class="h-full rounded-full bg-primary" :style="{ width: `${pct}%` }" />
+        </div>
+        <span class="shrink-0 text-xs font-medium text-color">
           {{ item.current_chapter_index }} / {{ item.total_chapters }} 话
-        </Text>
-      </Inline>
-    </Stack>
-  </Inline>
+        </span>
+      </div>
+    </div>
+  </div>
 </template>

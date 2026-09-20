@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Heading, Inline, Stack, Text } from '@hina-ui/vue'
-
   defineOptions({ name: 'EntitySection' })
   defineProps<{
     title: string
@@ -11,14 +9,16 @@
 </script>
 
 <template>
-  <Stack as="section">
-    <Inline align="baseline" :wrap="false">
-      <Heading :level="2" size="2xl">{{ title }}</Heading>
-      <Text v-if="meta" size="sm" tone="muted">{{ meta }}</Text>
-      <ViewAllLink v-if="moreTo" :to="moreTo" class="ms-auto">
+  <section class="flex flex-col gap-5">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <h2 class="text-[22px] font-bold text-surface-900 dark:text-surface-0">{{ title }}</h2>
+        <p v-if="meta" class="text-[13px] text-surface-500 dark:text-surface-400">{{ meta }}</p>
+      </div>
+      <ViewAllLink v-if="moreTo" :to="moreTo">
         {{ moreText ?? '查看全部' }}
       </ViewAllLink>
-    </Inline>
+    </div>
     <slot />
-  </Stack>
+  </section>
 </template>

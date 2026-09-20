@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Button, Card, Heading, IconButton, Inline, Ripple, Stack, Tag, Text } from '@hina-ui/vue'
   import { ArrowLeft, List } from '@lucide/vue'
-  import { cn } from '~/utils/cn'
   import type { MangaReadPageData } from '~~/server/api/pages/mangas/reader/[id]/[chapterId].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
@@ -33,87 +31,92 @@
     return name ? `${label} ${name}` : label
   })
 
-  const strongText = computed(() => (props.light ? 'text-neutral-1000' : 'text-neutral-0'))
-  const subtleText = computed(() => (props.light ? 'text-neutral-1000/50' : 'text-neutral-400'))
+  const strongText = computed(() => (props.light ? 'text-black' : 'text-white'))
+  const subtleText = computed(() => (props.light ? 'text-black/50' : 'text-[#8b95a6]'))
   const panelClass = computed(() =>
-    props.light ? 'border-neutral-1000/10 bg-neutral-1000/5' : 'border-neutral-0/10 bg-neutral-0/5',
+    props.light ? 'border-black/10 bg-black/5' : 'border-white/10 bg-white/5',
   )
-  const panelHover = computed(() =>
-    props.light ? 'hover:bg-neutral-1000/10' : 'hover:bg-neutral-0/10',
-  )
-  const markClass = computed(() =>
-    props.light
-      ? 'bg-brand-500/15 text-brand-700 hover:bg-brand-500/25'
-      : 'bg-brand-400/15 text-brand-400 hover:bg-brand-400/25',
-  )
-  const panelBase = 'w-full max-w-96 flex-col items-center rounded-2xl px-8 py-6 shadow-none'
 </script>
 
 <template>
-  <Stack align="center" justify="center" gap="none" class="h-full w-full gap-7 px-6">
-    <Stack align="center" gap="md">
-      <Tag tone="info">{{ chapterLabel }}</Tag>
-      <Heading :level="2" size="2xl" :class="cn('font-bold', strongText)">本话完</Heading>
-    </Stack>
+  <div class="flex h-full w-full flex-col items-center justify-center gap-7 px-6">
+    <div class="flex flex-col items-center gap-4">
+      <Tag severity="info">{{ chapterLabel }}</Tag>
+      <h2 class="text-2xl font-bold" :class="strongText">本话完</h2>
+    </div>
 
-    <Card
+    <Button
       v-if="nextChapter && !nextLocked"
-      as="button"
-      :padded="false"
-      :class="cn('hn-state-layer flex hn-interactive gap-1.5', panelBase, panelClass, panelHover)"
+      unstyled
+      class="flex w-full max-w-96 cursor-pointer flex-col items-center gap-1.5 rounded-2xl border px-8 py-6 transition-colors"
+      :class="[panelClass, light ? 'hover:bg-black/10' : 'hover:bg-white/10']"
       @click="emit('openNext')"
     >
-      <Ripple />
-      <Text as="span" size="xs" :class="subtleText">下一话</Text>
-      <Text as="span" size="md" weight="semibold" :class="strongText">{{ nextTitle }}</Text>
-      <Text as="span" size="xs" :class="subtleText">继续翻页进入</Text>
-    </Card>
-
-    <Card
+      <span class="text-xs" :class="subtleText">下一话</span>
+      <span class="text-[17px] font-semibold" :class="strongText">{{ nextTitle }}</span>
+      <span class="text-xs" :class="subtleText">继续翻页进入</span>
+    </Button>
+    <div
       v-else-if="nextChapter && nextLocked"
-      :padded="false"
-      :class="cn('flex gap-3', panelBase, panelClass)"
+      class="flex w-full max-w-96 flex-col items-center gap-3 rounded-2xl border px-8 py-6"
+      :class="panelClass"
     >
-      <Stack align="center" gap="none" class="gap-1.5">
-        <Text as="span" size="xs" :class="subtleText">下一话</Text>
-        <Text as="span" size="md" weight="semibold" :class="strongText">{{ nextTitle }}</Text>
-        <Text as="span" size="xs" :class="subtleText">
+      <div class="flex flex-col items-center gap-1.5">
+        <span class="text-xs" :class="subtleText">下一话</span>
+        <span class="text-[17px] font-semibold" :class="strongText">{{ nextTitle }}</span>
+        <span class="text-xs" :class="subtleText">
           登录后免费阅读全部章节，还可以随时随地同步阅读进度
-        </Text>
-      </Stack>
-      <AuthGateButton pill class="px-5">登录 / 注册</AuthGateButton>
-    </Card>
-
-    <Card v-else :padded="false" :class="cn('flex max-w-124 gap-1.5', panelBase, panelClass)">
-      <Text as="span" size="sm" weight="medium" :class="strongText">已是最新一话</Text>
-    </Card>
+        </span>
+      </div>
+      <Button login-required rounded label="登录 / 注册" class="px-5" />
+    </div>
+    <div
+      v-else
+      class="flex w-full max-w-124 flex-col items-center gap-1.5 rounded-2xl border px-8 py-6"
+      :class="panelClass"
+    >
+      <span class="text-[15px] font-medium" :class="strongText">已是最新一话</span>
+    </div>
 
     <Button
       v-if="showMarkCta"
-      variant="ghost"
-      pill
-      :class="cn('px-4', markClass)"
+      unstyled
+      class="cursor-pointer rounded-full bg-primary/15 px-4 py-2.5 text-[13px] text-primary transition-colors hover:bg-primary/25 disabled:opacity-60"
       :disabled="marking"
       @click="emit('mark')"
     >
       在看这部？标记一下，更新你的状态
     </Button>
 
-    <Inline justify="center" :wrap="false">
-      <IconButton label="详情" side="bottom" pill :class="strongText" @click="emit('backToDetail')">
-        <ArrowLeft />
-      </IconButton>
-      <IconButton label="目录" side="bottom" pill :class="strongText" @click="emit('openCatalog')">
-        <List />
-      </IconButton>
+    <div class="flex items-center justify-center gap-3">
+      <Button
+        v-tooltip.bottom="'详情'"
+        rounded
+        text
+        severity="secondary"
+        aria-label="详情"
+        @click="emit('backToDetail')"
+      >
+        <template #icon><ArrowLeft :size="19" /></template>
+      </Button>
+      <Button
+        v-tooltip.bottom="'目录'"
+        rounded
+        text
+        severity="secondary"
+        aria-label="目录"
+        @click="emit('openCatalog')"
+      >
+        <template #icon><List :size="19" /></template>
+      </Button>
       <FavoriteToggle
         :id="mangaId"
         type="manga"
         variant="bar"
-        pill
+        rounded
         :picker-title="`将「${mangaTitle}」添加到收藏夹`"
       />
-      <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" pill />
-    </Inline>
-  </Stack>
+      <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" rounded text severity="secondary" />
+    </div>
+  </div>
 </template>

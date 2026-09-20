@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import type { CreatorOverviewPageData } from '~~/server/api/pages/create/overview.get'
 
   definePageMeta({ title: '概览' })
@@ -10,10 +9,10 @@
 </script>
 
 <template>
-  <Stack gap="md">
+  <div class="flex flex-col gap-5">
     <CreatorContributionStatsHeatmap v-if="data" :stats="data.stats" />
     <CreatorReviewQueueSection :entries="data?.review_entries" />
     <CreatorContributionPendingSection :list="data?.pending" />
     <CreatorContributionActivityFeed :initial-items="data?.activity ?? []" />
-  </Stack>
+  </div>
 </template>

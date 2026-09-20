@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Card, Inline, Text } from '@hina-ui/vue'
   import type { NotivueItem } from 'notivue'
   import type { DmPeer } from '~/features/messages/dm'
   import { displayName } from '~/utils/user'
@@ -16,14 +15,14 @@
 </script>
 
 <template>
-  <Card :padded="false" class="hn-scrollbar-safe min-w-72 rounded-xl p-3 shadow-lg">
-    <Inline gap="md">
-      <Avatar :user="peer" class="size-9! shrink-0" />
-      <Inline as="p" gap="xs" align="baseline" class="min-w-0 flex-1 text-sm">
-        <Text as="span" weight="semibold" truncate>{{ displayName(peer) }}</Text>
-        <Text as="span" class="shrink-0">给你发了一条私信</Text>
-      </Inline>
-      <Button size="sm" class="shrink-0" @click="openChat">查看</Button>
-    </Inline>
-  </Card>
+  <div
+    class="mr-(--p-scrollbar-width) flex min-w-72 items-center gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-lg dark:border-surface-700 dark:bg-surface-800"
+  >
+    <Avatar :user="peer" shape="circle" class="size-9! shrink-0" />
+    <p class="flex min-w-0 flex-1 items-baseline gap-1 text-sm text-color">
+      <span class="truncate font-semibold">{{ displayName(peer) }}</span>
+      <span class="shrink-0">给你发了一条私信</span>
+    </p>
+    <Button label="查看" size="small" class="shrink-0" @click="openChat" />
+  </div>
 </template>

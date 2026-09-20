@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <WorkSection v-if="characters.length" title="登场角色" :meta="`共 ${total} 位`">
+  <MangaSection v-if="characters.length" title="登场角色" :meta="`共 ${total} 位`">
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <MangaCharactersCard
         v-for="item in characters"
@@ -17,5 +17,5 @@
         :item="item"
       />
     </div>
-  </WorkSection>
+  </MangaSection>
 </template>

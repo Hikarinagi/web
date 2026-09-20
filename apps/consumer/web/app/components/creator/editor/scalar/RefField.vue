@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Stack } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
   import type {
     BackendEditorField,
@@ -76,7 +75,7 @@
 </script>
 
 <template>
-  <Stack gap="sm" align="stretch">
+  <div class="flex flex-col gap-2">
     <CreatorEditorRelationEntityRow
       v-if="model != null && entity"
       :row="row"
@@ -86,15 +85,14 @@
       @remove="clear"
     />
     <Button
-      variant="outline"
-      tone="neutral"
-      size="sm"
+      :label="model != null ? '更换' : '选择'"
+      severity="secondary"
+      variant="outlined"
       class="self-start"
       :disabled="disabled"
       @click="dialogOpen = true"
     >
-      <template #icon><Plus /></template>
-      {{ model != null ? '更换' : '选择' }}
+      <template #icon><Plus :size="14" /></template>
     </Button>
     <CreatorEditorRelationPickerDialog
       v-model:visible="dialogOpen"
@@ -104,5 +102,5 @@
       :title="`选择 ${field.ref_target ?? ''}`"
       @select="onPick"
     />
-  </Stack>
+  </div>
 </template>

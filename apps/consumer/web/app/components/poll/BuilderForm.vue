@@ -1,24 +1,6 @@
 <script setup lang="ts">
-  import {
-    Button,
-    DateTimePicker,
-    Form,
-    FormField,
-    IconButton,
-    Input,
-    InputGroup,
-    NumberInput,
-    Stack,
-    Switch,
-  } from '@hina-ui/vue'
   import { Plus, X } from '@lucide/vue'
-  import {
-    pollLockedSchema,
-    pollSchema,
-    type PollValues,
-  } from '~/features/interaction/schemas/poll.schema'
   import type { PollEditorDef } from '~/features/interaction/usePollEditor'
-  import { TimeFormatEnum, timeFormat } from '~/utils/time-format'
 
   defineOptions({ name: 'PollBuilderForm' })
 
@@ -26,152 +8,158 @@
     defineProps<{ initial?: PollEditorDef | null; locked?: boolean; submitting?: boolean }>(),
     { initial: null, locked: false, submitting: false },
   )
-  const emit = defineEmits<{ submit: [PollEditorDef] }>()
+  const emit = defineEmits<{ submit: [PollEditorDef]; cancel: [] }>()
 
   const MAX_OPTIONS = 10
-
-  const values = reactive<PollValues>({
-    question: '',
-    options: ['', ''],
-    allow_multiple: false,
-    max_choices: null,
-    is_public: false,
-    allow_change: true,
-    closes_at: null,
-  })
-
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
+  const question = ref('')
+  const options = ref<string[]>(['', ''])
+  const allowMultiple = ref(false)
+  const maxChoices = ref<number | null>(null)
+  const isPublic = ref(false)
+  const allowChange = ref(true)
+  const closesAt = ref<Date | null>(null)
 
   onMounted(() => {
     if (!props.initial) return
-    values.question = props.initial.question
-    values.options = props.initial.options.length ? props.initial.options.slice() : ['', '']
-    values.allow_multiple = props.initial.allow_multiple
-    values.max_choices = props.initial.max_choices
-    values.is_public = !props.initial.anonymous
-    values.allow_change = props.initial.allow_change
-    values.closes_at = props.initial.closes_at
-      ? timeFormat(props.initial.closes_at, TimeFormatEnum.YYYY_MM_DD_HH_MM).replace(' ', 'T')
-      : null
+    question.value = props.initial.question
+    options.value = props.initial.options.length ? props.initial.options.slice() : ['', '']
+    allowMultiple.value = props.initial.allow_multiple
+    maxChoices.value = props.initial.max_choices
+    isPublic.value = !props.initial.anonymous
+    allowChange.value = props.initial.allow_change
+    closesAt.value = props.initial.closes_at ? new Date(props.initial.closes_at) : null
   })
 
-  const maxChoicesCap = computed(() =>
-    Math.max(2, values.options.filter(option => option.length > 0).length),
+  const filledOptions = computed(() => options.value.map(o => o.trim()).filter(Boolean))
+  const maxChoicesCap = computed(() => Math.max(2, filledOptions.value.length))
+  const valid = computed(
+    () => question.value.trim().length > 0 && (props.locked || filledOptions.value.length >= 2),
   )
 
   function addOption() {
-    if (values.options.length < MAX_OPTIONS) values.options.push('')
+    if (options.value.length < MAX_OPTIONS) options.value.push('')
   }
-
   function removeOption(index: number) {
-    if (values.options.length > 2) values.options.splice(index, 1)
+    if (options.value.length > 2) options.value.splice(index, 1)
   }
 
-  function onSubmit() {
+  function submit() {
+    if (!valid.value || props.submitting) return
     emit('submit', {
-      question: values.question.trim(),
-      options: values.options.map(option => option.trim()).filter(Boolean),
-      allow_multiple: values.allow_multiple,
-      max_choices: values.allow_multiple ? values.max_choices : null,
-      anonymous: !values.is_public,
-      allow_change: values.allow_change,
-      closes_at: values.closes_at ? new Date(values.closes_at).toISOString() : null,
+      question: question.value.trim(),
+      options: filledOptions.value,
+      allow_multiple: allowMultiple.value,
+      max_choices: allowMultiple.value ? maxChoices.value : null,
+      anonymous: !isPublic.value,
+      allow_change: allowChange.value,
+      closes_at: closesAt.value ? closesAt.value.toISOString() : null,
     })
   }
-
-  defineExpose({ submit: () => form.value?.submit() })
 </script>
 
 <template>
-  <Form
-    ref="form"
-    :values="values"
-    :rules="locked ? pollLockedSchema : pollSchema"
-    :disabled="submitting"
-    @submit="onSubmit"
-  >
-    <FormField name="question" label="问题">
-      <Input v-model="values.question" maxlength="120" placeholder="想问大家什么？" />
-    </FormField>
+  <div class="flex w-full flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold tracking-wide text-muted-color uppercase">问题</label>
+      <InputText
+        v-model="question"
+        fluid
+        size="small"
+        placeholder="想问大家什么？"
+        maxlength="120"
+      />
+    </div>
 
-    <FormField
-      name="options"
-      label="选项"
-      description-placement="label"
-      :description="locked ? '已经有人投票啦，选项已锁定' : undefined"
-    >
-      <Stack gap="sm">
-        <InputGroup v-for="(_, index) in values.options" :key="index" :disabled="locked">
-          <Input
-            v-model="values.options[index]"
-            :placeholder="`选项 ${index + 1}`"
-            maxlength="80"
-            @keydown.enter.prevent="index === values.options.length - 1 ? addOption() : undefined"
-          />
-          <IconButton
-            v-if="!locked"
-            label="移除选项"
-            variant="ghost"
-            tone="neutral"
-            :disabled="values.options.length <= 2"
-            @click="removeOption(index)"
-          >
-            <X />
-          </IconButton>
-        </InputGroup>
-
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold tracking-wide text-muted-color uppercase">选项</label>
+      <p v-if="locked" class="text-xs text-muted-color">已经有人投票啦，选项已锁定</p>
+      <div v-for="(_, index) in options" :key="index" class="flex items-center gap-2">
+        <InputText
+          v-model="options[index]"
+          fluid
+          size="small"
+          :disabled="locked"
+          :placeholder="`选项 ${index + 1}`"
+          maxlength="80"
+          @keydown.enter.prevent="index === options.length - 1 ? addOption() : undefined"
+        />
         <Button
-          v-if="!locked && values.options.length < MAX_OPTIONS"
-          variant="ghost"
-          tone="accent"
-          class="self-start"
-          @click="addOption"
+          v-if="!locked"
+          v-tooltip.top="'移除'"
+          unstyled
+          type="button"
+          :disabled="options.length <= 2"
+          class="inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-color transition-colors hover:bg-emphasis disabled:opacity-40"
+          aria-label="移除选项"
+          @click="removeOption(index)"
         >
-          <template #icon><Plus /></template>
-          添加选项
+          <X class="size-4" />
         </Button>
-      </Stack>
-    </FormField>
+      </div>
+      <Button
+        v-if="!locked && options.length < MAX_OPTIONS"
+        unstyled
+        type="button"
+        class="inline-flex items-center gap-1.5 self-start rounded-md px-2 py-1 text-sm text-primary transition-colors hover:bg-emphasis"
+        @click="addOption"
+      >
+        <Plus class="size-4" />
+        添加选项
+      </Button>
+    </div>
 
-    <Switch v-model="values.allow_multiple" control-placement="end" block :disabled="locked">
-      允许多选
-    </Switch>
+    <div class="flex items-center justify-between">
+      <label class="text-sm text-color">允许多选</label>
+      <ToggleSwitch v-model="allowMultiple" :disabled="locked" />
+    </div>
 
-    <FormField v-if="values.allow_multiple" name="max_choices" label="最多可选">
-      <NumberInput
-        v-model="values.max_choices"
+    <div v-if="allowMultiple" class="flex items-center justify-between gap-3">
+      <label class="text-sm text-color">最多可选</label>
+      <InputNumber
+        v-model="maxChoices"
         :min="2"
         :max="maxChoicesCap"
+        :use-grouping="false"
+        size="small"
         :disabled="locked"
         placeholder="不限"
+        input-class="text-center"
       />
-    </FormField>
+    </div>
 
-    <Switch
-      v-model="values.is_public"
-      control-placement="end"
-      block
-      description="开启后展示参与者头像"
-    >
-      公开投票人
-    </Switch>
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex flex-col">
+        <label class="text-sm text-color">公开投票人</label>
+        <span class="text-xs text-muted-color">开启后展示参与者头像</span>
+      </div>
+      <ToggleSwitch v-model="isPublic" />
+    </div>
 
-    <Switch
-      v-model="values.allow_change"
-      control-placement="end"
-      block
-      description="关闭后投票一旦提交不可更改"
-    >
-      允许修改投票
-    </Switch>
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex flex-col">
+        <label class="text-sm text-color">允许修改投票</label>
+        <span class="text-xs text-muted-color">关闭后投票一旦提交不可更改</span>
+      </div>
+      <ToggleSwitch v-model="allowChange" />
+    </div>
 
-    <FormField name="closes_at" label="截止时间（可选）">
-      <DateTimePicker
-        v-model="values.closes_at"
-        clearable
-        :hour-cycle="24"
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold tracking-wide text-muted-color uppercase">
+        截止时间（可选）
+      </label>
+      <DatePicker
+        v-model="closesAt"
+        show-time
+        hour-format="24"
+        size="small"
+        show-button-bar
         placeholder="不设置则长期开放"
       />
-    </FormField>
-  </Form>
+    </div>
+
+    <div class="flex items-center justify-end gap-2">
+      <Button text severity="secondary" size="small" label="取消" @click="emit('cancel')" />
+      <Button size="small" label="保存" :disabled="!valid" :loading="submitting" @click="submit" />
+    </div>
+  </div>
 </template>

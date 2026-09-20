@@ -1,10 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { BackendGalgameExternalLinkRow } from '~/features/creator/editor'
-
-  const ROW_TONE = { added: 'bg-success-soft', removed: 'bg-danger-soft' } as const
-  const MARK_TONE = { added: 'text-success-text', removed: 'text-danger-text' } as const
-  const MARKER = { added: '+', removed: '−' } as const
 
   const props = defineProps<{
     op: Record<string, unknown>
@@ -32,37 +27,34 @@
 </script>
 
 <template>
-  <Stack as="ul" gap="xs">
-    <Inline
+  <ul class="flex flex-col gap-1">
+    <li
       v-for="(d, i) in diff"
       :key="i"
-      as="li"
-      gap="sm"
-      align="center"
-      :wrap="false"
-      class="rounded-md px-2 py-1.5"
-      :class="ROW_TONE[d.kind as keyof typeof ROW_TONE]"
+      class="flex items-center gap-3 rounded-md px-2 py-1.5"
+      :class="d.kind === 'added' ? 'bg-green-500/10' : d.kind === 'removed' ? 'bg-red-500/10' : ''"
     >
-      <Text
-        as="span"
-        weight="semibold"
-        class="w-4 shrink-0 text-center"
-        :class="MARK_TONE[d.kind as keyof typeof MARK_TONE] ?? 'text-muted'"
+      <span
+        class="w-4 shrink-0 text-center font-semibold"
+        :class="
+          d.kind === 'added'
+            ? 'text-green-700 dark:text-green-300'
+            : d.kind === 'removed'
+              ? 'text-red-700 dark:text-red-300'
+              : 'text-muted-color'
+        "
       >
-        {{ MARKER[d.kind as keyof typeof MARKER] ?? '·' }}
-      </Text>
-      <Text
-        as="span"
-        size="sm"
-        truncate
-        class="w-36 shrink-0"
-        :class="d.kind === 'removed' ? 'text-danger-text line-through' : 'font-medium'"
+        {{ d.kind === 'added' ? '+' : d.kind === 'removed' ? '−' : '·' }}
+      </span>
+      <span
+        class="w-36 shrink-0 truncate text-sm"
+        :class="
+          d.kind === 'removed' ? 'text-red-700 line-through dark:text-red-300' : 'font-medium'
+        "
       >
         {{ d.row.label || d.row.name }}
-      </Text>
-      <Text as="span" size="sm" tone="muted" truncate class="min-w-0 flex-1">
-        {{ d.row.url }}
-      </Text>
-    </Inline>
-  </Stack>
+      </span>
+      <span class="min-w-0 flex-1 truncate text-sm text-muted-color">{{ d.row.url }}</span>
+    </li>
+  </ul>
 </template>

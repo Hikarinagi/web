@@ -1,69 +1,20 @@
 <script setup lang="ts">
-  import {
-    Chip,
-    Inline,
-    Listbox,
-    Popover,
-    ScrollArea,
-    SearchInput,
-    Sheet,
-    Skeleton,
-    Stack,
-    Tag,
-    Text,
-  } from '@hina-ui/vue'
-  import type { SelectItems, SelectOption } from '@hina-ui/vue'
-  import { Check, Hash } from '@lucide/vue'
-  import type { TopicOption, TopicSection, TopicValue } from './useTopics'
+  import { Check } from '@lucide/vue'
+  import type { TopicOption, TopicSection } from './useTopics'
 
   defineOptions({ name: 'TopicPicker' })
 
-  const props = defineProps<{
+  defineProps<{
     loading: boolean
     sections: TopicSection[]
     canCreate: boolean
     kw: string
-    selected: TopicValue[]
     selectedIds: Set<number>
   }>()
   const query = defineModel<string>('query', { required: true })
-  const open = defineModel<boolean>('open', { required: true })
-  const emit = defineEmits<{ pick: [topic: TopicOption]; create: []; remove: [id: number] }>()
-  defineSlots<{ default(): unknown }>()
+  const emit = defineEmits<{ pick: [topic: TopicOption]; create: [] }>()
 
-  const CREATE_VALUE = '__create__'
-  const SKELETON_WIDTHS = ['w-2/3', 'w-5/6', 'w-1/2', 'w-3/4', 'w-3/5']
-
-  const narrow = useNarrow()
-  const mounted = useMounted()
-  const asSheet = computed(() => mounted.value && narrow.value)
-
-  const options = computed<SelectItems<SelectOption<{ count?: number }>>>(() => [
-    ...(props.canCreate ? [{ value: CREATE_VALUE, label: props.kw }] : []),
-    ...props.sections.map(section => ({
-      label: section.label,
-      options: section.items.map(item => ({
-        value: item.id,
-        label: item.name,
-        count: item.use_count,
-      })),
-    })),
-  ])
-  const picked = computed(() => [...props.selectedIds])
-
-  function onSelect(next: string | number | (string | number)[] | null | undefined) {
-    const values = Array.isArray(next) ? next : []
-    if (values.includes(CREATE_VALUE)) {
-      emit('create')
-      return
-    }
-    const ids = values.map(Number)
-    const added = ids.find(id => !props.selectedIds.has(id))
-    const changed = added ?? [...props.selectedIds].find(id => !ids.includes(id))
-    if (changed === undefined) return
-    const topic = props.sections.flatMap(section => section.items).find(item => item.id === changed)
-    if (topic) emit('pick', topic)
-  }
+  const SKELETON_WIDTHS = ['66%', '82%', '52%', '74%', '60%']
 
   function formatCount(n: number) {
     return n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : String(n)
@@ -71,107 +22,53 @@
 </script>
 
 <template>
-  <Sheet v-if="asSheet" v-model:open="open" title="话题" class="h-[60dvh]">
-    <slot />
-
-    <template #body>
-      <Stack gap="sm" class="min-h-0 grow px-(--hn-panel-p) pb-(--hn-panel-p)">
-        <Inline v-if="selected.length" gap="xs" class="shrink-0">
-          <Chip
-            v-for="topic in selected"
-            :key="topic.id"
-            size="sm"
-            removable
-            @remove="emit('remove', topic.id)"
-          >
-            <template #icon><Hash /></template>
-            {{ topic.name }}
-          </Chip>
-        </Inline>
-
-        <SearchInput v-model="query" clearable placeholder="搜索或输入新话题…" class="shrink-0" />
-
-        <Stack v-if="loading" gap="sm" class="min-h-0 grow">
-          <Skeleton
-            v-for="width in SKELETON_WIDTHS"
-            :key="width"
-            :class="`h-8 rounded-md ${width}`"
-          />
-        </Stack>
-
-        <ScrollArea v-else class="min-h-0 grow">
-          <Listbox
-            :model-value="picked"
-            :options="options"
-            multiple
-            variant="bare"
-            :padded="false"
-            max-height="none"
-            aria-label="话题"
-            @update:model-value="onSelect"
-          >
-            <template #option="{ option }">
-              <Inline as="span" :wrap="false" gap="xs" align="center" class="min-w-0">
-                <Hash class="shrink-0 text-accent-text" aria-hidden="true" />
-                <Text as="span" truncate>{{ option.label }}</Text>
-              </Inline>
-            </template>
-
-            <template #trailing="{ option, selected: on }">
-              <Tag v-if="option.value === CREATE_VALUE" class="shrink-0">创建</Tag>
-              <Check v-else-if="on" class="shrink-0 text-accent-text" aria-hidden="true" />
-              <Text v-else as="span" size="xs" tone="muted" class="shrink-0 tabular-nums">
-                {{ formatCount(option.count ?? 0) }}
-              </Text>
-            </template>
-          </Listbox>
-        </ScrollArea>
-      </Stack>
-    </template>
-  </Sheet>
-
-  <Popover v-else v-model:open="open" :padded="false" align="start">
-    <slot />
-
-    <template #content>
-      <Stack gap="sm" class="w-72 p-1.5">
-        <SearchInput v-model="query" size="sm" clearable placeholder="搜索或输入新话题…" />
-
-        <Stack v-if="loading" gap="sm">
-          <Skeleton
-            v-for="width in SKELETON_WIDTHS"
-            :key="width"
-            :class="`h-6 rounded-md ${width}`"
-          />
-        </Stack>
-
-        <Listbox
-          v-else
-          :model-value="picked"
-          :options="options"
-          multiple
-          variant="bare"
-          :padded="false"
-          max-height="16rem"
-          aria-label="话题"
-          @update:model-value="onSelect"
+  <div class="w-72">
+    <InputText v-model="query" placeholder="搜索或输入新话题…" size="small" fluid class="mb-2" />
+    <ScrollArea class="max-h-64">
+      <div v-if="loading" class="flex flex-col gap-2 px-1 py-1">
+        <Skeleton
+          v-for="(w, i) in SKELETON_WIDTHS"
+          :key="i"
+          height="1.5rem"
+          :width="w"
+          border-radius="0.375rem"
+        />
+      </div>
+      <Button
+        v-else-if="canCreate"
+        unstyled
+        class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-sm text-color transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+        @click="emit('create')"
+      >
+        <span class="truncate">
+          <span class="text-primary-600">#</span>
+          {{ kw }}
+        </span>
+        <Tag class="shrink-0 rounded px-1.5! py-0.5! text-[11px]! font-medium">创建</Tag>
+      </Button>
+      <p v-else-if="!sections.length" class="px-1 py-6 text-center text-sm text-muted-color">
+        没有匹配的话题
+      </p>
+      <div v-for="sec in sections" :key="sec.key" class="not-first:mt-1">
+        <p class="px-1 pb-1 text-xs font-medium text-muted-color">{{ sec.label }}</p>
+        <Button
+          v-for="t in sec.items"
+          :key="sec.key + t.id"
+          unstyled
+          class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+          :class="selectedIds.has(t.id) ? 'text-primary-600' : 'text-color'"
+          @click="emit('pick', t)"
         >
-          <template #option="{ option }">
-            <Inline as="span" :wrap="false" gap="xs" align="center" class="min-w-0">
-              <Hash class="shrink-0 text-accent-text" aria-hidden="true" />
-              <Text as="span" size="sm" truncate>{{ option.label }}</Text>
-            </Inline>
-          </template>
-
-          <template #trailing="{ option, selected: on }">
-            <Tag v-if="option.value === CREATE_VALUE" class="shrink-0">创建</Tag>
-            <Check v-else-if="on" class="shrink-0 text-accent-text" aria-hidden="true" />
-            <Text v-else as="span" size="xs" tone="muted" class="shrink-0 tabular-nums">
-              {{ formatCount(option.count ?? 0) }}
-            </Text>
-          </template>
-        </Listbox>
-      </Stack>
-    </template>
-  </Popover>
+          <span class="truncate">
+            <span class="text-primary-600">#</span>
+            {{ t.name }}
+          </span>
+          <Check v-if="selectedIds.has(t.id)" :size="15" class="shrink-0 text-primary-600" />
+          <span v-else class="shrink-0 text-xs text-muted-color tabular-nums">
+            {{ formatCount(t.use_count) }}
+          </span>
+        </Button>
+      </div>
+    </ScrollArea>
+  </div>
 </template>

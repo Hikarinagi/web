@@ -57,11 +57,11 @@ export const SPACE_FOLLOW_PAGE_SIZE = 12
 export const SPACE_BOOKSHELF_PAGE_SIZE = 12
 
 export const MANAGED_STATUS_FILTERS = [
-  { key: 'all', label: '全部', tone: 'neutral' },
-  { key: 'PUBLISHED', label: '已发布', tone: 'success' },
-  { key: 'DRAFT', label: '草稿', tone: 'neutral' },
-  { key: 'PENDING', label: '审核中', tone: 'warning' },
-  { key: 'REJECTED', label: '未通过', tone: 'danger' },
+  { key: 'all', label: '全部', severity: undefined },
+  { key: 'PUBLISHED', label: '已发布', severity: undefined },
+  { key: 'DRAFT', label: '草稿', severity: 'secondary' },
+  { key: 'PENDING', label: '审核中', severity: 'warn' },
+  { key: 'REJECTED', label: '未通过', severity: 'danger' },
 ] as const
 
 export type ManagedStatusFilterKey = (typeof MANAGED_STATUS_FILTERS)[number]['key']

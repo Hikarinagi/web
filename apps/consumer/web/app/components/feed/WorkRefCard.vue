@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Rating } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { FeedWorkRef } from '~/features/feed/feed'
 
@@ -29,7 +29,7 @@
   >
     <NuxtLink
       :to="to"
-      class="relative z-1 flex items-start gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-[0_1px_1.5px_rgba(15,23,42,0.05)] transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
+      class="flex items-start gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-[0_1px_1.5px_rgba(15,23,42,0.05)] transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
     >
       <HikariImage
         :src="workRef.cover"
@@ -41,9 +41,9 @@
       <div class="flex min-w-0 flex-1 flex-col gap-1">
         <p class="truncate text-sm font-bold text-color">{{ workRef.title }}</p>
         <p class="truncate text-xs text-muted-color">{{ meta }}</p>
-        <div v-if="score != null" class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
-          <Rating :model-value="score" :max="10" :stars="5" readonly size="sm" />
-          <span class="text-sm font-medium text-color">{{ score.toFixed(1) }}</span>
+        <div v-if="score != null" class="flex items-center gap-1">
+          <Star class="size-3.5 fill-amber-400 text-amber-400" />
+          <span class="text-[13px] font-medium text-color">{{ score.toFixed(1) }}</span>
         </div>
       </div>
     </NuxtLink>

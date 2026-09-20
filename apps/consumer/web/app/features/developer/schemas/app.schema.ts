@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const developerAppSchema = v.object({
@@ -10,6 +11,7 @@ export const developerAppSchema = v.object({
   form: v.picklist(['server', 'spa', 'native'], '请选择应用形态'),
 })
 export type DeveloperAppValues = v.InferOutput<typeof developerAppSchema>
+export const developerAppResolver = valibotResolver(developerAppSchema)
 
 export const developerAppProfileSchema = v.object({
   client_name: v.pipe(
@@ -28,6 +30,7 @@ export const developerAppProfileSchema = v.object({
   ),
 })
 export type DeveloperAppProfileValues = v.InferOutput<typeof developerAppProfileSchema>
+export const developerAppProfileResolver = valibotResolver(developerAppProfileSchema)
 
 export const developerAppRedirectSchema = v.object({
   uri: v.pipe(
@@ -39,3 +42,4 @@ export const developerAppRedirectSchema = v.object({
   ),
 })
 export type DeveloperAppRedirectValues = v.InferOutput<typeof developerAppRedirectSchema>
+export const developerAppRedirectResolver = valibotResolver(developerAppRedirectSchema)

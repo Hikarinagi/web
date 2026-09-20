@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, Sheet, Stack } from '@hina-ui/vue'
   import { ListTree } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
@@ -34,33 +33,39 @@
     scrollTo(id)
     open.value = false
   }
-
-  function entryClass(entry: { id: string; level: number }) {
-    return cn(
-      'hn-state-layer block w-full hn-interactive truncate px-3 py-2.5 text-start text-sm hn-press-none',
-      'rounded-lg border-0 bg-transparent shadow-none',
-      entry.level === 3 && 'ps-7',
-      activeId.value === entry.id ? 'font-semibold text-accent-text' : 'text-muted',
-    )
-  }
 </script>
 
 <template>
-  <Sheet v-model:open="open" title="目录" class="h-[60dvh]">
-    <template #content>
-      <Stack gap="none">
-        <Card
-          v-for="entry in entries"
-          :key="entry.id"
-          as="button"
-          type="button"
-          :padded="false"
-          :class="entryClass(entry)"
-          @click="select(entry.id)"
-        >
-          {{ entry.text }}
-        </Card>
-      </Stack>
+  <Drawer
+    v-model:visible="open"
+    position="bottom"
+    :pt="{
+      root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
+      content: { class: 'p-2! min-h-0 flex' },
+    }"
+  >
+    <template #header>
+      <h2 class="text-base font-semibold text-color">目录</h2>
     </template>
-  </Sheet>
+
+    <ScrollArea class="min-h-0 flex-1">
+      <div class="pb-1">
+        <Button
+          v-for="e in entries"
+          :key="e.id"
+          unstyled
+          :class="
+            cn(
+              'block w-full cursor-pointer truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-emphasis',
+              e.level === 3 && 'pl-7',
+              activeId === e.id ? 'font-semibold text-primary' : 'text-muted-color',
+            )
+          "
+          @click="select(e.id)"
+        >
+          {{ e.text }}
+        </Button>
+      </div>
+    </ScrollArea>
+  </Drawer>
 </template>

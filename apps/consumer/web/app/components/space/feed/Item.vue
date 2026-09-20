@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type { Component } from 'vue'
-  import { Inline, Rating, Stack, Text } from '@hina-ui/vue'
-  import { Eye, Heart, MessageSquare } from '@lucide/vue'
+  import { Eye, MessageSquare, Star, ThumbsUp } from '@lucide/vue'
   import { timeFromNow } from '#imports'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import { statusVerb, type BackendFeedItem } from '~/features/feed/feed'
@@ -87,7 +86,7 @@
 
     const rows: { key: string; icon: Component; value: number }[] = []
     if ('view_count' in item) rows.push({ key: 'views', icon: Eye, value: item.view_count })
-    if ('like_count' in item) rows.push({ key: 'likes', icon: Heart, value: item.like_count })
+    if ('like_count' in item) rows.push({ key: 'likes', icon: ThumbsUp, value: item.like_count })
     if ('comment_count' in item) {
       rows.push({ key: 'comments', icon: MessageSquare, value: item.comment_count })
     }
@@ -96,62 +95,69 @@
 </script>
 
 <template>
-  <Stack as="article" gap="sm" class="group relative border-b border-line py-4 last:border-b-0">
+  <article
+    class="group relative flex flex-col gap-2.5 border-b border-surface-100 py-4 last:border-b-0 dark:border-surface-800/60"
+  >
     <NuxtLink :to="to" class="absolute inset-0" :aria-label="verb" />
 
-    <Text size="sm" tone="muted">{{ verb }} · {{ timeFromNow(item.sort_time) }}</Text>
+    <p class="text-[13px] text-muted-color">{{ verb }} · {{ timeFromNow(item.sort_time) }}</p>
 
-    <Inline v-if="work" gap="sm" class="rounded-lg bg-subtle p-2.5" :wrap="false">
+    <div
+      v-if="work"
+      class="flex items-center gap-3 rounded-lg bg-surface-50 p-2.5 dark:bg-surface-800/40"
+    >
       <HikariImage
         :src="work.cover"
         :alt="work.title"
-        class="h-15 w-11 shrink-0 rounded bg-inset"
+        class="h-15 w-11 shrink-0 rounded bg-surface-100 dark:bg-surface-700"
         image-class="size-full object-cover"
         :processing="{ width: 120, height: 164, fit: 'cover', quality: 78 }"
       />
-      <Stack gap="xs" class="min-w-0 flex-1">
-        <Text weight="medium" truncate class="transition-colors group-hover:text-accent-text">
+      <div class="flex min-w-0 flex-1 flex-col gap-1">
+        <p class="truncate font-medium text-color transition-colors group-hover:text-primary">
           {{ work.title }}
-        </Text>
-        <Inline v-if="work.rate || work.note" gap="xs" class="min-w-0">
+        </p>
+        <div v-if="work.rate || work.note" class="flex min-w-0 items-center gap-1.5 text-[13px]">
           <template v-if="work.rate">
-            <Rating :model-value="work.rate" :max="10" :stars="5" readonly size="sm" />
-            <Text as="span" size="sm" weight="semibold" class="shrink-0">{{ work.rate }}</Text>
+            <Star class="size-3.5 shrink-0 fill-amber-400 text-amber-400" />
+            <span class="shrink-0 font-semibold text-color">{{ work.rate }}</span>
           </template>
-          <Text v-if="work.note" as="span" size="sm" tone="muted" truncate>· {{ work.note }}</Text>
-        </Inline>
-      </Stack>
-    </Inline>
+          <span v-if="work.note" class="truncate text-muted-color">· {{ work.note }}</span>
+        </div>
+      </div>
+    </div>
 
     <FeedItemPost v-else-if="item.type === 'post'" :item="item" />
 
-    <Inline v-else-if="item.type === 'article'" gap="md" align="start" :wrap="false">
-      <Stack gap="xs" class="min-w-0 flex-1">
-        <Text
-          weight="semibold"
-          class="line-clamp-2 leading-snug transition-colors group-hover:text-accent-text"
+    <div v-else-if="item.type === 'article'" class="flex gap-4">
+      <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+        <p
+          class="line-clamp-2 text-base leading-snug font-semibold text-color transition-colors group-hover:text-primary"
         >
           {{ item.title }}
-        </Text>
-        <Text v-if="item.excerpt" size="sm" tone="muted" class="line-clamp-2 leading-relaxed">
+        </p>
+        <p v-if="item.excerpt" class="line-clamp-2 text-sm leading-relaxed text-muted-color">
           {{ item.excerpt }}
-        </Text>
-      </Stack>
+        </p>
+      </div>
       <HikariImage
         v-if="item.cover"
         :src="item.cover.src"
         :alt="item.title"
-        class="h-24 w-36 shrink-0 rounded-lg bg-inset"
+        class="h-24 w-36 shrink-0 rounded-lg bg-surface-100 dark:bg-surface-800"
         image-class="size-full object-cover"
         :processing="{ width: 288, height: 192, fit: 'cover', quality: 80 }"
       />
-    </Inline>
+    </div>
 
-    <Inline v-if="stats.length" gap="md" class="relative z-1">
-      <Inline v-for="stat in stats" :key="stat.key" as="span" gap="xs">
-        <component :is="stat.icon" class="size-3.5 text-muted" />
-        <Text as="span" size="xs" tone="muted">{{ stat.value }}</Text>
-      </Inline>
-    </Inline>
-  </Stack>
+    <div
+      v-if="stats.length"
+      class="relative z-1 flex items-center gap-3.5 text-xs text-muted-color"
+    >
+      <span v-for="stat in stats" :key="stat.key" class="flex items-center gap-1">
+        <component :is="stat.icon" class="size-3.5" />
+        {{ stat.value }}
+      </span>
+    </div>
+  </article>
 </template>

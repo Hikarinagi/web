@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { AspectRatio, Progress, Stack, Tag, Text } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import {
     getLightNovelVolumeCover,
@@ -34,11 +33,10 @@
 </script>
 
 <template>
-  <NuxtLink :to="to" class="group block hn-interactive rounded-lg hn-press-none">
-    <AspectRatio
-      :ratio="7 / 10"
-      class="relative overflow-hidden rounded-lg bg-subtle ring-1"
-      :class="active ? 'ring-2 ring-accent' : 'ring-line'"
+  <NuxtLink :to="to" class="group block outline-none">
+    <div
+      class="relative aspect-7/10 overflow-hidden rounded-lg bg-surface-100 transition-shadow duration-200 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-primary dark:bg-surface-900"
+      :class="active ? 'ring-2 ring-primary' : 'ring-1 ring-surface-200 dark:ring-surface-800'"
     >
       <HikariImage
         :src="cover"
@@ -50,40 +48,41 @@
         <template #empty><span /></template>
         <template #error><span /></template>
       </HikariImage>
-      <Tag
+      <span
         v-if="volume.online_reading_available"
-        variant="solid"
-        tone="neutral"
-        size="sm"
-        class="absolute top-1.5 left-1.5 backdrop-blur-sm"
+        class="absolute top-1.5 left-1.5 rounded bg-black/55 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm"
       >
         {{ volume.online_reading_is_collection ? 'EPUB 合集' : 'EPUB' }}
-      </Tag>
-      <Progress
-        v-if="progress && pct > 0"
-        :value="pct"
-        size="sm"
-        :tone="done ? 'success' : 'accent'"
-        class="absolute inset-x-0 bottom-0"
-      />
-    </AspectRatio>
-
-    <Stack gap="none" class="mt-2">
-      <Text
-        size="sm"
-        weight="semibold"
-        truncate
-        class="transition-colors"
-        :class="active ? 'text-accent-text' : 'group-hover:text-accent-text'"
-      >
-        {{ label ? `${label}${active ? ' · 本卷' : ''}` : active ? '本卷' : title }}
-      </Text>
-      <Text v-if="tracked" size="xs" truncate :class="done ? 'text-success-text' : 'text-muted'">
-        {{ stateLabel }}
-      </Text>
-      <Text v-else-if="publicationDate" size="xs" tone="muted" truncate>
-        {{ publicationDate }}
-      </Text>
-    </Stack>
+      </span>
+      <div v-if="progress && pct > 0" class="absolute inset-x-0 bottom-0 h-1 bg-black/35">
+        <div
+          class="h-full"
+          :class="done ? 'bg-emerald-500' : 'bg-primary'"
+          :style="{ width: `${pct}%` }"
+        />
+      </div>
+    </div>
+    <p
+      class="mt-2 truncate text-sm font-semibold"
+      :class="
+        active
+          ? 'text-hikari-primary-600 dark:text-hikari-primary-400'
+          : 'text-surface-950 dark:text-surface-0'
+      "
+    >
+      {{ label ? `${label}${active ? ' · 本卷' : ''}` : active ? '本卷' : title }}
+    </p>
+    <p
+      v-if="tracked"
+      class="truncate text-xs"
+      :class="
+        done ? 'text-emerald-600 dark:text-emerald-400' : 'text-surface-500 dark:text-surface-400'
+      "
+    >
+      {{ stateLabel }}
+    </p>
+    <p v-else-if="publicationDate" class="truncate text-xs text-surface-500 dark:text-surface-400">
+      {{ publicationDate }}
+    </p>
   </NuxtLink>
 </template>

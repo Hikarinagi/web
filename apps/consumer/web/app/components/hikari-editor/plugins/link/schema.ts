@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 const URL_PATTERN = /^(https?:\/\/|\/)/i
@@ -13,3 +14,5 @@ export const linkSchema = v.object({
 })
 
 export type LinkValues = v.InferOutput<typeof linkSchema>
+
+export const linkResolver = valibotResolver(linkSchema)

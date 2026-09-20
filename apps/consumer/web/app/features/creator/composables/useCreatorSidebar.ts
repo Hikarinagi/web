@@ -1,15 +1,24 @@
-import type { SidebarState } from '@hina-ui/vue'
-
-const CREATOR_SIDEBAR_STATE_COOKIE = 'hikari-creator-sidebar-state'
+const CREATOR_SIDEBAR_COLLAPSED_COOKIE = 'hikari-creator-sidebar-collapsed'
 const CREATOR_SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 export function useCreatorSidebar() {
-  const state = useCookie<SidebarState>(CREATOR_SIDEBAR_STATE_COOKIE, {
-    default: () => 'expanded',
+  const collapsedCookie = useCookie<boolean>(CREATOR_SIDEBAR_COLLAPSED_COOKIE, {
+    default: () => false,
     maxAge: CREATOR_SIDEBAR_COOKIE_MAX_AGE,
     path: '/',
     sameSite: 'lax',
   })
 
-  return { state }
+  const collapsed = computed({
+    get: () => collapsedCookie.value === true,
+    set: value => {
+      collapsedCookie.value = value
+    },
+  })
+
+  function toggle() {
+    collapsed.value = !collapsed.value
+  }
+
+  return { collapsed, toggle }
 }

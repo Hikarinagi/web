@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Flex, Inline, Panel, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import { CalendarRange } from '@lucide/vue'
   import type { BackendContributionStats } from '~/features/creator/contribution'
   import {
@@ -15,53 +14,50 @@
 </script>
 
 <template>
-  <Panel title="贡献日历" :description="`过去 1 年共 ${stats.range.count} 次贡献`">
-    <template #icon><CalendarRange /></template>
-    <Stack gap="sm" class="select-none" :style="{ maxWidth: `${D.width}px` }">
-      <ScrollArea class="min-w-0">
-        <Flex
+  <CardPanel
+    title="贡献日历"
+    :description="`过去 1 年共 ${stats.range.count} 次贡献`"
+    :icon="CalendarRange"
+  >
+    <div class="flex flex-col gap-3 select-none" :style="{ maxWidth: `${D.width}px` }">
+      <div class="overflow-x-auto">
+        <div
           class="relative"
           :style="{ width: `${D.width}px`, height: `${D.height}px` }"
           role="img"
           aria-label="贡献日历"
         >
-          <Text
+          <span
             v-for="header in monthHeaders"
             :key="`m-${header.col}`"
-            as="span"
-            tone="muted"
-            class="absolute leading-none"
+            class="absolute text-[10px] leading-none text-muted-color"
             :style="{
               left: `${D.weekLabelW + header.col * D.step}px`,
               top: '0px',
-              fontSize: `${D.labelFont}px`,
             }"
           >
             {{ header.label }}
-          </Text>
+          </span>
           <template v-for="(label, row) in WEEK_LABELS" :key="`w-${row}`">
-            <Text
+            <span
               v-if="label"
-              as="span"
-              tone="muted"
-              class="absolute leading-none"
+              class="absolute text-[10px] leading-none text-muted-color"
               :style="{
                 left: '0px',
-                top: `${D.monthLabelH + row * D.step + (D.cell - D.labelFont) / 2}px`,
-                fontSize: `${D.labelFont}px`,
+                top: `${D.monthLabelH + row * D.step + (D.cell - 10) / 2}px`,
               }"
             >
               {{ label }}
-            </Text>
+            </span>
           </template>
           <template v-for="(col, c) in grid" :key="`c-${c}`">
-            <Flex
+            <div
               v-for="(cell, r) in col.cells"
               v-show="!cell.future"
               :key="`${c}-${r}`"
-              v-tooltip="heatmapTooltip(cell)"
-              as="span"
-              :class="cn('absolute rounded-xs', LEVELS[cell.level])"
+              v-tooltip.top="heatmapTooltip(cell)"
+              class="absolute rounded-[2px]"
+              :class="LEVELS[cell.level]"
               :style="{
                 left: `${D.weekLabelW + c * D.step}px`,
                 top: `${D.monthLabelH + r * D.step}px`,
@@ -70,31 +66,31 @@
               }"
             />
           </template>
-        </Flex>
-      </ScrollArea>
+        </div>
+      </div>
 
-      <Inline gap="md" align="center" justify="between" class="text-xs">
-        <Inline gap="xs" align="center" class="text-muted">
-          <Text as="span" size="xs">少</Text>
-          <Flex
+      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs">
+        <div class="flex items-center gap-1.5 text-muted-color">
+          <span>少</span>
+          <span
             v-for="(palette, level) in LEVELS"
             :key="level"
-            as="span"
-            :class="cn('size-2.5 rounded-xs', palette)"
+            class="size-2.5 rounded-[2px]"
+            :class="palette"
           />
-          <Text as="span" size="xs">多</Text>
-        </Inline>
-        <Text size="xs" tone="muted">
+          <span>多</span>
+        </div>
+        <div class="text-muted-color">
           已合并
-          <Text as="strong" size="xs" weight="semibold">{{ stats.totals.merged }}</Text>
-          <Text as="span" size="xs" tone="faint" class="mx-2">·</Text>
+          <strong class="text-color">{{ stats.totals.merged }}</strong>
+          <span class="mx-2 text-surface-300 dark:text-surface-700">·</span>
           待审
-          <Text as="strong" size="xs" weight="semibold">{{ stats.totals.pending }}</Text>
-          <Text as="span" size="xs" tone="faint" class="mx-2">·</Text>
+          <strong class="text-color">{{ stats.totals.pending }}</strong>
+          <span class="mx-2 text-surface-300 dark:text-surface-700">·</span>
           已关闭
-          <Text as="strong" size="xs" weight="semibold">{{ stats.totals.closed }}</Text>
-        </Text>
-      </Inline>
-    </Stack>
-  </Panel>
+          <strong class="text-color">{{ stats.totals.closed }}</strong>
+        </div>
+      </div>
+    </div>
+  </CardPanel>
 </template>

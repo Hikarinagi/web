@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
   import { useUserCard } from './composables/useUserCard'
 
   const props = defineProps<{
@@ -7,33 +6,24 @@
     showOnClick?: boolean
   }>()
 
-  const { requestShow, showNow, abortShow, hideForAnchor } = useUserCard()
-  const rootRef = useTemplateRef('rootRef')
-  const anchor = computed(() => {
-    const el = unrefElement(rootRef)
-    return el instanceof HTMLElement ? el : null
-  })
+  const { requestShow, showNow, requestHide, hideForAnchor } = useUserCard()
+  const rootRef = useTemplateRef<HTMLElement>('rootRef')
 
   function onEnter() {
-    if (!props.userId || !anchor.value) return
-    requestShow(props.userId, anchor.value)
+    if (!props.userId || !rootRef.value) return
+    requestShow(props.userId, rootRef.value)
   }
   function onLeave() {
-    abortShow()
+    requestHide()
   }
   function onClick(event: Event) {
-    if (!props.showOnClick || !props.userId || !anchor.value) return
+    if (!props.showOnClick || !props.userId || !rootRef.value) return
     event.preventDefault()
     event.stopPropagation()
-    showNow(props.userId, anchor.value)
-  }
-  function onFocusIn(event: FocusEvent) {
-    const target = event.target
-    if (target instanceof Element && !target.matches(':focus-visible')) return
-    onEnter()
+    showNow(props.userId, rootRef.value)
   }
   function hideSelf() {
-    if (anchor.value) hideForAnchor(anchor.value)
+    if (rootRef.value) hideForAnchor(rootRef.value)
   }
 
   watch(
@@ -46,20 +36,17 @@
 </script>
 
 <template>
-  <Inline
+  <span
     v-if="userId"
     ref="rootRef"
-    as="span"
-    gap="none"
-    :wrap="false"
     class="inline-flex"
     @mouseenter="onEnter"
     @mouseleave="onLeave"
-    @focusin="onFocusIn"
+    @focusin="onEnter"
     @focusout="onLeave"
     @click="onClick"
   >
     <slot />
-  </Inline>
+  </span>
   <slot v-else />
 </template>

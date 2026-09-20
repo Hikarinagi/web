@@ -1,5 +1,6 @@
 import type { Reader } from '@ritojs/core'
 import type { AnnotationRecord } from '@ritojs/kit'
+import { buildHitMap, resolveAnnotations } from '@ritojs/kit'
 
 function stripFragment(href: string): string {
   const idx = href.indexOf('#')
@@ -50,22 +51,31 @@ export function progressPageOf(record: AnnotationRecord, reader: Reader) {
   return range.startPage + offset
 }
 
-/**
- * The estimate is the only page this module can produce.
- *
- * This used to try an exact resolution first, through `buildHitMap` and
- * `resolveAnnotations`. Both read `Page.content`, which the engine always
- * built empty, so the exact pass resolved nothing and every call already fell
- * through to the estimate below. `@ritojs/core` 2.0 removes `Reader.pages`,
- * `Reader.measurer` and both helpers, so the dead pass is gone with them and
- * the result is unchanged.
- *
- * An exact jump is now expressible for the first time: an annotation's
- * `target.selectors.sourceRange` is a durable source anchor, and
- * `controller.goToPosition({ sourceLocator: { href, sourceRange } })` resolves
- * it against the committed layout. That is a behaviour change, so it is left
- * for a follow-up rather than folded into this port.
- */
+/** Where the annotation actually starts, resolved against the current layout. */
+export function exactPageOf(record: AnnotationRecord, reader: Reader) {
+  const range = chapterRangeOf(reader, record.target.href)
+  if (!range) return null
+
+  const hitMaps = new Map<number, ReturnType<typeof buildHitMap>>()
+  for (let pageIndex = range.startPage; pageIndex <= range.endPage; pageIndex++) {
+    const page = reader.pages[pageIndex]
+    if (page) hitMaps.set(page.index, buildHitMap(page))
+  }
+
+  const [resolved] = resolveAnnotations([record], {
+    chapterIndices: reader.getChapterTextIndices(),
+    hitMaps,
+    chapterPageRanges: chapterPageRangesOf(reader),
+    // Without the idref -> href bridge the resolver cannot find the chapter at
+    // all, and every jump silently degrades to the progress estimate.
+    chapterHrefMap: reader.manifestHrefMap,
+    measurer: reader.measurer,
+  })
+  const pages = resolved?.segments.map(segment => segment.pageIndex) ?? []
+  return pages.length ? Math.min(...pages) : null
+}
+
+/** Exact position where the layout can give one, estimate otherwise. */
 export function annotationPageIndex(record: AnnotationRecord, reader: Reader) {
-  return progressPageOf(record, reader)
+  return exactPageOf(record, reader) ?? progressPageOf(record, reader)
 }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Center, Stack, Text } from '@hina-ui/vue'
   import type { ShopDecoration } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
 
@@ -27,9 +26,9 @@
 </script>
 
 <template>
-  <Stack gap="sm" align="center" class="p-3">
-    <Avatar v-if="isFrame" :user="previewUser" class="size-16!" />
-    <Center v-else class="h-16 w-full">
+  <div class="flex flex-col items-center gap-2 px-3 py-3">
+    <Avatar v-if="isFrame" :user="previewUser" shape="circle" class="size-16!" />
+    <div v-else class="flex h-16 w-full items-center justify-center">
       <HikariImage
         :src="decoration?.image.src"
         alt=""
@@ -37,15 +36,13 @@
         image-class="h-full w-full object-contain"
         class="h-14 w-full"
       />
-    </Center>
-    <Stack gap="none" class="w-full text-center">
-      <Text size="sm" weight="medium" class="line-clamp-1">
-        {{ decoration?.name ?? '不佩戴' }}
-      </Text>
-      <Text size="xs" tone="muted" class="mt-0.5 line-clamp-2 h-8 leading-4">
+    </div>
+    <div class="w-full text-center">
+      <p class="line-clamp-1 text-sm font-medium text-color">{{ decoration?.name ?? '不佩戴' }}</p>
+      <p class="mt-0.5 line-clamp-2 h-8 text-xs leading-4 text-muted-color">
         {{ decoration?.description }}
-      </Text>
-    </Stack>
+      </p>
+    </div>
     <slot name="footer" />
-  </Stack>
+  </div>
 </template>

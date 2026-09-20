@@ -1,3 +1,4 @@
+import type { FormInstance } from '@primevue/forms/form'
 import { WORKSPACE_SESSION_KEY } from '~/features/creator/composables/useWorkspaceSession'
 import type { EditorRelationRow } from '~/features/creator/editor/relation'
 import {
@@ -37,7 +38,7 @@ export interface TagCandidate {
 export function useSyncDraft(params: {
   resourceType: () => string
   resourceId: () => number | null | undefined
-  values: () => Record<string, unknown>
+  formEl: () => FormInstance | null
   fields: () => SyncField[]
   relations: () => Record<string, EditorRelationRow[]>
   onRoster?: (roster: SyncRoster) => void
@@ -80,7 +81,10 @@ export function useSyncDraft(params: {
   )
 
   function currentValues(): Record<string, unknown> {
-    return { ...params.values() }
+    const states = params.formEl()?.states ?? {}
+    const out: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(states)) out[k] = (v as { value?: unknown })?.value
+    return out
   }
 
   const toRel = (

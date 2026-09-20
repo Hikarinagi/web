@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Heading, Inline, Stack, Text } from '@hina-ui/vue'
-
   defineOptions({ name: 'LightNovelExploreSection' })
   withDefaults(
     defineProps<{
@@ -14,12 +12,12 @@
 </script>
 
 <template>
-  <Stack as="section" :gap="gap === 'loose' ? 'lg' : 'md'">
-    <Inline align="baseline" :wrap="false">
-      <Heading :level="2" size="2xl">{{ title }}</Heading>
-      <Text v-if="meta" size="sm" tone="muted">{{ meta }}</Text>
-      <ViewAllLink v-if="to" :to="to" class="ms-auto" />
-    </Inline>
+  <section class="flex flex-col" :class="gap === 'loose' ? 'gap-6' : 'gap-4'">
+    <div class="flex items-baseline gap-3">
+      <h2 class="text-2xl font-bold text-surface-950 dark:text-white">{{ title }}</h2>
+      <p v-if="meta" class="text-sm text-surface-500 dark:text-surface-400">{{ meta }}</p>
+      <ViewAllLink v-if="to" :to="to" class="ml-auto" />
+    </div>
     <slot />
-  </Stack>
+  </section>
 </template>

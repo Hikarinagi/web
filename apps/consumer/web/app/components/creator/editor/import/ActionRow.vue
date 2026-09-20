@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Checkbox, Inline, Tag } from '@hina-ui/vue'
   import type { RosterAction } from '~/features/creator/editor/roster-actions'
 
   defineProps<{
@@ -12,28 +11,25 @@
 </script>
 
 <template>
-  <Inline
-    gap="sm"
-    align="start"
-    :wrap="false"
-    class="w-full"
-    :class="state === 'done' ? 'opacity-60' : ''"
+  <label
+    class="flex w-full items-start gap-2"
+    :class="state === 'done' ? 'opacity-60' : 'cursor-pointer'"
   >
     <Checkbox
       :model-value="checked"
-      :disabled="state === 'done' || running"
-      :aria-label="action.label"
+      binary
       class="mt-3 shrink-0"
+      :disabled="state === 'done' || running"
       @update:model-value="emit('toggle')"
     />
-    <CreatorChangesetFieldDiff :op="action.op" :label="action.label" class="min-w-0 flex-1" />
+    <div class="pointer-events-none min-w-0 flex-1">
+      <CreatorChangesetFieldDiff :op="action.op" :label="action.label" />
+    </div>
     <Tag
       v-if="state !== 'pending'"
-      size="sm"
-      :tone="state === 'done' ? 'success' : 'danger'"
       class="mt-3 shrink-0"
-    >
-      {{ state === 'done' ? '已应用' : '失败' }}
-    </Tag>
-  </Inline>
+      :value="state === 'done' ? '已应用' : '失败'"
+      :severity="state === 'done' ? 'success' : 'danger'"
+    />
+  </label>
 </template>

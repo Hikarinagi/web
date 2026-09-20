@@ -1,27 +1,28 @@
-import type { Form } from '@hina-ui/vue'
+import type { FormInstance, FormSubmitEvent } from '@primevue/forms/form'
 import { push } from 'notivue'
-import { getFieldErrors } from '~/utils/api/error'
+import { usernameResolver, type UsernameValues } from './schemas/username.schema'
 
 export function useChangeUsernameForm(onSuccess: () => void) {
   const auth = useAuthStore()
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
+  const formErrors = useFormErrors(usernameResolver)
+  const form = useTemplateRef<FormInstance>('form')
   const submitting = ref(false)
   const confirmed = ref(false)
-  const values = reactive({ username: '' })
 
-  async function submit() {
-    if (!confirmed.value || submitting.value) return
+  async function submit(event: FormSubmitEvent) {
+    if (!event.valid || !confirmed.value || submitting.value) return
     submitting.value = true
     try {
+      const values = event.values as UsernameValues
       const updated = await hikariRequest<'/api/v3/user/me/username', 'patch'>(
         '/api/v3/user/me/username',
-        { method: 'PATCH', body: { username: values.username.trim() } },
+        { method: 'PATCH', body: { username: values.username } },
       )
       auth.setUser(updated)
       push.success({ message: '用户名已修改' })
       onSuccess()
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     } finally {
       submitting.value = false
     }
@@ -29,9 +30,9 @@ export function useChangeUsernameForm(onSuccess: () => void) {
 
   function reset() {
     form.value?.reset()
-    values.username = ''
+    formErrors.clear()
     confirmed.value = false
   }
 
-  return { form, values, submitting, confirmed, submit, reset }
+  return { form, formErrors, submitting, confirmed, submit, reset }
 }

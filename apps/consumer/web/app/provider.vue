@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { darkTheme, pastelTheme } from 'notivue'
   import type { NotivueProps, NotivueTheme } from 'notivue'
+  import HikariImagePreview from '~/components/ui/hikari-image/Preview.vue'
 
   defineOptions({
     name: 'HikariProvider',
@@ -36,14 +37,15 @@
       v-else-if="item.props?.kind === 'check-in-loading'"
       :item="item"
     />
-    <Notification v-else :item="item" :theme="notivueTheme" class="hn-scrollbar-safe" />
+    <Notification v-else :item="item" :theme="notivueTheme" class="mr-(--p-scrollbar-width)" />
   </Notivue>
-  <ConfirmHost />
+  <ConfirmDialog />
   <PurchaseDialog />
   <DecorationDetailDialog />
   <AuthLogoutDialog />
   <AuthNicknamePrompt />
   <AuthUsernamePrompt />
+  <HikariImagePreview />
   <UserCardHost />
   <WorkCardHost />
   <NotificationsDetailDrawer />
@@ -54,4 +56,5 @@
   <CheckinDialog />
   <HikariPointsLedgerDialog />
   <LayoutFloatingToolbar />
+  <LayoutTooltipHost />
 </template>

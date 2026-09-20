@@ -12,7 +12,8 @@ export type LnRoster = Pick<
 >
 
 export type SyncRoster =
-  { kind: 'galgame'; galgame: GalgameRoster } | { kind: 'light-novel'; ln: LnRoster }
+  | { kind: 'galgame'; galgame: GalgameRoster }
+  | { kind: 'light-novel'; ln: LnRoster }
 
 export interface RosterHintEntry {
   target: 'person' | 'producer' | 'character'

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { EDITOR_PRESENTATIONS } from '~/features/creator/editor/presentation'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
 
@@ -21,13 +20,13 @@
 </script>
 
 <template>
-  <Stack v-if="payload.length" gap="sm">
+  <div v-if="payload.length" class="flex flex-col gap-3">
     <CreatorChangesetFieldDiff
       v-for="(op, index) in payload"
       :key="index"
       :op="op"
       :label="labelFor(op)"
     />
-  </Stack>
+  </div>
   <CreatorEmpty v-else text="无变更内容" />
 </template>

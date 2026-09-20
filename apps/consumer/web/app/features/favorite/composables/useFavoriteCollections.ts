@@ -72,14 +72,7 @@ export function useFavoriteCollections(type: FavoriteEntityType, id: number) {
   async function create(values: CollectionValues) {
     const collection = (await hikariRequest<'/api/v3/favorite-collections', 'post'>(
       '/api/v3/favorite-collections',
-      {
-        method: 'post',
-        body: {
-          name: values.name.trim(),
-          description: values.description.trim() || undefined,
-          is_private: values.is_private ?? false,
-        },
-      },
+      { method: 'post', body: values },
     )) as CreatedCollection
     const path = `/api/v3/favorite-collections/{collection_id}/${seg}/{${type}_id}` as ApiPath
     await hikariRequest(path, {

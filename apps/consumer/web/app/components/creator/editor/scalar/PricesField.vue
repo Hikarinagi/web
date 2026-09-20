@@ -1,31 +1,23 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Card,
-    IconButton,
-    Inline,
-    Input,
-    NumberInput,
-    Select,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
   import { Plus, X } from '@lucide/vue'
   import type { BackendEditorField, BackendGalgamePriceRow } from '~/features/creator/editor'
 
   const props = defineProps<{
     field: BackendEditorField
+    inputId?: string
     disabled?: boolean
   }>()
   const model = defineModel<BackendGalgamePriceRow[]>({ default: () => [] })
 
-  const CURRENCY_OPTIONS = ['JPY', 'USD', 'CNY', 'EUR', 'KRW', 'TWD', 'HKD', 'GBP'].map(code => ({
-    value: code,
-    label: code,
-  }))
+  // 多输入控件必须切断 FormField 的 inject,否则每个 PrimeVue 编辑器都会被
+  // 自动注册到外层 FormField,modelValue 被劫持成 $field.value(整个 prices 数组)。
+  provide('$pcFormField', undefined)
+  provide('$pcForm', undefined)
+
+  const CURRENCY_OPTIONS = ['JPY', 'USD', 'CNY', 'EUR', 'KRW', 'TWD', 'HKD', 'GBP']
   const TAX_OPTIONS = [
-    { label: '含税', value: 'included' },
-    { label: '不含税', value: 'excluded' },
+    { label: '含税', value: true },
+    { label: '不含税', value: false },
   ]
 
   const maxRows = computed(() => props.field.max_length ?? 30)
@@ -42,12 +34,6 @@
   function isDuplicate(row: BackendGalgamePriceRow): boolean {
     const key = typeof row.version === 'string' ? row.version.trim() : ''
     return key !== '' && (versionCounts.value.get(key) ?? 0) > 1
-  }
-
-  function taxValue(row: BackendGalgamePriceRow): string | null {
-    if (row.tax_included === true) return 'included'
-    if (row.tax_included === false) return 'excluded'
-    return null
   }
 
   function setRow<K extends keyof BackendGalgamePriceRow>(
@@ -74,81 +60,103 @@
 </script>
 
 <template>
-  <Stack gap="sm" align="stretch">
-    <Card v-for="(row, index) in model" :key="index" :padded="false">
-      <Inline gap="sm" align="center" :wrap="false" class="p-2">
-        <Input
+  <div class="flex flex-col gap-2">
+    <div
+      v-for="(row, index) in model"
+      :key="index"
+      class="flex items-center gap-2 rounded-lg border p-2"
+      :class="
+        isDuplicate(row)
+          ? 'border-red-300 dark:border-red-700'
+          : 'border-(--p-form-field-border-color)'
+      "
+    >
+      <div class="min-w-0 flex-2">
+        <InputText
+          :id="index === 0 ? inputId : undefined"
           :model-value="row.version ?? ''"
           placeholder="版本"
-          size="sm"
+          size="small"
           :disabled="disabled"
           :invalid="isDuplicate(row)"
-          class="min-w-0 flex-2"
-          @update:model-value="value => setRow(index, 'version', value || null)"
+          fluid
+          @update:model-value="
+            value =>
+              setRow(index, 'version', typeof value === 'string' && value !== '' ? value : null)
+          "
         />
-        <NumberInput
+      </div>
+      <div class="min-w-0 flex-1">
+        <InputNumber
           :model-value="row.amount ?? null"
           placeholder="金额"
-          size="sm"
+          size="small"
           :min="0"
-          :format-options="{ maximumFractionDigits: 2, useGrouping: false }"
+          :max-fraction-digits="2"
+          :use-grouping="false"
           :disabled="disabled"
-          class="min-w-0 flex-1"
+          fluid
+          @input="
+            event => setRow(index, 'amount', typeof event.value === 'number' ? event.value : null)
+          "
           @update:model-value="
             value => setRow(index, 'amount', typeof value === 'number' ? value : null)
           "
         />
+      </div>
+      <div class="min-w-0 flex-1">
         <Select
           :model-value="row.currency ?? null"
           :options="CURRENCY_OPTIONS"
           placeholder="币种"
-          size="sm"
-          clearable
+          size="small"
           :disabled="disabled"
-          class="min-w-0 flex-1"
+          fluid
           @update:model-value="
             value => setRow(index, 'currency', typeof value === 'string' ? value : null)
           "
         />
+      </div>
+      <div class="min-w-0 flex-1">
         <Select
-          :model-value="taxValue(row)"
+          :model-value="row.tax_included ?? null"
           :options="TAX_OPTIONS"
+          option-label="label"
+          option-value="value"
           placeholder="税"
-          size="sm"
-          clearable
+          size="small"
+          show-clear
           :disabled="disabled"
-          class="min-w-0 flex-1"
+          fluid
           @update:model-value="
-            value => setRow(index, 'tax_included', value == null ? null : value === 'included')
+            value => setRow(index, 'tax_included', typeof value === 'boolean' ? value : null)
           "
         />
-        <IconButton
-          :label="`移除第 ${index + 1} 行`"
-          variant="ghost"
-          tone="danger"
-          size="sm"
-          pill
-          :disabled="disabled"
-          class="shrink-0"
-          @click="removeRow(index)"
-        >
-          <X />
-        </IconButton>
-      </Inline>
-    </Card>
+      </div>
+      <Button
+        type="button"
+        unstyled
+        class="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
+        :aria-label="`移除第 ${index + 1} 行`"
+        :disabled="disabled"
+        @click="removeRow(index)"
+      >
+        <template #icon><X :size="14" /></template>
+      </Button>
+    </div>
 
     <Button
-      variant="outline"
-      tone="neutral"
-      size="sm"
+      type="button"
+      severity="secondary"
+      variant="outlined"
+      label="添加价格"
       class="self-start"
       :disabled="disabled || !canAdd"
       @click="addRow"
     >
-      <template #icon><Plus /></template>
-      添加价格
+      <template #icon><Plus :size="14" /></template>
     </Button>
 
-    <Text size="xs" tone="muted">{{ model.length }} / {{ maxRows }}</Text>
-  </Stack>
+    <span class="text-xs text-muted-color">{{ model.length }} / {{ maxRows }}</span>
+  </div>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { Button, Inline, Popover } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
+  import { AnimatePresence, motion } from 'motion-v'
+  import { TRANSITION_FAST } from '~/lib/motion'
+  import Button from './bubble/Button.vue'
   import { useBubbleMenu } from './bubble/composables/useBubbleMenu'
   import type { EditorPlugin, EditorPluginContext } from './plugins/types'
 
@@ -12,9 +14,11 @@
     context: EditorPluginContext
   }>()
 
-  const { visible, anchor, bubblePlugins, press } = useBubbleMenu(
+  const menuRef = useTemplateRef<HTMLElement>('menuRef')
+  const { visible, bubblePlugins } = useBubbleMenu(
     () => props.editor,
     () => props.items,
+    menuRef,
   )
 
   function isActive(plugin: EditorPlugin): boolean {
@@ -22,43 +26,61 @@
     return plugin.toolbarItem.isActive(props.editor)
   }
 
-  function onPress(plugin: EditorPlugin, event: MouseEvent) {
-    const editor = props.editor
-    if (!editor || !plugin.toolbarItem) return
+  function handleClick(plugin: EditorPlugin, event: MouseEvent) {
+    if (!props.editor || !plugin.toolbarItem) return
     const trigger = event.currentTarget as HTMLElement
-    press(plugin, () => plugin.toolbarItem?.onClick?.(editor, props.context, trigger))
+    plugin.toolbarItem.onClick?.(props.editor, props.context, trigger)
   }
 </script>
 
 <template>
-  <Popover
-    v-model:open="visible"
-    :anchor="anchor"
-    :modal="false"
-    side="top"
-    update-position-strategy="always"
-    :padded="false"
-    class="max-w-none p-1"
-    @open-auto-focus="event => event.preventDefault()"
-    @interact-outside="event => event.preventDefault()"
-    @escape-key-down="event => event.preventDefault()"
-  >
-    <template #content>
-      <Inline align="center" gap="xs" :wrap="false">
-        <Button
-          v-for="plugin in bubblePlugins"
-          :key="plugin.id"
-          :aria-label="plugin.toolbarItem!.tooltip"
-          :variant="isActive(plugin) ? 'soft' : 'ghost'"
-          :tone="isActive(plugin) ? 'accent' : 'neutral'"
-          size="sm"
-          icon-only
-          @mousedown.prevent
-          @click="(event: MouseEvent) => onPress(plugin, event)"
+  <Teleport to="body">
+    <div ref="menuRef" class="hikari-bubble-menu-host">
+      <AnimatePresence>
+        <motion.div
+          v-if="visible && bubblePlugins.length > 0"
+          class="hikari-bubble-menu"
+          :initial="{ opacity: 0, y: 4, scale: 0.96 }"
+          :animate="{ opacity: 1, y: 0, scale: 1 }"
+          :exit="{ opacity: 0, y: 4, scale: 0.96 }"
+          :transition="TRANSITION_FAST"
         >
-          <template #icon><component :is="plugin.toolbarItem!.icon" /></template>
-        </Button>
-      </Inline>
-    </template>
-  </Popover>
+          <Button
+            v-for="plugin in bubblePlugins"
+            :key="plugin.id"
+            :icon="plugin.toolbarItem!.icon"
+            :active="isActive(plugin)"
+            @press="handleClick(plugin, $event)"
+          />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  </Teleport>
 </template>
+
+<style>
+  .hikari-bubble-menu-host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10500;
+    pointer-events: none;
+  }
+  .hikari-bubble-menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    background: var(--p-surface-0);
+    border: 1px solid var(--p-surface-200);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    pointer-events: auto;
+    transform-origin: bottom center;
+  }
+  html.dark .hikari-bubble-menu {
+    background: var(--p-surface-900);
+    border-color: var(--p-surface-700);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+</style>

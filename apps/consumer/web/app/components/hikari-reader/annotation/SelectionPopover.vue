@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { IconButton } from '@hina-ui/vue'
   import { Highlighter, Underline } from '@lucide/vue'
   import { motion } from 'motion-v'
   import { EASE_CSS, TRANSITION } from '~/lib/motion'
@@ -35,28 +34,32 @@
     :exit="{ opacity: 0, scale: 0.96, y: 4 }"
     :transition="TRANSITION"
   >
-    <IconButton
-      label="高亮"
-      :tooltip="false"
-      variant="ghost"
-      tone="neutral"
-      size="sm"
-      pill
+    <Button
+      rounded
+      severity="secondary"
+      variant="text"
+      size="small"
+      class="reader-selection-button"
+      aria-label="高亮"
       @click="emit('highlight')"
     >
-      <Highlighter />
-    </IconButton>
-    <IconButton
-      label="下划线"
-      :tooltip="false"
-      variant="ghost"
-      tone="neutral"
-      size="sm"
-      pill
+      <template #icon>
+        <Highlighter :size="16" aria-hidden="true" />
+      </template>
+    </Button>
+    <Button
+      rounded
+      severity="secondary"
+      variant="text"
+      size="small"
+      class="reader-selection-button"
+      aria-label="下划线"
       @click="emit('underline')"
     >
-      <Underline />
-    </IconButton>
+      <template #icon>
+        <Underline :size="16" aria-hidden="true" />
+      </template>
+    </Button>
   </motion.div>
 </template>
 
@@ -71,13 +74,13 @@
     backdrop-filter: blur(18px) saturate(1.6);
   }
 
-  .reader-selection-popover :deep(button) {
+  .reader-selection-popover :deep(.p-button) {
     color: var(--reader-icon);
     transition: background-color 140ms ease;
   }
 
-  .reader-selection-popover :deep(button:not(:disabled):hover),
-  .reader-selection-popover :deep(button:not(:disabled):focus-visible) {
+  .reader-selection-popover :deep(.p-button:not(:disabled):hover),
+  .reader-selection-popover :deep(.p-button:not(:disabled):focus-visible) {
     background: var(--reader-icon-hover-bg);
   }
 </style>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Center, Skeleton, Stack, Text } from '@hina-ui/vue'
   import { RotateCw } from '@lucide/vue'
   import { cn } from '~/utils/cn'
   import type { PageLoadStatus } from './composables/usePageLoader'
@@ -24,7 +23,7 @@
     switch (props.fit) {
       case 'screen':
         return props.double
-          ? 'h-auto max-h-dvh w-auto max-w-1/2'
+          ? 'h-auto max-h-dvh w-auto max-w-[50%]'
           : 'h-auto max-h-dvh w-auto max-w-full'
       case 'width':
         return props.double ? 'h-auto w-1/2' : 'h-auto w-full'
@@ -64,19 +63,19 @@
 
 <template>
   <canvas v-if="status === 'ready'" ref="canvas" :class="sizeClass" />
-  <Center v-else :class="cn(placeholderClass)" :style="ratioStyle">
-    <Skeleton v-if="status !== 'error'" class="size-full rounded-none bg-neutral-0/5" />
-    <Stack v-else align="center" gap="sm" class="px-6 text-center">
-      <Text size="sm" class="text-neutral-400">这一页加载失败了</Text>
+  <div v-else :class="cn('flex items-center justify-center', placeholderClass)" :style="ratioStyle">
+    <Skeleton v-if="status !== 'error'" class="size-full! rounded-none! bg-white/5!" />
+    <div v-else class="flex flex-col items-center gap-3 px-6 text-center">
+      <p class="text-sm text-[#8b95a6]">这一页加载失败了</p>
       <Button
-        variant="outline"
-        tone="neutral"
-        size="sm"
+        size="small"
+        severity="secondary"
+        outlined
+        label="重试"
         @click.stop="emit('retry', page.page_number)"
       >
-        <template #icon><RotateCw /></template>
-        重试
+        <template #icon><RotateCw :size="14" /></template>
       </Button>
-    </Stack>
-  </Center>
+    </div>
+  </div>
 </template>

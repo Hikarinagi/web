@@ -20,7 +20,8 @@
         :user="cluster.author"
         card
         card-show-on-click
-        class="size-10! shrink-0 border border-surface ring-4 ring-canvas"
+        shape="circle"
+        class="size-10! shrink-0 border border-surface ring-4 ring-surface-0 dark:ring-surface-950"
       />
     </div>
     <div class="min-w-0 flex-1">

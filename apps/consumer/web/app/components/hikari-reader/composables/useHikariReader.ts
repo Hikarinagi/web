@@ -1,16 +1,10 @@
 import type { TocEntry, Reader } from '@ritojs/core'
 import type { ReadingPosition, ReaderController } from '@ritojs/kit'
 import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
-import { bindReaderEvents, restorePosition, type ReaderRuntimeError } from '../lib/events'
+import { bindReaderEvents, restorePosition } from '../lib/events'
 import { getSpreadMode } from '../lib/layout'
 import { disposeReaderStack, createReaderStack } from '../lib/runtime'
-import {
-  getReaderError,
-  loadReaderEpub,
-  resolveViewport,
-  type ReaderDownloadProgress,
-  type ReaderLoadPhase,
-} from '../lib/session'
+import { getReaderError, loadReaderEpub, resolveViewport } from '../lib/session'
 import { useReaderDurationTracker } from './useReaderDurationTracker'
 import { useReaderProgressSync } from './useReaderProgressSync'
 import { useReaderResize } from './useReaderResize'
@@ -28,9 +22,6 @@ export function useHikariReader(input: HikariReaderInput) {
   const isLoading = ref(false)
   const isTransitioning = ref(false)
   const error = ref<string | null>(null)
-  const runtimeError = shallowRef<ReaderRuntimeError | null>(null)
-  const loadPhase = ref<ReaderLoadPhase | null>(null)
-  const downloadProgress = shallowRef<ReaderDownloadProgress | null>(null)
 
   let requestId = 0
   let disposeEvents: (() => void) | null = null
@@ -63,49 +54,28 @@ export function useHikariReader(input: HikariReaderInput) {
     if (!import.meta.client || isLoading.value) return
 
     const activeRequestId = ++requestId
-    const isActive = () => activeRequestId === requestId
     isLoading.value = true
     error.value = null
-    runtimeError.value = null
-    loadPhase.value = null
-    downloadProgress.value = null
 
     try {
       const viewport = await resolveViewport(surface.value)
-      const epub = await loadReaderEpub(input.volumeId, {
-        onPhase: phase => {
-          if (isActive()) loadPhase.value = phase
-        },
-        onDownload: progress => {
-          if (isActive()) downloadProgress.value = progress
-        },
-      })
-      if (!isActive() || !surface.value) return
+      const epub = await loadReaderEpub(input.volumeId)
+      if (activeRequestId !== requestId || !surface.value) return
 
-      loadPhase.value = 'parse'
       const stack = await createReaderStack(epub, viewport, input)
-      if (!isActive()) {
+      if (activeRequestId !== requestId) {
         disposeReaderStack(stack)
         return
       }
 
       dispose()
       if (!mountStack(stack, viewport.width)) return
-      loadPhase.value = 'restore'
       await restorePosition(stack.controller)
     } catch (err) {
-      if (isActive()) error.value = getReaderError(err)
+      if (activeRequestId === requestId) error.value = getReaderError(err)
     } finally {
-      if (isActive()) {
-        isLoading.value = false
-        loadPhase.value = null
-        downloadProgress.value = null
-      }
+      if (activeRequestId === requestId) isLoading.value = false
     }
-  }
-
-  function dismissRuntimeError() {
-    runtimeError.value = null
   }
 
   function mountStack(stack: ReaderStack, width: number) {
@@ -125,7 +95,7 @@ export function useHikariReader(input: HikariReaderInput) {
     disposeEvents = bindReaderEvents(stack.controller, {
       currentPosition,
       currentSpread,
-      runtimeError,
+      error,
       transitioning: isTransitioning,
       totalSpreads,
     })
@@ -207,16 +177,12 @@ export function useHikariReader(input: HikariReaderInput) {
     controller,
     currentPosition,
     currentSpread,
-    dismissRuntimeError,
-    downloadProgress,
     error,
     goTo,
     goToPosition,
     goToSpread,
     isLoaded,
     isLoading,
-    loadPhase,
-    runtimeError,
     isTransitioning,
     jumpToSpread,
     load,

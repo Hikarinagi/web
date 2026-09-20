@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const EDITOR_RESOURCE_OPTIONS: { label: string; value: string }[] = [
@@ -34,3 +35,12 @@ export const editorNewSchema = v.object({
 })
 
 export type EditorNewValues = v.InferOutput<typeof editorNewSchema>
+
+export const editorNewResolver = valibotResolver(editorNewSchema)
+
+export const editorLaunchInitialValues: { resource_type: string; resource_id: number | null } = {
+  resource_type: 'galgame',
+  resource_id: null,
+}
+
+export const editorLaunchResolver = valibotResolver(editorLaunchSchema)

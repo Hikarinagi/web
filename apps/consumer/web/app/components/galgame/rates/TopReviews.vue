@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Rating, Spoiler } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameRatesTopReviews' })
@@ -26,7 +26,7 @@
 
     <div v-else class="grid grid-cols-1 gap-x-6 gap-y-4 px-5 pb-1 sm:grid-cols-2">
       <div v-for="r in reviews" :key="r.id" class="flex items-start gap-2.5">
-        <Avatar :user="r.rater" card class="size-7! shrink-0" />
+        <Avatar :user="r.rater" card shape="circle" class="size-7! shrink-0" />
         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
           <div class="flex items-center gap-1.5">
             <UserName
@@ -37,7 +37,7 @@
             <span
               class="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-surface-700 tabular-nums dark:text-surface-300"
             >
-              <Rating :model-value="r.rate ?? 0" :max="10" :stars="5" readonly size="sm" />
+              <Star class="size-3 fill-amber-400 text-amber-400" />
               {{ r.rate }}
             </span>
           </div>

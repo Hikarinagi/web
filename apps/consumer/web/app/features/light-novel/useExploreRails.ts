@@ -10,13 +10,11 @@ export function useExploreRails() {
   const entries = useState<RailEntry[]>('ln:explore:entries', () => [])
   const cursor = useState<number | null>('ln:explore:cursor', () => 0)
   const loading = useState('ln:explore:loading', () => false)
-  const failed = useState('ln:explore:failed', () => false)
   const done = computed(() => cursor.value === null)
 
   async function loadMore() {
     if (loading.value || cursor.value === null) return
     loading.value = true
-    failed.value = false
     try {
       const data = await $fetch<LightNovelRailsData>('/api/pages/light-novels/rails', {
         query: { cursor: cursor.value },
@@ -24,11 +22,11 @@ export function useExploreRails() {
       entries.value.push(...data.entries)
       cursor.value = data.next_cursor
     } catch {
-      failed.value = true
+      cursor.value = null
     } finally {
       loading.value = false
     }
   }
 
-  return { entries, loading, failed, done, loadMore }
+  return { entries, loading, done, loadMore }
 }

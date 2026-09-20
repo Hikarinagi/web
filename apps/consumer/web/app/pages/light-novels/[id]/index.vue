@@ -59,7 +59,9 @@
         :contributors="data.contributors"
       />
 
-      <WorkLongReviews :articles="data.articles" />
+      <LightNovelLongReviews :articles="data.articles" />
+
+      <LightNovelMentions :posts="data.posts" />
 
       <LightNovelRelations :relations="data.relations" />
     </div>

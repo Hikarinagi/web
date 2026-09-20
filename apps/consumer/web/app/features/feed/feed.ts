@@ -1,5 +1,4 @@
 import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
-import { ratePath, volumeRatePath } from '~/features/rate/permalink'
 
 export const FEED_PAGE_SIZE = 20
 export type FeedResponse = ApiData<'/api/v3/feed', 'get'>
@@ -49,25 +48,6 @@ export function feedTypeLabel(item: BackendFeedItem): string {
       return '打卡'
     case 'light_novel_volume_rate':
       return '卷评'
-  }
-}
-
-export function feedItemPath(item: BackendFeedItem): string | null {
-  switch (item.type) {
-    case 'post':
-      return `/posts/${item.id}`
-    case 'article':
-      return `/articles/${item.id}`
-    case 'galgame_rate':
-    case 'light_novel_rate':
-    case 'manga_rate':
-      return ratePath(item.work_ref.work_type, item.work_ref.id, item.id)
-    case 'light_novel_volume_rate':
-      return volumeRatePath(item.volume_ref.id, item.id)
-    case 'galgame_status':
-    case 'light_novel_status':
-    case 'manga_status':
-      return null
   }
 }
 

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Empty, Skeleton, Stack } from '@hina-ui/vue'
-
   defineOptions({ name: 'ChangelogList' })
 
   const { data, pending } = useHikariApiData('/api/v3/site/releases', {
@@ -10,11 +8,11 @@
 </script>
 
 <template>
-  <Stack v-if="pending" gap="md">
-    <Skeleton v-for="index in 3" :key="index" class="h-20" />
-  </Stack>
+  <div v-if="pending" class="flex flex-col gap-4">
+    <Skeleton v-for="index in 3" :key="index" height="5rem" />
+  </div>
 
-  <Stack v-else-if="data?.items.length" gap="none">
+  <div v-else-if="data?.items.length" class="flex flex-col">
     <ChangelogEntry
       v-for="entry in data.items"
       :key="entry.version"
@@ -22,7 +20,7 @@
       :released-at="entry.released_at"
       :sections="entry.sections"
     />
-  </Stack>
+  </div>
 
-  <Empty v-else size="sm" title="还没有更新记录" />
+  <p v-else class="py-8 text-center text-sm text-muted-color">还没有更新记录</p>
 </template>

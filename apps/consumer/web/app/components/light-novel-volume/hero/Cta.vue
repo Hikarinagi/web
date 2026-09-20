@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Inline } from '@hina-ui/vue'
   import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { getLightNovelVolumeTitle } from '~/utils/media/light-novel'
@@ -26,49 +25,60 @@
 </script>
 
 <template>
-  <Inline gap="sm" justify="center" class="lg:justify-start">
-    <AuthGateButton v-if="volume.online_reading_available" size="lg" @click="read">
+  <div class="flex flex-wrap items-stretch justify-center gap-2.5 lg:justify-start">
+    <Button
+      v-if="volume.online_reading_available"
+      login-required
+      :label="resume ? '继续阅读' : '开始阅读'"
+      @click="read"
+    >
       <template #icon>
-        <Play aria-hidden="true" />
+        <Play :size="17" aria-hidden="true" />
       </template>
-      {{ resume ? '继续阅读' : '开始阅读' }}
-    </AuthGateButton>
-    <Button v-else size="lg" disabled>
+    </Button>
+    <Button v-else disabled label="暂无在线阅读">
       <template #icon>
-        <Play aria-hidden="true" />
+        <Play :size="17" aria-hidden="true" />
       </template>
-      暂无在线阅读
     </Button>
 
     <Button
       v-if="rateCtl.score.value != null"
-      size="lg"
-      variant="outline"
-      tone="neutral"
+      severity="secondary"
+      outlined
       @click="dialogOpen = true"
     >
-      <template #icon>
-        <Star class="fill-current text-warning" />
-      </template>
-      {{ rateCtl.score.value?.toFixed(1) }}
-      <template #trailing>
-        <Pencil class="text-muted" />
-      </template>
+      <span class="inline-flex items-center gap-1.5">
+        <Star class="size-4 fill-amber-500 text-amber-500" />
+        <span class="text-[15px] font-semibold text-color">
+          {{ rateCtl.score.value?.toFixed(1) }}
+        </span>
+        <Pencil class="size-3 text-muted-color" />
+      </span>
     </Button>
-    <AuthGateButton v-else size="lg" variant="outline" tone="neutral" @click="dialogOpen = true">
-      写个评分
-      <template #trailing><ArrowRight /></template>
-    </AuthGateButton>
+    <Button
+      v-else
+      login-required
+      severity="secondary"
+      label="写个评分"
+      icon-pos="right"
+      outlined
+      @click="dialogOpen = true"
+    >
+      <template #icon><ArrowRight class="size-3.5" /></template>
+    </Button>
 
-    <ShareButton :to="`/light-novel-volumes/${volume.id}`" tooltip="分享" size="lg" />
+    <ShareButton
+      :to="`/light-novel-volumes/${volume.id}`"
+      tooltip="分享"
+      severity="secondary"
+      outlined
+    />
 
     <LightNovelVolumeEpubActions
       :volume-id="volume.id"
       :available="volume.online_reading_available"
-      size="lg"
     />
-
-    <WorkEditButton resource-type="light-novel-volume" :resource-id="volume.id" size="lg" />
 
     <LightNovelVolumeRateDialog
       v-model:visible="dialogOpen"
@@ -77,5 +87,5 @@
       :upsert="rateCtl.upsert"
       :remove="rateCtl.remove"
     />
-  </Inline>
+  </div>
 </template>

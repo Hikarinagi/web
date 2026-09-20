@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Alert, Button, Dialog, Input, Text } from '@hina-ui/vue'
   import { ImagePlus, Star } from '@lucide/vue'
   import { useArticleEditor, type ArticleReviewContext } from './composables/useArticleEditor'
 
@@ -85,16 +84,17 @@
   <div class="flex min-h-[calc(100vh-4rem)] flex-col">
     <div
       class="sticky top-(--app-header-height) z-20 border-b border-surface-200/75 bg-surface-0/85 shadow-[0_2px_5px_rgba(15,23,42,0.04)] backdrop-blur-xl dark:border-surface-800/75 dark:bg-surface-950/80"
+      :style="{ '--editor-toolbar-bg': 'transparent', '--editor-toolbar-border': 'transparent' }"
     >
-      <div class="flex justify-center">
+      <div class="flex justify-center px-4">
         <HikariEditorToolbar :editor="editor" :items="plugins" :context="pluginContext" />
       </div>
     </div>
 
     <div class="article-canvas mx-auto w-[600px] max-w-full flex-1 px-4 pt-8 pb-28 sm:px-0">
-      <Alert v-model:open="editingPublishedArticle" tone="warning" class="mb-5">
+      <Message v-if="editingPublishedArticle" severity="warn" :closable="false" class="mb-5">
         这篇文章是从已发布状态进入编辑的。任何修改都会自动转为草稿，需要重新提交后才会再次公开。
-      </Alert>
+      </Message>
 
       <div
         v-if="isReview"
@@ -119,31 +119,39 @@
         <div
           class="absolute top-3 right-3 flex gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover/cover:opacity-100 md:focus-within:opacity-100"
         >
-          <Button variant="solid" tone="neutral" size="sm" @click="openCoverLibrary">
+          <Button
+            unstyled
+            class="cursor-pointer rounded-lg bg-surface-900/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-surface-900/70"
+            @click="openCoverLibrary"
+          >
             更换封面
           </Button>
-          <Button variant="solid" tone="neutral" size="sm" @click="removeCover">移除</Button>
+          <Button
+            unstyled
+            class="cursor-pointer rounded-lg bg-surface-900/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-surface-900/70"
+            @click="removeCover"
+          >
+            移除
+          </Button>
         </div>
       </div>
       <Button
         v-else
-        variant="outline"
-        tone="neutral"
-        size="sm"
-        class="border-dashed"
+        unstyled
+        class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-dashed border-surface-300 px-3 py-1.5 text-sm text-muted-color transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-surface-600"
         @click="openCoverLibrary"
       >
-        <template #icon><ImagePlus /></template>
-        添加封面
+        <ImagePlus :size="17" />
+        <span>添加封面</span>
       </Button>
 
-      <Input
+      <InputText
         v-model="title"
-        variant="bare"
+        unstyled
         autofocus
         maxlength="200"
         placeholder="标题"
-        class="mt-5 h-auto text-4xl leading-tight font-bold [--hn-input-px:0]"
+        class="mt-5 w-full border-0 bg-transparent text-4xl leading-tight font-bold text-color outline-none placeholder:text-(--editor-placeholder-color)"
       />
 
       <HikariEditor v-if="editor" :editor="editor" class="mt-4" />
@@ -163,9 +171,13 @@
           <div class="h-4 w-px bg-surface-200 dark:bg-surface-700" />
           <HikariEditorUndoRedo :editor="editor" />
         </div>
-        <Button size="sm" :loading="publishing" :disabled="!canPublish" @click="publishOpen = true">
-          发布
-        </Button>
+        <Button
+          label="发布"
+          size="small"
+          :loading="publishing"
+          :disabled="!canPublish"
+          @click="publishOpen = true"
+        />
       </div>
     </div>
 
@@ -176,19 +188,30 @@
     <ArticleEditorPublishDialog v-model:visible="publishOpen" :host="host" />
     <ArticleEditorDraftChooser v-if="props.articleId === null && !isReview" @restore="onRestore" />
 
-    <Dialog v-model:open="leavePromptOpen" title="空白草稿" size="sm">
-      <template #content>
-        <Text tone="muted">要保存此草稿吗？</Text>
-      </template>
+    <Dialog
+      v-model:visible="leavePromptOpen"
+      modal
+      header="空白草稿"
+      :draggable="false"
+      dismissable-mask
+      :style="{ width: '26rem' }"
+    >
+      <p class="text-sm leading-6 text-muted-color">要保存此草稿吗？</p>
       <template #footer>
-        <Button variant="ghost" tone="neutral" @click="leaveTo">保留</Button>
-        <Button tone="danger" @click="discardDraft">删除草稿</Button>
+        <Button label="保留" severity="secondary" text @click="leaveTo" />
+        <Button label="删除草稿" severity="danger" @click="discardDraft" />
       </template>
     </Dialog>
   </div>
 </template>
 
 <style scoped>
+  :deep(.editor-toolbar) {
+    width: max-content;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
   .article-canvas :deep(.hikari-editor-surface) {
     font-size: 17px;
     line-height: 1.8;

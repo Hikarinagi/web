@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Button, DateRangePicker, Inline, SearchInput, Select, Stack } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
   import { FileText, ImagePlus, SquarePen } from '@lucide/vue'
   import { MANAGED_STATUS_FILTERS, type ManagedContentPage } from '~/features/space/space'
   import { useManagedContent } from '~/features/space/useManagedContent'
@@ -8,7 +6,7 @@
   defineOptions({ name: 'SpaceTabsContentManage' })
 
   const props = defineProps<{ managed: ManagedContentPage; type: 'post' | 'article' }>()
-  const statusOptions = MANAGED_STATUS_FILTERS.map(f => ({ value: f.key, label: f.label }))
+  const statusOptions = [...MANAGED_STATUS_FILTERS]
   const {
     list,
     status,
@@ -22,57 +20,64 @@
     reset,
     loadPage,
   } = useManagedContent(props.managed, props.type)
-
-  function selectStatus(value: string | number | null | undefined) {
-    const next = MANAGED_STATUS_FILTERS.find(f => f.key === value)?.key
-    if (next) status.value = next
-  }
 </script>
 
 <template>
-  <Stack gap="md" class="pt-2">
-    <Inline gap="sm" justify="between" class="sm:flex-nowrap">
-      <Inline gap="sm" class="min-w-0 sm:flex-1 sm:flex-nowrap">
-        <Select
-          :model-value="status"
-          :options="statusOptions"
-          size="sm"
-          aria-label="状态"
-          class="min-w-0 sm:w-36 sm:shrink-0"
-          @update:model-value="selectStatus"
-        />
-        <DateRangePicker
-          v-model="updatedRange"
-          placeholder="更新时间"
-          size="sm"
-          class="min-w-0 sm:w-56 sm:shrink-0"
-          aria-label="更新时间"
-        />
-        <SearchInput
+  <div class="flex flex-col gap-4 pt-2">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      <div class="grid w-full grid-cols-2 gap-2 sm:flex sm:min-w-0 sm:flex-1">
+        <InputText
           v-model="search"
           placeholder="搜索标题或正文"
-          size="sm"
-          class="w-full sm:min-w-64 sm:flex-1"
-          aria-label="搜索标题或正文"
+          size="small"
+          class="order-1 col-span-2 w-full sm:order-3 sm:min-w-64 sm:flex-1"
         />
-      </Inline>
-      <Inline gap="sm" :wrap="false" class="shrink-0">
-        <Button variant="ghost" tone="neutral" size="sm" :disabled="!hasFilters" @click="reset">
-          清空
+        <Select
+          v-model="status"
+          :options="statusOptions"
+          option-label="label"
+          option-value="key"
+          size="small"
+          class="order-2 min-w-0 sm:order-1 sm:w-36 sm:shrink-0"
+        />
+        <DatePicker
+          v-model="updatedRange"
+          selection-mode="range"
+          date-format="yy/mm/dd"
+          placeholder="更新时间"
+          show-icon
+          :manual-input="false"
+          size="small"
+          class="order-3 min-w-0 sm:order-2 sm:w-56 sm:shrink-0"
+        />
+      </div>
+      <div class="flex w-full items-center gap-2 sm:w-auto sm:shrink-0">
+        <Button
+          label="清空"
+          text
+          size="small"
+          class="shrink-0"
+          :disabled="!hasFilters"
+          @click="reset"
+        />
+        <Button
+          v-if="type === 'article'"
+          as="router-link"
+          to="/articles/new"
+          label="写文章"
+          size="small"
+          class="flex-1 sm:flex-none"
+        >
+          <template #icon><SquarePen class="size-4" /></template>
         </Button>
-        <Button v-if="type === 'article'" :as="NuxtLink" to="/articles/new" size="sm">
-          <template #icon><SquarePen /></template>
-          写文章
+        <Button v-else label="发图文" size="small" class="flex-1 sm:flex-none" @click="create">
+          <template #icon><ImagePlus class="size-4" /></template>
         </Button>
-        <Button v-else size="sm" @click="create">
-          <template #icon><ImagePlus /></template>
-          发图文
-        </Button>
-      </Inline>
-    </Inline>
+      </div>
+    </div>
 
     <LoadingOverlay :loading="pending">
-      <Stack v-if="list.items.length" gap="none">
+      <div v-if="list.items.length" class="flex flex-col">
         <SpaceTabsContentManageRow
           v-for="item in list.items"
           :key="item.id"
@@ -80,7 +85,7 @@
           @edit="edit"
           @remove="remove"
         />
-      </Stack>
+      </div>
       <SpaceEmptyState
         v-else
         :icon="FileText"
@@ -95,5 +100,5 @@
       route="replace"
       @change="loadPage"
     />
-  </Stack>
+  </div>
 </template>

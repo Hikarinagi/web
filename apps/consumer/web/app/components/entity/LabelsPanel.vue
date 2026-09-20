@@ -1,13 +1,4 @@
 <script setup lang="ts">
-  import {
-    Chip,
-    DescriptionDetails,
-    DescriptionList,
-    DescriptionTerm,
-    Inline,
-    Link,
-    Text,
-  } from '@hina-ui/vue'
   import type { EntityContributors, EntityDetail, EntityKind } from '~/features/entity/entity'
   import { buildInfoRows, buildSourceLinks } from '~/features/entity/info'
 
@@ -36,37 +27,40 @@
     :title="rows.length ? title : null"
     :footer-separated="Boolean(rows.length || sourceLinks.length)"
   >
-    <DescriptionList v-if="rows.length" class="flex flex-col gap-2.5 px-5 py-3.5 text-sm">
-      <Inline v-for="row in rows" :key="row.key" align="start" gap="none" class="gap-2.5">
-        <DescriptionTerm class="w-16 shrink-0 text-faint">{{ row.key }}</DescriptionTerm>
-        <DescriptionDetails class="min-w-0 flex-1">
-          <Link
-            v-if="row.href"
-            :href="row.href"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="wrap-anywhere"
-          >
-            {{ row.value }}
-          </Link>
-          <Text v-else as="span" size="sm" class="wrap-anywhere">{{ row.value }}</Text>
-        </DescriptionDetails>
-      </Inline>
-    </DescriptionList>
+    <template v-if="rows.length">
+      <dl class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
+        <div v-for="row in rows" :key="row.key" class="flex items-start gap-2.5">
+          <dt class="w-16 shrink-0 text-surface-400">{{ row.key }}</dt>
+          <dd class="min-w-0 flex-1">
+            <a
+              v-if="row.href"
+              :href="row.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="wrap-anywhere text-sky-700 hover:underline dark:text-sky-400"
+            >
+              {{ row.value }}
+            </a>
+            <span v-else class="wrap-anywhere text-surface-700 dark:text-surface-300">
+              {{ row.value }}
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </template>
 
-    <Inline v-if="sourceLinks.length" gap="sm" :class="rows.length ? 'px-5 pb-4' : 'px-5 py-4'">
-      <Chip
+    <div v-if="sourceLinks.length" class="flex gap-2 px-5 pb-4" :class="{ 'pt-4': !rows.length }">
+      <a
         v-for="link in sourceLinks"
         :key="link.label"
-        as="a"
-        variant="outline"
         :href="link.href"
         target="_blank"
         rel="noopener noreferrer"
+        class="rounded-md border border-surface-200 px-2.5 py-1 text-[11px] font-semibold text-surface-600 transition-colors hover:bg-surface-50 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         {{ link.label }}
-      </Chip>
-    </Inline>
+      </a>
+    </div>
 
     <template v-if="hasContributors" #footer>
       <ResourceArchiveContributorFooter

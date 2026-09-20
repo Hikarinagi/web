@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  import { Button, Flex, Heading, Inline, Stack, Text } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
-
   defineOptions({ name: 'DeveloperLandingHero' })
 
   const TITLE = 'Code Together'
@@ -35,51 +32,52 @@
 </script>
 
 <template>
-  <Stack as="section" gap="none" class="relative overflow-hidden border-b border-line">
+  <section class="relative overflow-hidden border-b border-surface">
     <div class="hero-grid absolute inset-0" aria-hidden="true" />
 
-    <Flex
-      direction="col"
-      justify="center"
-      gap="none"
-      class="relative z-10 mx-auto box-content min-h-[calc(360px+var(--app-header-height))] w-full max-w-app gap-12 px-6 pt-[calc(var(--app-header-height)+48px)] pb-16 lg:flex-row lg:items-center lg:gap-16"
+    <div
+      class="relative z-10 mx-auto box-content flex min-h-[calc(360px+var(--app-header-height))] max-w-app flex-col justify-center gap-12 px-6 pt-[calc(var(--app-header-height)+48px)] pb-16 lg:flex-row lg:items-center lg:gap-16"
     >
-      <Stack gap="none" align="start" class="max-w-xl flex-1 gap-5">
-        <Heading
-          :level="1"
+      <div class="flex max-w-xl flex-1 flex-col items-start gap-5">
+        <p
+          class="font-mono text-xs font-semibold tracking-widest text-hikari-primary-600 uppercase dark:text-hikari-primary-400"
+        >
+          Hikarinagi Developers
+        </p>
+
+        <h1
+          class="font-mono text-5xl font-extrabold tracking-tight text-color lg:text-6xl"
           :aria-label="TITLE"
-          class="font-mono text-5xl font-extrabold tracking-tight lg:text-6xl"
         >
           <span aria-hidden="true" v-text="typed" />
           <span
             aria-hidden="true"
-            class="text-accent"
+            class="text-hikari-primary-500"
             :class="{ 'hero-caret': !typing }"
             v-text="'_'"
           />
-        </Heading>
+        </h1>
 
-        <Text as="p" size="lg" tone="muted">使用 Hikarinagi 的公开数据构建你的应用</Text>
+        <p class="text-lg text-muted-color">使用 Hikarinagi 的公开数据构建你的应用。</p>
 
-        <Inline gap="md" align="center">
-          <Button as-child>
-            <NuxtLink to="/developers/guide">查看文档</NuxtLink>
-          </Button>
-          <AuthGateButton
-            variant="outline"
-            tone="neutral"
-            @click="navigateTo('/developers/console')"
-          >
-            进入控制台
-          </AuthGateButton>
-        </Inline>
-      </Stack>
+        <div class="flex flex-wrap items-center gap-3">
+          <Button label="查看文档" as="router-link" to="/developers/docs" />
+          <Button
+            label="进入控制台"
+            severity="secondary"
+            outlined
+            login-required
+            as="router-link"
+            to="/developers/console"
+          />
+        </div>
+      </div>
 
-      <Stack gap="none" class="w-full max-w-xl min-w-0 flex-1">
+      <div class="w-full max-w-xl min-w-0 flex-1">
         <DeveloperLandingHeroTerminal />
-      </Stack>
-    </Flex>
-  </Stack>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>

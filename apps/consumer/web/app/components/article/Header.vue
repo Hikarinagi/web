@@ -8,7 +8,7 @@
   <header class="flex flex-col gap-6">
     <HikariImage
       v-if="article.cover"
-      :src="article.cover"
+      :src="article.cover.src"
       :alt="article.title"
       class="aspect-2/1 w-full overflow-hidden rounded-xl"
       image-class="size-full object-cover"

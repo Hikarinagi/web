@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Center, Inline, Stack, Text } from '@hina-ui/vue'
   import { Camera, ImagePlus, User } from '@lucide/vue'
   import { useMediaLibrary } from '~/components/media-library/composables/useMediaLibrary'
   import type { MediaValue } from '~/components/media-library/types'
@@ -45,14 +44,10 @@
 </script>
 
 <template>
-  <Inline gap="lg" align="center">
-    <Center
-      :class="
-        cn(
-          'shrink-0 overflow-hidden bg-inset text-muted',
-          isCircle ? 'size-18 rounded-full' : 'aspect-6/1 w-75 max-w-full rounded-lg',
-        )
-      "
+  <div class="flex flex-wrap items-center gap-5">
+    <div
+      class="shrink-0 overflow-hidden bg-surface-100 dark:bg-surface-800"
+      :class="isCircle ? 'size-[72px] rounded-full' : 'aspect-6/1 w-[300px] max-w-full rounded-lg'"
     >
       <HikariImage
         v-if="model"
@@ -62,17 +57,25 @@
         image-class="size-full object-cover"
         :processing="{ q: 85 }"
       />
-      <component :is="isCircle ? User : ImagePlus" v-else :size="isCircle ? 30 : 22" />
-    </Center>
-
-    <Stack gap="xs" align="start" class="min-w-0">
-      <Text size="sm" weight="medium">{{ label }}</Text>
-      <Text size="xs" tone="muted">{{ hint }}</Text>
-      <Button size="sm" variant="outline" tone="neutral" :loading="choosing" @click="pick">
-        <template #icon><component :is="isCircle ? Camera : ImagePlus" /></template>
-        {{ buttonLabel }}
+      <div v-else class="flex size-full items-center justify-center text-muted-color">
+        <component :is="isCircle ? User : ImagePlus" :size="isCircle ? 30 : 22" />
+      </div>
+    </div>
+    <div class="min-w-0">
+      <p class="text-sm font-medium text-color">{{ label }}</p>
+      <p class="mt-1 text-xs text-muted-color">{{ hint }}</p>
+      <Button
+        class="mt-2.5"
+        :label="buttonLabel"
+        size="small"
+        severity="secondary"
+        variant="outlined"
+        :loading="choosing"
+        @click="pick"
+      >
+        <template #icon><component :is="isCircle ? Camera : ImagePlus" class="size-4" /></template>
       </Button>
-    </Stack>
+    </div>
 
     <MediaLibraryCropDialog
       v-model:visible="cropVisible"
@@ -83,5 +86,5 @@
       :output-height="outputSize.height"
       @cropped="apply"
     />
-  </Inline>
+  </div>
 </template>

@@ -98,15 +98,14 @@ export function useReleaseTimeline(props: ReleaseTimelineProps, emit: ReleaseTim
       maxYear.value,
     ],
     () => {
-      cancelYearRange()
-
       if (props.releasePeriods.length) {
+        cancelYearRange()
         mode.value = 'periods'
         return
       }
 
-      if (props.releaseFrom || props.releaseTo) mode.value = 'range'
-
+      cancelYearRange()
+      mode.value = 'range'
       rangeFromYear.value = yearOf(props.releaseFrom) ?? minYear.value
       rangeFromMonth.value = monthOf(props.releaseFrom) ?? 1
       rangeToYear.value = yearOf(props.releaseTo) ?? yearOf(props.releaseFrom) ?? maxYear.value

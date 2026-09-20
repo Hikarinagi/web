@@ -1,12 +1,18 @@
 <script setup lang="ts">
-  import { Inline, Sheet, Stack } from '@hina-ui/vue'
   import { ListTree } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
-  import type { GuideNavItem } from '~/features/developer/useGuide'
-  import type { ReferenceNavGroup } from '~~/server/features/developer/reference'
+  import { GUIDE_SECTIONS } from '~/features/developer/guide'
+  import type { ReferenceGroup } from '~~/server/features/developer/reference'
+  import { useActiveSection } from '~/features/developer/useActiveSection'
 
   defineOptions({ name: 'DeveloperDocsShell' })
-  defineProps<{ groups: ReferenceNavGroup[]; sections: GuideNavItem[] }>()
+  const props = defineProps<{ groups: ReferenceGroup[] }>()
+
+  const activeId = useActiveSection(() => [
+    ...GUIDE_SECTIONS.map(section => section.id),
+    'reference',
+    ...props.groups.flatMap(group => group.operations.map(operation => operation.id)),
+  ])
 
   const breakpoints = useBreakpoints(breakpointsTailwind)
   const belowLg = breakpoints.smaller('lg')
@@ -26,28 +32,40 @@
 </script>
 
 <template>
-  <Inline gap="none" align="start" :wrap="false" class="mx-auto max-w-header lg:gap-10">
-    <Stack
-      as="nav"
-      gap="none"
+  <div class="mx-auto box-content flex max-w-header items-start px-6 py-10 lg:gap-10">
+    <nav
+      class="sticky top-[calc(var(--app-header-height)+24px)] hidden w-64 shrink-0 lg:block"
       aria-label="开发者文档导航"
-      class="sticky top-(--app-header-height) hidden w-64 shrink-0 py-8 ps-4 sm:ps-6 lg:block"
     >
       <DeveloperDocsNav
         :groups
-        :sections
-        scroll-class="max-h-[calc(100vh-var(--app-header-height)-8rem)]"
+        :active-id="activeId"
+        scroll-class="max-h-[calc(100vh-var(--app-header-height)-108px)]"
       />
-    </Stack>
+    </nav>
 
-    <Stack gap="none" class="min-w-0 flex-1">
+    <div class="flex min-w-0 flex-1 flex-col gap-14">
       <slot />
-    </Stack>
+    </div>
 
-    <Sheet v-model:open="open" title="文档目录" class="h-[60dvh]">
-      <template #content>
-        <DeveloperDocsNav :groups :sections scroll-class="max-h-none" @navigate="open = false" />
+    <Drawer
+      v-model:visible="open"
+      position="bottom"
+      :pt="{
+        root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
+        content: { class: 'p-2!' },
+      }"
+    >
+      <template #header>
+        <h2 class="text-base font-semibold text-color">文档目录</h2>
       </template>
-    </Sheet>
-  </Inline>
+
+      <DeveloperDocsNav
+        :groups
+        :active-id="activeId"
+        scroll-class="max-h-[calc(72vh-10.5rem)]"
+        @navigate="open = false"
+      />
+    </Drawer>
+  </div>
 </template>

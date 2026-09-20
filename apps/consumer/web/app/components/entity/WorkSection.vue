@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Grid } from '@hina-ui/vue'
   import { mapWorkItems, type WorkVariant } from '~/features/entity/relations'
 
   defineOptions({ name: 'EntityWorkSection' })
@@ -25,8 +24,8 @@
 
 <template>
   <EntitySection v-if="items.length" :title="title" :meta="meta" :more-to="moreTo">
-    <Grid :cols="3" class="gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6">
+    <div class="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6">
       <EntityWorkCard v-for="(item, index) in items" :key="`${item.to}-${index}`" :item="item" />
-    </Grid>
+    </div>
   </EntitySection>
 </template>

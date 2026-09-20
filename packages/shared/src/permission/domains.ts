@@ -60,12 +60,6 @@ export const PLATFORM_PERMISSIONS = {
   SETTINGS_WRITE: 'platform.settings.write',
 } as const
 
-export const APM_PERMISSIONS = {
-  READ: 'apm.read',
-  KEYS_WRITE: 'apm.keys.write',
-  SETTINGS_WRITE: 'apm.settings.write',
-} as const
-
 export const MEDIA_PERMISSIONS = {
   READ: 'media.read',
   SCAN_RUN: 'media.scan.run',
@@ -153,7 +147,6 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(USERS_PERMISSIONS),
   ...Object.values(IDP_PERMISSIONS),
   ...Object.values(PLATFORM_PERMISSIONS),
-  ...Object.values(APM_PERMISSIONS),
   ...Object.values(MEDIA_PERMISSIONS),
   ...Object.values(READER_PERMISSIONS),
   ...Object.values(PROMOTIONS_PERMISSIONS),
@@ -178,7 +171,6 @@ export type PermissionKey =
   | ValueOf<typeof USERS_PERMISSIONS>
   | ValueOf<typeof IDP_PERMISSIONS>
   | ValueOf<typeof PLATFORM_PERMISSIONS>
-  | ValueOf<typeof APM_PERMISSIONS>
   | ValueOf<typeof MEDIA_PERMISSIONS>
   | ValueOf<typeof READER_PERMISSIONS>
   | ValueOf<typeof PROMOTIONS_PERMISSIONS>

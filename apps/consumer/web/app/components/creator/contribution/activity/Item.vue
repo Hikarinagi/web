@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Center, Flex, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { timeFormat, timeFromNow } from '#imports'
-  import { cn } from '~/utils/cn'
   import { Cog, ImageOff } from '@lucide/vue'
   import type { BackendContributionActivityItem } from '~/features/creator/contribution'
   import {
@@ -26,20 +24,20 @@
 
 <template>
   <NuxtLink :to="`/create/contributions/${item.change_request.id}`" class="group flex gap-3">
-    <Stack gap="none" align="center" class="pt-1">
-      <Avatar v-if="item.actor" :user="item.actor" card class="size-8! shrink-0" />
-      <Center v-else as="span" class="size-8 shrink-0 rounded-full bg-subtle text-muted">
-        <Cog class="size-4" />
-      </Center>
-      <Flex v-if="!isLast" as="span" class="mt-1.5 w-px flex-1 bg-line" />
-    </Stack>
+    <div class="flex flex-col items-center pt-1">
+      <Avatar v-if="item.actor" :user="item.actor" card shape="circle" class="size-8! shrink-0" />
+      <span
+        v-else
+        class="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-100 text-muted-color dark:bg-surface-800"
+      >
+        <Cog :size="16" />
+      </span>
+      <span v-if="!isLast" class="mt-1.5 w-px flex-1 bg-surface-200 dark:bg-surface-700" />
+    </div>
 
-    <Stack gap="none" :class="cn('min-w-0 flex-1', !isLast && 'pb-4')">
-      <Inline
-        gap="sm"
-        align="start"
-        :wrap="false"
-        class="rounded-lg p-2.5 transition-colors group-hover:bg-subtle"
+    <div class="min-w-0 flex-1" :class="{ 'pb-4': !isLast }">
+      <div
+        class="flex gap-3 rounded-lg p-2.5 transition-colors group-hover:bg-surface-100 dark:group-hover:bg-surface-800"
       >
         <HikariImage
           :src="item.resource?.cover"
@@ -49,43 +47,57 @@
           image-class="object-cover"
         >
           <template #empty>
-            <Center class="h-16 w-12 rounded-md bg-subtle text-muted">
-              <ImageOff class="size-4" />
-            </Center>
+            <div
+              class="flex h-16 w-12 items-center justify-center rounded-md bg-surface-100 text-muted-color dark:bg-surface-800"
+            >
+              <ImageOff :size="16" />
+            </div>
           </template>
           <template #error>
-            <Center class="h-16 w-12 rounded-md bg-subtle text-muted">
-              <ImageOff class="size-4" />
-            </Center>
+            <div
+              class="flex h-16 w-12 items-center justify-center rounded-md bg-surface-100 text-muted-color dark:bg-surface-800"
+            >
+              <ImageOff :size="16" />
+            </div>
           </template>
         </HikariImage>
 
-        <Stack gap="xs" class="min-w-0 flex-1">
-          <Inline gap="xs" align="center">
+        <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
             <UserName :user="item.actor" fallback="系统" class="text-sm font-medium" />
-            <Text as="span" size="sm" :tone="meta?.tone ?? 'muted'">
+            <span class="text-sm" :class="meta?.text ?? 'text-muted-color'">
               {{ meta?.label ?? item.type }}
-            </Text>
-            <Tag size="sm" tone="neutral" class="font-mono">#{{ item.change_request.id }}</Tag>
-            <Tag v-if="statusMeta" size="sm" variant="outline" :tone="statusMeta.tone">
+            </span>
+            <span
+              class="rounded bg-surface-100 px-1.5 font-mono text-xs text-muted-color dark:bg-surface-800"
+            >
+              #{{ item.change_request.id }}
+            </span>
+            <span
+              v-if="statusMeta"
+              class="rounded-full border px-1.5 py-px text-xs"
+              :class="statusMeta.badge"
+            >
               {{ statusMeta.label }}
-            </Tag>
-            <Text v-tooltip="timeFormat(item.created_at)" as="span" size="xs" tone="muted">
+            </span>
+            <span class="text-xs text-muted-color" :title="timeFormat(item.created_at)">
               {{ timeFromNow(item.created_at) }}
-            </Text>
-          </Inline>
+            </span>
+          </div>
 
-          <Inline gap="xs" align="center" :wrap="false" class="min-w-0 text-sm">
-            <Tag size="sm" tone="neutral" class="shrink-0">
-              <component :is="typeIcon" v-if="typeIcon" />
+          <div class="flex min-w-0 items-center gap-1.5 text-sm">
+            <span
+              class="inline-flex shrink-0 items-center gap-1 rounded bg-surface-100 px-1.5 py-0.5 text-xs text-muted-color dark:bg-surface-800"
+            >
+              <component :is="typeIcon" v-if="typeIcon" :size="12" />
               {{ typeLabel }}
-            </Tag>
-            <Text as="span" size="sm" truncate>{{ title }}</Text>
-          </Inline>
+            </span>
+            <span class="truncate text-surface-700 dark:text-surface-200">{{ title }}</span>
+          </div>
 
-          <Text v-if="item.body" size="xs" tone="muted" truncate>{{ item.body }}</Text>
-        </Stack>
-      </Inline>
-    </Stack>
+          <p v-if="item.body" class="truncate text-xs text-muted-color">{{ item.body }}</p>
+        </div>
+      </div>
+    </div>
   </NuxtLink>
 </template>

@@ -1,23 +1,15 @@
-import type { Component } from 'vue'
-import { EDITOR_PLUGIN_CONTEXT_KEY, type EditorOverlay, type EditorPlugin } from '../plugins/types'
-import { useCommandMenu } from '../plugins/command/composables/useCommandMenu'
-import { useMentionSuggestion } from '../plugins/mention/composables/useMentionSuggestion'
+import type { Component, Ref } from 'vue'
+import { breakpointsTailwind } from '@vueuse/core'
+import type Popover from 'primevue/popover'
+import { EDITOR_PLUGIN_CONTEXT_KEY, type EditorPlugin } from '../plugins/types'
 import { useEditorOverlays } from './useEditorOverlays'
 
-function normalize(
-  entry: Component | EditorOverlay,
-  fallbackTitle: string,
-): Required<EditorOverlay> {
-  const overlay = 'component' in entry ? entry : { component: entry }
-  return {
-    component: overlay.component,
-    presentation: overlay.presentation ?? 'anchored',
-    scroll: overlay.scroll ?? 'host',
-    title: overlay.title ?? fallbackTitle,
-  }
-}
+const NESTED_OVERLAY_SELECTOR = '[data-pc-section="overlay"], [data-pc-section="panel"]'
 
-export function useOverlayHost(plugins: () => EditorPlugin[]) {
+export function useOverlayHost(
+  plugins: () => EditorPlugin[],
+  popoverRef: Readonly<Ref<InstanceType<typeof Popover> | null>>,
+) {
   const { active, closeOverlay } = useEditorOverlays()
 
   // 本 host 所属编辑器实例的归属标识(由所在编辑器 provide)。host 只认属于自己实例(或未归属)的
@@ -29,104 +21,93 @@ export function useOverlayHost(plugins: () => EditorPlugin[]) {
     return !cur.ownerId || cur.ownerId === ownerId ? cur : null
   })
 
-  const narrow = useNarrow()
+  const breakpoints = useBreakpoints(breakpointsTailwind)
+  const isMobile = breakpoints.smaller('md')
 
   // keepalive 下被缓存的 host(如首页内联编辑器)deactivate 后不再响应共享的 active 单例，
-  // 否则会与当前活跃页的编辑器抢 overlay。
+  // 否则会与当前活跃页的编辑器抢 overlay 并残留 document 监听。
   const activated = ref(true)
   onActivated(() => {
     activated.value = true
   })
   onDeactivated(() => {
     activated.value = false
+    document.removeEventListener('mousedown', onDocumentMouseDown, true)
   })
 
   const overlayMap = computed(() => {
-    const m = new Map<string, Required<EditorOverlay>>()
+    const m = new Map<string, Component>()
     for (const p of plugins()) {
       if (!p.overlays) continue
-      const fallbackTitle = p.toolbarItem?.tooltip ?? ''
-      for (const [id, entry] of Object.entries(p.overlays))
-        m.set(id, normalize(entry, fallbackTitle))
+      for (const [id, comp] of Object.entries(p.overlays)) m.set(id, comp)
     }
     return m
   })
 
   const renderedComp = shallowRef<Component | null>(null)
   const renderedProps = shallowRef<Record<string, unknown>>({})
-  const title = ref('')
-  const presentation = ref<'anchored' | 'dialog'>('anchored')
-  const scroll = ref<'host' | 'self'>('host')
   const overlayKey = ref(0)
 
   watch(mineActive, cur => {
-    if (!activated.value || !cur) return
-    const entry = overlayMap.value.get(cur.id)
-    if (!entry) return
-    renderedComp.value = entry.component
-    renderedProps.value = cur.props
-    title.value = entry.title
-    presentation.value = entry.presentation
-    scroll.value = entry.scroll
-    overlayKey.value += 1
+    if (!activated.value) return
+    if (cur) {
+      const comp = overlayMap.value.get(cur.id)
+      if (!comp) return
+      renderedComp.value = comp
+      renderedProps.value = cur.props
+      overlayKey.value += 1
+      if (isMobile.value) return
+      nextTick(() => {
+        const ev = { currentTarget: cur.anchor, target: cur.anchor } as unknown as Event
+        popoverRef.value?.show(ev)
+      })
+    } else if (!isMobile.value) {
+      popoverRef.value?.hide()
+    }
   })
 
-  const open = computed({
-    get: () => activated.value && !!mineActive.value && !!renderedComp.value,
-    set: value => {
-      if (!value && mineActive.value) closeOverlay()
-    },
-  })
-  const anchor = computed(() => mineActive.value?.anchor ?? null)
+  function isOutsideClick(event: MouseEvent): boolean {
+    const cur = mineActive.value
+    if (!cur) return false
+    const target = event.target as HTMLElement | null
+    if (!target) return false
+    const container = (popoverRef.value as unknown as { container?: HTMLElement } | null)?.container
+    if (container && container.contains(target)) return false
+    if (cur.anchor.contains(target)) return false
+    if (target.closest(NESTED_OVERLAY_SELECTOR)) return false
+    return true
+  }
 
-  const { session, highlighted, hide, commit } = useCommandMenu()
-  const command = computed(() => {
-    const current = session.value
-    if (!activated.value || !current) return null
-    return current.ownerId === ownerId ? current : null
-  })
-  const commandOpen = computed({
-    get: () => command.value !== null,
-    set: value => {
-      if (!value) hide()
+  function onDocumentMouseDown(event: MouseEvent) {
+    if (isOutsideClick(event)) closeOverlay()
+  }
+
+  watch(
+    () => !!mineActive.value && !isMobile.value && activated.value,
+    on => {
+      if (on) document.addEventListener('mousedown', onDocumentMouseDown, true)
+      else document.removeEventListener('mousedown', onDocumentMouseDown, true)
     },
+  )
+  onBeforeUnmount(() => {
+    document.removeEventListener('mousedown', onDocumentMouseDown, true)
   })
 
-  const {
-    session: mentionSession,
-    highlighted: mentionHighlighted,
-    hide: mentionHide,
-    commit: mentionCommit,
-  } = useMentionSuggestion()
-  const mention = computed(() => {
-    const current = mentionSession.value
-    if (!activated.value || !current) return null
-    return current.ownerId === ownerId ? current : null
-  })
-  const mentionOpen = computed({
-    get: () => mention.value !== null,
-    set: value => {
-      if (!value) mentionHide()
-    },
-  })
+  function onPopoverHide() {
+    if (mineActive.value) closeOverlay()
+  }
+  function onDrawerVisible(visible: boolean) {
+    if (!visible && mineActive.value) closeOverlay()
+  }
 
   return {
-    open,
-    anchor,
-    title,
-    presentation,
-    scroll,
-    narrow,
+    // 对外暴露的 active 即「属于本 host 的 active」—— OverlayHost.vue 的 Drawer :visible 等据此自动归属。
+    active: mineActive,
+    isMobile,
     renderedComp,
     renderedProps,
     overlayKey,
-    command,
-    commandOpen,
-    commandHighlighted: highlighted,
-    commandCommit: commit,
-    mention,
-    mentionOpen,
-    mentionHighlighted,
-    mentionCommit,
+    onPopoverHide,
+    onDrawerVisible,
   }
 }

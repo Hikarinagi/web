@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Divider, Inline, Text } from '@hina-ui/vue'
   import { ArrowUpDown } from '@lucide/vue'
   import { MANGA_STATUS_LABEL, type MangaRateStatus } from '~/features/manga/rate'
   import { REVIEW_STATUS_ORDER } from '~/features/rate/status'
@@ -31,12 +30,18 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <FilterSelect v-model="sort" :options="SORT_OPTIONS" placeholder="推荐" :icon="ArrowUpDown" />
-    <Divider orientation="vertical" class="h-5" />
-    <FilterSelect v-model="status" :options="STATUS_OPTIONS" placeholder="全部状态" />
-    <FilterSelect v-model="score" :options="SCORE_OPTIONS" placeholder="全部评分" />
-    <FilterSelect v-model="spoiler" :options="SPOILER_OPTIONS" placeholder="含剧透" />
-    <Text as="span" size="xs" tone="faint" class="ms-auto">共 {{ total }} 条短评</Text>
-  </Inline>
+  <div class="flex flex-wrap items-center gap-3">
+    <MangaRatesFilterSelect
+      v-model="sort"
+      :options="SORT_OPTIONS"
+      placeholder="推荐"
+      :icon="ArrowUpDown"
+    />
+    <div class="h-5 w-px bg-surface-200 dark:bg-surface-700" />
+    <MangaRatesFilterSelect v-model="status" :options="STATUS_OPTIONS" placeholder="全部状态" />
+    <MangaRatesFilterSelect v-model="score" :options="SCORE_OPTIONS" placeholder="全部评分" />
+    <MangaRatesFilterSelect v-model="spoiler" :options="SPOILER_OPTIONS" placeholder="含剧透" />
+    <span class="flex-1" />
+    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条短评</span>
+  </div>
 </template>

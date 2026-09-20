@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, Inline, Stack, Text } from '@hina-ui/vue'
   import { Download, Link2 } from '@lucide/vue'
   import { fileSizeLabel, type GalgameDownloadResource } from '~/features/galgame/download'
 
@@ -14,34 +13,36 @@
 </script>
 
 <template>
-  <Card class="flex flex-col gap-3 rounded-xl p-4 sm:flex-row sm:items-center sm:justify-between">
-    <Stack gap="xs" class="min-w-0">
-      <Text size="sm" weight="medium" truncate :title="file.file_name">
+  <div
+    class="flex flex-col gap-3 rounded-xl border border-surface p-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div class="flex min-w-0 flex-col gap-1">
+      <p class="truncate text-sm font-medium text-color" :title="file.file_name">
         {{ file.file_name }}
-      </Text>
-      <Inline gap="none" class="gap-x-3 gap-y-1">
-        <Text as="span" size="xs" tone="muted">{{ fileSizeLabel(file.file_size) }}</Text>
-        <Text v-if="file.file_hash" as="span" size="xs" tone="muted" truncate class="font-mono">
+      </p>
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-color">
+        <span>{{ fileSizeLabel(file.file_size) }}</span>
+        <span v-if="file.file_hash" class="truncate font-mono">
           {{ file.hash_algorithm ?? 'hash' }}: {{ file.file_hash }}
-        </Text>
-      </Inline>
-    </Stack>
+        </span>
+      </p>
+    </div>
 
-    <Inline gap="sm" align="stretch" :wrap="false" class="shrink-0">
-      <AuthGateButton :loading="loading" @click="$emit('download', file.id)">
-        <template #icon><Download /></template>
-        下载
-      </AuthGateButton>
-      <AuthGateButton
-        label="复制下载链接"
-        side="top"
-        variant="outline"
-        tone="neutral"
+    <div class="flex shrink-0 items-stretch gap-2">
+      <Button label="下载" login-required :loading="loading" @click="$emit('download', file.id)">
+        <template #icon><Download class="size-4" /></template>
+      </Button>
+      <Button
+        v-tooltip.top="'复制下载链接'"
+        severity="secondary"
+        outlined
+        login-required
         :loading="loading"
+        aria-label="复制下载链接"
         @click="$emit('copy', file.id)"
       >
-        <Link2 />
-      </AuthGateButton>
-    </Inline>
-  </Card>
+        <template #icon><Link2 class="size-4" /></template>
+      </Button>
+    </div>
+  </div>
 </template>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Button, IconButton, Inline, Panel, Stack } from '@hina-ui/vue'
   import { ArrowDownUp, LibraryBig } from '@lucide/vue'
-  import type { ComponentPublicInstance } from 'vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
@@ -90,34 +88,40 @@
     return Date.now() - time < NEW_WINDOW_MS ? latest.value.id : null
   })
 
-  const grid = useTemplateRef<ComponentPublicInstance>('grid')
+  const grid = useTemplateRef<HTMLElement>('grid')
   function jumpToLatest() {
     const last = segments.value.at(-1)
     if (last) active.value = last.key
-    unrefElement(grid)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    grid.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 </script>
 
 <template>
-  <Panel title="章节列表" :count="episodes.length + extras.length" :description="volumeDescription">
-    <template #icon><LibraryBig /></template>
+  <CardPanel
+    title="章节列表"
+    :icon="LibraryBig"
+    :count="episodes.length + extras.length"
+    :description="volumeDescription"
+  >
     <template #actions>
-      <Inline gap="none" :wrap="false" class="gap-1.5">
-        <Button v-if="latest" variant="ghost" size="sm" @click="jumpToLatest">
+      <div class="flex items-center gap-1.5">
+        <Button v-if="latest" variant="text" size="small" @click="jumpToLatest">
           更新至{{ getMangaEpisodeLabel(latest) }}
         </Button>
-        <IconButton
-          :label="desc ? '切回正序' : '倒序排列'"
-          side="bottom"
-          size="sm"
+        <Button
+          v-tooltip.bottom="desc ? '切回正序' : '倒序排列'"
+          text
+          severity="secondary"
+          size="small"
+          aria-label="切换排序"
           @click="desc = !desc"
         >
-          <ArrowDownUp />
-        </IconButton>
-      </Inline>
+          <template #icon><ArrowDownUp class="size-4" /></template>
+        </Button>
+      </div>
     </template>
 
-    <Stack>
+    <div class="flex flex-col gap-4">
       <MangaChaptersContinueStrip
         v-if="progress"
         :manga-id="mangaId"
@@ -125,21 +129,24 @@
         :first="episodes[0] ?? null"
       />
 
-      <Inline v-if="pills.length" gap="none" class="gap-1.5">
+      <div v-if="pills.length" class="flex flex-wrap gap-1.5">
         <Button
           v-for="pill in pills"
           :key="pill.key"
-          variant="soft"
-          :tone="active === pill.key ? 'accent' : 'neutral'"
-          size="sm"
-          pill
+          unstyled
+          class="rounded-full px-3 py-1 text-[13px] transition-colors"
+          :class="
+            active === pill.key
+              ? 'bg-hikari-primary-50 font-medium text-hikari-primary-800 dark:bg-hikari-primary-950 dark:text-hikari-primary-300'
+              : 'bg-emphasis text-muted-color hover:text-color'
+          "
           @click="active = pill.key"
         >
           {{ pill.label }}
         </Button>
-      </Inline>
+      </div>
 
-      <Stack ref="grid" gap="none" class="scroll-mt-24">
+      <div ref="grid" class="scroll-mt-24">
         <MangaChaptersGrid
           :manga-id="mangaId"
           :chapters="current"
@@ -148,7 +155,7 @@
           :read-ids="readIds"
           :volume-ids="volumeIds"
         />
-      </Stack>
-    </Stack>
-  </Panel>
+      </div>
+    </div>
+  </CardPanel>
 </template>

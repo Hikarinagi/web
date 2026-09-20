@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { Center, Inline, Stack, Text } from '@hina-ui/vue'
   import { ImageOff } from '@lucide/vue'
   import { RESOURCE_TYPE_LABEL } from '~/features/creator/labels'
-  import { cn } from '~/utils/cn'
 
   const props = withDefaults(
     defineProps<{
@@ -19,14 +17,10 @@
     () => props.resource?.title?.trim() || `${typeLabel.value}${props.id ? ` #${props.id}` : ''}`,
   )
   const coverClass = computed(() => (props.size === 'sm' ? 'h-11 w-8' : 'h-16 w-12'))
-  const fallbackClass = computed(() =>
-    cn('shrink-0 rounded-md bg-subtle text-muted', coverClass.value),
-  )
-  const iconClass = computed(() => (props.size === 'sm' ? 'size-3.5' : 'size-4.5'))
 </script>
 
 <template>
-  <Inline gap="sm" align="center" :wrap="false" class="min-w-0">
+  <div class="flex min-w-0 items-center gap-3">
     <HikariImage
       :src="resource?.cover"
       :alt="title"
@@ -35,24 +29,35 @@
       image-class="object-cover"
     >
       <template #empty>
-        <Center :class="fallbackClass">
-          <ImageOff :class="iconClass" aria-hidden="true" />
-        </Center>
+        <div
+          :class="[
+            'flex shrink-0 items-center justify-center rounded-md bg-surface-100 text-muted-color dark:bg-surface-800',
+            coverClass,
+          ]"
+        >
+          <ImageOff :size="size === 'sm' ? 14 : 18" aria-hidden="true" />
+        </div>
       </template>
 
       <template #error>
-        <Center :class="fallbackClass">
-          <ImageOff :class="iconClass" aria-hidden="true" />
-        </Center>
+        <div
+          :class="[
+            'flex shrink-0 items-center justify-center rounded-md bg-surface-100 text-muted-color dark:bg-surface-800',
+            coverClass,
+          ]"
+        >
+          <ImageOff :size="size === 'sm' ? 14 : 18" aria-hidden="true" />
+        </div>
       </template>
     </HikariImage>
-
-    <Stack gap="none" class="min-w-0">
-      <Text truncate weight="medium" :size="size === 'sm' ? 'sm' : 'base'">{{ title }}</Text>
-      <Text size="xs" tone="muted" truncate>
+    <div class="min-w-0">
+      <p :class="['truncate font-medium', size === 'sm' ? 'text-sm' : 'text-base']">
+        {{ title }}
+      </p>
+      <p class="truncate text-xs text-muted-color">
         {{ typeLabel }}
         <template v-if="id">#{{ id }}</template>
-      </Text>
-    </Stack>
-  </Inline>
+      </p>
+    </div>
+  </div>
 </template>

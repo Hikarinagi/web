@@ -121,14 +121,8 @@
 }
 .hikari-content .hikari-table-scroll {
   max-height: 70vh;
-}
-.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-start'],
-.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-end'] {
-  inset-inline-start: var(--hikari-table-head-w, 0px);
-}
-.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-start'],
-.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-end'] {
-  inset-block-start: var(--hikari-table-head-h, 0px);
+  --hikari-scroll-shadow-inset-y: var(--hikari-table-head-h, 0px);
+  --hikari-scroll-shadow-inset-x: var(--hikari-table-head-w, 0px);
 }
 .hikari-content table {
   table-layout: fixed;
@@ -430,21 +424,4 @@
   border-bottom: 1px dashed var(--editor-text-muted);
   border-radius: 2px;
   padding: 0 1px;
-}
-
-.hikari-editor-surface .ProseMirror {
-  outline: none;
-}
-
-.hikari-editor-surface .ProseMirror,
-.hikari-editor-surface .ProseMirror * {
-  overflow-anchor: none;
-}
-
-.hikari-editor-surface .ProseMirror p.is-editor-empty:first-child::before {
-  content: attr(data-placeholder);
-  color: var(--hn-fg-subtle);
-  float: left;
-  height: 0;
-  pointer-events: none;
 }

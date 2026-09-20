@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Center, Grid, Panel, Stack, Text } from '@hina-ui/vue'
   import { BookCopy, ChevronDown } from '@lucide/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaVolumeLabel } from '~/utils/media/manga'
@@ -23,44 +22,48 @@
 </script>
 
 <template>
-  <Panel title="单行本" :count="volumes.length" :description="`共 ${volumes.length} 卷`">
-    <template #icon><BookCopy /></template>
-    <Grid :cols="3" class="gap-3 sm:grid-cols-5 lg:grid-cols-8">
+  <CardPanel
+    title="单行本"
+    :icon="BookCopy"
+    :count="volumes.length"
+    :description="`共 ${volumes.length} 卷`"
+  >
+    <div class="grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-8">
       <NuxtLink
         v-for="volume in visible"
         :key="volume.id"
         :to="`/manga-volumes/${volume.id}`"
-        class="group flex hn-interactive flex-col gap-1.5 rounded-lg hn-press-none"
+        class="group flex flex-col gap-1.5 outline-none"
       >
         <HikariImage
           :src="volume.cover"
           :alt="getMangaVolumeLabel(volume)"
-          class="aspect-7/10 rounded-lg ring-1 ring-line"
+          class="aspect-7/10 rounded-lg ring-1 ring-surface-200 transition-shadow duration-200 group-hover:shadow-lg group-focus-visible:ring-2 group-focus-visible:ring-primary dark:ring-surface-800"
           image-class="object-cover"
           :processing="{ width: 360, quality: 88, fit: 'cover' }"
         >
           <template #empty><MangaCoverFallback :title="getMangaVolumeLabel(volume)" /></template>
           <template #error><MangaCoverFallback :title="getMangaVolumeLabel(volume)" /></template>
         </HikariImage>
-        <Stack gap="none">
-          <Text
-            size="xs"
-            weight="medium"
-            truncate
-            class="transition-colors group-hover:text-accent-text"
-          >
-            {{ getMangaVolumeLabel(volume) }}
-          </Text>
-          <Text v-if="yearOf(volume)" size="xs" tone="muted" truncate>{{ yearOf(volume) }}</Text>
-        </Stack>
+        <div class="flex flex-col">
+          <p class="truncate text-xs font-medium text-color">{{ getMangaVolumeLabel(volume) }}</p>
+          <p v-if="yearOf(volume)" class="truncate text-xs text-muted-color">
+            {{ yearOf(volume) }}
+          </p>
+        </div>
       </NuxtLink>
-    </Grid>
+    </div>
 
-    <Center v-if="hasMore && !expanded" class="mt-3">
-      <Button variant="ghost" tone="neutral" size="sm" @click="expanded = true">
-        <template #icon><ChevronDown /></template>
-        全部 {{ volumes.length }} 卷
+    <div v-if="hasMore && !expanded" class="mt-3 flex justify-center">
+      <Button
+        text
+        severity="secondary"
+        size="small"
+        :label="`全部 ${volumes.length} 卷`"
+        @click="expanded = true"
+      >
+        <template #icon><ChevronDown class="size-4" /></template>
       </Button>
-    </Center>
-  </Panel>
+    </div>
+  </CardPanel>
 </template>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { Button, Heading, Inline, Panel, Stack, Tag } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
-  import { NuxtLink } from '#components'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
 
   defineOptions({ name: 'DeveloperConsoleAppDetail' })
@@ -19,40 +17,38 @@
 </script>
 
 <template>
-  <Stack gap="lg">
-    <Stack gap="sm" align="start">
+  <div class="flex flex-col gap-5">
+    <div class="flex flex-col items-start gap-2">
       <Button
-        :as="NuxtLink"
+        unstyled
+        as="router-link"
         to="/developers/console"
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        class="-mx-2"
+        class="-mx-2 -my-1 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm text-muted-color transition-colors hover:bg-emphasis hover:text-color"
       >
-        <template #icon><ArrowLeft /></template>
+        <ArrowLeft class="size-4" />
         返回控制台
       </Button>
-      <Inline gap="sm" align="center">
+      <div class="flex items-center gap-3">
         <DeveloperConsoleAppIcon :src="app.logo" :name="app.client_name" />
-        <Inline gap="sm" align="center" wrap>
-          <Heading :level="2" size="xl">{{ app.client_name }}</Heading>
-          <Tag v-if="!app.enabled">已停用</Tag>
-        </Inline>
-      </Inline>
-    </Stack>
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-xl font-bold text-color">{{ app.client_name }}</h2>
+          <Tag v-if="!app.enabled" severity="secondary" value="已停用" />
+        </div>
+      </div>
+    </div>
 
-    <Panel title="应用设置">
-      <Stack gap="none" class="divide-y divide-line">
+    <CardPanel title="应用设置">
+      <div class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800">
         <DeveloperConsoleAppCredentialsPanel :app :oauth @rotated="onRotated" />
         <DeveloperConsoleAppProfilePanel :app @changed="emit('changed')" />
         <DeveloperConsoleAppClientTypePanel :app @changed="emit('changed')" @rotated="onRotated" />
         <DeveloperConsoleAppScopesPanel :app @changed="emit('changed')" />
         <DeveloperConsoleAppRedirectPanel :app @changed="emit('changed')" />
-      </Stack>
-    </Panel>
+      </div>
+    </CardPanel>
 
     <DeveloperConsoleAppDangerPanel :app @changed="emit('changed')" />
 
     <DeveloperConsoleSecretDialog v-model:visible="secretOpen" :secret />
-  </Stack>
+  </div>
 </template>

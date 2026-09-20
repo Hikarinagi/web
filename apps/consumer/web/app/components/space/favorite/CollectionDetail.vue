@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Chip, Inline, Stack } from '@hina-ui/vue'
   import { Lock } from '@lucide/vue'
   import type { SpaceCollectionDetailPageData } from '~~/server/api/pages/space/[id]/favorites/[cid].get'
   import { useCollectionDetail } from '~/features/favorite/composables/useCollectionDetail'
@@ -25,7 +24,7 @@
 </script>
 
 <template>
-  <Stack gap="none" class="py-8">
+  <div class="py-8">
     <SpaceFavoriteDetailHeader
       :collection="collection"
       :owner="data.owner"
@@ -36,18 +35,20 @@
       @delete="confirmDeleteCollection"
     />
 
-    <Inline gap="sm" class="mt-5">
-      <Chip
+    <div class="mt-5 flex flex-wrap items-center gap-2">
+      <Button
         v-for="f in COLLECTION_TYPE_FILTERS"
         :key="f.key"
-        selectable
-        :selected="activeType === f.key"
-        :tone="activeType === f.key ? 'accent' : 'neutral'"
-        @update:selected="activeType = f.key"
+        unstyled
+        class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+        :class="
+          activeType === f.key ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'
+        "
+        @click="activeType = f.key"
       >
         {{ f.label }} {{ chipCount(f.key) }}
-      </Chip>
-    </Inline>
+      </Button>
+    </div>
 
     <LoadingOverlay
       v-if="list.items.length"
@@ -81,5 +82,5 @@
       :collection="collection"
       @saved="onCollectionSaved"
     />
-  </Stack>
+  </div>
 </template>

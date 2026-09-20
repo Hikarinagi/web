@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Drawer, Inline, NavLink, Stack, Text } from '@hina-ui/vue'
+  import { cn } from '~/utils/cn'
   import type { MangaReadPageData } from '~~/server/api/pages/mangas/reader/[id]/[chapterId].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
@@ -12,7 +12,7 @@
     currentChapterId: number
   }>()
 
-  const open = defineModel<boolean>('open', { default: false })
+  const visible = defineModel<boolean>('visible', { default: false })
 
   const emit = defineEmits<{ select: [chapter: ChapterItem] }>()
 
@@ -33,29 +33,51 @@
 </script>
 
 <template>
-  <Drawer v-model:open="open" title="章节目录" :description="`${items.length} 话`">
-    <template #content>
-      <Stack gap="xs">
-        <NavLink
-          v-for="chapter in items"
-          :key="chapter.id"
-          as="button"
-          :active="chapter.id === currentChapterId"
-          :disabled="!chapter.readable"
-          class="h-auto justify-between gap-3 py-2 text-start"
-          @click="select(chapter)"
-        >
-          <Inline gap="none" :wrap="false" align="baseline" class="min-w-0 gap-2">
-            <Text as="span" size="sm" weight="medium" class="shrink-0 text-inherit">
-              {{ getMangaEpisodeLabel(chapter) }}
-            </Text>
-            <Text as="span" size="xs" tone="muted" truncate>{{ chapterTitle(chapter) }}</Text>
-          </Inline>
-          <Text as="span" size="xs" tone="muted" class="shrink-0 tabular-nums">
-            {{ chapter.readable ? `${chapter.page_count} 页` : '暂无资源' }}
-          </Text>
-        </NavLink>
-      </Stack>
+  <Drawer
+    v-model:visible="visible"
+    position="right"
+    :pt="{
+      root: {
+        class: '!w-[21rem] !max-w-full !border-l !border-white/10 !bg-[#0b0e13] !text-white',
+      },
+      header: { class: '!px-5' },
+      content: { class: '!px-3 !pb-3' },
+      pcCloseButton: { root: { class: '!text-[#b8c2d1]' } },
+    }"
+  >
+    <template #header>
+      <div class="flex items-baseline gap-2">
+        <h3 class="text-sm font-semibold text-white">章节目录</h3>
+        <span class="text-xs text-[#8b95a6]">{{ items.length }} 话</span>
+      </div>
     </template>
+    <div class="flex flex-col gap-0.5">
+      <Button
+        v-for="chapter in items"
+        :key="chapter.id"
+        unstyled
+        :class="
+          cn(
+            'flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left transition-colors',
+            chapter.id === currentChapterId
+              ? 'bg-primary/12 text-primary'
+              : chapter.readable
+                ? 'cursor-pointer text-white hover:bg-white/8'
+                : 'cursor-default text-white opacity-40',
+          )
+        "
+        :disabled="!chapter.readable"
+        @click="select(chapter)"
+      >
+        <span class="flex min-w-0 items-baseline gap-2">
+          <span class="shrink-0 text-[13px] font-medium">{{ getMangaEpisodeLabel(chapter) }}</span>
+          <span class="truncate text-xs text-[#8b95a6]">{{ chapterTitle(chapter) }}</span>
+        </span>
+        <span v-if="chapter.readable" class="shrink-0 text-[11px] text-[#8b95a6] tabular-nums">
+          {{ chapter.page_count }} 页
+        </span>
+        <span v-else class="shrink-0 text-[11px] text-[#8b95a6]">暂无资源</span>
+      </Button>
+    </div>
   </Drawer>
 </template>

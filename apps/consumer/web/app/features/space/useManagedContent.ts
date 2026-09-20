@@ -16,7 +16,7 @@ type ManagedType = 'post' | 'article'
 
 export function useManagedContent(initial: ManagedContentPage, type: ManagedType) {
   const router = useRouter()
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
   const composerDialog = usePostComposerDialog()
   const postActions = usePostOwnerActions()
   const articleActions = useArticleOwnerActions()
@@ -24,18 +24,19 @@ export function useManagedContent(initial: ManagedContentPage, type: ManagedType
   const list = ref<ManagedContentPage>(initial)
   const status = ref<ManagedStatusFilterKey>('all')
   const search = ref('')
-  const updatedRange = ref<{ start: string | null; end: string | null } | null>(null)
+  const updatedRange = ref<Date[] | null>(null)
   const page = ref(initial.meta.page)
   const pending = ref(false)
   let requestSeq = 0
 
   const hasFilters = computed(
-    () => status.value !== 'all' || search.value.trim().length > 0 || !!updatedRange.value?.start,
+    () => status.value !== 'all' || search.value.trim().length > 0 || !!updatedRange.value?.[0],
   )
 
   const query = computed<ManagedContentQuery>(() => {
-    const from = updatedRange.value?.start ? new Date(`${updatedRange.value.start}T00:00:00`) : null
-    const end = updatedRange.value?.end ? new Date(`${updatedRange.value.end}T23:59:59.999`) : null
+    const [from, to] = updatedRange.value ?? []
+    const end = to ? new Date(to) : null
+    if (end) end.setHours(23, 59, 59, 999)
 
     return {
       type,
@@ -85,13 +86,14 @@ export function useManagedContent(initial: ManagedContentPage, type: ManagedType
   }
 
   function remove(item: ManagedContentItem) {
-    confirm({
-      title: '删除',
-      description: `确定删除《${item.title || '未命名'}》吗？删除后无法恢复。`,
-      confirmText: '删除',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: async () => {
+    confirm.require({
+      group: 'app-shell',
+      header: '删除',
+      message: `确定删除《${item.title || '未命名'}》吗？删除后无法恢复。`,
+      acceptLabel: '删除',
+      rejectLabel: '取消',
+      onAccept: async ({ close }) => {
+        close()
         try {
           if (item.content_type === 'post') {
             await hikariRequest('/api/v3/posts/{id}', { method: 'delete', path: { id: item.id } })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Rating, Stack } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { WorkCardData } from './composables/useWorkCard'
 
@@ -16,7 +16,9 @@
 </script>
 
 <template>
-  <Stack gap="none">
+  <div
+    class="w-80 overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-[0_16px_48px_rgba(0,0,0,0.18)] dark:border-surface-700 dark:bg-surface-900"
+  >
     <WorkCardSkeleton v-if="!work" />
     <NuxtLink
       v-else
@@ -37,11 +39,8 @@
             {{ work.original_title }}
           </p>
           <p v-if="meta" class="line-clamp-1 text-xs text-muted-color">{{ meta }}</p>
-          <div
-            v-if="work.average_rate != null"
-            class="mt-auto flex flex-wrap items-center gap-x-1.5 gap-y-0.5 pt-1"
-          >
-            <Rating :model-value="work.average_rate" :max="10" :stars="5" readonly size="sm" />
+          <div v-if="work.average_rate != null" class="mt-auto flex items-center gap-1 pt-1">
+            <Star class="size-3.5 fill-amber-400 text-amber-400" />
             <span class="text-sm font-semibold text-color">{{ work.average_rate.toFixed(1) }}</span>
             <span class="text-xs text-muted-color">· {{ work.rated_count }} 人评分</span>
           </div>
@@ -60,5 +59,5 @@
         </p>
       </div>
     </NuxtLink>
-  </Stack>
+  </div>
 </template>

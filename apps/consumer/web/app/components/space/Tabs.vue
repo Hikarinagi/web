@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { Tabs, TabsList, TabsTrigger } from '@hina-ui/vue'
+  import { motion } from 'motion-v'
   import { SPACE_TABS, type SpaceTabKey } from '~/features/space/space'
+  import { TRANSITION } from '~/lib/motion'
 
   defineOptions({ name: 'SpaceTabs' })
 
@@ -14,19 +15,42 @@
       return true
     }),
   )
-
-  function onSelect(value: string | undefined) {
-    const next = visibleTabs.value.find(tab => tab.key === value)
-    if (next) active.value = next.key
-  }
 </script>
 
 <template>
-  <Tabs :model-value="active" @update:model-value="onSelect">
-    <TabsList label="主页内容">
-      <TabsTrigger v-for="tab in visibleTabs" :key="tab.key" :value="tab.key">
-        {{ tab.label }}
-      </TabsTrigger>
-    </TabsList>
-  </Tabs>
+  <div class="border-b border-surface-200 dark:border-surface-800">
+    <ScrollArea visibility="hidden" axis="x" shadow="both" wheel-to-horizontal>
+      <div role="tablist" class="flex min-w-max items-center gap-7">
+        <motion.button
+          v-for="tab in visibleTabs"
+          :key="tab.key"
+          type="button"
+          role="tab"
+          :aria-selected="active === tab.key"
+          class="group relative flex cursor-pointer flex-col items-center gap-2 rounded pt-1 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
+          :while-press="{ opacity: 0.7 }"
+          @click="active = tab.key"
+        >
+          <span
+            class="text-[15px] transition-colors duration-150"
+            :class="
+              active === tab.key
+                ? 'font-bold text-color'
+                : 'font-medium text-muted-color group-hover:text-color'
+            "
+          >
+            {{ tab.label }}
+          </span>
+          <span class="relative h-0.5 w-7">
+            <motion.span
+              v-if="active === tab.key"
+              layout-id="space-tab-indicator"
+              class="absolute inset-0 rounded-full bg-primary"
+              :transition="TRANSITION"
+            />
+          </span>
+        </motion.button>
+      </div>
+    </ScrollArea>
+  </div>
 </template>

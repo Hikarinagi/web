@@ -46,7 +46,6 @@ export function useReaderRenderReport(options: UseReaderRenderReportOptions) {
       render_scale: controller?.renderScale ?? null,
       settings: { ...options.settings.value },
       error: r.error.value,
-      runtime_error: r.runtimeError.value,
     }
   }
 

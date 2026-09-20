@@ -1,49 +1,49 @@
-import type { SystemMessageItem } from './notifications'
+// 推导通知「前往」目标：变更请求通知优先跳 CR 详情页；否则取首个 work card 的路由 + comment card 的 #comment 锚点。
 
-type Target = NonNullable<SystemMessageItem['target']>
-
-const WORK_ROUTE: Partial<Record<Target['kind'], string>> = {
-  galgame: '/galgames',
-  light_novel: '/light-novels',
-  light_novel_volume: '/light-novel-volumes',
-  manga: '/mangas',
-  person: '/people',
-  producer: '/producers',
-  character: '/characters',
-  article: '/articles',
-  post: '/posts',
+const WORK_ROUTE: Record<string, string> = {
+  galgame_card: '/galgames',
+  light_novel_card: '/light-novels',
+  light_novel_volume_card: '/light-novel-volumes',
+  person_card: '/people',
+  producer_card: '/producers',
+  character_card: '/characters',
+  article_card: '/articles',
+  post_card: '/posts',
 }
 
-const RATE_ROUTE: Partial<Record<Target['kind'], string>> = {
-  galgame_rate: '/galgames',
-  light_novel_rate: '/light-novels',
-  manga_rate: '/mangas',
+const WORK_ID_KEY: Record<string, string> = {
+  galgame_card: 'galgame_id',
+  light_novel_card: 'light_novel_id',
+  light_novel_volume_card: 'light_novel_volume_id',
+  person_card: 'person_id',
+  producer_card: 'producer_id',
+  character_card: 'character_id',
+  article_card: 'article_id',
+  post_card: 'post_id',
 }
 
-function anchor(commentId: number | null): string {
-  return commentId == null ? '' : `?comment=${commentId}#comment-${commentId}`
+interface DocNode {
+  type: string
+  attrs?: Record<string, unknown>
 }
 
 export function notificationTarget(
-  source: { target?: Target | null } | null | undefined,
+  detail:
+    | { change_request_id?: number | null; content_json?: { content?: DocNode[] } | null }
+    | null
+    | undefined,
 ): string | null {
-  const target = source?.target
-  if (!target) return null
-
-  if (target.kind === 'decoration') return '/setting/decoration'
-  if (target.kind === 'dm') return target.id == null ? null : `/messages?peer=${target.id}`
-  if (target.kind === 'change_request') {
-    return target.id == null ? null : `/create/contributions/${target.id}`
+  if (!detail) return null
+  if (detail.change_request_id != null) {
+    return `/create/contributions/${detail.change_request_id}`
   }
-
-  const rate = RATE_ROUTE[target.kind]
-  if (rate) {
-    return target.id == null || target.work_id == null
-      ? null
-      : `${rate}/${target.work_id}/rates/${target.id}`
-  }
-
-  const work = WORK_ROUTE[target.kind]
-  if (!work || target.id == null) return null
-  return `${work}/${target.id}${anchor(target.comment_id)}`
+  const content = detail.content_json?.content
+  if (!Array.isArray(content)) return null
+  const work = content.find(n => WORK_ROUTE[n.type])
+  if (!work) return null
+  const id = work.attrs?.[WORK_ID_KEY[work.type]!]
+  if (typeof id !== 'number') return null
+  const commentId = content.find(n => n.type === 'comment_card')?.attrs?.comment_id
+  const anchor = typeof commentId === 'number' ? `?comment=${commentId}#comment-${commentId}` : ''
+  return `${WORK_ROUTE[work.type]}/${id}${anchor}`
 }

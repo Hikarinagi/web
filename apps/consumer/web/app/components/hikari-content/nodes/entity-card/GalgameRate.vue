@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Rating } from '@hina-ui/vue'
-  import { GamepadDirectional } from '@lucide/vue'
+  import { GamepadDirectional, Star } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { useContentSummaries } from '../../composables/useContentSummaries'
   import { rateWorkHref } from './links'
@@ -83,7 +82,7 @@
                 : 'text-(--editor-text-color)',
             ]"
           >
-            <Rating :model-value="rate" :max="10" :stars="1" readonly size="sm" />
+            <Star class="size-3.5 fill-amber-400 text-amber-400" />
             {{ rate }}
           </span>
           <span

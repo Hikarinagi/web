@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Drawer, Skeleton, Stack } from '@hina-ui/vue'
   import { push } from 'notivue'
+  import PrimeDrawer from 'primevue/drawer'
   import { useEntityDrawer } from '~/features/creator/composables/useEntityDrawer'
   import {
     WORKSPACE_SESSION_KEY,
@@ -40,11 +40,7 @@
 
   const { loading, failed, data, mineCr, blocked } = useEntityDrawer(() => props.editing)
 
-  const footerHost = useTemplateRef<{ $el: HTMLElement }>('footerHost')
   const footerEl = ref<HTMLElement | null>(null)
-  watchEffect(() => {
-    footerEl.value = footerHost.value?.$el ?? null
-  })
   provide(IN_ENTITY_DRAWER_KEY, true)
   provide(ENTITY_DRAWER_FOOTER_KEY, footerEl)
 
@@ -83,43 +79,41 @@
 </script>
 
 <template>
-  <Drawer
-    v-model:open="visible"
-    side="end"
-    size="lg"
-    :title="data?.resource?.title ?? '编辑条目'"
-    class="sm:w-136"
+  <PrimeDrawer
+    v-model:visible="visible"
+    position="right"
+    :block-scroll="true"
+    :header="data?.resource?.title ?? '编辑条目'"
+    class="w-full! sm:w-136!"
   >
-    <template #content>
-      <Stack v-if="loading" gap="md">
-        <Skeleton v-for="n in 6" :key="n" as="div" class="h-14 rounded-lg" />
-      </Stack>
+    <div v-if="loading" class="flex flex-col gap-4">
+      <Skeleton v-for="n in 6" :key="n" height="3.5rem" />
+    </div>
 
-      <CreatorEmpty v-else-if="failed" text="加载失败，关闭后重试" />
+    <CreatorEmpty v-else-if="failed" text="加载失败，关闭后重试" />
 
-      <CreatorEditorBlockedCard
-        v-else-if="blocked && data?.openCr"
-        :change-request-id="data.openCr.id"
-      />
+    <CreatorEditorBlockedCard
+      v-else-if="blocked && data?.openCr"
+      :change-request-id="data.openCr.id"
+    />
 
-      <CreatorEditorEntityForm
-        v-else-if="data && editing"
-        :key="`${editing.target}:${editing.id}`"
-        :slug="editing.target"
-        :resource-id="editing.id"
-        :schema="data.schema"
-        :snapshot="data.snapshot"
-        :refs="data.refs"
-        :open-change-request="mineCr"
-        :staged="staged"
-        :staged-changeset="stagedChangeset"
-        @submitted="onSubmitted"
-        @staged="onStaged"
-      />
-    </template>
+    <CreatorEditorEntityForm
+      v-else-if="data && editing"
+      :key="`${editing.target}:${editing.id}`"
+      :slug="editing.target"
+      :resource-id="editing.id"
+      :schema="data.schema"
+      :snapshot="data.snapshot"
+      :refs="data.refs"
+      :open-change-request="mineCr"
+      :staged="staged"
+      :staged-changeset="stagedChangeset"
+      @submitted="onSubmitted"
+      @staged="onStaged"
+    />
 
     <template v-if="data && editing && !blocked" #footer>
-      <Stack ref="footerHost" class="w-full" />
+      <div ref="footerEl" class="w-full" />
     </template>
-  </Drawer>
+  </PrimeDrawer>
 </template>

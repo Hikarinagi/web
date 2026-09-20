@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { FormField, Heading, RadioGroup, Section, Select, Stack, Text } from '@hina-ui/vue'
-  import type { SelectOption } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import {
     appFormOf,
@@ -17,45 +15,42 @@
     rotated: [secret: { client_id: string; client_secret: string }]
   }>()
 
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
   const busy = ref(false)
   const current = computed(() => appFormValue(props.app.client_type, props.app.application_type))
+  const selected = ref(current.value)
   const confidential = computed(() => props.app.client_type === 'confidential')
 
-  const formOptions = DEVELOPER_APP_FORMS.map(option => ({
-    value: option.value,
-    label: option.label,
-    description: option.hint,
-  }))
+  watch(current, value => {
+    selected.value = value
+  })
 
-  const authMethodOptions = computed<SelectOption<{ hint: string }>[]>(() =>
-    DEVELOPER_AUTH_METHODS.map(method => ({
-      value: method.value,
-      label: method.label,
-      hint: method.hint,
-    })),
-  )
-
-  function confirmSwitch(next: string | number | null | undefined) {
-    const value = String(next ?? '')
-    if (busy.value || !value || value === current.value) return
-    const shape = appFormOf(value)
+  function confirmSwitch(next: string) {
+    if (busy.value || next === current.value) return
+    const shape = appFormOf(next)
     const losesSecret = confidential.value && shape.client_type === 'public'
     const gainsSecret = !confidential.value && shape.client_type === 'confidential'
+    let accepted = false
 
-    confirm({
-      title: `切换为${shape.label}`,
-      description: [
+    confirm.require({
+      group: 'app-shell',
+      header: `切换为${shape.label}`,
+      message: [
         losesSecret ? '当前密钥将被立即清除，正在使用该密钥的服务将中断。' : '',
         gainsSecret ? '将签发新密钥，且仅展示一次。' : '',
         `${shape.redirect}；已配置的回调地址若不符合新规则，本次切换会失败。`,
       ]
         .filter(Boolean)
         .join('\n'),
-      confirmText: '切换',
-      tone: losesSecret ? 'danger' : 'accent',
-      onConfirm: () =>
-        save({ client_type: shape.client_type, application_type: shape.application_type }),
+      acceptProps: { label: '切换', severity: losesSecret ? 'danger' : 'primary' },
+      rejectProps: { label: '取消', severity: 'secondary' },
+      accept: () => {
+        accepted = true
+        void save({ client_type: shape.client_type, application_type: shape.application_type })
+      },
+      onHide: () => {
+        if (!accepted) selected.value = current.value
+      },
     })
   }
 
@@ -72,45 +67,58 @@
       emit('changed')
     } finally {
       busy.value = false
+      selected.value = current.value
     }
   }
 </script>
 
 <template>
-  <Section class="py-6 first:pt-0 last:pb-0">
-    <Stack gap="md">
-      <Heading :level="3" size="base">应用形态</Heading>
+  <section class="flex flex-col gap-4 py-6 first:pt-0 last:pb-0">
+    <h3 class="text-sm font-semibold text-color">应用形态</h3>
 
-      <RadioGroup
-        :model-value="current"
-        :options="formOptions"
-        :disabled="busy"
-        orientation="horizontal"
-        block
-        aria-label="应用形态"
-        @update:model-value="confirmSwitch"
-      />
-
-      <FormField
-        v-if="confidential"
-        label="令牌端点认证方式"
-        description="换取令牌时必须使用此处登记的方式，登记之外的方式会被拒绝。"
+    <div class="grid gap-2 sm:grid-cols-3">
+      <label
+        v-for="option in DEVELOPER_APP_FORMS"
+        :key="option.value"
+        class="flex cursor-pointer items-start gap-2.5 rounded-lg border border-surface p-3 transition-colors hover:bg-emphasis"
+        :class="selected === option.value ? 'border-hikari-primary-500' : ''"
       >
-        <Select
-          :model-value="app.token_endpoint_auth_method"
-          :options="authMethodOptions"
+        <RadioButton
+          v-model="selected"
+          :value="option.value"
           :disabled="busy"
-          class="sm:w-80"
-          @update:model-value="value => save({ token_endpoint_auth_method: String(value) })"
-        >
-          <template #option="{ option }">
-            <Stack as="span" gap="none">
-              <Text as="span" size="sm" class="font-mono">{{ option.label }}</Text>
-              <Text as="span" size="xs" tone="muted">{{ option.hint }}</Text>
-            </Stack>
-          </template>
-        </Select>
-      </FormField>
-    </Stack>
-  </Section>
+          :aria-label="option.label"
+          @update:model-value="confirmSwitch(option.value)"
+        />
+        <span class="flex min-w-0 flex-col gap-1">
+          <span class="text-sm font-medium text-color">{{ option.label }}</span>
+          <span class="text-xs leading-relaxed text-muted-color">{{ option.hint }}</span>
+        </span>
+      </label>
+    </div>
+
+    <div v-if="confidential" class="flex flex-col gap-2">
+      <p class="text-xs text-muted-color">令牌端点认证方式</p>
+      <Select
+        :model-value="app.token_endpoint_auth_method"
+        :options="DEVELOPER_AUTH_METHODS"
+        option-label="label"
+        option-value="value"
+        :disabled="busy"
+        aria-label="令牌端点认证方式"
+        class="sm:w-80"
+        @update:model-value="(value: string) => save({ token_endpoint_auth_method: value })"
+      >
+        <template #option="{ option }">
+          <span class="flex flex-col gap-0.5">
+            <span class="font-mono text-sm">{{ option.label }}</span>
+            <span class="text-xs text-muted-color">{{ option.hint }}</span>
+          </span>
+        </template>
+      </Select>
+      <p class="text-xs leading-relaxed text-muted-color">
+        换取令牌时必须使用此处登记的方式，登记之外的方式会被拒绝。
+      </p>
+    </div>
+  </section>
 </template>

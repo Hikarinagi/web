@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { DropdownMenu, DropdownMenuItem } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
-  import { ref, shallowRef } from 'vue'
+  import Menu from 'primevue/menu'
+  import type { MenuItem } from 'primevue/menuitem'
+  import { ref, useTemplateRef } from 'vue'
   import type { EditorPluginContext, ToolbarDropdownItem } from '../plugins/types'
 
   const props = defineProps<{
@@ -9,42 +10,51 @@
     context: EditorPluginContext
   }>()
 
-  const items = shallowRef<ToolbarDropdownItem[]>([])
-  const anchor = shallowRef<HTMLElement | null>(null)
-  const open = ref(false)
+  const model = ref<MenuItem[]>([])
+  const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menuRef')
 
-  function isDisabled(item: ToolbarDropdownItem) {
+  function open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement, event: Event) {
     const editor = props.editor
-    return editor === null || (item.isDisabled?.(editor) ?? false)
+    model.value = dropdownItems.map(item => ({
+      label: item.label,
+      disabled: editor === null || (item.isDisabled?.(editor) ?? false),
+      __dropdownItem: item,
+      command: () => {
+        if (!editor) return
+        item.onClick(editor, props.context, triggerEl)
+      },
+    }))
+    nextTick(() => menuRef.value?.toggle(event))
   }
 
-  function select(item: ToolbarDropdownItem) {
-    const editor = props.editor
-    if (!editor || !anchor.value) return
-    item.onClick(editor, props.context, anchor.value)
-  }
-
-  defineExpose({
-    open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement) {
-      items.value = dropdownItems
-      anchor.value = triggerEl
-      open.value = true
-    },
-  })
+  defineExpose({ open })
 </script>
 
 <template>
-  <DropdownMenu v-model:open="open" :anchor="anchor" label="插入" align="start">
-    <template #content>
-      <DropdownMenuItem
-        v-for="item in items"
-        :key="item.label"
-        :disabled="isDisabled(item)"
-        @select="select(item)"
-      >
-        <template #icon><component :is="item.icon" /></template>
-        {{ item.label }}
-      </DropdownMenuItem>
+  <Menu ref="menuRef" :model="model" popup>
+    <template #item="{ item }">
+      <a class="dropdown-item">
+        <component
+          :is="(item as { __dropdownItem: ToolbarDropdownItem }).__dropdownItem.icon"
+          :size="16"
+        />
+        <span>{{ item.label }}</span>
+      </a>
     </template>
-  </DropdownMenu>
+  </Menu>
 </template>
+
+<style scoped>
+  .dropdown-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    color: var(--editor-text-color);
+    cursor: pointer;
+  }
+  li[data-p-disabled='true'] .dropdown-item {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+</style>

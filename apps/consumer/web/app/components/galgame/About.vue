@@ -12,7 +12,7 @@
 </script>
 
 <template>
-  <WorkSection title="关于此作">
+  <GalgameSection title="关于此作">
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
       <GalgameAboutIntro :galgame="galgame" :tags="tags" />
       <GalgameAboutArchive
@@ -28,5 +28,5 @@
       :app-ids="galgame.steam_apps.map(app => app.app_id)"
     />
     <GalgameAboutCharacters :characters="characters" />
-  </WorkSection>
+  </GalgameSection>
 </template>

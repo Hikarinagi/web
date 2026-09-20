@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Drawer, Text } from '@hina-ui/vue'
   import type { TocEntry } from '@ritojs/core'
 
   defineProps<{
@@ -16,15 +15,22 @@
 </script>
 
 <template>
-  <Drawer v-model:open="visible" side="start" size="lg" :title="title" :description="subtitle">
-    <template #content>
+  <Drawer v-model:visible="visible" position="left" class="w-full! max-w-120!">
+    <template #header>
+      <div class="min-w-0">
+        <p class="truncate text-xs text-muted-color">{{ subtitle }}</p>
+        <h2 class="truncate text-base font-semibold">{{ title }}</h2>
+      </div>
+    </template>
+
+    <div class="min-h-0">
       <HikariReaderCatalogTableOfContents
         v-if="items.length"
         :items="items"
         :active-href="activeHref"
         @select="emit('select', $event)"
       />
-      <Text v-else size="sm" tone="muted">目录加载中</Text>
-    </template>
+      <p v-else class="px-2 py-3 text-sm text-muted-color">目录加载中</p>
+    </div>
   </Drawer>
 </template>

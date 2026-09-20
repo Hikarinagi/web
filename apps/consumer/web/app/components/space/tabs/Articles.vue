@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { SPACE_CONTENT_PAGE_SIZE, type SpaceContentPage } from '~/features/space/space'
   import { usePagedList } from '~/features/space/usePagedList'
 
@@ -16,7 +15,7 @@
 </script>
 
 <template>
-  <Stack gap="md">
+  <div class="flex flex-col gap-4">
     <LoadingOverlay :loading="pending">
       <SpaceContentList :items="list.items" empty-text="还没有发布文章" />
     </LoadingOverlay>
@@ -27,5 +26,5 @@
       route="replace"
       @change="loadPage"
     />
-  </Stack>
+  </div>
 </template>

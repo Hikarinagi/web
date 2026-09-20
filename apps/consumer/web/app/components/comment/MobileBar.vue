@@ -13,19 +13,11 @@
   const thread = inject(COMMENT_THREAD_KEY)!
   const { emojiSets, posting, replyTarget, postRoot, postReply, setReplyTarget } = thread
 
-  const { toggle, busy } = useLike(actions.like.kind)
-  const view = useLikeView(actions.like.kind, actions.like.id, () => ({
-    like_count: actions.like.count,
-    liked: actions.like.liked,
+  const { toggle, busy } = useLike(actions.type)
+  const view = useLikeView(actions.type, actions.id, () => ({
+    like_count: actions.likeCount,
+    liked: actions.liked,
   }))
-
-  function like() {
-    const parentId = actions.like.parentId
-    void toggle(
-      actions.like.id,
-      parentId != null ? { parentId, liked: view.value.liked } : undefined,
-    )
-  }
 
   const expanded = ref(false)
   const composerRef = ref<{ focus: () => void; reset: () => void }>()
@@ -92,29 +84,33 @@
       >
         {{ placeholder }}
       </button>
-      <AuthGateButton
-        variant="ghost"
-        :tone="view.liked ? 'accent' : 'neutral'"
+      <Button
+        login-required
+        text
+        :severity="view.liked ? undefined : 'secondary'"
         :loading="busy"
         :disabled="busy"
+        :label="view.like_count.toString()"
         aria-label="赞"
-        pill
-        class="h-9! shrink-0 px-3!"
-        @click="like"
+        class="h-9! shrink-0 gap-1! rounded-full! px-3!"
+        @click="toggle(actions.id)"
       >
         <template #icon><InteractionLikeIcon :active="view.liked" /></template>
-        {{ view.like_count }}
-      </AuthGateButton>
+      </Button>
       <FavoriteToggle
-        :id="actions.favorite.id"
-        :type="actions.favorite.type"
-        :initial-favorited="actions.favorite.favorited"
+        :id="actions.id"
+        :type="actions.type"
+        :initial-favorited="actions.favorited"
         variant="bar"
-        :picker-title="actions.favorite.pickerTitle"
-        pill
-        class="size-9! shrink-0"
+        :picker-title="actions.pickerTitle"
+        class="size-9! shrink-0 rounded-full!"
       />
-      <ShareButton :to="actions.shareTo" pill class="size-9! shrink-0" />
+      <ShareButton
+        text
+        severity="secondary"
+        :to="`/${actions.type}s/${actions.id}`"
+        class="size-9! shrink-0 rounded-full!"
+      />
     </div>
   </div>
 </template>

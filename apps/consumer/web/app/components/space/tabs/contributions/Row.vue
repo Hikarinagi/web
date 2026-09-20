@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Center, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Image as ImageIcon, User } from '@lucide/vue'
   import {
     contributionDetailPath,
@@ -33,41 +32,49 @@
     :is="to ? NuxtLink : 'div'"
     :to="to ?? undefined"
     :target="to ? '_blank' : undefined"
-    class="group flex items-start gap-3.5 border-b border-line py-3.5 last:border-b-0"
+    class="group flex items-start gap-3.5 border-b border-surface-100 py-3.5 last:border-b-0 dark:border-surface-800/60"
   >
     <HikariImage
       v-if="item.resource?.cover"
       :src="item.resource.cover"
       alt=""
-      class="shrink-0 bg-inset"
+      class="shrink-0 bg-surface-100 dark:bg-surface-800"
       :class="mediaClass"
       :image-class="mediaImageClass"
       :processing="mediaProcessing"
     />
-    <Center v-else :class="cn('shrink-0 bg-inset text-muted', mediaClass)">
+    <div
+      v-else
+      class="flex shrink-0 items-center justify-center bg-surface-100 text-muted-color dark:bg-surface-800"
+      :class="mediaClass"
+    >
       <component :is="isEntity ? User : ImageIcon" class="size-4" />
-    </Center>
+    </div>
 
-    <Stack gap="xs" class="min-w-0 flex-1">
-      <Inline gap="sm" :wrap="false">
-        <Text weight="semibold" truncate class="transition-colors group-hover:text-accent-text">
+    <div class="flex min-w-0 flex-1 flex-col gap-1">
+      <div class="flex items-center gap-2">
+        <p class="truncate font-semibold text-color transition-colors group-hover:text-primary">
           {{ item.resource?.title ?? `#${item.resource_id}` }}
-        </Text>
-        <Text as="span" size="xs" tone="muted" class="shrink-0">
+        </p>
+        <span class="shrink-0 text-xs text-muted-color">
           {{ contributionResourceLabel(item.resource_type) }}
-        </Text>
-      </Inline>
-      <Text size="sm" tone="muted" truncate>{{ item.summary }}</Text>
-    </Stack>
+        </span>
+      </div>
+      <p class="truncate text-[13px] text-muted-color">{{ item.summary }}</p>
+    </div>
 
-    <Stack gap="xs" align="end" class="shrink-0">
-      <Inline gap="xs" :wrap="false">
-        <Tag size="sm">v{{ item.version }}</Tag>
-        <Tag size="sm" tone="accent">已合并</Tag>
-      </Inline>
-      <Text as="span" size="xs" tone="muted">
+    <div class="flex shrink-0 flex-col items-end gap-1.5">
+      <div class="flex items-center gap-1.5">
+        <span
+          class="rounded bg-surface-100 px-1.5 py-0.5 text-[11px] text-muted-color dark:bg-surface-800"
+        >
+          v{{ item.version }}
+        </span>
+        <span class="rounded bg-primary/10 px-1.5 py-0.5 text-[11px] text-primary">已合并</span>
+      </div>
+      <span class="text-xs text-muted-color">
         {{ datePartFormat(item.created_at, TimeFormatEnum.M_D_CN) }}
-      </Text>
-    </Stack>
+      </span>
+    </div>
   </component>
 </template>

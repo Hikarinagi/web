@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { CreatorEditorPageData } from '~~/server/api/pages/create/editor/[type]/[id].get'
   import type { PrefillRelations } from '~~/server/api/pages/create/editor/new/[type].get'
-  import { Card, Drawer, Form, Inline, Stack } from '@hina-ui/vue'
+  import Form, { type FormInstance } from '@primevue/forms/form'
   import {
     WORKSPACE_SESSION_KEY,
     useWorkspaceSession,
@@ -65,8 +65,8 @@
   provide(WORKSPACE_SESSION_KEY, session)
 
   const {
-    rules,
-    values,
+    resolver,
+    initialValues,
     snapshotValues,
     snapshotRelations,
     initialRefs,
@@ -93,6 +93,8 @@
     onReview: (nextChangeset, needsReviewNow) => session.review(nextChangeset, needsReviewNow),
   })
 
+  const formEl = ref<FormInstance>()
+
   const relationOps = useRelationOps(relations)
   const rosterCtx = {
     addRow: relationOps.add,
@@ -106,7 +108,7 @@
     session.addRosterHints(rosterHintEntries(roster))
   }
 
-  useWorkRosterLoader(session, values, props.resourceType)
+  useWorkRosterLoader(session, formEl, props.resourceType)
 
   const suggestionSource = computed(() =>
     suggestionSourceOf(syncRoster.value, props.pageData.prefill_relations),
@@ -114,17 +116,21 @@
 </script>
 
 <template>
-  <Stack gap="lg">
+  <div class="flex flex-col gap-5">
     <Card v-if="resourceId != null">
-      <CreatorResourceHead
-        :id="resourceId"
-        :type="pageData.schema.resource_type"
-        :resource="pageData.resource"
-      />
+      <template #content>
+        <CreatorResourceHead
+          :id="resourceId"
+          :type="pageData.schema.resource_type"
+          :resource="pageData.resource"
+        />
+      </template>
     </Card>
 
     <Card v-if="blocked">
-      <CreatorEditorBlockedCard :change-request-id="openCr!.id" />
+      <template #content>
+        <CreatorEditorBlockedCard :change-request-id="openCr!.id" />
+      </template>
     </Card>
 
     <template v-else>
@@ -140,66 +146,77 @@
         :ctx="rosterCtx"
       />
 
-      <CreatorEditorImportRelatedBackfill :resource-type="resourceType" :current="relations" />
+      <CreatorEditorImportRelatedBackfill
+        :resource-type="resourceType"
+        :form-el="formEl ?? null"
+        :current="relations"
+      />
 
       <Form
-        :values="values"
-        :rules="rules"
+        ref="formEl"
+        v-slot="$form"
+        :initial-values="initialValues"
+        :resolver="resolver"
         :class="session.memberList.value.length ? 'pb-40' : 'pb-24'"
         @submit="review"
       >
-        <Inline align="start" gap="lg" :wrap="false">
+        <div class="flex items-start gap-5">
           <Card class="min-w-0 flex-1">
-            <CreatorEditorFormFields
-              v-model:relations="relations"
-              v-model:values="values"
-              :fields="fields"
-              :presentation="presentation"
-              :relation-errors="relationErrors"
-              :initial-relations="snapshotRelations"
-              :initial-values="snapshotValues"
-              :initial-refs="initialRefs"
-            />
+            <template #content>
+              <CreatorEditorFormFields
+                v-model:relations="relations"
+                :fields="fields"
+                :presentation="presentation"
+                :relation-errors="relationErrors"
+                :initial-relations="snapshotRelations"
+                :initial-values="snapshotValues"
+                :initial-refs="initialRefs"
+                :form-state="$form"
+              />
+            </template>
           </Card>
 
-          <Card class="sticky top-6 hidden w-52 shrink-0 lg:block">
-            <CreatorEditorFieldNav
-              :fields="fields"
-              :presentation="presentation"
-              :changed-fields="changedFields"
-            />
-          </Card>
-        </Inline>
+          <div class="sticky top-20 hidden w-52 shrink-0 lg:block">
+            <Card>
+              <template #content>
+                <CreatorEditorFieldNav
+                  :fields="fields"
+                  :presentation="presentation"
+                  :changed-fields="changedFields($form)"
+                />
+              </template>
+            </Card>
+          </div>
+        </div>
 
         <CreatorEditorActionBar
           :resource-type="resourceType"
           :resource-id="resourceId"
+          :form-el="formEl ?? null"
           :fields="fields"
           :presentation="presentation"
           :relations="relations"
-          :changed-count="changedCount"
+          :changed-count="changedCount($form)"
           :submitting="submitting || session.submitting.value"
           :disabled="
             submitting ||
             session.submitting.value ||
-            (changedCount === 0 && session.memberList.value.length === 0)
+            (changedCount($form) === 0 && session.memberList.value.length === 0)
           "
           @add="onAddRelation"
           @roster="onRoster"
           @open-nav="navOpen = true"
         />
-      </Form>
 
-      <Drawer v-model:open="navOpen" side="end" size="sm" title="跳转到字段">
-        <template #content>
+        <Drawer v-model:visible="navOpen" position="right" header="跳转到字段" class="lg:hidden!">
           <CreatorEditorFieldNav
             :fields="fields"
             :presentation="presentation"
-            :changed-fields="changedFields"
+            :changed-fields="changedFields($form)"
             @navigate="navOpen = false"
           />
-        </template>
-      </Drawer>
+        </Drawer>
+      </Form>
 
       <CreatorEditorSubmitDialog
         v-model:visible="dialogOpen"
@@ -217,5 +234,5 @@
         :work-resource-type="pageData.schema.resource_type"
       />
     </template>
-  </Stack>
+  </div>
 </template>

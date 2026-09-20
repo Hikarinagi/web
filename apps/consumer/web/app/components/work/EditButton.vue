@@ -1,19 +1,27 @@
 <script setup lang="ts">
-  import { IconButton } from '@hina-ui/vue'
   import { SquarePen } from '@lucide/vue'
-  import { NuxtLink } from '#components'
-  import { getRevisionEditPath, type WorkResourceSlug } from '~/features/revision/resources'
 
-  const props = defineProps<{
-    resourceType: WorkResourceSlug
+  defineProps<{
+    resourceType: 'galgame' | 'light-novel' | 'light-novel-volume'
     resourceId: number
   }>()
 
-  const to = computed(() => getRevisionEditPath(props.resourceType, props.resourceId))
+  const auth = useAuthStore()
 </script>
 
 <template>
-  <IconButton :as="NuxtLink" :to="to" target="_blank" label="修订此条目" side="bottom">
-    <SquarePen />
-  </IconButton>
+  <Button
+    v-if="auth.isAuthenticated"
+    as="router-link"
+    :to="`/create/edit/${resourceType}/${resourceId}`"
+    label="编辑此页"
+    severity="secondary"
+    outlined
+    size="small"
+    fluid
+  >
+    <template #icon>
+      <SquarePen :size="15" />
+    </template>
+  </Button>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { AspectRatio, Stack, Tag, Text } from '@hina-ui/vue'
   import { titleOf, yearOf, type SeriesCardItem } from '~/features/light-novel/explore'
   import { topVotedMedia } from '~/utils/media/image'
 
@@ -12,13 +11,9 @@
 </script>
 
 <template>
-  <NuxtLink
-    :to="`/light-novels/${item.id}`"
-    class="group flex shrink-0 hn-interactive flex-col gap-2 rounded-lg hn-press-none"
-  >
-    <AspectRatio
-      :ratio="7 / 10"
-      class="relative overflow-hidden rounded-lg border border-line bg-subtle"
+  <NuxtLink :to="`/light-novels/${item.id}`" class="group flex shrink-0 flex-col gap-2">
+    <div
+      class="relative aspect-7/10 overflow-hidden rounded-lg border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-800"
     >
       <HikariImage
         :src="cover"
@@ -27,26 +22,20 @@
         image-class="object-cover object-top"
         preset="medium"
       />
-      <Tag
+      <span
         v-if="badge"
-        variant="solid"
-        tone="neutral"
-        size="sm"
-        class="absolute top-1.5 left-1.5 backdrop-blur-sm"
+        class="absolute top-1.5 left-1.5 rounded bg-surface-900/75 px-1.5 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm"
       >
         {{ badge }}
-      </Tag>
-    </AspectRatio>
-    <Stack gap="none" class="min-w-0 gap-0.5">
-      <Text
-        size="sm"
-        weight="medium"
-        truncate
-        class="transition-colors group-hover:text-accent-text"
+      </span>
+    </div>
+    <div class="flex min-w-0 flex-col gap-0.5">
+      <p
+        class="truncate text-sm font-medium text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
       >
         {{ title }}
-      </Text>
-      <Text v-if="year" size="xs" tone="muted">{{ year }}</Text>
-    </Stack>
+      </p>
+      <p v-if="year" class="text-xs text-surface-500 dark:text-surface-400">{{ year }}</p>
+    </div>
   </NuxtLink>
 </template>

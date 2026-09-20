@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Card, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
-
   defineOptions({ name: 'DeveloperLandingHeroTerminal' })
 
   const openApiBase = useRuntimeConfig().public.openApiBase
@@ -53,35 +51,36 @@
     },
     { segments: [{ text: '}', accent: false }], muted: true },
   ]
-
-  function segmentClass(segment: { accent: boolean }, line: { muted: boolean }) {
-    if (segment.accent) return 'text-accent-text'
-    return line.muted ? 'text-muted' : 'text-fg'
-  }
 </script>
 
 <template>
-  <Card :padded="false" class="overflow-hidden rounded-xl bg-inset shadow-lg">
-    <Inline gap="xs" align="center" :wrap="false" class="border-b border-line px-4 py-3">
-      <Text v-for="dot in 3" :key="dot" as="span" class="size-2.5 rounded-full bg-line-strong" />
-      <Text as="span" size="xs" tone="muted" class="ms-2 font-mono">terminal</Text>
-    </Inline>
+  <div
+    class="overflow-hidden rounded-xl border border-surface bg-surface-100 shadow-lg dark:border-surface-800 dark:bg-surface-950"
+  >
+    <div
+      class="flex items-center gap-1.5 border-b border-surface-200 px-4 py-3 dark:border-surface-800"
+    >
+      <span class="size-2.5 rounded-full bg-surface-300 dark:bg-surface-600" />
+      <span class="size-2.5 rounded-full bg-surface-300 dark:bg-surface-600" />
+      <span class="size-2.5 rounded-full bg-surface-300 dark:bg-surface-600" />
+      <span class="ml-2 font-mono text-xs text-surface-500">terminal</span>
+    </div>
 
-    <ScrollArea direction="horizontal">
-      <Stack gap="none" class="px-4 py-4 font-mono text-xs leading-6 sm:text-sm">
-        <Text v-for="(line, index) in lines" :key="index" as="div" size="xs" class="sm:text-sm">
-          <Text
-            v-for="(segment, segmentIndex) in line.segments"
-            :key="segmentIndex"
-            as="span"
-            size="xs"
-            class="whitespace-pre sm:text-sm"
-            :class="segmentClass(segment, line)"
-          >
-            {{ segment.text }}
-          </Text>
-        </Text>
-      </Stack>
+    <ScrollArea axis="x">
+      <pre class="px-4 py-4 font-mono text-xs leading-6 sm:text-sm"><div
+        v-for="(line, index) in lines"
+        :key="index"
+      ><span
+          v-for="(segment, segmentIndex) in line.segments"
+          :key="segmentIndex"
+          :class="
+            segment.accent
+              ? 'text-hikari-primary-600 dark:text-hikari-primary-400'
+              : line.muted
+                ? 'text-surface-500 dark:text-surface-400'
+                : 'text-surface-800 dark:text-surface-100'
+          "
+        >{{ segment.text }}</span></div></pre>
     </ScrollArea>
-  </Card>
+  </div>
 </template>

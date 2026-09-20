@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { ACCESS_PERMISSIONS } from '@hikarinagi/shared'
   import type { CreatorGovernanceGroupPageData } from '~~/server/api/pages/create/governance/groups/[id].get'
 
@@ -33,7 +32,7 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="md">
+  <div v-if="data" class="flex flex-col gap-5">
     <CreatorGovernanceGroupsInfoPanel
       :group="data.group"
       @updated="refresh"
@@ -48,5 +47,5 @@
       :list="data.members"
       @changed="refresh"
     />
-  </Stack>
+  </div>
 </template>

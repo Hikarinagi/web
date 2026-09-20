@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Chip, Inline, Stack } from '@hina-ui/vue'
   import { GitPullRequest } from '@lucide/vue'
   import {
     CONTRIBUTION_TYPE_FILTERS,
@@ -46,19 +45,21 @@
 </script>
 
 <template>
-  <Stack gap="md" class="pt-2">
-    <Inline v-if="chips.length > 1" gap="sm">
-      <Chip
+  <div class="flex flex-col gap-4 pt-2">
+    <div v-if="chips.length > 1" class="flex flex-wrap items-center gap-2">
+      <Button
         v-for="c in chips"
         :key="c.key"
-        selectable
-        :selected="filter === c.key"
-        :tone="filter === c.key ? 'accent' : 'neutral'"
-        @update:selected="filter = c.key"
+        unstyled
+        class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+        :class="
+          filter === c.key ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'
+        "
+        @click="filter = c.key"
       >
         {{ c.label }} {{ c.count }}
-      </Chip>
-    </Inline>
+      </Button>
+    </div>
 
     <LoadingOverlay v-if="list.items.length" :loading="pending" content-class="flex flex-col">
       <SpaceTabsContributionsRow v-for="item in list.items" :key="item.id" :item="item" />
@@ -72,5 +73,5 @@
       route="replace"
       @change="loadPage"
     />
-  </Stack>
+  </div>
 </template>

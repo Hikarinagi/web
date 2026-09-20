@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { CloseButton, Inline, ScrollArea, Text } from '@hina-ui/vue'
-  import { NotebookPen } from '@lucide/vue'
+  import { X, NotebookPen } from '@lucide/vue'
   import { motion } from 'motion-v'
   import type { ReaderFootnote } from './composables/useReaderFootnotes'
 
@@ -26,30 +25,37 @@
     data-reader-ui
     data-reader-footnote-panel
     role="note"
-    class="reader-footnote-panel fixed inset-x-3 z-30 mx-auto max-w-2xl rounded-xl p-4"
+    class="reader-footnote-panel fixed left-1/2 z-30 w-[calc(100vw-1.5rem)] max-w-2xl rounded-xl p-4"
+    :style="{ translate: '-50% 0' }"
     :initial="{ opacity: 0, scale: 0.96, y: 10 }"
     :animate="{ opacity: 1, scale: 1, y: 0 }"
     :exit="{ opacity: 0, scale: 0.96, y: 8 }"
     :aria-label="labelFor(footnote.kind)"
   >
-    <Inline as="header" gap="sm" align="center" :wrap="false" class="reader-footnote-header">
-      <NotebookPen class="size-4 shrink-0" />
-      <Text as="span" size="xs" weight="medium" truncate class="min-w-0 flex-1 tracking-wide">
+    <header class="flex items-center gap-3">
+      <NotebookPen class="size-4" />
+      <span class="min-w-0 flex-1 text-xs font-medium tracking-wide">
         {{ labelFor(footnote.kind) }}
-      </Text>
-      <CloseButton
-        label="关闭脚注"
-        :tooltip="false"
-        size="sm"
+      </span>
+      <Button
+        rounded
+        severity="secondary"
+        variant="text"
+        size="small"
+        aria-label="关闭脚注"
         class="reader-footnote-close shrink-0"
         @click="emit('dismiss')"
-      />
-    </Inline>
+      >
+        <template #icon>
+          <X :size="14" aria-hidden="true" />
+        </template>
+      </Button>
+    </header>
 
-    <ScrollArea class="reader-footnote-scroll mt-2">
-      <Text size="sm" class="reader-footnote-content leading-7">
+    <ScrollArea class="mt-2 max-h-[min(45dvh,18rem)]">
+      <p class="reader-footnote-content text-sm leading-7">
         {{ footnote.text || '无内容' }}
-      </Text>
+      </p>
     </ScrollArea>
   </motion.aside>
 </template>
@@ -65,12 +71,8 @@
     backdrop-filter: blur(18px) saturate(1.6);
   }
 
-  .reader-footnote-header {
+  .reader-footnote-panel header {
     color: var(--reader-text-muted);
-  }
-
-  .reader-footnote-scroll {
-    max-height: min(45dvh, 18rem);
   }
 
   .reader-footnote-content {

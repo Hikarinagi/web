@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  import { Card, Grid, Stack, Text } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
-  import { cn } from '~/utils/cn'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { titleOf } from '~/features/manga/explore'
   import { topVotedMedia } from '~/utils/media/image'
@@ -18,29 +15,27 @@
 
 <template>
   <MangaHomeSection title="按标签筛选">
-    <Grid :cols="1" class="gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <NuxtLink
         v-for="entry in collections"
         :key="entry.title"
-        :as="NuxtLink"
         :to="entry.to"
-        :padded="false"
-        class="group flex items-center justify-between gap-4 rounded-xl p-5 shadow-none transition-colors hover:border-accent"
+        class="group flex items-center justify-between gap-4 rounded-xl border border-surface bg-surface-0 p-5 transition-colors hover:border-hikari-primary-300 dark:bg-surface-900 dark:hover:border-hikari-primary-700"
       >
-        <Stack gap="none" class="min-w-0">
-          <Text weight="semibold" truncate class="transition-colors group-hover:text-accent-text">
+        <div class="min-w-0">
+          <p
+            class="truncate text-base font-semibold text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
+          >
             {{ entry.title }}
-          </Text>
-          <Text size="sm" tone="muted" class="mt-1">{{ entry.total.toLocaleString() }} 部</Text>
-        </Stack>
-        <Stack gap="none" class="relative h-19 w-25 shrink-0">
-          <Card
+          </p>
+          <p class="mt-1 text-sm text-muted-color">{{ entry.total.toLocaleString() }} 部</p>
+        </div>
+        <div class="relative h-[76px] w-[100px] shrink-0">
+          <div
             v-for="(work, index) in entry.covers"
             :key="work.id"
-            :padded="false"
-            :class="
-              cn('absolute aspect-2/3 w-10 origin-bottom rounded bg-subtle', fanClasses[index])
-            "
+            class="absolute aspect-2/3 w-10 origin-bottom overflow-hidden rounded border border-surface bg-surface-100 shadow-sm dark:bg-surface-800"
+            :class="fanClasses[index]"
           >
             <HikariImage
               :src="topVotedMedia(work.covers)"
@@ -49,9 +44,9 @@
               image-class="object-cover object-top"
               preset="small"
             />
-          </Card>
-        </Stack>
-      </Card>
-    </Grid>
+          </div>
+        </div>
+      </NuxtLink>
+    </div>
   </MangaHomeSection>
 </template>

@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <WorkSection v-if="images.length" title="画廊" :meta="`${images.length} 张图片`">
+  <GalgameSection v-if="images.length" title="画廊" :meta="`${images.length} 张图片`">
     <div ref="galleryRef" class="w-full">
       <HikariImageGroup class="flex flex-col gap-2">
         <div v-for="(row, index) in rows" :key="index" class="flex gap-2">
@@ -44,7 +44,7 @@
             :key="cell.item.id"
             :src="cell.item"
             :alt="`${title} 截图`"
-            class="shrink-0 rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
+            class="shrink-0 overflow-hidden rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
             image-class="size-full object-cover"
             :style="{ width: `${cell.width}px`, height: `${cell.height}px` }"
             :processing="thumbProcessing"
@@ -53,5 +53,5 @@
         </div>
       </HikariImageGroup>
     </div>
-  </WorkSection>
+  </GalgameSection>
 </template>

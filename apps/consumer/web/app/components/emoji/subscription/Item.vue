@@ -48,7 +48,7 @@
           <HikariImage
             v-for="emoji in preview"
             :key="emoji.id"
-            v-tooltip="`:${emoji.name}:`"
+            v-tooltip.top="`:${emoji.name}:`"
             :src="emoji.src?.src"
             :alt="emoji.name"
             :processing="false"

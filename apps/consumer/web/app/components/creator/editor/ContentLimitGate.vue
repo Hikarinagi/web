@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Alert, Button, Inline, Panel, Stack } from '@hina-ui/vue'
   import { ArrowLeft, Check, ShieldAlert } from '@lucide/vue'
   import {
     NEVER_SHOW_NSFW,
@@ -48,28 +47,27 @@
 </script>
 
 <template>
-  <Panel
-    title="确认内容显示等级"
-    description="Wiki编辑需要完整检索条目。继续前需要至少能看到 NSFW 条目（可带模糊遮罩），否则部分条目会被门禁过滤。"
-    class="mx-auto w-full max-w-2xl"
-  >
-    <template #icon><ShieldAlert /></template>
-    <Stack gap="md">
-      <Alert tone="warning">
-        确认后会将内容显示等级切换为「显示但带模糊遮罩」。编辑器内的搜索、关联和详情不再被 NSFW
-        门禁过滤（图片仍按模糊遮罩处理）。
-      </Alert>
+  <div class="mx-auto flex max-w-2xl flex-col gap-5">
+    <CardPanel
+      title="确认内容显示等级"
+      :icon="ShieldAlert"
+      description="Wiki编辑需要完整检索条目。继续前需要至少能看到 NSFW 条目（可带模糊遮罩），否则部分条目会被门禁过滤。"
+    >
+      <div class="flex flex-col gap-5">
+        <Message severity="warn" variant="simple" size="small">
+          确认后会将内容显示等级切换为「显示但带模糊遮罩」。编辑器内的搜索、关联和详情不再被 NSFW
+          门禁过滤（图片仍按模糊遮罩处理）。
+        </Message>
 
-      <Inline gap="sm">
-        <Button :loading="submitting" @click="enableAndContinue">
-          <template #icon><Check /></template>
-          切换并继续
-        </Button>
-        <Button variant="outline" tone="neutral" @click="back">
-          <template #icon><ArrowLeft /></template>
-          返回
-        </Button>
-      </Inline>
-    </Stack>
-  </Panel>
+        <div class="flex flex-wrap gap-3">
+          <Button label="切换并继续" :loading="submitting" @click="enableAndContinue">
+            <template #icon><Check class="size-[1em]" /></template>
+          </Button>
+          <Button label="返回" severity="secondary" variant="outlined" @click="back">
+            <template #icon><ArrowLeft class="size-[1em]" /></template>
+          </Button>
+        </div>
+      </div>
+    </CardPanel>
+  </div>
 </template>

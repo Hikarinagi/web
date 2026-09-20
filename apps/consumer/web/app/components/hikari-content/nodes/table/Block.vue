@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { ScrollArea } from '@hina-ui/vue'
   import { useScroll } from '@vueuse/core'
   import { TABLE_CELL_MIN_WIDTH, type EditorNode } from '@hikarinagi/editor-schema'
 
@@ -96,7 +95,7 @@
       </div>
     </div>
 
-    <ScrollArea ref="scroller" direction="both" class="hikari-table-scroll">
+    <ScrollArea ref="scroller" axis="both" shadow="both" class="hikari-table-scroll">
       <table ref="table" :style="tableStyle">
         <colgroup>
           <col v-for="(width, i) in columnWidths" :key="i" :style="colStyle(width)" />

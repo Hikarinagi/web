@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { PageMeta } from '@hikarinagi/shared'
-  import { Grid, Heading, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import {
     mapVoiceItems,
@@ -19,8 +18,10 @@
     variant?: WorkVariant
     rawItems: readonly unknown[]
     pending: boolean
-    meta: PageMeta
+    meta?: PageMeta
+    hasMore?: boolean
   }>()
+  defineEmits<{ loadMore: [] }>()
 
   const router = useRouter()
   function onBack(e: MouseEvent, navigate: () => void) {
@@ -40,47 +41,55 @@
 </script>
 
 <template>
-  <Stack gap="lg">
+  <div class="flex flex-col gap-6">
     <NuxtLink v-slot="{ href, navigate }" :to="backTo" custom>
-      <Link
+      <a
         :href="href ?? undefined"
-        tone="neutral"
-        :underline="false"
-        class="inline-flex w-fit items-center gap-1.5 text-sm text-muted hover:text-fg"
+        class="inline-flex w-fit items-center gap-1.5 text-sm text-surface-500 transition-colors hover:text-surface-700 dark:text-surface-400 dark:hover:text-surface-200"
         @click="onBack($event, navigate)"
       >
         <ArrowLeft class="size-3.5" />
         {{ backLabel }}
-      </Link>
+      </a>
     </NuxtLink>
 
-    <Inline gap="sm" :wrap="false">
-      <Heading :level="2">{{ title }}</Heading>
-      <Text size="xs" tone="muted">{{ metaText }}</Text>
-    </Inline>
+    <div class="flex items-center gap-2.5">
+      <h2 class="text-[22px] font-bold text-surface-900 dark:text-surface-0">{{ title }}</h2>
+      <p class="text-[13px] text-surface-500 dark:text-surface-400">{{ metaText }}</p>
+    </div>
 
-    <Grid
+    <div
       v-if="mode === 'work'"
       id="entity-relation-items"
-      :cols="3"
-      class="gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6"
+      class="grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6"
     >
       <EntityWorkCard
         v-for="(item, index) in workItems"
         :key="`${item.to}-${index}`"
         :item="item"
       />
-    </Grid>
-    <Grid v-else id="entity-relation-items" :cols="1" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    </div>
+    <div
+      v-else
+      id="entity-relation-items"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+    >
       <EntityVoiceCard v-for="item in voiceItems" :key="item.to" :item="item" />
-    </Grid>
+    </div>
 
     <Paginator
+      v-if="meta"
       :meta="meta"
       :loading="pending"
       route="push"
       align="center"
       scroll-target="#entity-relation-items"
     />
-  </Stack>
+
+    <div v-else-if="hasMore" class="flex justify-center pt-2">
+      <Button severity="secondary" outlined :loading="pending" @click="$emit('loadMore')">
+        加载更多
+      </Button>
+    </div>
+  </div>
 </template>

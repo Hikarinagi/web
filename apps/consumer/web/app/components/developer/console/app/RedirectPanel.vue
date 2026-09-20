@@ -1,40 +1,20 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Code,
-    Form,
-    FormField,
-    Heading,
-    IconButton,
-    Inline,
-    Input,
-    InputGroup,
-    Section,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
   import { Plus, Trash2 } from '@lucide/vue'
+  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import {
-    developerAppRedirectSchema,
+    developerAppRedirectResolver,
     type DeveloperAppRedirectValues,
   } from '~/features/developer/schemas/app.schema'
-  import { getFieldErrors } from '~/utils/api/error'
 
   defineOptions({ name: 'DeveloperConsoleAppRedirectPanel' })
 
   const props = defineProps<{ app: DeveloperAppPageData['app'] }>()
   const emit = defineEmits<{ changed: [] }>()
 
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
-  const values = reactive<DeveloperAppRedirectValues>({ uri: '' })
+  const formErrors = useFormErrors(developerAppRedirectResolver)
+  const form = useTemplateRef<FormInstance>('form')
   const busy = ref(false)
-
-  const hint = computed(() =>
-    props.app.application_type === 'native'
-      ? '原生应用可用私有 scheme（com.example.app:/callback）、环回地址（http://127.0.0.1:端口、http://[::1]:端口、http://localhost:端口）或非环回的 https:// 地址。地址不能包含 #fragment。'
-      : 'Web 应用需使用 https:// 地址；本地调试可用 http://localhost、http://127.0.0.1、http://[::1]。地址不能包含 #fragment。',
-  )
 
   async function save(uris: string[]) {
     busy.value = true
@@ -53,18 +33,18 @@
     }
   }
 
-  async function onSubmit() {
-    if (busy.value) return
-    if (props.app.redirect_uris.includes(values.uri)) {
+  async function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid || busy.value) return
+    const { uri } = event.values as DeveloperAppRedirectValues
+    if (props.app.redirect_uris.includes(uri)) {
       push.error({ message: '该地址已存在' })
       return
     }
     try {
-      await save([...props.app.redirect_uris, values.uri])
-      values.uri = ''
-      form.value?.reset()
+      await save([...props.app.redirect_uris, uri])
+      event.reset()
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     }
   }
 
@@ -74,59 +54,68 @@
 </script>
 
 <template>
-  <Section class="py-6 first:pt-0 last:pb-0">
-    <Stack gap="md">
-      <Heading :level="3" size="base">回调地址</Heading>
-      <Text size="xs" tone="muted" class="leading-relaxed">{{ hint }}</Text>
-
-      <Stack gap="sm">
-        <Stack v-if="app.redirect_uris.length" gap="none" class="divide-y divide-line">
-          <Inline
-            v-for="uri in app.redirect_uris"
-            :key="uri"
-            gap="sm"
-            align="center"
-            justify="between"
-            class="py-2"
-          >
-            <Code class="min-w-0 truncate">{{ uri }}</Code>
-            <IconButton
-              label="删除回调地址"
-              variant="ghost"
-              tone="danger"
-              size="sm"
-              :disabled="busy"
-              @click="remove(uri)"
-            >
-              <Trash2 />
-            </IconButton>
-          </Inline>
-        </Stack>
-
-        <Form
-          v-if="app.redirect_uris.length < 5"
-          ref="form"
-          :values="values"
-          :rules="developerAppRedirectSchema"
-          :disabled="busy"
-          @submit="onSubmit"
+  <section class="flex flex-col gap-4 py-6 first:pt-0 last:pb-0">
+    <h3 class="text-sm font-semibold text-color">回调地址</h3>
+    <p class="text-xs leading-relaxed text-muted-color">
+      {{
+        app.application_type === 'native'
+          ? '原生应用可用私有 scheme（com.example.app:/callback）、环回地址（http://127.0.0.1:端口、http://[::1]:端口、http://localhost:端口）或非环回的 https:// 地址。'
+          : 'Web 应用需使用 https:// 地址；本地调试可用 http://localhost、http://127.0.0.1、http://[::1]。'
+      }}
+      地址不能包含 #fragment。
+    </p>
+    <div class="flex flex-col gap-3">
+      <div
+        v-if="app.redirect_uris.length"
+        class="flex flex-col divide-y divide-surface-100 dark:divide-surface-800"
+      >
+        <div
+          v-for="uri in app.redirect_uris"
+          :key="uri"
+          class="flex items-center justify-between gap-3 py-2"
         >
-          <FormField name="uri">
-            <InputGroup>
-              <Input
-                v-model="values.uri"
-                autocomplete="off"
-                aria-label="回调地址"
-                placeholder="https://your.app/callback"
-              />
-              <Button type="submit" variant="ghost" tone="neutral" :loading="busy">
-                <template #icon><Plus /></template>
-                添加
-              </Button>
-            </InputGroup>
-          </FormField>
-        </Form>
-      </Stack>
-    </Stack>
-  </Section>
+          <code class="min-w-0 truncate font-mono text-sm text-color">{{ uri }}</code>
+          <Button
+            unstyled
+            class="inline-flex shrink-0 items-center justify-center rounded p-1.5 text-muted-color hover:bg-emphasis hover:text-red-500"
+            :disabled="busy"
+            aria-label="删除回调地址"
+            @click="remove(uri)"
+          >
+            <Trash2 class="size-4" />
+          </Button>
+        </div>
+      </div>
+
+      <Form
+        v-if="app.redirect_uris.length < 5"
+        ref="form"
+        :resolver="formErrors.resolver"
+        @input="formErrors.clear"
+        @submit="onSubmit"
+      >
+        <FormItem v-slot="{ id, ariaDescribedby }" name="uri">
+          <div class="flex items-center gap-2">
+            <InputText
+              :id="id"
+              :aria-describedby="ariaDescribedby"
+              fluid
+              autocomplete="off"
+              placeholder="https://your.app/callback"
+            />
+            <Button
+              class="shrink-0"
+              label="添加"
+              severity="secondary"
+              outlined
+              type="submit"
+              :loading="busy"
+            >
+              <template #icon><Plus class="size-4" /></template>
+            </Button>
+          </div>
+        </FormItem>
+      </Form>
+    </div>
+  </section>
 </template>

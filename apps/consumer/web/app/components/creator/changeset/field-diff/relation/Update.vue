@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
   import { asRecord, asRefValues, attrKeyLabel, attrValueLabel, REF_ATTR_LABEL } from '../helpers'
 
@@ -37,8 +36,8 @@
 </script>
 
 <template>
-  <Stack as="ul" gap="xs">
-    <Inline as="li" gap="sm" align="center">
+  <ul class="flex flex-col gap-1.5">
+    <li class="flex flex-wrap items-center gap-2">
       <HikariImage
         v-if="targetCover"
         :src="targetCover"
@@ -47,23 +46,21 @@
         class="size-10 shrink-0 overflow-hidden rounded"
         image-class="size-full object-cover"
       />
-      <Text v-if="targetName" as="span" size="sm" weight="medium">{{ targetName }}</Text>
-      <Text as="span" size="xs" tone="muted" class="font-mono">#{{ op.target_id }}</Text>
-    </Inline>
-
-    <Inline v-for="change in updates" :key="change.key" as="li" gap="sm" align="center">
-      <Text as="span" size="xs" tone="muted">{{ attrKeyLabel(change.key) }}</Text>
-      <Text as="span" class="rounded bg-danger-soft px-2 py-1 text-danger-text line-through">
+      <span v-if="targetName" class="text-sm font-medium">{{ targetName }}</span>
+      <span class="font-mono text-xs text-muted-color">#{{ op.target_id }}</span>
+    </li>
+    <li v-for="change in updates" :key="change.key" class="flex flex-wrap items-center gap-2">
+      <span class="text-xs text-muted-color">{{ attrKeyLabel(change.key) }}</span>
+      <span class="rounded bg-red-500/10 px-2 py-1 text-red-700 line-through dark:text-red-300">
         {{ attrValueLabel(op, change.key, change.from) }}
-      </Text>
-      <ArrowRight class="size-3.5 shrink-0 text-muted" aria-hidden="true" />
-      <Text as="span" class="rounded bg-success-soft px-2 py-1 text-success-text">
+      </span>
+      <ArrowRight :size="14" class="shrink-0 text-muted-color" aria-hidden="true" />
+      <span class="rounded bg-green-500/10 px-2 py-1 text-green-700 dark:text-green-300">
         {{ attrValueLabel(op, change.key, change.to) }}
-      </Text>
-    </Inline>
-
-    <Inline v-for="ref in refUpdates" :key="`ref-${ref.key}`" as="li" gap="sm" align="center">
-      <Text as="span" size="xs" tone="muted">{{ ref.label }}</Text>
+      </span>
+    </li>
+    <li v-for="ref in refUpdates" :key="`ref-${ref.key}`" class="flex flex-wrap items-center gap-2">
+      <span class="text-xs text-muted-color">{{ ref.label }}</span>
       <CreatorChangesetFieldDiffRelationRefList
         v-if="ref.removed.length"
         :values="ref.removed"
@@ -74,6 +71,6 @@
         :values="ref.added"
         variant="add"
       />
-    </Inline>
-  </Stack>
+    </li>
+  </ul>
 </template>

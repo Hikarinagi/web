@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Heart } from '@lucide/vue'
+  import { ThumbsUp } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { EASE, TRANSITION_FAST } from '~/lib/motion'
 
@@ -92,7 +92,7 @@
       :transition="iconTransition"
       :while-press="{ scale: 0.88 }"
     >
-      <Heart class="size-full transition-colors duration-150" :class="activeClass" />
+      <ThumbsUp class="size-full transition-colors duration-150" :class="activeClass" />
     </motion.span>
   </motion.span>
 </template>

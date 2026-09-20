@@ -17,11 +17,11 @@ export function useSearchControls(search: ReturnType<typeof useSearch>) {
       search.activateActive()
       return
     }
-    void search.submit()
+    search.submit()
   }
 
   function onPick(keyword: string) {
-    void search.submit(keyword)
+    search.submit(keyword)
   }
 
   return { onKeydown, onPick }

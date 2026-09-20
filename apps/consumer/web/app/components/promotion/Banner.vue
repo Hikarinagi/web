@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { IconButton, Stack, Tag } from '@hina-ui/vue'
   import { X } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
-  import type { ComponentPublicInstance } from 'vue'
   import type { PromoBanner } from '~/features/promotion/placement'
   import { useBannerDismiss } from '~/features/promotion/composables/useBannerDismiss'
   import { TRANSITION } from '~/lib/motion'
@@ -14,16 +12,19 @@
   const { isDismissed, dismiss } = useBannerDismiss()
   const visible = computed(() => !isDismissed(props.banner.id))
 
+  const CLOSE_BTN =
+    'grid size-7 place-items-center rounded-full bg-black/45 text-white transition-colors hover:bg-black/65'
+
   const aspectStyle = computed(() => {
     const { width, height } = props.banner.image
     return width && height ? { aspectRatio: `${width} / ${height}` } : undefined
   })
 
-  const inner = useTemplateRef<ComponentPublicInstance>('inner')
+  const inner = useTemplateRef<HTMLElement>('inner')
   const exitSpacing = ref<Record<string, string>>({})
 
   function gapCollapse(): Record<string, string> {
-    const item = unrefElement(inner)?.parentElement
+    const item = inner.value?.parentElement
     const container = item?.parentElement
     if (!item || !container || container.children.length < 2) return {}
 
@@ -51,11 +52,11 @@
       :transition="TRANSITION"
       class="overflow-hidden"
     >
-      <Stack ref="inner" gap="none" class="relative">
+      <div ref="inner" class="relative">
         <NuxtLink
           :to="banner.link"
           :target="banner.open_in_new ? '_blank' : undefined"
-          class="block overflow-hidden rounded-2xl border border-line"
+          class="block overflow-hidden rounded-2xl border border-surface"
           :style="aspectStyle"
         >
           <HikariImage
@@ -67,20 +68,17 @@
           />
         </NuxtLink>
 
-        <Tag class="pointer-events-none absolute bottom-2 left-2 z-1">广告</Tag>
+        <Tag
+          value="广告"
+          class="pointer-events-none absolute bottom-2 left-2 z-1 bg-black/55! text-white!"
+        />
 
-        <IconButton
-          label="关闭广告"
-          variant="solid"
-          tone="neutral"
-          size="sm"
-          pill
-          class="absolute top-2 right-2 z-1"
-          @click="close"
-        >
-          <X />
-        </IconButton>
-      </Stack>
+        <div class="absolute top-2 right-2 z-1">
+          <Button unstyled :class="CLOSE_BTN" aria-label="关闭广告" @click="close">
+            <template #icon><X :size="14" /></template>
+          </Button>
+        </div>
+      </div>
     </motion.div>
   </AnimatePresence>
 </template>

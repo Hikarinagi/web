@@ -1,36 +1,39 @@
 <script setup lang="ts">
-  import { Button, Dialog, Form, FormField, NumberInput } from '@hina-ui/vue'
-  import { addPermissionGroupMemberSchema } from '~/features/creator/schemas/governance.schema'
-  import { getFieldErrors } from '~/utils/api/error'
+  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
+  import {
+    addPermissionGroupMemberResolver,
+    type AddPermissionGroupMemberValues,
+  } from '~/features/creator/schemas/governance.schema'
 
   const props = defineProps<{ groupId: number }>()
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ added: [] }>()
 
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
+  const formErrors = useFormErrors(addPermissionGroupMemberResolver)
+  const form = useTemplateRef<FormInstance>('form')
   const submitting = ref(false)
-  const values = reactive<{ user_id: number | null }>({ user_id: null })
 
   watch(visible, next => {
-    if (!next) return
-    form.value?.reset()
-    values.user_id = null
+    if (next) {
+      formErrors.clear()
+      form.value?.reset()
+    }
   })
 
-  async function onSubmit() {
-    const userId = values.user_id
-    if (userId === null || submitting.value) return
+  async function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid || submitting.value) return
     submitting.value = true
     try {
+      const values = event.values as AddPermissionGroupMemberValues
       await hikariRequest('/api/v3/permission-groups/{id}/members', {
         method: 'POST',
         path: { id: props.groupId },
-        body: { user_id: userId },
+        body: { user_id: values.user_id },
       })
       visible.value = false
       emit('added')
     } catch (error) {
-      form.value?.setErrors(getFieldErrors(error))
+      await formErrors.apply(error, form.value)
     } finally {
       submitting.value = false
     }
@@ -38,26 +41,28 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="添加成员" size="sm" :locked="submitting">
-    <template #content>
-      <Form
-        ref="form"
-        :values="values"
-        :rules="addPermissionGroupMemberSchema"
-        :disabled="submitting"
-        @submit="onSubmit"
-      >
-        <FormField name="user_id" label="用户 ID" required>
-          <NumberInput v-model="values.user_id" :min="1" :step="1" />
-        </FormField>
-      </Form>
-    </template>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="添加成员"
+    :dismissable-mask="!submitting"
+    :style="{ width: '92vw', maxWidth: '24rem' }"
+  >
+    <Form
+      ref="form"
+      :resolver="formErrors.resolver"
+      class="flex flex-col gap-4"
+      @input="formErrors.clear"
+      @submit="onSubmit"
+    >
+      <FormItem v-slot="{ id }" name="user_id" label="用户 ID">
+        <InputNumber :input-id="id" :use-grouping="false" fluid />
+      </FormItem>
 
-    <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
-        取消
-      </Button>
-      <Button :loading="submitting" @click="form?.submit()">添加</Button>
-    </template>
+      <div class="flex justify-end gap-3 pt-2">
+        <Button label="取消" severity="secondary" :disabled="submitting" @click="visible = false" />
+        <Button label="添加" type="submit" :loading="submitting" />
+      </div>
+    </Form>
   </Dialog>
 </template>

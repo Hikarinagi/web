@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { useReaderTapNavigation } from '~/components/hikari-reader/composables/useReaderTapNavigation'
@@ -6,7 +6,8 @@ import { useReaderTapNavigation } from '~/components/hikari-reader/composables/u
 const WIDTH = 900
 
 function setup(tapZones = true) {
-  const spread = ref(5)
+  const currentSpread = ref(5)
+  const jumps: number[] = []
   const surface = document.createElement('div')
   surface.getBoundingClientRect = () =>
     ({ left: 0, top: 0, right: WIDTH, bottom: 600, width: WIDTH, height: 600 }) as DOMRect
@@ -16,66 +17,95 @@ function setup(tapZones = true) {
     setup() {
       api = useReaderTapNavigation({
         device: ref({ page_animation: true, tap_zones: tapZones }),
+        isCoarsePointer: ref(true),
         isLoaded: ref(true),
         surface: ref(surface),
-        next: () => (spread.value += 1),
-        previous: () => (spread.value -= 1),
+        currentSpread,
+        jumpToSpread: index => {
+          jumps.push(index)
+          currentSpread.value = index
+        },
+        toggleToolbar: vi.fn(),
+        next: () => (currentSpread.value += 1),
+        previous: () => (currentSpread.value -= 1),
       })
       return () => h('div')
     },
   })
   mount(Harness)
-  return { api, spread, surface }
+  return { api, currentSpread, jumps, surface }
 }
 
-function tapAt(api: ReturnType<typeof useReaderTapNavigation>, surface: HTMLElement, x: number) {
-  const touch = { identifier: 1, clientX: x, clientY: 300 }
-  const event = (timeStamp: number, ongoing: boolean) =>
-    ({
-      target: surface,
-      timeStamp,
-      touches: ongoing ? [touch] : [],
-      changedTouches: [touch],
-    }) as unknown as TouchEvent
-  api.onTouchStart(event(0, true))
-  api.onTouchEnd(event(60, false))
+/** A clean tap in the right-hand zone, i.e. "next page". */
+function tapNext(api: ReturnType<typeof useReaderTapNavigation>, surface: HTMLElement) {
+  const touch = { identifier: 1, clientX: WIDTH - 40, clientY: 300 }
+  api.onTouchStart({
+    target: surface,
+    timeStamp: 0,
+    touches: [touch],
+    changedTouches: [touch],
+  } as unknown as TouchEvent)
+  api.onTouchEnd({
+    target: surface,
+    timeStamp: 60,
+    touches: [],
+    changedTouches: [touch],
+  } as unknown as TouchEvent)
 }
 
-describe('useReaderTapNavigation', () => {
-  it('turns the page from the left and right zones', () => {
-    const { api, spread, surface } = setup()
-    tapAt(api, surface, WIDTH - 40)
-    expect(spread.value).toBe(6)
-    tapAt(api, surface, 40)
-    expect(spread.value).toBe(5)
-  })
+afterEach(() => {
+  vi.useRealTimers()
+})
 
-  it('leaves the middle of the page alone', () => {
-    const { api, spread, surface } = setup()
-    tapAt(api, surface, WIDTH / 2)
-    expect(spread.value).toBe(5)
-  })
+describe('useReaderTapNavigation — late content clicks', () => {
+  it('takes back the turn when an image click arrives after the fact', () => {
+    // Rito emits `imageClick` only once the blob resolves, which on a cache
+    // miss lands well after the tap has already paged.
+    const { api, currentSpread, jumps, surface } = setup()
+    tapNext(api, surface)
+    expect(currentSpread.value).toBe(6)
 
-  it('does nothing at all while tap zones are off', () => {
-    const { api, spread, surface } = setup(false)
-    tapAt(api, surface, WIDTH - 40)
-    expect(spread.value).toBe(5)
-  })
-
-  it('skips the turn when content claimed the tap first', () => {
-    // Rito dispatches a link hit from its own canvas handler, which runs before
-    // our release handler gets to read the tap.
-    const { api, spread, surface } = setup()
     api.suppressTap()
-    tapAt(api, surface, WIDTH - 40)
-    expect(spread.value).toBe(5)
+    expect(jumps).toEqual([5])
+    expect(currentSpread.value).toBe(5)
   })
 
-  it('only holds that claim for the tap it was made for', () => {
-    const { api, spread, surface } = setup()
+  it('leaves the turn alone once the reader has moved on', () => {
+    const { api, currentSpread, jumps, surface } = setup()
+    tapNext(api, surface)
+    tapNext(api, surface)
+    expect(currentSpread.value).toBe(7)
+
+    // The first tap's image finally resolved, but two pages have passed.
     api.suppressTap()
-    tapAt(api, surface, WIDTH - 40)
-    tapAt(api, surface, WIDTH - 40)
-    expect(spread.value).toBe(6)
+    expect(jumps).toEqual([6])
+    expect(currentSpread.value).toBe(6)
+  })
+
+  it('ignores a content click that arrives far too late', () => {
+    vi.useFakeTimers()
+    const { api, currentSpread, jumps, surface } = setup()
+    tapNext(api, surface)
+    vi.advanceTimersByTime(2000)
+    api.suppressTap()
+    expect(jumps).toEqual([])
+    expect(currentSpread.value).toBe(6)
+  })
+
+  it('only reverts once for a single turn', () => {
+    const { api, jumps, surface } = setup()
+    tapNext(api, surface)
+    api.suppressTap()
+    api.suppressTap()
+    expect(jumps).toEqual([5])
+  })
+
+  it('has nothing to revert when the tap only toggled the toolbar', () => {
+    const { api, currentSpread, jumps } = setup(false)
+    const surface = document.createElement('div')
+    tapNext(api, surface)
+    expect(currentSpread.value).toBe(5)
+    api.suppressTap()
+    expect(jumps).toEqual([])
   })
 })

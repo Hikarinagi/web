@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { toRef } from 'vue'
   import type { UserCardData } from './composables/useUserCard'
   import { provideUserCardFollow } from './composables/useUserCardFollow'
@@ -13,9 +12,11 @@
 </script>
 
 <template>
-  <Stack gap="none">
+  <div
+    class="w-80 overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-[0_16px_48px_rgba(0,0,0,0.18)] dark:border-surface-700 dark:bg-surface-900"
+  >
     <UserCardCover :src="user?.head_cover?.src" />
-    <Stack gap="none" class="relative px-4 pb-4">
+    <div class="relative px-4 pb-4">
       <UserCardHeader :user="user" />
       <template v-if="user">
         <UserCardIdentity :user="user" />
@@ -23,6 +24,6 @@
         <UserCardStats :user="user" />
       </template>
       <UserCardSkeleton v-else />
-    </Stack>
-  </Stack>
+    </div>
+  </div>
 </template>

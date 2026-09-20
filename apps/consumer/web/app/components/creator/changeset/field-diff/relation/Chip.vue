@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Inline, Text } from '@hina-ui/vue'
   import { asRecord, asRefValues, attrKeyLabel, attrValueLabel, REF_ATTR_LABEL } from '../helpers'
 
   const props = defineProps<{
@@ -26,14 +25,12 @@
 </script>
 
 <template>
-  <Inline
-    gap="sm"
-    align="center"
-    class="rounded-lg px-3 py-2"
+  <div
+    class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2"
     :class="
       variant === 'add'
-        ? 'bg-success-soft text-success-text'
-        : 'bg-danger-soft text-danger-text line-through'
+        ? 'bg-green-500/10 text-green-700 dark:text-green-300'
+        : 'bg-red-500/10 text-red-700 line-through dark:text-red-300'
     "
   >
     <HikariImage
@@ -44,16 +41,14 @@
       class="size-10 shrink-0 overflow-hidden rounded"
       image-class="size-full object-cover"
     />
-    <Text v-if="targetName" as="span" size="sm" weight="medium" class="text-inherit">
-      {{ targetName }}
-    </Text>
-    <Text as="span" size="xs" class="font-mono text-inherit opacity-70">#{{ op.target_id }}</Text>
-    <Text v-for="[key, value] in attrs" :key="key" as="span" size="xs" class="text-inherit">
+    <span v-if="targetName" class="text-sm font-medium">{{ targetName }}</span>
+    <span class="font-mono text-xs opacity-70">#{{ op.target_id }}</span>
+    <span v-for="[key, value] in attrs" :key="key" class="text-xs">
       {{ attrKeyLabel(key) }}:{{ attrValueLabel(op, key, value) }}
-    </Text>
+    </span>
     <template v-for="ref in refLists" :key="ref.key">
-      <Text as="span" size="xs" class="text-inherit">{{ ref.label }}:</Text>
+      <span class="text-xs">{{ ref.label }}:</span>
       <CreatorChangesetFieldDiffRelationRefList :values="ref.values" variant="plain" />
     </template>
-  </Inline>
+  </div>
 </template>

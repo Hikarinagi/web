@@ -125,7 +125,7 @@
             :severity="tag.highlight ? undefined : 'secondary'"
           >
             {{ tag.label }}
-            <Volume2 v-if="tag.audio" v-tooltip="'含完整语音'" :size="11" />
+            <Volume2 v-if="tag.audio" v-tooltip.top="'含完整语音'" :size="11" />
           </Tag>
         </div>
 

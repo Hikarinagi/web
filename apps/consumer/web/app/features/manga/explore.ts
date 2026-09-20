@@ -1,6 +1,5 @@
 import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
 
 export const MANGA_BROWSE_PAGE_SIZE = 24
 
@@ -11,7 +10,14 @@ export type MangaRegion = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['region'
 export type MangaDecade = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['decade']>
 export type MangaAudience = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['audience']>
 export type MangaSerialStatus = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['serial_status']>
-export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export type TagFilterOp = 'include' | 'exclude'
+export type TagMatchMode = 'and' | 'or'
+
+export interface TagFilterGroup {
+  op: TagFilterOp
+  match: TagMatchMode
+  tag_ids: number[]
+}
 
 export interface MangaBrowseState {
   page: number

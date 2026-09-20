@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { AspectRatio, Stack, Tag, Text } from '@hina-ui/vue'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { topVotedMedia } from '~/utils/media/image'
 
@@ -21,7 +20,9 @@
 
 <template>
   <NuxtLink :to="`/mangas/${item.id}`" class="group flex min-w-0 shrink-0 flex-col gap-2">
-    <AspectRatio :ratio="2 / 3" class="relative overflow-hidden rounded-lg bg-subtle">
+    <div
+      class="relative aspect-2/3 overflow-hidden rounded-lg border border-surface bg-surface-100 dark:bg-surface-800"
+    >
       <HikariImage
         :src="cover"
         :alt="title"
@@ -29,37 +30,29 @@
         image-class="object-cover object-top"
         preset="medium"
       >
-        <template #empty />
+        <template #empty><span /></template>
       </HikariImage>
-      <Tag
+      <span
         v-if="rank"
-        variant="solid"
-        :tone="rank <= 3 ? 'accent' : 'neutral'"
-        size="sm"
-        class="absolute top-1.5 left-1.5 size-6 justify-center font-bold backdrop-blur-sm"
+        class="absolute top-1.5 left-1.5 flex size-6 items-center justify-center rounded-md text-xs font-bold text-white backdrop-blur-sm"
+        :class="rank <= 3 ? 'bg-hikari-primary-500/90' : 'bg-surface-900/75'"
       >
         {{ rank }}
-      </Tag>
-      <Tag
+      </span>
+      <span
         v-if="!hideStatus && item.serial_status === 'FINISHED'"
-        variant="solid"
-        tone="neutral"
-        size="sm"
-        class="absolute top-1.5 right-1.5 backdrop-blur-sm"
+        class="absolute top-1.5 right-1.5 rounded bg-surface-900/75 px-1.5 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm"
       >
         已完结
-      </Tag>
-    </AspectRatio>
-    <Stack gap="none" class="min-w-0 gap-0.5">
-      <Text
-        size="sm"
-        weight="medium"
-        truncate
-        class="transition-colors group-hover:text-accent-text"
+      </span>
+    </div>
+    <div class="flex min-w-0 flex-col gap-0.5">
+      <p
+        class="truncate text-sm font-medium text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
       >
         {{ title }}
-      </Text>
-      <Text v-if="year" size="xs" tone="muted">{{ year }}</Text>
-    </Stack>
+      </p>
+      <p v-if="year" class="text-xs text-muted-color">{{ year }}</p>
+    </div>
   </NuxtLink>
 </template>

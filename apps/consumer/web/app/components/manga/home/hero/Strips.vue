@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { Card, Inline } from '@hina-ui/vue'
-
   defineOptions({ name: 'MangaHomeHeroStrips' })
   const props = defineProps<{
     count: number
@@ -33,13 +31,12 @@
 </script>
 
 <template>
-  <Inline align="center" gap="none" :wrap="false" class="gap-1.5 text-fg">
-    <Card
+  <div class="flex items-center gap-1.5 text-color">
+    <Button
       v-for="index in count"
       :key="index"
-      as="button"
-      :padded="false"
-      class="flex h-4 cursor-pointer items-center border-0 bg-transparent shadow-none"
+      unstyled
+      class="flex h-4 cursor-pointer items-center"
       :aria-label="`第 ${index} 张`"
       @click="emit('select', index - 1)"
     >
@@ -48,7 +45,7 @@
         :class="index - 1 === current ? 'w-9' : 'w-4'"
       >
         <span
-          class="absolute inset-0 origin-left rounded-full bg-accent transition-transform duration-300"
+          class="absolute inset-0 origin-left rounded-full bg-hikari-primary-500 transition-transform duration-300"
           :class="fillClass(index - 1)"
           :style="
             fillClass(index - 1) === 'strip-fill'
@@ -58,8 +55,8 @@
           @animationend="index - 1 === current && emit('elapsed')"
         />
       </span>
-    </Card>
-  </Inline>
+    </Button>
+  </div>
 </template>
 
 <style scoped>

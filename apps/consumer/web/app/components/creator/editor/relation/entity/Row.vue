@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Badge, Card, Chip, IconButton, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Pencil, X } from '@lucide/vue'
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
@@ -54,116 +53,121 @@
     return attr?.value_type === 'enum' ? enumLabel(attr.enum_name, String(v)) : String(v)
   }
 
-  const badges = computed(() =>
-    props.attributes
-      .map(attr => ({ name: attr.name, value: attrBadge(attr.name) }))
-      .filter((badge): badge is { name: string; value: string } => badge.value !== null),
-  )
-
   const refPreview = computed(() =>
     props.refAttributes.flatMap(refAttr => relationRefValues(props.row, refAttr.name)),
   )
 </script>
 
 <template>
-  <Inline gap="sm" align="center" :wrap="false" class="w-full">
-    <Card
-      :as="hasEditable ? 'button' : 'div'"
-      :type="hasEditable ? 'button' : undefined"
-      :padded="false"
-      :class="
-        cn(
-          'min-w-0 flex-1 text-start',
-          hasEditable && 'hn-state-layer hn-interactive hn-press-none',
-        )
-      "
+  <div class="flex w-full items-center gap-2">
+    <Button
+      v-if="hasEditable"
+      unstyled
+      class="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-(--p-form-field-border-color) bg-(--p-form-field-background) p-2.5 text-left transition-colors hover:border-(--p-form-field-hover-border-color) focus:border-(--p-form-field-focus-border-color) focus:outline-none"
       @click="togglePopover"
     >
-      <Inline gap="md" align="center" :wrap="false" class="p-2.5">
-        <HikariImage
-          :src="cover"
-          alt=""
-          preset="small"
-          class="size-10 shrink-0 rounded bg-subtle"
-          :image-class="imageClass"
-        >
-          <template #empty />
-          <template #error />
-        </HikariImage>
-
-        <Stack gap="xs" class="min-w-0 flex-1">
-          <Inline gap="xs" align="center">
-            <Text as="span" size="sm" weight="medium" truncate class="min-w-0">
-              {{ row.target.name || `#${row.target_id}` }}
-            </Text>
-            <Tag v-for="badge in badges" :key="badge.name" size="sm" tone="neutral">
-              {{ ATTR_LABEL[badge.name] ?? badge.name }}：{{ badge.value }}
-            </Tag>
-          </Inline>
-
-          <Inline gap="xs" align="center">
-            <Text as="span" size="xs" tone="muted" class="font-mono">#{{ row.target_id }}</Text>
-            <Chip v-for="value in refPreview" :key="value.id" size="sm">
-              <template #icon>
-                <HikariImage
-                  :src="value.cover ?? ''"
-                  alt=""
-                  preset="small"
-                  class="size-4 shrink-0 rounded-full bg-subtle"
-                  image-class="size-full object-cover object-top"
-                >
-                  <template #empty />
-                  <template #error />
-                </HikariImage>
-              </template>
-              {{ value.name || `#${value.id}` }}
-            </Chip>
-          </Inline>
-        </Stack>
-
-        <AttrPopover
-          v-if="hasEditable"
-          ref="popoverRef"
-          v-model:row="rowProxy"
-          :attributes="attributes"
-          :ref-attributes="refAttributes"
-          :target="target"
-          @remove="emit('remove')"
-        />
-      </Inline>
-    </Card>
-
-    <IconButton
-      v-if="!hasEditable"
-      label="移除"
-      variant="ghost"
-      tone="neutral"
-      size="sm"
-      pill
-      class="shrink-0"
-      @click="emit('remove')"
-    >
-      <X />
-    </IconButton>
-
-    <Badge
-      v-if="editable"
-      :content="dirtyCount || null"
-      tone="warning"
-      :label="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : undefined"
-      class="shrink-0"
-    >
-      <IconButton
-        v-tooltip="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : '编辑条目'"
-        :label="dirtyCount ? `编辑条目（已暂存 ${dirtyCount} 项修改）` : '编辑条目'"
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        pill
-        @click="emit('edit')"
+      <HikariImage
+        :src="cover"
+        alt=""
+        preset="small"
+        class="size-10 shrink-0 rounded bg-surface-100 dark:bg-surface-800"
+        :image-class="imageClass"
       >
-        <Pencil />
-      </IconButton>
-    </Badge>
-  </Inline>
+        <template #empty><span /></template>
+        <template #error><span /></template>
+      </HikariImage>
+      <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="truncate text-sm font-medium">
+            {{ row.target.name || `#${row.target_id}` }}
+          </span>
+          <span
+            v-for="attr in attributes"
+            v-show="attrBadge(attr.name)"
+            :key="attr.name"
+            class="inline-flex items-center rounded bg-surface-100 px-1.5 py-0.5 text-[10px] text-surface-700 dark:bg-surface-800 dark:text-surface-200"
+          >
+            {{ ATTR_LABEL[attr.name] ?? attr.name }}：{{ attrBadge(attr.name) }}
+          </span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="font-mono text-xs text-muted-color">#{{ row.target_id }}</span>
+          <span
+            v-for="value in refPreview"
+            :key="value.id"
+            class="inline-flex items-center gap-1 rounded-full bg-surface-100 py-0.5 pr-1.5 pl-0.5 dark:bg-surface-800"
+          >
+            <HikariImage
+              :src="value.cover ?? ''"
+              alt=""
+              preset="small"
+              class="size-4 shrink-0 rounded-full bg-surface-200 dark:bg-surface-700"
+              image-class="size-full object-cover object-top"
+            >
+              <template #empty><span /></template>
+              <template #error><span /></template>
+            </HikariImage>
+            <span class="text-[10px] text-surface-700 dark:text-surface-200">
+              {{ value.name || `#${value.id}` }}
+            </span>
+          </span>
+        </div>
+      </div>
+      <AttrPopover
+        ref="popoverRef"
+        v-model:row="rowProxy"
+        :attributes="attributes"
+        :ref-attributes="refAttributes"
+        :target="target"
+        @remove="emit('remove')"
+      />
+    </Button>
+
+    <div
+      v-else
+      class="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-(--p-form-field-border-color) bg-(--p-form-field-background) p-2.5"
+    >
+      <HikariImage
+        :src="cover"
+        alt=""
+        preset="small"
+        class="size-10 shrink-0 rounded bg-surface-100 dark:bg-surface-800"
+        :image-class="imageClass"
+      >
+        <template #empty><span /></template>
+        <template #error><span /></template>
+      </HikariImage>
+      <div class="flex min-w-0 flex-1 flex-col">
+        <span class="truncate text-sm font-medium">
+          {{ row.target.name || `#${row.target_id}` }}
+        </span>
+        <span class="font-mono text-xs text-muted-color">#{{ row.target_id }}</span>
+      </div>
+      <Button
+        unstyled
+        class="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
+        aria-label="移除"
+        @click="emit('remove')"
+      >
+        <template #icon><X :size="15" /></template>
+      </Button>
+    </div>
+
+    <Button
+      v-if="editable"
+      v-tooltip.top="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : '编辑条目'"
+      unstyled
+      class="relative flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"
+      :aria-label="dirtyCount ? `编辑条目（已暂存 ${dirtyCount} 项修改）` : '编辑条目'"
+      @click="emit('edit')"
+    >
+      <template #icon>
+        <Pencil :size="14" />
+        <span
+          v-if="dirtyCount"
+          class="absolute top-0.5 right-0.5 size-2 rounded-full bg-amber-500"
+        />
+      </template>
+    </Button>
+  </div>
 </template>

@@ -1,8 +1,29 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { NumberInput } from '@hina-ui/vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
+import Form from '@primevue/forms/form'
+import FormField from '@primevue/forms/formfield'
+import PrimeVue from 'primevue/config'
+import InputNumber from 'primevue/inputnumber'
+import InputText from 'primevue/inputtext'
 import ScalarField from '../../../app/components/creator/editor/scalar/Field.vue'
 import type { BackendEditorField } from '../../../app/features/creator/editor'
+
+const InputNumberStub = defineComponent({
+  name: 'InputNumber',
+  props: ['modelValue'],
+  emits: ['input', 'update:modelValue'],
+  setup(props) {
+    return () => h('input', { 'data-testid': 'number-input', value: props.modelValue ?? '' })
+  },
+})
+
+const ResetStub = defineComponent({
+  name: 'CreatorEditorFieldReset',
+  setup() {
+    return () => h('span', { 'data-testid': 'field-reset' })
+  },
+})
 
 const volumeNumberField = {
   field: 'volume_number',
@@ -21,37 +42,120 @@ function mountNumberField(modelValue: number | null) {
       initialValue: 99,
     },
     global: {
+      components: {
+        InputNumber: InputNumberStub,
+      },
       stubs: {
-        CreatorEditorFieldReset: true,
+        AutoComplete: true,
+        CreatorEditorFieldReset: ResetStub,
         CreatorEditorScalarLabelsField: true,
         CreatorEditorScalarPricesField: true,
         CreatorEditorScalarRefField: true,
+        DatePicker: true,
+        InputText: true,
         MediaLibraryPicker: true,
+        MultiSelect: true,
+        Select: true,
+        Textarea: true,
+        ToggleSwitch: true,
       },
     },
   })
 }
 
+function mountFormNumberField() {
+  const submitted = ref<Record<string, unknown> | null>(null)
+  const Harness = defineComponent({
+    components: { Form, FormField, ScalarField },
+    setup() {
+      return {
+        field: volumeNumberField,
+        submitted,
+        onSubmit: (event: { values: Record<string, unknown> }) => {
+          submitted.value = event.values
+        },
+      }
+    },
+    template: `
+      <Form v-slot="$form" :initial-values="{ volume_number: 99 }" @submit="onSubmit">
+        <FormField v-slot="$field" name="volume_number">
+          <ScalarField
+            :field="field"
+            :model-value="$field.value"
+            :initial-value="99"
+            @update:model-value="value => $field.props.onInput({ value })"
+          />
+        </FormField>
+        <span data-testid="form-value">{{ $form.volume_number?.value ?? '' }}</span>
+        <button type="submit">submit</button>
+      </Form>
+    `,
+  })
+
+  return {
+    submitted,
+    wrapper: mount(Harness, {
+      global: {
+        plugins: [PrimeVue],
+        components: {
+          InputNumber,
+          InputText,
+        },
+        stubs: {
+          AutoComplete: true,
+          CreatorEditorFieldReset: ResetStub,
+          CreatorEditorScalarLabelsField: true,
+          CreatorEditorScalarPricesField: true,
+          CreatorEditorScalarRefField: true,
+          DatePicker: true,
+          MediaLibraryPicker: true,
+          MultiSelect: true,
+          Select: true,
+          Textarea: true,
+          ToggleSwitch: true,
+        },
+      },
+    }),
+  }
+}
+
+async function backspace(input: HTMLInputElement) {
+  input.setSelectionRange(input.value.length, input.value.length)
+  input.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      key: 'Backspace',
+      code: 'Backspace',
+      bubbles: true,
+      cancelable: true,
+    }),
+  )
+  await nextTick()
+}
+
 describe('creator/editor/scalar/Field.vue', () => {
-  it('清空可空数字字段时抛出 null，而不是 0', () => {
+  it('emits null when a nullable InputNumber is cleared', () => {
     const wrapper = mountNumberField(9)
 
-    wrapper.findComponent(NumberInput).vm.$emit('update:modelValue', null)
+    wrapper.findComponent(InputNumberStub).vm.$emit('input', { value: null })
 
     expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual([null])
   })
 
-  it('整数字段不留小数位也不分组，避免出现 1,234 这种进不了 schema 的值', () => {
-    const formatOptions = mountNumberField(9).findComponent(NumberInput).props('formatOptions')
+  it('keeps nullable numbers empty after deleting the final digit inside a FormField', async () => {
+    const { submitted, wrapper } = mountFormNumberField()
+    const input = wrapper.find<HTMLInputElement>('input[role="spinbutton"]').element
 
-    expect(formatOptions).toMatchObject({ maximumFractionDigits: 0, useGrouping: false })
-  })
+    expect(input.value).toBe('99')
 
-  it('已有数字照原样交给控件', () => {
-    expect(mountNumberField(12).findComponent(NumberInput).props('modelValue')).toBe(12)
-  })
+    await backspace(input)
+    expect(input.value).toBe('9')
 
-  it('空值交给控件的是 null，不会被读成 0', () => {
-    expect(mountNumberField(null).findComponent(NumberInput).props('modelValue')).toBeNull()
+    await backspace(input)
+    expect(input.value).toBe('')
+    expect(wrapper.find('[data-testid="form-value"]').text()).toBe('')
+
+    await wrapper.find('form').trigger('submit')
+
+    expect(submitted.value).toMatchObject({ volume_number: null })
   })
 })

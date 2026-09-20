@@ -31,10 +31,6 @@ import type { FeedItemByType } from '~/features/feed/feed'
 export const POST_MAX_COVERS = 9
 export const POST_MAX_TOPICS = 5
 export const POST_MAX_RELATED_WORKS = 10
-export const COMPOSER_KIND_OPTIONS = [
-  { value: 'post', label: '图文' },
-  { value: 'article', label: '文章' },
-]
 const TITLE_MAX = 200
 
 export interface ComposerTopic {
@@ -229,7 +225,7 @@ export function useComposer(
     plugins,
     summariesRef,
     documentEmojiSetsRef,
-    placeholder: '分享你的发现、推荐…',
+    placeholder: '分享你的发现、推荐、打卡…',
     editorProps: {
       handleKeyDown(_view, event) {
         if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) return trySubmit()

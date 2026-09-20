@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Link, Stack, Text } from '@hina-ui/vue'
-  import logoUrl from '~/assets/images/wordmark.svg'
+  import logoUrl from '~/assets/images/logo.png'
   import { SITE_CONFIG } from '~/config/site'
 
   const year = new Date().getFullYear()
@@ -10,33 +9,31 @@
 </script>
 
 <template>
-  <Stack as="footer" gap="xs" class="border-t border-line px-1 pt-2">
-    <Inline gap="sm" align="center" justify="between" :wrap="false">
+  <footer class="flex flex-col gap-1 border-t border-surface px-1 pt-2">
+    <div class="flex items-center justify-between gap-2">
       <NuxtLink to="/" :aria-label="SITE_CONFIG.name" class="w-fit">
         <HikariImage
           :src="logoUrl"
           :alt="SITE_CONFIG.name"
-          class="aspect-792/191 h-5"
+          class="aspect-963/183 h-5"
           image-class="object-contain"
           :skeleton="false"
         />
       </NuxtLink>
       <LayoutFooterSocial size="sm" />
-    </Inline>
-    <Text size="xs" tone="muted" class="leading-relaxed">
+    </div>
+    <p class="text-xs leading-relaxed text-muted-color">
       © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
-      <Link
-        v-tooltip="buildLabel"
-        as="button"
+      <button
+        v-tooltip.top="buildLabel"
         type="button"
-        tone="neutral"
-        class="tabular-nums"
+        class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
         @click="changelogOpen = true"
       >
         {{ appVersion }}
-      </Link>
-    </Text>
+      </button>
+    </p>
 
     <ChangelogDialog v-model:visible="changelogOpen" />
-  </Stack>
+  </footer>
 </template>

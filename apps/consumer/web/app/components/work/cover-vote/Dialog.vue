@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { AspectRatio, Button, Dialog, Grid, Inline, Stack, Text } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
   import type { CoverVoteCandidate } from '~/features/interaction/useCoverVote'
 
   defineOptions({ name: 'WorkCoverVoteDialog' })
@@ -22,54 +20,59 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="封面投票" size="lg" :locked="busy">
-    <template #content>
-      <Grid :cols="2" gap="md">
-        <Stack
-          v-for="candidate in candidates"
-          :key="candidate.media?.id ?? candidate.votes"
-          gap="sm"
-        >
-          <AspectRatio :ratio="7 / 10" class="relative overflow-hidden rounded-lg bg-subtle">
-            <HikariImage
-              :src="candidate.media"
-              preview
-              alt="候选封面"
-              class="size-full"
-              image-class="object-cover"
-              :processing="{ width: 480, quality: 88, fit: 'cover' }"
-            />
-          </AspectRatio>
-
-          <Inline align="center" justify="between" :wrap="false">
-            <Text
-              size="sm"
-              :tone="candidate.mine ? 'accent' : 'muted'"
-              :weight="candidate.mine ? 'medium' : 'normal'"
-              class="tabular-nums"
-            >
-              {{ candidate.votes }} 票
-            </Text>
-            <AuthGateButton
-              :variant="candidate.mine ? 'soft' : 'outline'"
-              :tone="candidate.mine ? 'accent' : 'neutral'"
-              :disabled="busy"
-              @click="pick(candidate)"
-            >
-              {{ candidate.mine ? '已投' : '投这张' }}
-            </AuthGateButton>
-          </Inline>
-        </Stack>
-      </Grid>
-    </template>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="封面投票"
+    :dismissable-mask="!busy"
+    :close-on-escape="!busy"
+    :style="{ width: '92vw', maxWidth: '540px' }"
+  >
+    <div class="grid grid-cols-2 gap-4">
+      <div v-for="candidate in candidates" :key="candidate.media?.id ?? candidate.votes">
+        <div class="aspect-7/10 overflow-hidden rounded-lg bg-surface-100 dark:bg-surface-900">
+          <HikariImage
+            :src="candidate.media"
+            preview
+            alt=""
+            class="size-full"
+            image-class="object-cover"
+            :processing="{ width: 480, quality: 88, fit: 'cover' }"
+          />
+        </div>
+        <div class="mt-2 flex items-center justify-between gap-2">
+          <span
+            class="text-sm"
+            :class="candidate.mine ? 'font-medium text-primary' : 'text-muted-color'"
+          >
+            {{ candidate.votes }} 票
+          </span>
+          <Button
+            :label="candidate.mine ? '已投' : '投这张'"
+            size="small"
+            :severity="candidate.mine ? undefined : 'secondary'"
+            :outlined="!candidate.mine"
+            login-required
+            :disabled="busy"
+            @click="pick(candidate)"
+          />
+        </div>
+      </div>
+    </div>
 
     <template #footer>
-      <Inline align="center" gap="xs" justify="start" class="w-full">
-        <Text size="sm" tone="muted">选择你认为最适合展示给大家的封面，你也可以</Text>
-        <Button :as="NuxtLink" :to="editPath" target="_blank" variant="link" size="sm">
-          添加新封面
-        </Button>
-      </Inline>
+      <span class="flex items-center">
+        <span class="text-sm text-muted-color">选择你认为最适合展示给大家的封面，你也可以</span>
+        <Button
+          as="router-link"
+          :to="editPath"
+          target="_blank"
+          label="添加新封面"
+          text
+          severity="secondary"
+          size="small"
+        />
+      </span>
     </template>
   </Dialog>
 </template>

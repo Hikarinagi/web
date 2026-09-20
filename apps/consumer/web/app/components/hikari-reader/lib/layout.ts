@@ -21,6 +21,7 @@ export function createReaderOptions(
     fontSize: settings.font_size,
     backgroundColor: settings.background_color,
     foregroundColor: isDarkBackground(settings.background_color) ? settings.text_color : undefined,
+    lineBreaking: 'greedy',
     lineHeight: settings.line_height,
     lineHeightForce: true,
     fontFamily: settings.font_family || undefined,

@@ -1,32 +1,29 @@
 <script setup lang="ts">
-  import { Form, FormField, Input, Text } from '@hina-ui/vue'
+  import Form, { type FormSubmitEvent } from '@primevue/forms/form'
   import type { BackendEntitySummary } from '~/features/creator/editor'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
   import { CREATABLE_ENTITY } from '~/features/creator/editor/entity-create'
   import { createProvisionalEntity } from '~/features/creator/editor/create-entity'
   import {
-    entityCreateSchema,
-    producerCreateSchema,
+    entityCreateResolver,
+    producerCreateResolver,
   } from '~/features/creator/schemas/entity-create.schema'
 
   const props = defineProps<{ target: EntityTarget; presetName?: string }>()
-  const emit = defineEmits<{ created: [entity: BackendEntitySummary] }>()
+  const emit = defineEmits<{ created: [entity: BackendEntitySummary]; cancel: [] }>()
 
   const config = computed(() => CREATABLE_ENTITY[props.target] ?? null)
   const needsCountry = computed(() => props.target === 'producer')
-  const rules = computed(() => (needsCountry.value ? producerCreateSchema : entityCreateSchema))
-
-  const form = useTemplateRef<InstanceType<typeof Form>>('form')
-  const values = reactive({ name: '', country: '' })
+  const resolver = computed(() =>
+    needsCountry.value ? producerCreateResolver : entityCreateResolver,
+  )
+  const initialValues = computed(() => ({ name: props.presetName?.trim() ?? '' }))
   const submitting = ref(false)
 
-  onMounted(() => {
-    values.name = props.presetName?.trim() ?? ''
-  })
-
-  async function onSubmit() {
+  async function onSubmit(event: FormSubmitEvent) {
     const cfg = config.value
-    if (!cfg || submitting.value) return
+    if (!event.valid || !cfg || submitting.value) return
+    const values = event.values as { name: string; country?: string }
     submitting.value = true
     try {
       const entity = await createProvisionalEntity({
@@ -40,20 +37,36 @@
       submitting.value = false
     }
   }
-
-  defineExpose({ submit: () => form.value?.submit(), submitting })
 </script>
 
 <template>
-  <Form ref="form" :values="values" :rules="rules" :disabled="submitting" @submit="onSubmit">
-    <Text size="sm" tone="muted">新建并选择{{ config?.label }}</Text>
+  <Form
+    :initial-values="initialValues"
+    :resolver="resolver"
+    class="flex flex-col gap-4"
+    @submit="onSubmit"
+  >
+    <p class="text-sm text-muted-color">
+      没有合适的{{ config?.label }}？在这里新建一个，创建后立即可选。
+    </p>
 
-    <FormField name="name" label="名称" required>
-      <Input v-model="values.name" placeholder="官方原文名" autofocus />
-    </FormField>
+    <FormItem v-slot="{ id, errorId }" name="name" label="名称" required>
+      <InputText :id="id" :aria-describedby="errorId" placeholder="官方原文名" fluid autofocus />
+    </FormItem>
 
-    <FormField v-if="needsCountry" name="country" label="国家 / 地区" required>
-      <Input v-model="values.country" placeholder="如 日本" />
-    </FormField>
+    <FormItem
+      v-if="needsCountry"
+      v-slot="{ id, errorId }"
+      name="country"
+      label="国家 / 地区"
+      required
+    >
+      <InputText :id="id" :aria-describedby="errorId" placeholder="如 日本" fluid />
+    </FormItem>
+
+    <div class="flex items-center justify-end gap-3">
+      <Button label="返回" severity="secondary" :disabled="submitting" @click="emit('cancel')" />
+      <Button label="创建并选择" type="submit" :loading="submitting" />
+    </div>
   </Form>
 </template>

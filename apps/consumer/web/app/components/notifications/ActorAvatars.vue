@@ -70,12 +70,13 @@
         :key="u.id"
         :user="u"
         card
+        shape="circle"
         class="size-8! ring-2 ring-surface-0 dark:ring-surface-900"
         :class="i > 0 ? '-ms-3.5' : ''"
         :style="{ zIndex: stack.length - i }"
       />
     </div>
-    <Avatar v-else-if="primary" :user="primary" card class="size-10!" />
+    <Avatar v-else-if="primary" :user="primary" card shape="circle" class="size-10!" />
     <span v-else class="grid size-10 place-items-center rounded-full bg-emphasis text-muted-color">
       <component :is="icon" class="size-5" aria-hidden="true" />
     </span>

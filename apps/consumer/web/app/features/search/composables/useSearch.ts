@@ -28,10 +28,7 @@ export function useSearch() {
           ...hits.value.map(hit => ({ kind: 'hit' as const, hit })),
           { kind: 'keyword' as const, value: query.value },
         ]
-      : [
-          ...history.recent.value.map(value => ({ kind: 'keyword' as const, value })),
-          ...trending.value.map(t => ({ kind: 'keyword' as const, value: t.keyword })),
-        ],
+      : trending.value.map(t => ({ kind: 'keyword' as const, value: t.keyword })),
   )
 
   let seq = 0
@@ -89,11 +86,11 @@ export function useSearch() {
     query.value = value || ''
   }
 
-  async function submit(keyword?: string) {
+  function submit(keyword?: string) {
     const value = (keyword ?? query.value).trim()
     if (!value) return
-    await navigateTo(searchHref(value), { replace: true })
     history.add(value)
+    void navigateTo(searchHref(value), { replace: true })
   }
 
   function moveActive(delta: number) {
@@ -106,7 +103,7 @@ export function useSearch() {
   function activateActive(): boolean {
     const item = navItems.value[activeIndex.value]
     if (!item) return false
-    if (item.kind === 'keyword') void submit(item.value)
+    if (item.kind === 'keyword') submit(item.value)
     else void navigateTo(entityHref(item.hit), { replace: true })
     return true
   }

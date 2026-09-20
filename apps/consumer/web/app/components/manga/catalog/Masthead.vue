@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Heading, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import type { CatalogMasthead } from '~/features/manga/catalog'
 
   defineOptions({ name: 'MangaCatalogMasthead' })
@@ -11,49 +10,50 @@
 </script>
 
 <template>
-  <Stack
-    as="section"
-    gap="none"
-    class="relative overflow-hidden border-b border-line bg-linear-to-r from-surface via-surface to-accent-soft"
+  <section
+    class="relative overflow-hidden border-b border-surface-200 bg-linear-to-r from-surface-0 via-surface-0 to-hikari-primary-100/50 dark:border-surface-800 dark:from-surface-950 dark:via-surface-950 dark:to-surface-900"
   >
-    <Inline
-      align="center"
-      :wrap="false"
-      class="mx-auto box-content w-full max-w-app gap-5 px-6 pt-[calc(var(--app-header-height)+1.75rem)] pb-7"
+    <div
+      class="mx-auto box-content flex max-w-app items-center gap-5 px-6 pt-[calc(var(--app-header-height)+1.75rem)] pb-7"
     >
       <HikariImage
         v-if="masthead.image"
         :src="masthead.image.src"
         :alt="masthead.name"
-        class="size-16 shrink-0 border border-line bg-surface"
+        class="size-16 shrink-0 border border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-900"
         :class="masthead.shape === 'circle' ? 'rounded-full' : 'rounded-xl'"
         :image-class="
           masthead.shape === 'circle' ? 'object-cover object-top' : 'object-contain p-1.5'
         "
         preset="thumbnail"
       />
-      <Stack gap="none" class="min-w-0 gap-1">
-        <Text size="xs" weight="semibold" class="tracking-wide text-accent-text">
+      <div class="flex min-w-0 flex-col gap-1">
+        <p class="text-xs font-semibold tracking-wide text-hikari-primary-600">
           {{ masthead.eyebrow }}
-        </Text>
-
-        <Inline align="baseline" gap="none" class="min-w-0 gap-x-2.5 gap-y-0.5">
-          <Heading :level="1" size="2xl" class="leading-tight font-bold">
+        </p>
+        <div class="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+          <h1 class="text-[28px] leading-tight font-bold text-surface-950 dark:text-white">
             {{ masthead.name }}
-          </Heading>
-          <Text v-if="masthead.sub" as="span" size="sm" tone="muted" truncate>
+          </h1>
+          <span v-if="masthead.sub" class="truncate text-sm text-surface-500 dark:text-surface-400">
             {{ masthead.sub }}
-          </Text>
-        </Inline>
-
-        <Text size="sm" tone="muted">
+          </span>
+        </div>
+        <p class="text-[13px] text-surface-500 dark:text-surface-400">
           {{ metaLine }}
           <template v-if="masthead.website">
             ·
-            <Link :href="masthead.website" target="_blank" rel="noopener noreferrer">官网 ↗</Link>
+            <a
+              :href="masthead.website"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-hikari-primary-600 transition-colors hover:text-hikari-primary-700 dark:text-hikari-primary-400"
+            >
+              官网 ↗
+            </a>
           </template>
-        </Text>
-      </Stack>
-    </Inline>
-  </Stack>
+        </p>
+      </div>
+    </div>
+  </section>
 </template>

@@ -1,14 +1,15 @@
 <script setup lang="ts">
-  import { DropdownMenu, DropdownMenuItem, Flex, IconButton, Inline, Tag, Time } from '@hina-ui/vue'
+  import { timeFromNow } from '#imports'
   import { Ellipsis, Flag, Pencil, Pin } from '@lucide/vue'
+  import type Menu from 'primevue/menu'
+  import type { MenuItem } from 'primevue/menuitem'
   import type { Component } from 'vue'
   import type { BackendFeedItem } from '~/features/feed/feed'
   import { usePostOwnerActions } from '~/features/post/usePostOwnerActions'
   import { useArticleOwnerActions } from '~/features/article/useArticleOwnerActions'
 
   const props = defineProps<{ item: BackendFeedItem; hideName?: boolean }>()
-  interface MoreItem {
-    label: string
+  interface MoreItem extends MenuItem {
     iconComponent: Component
     danger?: boolean
     loginRequired?: boolean
@@ -16,13 +17,14 @@
   }
 
   const auth = useAuthStore()
-  const { requireLogin } = useAuthGate()
   const ownerActions = usePostOwnerActions()
   const articleActions = useArticleOwnerActions()
 
   const isPinned = computed(
     () => (props.item.type === 'post' || props.item.type === 'article') && props.item.pinned,
   )
+  const menu = ref<InstanceType<typeof Menu> | null>(null)
+  const menuOpen = ref(false)
   const reportVisible = ref(false)
 
   const owned = computed(() => {
@@ -37,78 +39,98 @@
     if (own?.type === 'post' || own?.type === 'article') {
       const id = own.id
       const run = own.type === 'post' ? () => ownerActions.edit(id) : () => articleActions.edit(id)
-      return [{ label: '编辑', iconComponent: Pencil, action: run }]
+      return [
+        {
+          label: '编辑',
+          iconComponent: Pencil,
+          action: () => {
+            menu.value?.hide()
+            run()
+          },
+        },
+      ]
     }
     return [
       { label: '举报', iconComponent: Flag, danger: true, loginRequired: true, action: report },
     ]
   })
 
+  function toggle(event: MouseEvent) {
+    menu.value?.toggle(event)
+  }
+
   function report() {
+    menu.value?.hide()
     reportVisible.value = true
   }
 </script>
 
 <template>
-  <Inline gap="sm" align="start" class="min-w-0 text-sm">
-    <Tag v-if="isPinned" size="sm" class="shrink-0">
-      <Pin class="size-3" />
-      置顶
-    </Tag>
-
-    <Flex
-      v-if="!hideName"
-      direction="col"
-      gap="none"
-      class="min-w-0 flex-1 gap-0.5 sm:flex-row sm:items-center sm:gap-2"
+  <div class="flex min-w-0 items-start gap-2 text-sm">
+    <Tag
+      v-if="isPinned"
+      value="置顶"
+      severity="secondary"
+      class="shrink-0"
+      :pt="{ root: { class: 'text-xs!' } }"
     >
-      <Inline gap="sm" class="min-w-0">
-        <UserName :user="item.author" class="min-w-0 font-semibold text-fg" />
+      <template #icon><Pin class="size-3" /></template>
+    </Tag>
+    <div
+      v-if="!hideName"
+      class="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-2"
+    >
+      <div class="flex min-w-0 items-center gap-2">
+        <UserName :user="item.author" class="min-w-0 font-semibold text-color" />
         <UserBadges :user="item.author" />
-        <Time
-          v-if="!isPinned"
-          :value="item.sort_time"
-          format="relative"
-          class="shrink-0 text-muted sm:hidden"
-        />
-      </Inline>
+        <span v-if="!isPinned" class="shrink-0 text-muted-color sm:hidden">
+          {{ timeFromNow(item.sort_time) }}
+        </span>
+      </div>
 
-      <Time
-        v-if="!isPinned"
-        :value="item.sort_time"
-        format="relative"
-        class="hidden shrink-0 text-muted sm:inline"
-      />
-    </Flex>
+      <div class="flex min-w-0 items-center gap-1 text-muted-color">
+        <span v-if="!isPinned" class="hidden shrink-0 sm:inline">
+          {{ timeFromNow(item.sort_time) }}
+        </span>
+      </div>
+    </div>
 
-    <Inline v-else gap="xs" class="min-w-0 flex-1 text-muted">
-      <Time v-if="!isPinned" :value="item.sort_time" format="relative" class="shrink-0" />
-    </Inline>
-    <DropdownMenu label="动态操作" align="end">
-      <IconButton
-        label="更多"
-        :tooltip="false"
-        size="sm"
-        aria-haspopup="menu"
-        class="relative z-1 size-6"
-      >
-        <Ellipsis />
-      </IconButton>
-
-      <template #content>
-        <DropdownMenuItem
-          v-for="option in items"
-          :key="option.label"
-          :tone="option.danger ? 'danger' : undefined"
-          @select="option.loginRequired && !requireLogin() ? undefined : option.action()"
+    <div v-else class="flex min-w-0 flex-1 items-center gap-1 text-muted-color">
+      <span v-if="!isPinned" class="shrink-0">{{ timeFromNow(item.sort_time) }}</span>
+    </div>
+    <Button
+      unstyled
+      aria-label="更多"
+      aria-haspopup="menu"
+      :aria-expanded="menuOpen"
+      class="relative z-1 grid size-6 shrink-0 place-items-center rounded text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"
+      @click="toggle"
+    >
+      <Ellipsis class="size-3.5" />
+    </Button>
+    <Menu
+      ref="menu"
+      :model="items"
+      popup
+      aria-label="动态操作"
+      :pt="{ list: { class: 'py-1!' } }"
+      @show="menuOpen = true"
+      @hide="menuOpen = false"
+    >
+      <template #item="{ item: option }">
+        <Button
+          unstyled
+          type="button"
+          class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-surface-100 dark:hover:bg-surface-800"
+          :class="option.danger ? 'text-red-500' : 'text-color'"
+          :login-required="option.loginRequired"
+          @click="option.action"
         >
-          <template #icon>
-            <component :is="option.iconComponent" />
-          </template>
-          {{ option.label }}
-        </DropdownMenuItem>
+          <component :is="option.iconComponent" class="size-4 shrink-0" />
+          <span>{{ option.label }}</span>
+        </Button>
       </template>
-    </DropdownMenu>
+    </Menu>
     <FeedItemReport v-model:visible="reportVisible" :item="item" />
-  </Inline>
+  </div>
 </template>

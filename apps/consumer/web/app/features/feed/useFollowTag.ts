@@ -1,7 +1,7 @@
 export function useFollowTag(kind: 'topic' | 'section', id: number, initial: boolean) {
   const following = useState(`follow:${kind}:${id}`, () => initial)
   const pending = ref(false)
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
 
   async function apply(next: boolean) {
     pending.value = true
@@ -31,12 +31,16 @@ export function useFollowTag(kind: 'topic' | 'section', id: number, initial: boo
       void apply(true)
       return
     }
-    confirm({
-      title: '取消关注',
-      description: `取消关注后，该${kind === 'topic' ? '话题' : '板块'}的更新将不再进入你的关注流。`,
-      confirmText: '取消关注',
-      cancelText: '再想想',
-      onConfirm: () => apply(false),
+    confirm.require({
+      group: 'app-shell',
+      header: '取消关注',
+      message: `取消关注后，该${kind === 'topic' ? '话题' : '板块'}的更新将不再进入你的关注流。`,
+      acceptLabel: '取消关注',
+      rejectLabel: '再想想',
+      onAccept: ({ close }: { close: () => void }) => {
+        close()
+        void apply(false)
+      },
     })
   }
 

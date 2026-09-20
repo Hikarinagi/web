@@ -1,16 +1,7 @@
 <script setup lang="ts">
-  import { Inline, Link, Text } from '@hina-ui/vue'
-
   const props = defineProps<{
     op: Record<string, unknown>
   }>()
-
-  const TONE = {
-    added: 'bg-success-soft text-success-text',
-    removed: 'bg-danger-soft text-danger-text line-through',
-  } as const
-
-  const MARKER = { added: '+', removed: '−' } as const
 
   function normalize(input: unknown): number[] {
     if (!Array.isArray(input)) return []
@@ -33,28 +24,30 @@
 </script>
 
 <template>
-  <Inline as="ul" gap="sm">
-    <Inline
+  <ul class="flex flex-wrap gap-2">
+    <li
       v-for="row in rows"
       :key="`${row.kind}-${row.id}`"
-      as="li"
-      gap="xs"
-      align="center"
-      :wrap="false"
-      class="rounded-md px-2 py-1 text-sm"
-      :class="TONE[row.kind as keyof typeof TONE] ?? 'text-fg'"
+      class="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm"
+      :class="
+        row.kind === 'added'
+          ? 'bg-green-500/10 text-green-700 dark:text-green-300'
+          : row.kind === 'removed'
+            ? 'bg-red-500/10 text-red-700 line-through dark:text-red-300'
+            : 'text-surface-700 dark:text-surface-300'
+      "
     >
-      <Text as="span" weight="semibold" class="text-inherit">
-        {{ MARKER[row.kind as keyof typeof MARKER] ?? '·' }}
-      </Text>
-      <Link
+      <span class="font-semibold">
+        {{ row.kind === 'added' ? '+' : row.kind === 'removed' ? '−' : '·' }}
+      </span>
+      <a
         :href="`https://store.steampowered.com/app/${row.id}/`"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-inherit"
+        class="underline-offset-2 hover:underline"
       >
         {{ row.id }}
-      </Link>
-    </Inline>
-  </Inline>
+      </a>
+    </li>
+  </ul>
 </template>

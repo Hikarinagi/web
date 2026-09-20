@@ -24,6 +24,7 @@
     previous: []
     tap: [event: PointerEvent]
     retryPage: [page: number]
+    pointerMove: [event: PointerEvent]
   }>()
 
   const viewport = ref<HTMLElement | null>(null)
@@ -69,8 +70,6 @@
     switch (props.fit) {
       case 'width':
         return 'overflow-y-auto overflow-x-hidden overscroll-contain'
-      case 'height':
-        return 'overflow-x-auto overflow-y-hidden overscroll-contain'
       case 'original':
         return 'overflow-auto overscroll-contain'
       default:
@@ -82,10 +81,8 @@
     switch (props.fit) {
       case 'width':
         return 'flex min-h-full w-full'
-      case 'height':
-        return 'flex h-full min-w-max'
       case 'original':
-        return 'flex min-h-full min-w-max'
+        return 'flex min-h-full min-w-full'
       default:
         return 'flex h-full w-full'
     }
@@ -95,7 +92,6 @@
     switch (props.fit) {
       case 'width':
         return 'm-auto flex w-full flex-row-reverse items-center'
-      case 'height':
       case 'original':
         return 'm-auto flex flex-row-reverse items-center'
       default:
@@ -103,34 +99,12 @@
     }
   })
 
-  function resetScroll() {
-    const scroller = scrollers.get(props.current)
-    if (!scroller) return
-    scroller.scrollTop = 0
-    scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth
-  }
-
   watch(
     () => props.current,
     () => {
-      resetScroll()
+      const scroller = scrollers.get(props.current)
+      if (scroller) scroller.scrollTop = 0
       zoom.reset()
-    },
-    { flush: 'post' },
-  )
-
-  watch(() => props.fit, resetScroll, { flush: 'post' })
-
-  const currentReady = computed(() => {
-    const spread = props.spreads.find(item => item.index === props.current)
-    if (!spread?.pages.length) return false
-    return spread.pages.every(page => props.statusOf(page.page_number) === 'ready')
-  })
-
-  watch(
-    currentReady,
-    ready => {
-      if (ready) resetScroll()
     },
     { flush: 'post' },
   )
@@ -148,7 +122,12 @@
     class="absolute inset-0 overflow-hidden"
     :style="{ touchAction: zoomable ? 'none' : 'pan-y' }"
     @pointerdown="gestures.onPointerDown"
-    @pointermove="gestures.onPointerMove"
+    @pointermove="
+      (event: PointerEvent) => {
+        gestures.onPointerMove(event)
+        emit('pointerMove', event)
+      }
+    "
     @pointerup="gestures.onPointerUp"
     @pointercancel="gestures.onPointerCancel"
   >

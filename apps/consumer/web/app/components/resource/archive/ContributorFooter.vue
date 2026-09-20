@@ -42,6 +42,7 @@
       <UserCardTrigger v-for="u in contributors.contributors" :key="u.id" :user-id="u.id">
         <Avatar
           :user="u"
+          shape="circle"
           class="size-6! ring-2 ring-surface-0 transition-transform dark:ring-surface-900"
         />
       </UserCardTrigger>

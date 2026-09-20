@@ -74,7 +74,7 @@
         <Button
           as="router-link"
           :to="`/mangas/${item.id}`"
-          label="查看详情"
+          label="看看这部"
           size="small"
           class="mt-1"
         />

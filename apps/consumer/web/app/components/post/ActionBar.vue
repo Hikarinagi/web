@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { IconButton, Inline } from '@hina-ui/vue'
   import { MessageSquare } from '@lucide/vue'
   import { COMMENT_SECTION_HASH, requestCommentFocus } from '~/features/comment/comment'
   import { useLike, useLikeView } from '~/features/interaction/useLike'
@@ -18,6 +17,9 @@
     liked: props.liked,
   }))
 
+  const placeholder =
+    '-mx-2 -my-1 w-auto! px-2! py-1! hover:bg-transparent! active:bg-transparent! hover:text-color!'
+
   async function comment() {
     await navigateTo({ path: `/posts/${props.postId}`, hash: COMMENT_SECTION_HASH })
     requestCommentFocus()
@@ -25,30 +27,32 @@
 </script>
 
 <template>
-  <Inline gap="xl">
-    <AuthGateButton
-      variant="ghost"
-      :tone="view.liked ? 'accent' : 'neutral'"
-      size="sm"
+  <div class="flex items-center gap-8 text-muted-color">
+    <Button
+      login-required
+      text
+      :severity="view.liked ? undefined : 'secondary'"
       :loading="busy"
       :disabled="busy"
+      :label="view.like_count.toString()"
+      class="-mx-2 -my-1 gap-1.5! px-2! py-1! hover:bg-transparent! active:bg-transparent!"
+      :class="{ 'hover:text-color!': !view.liked }"
       aria-label="赞"
       @click="toggle(postId)"
     >
       <template #icon><InteractionLikeIcon :active="view.liked" /></template>
-      {{ view.like_count }}
-    </AuthGateButton>
-    <IconButton label="评论" size="sm" @click="comment">
-      <MessageSquare />
-    </IconButton>
+    </Button>
+    <Button text severity="secondary" :class="placeholder" aria-label="评论" @click="comment">
+      <template #icon><MessageSquare /></template>
+    </Button>
     <FavoriteToggle
       :id="postId"
       type="post"
       :initial-favorited="favorited"
       variant="bar"
-      size="sm"
       :picker-title="pickerTitle"
+      :class="placeholder"
     />
-    <ShareButton :to="`/posts/${postId}`" size="sm" />
-  </Inline>
+    <ShareButton text severity="secondary" :to="`/posts/${postId}`" :class="placeholder" />
+  </div>
 </template>

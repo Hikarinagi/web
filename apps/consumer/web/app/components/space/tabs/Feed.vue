@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Center, Spinner, Stack } from '@hina-ui/vue'
   import { Activity } from '@lucide/vue'
   import type { BackendFeedItem, FeedResponse } from '~/features/feed/feed'
   import { useSpaceFeed } from '~/features/space/useSpaceFeed'
@@ -27,15 +26,15 @@
 </script>
 
 <template>
-  <Stack v-if="items.length" gap="none">
-    <Stack gap="none">
+  <div v-if="items.length">
+    <div class="flex flex-col">
       <SpaceFeedItem v-for="item in items" :key="feedKey(item)" :item="item" />
-    </Stack>
+    </div>
     <div ref="sentinel" class="h-px" />
-    <Center v-if="loading" class="py-6">
-      <Spinner size="lg" />
-    </Center>
-  </Stack>
+    <div v-if="loading" class="flex justify-center py-6">
+      <Spinner :size="28" />
+    </div>
+  </div>
   <SpaceEmptyState
     v-else
     :icon="Activity"

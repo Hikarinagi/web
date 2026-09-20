@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Card, Chip, IconButton, Inline, Text } from '@hina-ui/vue'
   import { Layers, X } from '@lucide/vue'
   import {
     WORKSPACE_SESSION_KEY,
@@ -8,7 +7,7 @@
   import { RESOURCE_TYPE_LABEL } from '~/features/creator/labels'
 
   const session = inject(WORKSPACE_SESSION_KEY)!
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
 
   const TARGET_LABEL: Record<WorkspaceMember['target'], string> = {
     person: RESOURCE_TYPE_LABEL.PERSON ?? '人物',
@@ -17,59 +16,52 @@
   }
 
   function confirmDiscard(member: WorkspaceMember) {
-    confirm({
-      title: '丢弃暂存修改',
-      description: `确定丢弃「${member.name || `#${member.id}`}」的 ${member.changeset.length} 项暂存修改？`,
-      confirmText: '丢弃',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: () => session.discard(member.target, member.id),
+    confirm.require({
+      group: 'app-shell',
+      header: '丢弃暂存修改',
+      message: `确定丢弃「${member.name || `#${member.id}`}」的 ${member.changeset.length} 项暂存修改？`,
+      acceptLabel: '丢弃',
+      rejectLabel: '取消',
+      onAccept: ({ close }) => {
+        session.discard(member.target, member.id)
+        close()
+      },
     })
   }
 </script>
 
 <template>
-  <Card v-if="session.memberList.value.length" :padded="false" class="bg-subtle">
-    <Inline gap="sm" align="center" class="px-3 py-2">
-      <Inline gap="xs" align="center" :wrap="false">
-        <Layers class="size-3.5 shrink-0 text-muted" aria-hidden="true" />
-        <Text as="span" size="xs" tone="muted">本次会话暂存</Text>
-      </Inline>
-
-      <Inline
-        v-for="member in session.memberList.value"
-        :key="`${member.target}:${member.id}`"
-        gap="xs"
-        align="center"
-        :wrap="false"
+  <div
+    v-if="session.memberList.value.length"
+    class="flex flex-wrap items-center gap-2 rounded-lg border border-surface px-3 py-2 bg-emphasis"
+  >
+    <span class="flex items-center gap-1.5 text-xs text-muted-color">
+      <Layers :size="13" />
+      本次会话暂存
+    </span>
+    <span
+      v-for="member in session.memberList.value"
+      :key="`${member.target}:${member.id}`"
+      class="inline-flex items-center gap-1 rounded-full border border-surface bg-surface-0 py-0.5 pr-1 pl-2.5 text-xs dark:bg-surface-900"
+    >
+      <Button
+        unstyled
+        class="inline-flex items-center gap-1 hover:text-color"
+        :aria-label="`编辑 ${member.name}`"
+        @click="session.open(member.target, member.id)"
       >
-        <Chip
-          as="button"
-          variant="outline"
-          size="sm"
-          :aria-label="`编辑 ${member.name || `#${member.id}`}`"
-          @click="session.open(member.target, member.id)"
-        >
-          <Inline gap="xs" align="center" :wrap="false">
-            <Text as="span" size="xs" tone="muted">{{ TARGET_LABEL[member.target] }}</Text>
-            <Text as="span" size="xs" weight="medium" truncate class="max-w-32">
-              {{ member.name || `#${member.id}` }}
-            </Text>
-            <Text as="span" size="xs" tone="muted">{{ member.changeset.length }} 项</Text>
-          </Inline>
-        </Chip>
-        <IconButton
-          label="丢弃暂存"
-          tooltip
-          variant="ghost"
-          tone="danger"
-          size="sm"
-          class="shrink-0"
-          @click="confirmDiscard(member)"
-        >
-          <X />
-        </IconButton>
-      </Inline>
-    </Inline>
-  </Card>
+        <span class="text-muted-color">{{ TARGET_LABEL[member.target] }}</span>
+        <span class="max-w-32 truncate font-medium">{{ member.name || `#${member.id}` }}</span>
+        <span class="text-muted-color">{{ member.changeset.length }} 项</span>
+      </Button>
+      <Button
+        unstyled
+        class="flex size-4.5 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
+        aria-label="丢弃暂存"
+        @click="confirmDiscard(member)"
+      >
+        <template #icon><X :size="12" /></template>
+      </Button>
+    </span>
+  </div>
 </template>

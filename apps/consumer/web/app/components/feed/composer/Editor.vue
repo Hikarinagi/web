@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Flex, Stack } from '@hina-ui/vue'
   import { useComposer, type ComposerTopic } from './composables/useComposer'
 
   defineOptions({ name: 'FeedComposerEditor' })
@@ -7,7 +6,7 @@
   const props = defineProps<{ topic?: ComposerTopic; sectionId?: number }>()
 
   const auth = useAuthStore()
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
   const host = useComposer({ topic: props.topic, sectionId: props.sectionId })
   const {
     editor,
@@ -71,13 +70,14 @@
     navigateTo('/articles/new')
   }
   function onClear() {
-    confirm({
-      title: '清空草稿',
-      description: '会清掉当前正文、图片和本地草稿，确定吗？',
-      confirmText: '清空',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: () => {
+    confirm.require({
+      group: 'app-shell',
+      header: '清空草稿',
+      message: '会清掉当前正文、图片和本地草稿，确定吗？',
+      acceptLabel: '清空',
+      rejectLabel: '取消',
+      onAccept: ({ close }: { close: () => void }) => {
+        close()
         reset()
         collapse()
       },
@@ -89,9 +89,9 @@
 </script>
 
 <template>
-  <Stack ref="boxRef" gap="none" class="cursor-text" @click="onShellClick">
-    <Flex gap="md" align="start" class="px-4 py-4">
-      <Avatar :user="auth.user" class="size-9! shrink-0" />
+  <div ref="boxRef" class="cursor-text" @click="onShellClick">
+    <div class="flex items-start gap-3 px-4 py-4">
+      <Avatar :user="auth.user" shape="circle" class="size-9! shrink-0" />
       <FeedComposerBody
         v-model:title="title"
         :editor="editor"
@@ -105,7 +105,7 @@
         @collapse="collapse"
         @switch-article="onSwitchArticle"
       />
-    </Flex>
+    </div>
 
     <FeedComposerCovers
       :show="expanded && covers.length > 0"
@@ -161,5 +161,5 @@
     />
 
     <HikariEditorOverlayHost :plugins="plugins" />
-  </Stack>
+  </div>
 </template>

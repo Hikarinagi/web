@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
   defineProps<{

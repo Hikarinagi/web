@@ -6,16 +6,13 @@ interface FollowState {
   isMutual: Ref<boolean>
   followerCount: Ref<number>
   toggling: Ref<boolean>
-  confirmOpen: Ref<boolean>
-  toggleFollow: () => void
-  unfollow: () => Promise<void>
+  toggleFollow: () => Promise<void>
 }
 
 const KEY: InjectionKey<FollowState> = Symbol('user-card-follow')
 
 export function provideUserCardFollow(user: Ref<UserCardData | null>): FollowState {
   const { invalidate } = useUserCard()
-  const confirmOpen = ref(false)
   const isFollowing = ref(false)
   const isMutual = ref(false)
   const followerCount = ref(0)
@@ -32,7 +29,7 @@ export function provideUserCardFollow(user: Ref<UserCardData | null>): FollowSta
     { immediate: true },
   )
 
-  async function apply() {
+  async function toggleFollow() {
     const target = user.value
     if (!target || toggling.value) return
     toggling.value = true
@@ -68,21 +65,7 @@ export function provideUserCardFollow(user: Ref<UserCardData | null>): FollowSta
     }
   }
 
-  function toggleFollow() {
-    if (!user.value || toggling.value) return
-    if (isFollowing.value) confirmOpen.value = true
-    else void apply()
-  }
-
-  const state: FollowState = {
-    isFollowing,
-    isMutual,
-    followerCount,
-    toggling,
-    confirmOpen,
-    toggleFollow,
-    unfollow: apply,
-  }
+  const state: FollowState = { isFollowing, isMutual, followerCount, toggling, toggleFollow }
   provide(KEY, state)
   return state
 }

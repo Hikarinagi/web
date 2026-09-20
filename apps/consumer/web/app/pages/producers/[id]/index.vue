@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { producerSeo } from '~/features/seo/producer'
 
   definePageMeta({ container: 'full' })
@@ -24,10 +23,10 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
+  <div v-if="data" class="-mt-(--app-header-height)">
     <EntityHero kind="producer" :entity="data.producer" />
 
-    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
+    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
       <EntityAbout kind="producer" :entity="data.producer" :contributors="data.contributors" />
       <EntityWorkSection
         v-if="isMagazine"
@@ -57,6 +56,6 @@
         :more-base="`/producers/${id}/mangas`"
       />
       <EntityProducerRelations :relations="data.relations" />
-    </Stack>
-  </Stack>
+    </div>
+  </div>
 </template>

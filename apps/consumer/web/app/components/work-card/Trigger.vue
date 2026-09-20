@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
   import type { WorkType } from '#shared/utils/work'
   import { useWorkCard } from './composables/useWorkCard'
 
@@ -9,34 +8,25 @@
     showOnClick?: boolean
   }>()
 
-  const { requestShow, showNow, abortShow, hideForAnchor } = useWorkCard()
-  const rootRef = useTemplateRef('rootRef')
+  const { requestShow, showNow, requestHide, hideForAnchor } = useWorkCard()
+  const rootRef = useTemplateRef<HTMLElement>('rootRef')
   const noHover = useNoHover()
-  const anchor = computed(() => {
-    const el = unrefElement(rootRef)
-    return el instanceof HTMLElement ? el : null
-  })
 
   function onEnter() {
-    if (!props.workId || !anchor.value) return
-    requestShow(props.workType, props.workId, anchor.value)
+    if (!props.workId || !rootRef.value) return
+    requestShow(props.workType, props.workId, rootRef.value)
   }
   function onLeave() {
-    abortShow()
+    requestHide()
   }
   function onClick(event: Event) {
-    if (!(props.showOnClick || noHover.value) || !props.workId || !anchor.value) return
+    if (!(props.showOnClick || noHover.value) || !props.workId || !rootRef.value) return
     event.preventDefault()
     event.stopPropagation()
-    showNow(props.workType, props.workId, anchor.value)
-  }
-  function onFocusIn(event: FocusEvent) {
-    const target = event.target
-    if (target instanceof Element && !target.matches(':focus-visible')) return
-    onEnter()
+    showNow(props.workType, props.workId, rootRef.value)
   }
   function hideSelf() {
-    if (anchor.value) hideForAnchor(anchor.value)
+    if (rootRef.value) hideForAnchor(rootRef.value)
   }
 
   watch(
@@ -49,18 +39,14 @@
 </script>
 
 <template>
-  <Inline
+  <span
     ref="rootRef"
-    as="span"
-    gap="none"
-    :wrap="false"
-    class="inline"
     @mouseenter="onEnter"
     @mouseleave="onLeave"
-    @focusin="onFocusIn"
+    @focusin="onEnter"
     @focusout="onLeave"
     @click.capture="onClick"
   >
     <slot />
-  </Inline>
+  </span>
 </template>

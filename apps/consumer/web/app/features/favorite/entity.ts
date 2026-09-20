@@ -1,5 +1,11 @@
 export type FavoriteEntityType =
-  'galgame' | 'light_novel' | 'manga' | 'article' | 'post' | 'section' | 'topic'
+  | 'galgame'
+  | 'light_novel'
+  | 'manga'
+  | 'article'
+  | 'post'
+  | 'section'
+  | 'topic'
 
 export const FAVORITE_SEG: Record<FavoriteEntityType, string> = {
   galgame: 'galgames',

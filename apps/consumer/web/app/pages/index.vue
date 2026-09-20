@@ -24,7 +24,7 @@
   watch(
     scope,
     s => {
-      if (s !== 'recommend') mounted.value = { ...mounted.value, [s]: true }
+      if (s !== 'all') mounted.value = { ...mounted.value, [s]: true }
       if (import.meta.client) window.scrollTo({ top: 0, behavior: 'instant' })
     },
     { immediate: true },
@@ -36,7 +36,7 @@
   watch(
     () => auth.isAuthenticated,
     isAuthed => {
-      // 登出后关注流无意义，退回推荐；清空 feed 桶以新身份重拉，并按登录态切换重拉一次 BFF。
+      // 登出后关注流无意义，退回全站；清空 feed 桶以新身份重拉，并按登录态切换重拉一次 BFF。
       // 列表内容整体换身份，深滚位置已无意义，直接回顶。
       if (!isAuthed && scope.value === 'following') void router.replace({ path: '/', query: {} })
       resetFeed()
@@ -63,16 +63,12 @@
 
     <div>
       <FeedComposer class="mb-4" />
+      <FeedList v-show="scope === 'all'" :source="allSource" :active="scope === 'all'" />
       <FeedList
+        v-if="mounted.recommend"
         v-show="scope === 'recommend'"
         :source="recommendSource"
         :active="scope === 'recommend'"
-      />
-      <FeedList
-        v-if="mounted.all"
-        v-show="scope === 'all'"
-        :source="allSource"
-        :active="scope === 'all'"
       />
       <FeedList
         v-if="mounted.latest"

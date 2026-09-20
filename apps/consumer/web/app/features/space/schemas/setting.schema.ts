@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 export const profileSchema = v.object({
@@ -17,6 +18,7 @@ export const profileSchema = v.object({
     v.maxLength(500, '简介最多 500 个字'),
   ),
 })
+export const profileResolver = valibotResolver(profileSchema)
 export type ProfileValues = v.InferOutput<typeof profileSchema>
 
 export const nicknameSchema = v.object({
@@ -27,4 +29,5 @@ export const nicknameSchema = v.object({
     v.maxLength(32, '昵称最多 32 个字'),
   ),
 })
+export const nicknameResolver = valibotResolver(nicknameSchema)
 export type NicknameValues = v.InferOutput<typeof nicknameSchema>

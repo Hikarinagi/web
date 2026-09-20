@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { Button, Form, FormField, Inline, Input } from '@hina-ui/vue'
+  import Form, { type FormSubmitEvent } from '@primevue/forms/form'
   import type { Editor } from '@tiptap/vue-3'
   import { useEditorOverlays } from '../../composables/useEditorOverlays'
-  import { linkSchema } from './schema'
+  import { linkResolver, type LinkValues } from './schema'
 
   const props = defineProps<{
     editor: Editor
@@ -13,16 +13,17 @@
   const { closeOverlay } = useEditorOverlays()
   const isEditing = computed(() => !!props.initialUrl?.length)
 
-  const values = reactive({
+  const initialValues = computed<LinkValues>(() => ({
     url: props.initialUrl ?? '',
     text: props.selectedText ?? '',
-  })
+  }))
 
-  function onSubmit() {
+  function onSubmit(event: FormSubmitEvent) {
+    if (!event.valid) return
+    const values = event.values as LinkValues
     const { editor } = props
-    const url = values.url.trim()
-    const text = values.text.trim()
-    const displayText = text.length ? text : null
+    const url = values.url
+    const displayText = values.text?.length ? values.text : null
 
     const { from, to } = editor.state.selection
     const hasRange = from !== to
@@ -64,29 +65,38 @@
 </script>
 
 <template>
-  <Form :values="values" :rules="linkSchema" class="w-full sm:w-90" @submit="onSubmit">
-    <FormField name="url" label="URL" required>
-      <Input
-        v-model="values.url"
-        size="sm"
+  <Form
+    :resolver="linkResolver"
+    :initial-values="initialValues"
+    class="flex w-full flex-col gap-3 md:w-[360px]"
+    @submit="onSubmit"
+  >
+    <FormItem v-slot="{ id, errorId }" name="url" label="URL" required>
+      <InputText
+        :id="id"
         autocomplete="off"
         autofocus
+        fluid
         placeholder="https://... 或 /path"
+        :aria-describedby="errorId"
+        size="small"
       />
-    </FormField>
+    </FormItem>
 
-    <FormField name="text" label="显示文字">
-      <Input
-        v-model="values.text"
-        size="sm"
+    <FormItem v-slot="{ id, errorId }" name="text" label="显示文字">
+      <InputText
+        :id="id"
         autocomplete="off"
+        fluid
         :placeholder="selectedText || '可选，默认与 URL 一致'"
+        :aria-describedby="errorId"
+        size="small"
       />
-    </FormField>
+    </FormItem>
 
-    <Inline gap="sm" justify="end">
-      <Button size="sm" variant="ghost" tone="neutral" @click="onCancel">取消</Button>
-      <Button size="sm" type="submit">{{ isEditing ? '更新' : '插入' }}</Button>
-    </Inline>
+    <div class="flex justify-end gap-2">
+      <Button size="small" label="取消" severity="secondary" variant="text" @click="onCancel" />
+      <Button size="small" :label="isEditing ? '更新' : '插入'" type="submit" />
+    </div>
   </Form>
 </template>

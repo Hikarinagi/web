@@ -1,16 +1,14 @@
 import type { ReaderController } from '@ritojs/kit'
-import type { LightboxItem } from '@hina-ui/vue'
-import { onBeforeUnmount, ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import { onBeforeUnmount, watch, type ShallowRef } from 'vue'
+import { useHikariImagePreview } from '~/components/ui/hikari-image/composables/usePreview'
 
 interface UseReaderImagePreviewOptions {
   controller: ShallowRef<ReaderController | null>
   suppressTap?: () => void
-  open?: Ref<boolean>
 }
 
 export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
-  const open = options.open ?? ref(false)
-  const items = shallowRef<LightboxItem[]>([])
+  const preview = useHikariImagePreview()
   let unsubscribe: (() => void) | null = null
 
   function detach() {
@@ -20,29 +18,23 @@ export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
 
   function attach(controller: ReaderController) {
     detach()
-    unsubscribe = controller.on('imageClick', ({ src, alt, blobUrl, screenBounds }) => {
+    unsubscribe = controller.on('imageClick', ({ src, alt, blobUrl }) => {
       options.suppressTap?.()
       const displaySrc = blobUrl ?? src
       if (!displaySrc) return
 
-      const origin = screenBounds
-        ? {
-            x: screenBounds.x,
-            y: screenBounds.y,
-            width: screenBounds.width,
-            height: screenBounds.height,
-          }
-        : null
-
-      items.value = [
-        {
-          id: `reader-image:${src || displaySrc}`,
-          src: displaySrc,
-          alt: alt || '插图',
-          source: () => origin,
-        },
-      ]
-      open.value = true
+      preview.open(
+        [
+          {
+            id: `reader-image:${src || displaySrc}`,
+            displaySrc,
+            originalSrc: displaySrc,
+            alt,
+            processing: false,
+          },
+        ],
+        0,
+      )
     })
   }
 
@@ -56,6 +48,4 @@ export function useReaderImagePreview(options: UseReaderImagePreviewOptions) {
   )
 
   onBeforeUnmount(detach)
-
-  return { open, items }
 }

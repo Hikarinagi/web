@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
   import type { SpaceTabPageData } from '~~/server/api/pages/space/[id]/tab.get'
   import { readSpaceRouteQuery, spaceTabBffPath } from '~/features/space/route'
@@ -115,9 +114,9 @@
 </script>
 
 <template>
-  <Stack gap="none" class="min-w-0 flex-1">
+  <div class="min-w-0 flex-1">
     <SpaceTabs v-model="selectedTab" :is-self="initial.is_self" />
-    <Stack gap="none" class="pt-2">
+    <div class="pt-2">
       <SpaceTabsFeed
         v-if="selectedTab === 'feed' && tabPage.feed"
         :user-id="userId"
@@ -171,6 +170,6 @@
         :user-id="userId"
         :bookshelf="tabPage.bookshelf"
       />
-    </Stack>
-  </Stack>
+    </div>
+  </div>
 </template>

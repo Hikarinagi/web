@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Flex, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
   import { displayName } from '~/utils/user'
 
@@ -18,28 +17,34 @@
 </script>
 
 <template>
-  <Stack as="section" gap="none" class="border-b border-line bg-surface">
+  <section
+    class="border-b border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-950"
+  >
     <SpaceHeroBanner :cover="profile.head_cover" />
 
-    <Stack gap="none" class="mx-auto w-full max-w-app px-5 pb-7 sm:px-6">
-      <Stack gap="md" class="sm:flex-row sm:items-start sm:gap-6">
-        <Flex class="relative z-10 -mt-14 shrink-0 sm:-mt-18">
+    <div class="mx-auto max-w-app px-5 pb-7 sm:px-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+        <div class="relative z-10 -mt-14 shrink-0 sm:-mt-18">
           <Avatar
             :user="profile"
-            class="size-28! bg-inset shadow-lg ring-4 ring-surface sm:size-36!"
+            shape="circle"
+            class="size-28! bg-surface-100 ring-4 ring-surface-0 sm:size-36! dark:ring-surface-950"
+            :pt="{ root: { class: 'shadow-[0_8px_28px_rgba(15,23,42,0.16)]' } }"
           />
-        </Flex>
+        </div>
 
-        <Stack gap="sm" class="min-w-0 flex-1 sm:pt-3">
-          <Stack gap="sm" class="sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-            <Inline gap="sm" class="min-w-0">
-              <Heading :level="1" class="sm:text-3xl">{{ displayName(profile) }}</Heading>
-              <Text v-if="displayName(profile) !== profile.name" as="span" size="sm" tone="muted">
+        <div class="flex min-w-0 flex-1 flex-col gap-2.5 sm:pt-3">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+            <div class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5">
+              <h1 class="text-2xl font-bold text-surface-950 sm:text-[28px] dark:text-surface-0">
+                {{ displayName(profile) }}
+              </h1>
+              <span v-if="displayName(profile) !== profile.name" class="text-sm text-muted-color">
                 @{{ profile.name }}
-              </Text>
-              <Tag v-if="roleLabel">{{ roleLabel }}</Tag>
+              </span>
+              <Tag v-if="roleLabel" :value="roleLabel" :pt="{ root: { class: 'text-xs!' } }" />
               <UserBadges :user="profile" height="h-6" full />
-            </Inline>
+            </div>
 
             <SpaceHeroActions
               :profile="profile"
@@ -48,9 +53,11 @@
               variant="inline"
               class="hidden shrink-0 sm:flex"
             />
-          </Stack>
+          </div>
 
-          <Text v-if="profile.signature" size="sm" tone="muted">{{ profile.signature }}</Text>
+          <p v-if="profile.signature" class="text-sm text-surface-600 dark:text-surface-300">
+            {{ profile.signature }}
+          </p>
 
           <SpaceHeroStats :profile="profile" :statistics="statistics" />
 
@@ -61,8 +68,8 @@
             variant="stacked"
             class="flex pt-1 sm:hidden"
           />
-        </Stack>
-      </Stack>
-    </Stack>
-  </Stack>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>

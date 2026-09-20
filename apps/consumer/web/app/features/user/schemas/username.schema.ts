@@ -1,3 +1,4 @@
+import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import {
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
@@ -18,4 +19,5 @@ export const usernameSchema = v.object({
     v.check(value => !isReservedUsername(value), '该用户名不可用'),
   ),
 })
+export const usernameResolver = valibotResolver(usernameSchema)
 export type UsernameValues = v.InferOutput<typeof usernameSchema>

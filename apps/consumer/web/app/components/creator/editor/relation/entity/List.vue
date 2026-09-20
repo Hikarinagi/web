@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Button, Stack } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
   import type { BackendEditorField, BackendEntitySummary } from '~/features/creator/editor'
   import type { EntityTarget } from '~/features/creator/composables/useEntitySearch'
@@ -84,7 +83,7 @@
 </script>
 
 <template>
-  <Stack gap="sm" align="stretch">
+  <div class="flex flex-col gap-2">
     <CreatorEditorRelationEntityRow
       v-for="(row, index) in rows"
       :key="row.relation_id ?? `draft-${index}-${row.target_id}`"
@@ -99,14 +98,13 @@
       @edit="openEditor(row)"
     />
     <Button
-      variant="outline"
-      tone="neutral"
-      size="sm"
+      label="添加"
+      severity="secondary"
+      variant="outlined"
       class="self-start"
       @click="pickerOpen = true"
     >
-      <template #icon><Plus /></template>
-      添加
+      <template #icon><Plus :size="14" /></template>
     </Button>
     <CreatorEditorRelationPickerDialog
       v-model:visible="pickerOpen"
@@ -116,5 +114,5 @@
       :title="`添加 ${target}`"
       @select="onPick"
     />
-  </Stack>
+  </div>
 </template>

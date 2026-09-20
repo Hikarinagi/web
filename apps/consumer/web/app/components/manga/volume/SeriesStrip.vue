@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { AspectRatio, Flex, Link, Stack, Text } from '@hina-ui/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
   import { getMangaVolumeLabel, getMangaVolumeTitle } from '~/utils/media/manga'
 
@@ -21,30 +20,31 @@
 </script>
 
 <template>
-  <WorkSection v-if="volumes.length > 1" title="本系列" :meta="positionText">
+  <MangaSection v-if="volumes.length > 1" title="本系列" :meta="positionText">
     <template #action>
-      <NuxtLink v-slot="{ href, navigate }" :to="`/mangas/${volume.manga.id}`" custom>
-        <Link :href="href ?? undefined" class="text-sm font-medium" @click="navigate">
-          全部单行本
-        </Link>
+      <NuxtLink
+        :to="`/mangas/${volume.manga.id}`"
+        class="text-sm font-medium text-hikari-primary-600 transition-colors hover:text-hikari-primary-700 dark:text-hikari-primary-400"
+      >
+        全部单行本
       </NuxtLink>
     </template>
-    <ScrollRail class="-mx-6">
-      <Flex align="start" gap="none" class="min-w-max gap-3 px-6 pt-1 pb-3">
+    <ScrollArea axis="x" shadow="both" arrows class="-mx-6">
+      <div class="flex min-w-max items-start gap-3 px-6 pt-1 pb-3">
         <div
           v-for="item in volumes"
           :key="item.id"
           :ref="item.id === volume.id ? el => (currentRef = el as HTMLElement) : undefined"
           class="w-20 shrink-0"
         >
-          <NuxtLink
-            :to="`/manga-volumes/${item.id}`"
-            class="group block hn-interactive rounded-md hn-press-none"
-          >
-            <AspectRatio
-              :ratio="2 / 3"
-              class="overflow-hidden rounded-md bg-subtle ring-1"
-              :class="item.id === volume.id ? 'ring-2 ring-accent' : 'ring-line'"
+          <NuxtLink :to="`/manga-volumes/${item.id}`" class="group block outline-none">
+            <div
+              class="aspect-2/3 overflow-hidden rounded-md bg-surface-100 transition-shadow group-hover:shadow-md group-focus-visible:ring-2 group-focus-visible:ring-primary dark:bg-surface-900"
+              :class="
+                item.id === volume.id
+                  ? 'ring-2 ring-primary'
+                  : 'ring-1 ring-surface-200 dark:ring-surface-800'
+              "
             >
               <HikariImage
                 :src="item.cover"
@@ -56,24 +56,20 @@
                 <template #empty><span /></template>
                 <template #error><span /></template>
               </HikariImage>
-            </AspectRatio>
-            <Stack gap="none" class="mt-1.5">
-              <Text
-                size="xs"
-                truncate
-                class="text-center transition-colors"
-                :class="
-                  item.id === volume.id
-                    ? 'font-semibold text-accent-text'
-                    : 'text-muted group-hover:text-accent-text'
-                "
-              >
-                {{ getMangaVolumeLabel(item) || getMangaVolumeTitle(item) }}
-              </Text>
-            </Stack>
+            </div>
+            <p
+              class="mt-1.5 truncate text-center text-xs"
+              :class="
+                item.id === volume.id
+                  ? 'font-semibold text-hikari-primary-600 dark:text-hikari-primary-400'
+                  : 'text-surface-500 dark:text-surface-400'
+              "
+            >
+              {{ getMangaVolumeLabel(item) || getMangaVolumeTitle(item) }}
+            </p>
           </NuxtLink>
         </div>
-      </Flex>
-    </ScrollRail>
-  </WorkSection>
+      </div>
+    </ScrollArea>
+  </MangaSection>
 </template>

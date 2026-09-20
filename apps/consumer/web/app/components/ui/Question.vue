@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { Button, Dialog, Text } from '@hina-ui/vue'
   import { CircleQuestionMark } from '@lucide/vue'
   import type { PropType } from 'vue'
 
-  defineOptions({ name: 'UiQuestion', inheritAttrs: false })
+  defineOptions({ name: 'UiQuestion' })
 
   const props = defineProps({
     title: {
@@ -20,9 +19,9 @@
       validator: (value: unknown) =>
         typeof value === 'string' || value === false || value === null || value === undefined,
     },
-    size: {
-      type: String as PropType<'sm' | 'md' | 'lg'>,
-      default: 'sm',
+    maxWidth: {
+      type: String,
+      default: '360px',
     },
     showDialog: {
       type: Boolean,
@@ -32,8 +31,9 @@
 
   const visible = ref(false)
   const tooltip = computed(() => {
-    if (props.tooltip === false || props.tooltip === null) return null
-    return (props.tooltip ?? props.title) || null
+    if (props.tooltip === false || props.tooltip === null) return { value: '', disabled: true }
+    const value = props.tooltip ?? props.title
+    return { value, disabled: !value }
   })
 
   const handleClick = () => {
@@ -43,25 +43,24 @@
 
 <template>
   <Button
-    v-tooltip="tooltip"
-    v-bind="$attrs"
-    variant="ghost"
-    tone="neutral"
-    size="sm"
-    icon-only
-    pill
-    class="size-5"
+    v-tooltip.top="tooltip"
+    unstyled
+    class="inline-grid size-5 shrink-0 place-items-center rounded-full text-muted-color transition-colors duration-150 hover:bg-emphasis hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:bg-primary/10 active:text-primary"
     :aria-label="ariaLabel"
     @click="handleClick"
   >
-    <CircleQuestionMark />
+    <CircleQuestionMark class="size-3.5" aria-hidden="true" />
   </Button>
 
-  <Dialog v-model:open="visible" :title="title" :size="size">
-    <template #content>
-      <Text tone="muted" size="sm" class="leading-6">
-        <slot />
-      </Text>
-    </template>
+  <Dialog
+    v-model:visible="visible"
+    modal
+    dismissable-mask
+    :header="title"
+    :style="{ width: '92vw', maxWidth }"
+  >
+    <div class="text-sm leading-6 text-muted-color">
+      <slot />
+    </div>
   </Dialog>
 </template>

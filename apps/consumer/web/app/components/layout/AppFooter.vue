@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import logoUrl from '~/assets/images/wordmark.svg'
+  import logoUrl from '~/assets/images/logo.png'
   import { SITE_CONFIG } from '~/config/site'
 
   const flags = useFeatureFlags()
@@ -19,7 +19,7 @@
           <HikariImage
             :src="logoUrl"
             :alt="SITE_CONFIG.name"
-            class="aspect-792/191 h-6"
+            class="aspect-963/183 h-6"
             image-class="object-contain"
             :skeleton="false"
           />
@@ -32,7 +32,7 @@
           <p>
             © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
             <button
-              v-tooltip="buildLabel"
+              v-tooltip.top="buildLabel"
               type="button"
               class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
               @click="changelogOpen = true"

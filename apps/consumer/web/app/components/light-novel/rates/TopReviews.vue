@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Rating, Spoiler } from '@hina-ui/vue'
+  import { Star } from '@lucide/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   defineOptions({ name: 'LightNovelRatesTopReviews' })
@@ -30,7 +30,7 @@
         :key="`${r.volume ? 'v' : 's'}${r.id}`"
         class="flex items-start gap-2.5"
       >
-        <Avatar :user="r.rater" card class="size-7! shrink-0" />
+        <Avatar :user="r.rater" card shape="circle" class="size-7! shrink-0" />
         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
           <div class="flex items-center gap-1.5">
             <UserName
@@ -51,7 +51,7 @@
             <span
               class="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-surface-700 tabular-nums dark:text-surface-300"
             >
-              <Rating :model-value="r.rate ?? 0" :max="10" :stars="5" readonly size="sm" />
+              <Star class="size-3 fill-amber-400 text-amber-400" />
               {{ r.rate }}
             </span>
           </div>

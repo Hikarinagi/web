@@ -1,13 +1,4 @@
 <script setup lang="ts">
-  import {
-    Button,
-    DescriptionDetails,
-    DescriptionList,
-    DescriptionTerm,
-    Inline,
-    Panel,
-    Text,
-  } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Lock, Pencil, Shield, Trash2 } from '@lucide/vue'
   import type { BackendPermissionGroup } from '~/features/creator/governance'
@@ -17,9 +8,9 @@
 
   const editOpen = ref(false)
   const deleting = ref(false)
-  const { confirm } = useHikariConfirm()
+  const confirm = useConfirm()
 
-  async function performDelete() {
+  async function performDelete(close?: () => void) {
     if (deleting.value) return
     deleting.value = true
     try {
@@ -30,6 +21,7 @@
           path: { id: props.group.id },
         },
       )
+      close?.()
       emit('deleted')
     } finally {
       deleting.value = false
@@ -37,76 +29,76 @@
   }
 
   function confirmDelete() {
-    confirm({
-      title: '删除权限组',
-      description: `确认删除「${props.group.name}」？此操作不可撤销，组内成员会被同时移除。`,
-      confirmText: '删除',
-      cancelText: '取消',
-      tone: 'danger',
-      onConfirm: () => performDelete(),
+    confirm.require({
+      group: 'app-shell',
+      header: '删除权限组',
+      message: `确认删除「${props.group.name}」？此操作不可撤销，组内成员会被同时移除。`,
+      acceptLabel: '删除',
+      rejectLabel: '取消',
+      closeOnEscape: false,
+      loading: () => deleting.value,
+      onAccept: ({ close }) => void performDelete(close).catch(() => {}),
     })
   }
 </script>
 
 <template>
-  <Panel title="基本信息">
-    <template #icon><Shield /></template>
+  <CardPanel title="基本信息" :icon="Shield">
     <template #actions>
-      <Inline gap="sm" align="center" :wrap="false">
+      <div class="flex items-center gap-2">
         <Button
-          variant="ghost"
-          tone="neutral"
-          size="sm"
+          label="编辑"
+          variant="text"
+          size="small"
+          severity="secondary"
           :disabled="group.is_system"
           @click="editOpen = true"
         >
-          <template #icon><Pencil /></template>
-          编辑
+          <template #icon>
+            <Pencil :size="14" />
+          </template>
         </Button>
         <Button
-          variant="ghost"
-          tone="danger"
-          size="sm"
+          label="删除"
+          variant="text"
+          size="small"
+          severity="danger"
           :disabled="group.is_system"
           @click="confirmDelete"
         >
-          <template #icon><Trash2 /></template>
-          删除
+          <template #icon>
+            <Trash2 :size="14" />
+          </template>
         </Button>
-      </Inline>
+      </div>
     </template>
-    <DescriptionList>
-      <DescriptionTerm>名称</DescriptionTerm>
-      <DescriptionDetails>
-        <Inline gap="xs" align="center" :wrap="false">
-          <Text as="span" weight="medium">{{ group.name }}</Text>
-          <Lock
-            v-if="group.is_system"
-            v-tooltip="'系统权限组，不可编辑'"
-            class="size-3.5 shrink-0 text-muted"
-          />
-        </Inline>
-      </DescriptionDetails>
-
-      <DescriptionTerm>描述</DescriptionTerm>
-      <DescriptionDetails>{{ group.description || '—' }}</DescriptionDetails>
-
-      <DescriptionTerm>权限数</DescriptionTerm>
-      <DescriptionDetails>{{ group.permissions.length }} 项</DescriptionDetails>
-
-      <DescriptionTerm>创建</DescriptionTerm>
-      <DescriptionDetails>
+    <dl class="grid grid-cols-1 gap-y-3 text-sm sm:grid-cols-[6rem_1fr]">
+      <dt class="text-muted-color">名称</dt>
+      <dd class="flex items-center gap-2 font-medium">
+        {{ group.name }}
+        <Lock
+          v-if="group.is_system"
+          v-tooltip.top="'系统权限组，不可编辑'"
+          :size="14"
+          class="text-muted-color"
+        />
+      </dd>
+      <dt class="text-muted-color">描述</dt>
+      <dd>{{ group.description || '—' }}</dd>
+      <dt class="text-muted-color">权限数</dt>
+      <dd>{{ group.permissions.length }} 项</dd>
+      <dt class="text-muted-color">创建</dt>
+      <dd>
         {{ timeFormat(group.created_at) }}
         <template v-if="group.created_by">
           ·
           <UserName :user="group.created_by" class="inline-flex" />
         </template>
-      </DescriptionDetails>
-
-      <DescriptionTerm>最近更新</DescriptionTerm>
-      <DescriptionDetails>{{ timeFormat(group.updated_at) }}</DescriptionDetails>
-    </DescriptionList>
-  </Panel>
+      </dd>
+      <dt class="text-muted-color">最近更新</dt>
+      <dd>{{ timeFormat(group.updated_at) }}</dd>
+    </dl>
+  </CardPanel>
 
   <CreatorGovernanceGroupsEditDialog
     v-model:visible="editOpen"

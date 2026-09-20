@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Spinner } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { FeedSource } from '~/features/feed/sources'
   import { useFeedList } from '~/features/feed/useFeedList'
@@ -38,7 +37,7 @@
         :exit="{ opacity: 0, scale: 0.94 }"
         :transition="TRANSITION_FAST"
       >
-        <Spinner size="lg" />
+        <Spinner :size="28" />
       </motion.div>
     </AnimatePresence>
 
@@ -77,7 +76,7 @@
         />
 
         <div v-if="showFooterLoading" class="flex justify-center py-6 [overflow-anchor:none]">
-          <Spinner size="lg" />
+          <Spinner :size="28" />
         </div>
         <p
           v-else-if="!nextCursor && itemCount"

@@ -78,7 +78,8 @@ export async function hikariRequest<TPath extends ApiPath, TMethod extends ApiMe
   const method = options?.method ? options.method.toUpperCase() : 'GET'
   const pathParams = options && 'path' in options ? options.path : undefined
   const requestOptions = options as
-    HikariRequestOptions<unknown, Record<string, unknown>> | undefined
+    | HikariRequestOptions<unknown, Record<string, unknown>>
+    | undefined
   const { query, body, toast = true, ...fetchOptions } = requestOptions ?? {}
   const fetcher = import.meta.server
     ? (useRequestFetch() as unknown as HikariFetch)

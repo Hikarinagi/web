@@ -24,8 +24,8 @@ interface UseReaderTapDetectorOptions {
 
 /**
  * Distinguish a "tap" from a swipe / long-press on the reader surface.
- * Tap = primary-button/touch up within 320ms and < 10px from start,
- * not on any UI overlay (`[data-reader-ui]`).
+ * Tap = touch/pointer up within 320ms and < 10px from start,
+ * not on any UI overlay (`[data-reader-ui]`) or context menu.
  *
  * Both release handlers must be bound on the bubble phase so Rito's
  * canvas-level content interactions run first and can suppress the tap for
@@ -40,7 +40,6 @@ export function useReaderTapDetector(options: UseReaderTapDetectorOptions) {
     handledAt = 0
     if (!options.enabled.value) return
     if (event.pointerType === 'touch') return
-    if (event.button !== 0) return
     pointerStart = {
       x: event.clientX,
       y: event.clientY,
@@ -52,7 +51,6 @@ export function useReaderTapDetector(options: UseReaderTapDetectorOptions) {
   function onPointerUp(event: PointerEvent) {
     if (!options.enabled.value) return
     if (event.pointerType === 'touch') return
-    if (event.button !== 0) return
     const start = pointerStart
     pointerStart = null
     if (options.consumeSuppressedTap?.()) return
@@ -130,6 +128,7 @@ export function useReaderTapDetector(options: UseReaderTapDetectorOptions) {
     if (Math.hypot(dx, dy) > TAP_MAX_DISTANCE) return
     if (!(input.target instanceof HTMLElement)) return
     if (input.target.closest('[data-reader-ui]')) return
+    if (input.target.closest('[data-reader-context-menu]')) return
     handledAt = performance.now()
     options.onTap({ x: input.clientX, y: input.clientY })
   }

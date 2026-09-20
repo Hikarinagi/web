@@ -8,9 +8,8 @@
       node: EditorNode
       eager?: boolean
       selected?: boolean
-      preview?: boolean
     }>(),
-    { eager: false, selected: false, preview: true },
+    { eager: false, selected: false },
   )
 
   const src = computed(() => (props.node.attrs?.src as string | undefined) ?? '')
@@ -24,9 +23,6 @@
     const h = props.node.attrs?.height
     return typeof h === 'number' && h > 0 ? h : null
   })
-  const previewSize = computed(() =>
-    width.value && height.value ? { width: width.value, height: height.value } : undefined,
-  )
   const widthPercent = computed(() => {
     const w = props.node.attrs?.width_percent
     return typeof w === 'number' && w > 0 ? w : 100
@@ -71,8 +67,7 @@
       :skeleton="!eager"
       class="block size-full"
       image-class="size-full object-contain"
-      :preview="preview"
-      :preview-size="previewSize"
+      preview
     />
     <slot name="chrome" />
   </figure>

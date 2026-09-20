@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Divider, Inline, Text } from '@hina-ui/vue'
   import { ArrowUpDown } from '@lucide/vue'
   import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
   import { REVIEW_STATUS_ORDER } from '~/features/rate/status'
@@ -36,13 +35,31 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <FilterSelect v-model="sort" :options="SORT_OPTIONS" placeholder="推荐" :icon="ArrowUpDown" />
-    <Divider orientation="vertical" class="h-5" />
-    <FilterSelect v-model="status" :options="STATUS_OPTIONS" placeholder="全部状态" />
-    <FilterSelect v-model="score" :options="SCORE_OPTIONS" placeholder="全部评分" />
-    <FilterSelect v-model="spoiler" :options="SPOILER_OPTIONS" placeholder="含剧透" />
-    <FilterSelect v-model="hasDimensions" :options="DIMS_OPTIONS" placeholder="含多维" />
-    <Text as="span" size="xs" tone="faint" class="ms-auto">共 {{ total }} 条短评</Text>
-  </Inline>
+  <div class="flex flex-wrap items-center gap-3">
+    <LightNovelRatesFilterSelect
+      v-model="sort"
+      :options="SORT_OPTIONS"
+      placeholder="推荐"
+      :icon="ArrowUpDown"
+    />
+    <div class="h-5 w-px bg-surface-200 dark:bg-surface-700" />
+    <LightNovelRatesFilterSelect
+      v-model="status"
+      :options="STATUS_OPTIONS"
+      placeholder="全部状态"
+    />
+    <LightNovelRatesFilterSelect v-model="score" :options="SCORE_OPTIONS" placeholder="全部评分" />
+    <LightNovelRatesFilterSelect
+      v-model="spoiler"
+      :options="SPOILER_OPTIONS"
+      placeholder="含剧透"
+    />
+    <LightNovelRatesFilterSelect
+      v-model="hasDimensions"
+      :options="DIMS_OPTIONS"
+      placeholder="含多维"
+    />
+    <span class="flex-1" />
+    <span class="text-xs text-surface-400 dark:text-surface-500">共 {{ total }} 条短评</span>
+  </div>
 </template>

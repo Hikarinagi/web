@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
   const props = defineProps<{ item: FeedItemByType<'light_novel_volume_rate'> }>()

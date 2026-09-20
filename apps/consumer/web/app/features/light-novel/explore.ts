@@ -1,7 +1,6 @@
 import { NOVEL_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
 
 export const LIGHT_NOVEL_BROWSE_PAGE_SIZE = 24
 
@@ -10,7 +9,14 @@ export type LightNovelSortField = NonNullable<ApiQuery<'/api/v3/light-novels', '
 export type LightNovelSortOrder = NonNullable<ApiQuery<'/api/v3/light-novels', 'get'>['sort_order']>
 export type LightNovelStatus = NonNullable<ApiQuery<'/api/v3/light-novels', 'get'>['novel_status']>
 export type LightNovelDecade = '2020s' | '2010s' | '2000s' | 'earlier'
-export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export type TagFilterOp = 'include' | 'exclude'
+export type TagMatchMode = 'and' | 'or'
+
+export interface TagFilterGroup {
+  op: TagFilterOp
+  match: TagMatchMode
+  tag_ids: number[]
+}
 
 export interface LightNovelBrowseState {
   page: number
