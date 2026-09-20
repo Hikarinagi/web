@@ -1,6 +1,13 @@
 import { IncomingMessage } from 'node:http'
 
-import { context, propagation, trace, type Attributes, type Span } from '@opentelemetry/api'
+import {
+  context,
+  propagation,
+  SpanStatusCode,
+  trace,
+  type Attributes,
+  type Span,
+} from '@opentelemetry/api'
 import { logs, SeverityNumber, type Logger } from '@opentelemetry/api-logs'
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
@@ -59,10 +66,22 @@ export interface NodeTelemetryOptions {
   requestIdHeader?: string
 }
 
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
+
+const SEVERITY: Record<LogLevel, SeverityNumber> = {
+  debug: SeverityNumber.DEBUG,
+  info: SeverityNumber.INFO,
+  warn: SeverityNumber.WARN,
+  error: SeverityNumber.ERROR,
+  fatal: SeverityNumber.FATAL,
+}
+
 export interface NodeTelemetry {
   readonly enabled: boolean
   track(name: string, attributes?: Attributes): void
   captureError(error: unknown, attributes?: Attributes): void
+  log(level: LogLevel, message: string, attributes?: Attributes): void
+  failSpan(error: unknown, attributes?: Attributes): void
   flush(): Promise<void>
   shutdown(): Promise<void>
 }
@@ -71,6 +90,8 @@ const disabled: NodeTelemetry = {
   enabled: false,
   track: () => undefined,
   captureError: () => undefined,
+  log: () => undefined,
+  failSpan: () => undefined,
   flush: () => Promise.resolve(),
   shutdown: () => Promise.resolve(),
 }
@@ -151,6 +172,23 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
         },
       })
     },
+    log(level, message, attributes = {}) {
+      if (!message) return
+      logger.emit({
+        body: message,
+        severityNumber: SEVERITY[level],
+        severityText: level,
+        attributes,
+      })
+    },
+    failSpan(error, attributes = {}) {
+      const span = trace.getActiveSpan()
+      if (!span) return
+      const parts = errorParts(error)
+      span.recordException(error instanceof Error ? error : parts.message)
+      span.setStatus({ code: SpanStatusCode.ERROR, message: parts.message.slice(0, 1024) })
+      span.setAttributes(attributes)
+    },
     flush: () =>
       Promise.all([spanProcessor.forceFlush(), logProcessor.forceFlush()]).then(() => undefined),
     shutdown: () => sdk.shutdown(),
@@ -190,6 +228,14 @@ export function track(name: string, attributes?: Attributes): void {
 
 export function captureError(error: unknown, attributes?: Attributes): void {
   active.captureError(error, attributes)
+}
+
+export function log(level: LogLevel, message: string, attributes?: Attributes): void {
+  active.log(level, message, attributes)
+}
+
+export function failSpan(error: unknown, attributes?: Attributes): void {
+  active.failSpan(error, attributes)
 }
 
 export function identify(userId: string | number, request?: IncomingMessage): void {

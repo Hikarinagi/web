@@ -7,7 +7,9 @@ import { tick } from '../src/schedule'
 import {
   ATTR_REQUEST_ID,
   currentTraceparent,
+  failSpan,
   identify,
+  log,
   setSpanAttributes,
   spanOfRequest,
   startNodeTelemetry,
@@ -106,6 +108,8 @@ describe('node telemetry', () => {
     await tick('Sweeper.run', async () => {
       await (await fetch(`http://127.0.0.1:${upstreamPort}/api/v3/sweep`)).text()
       track('sweep.done')
+      log('warn', 'token refresh failed', { 'nest.context': 'BangumiAuth' })
+      failSpan(new Error('HTTP 400 invalid_grant'), { 'bangumi.stage': 'refresh' })
     })()
 
     track('user.registered', { 'user.id': '42' })
@@ -163,6 +167,9 @@ describe('node telemetry', () => {
     expect(attr(sweepClient, 'hikari.entry_name')).toBe('Sweeper.run')
     const tickSpan = spans.find((s: any) => s.name === 'schedule Sweeper.run')
     expect(tickSpan.parentSpanId ?? '').toBe('')
+    expect(tickSpan.status).toEqual({ code: 2, message: 'HTTP 400 invalid_grant' })
+    expect(attr(tickSpan, 'bangumi.stage')).toBe('refresh')
+    expect(tickSpan.events.find((e: any) => e.name === 'exception')).toBeDefined()
     expect(sweepClient.traceId).toBe(tickSpan.traceId)
     const resource = traces[0]!.body.resourceSpans[0].resource.attributes
     expect(resource.find((a: any) => a.key === 'service.name').value).toEqual({
@@ -183,6 +190,10 @@ describe('node telemetry', () => {
     const sweepEvent = records.find((r: any) => r.eventName === 'sweep.done')
     expect(attr(sweepEvent, 'hikari.entry')).toBe('schedule')
     expect(attr(sweepEvent, 'hikari.entry_name')).toBe('Sweeper.run')
+    const warned = records.find((r: any) => r.severityNumber === 13)
+    expect(warned.body).toEqual({ stringValue: 'token refresh failed' })
+    expect(attr(warned, 'nest.context')).toBe('BangumiAuth')
+    expect(attr(warned, 'hikari.entry_name')).toBe('Sweeper.run')
     const error = records.find((r: any) => r.severityNumber === 17)
     expect(error.body).toEqual({ stringValue: 'bad range' })
     expect(error.attributes.find((a: any) => a.key === 'exception.type').value).toEqual({
