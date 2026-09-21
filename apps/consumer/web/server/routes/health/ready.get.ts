@@ -6,6 +6,7 @@ const RENDERED_MARK = 'id="__nuxt"'
 export default defineEventHandler(async event => {
   try {
     const html = await event.$fetch<string>(PROBE_PATH, {
+      headers: { accept: 'text/html' },
       responseType: 'text',
       ignoreResponseError: true,
     })
