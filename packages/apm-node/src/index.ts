@@ -1,14 +1,6 @@
 import { IncomingMessage } from 'node:http'
 
-import {
-  context,
-  propagation,
-  SpanStatusCode,
-  trace,
-  type Attributes,
-  type Span,
-} from '@opentelemetry/api'
-import { logs, SeverityNumber, type Logger } from '@opentelemetry/api-logs'
+import { context, propagation, trace, type Attributes, type Span } from '@opentelemetry/api'
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import type { Instrumentation } from '@opentelemetry/instrumentation'
@@ -21,6 +13,7 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions'
 import type { Telemetry as BullTelemetry } from 'bullmq'
 
+import { captureError, failSpan, log, track, type LogLevel } from './api'
 import {
   ATTR_ORIGIN,
   ATTR_ORIGIN_NAME,
@@ -47,6 +40,7 @@ export {
   type Entry,
   type SampleRates,
 } from './entry'
+export { captureError, errorParts, failSpan, log, track, type LogLevel } from './api'
 export { tick } from './schedule'
 
 export const ATTR_REQUEST_ID = 'hikari.request_id'
@@ -64,16 +58,6 @@ export interface NodeTelemetryOptions {
   ignoreIncomingPaths?: string[]
   flushIntervalMs?: number
   requestIdHeader?: string
-}
-
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
-
-const SEVERITY: Record<LogLevel, SeverityNumber> = {
-  debug: SeverityNumber.DEBUG,
-  info: SeverityNumber.INFO,
-  warn: SeverityNumber.WARN,
-  error: SeverityNumber.ERROR,
-  fatal: SeverityNumber.FATAL,
 }
 
 export interface NodeTelemetry {
@@ -102,7 +86,11 @@ const serverSpans = new WeakMap<IncomingMessage, Span>()
 export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry {
   const endpoint = options.endpoint.replace(/\/$/, '')
   const headers = { Authorization: `Bearer ${options.key}` }
-  const ignored = new Set(options.ignoreIncomingPaths ?? ['/health'])
+  const ignored = options.ignoreIncomingPaths ?? ['/health']
+  const ignoredPath = (url: string) => {
+    const path = url.split('?')[0] ?? ''
+    return ignored.some(prefix => path === prefix || path.startsWith(`${prefix}/`))
+  }
   const delay = options.flushIntervalMs ?? 2000
   const spanProcessor = new BatchSpanProcessor(
     new OTLPTraceExporter({ url: `${endpoint}/v1/traces`, headers }),
@@ -125,7 +113,7 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
     logRecordProcessors: [new EntryLogProcessor(), logProcessor],
     instrumentations: [
       new HttpInstrumentation({
-        ignoreIncomingRequestHook: request => ignored.has((request.url ?? '').split('?')[0] ?? ''),
+        ignoreIncomingRequestHook: request => ignoredPath(request.url ?? ''),
         requestHook: (span, request) => {
           if (!(request instanceof IncomingMessage)) return
           serverSpans.set(request, span)
@@ -151,44 +139,12 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
   }
   process.once('SIGTERM', stop)
   process.once('SIGINT', stop)
-  const logger: Logger = logs.getLogger(SCOPE)
-
   const telemetry: NodeTelemetry = {
     enabled: true,
-    track(name, attributes = {}) {
-      if (!name) return
-      logger.emit({ eventName: name, body: name, severityNumber: SeverityNumber.INFO, attributes })
-    },
-    captureError(error, attributes = {}) {
-      const parts = errorParts(error)
-      logger.emit({
-        body: parts.message || parts.type,
-        severityNumber: SeverityNumber.ERROR,
-        attributes: {
-          'exception.type': parts.type,
-          'exception.message': parts.message,
-          ...(parts.stack ? { 'exception.stacktrace': parts.stack.slice(0, 16 * 1024) } : {}),
-          ...attributes,
-        },
-      })
-    },
-    log(level, message, attributes = {}) {
-      if (!message) return
-      logger.emit({
-        body: message,
-        severityNumber: SEVERITY[level],
-        severityText: level,
-        attributes,
-      })
-    },
-    failSpan(error, attributes = {}) {
-      const span = trace.getActiveSpan()
-      if (!span) return
-      const parts = errorParts(error)
-      span.recordException(error instanceof Error ? error : parts.message)
-      span.setStatus({ code: SpanStatusCode.ERROR, message: parts.message.slice(0, 1024) })
-      span.setAttributes(attributes)
-    },
+    track,
+    captureError,
+    log,
+    failSpan,
     flush: () =>
       Promise.all([spanProcessor.forceFlush(), logProcessor.forceFlush()]).then(() => undefined),
     shutdown: () => sdk.shutdown(),
@@ -222,22 +178,6 @@ export function telemetry(): NodeTelemetry {
   return active
 }
 
-export function track(name: string, attributes?: Attributes): void {
-  active.track(name, attributes)
-}
-
-export function captureError(error: unknown, attributes?: Attributes): void {
-  active.captureError(error, attributes)
-}
-
-export function log(level: LogLevel, message: string, attributes?: Attributes): void {
-  active.log(level, message, attributes)
-}
-
-export function failSpan(error: unknown, attributes?: Attributes): void {
-  active.failSpan(error, attributes)
-}
-
 export function identify(userId: string | number, request?: IncomingMessage): void {
   const id = String(userId)
   if (!id) return
@@ -265,17 +205,6 @@ export function bullmqTelemetry(): BullTelemetry | undefined {
     BullMQOtel: new (options: { tracerName: string }) => BullTelemetry
   }
   return new BullMQOtel({ tracerName: SCOPE })
-}
-
-function errorParts(error: unknown): { type: string; message: string; stack?: string } {
-  if (error instanceof Error)
-    return { type: error.name || 'Error', message: error.message, stack: error.stack }
-  if (typeof error === 'string') return { type: 'Error', message: error }
-  try {
-    return { type: 'Error', message: JSON.stringify(error) }
-  } catch {
-    return { type: 'Error', message: String(error) }
-  }
 }
 
 export function esmHookPath(): string {

@@ -47,6 +47,8 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 
 FROM node:24-bookworm-slim AS runner
 
+ARG APP_VERSION=dev
+ENV APP_VERSION=$APP_VERSION
 ENV NODE_ENV=production
 ENV NITRO_HOST=0.0.0.0
 ENV NITRO_PORT=3000
@@ -64,7 +66,7 @@ USER node
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=5 \
-  CMD node -e "fetch('http://127.0.0.1:' + (process.env.NITRO_PORT || '3000') + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+  CMD node -e "fetch('http://127.0.0.1:' + (process.env.NITRO_PORT || '3000') + '/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 ENTRYPOINT ["tini", "--"]
 CMD ["node", "--import", "@hikarinagi/apm-node/preload", ".output/server/index.mjs"]

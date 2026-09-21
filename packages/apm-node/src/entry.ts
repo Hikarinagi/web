@@ -27,7 +27,9 @@ import {
   type SpanProcessor,
 } from '@opentelemetry/sdk-trace-base'
 
-export const SCOPE = '@hikarinagi/apm-node'
+import { SCOPE } from './api'
+
+export { SCOPE }
 export const ATTR_ENTRY = 'hikari.entry'
 export const ATTR_ENTRY_NAME = 'hikari.entry_name'
 export const ATTR_ORIGIN = 'hikari.origin'

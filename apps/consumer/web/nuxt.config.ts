@@ -68,13 +68,16 @@ export default defineNuxtConfig({
   },
 
   robots: {
-    disallow: ['/auth', '/login', '/register'],
+    disallow: ['/auth', '/health', '/login', '/register'],
   },
 
   nitro: {
     prerender: {
       crawlLinks: false,
       routes: ['/developers/api', ...apiReferenceRoutes],
+    },
+    externals: {
+      inline: ['valibot'],
     },
   },
 
