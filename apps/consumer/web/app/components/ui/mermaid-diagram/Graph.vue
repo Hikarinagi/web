@@ -65,7 +65,7 @@
             :width="edge.labelWidth"
             :height="22"
             rx="11"
-            class="fill-surface-50 dark:fill-surface-950"
+            class="fill-canvas"
             :stroke="toneOf(edge.variant)"
             stroke-opacity="0.35"
           />

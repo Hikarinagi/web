@@ -154,7 +154,6 @@
       class="shrink-0"
     >
       <IconButton
-        v-tooltip="dirtyCount ? `已暂存 ${dirtyCount} 项修改` : '编辑条目'"
         :label="dirtyCount ? `编辑条目（已暂存 ${dirtyCount} 项修改）` : '编辑条目'"
         variant="ghost"
         tone="neutral"

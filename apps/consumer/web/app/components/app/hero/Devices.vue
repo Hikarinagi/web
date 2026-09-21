@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack } from '@hina-ui/vue'
   import shotFeed from '~/assets/images/app/shot-feed.webp'
   import shotFeedDark from '~/assets/images/app/shot-feed-dark.webp'
   import shotNovel from '~/assets/images/app/shot-novel.webp'
@@ -26,12 +27,16 @@
 </script>
 
 <template>
-  <div
-    class="pointer-events-none relative z-10 order-2 mx-auto flex w-full max-w-app items-end justify-center gap-4 px-6 pt-10 lg:absolute lg:inset-0 lg:order-none lg:block lg:pt-0"
+  <Inline
+    gap="none"
+    align="end"
+    justify="center"
+    :wrap="false"
+    class="pointer-events-none relative z-10 order-2 mx-auto w-full max-w-app gap-4 px-6 pt-10 lg:absolute lg:inset-0 lg:order-none lg:block lg:pt-0"
     aria-hidden="true"
   >
-    <div v-for="shot in shots" :key="shot.alt" :class="shot.frame">
-      <div class="overflow-hidden" :class="shot.bezel">
+    <Stack v-for="shot in shots" :key="shot.alt" gap="none" :class="shot.frame">
+      <Stack gap="none" :class="cn('overflow-hidden', shot.bezel)">
         <HikariImage
           :src="shot.light"
           :alt="shot.alt"
@@ -44,7 +49,7 @@
           class="hidden aspect-[1179/2556] w-full dark:block"
           image-class="block aspect-[1179/2556] w-full"
         />
-      </div>
-    </div>
-  </div>
+      </Stack>
+    </Stack>
+  </Inline>
 </template>

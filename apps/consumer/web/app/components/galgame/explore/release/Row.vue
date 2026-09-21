@@ -51,7 +51,7 @@
     </Inline>
 
     <ScrollRail class="-mx-6">
-      <Inline gap="md" :wrap="false" class="min-w-max px-6 pb-2">
+      <Inline gap="md" align="stretch" :wrap="false" class="min-w-max px-6 pb-2">
         <GalgameExploreReleaseCard v-for="item in release.items" :key="item.id" :item="item" />
       </Inline>
     </ScrollRail>

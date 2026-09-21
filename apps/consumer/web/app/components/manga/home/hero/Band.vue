@@ -74,18 +74,20 @@
             :processing="backdropProcessing"
             :skeleton="false"
           >
-            <template #empty><span /></template>
-            <template #error><span /></template>
+            <template #empty />
+            <template #error />
           </HikariImage>
         </motion.div>
       </Flex>
-      <div
+      <Stack
+        gap="none"
         class="absolute inset-0 -z-10 bg-linear-to-r from-surface/95 via-surface/85 to-surface/40"
         aria-hidden="true"
       />
     </template>
-    <div
+    <Stack
       v-else
+      gap="none"
       class="absolute inset-0 -z-10 bg-linear-to-r from-surface via-surface to-subtle"
       aria-hidden="true"
     />

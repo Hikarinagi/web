@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <Anchor :items="items" label="跳转到字段" @click="emit('navigate')">
+  <Anchor :items="items" label="跳转到字段" auto-scroll @click="emit('navigate')">
     <template #trailing="{ item }">
       <Indicator v-if="changedIds.has(item.id)" tone="accent" label="已改动" />
     </template>

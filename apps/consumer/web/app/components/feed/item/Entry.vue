@@ -43,8 +43,7 @@
     :class="
       cn(
         'relative -mx-2 min-w-0 px-2 py-4.5',
-        detailTo &&
-          'hn-state-layer hn-interactive hn-press-none active:after:opacity-(--hn-state-press-opacity)!',
+        detailTo && 'hn-state-layer hn-interactive hn-press-none',
       )
     "
   >

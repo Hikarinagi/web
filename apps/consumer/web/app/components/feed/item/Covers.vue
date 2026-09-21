@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Grid, Stack, Text } from '@hina-ui/vue'
   import { Expand } from '@lucide/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
@@ -29,7 +30,7 @@
 <template>
   <HikariImageGroup
     v-if="covers.length === 1"
-    class="relative z-1 overflow-hidden rounded-xl border border-surface"
+    class="relative z-1 overflow-hidden rounded-xl border border-line"
   >
     <HikariImage
       :src="covers[0]!"
@@ -40,17 +41,17 @@
       :processing="{ width: 800, quality: 85, fit: 'scale-down' }"
       preview
     />
-    <span
+    <Center
       v-if="single.cropped"
       class="pointer-events-none absolute top-2 right-2 rounded-full bg-black/45 p-1.5"
     >
       <Expand class="size-3.5 text-white" />
-    </span>
+    </Center>
   </HikariImageGroup>
 
   <HikariImageGroup
     v-else-if="covers.length === 2"
-    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-surface"
+    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-line"
   >
     <HikariImage
       v-for="(cover, index) in covers"
@@ -66,7 +67,7 @@
 
   <HikariImageGroup
     v-else-if="covers.length === 3"
-    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-surface"
+    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-line"
   >
     <HikariImage
       :src="covers[0]!"
@@ -76,7 +77,7 @@
       :processing="CELL"
       preview
     />
-    <div class="grid aspect-square grid-rows-2 gap-1">
+    <Grid :cols="1" gap="none" class="aspect-square grid-rows-2 gap-1">
       <HikariImage
         v-for="(cover, index) in covers.slice(1)"
         :key="cover.id"
@@ -87,14 +88,14 @@
         :processing="CELL"
         preview
       />
-    </div>
+    </Grid>
   </HikariImageGroup>
 
   <HikariImageGroup
     v-else-if="covers.length"
-    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-surface"
+    class="relative z-1 grid grid-cols-2 gap-1 overflow-hidden rounded-xl border border-line"
   >
-    <div v-for="(cover, index) in covers" :key="cover.id" class="relative">
+    <Stack v-for="(cover, index) in covers" :key="cover.id" gap="none" class="relative">
       <HikariImage
         :src="cover"
         :alt="`帖子配图 ${index + 1}`"
@@ -103,12 +104,12 @@
         :processing="CELL"
         preview
       />
-      <span
+      <Center
         v-if="index === covers.length - 1 && extra > 0"
-        class="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50 text-lg font-semibold text-white"
+        class="pointer-events-none absolute inset-0 bg-black/50"
       >
-        +{{ extra }}
-      </span>
-    </div>
+        <Text as="span" size="lg" weight="semibold" class="text-white">+{{ extra }}</Text>
+      </Center>
+    </Stack>
   </HikariImageGroup>
 </template>

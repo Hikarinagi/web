@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { GripVertical, Plus } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
   import { offset } from '@floating-ui/dom'
@@ -156,7 +157,7 @@
 </script>
 
 <template>
-  <div>
+  <Stack gap="none">
     <DragHandle
       v-if="editor && roomy"
       :editor="editor"
@@ -211,7 +212,7 @@
         />
       </AnimatePresence>
     </Teleport>
-  </div>
+  </Stack>
 </template>
 
 <style>

@@ -26,7 +26,8 @@
       class="max-w-12 min-w-0 flex-1"
     >
       <Inline gap="none" align="end" :wrap="false" class="h-12 w-full">
-        <div
+        <Stack
+          gap="none"
           class="w-full rounded-sm transition-colors"
           :class="bar.peak ? 'bg-accent' : 'bg-accent/30'"
           :style="{ height: bar.height }"

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Link, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { Heart } from '@lucide/vue'
   import type { FeedHotComment } from '~/features/feed/feed'
 
@@ -6,18 +8,28 @@
 </script>
 
 <template>
-  <NuxtLink
+  <Link
+    :as="NuxtLink"
     :to="to"
-    class="group bg-emphasis relative z-1 flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm"
+    tone="neutral"
+    class="group relative z-1 block rounded-lg bg-subtle px-2.5 py-1.5"
   >
-    <Avatar :user="comment.author" class="size-5! shrink-0" />
-    <UserName :user="comment.author" :handle="false" class="text-color shrink-0 font-medium" />
-    <span class="text-muted-color group-hover:text-color min-w-0 flex-1 truncate transition-colors">
-      {{ comment.excerpt }}
-    </span>
-    <span class="text-muted-color flex shrink-0 items-center gap-1 tabular-nums">
-      <Heart class="size-3.5" />
-      {{ comment.like_count }}
-    </span>
-  </NuxtLink>
+    <Inline gap="none" align="center" :wrap="false" class="gap-2">
+      <Avatar :user="comment.author" class="size-5! shrink-0" />
+      <UserName :user="comment.author" :handle="false" class="shrink-0 text-sm font-medium" />
+      <Text
+        as="span"
+        size="sm"
+        tone="muted"
+        truncate
+        class="min-w-0 flex-1 transition-colors group-hover:text-fg"
+      >
+        {{ comment.excerpt }}
+      </Text>
+      <Inline gap="none" align="center" :wrap="false" class="gap-1">
+        <Heart class="size-3.5 text-muted" />
+        <Text as="span" size="sm" tone="muted" class="tabular-nums">{{ comment.like_count }}</Text>
+      </Inline>
+    </Inline>
+  </Link>
 </template>

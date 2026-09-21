@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ImageGroup } from '@hina-ui/vue'
+  import { ImageGroup, Stack } from '@hina-ui/vue'
 
   defineOptions({ name: 'HikariImageGroup', inheritAttrs: false })
 
@@ -8,8 +8,8 @@
 
 <template>
   <ImageGroup :loop="loop">
-    <div :class="$attrs.class as string">
+    <Stack gap="none" :class="$attrs.class as string">
       <slot />
-    </div>
+    </Stack>
   </ImageGroup>
 </template>

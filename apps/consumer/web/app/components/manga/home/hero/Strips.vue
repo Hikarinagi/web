@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Inline } from '@hina-ui/vue'
+  import { Card, Inline, Stack } from '@hina-ui/vue'
 
   defineOptions({ name: 'MangaHomeHeroStrips' })
   const props = defineProps<{
@@ -43,11 +43,13 @@
       :aria-label="`第 ${index} 张`"
       @click="emit('select', index - 1)"
     >
-      <span
-        class="relative block h-0.75 overflow-hidden rounded-full bg-current/25 transition-all duration-300"
+      <Stack
+        gap="none"
+        class="relative h-0.75 overflow-hidden rounded-full bg-current/25 transition-all duration-300"
         :class="index - 1 === current ? 'w-9' : 'w-4'"
       >
-        <span
+        <Stack
+          gap="none"
           class="absolute inset-0 origin-left rounded-full bg-accent transition-transform duration-300"
           :class="fillClass(index - 1)"
           :style="
@@ -57,7 +59,7 @@
           "
           @animationend="index - 1 === current && emit('elapsed')"
         />
-      </span>
+      </Stack>
     </Card>
   </Inline>
 </template>

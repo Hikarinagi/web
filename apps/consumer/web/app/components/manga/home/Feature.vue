@@ -44,8 +44,8 @@
         :processing="backdropProcessing"
         :skeleton="false"
       >
-        <template #empty><span /></template>
-        <template #error><span /></template>
+        <template #empty />
+        <template #error />
       </HikariImage>
     </Stack>
     <Stack

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Spoiler } from '@hina-ui/vue'
+  import { Spoiler, Stack, Text } from '@hina-ui/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
   defineProps<{
@@ -11,14 +11,11 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
+  <Stack gap="none" class="gap-3">
     <FeedWorkRefCard :work-ref="item.work_ref" :score="item.rate" />
-    <p
-      v-if="item.rate_content"
-      class="text-base leading-relaxed wrap-anywhere whitespace-pre-wrap text-fg"
-    >
+    <Text v-if="item.rate_content" class="leading-relaxed wrap-anywhere whitespace-pre-wrap">
       <Spoiler v-if="item.is_spoiler">{{ item.rate_content }}</Spoiler>
       <template v-else>{{ item.rate_content }}</template>
-    </p>
-  </div>
+    </Text>
+  </Stack>
 </template>

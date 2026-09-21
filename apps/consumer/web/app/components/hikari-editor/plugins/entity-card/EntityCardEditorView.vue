@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
+  import { Inline, Stack } from '@hina-ui/vue'
   import { Trash2 } from '@lucide/vue'
   import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
   import { provide, type Component } from 'vue'
@@ -60,9 +60,9 @@
         : undefined
     "
   >
-    <div class="contents" @click.capture.stop.prevent>
+    <Stack gap="none" class="contents" @click.capture.stop.prevent>
       <component :is="inner" v-if="inner" :node="adaptedNode" />
-    </div>
+    </Stack>
 
     <Inline
       gap="xs"

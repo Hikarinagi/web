@@ -57,7 +57,7 @@
           )
         "
       >
-        <component :is="hint.icon" v-if="hint.icon" :size="22" class="text-primary" aria-hidden />
+        <component :is="hint.icon" v-if="hint.icon" :size="22" class="text-accent" aria-hidden />
         <Text as="p" size="sm" weight="semibold" class="text-white">{{ hint.title }}</Text>
         <Text v-if="hint.description" as="p" size="xs" class="text-hikari-reader-overlay-muted">
           {{ hint.description }}

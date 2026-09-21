@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { COMMENT_DETAIL_ACTIONS_KEY } from '~/features/comment/detailBar'
   import { commentFocusId } from '~/features/comment/comment'
   import { articleSeo } from '~/features/seo/article'
@@ -46,7 +47,7 @@
 
 <template>
   <FeedPageShell v-if="data" :follow="false">
-    <article>
+    <Stack as="article" gap="none">
       <ArticleHeader :article="data.article" :author="data.author" />
       <HikariContent
         v-if="data.article.content_json"
@@ -70,7 +71,7 @@
         :allow-comment="data.article.allow_comment !== 'DISALLOW'"
         class="mt-10"
       />
-    </article>
+    </Stack>
 
     <template #sidebar>
       <ArticleSidebar :data="data" />

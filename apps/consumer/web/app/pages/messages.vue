@@ -22,8 +22,7 @@
     { fatal: true, watch: false },
   )
 
-  const cardClass =
-    'overflow-hidden rounded-xl border border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-900'
+  const cardClass = 'overflow-hidden rounded-xl border border-line bg-surface'
 
   useHikariSeoMeta({ title: '消息', description: '通知与私信。', noindex: true })
 </script>

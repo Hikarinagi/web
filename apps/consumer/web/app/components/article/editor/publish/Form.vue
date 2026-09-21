@@ -84,7 +84,7 @@
         <HikariImage
           :src="cover.src"
           alt=""
-          class="aspect-8/5 h-12 shrink-0 overflow-hidden rounded-md border border-line"
+          class="aspect-8/5 h-12 w-auto shrink-0 overflow-hidden rounded-md border border-line"
           image-class="size-full object-cover"
           :processing="{ q: 70 }"
         />

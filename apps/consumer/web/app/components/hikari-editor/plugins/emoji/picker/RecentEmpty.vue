@@ -1,9 +1,12 @@
 <script setup lang="ts">
+  import { Empty } from '@hina-ui/vue'
+  import { Clock } from '@lucide/vue'
+
   defineOptions({ name: 'HikariEditorPluginsEmojiPickerRecentEmpty' })
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-1 px-3 py-6 text-center text-xs text-muted-color">
-    <span>什么都没有</span>
-  </div>
+  <Empty size="sm" title="什么都没有" class="px-3 py-6">
+    <template #icon><Clock /></template>
+  </Empty>
 </template>

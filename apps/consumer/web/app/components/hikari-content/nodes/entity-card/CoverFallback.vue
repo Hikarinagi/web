@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center } from '@hina-ui/vue'
   import type { Component } from 'vue'
 
   defineOptions({ name: 'HikariContentNodesEntityCardCoverFallback' })
@@ -10,7 +11,7 @@
 </script>
 
 <template>
-  <span class="text-muted-color absolute inset-0 flex items-center justify-center">
+  <Center as="span" class="absolute inset-0 text-muted">
     <component :is="icon" :size="size ?? 24" />
-  </span>
+  </Center>
 </template>

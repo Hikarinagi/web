@@ -39,7 +39,7 @@
     </Inline>
 
     <ScrollArea direction="horizontal">
-      <Inline gap="sm" :wrap="false" class="min-w-max pb-1">
+      <Inline gap="sm" align="stretch" :wrap="false" class="min-w-max pb-1">
         <WorkCardTrigger
           v-for="item in covers"
           :key="item.id"

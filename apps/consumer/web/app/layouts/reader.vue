@@ -1,5 +1,9 @@
+<script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
+</script>
+
 <template>
-  <div>
+  <Stack gap="none" class="contents">
     <slot />
-  </div>
+  </Stack>
 </template>

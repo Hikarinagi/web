@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Heading, Stack } from '@hina-ui/vue'
+
   defineOptions({ name: 'HikariEditorPluginsEmojiPickerSection' })
 
   defineProps<{
@@ -8,12 +10,15 @@
 </script>
 
 <template>
-  <section :data-section-id="id" class="flex flex-col">
-    <h3
-      class="sticky top-0 z-10 bg-surface-0/95 px-2 py-1.5 text-xs font-medium text-muted-color backdrop-blur dark:bg-surface-900/95"
+  <Stack as="section" :data-section-id="id" gap="none">
+    <Heading
+      :level="3"
+      size="xs"
+      weight="medium"
+      class="sticky top-0 z-10 bg-surface/95 px-2 py-1.5 text-muted backdrop-blur"
     >
       {{ title }}
-    </h3>
+    </Heading>
     <slot />
-  </section>
+  </Stack>
 </template>

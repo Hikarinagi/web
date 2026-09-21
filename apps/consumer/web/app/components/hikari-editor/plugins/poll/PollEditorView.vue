@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
+  import { Inline, Stack } from '@hina-ui/vue'
   import { Pencil, Trash2 } from '@lucide/vue'
   import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
   import { useContentSummaries } from '~/components/hikari-content/composables/useContentSummaries'
@@ -105,9 +105,9 @@
         : undefined
     "
   >
-    <div class="contents" @click.capture.stop.prevent>
+    <Stack gap="none" class="contents" @click.capture.stop.prevent>
       <HikariContentNodesPollCard :node="adaptedNode" :interactive="false" />
-    </div>
+    </Stack>
 
     <Inline
       gap="xs"

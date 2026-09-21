@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
+  import { Inline, Stack } from '@hina-ui/vue'
   import { Pencil, Trash2 } from '@lucide/vue'
   import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
   import HikariContentNodesImage from '~/components/hikari-content/nodes/Image.vue'
@@ -83,16 +83,19 @@
           </HikariEditorNodeViewChromeButton>
         </Inline>
         <template v-if="selected">
-          <span
+          <Stack
             v-for="corner in RESIZE_CORNERS"
             :key="corner"
-            :class="[
-              'absolute z-20 size-3 rounded-sm border-2 border-(--editor-focus-ring) bg-white shadow-sm',
-              corner === 'tl' && '-top-1.75 -left-1.75 cursor-nwse-resize',
-              corner === 'tr' && '-top-1.75 -right-1.75 cursor-nesw-resize',
-              corner === 'bl' && '-bottom-1.75 -left-1.75 cursor-nesw-resize',
-              corner === 'br' && '-right-1.75 -bottom-1.75 cursor-nwse-resize',
-            ]"
+            gap="none"
+            :class="
+              cn(
+                'absolute z-20 size-3 rounded-sm border-2 border-(--editor-focus-ring) bg-white shadow-sm',
+                corner === 'tl' && '-top-1.75 -left-1.75 cursor-nwse-resize',
+                corner === 'tr' && '-top-1.75 -right-1.75 cursor-nesw-resize',
+                corner === 'bl' && '-bottom-1.75 -left-1.75 cursor-nesw-resize',
+                corner === 'br' && '-right-1.75 -bottom-1.75 cursor-nwse-resize',
+              )
+            "
             @pointerdown="startResize(corner, $event)"
           />
         </template>

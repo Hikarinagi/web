@@ -209,8 +209,8 @@
             class="h-16 w-12 shrink-0 overflow-hidden rounded bg-subtle"
             image-class="size-full object-cover"
           >
-            <template #empty><span /></template>
-            <template #error><span /></template>
+            <template #empty />
+            <template #error />
           </HikariImage>
           <Stack gap="none" class="min-w-0 flex-1">
             <Text weight="medium" truncate>{{ item.display.title }}</Text>

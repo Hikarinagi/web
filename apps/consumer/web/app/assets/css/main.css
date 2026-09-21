@@ -12,6 +12,7 @@
   --app-header-height: 4rem;
   --app-bottombar-height: 3.5rem;
   --feed-tabs-height: 2.75rem;
+  --creator-topbar-height: calc(3.5rem + 1px);
   --page-container: var(--container-7xl);
 }
 

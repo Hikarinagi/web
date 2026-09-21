@@ -27,7 +27,7 @@
 </script>
 
 <template>
-  <div class="relative [overflow-anchor:none]">
+  <Stack gap="none" class="relative [overflow-anchor:none]">
     <AnimatePresence :initial="false">
       <motion.div
         v-if="topRefreshOpen"
@@ -94,5 +94,5 @@
         </Text>
       </template>
     </motion.div>
-  </div>
+  </Stack>
 </template>

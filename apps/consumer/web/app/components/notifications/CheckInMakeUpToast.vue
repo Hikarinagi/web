@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Stack, Text } from '@hina-ui/vue'
   import type { NotivueItem } from 'notivue'
   import type { CheckInMakeUpToastProps } from '~/features/checkin/checkin'
 
@@ -12,14 +13,14 @@
 </script>
 
 <template>
-  <div
-    class="hn-scrollbar-safe flex min-w-72 flex-col gap-0.5 rounded-md border border-surface bg-surface-0 p-3 shadow-lg dark:bg-surface-900"
-  >
-    <p class="text-sm font-semibold text-color">补签成功 · {{ date }}</p>
-    <p class="flex items-center gap-1 text-xs text-muted-color">
-      <span>消耗</span>
-      <HikariPoint class="size-3.5" aria-hidden="true" />
-      <span class="font-medium text-color">{{ cost }}</span>
-    </p>
-  </div>
+  <Card :padded="false" class="hn-scrollbar-safe min-w-72 p-3 shadow-lg">
+    <Stack gap="none" class="gap-0.5">
+      <Text as="p" size="sm" weight="semibold">补签成功 · {{ date }}</Text>
+      <Inline gap="none" align="center" :wrap="false" class="gap-1 text-xs text-muted">
+        <Text as="span" size="xs">消耗</Text>
+        <HikariPoint class="size-3.5" aria-hidden="true" />
+        <Text as="span" size="xs" weight="medium" class="text-fg">{{ cost }}</Text>
+      </Inline>
+    </Stack>
+  </Card>
 </template>

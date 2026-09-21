@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import type { CreatorEditorPageData } from '~~/server/api/pages/create/editor/[type]/[id].get'
   import type { PrefillRelations } from '~~/server/api/pages/create/editor/new/[type].get'
-  import { Card, Drawer, Form, Inline, Stack } from '@hina-ui/vue'
+  import type { ComponentPublicInstance } from 'vue'
+  import { Card, Drawer, Form, Inline, ScrollArea, Stack } from '@hina-ui/vue'
   import {
     WORKSPACE_SESSION_KEY,
     useWorkspaceSession,
@@ -111,10 +112,22 @@
   const suggestionSource = computed(() =>
     suggestionSourceOf(syncRoster.value, props.pageData.prefill_relations),
   )
+
+  const actionBar = useTemplateRef<ComponentPublicInstance>('actionBar')
+  const { height: actionBarHeight } = useElementSize(
+    () => unrefElement(actionBar),
+    { width: 0, height: 0 },
+    { box: 'border-box' },
+  )
+  const shellStyle = computed(() =>
+    actionBarHeight.value > 0
+      ? { '--creator-editor-actionbar-height': `${Math.round(actionBarHeight.value)}px` }
+      : undefined,
+  )
 </script>
 
 <template>
-  <Stack gap="lg">
+  <Stack gap="lg" :style="shellStyle">
     <Card v-if="resourceId != null">
       <CreatorResourceHead
         :id="resourceId"
@@ -162,16 +175,23 @@
             />
           </Card>
 
-          <Card class="sticky top-6 hidden w-52 shrink-0 lg:block">
-            <CreatorEditorFieldNav
-              :fields="fields"
-              :presentation="presentation"
-              :changed-fields="changedFields"
-            />
+          <Card
+            :padded="false"
+            class="sticky top-6 hidden max-h-[calc(100vh-var(--creator-topbar-height)-var(--creator-editor-actionbar-height,6rem)-3rem)] w-52 shrink-0 flex-col lg:flex"
+          >
+            <ScrollArea :shadow="false" class="min-h-0">
+              <CreatorEditorFieldNav
+                :fields="fields"
+                :presentation="presentation"
+                :changed-fields="changedFields"
+                class="p-(--hn-panel-p)"
+              />
+            </ScrollArea>
           </Card>
         </Inline>
 
         <CreatorEditorActionBar
+          ref="actionBar"
           :resource-type="resourceType"
           :resource-id="resourceId"
           :fields="fields"

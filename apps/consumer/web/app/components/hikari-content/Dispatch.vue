@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Text } from '@hina-ui/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
 
   defineOptions({ name: 'HikariContentDispatch' })
@@ -53,7 +54,7 @@
   <HikariContentNodesEntityCardMangaRate v-else-if="node.type === 'manga_rate_card'" :node="node" />
   <HikariContentNodesEntityCardComment v-else-if="node.type === 'comment_card'" :node="node" />
   <HikariContentNodesPollCard v-else-if="node.type === 'poll'" :node="node" />
-  <span v-else class="hikari-content-unknown-node" :data-node-type="node.type">
+  <Text v-else as="span" class="hikari-content-unknown-node" :data-node-type="node.type">
     [?{{ node.type }}]
-  </span>
+  </Text>
 </template>

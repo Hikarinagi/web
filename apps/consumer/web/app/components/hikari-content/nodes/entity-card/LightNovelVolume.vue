@@ -1,9 +1,11 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { BookOpen } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { useContentSummaries } from '../../composables/useContentSummaries'
   import { entityHref } from './links'
   import { joinMeta, yearOf } from './format'
+  import { workCardTone } from './tone'
 
   defineOptions({ name: 'HikariContentNodesEntityCardLightNovelVolume' })
 
@@ -43,6 +45,7 @@
   const nsfw = computed(() => summary.value?.nsfw ?? false)
   const { shouldBlockNsfw } = useNsfwPolicy()
   const blocked = computed(() => shouldBlockNsfw(nsfw.value))
+  const tone = computed(() => workCardTone(hasBackdrop.value))
 </script>
 
 <template>
@@ -54,7 +57,7 @@
     :href="href"
   >
     <HikariContentNodesEntityCardBackdrop v-if="hasBackdrop" :src="cover ?? undefined" />
-    <div class="relative z-1 flex items-center gap-3.5">
+    <Inline gap="none" align="center" :wrap="false" class="relative z-1 gap-3.5">
       <HikariImage
         :src="cover"
         :alt="title"
@@ -65,38 +68,15 @@
         <template #empty><HikariContentNodesEntityCardCoverFallback :icon="BookOpen" /></template>
         <template #error><HikariContentNodesEntityCardCoverFallback :icon="BookOpen" /></template>
       </HikariImage>
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <span
-          :class="[
-            'truncate text-md font-bold',
-            hasBackdrop ? 'text-white text-shadow-hikari-on-image' : 'text-(--editor-text-color)',
-          ]"
-        >
-          {{ title }}
-        </span>
-        <span
-          v-if="summary?.series_name"
-          :class="[
-            'truncate text-xs',
-            hasBackdrop
-              ? 'text-white/78 text-shadow-hikari-on-image'
-              : 'text-(--editor-text-muted)',
-          ]"
-        >
+      <Stack gap="none" class="min-w-0 flex-1 gap-1">
+        <Text as="span" size="md" truncate :class="cn('font-bold', tone.title)">{{ title }}</Text>
+        <Text v-if="summary?.series_name" as="span" size="xs" truncate :class="tone.subtitle">
           {{ summary.series_name }}
-        </span>
-        <span
-          v-if="meta"
-          :class="[
-            'text-xs tracking-wide',
-            hasBackdrop
-              ? 'text-white/65 text-shadow-hikari-on-image'
-              : 'text-(--editor-text-muted)',
-          ]"
-        >
+        </Text>
+        <Text v-if="meta" as="span" size="xs" :class="cn('tracking-wide', tone.meta)">
           {{ meta }}
-        </span>
-      </div>
-    </div>
+        </Text>
+      </Stack>
+    </Inline>
   </HikariContentNodesEntityCardContainer>
 </template>

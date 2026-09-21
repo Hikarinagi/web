@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
   import { COMMENT_THREAD_KEY } from '~/features/comment/useThread'
   import { COMMENT_DETAIL_ACTIONS_KEY } from '~/features/comment/detailBar'
@@ -68,10 +69,11 @@
 </script>
 
 <template>
-  <div
+  <Stack
+    gap="none"
     class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-200 md:hidden"
   >
-    <div v-if="expanded" class="px-3 py-2.5">
+    <Stack v-if="expanded" gap="none" class="px-3 py-2.5">
       <CommentComposer
         ref="composerRef"
         collapsible
@@ -82,16 +84,18 @@
         @submit="onSubmit"
         @cancel="collapse"
       />
-    </div>
+    </Stack>
 
-    <div v-else class="flex items-center gap-1 px-3 py-2.5">
-      <button
-        type="button"
-        class="bg-surface-100 text-muted-color hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 mr-1 h-9 min-w-0 flex-1 truncate rounded-full px-4 text-left text-sm transition-colors"
+    <Inline v-else gap="none" align="center" :wrap="false" class="gap-1 px-3 py-2.5">
+      <Button
+        variant="soft"
+        tone="neutral"
+        pill
+        class="mr-1 h-9! min-w-0 flex-1 justify-start px-4!"
         @click="expand"
       >
-        {{ placeholder }}
-      </button>
+        <Text as="span" size="sm" tone="muted" truncate class="min-w-0">{{ placeholder }}</Text>
+      </Button>
       <Button
         login-required
         variant="ghost"
@@ -116,6 +120,6 @@
         class="size-9! shrink-0"
       />
       <ShareButton :to="actions.shareTo" pill class="size-9! shrink-0" />
-    </div>
-  </div>
+    </Inline>
+  </Stack>
 </template>

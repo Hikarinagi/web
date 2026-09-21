@@ -185,7 +185,7 @@ export function useChangeRequestEditor(params: {
       .map(field => [field.field, toRelationRows(snapshot[field.field])]),
   )
 
-  // 首次提交后，关系修改实时回灌错误状态，跟 PrimeVue Form 的 scalar 行为对齐
+  // 首次提交后，关系修改实时回灌错误状态，跟标量字段的行为对齐
   watch(
     relations,
     () => {

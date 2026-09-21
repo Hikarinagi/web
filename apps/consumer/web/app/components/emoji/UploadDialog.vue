@@ -1,17 +1,6 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Card,
-    Dialog,
-    Form,
-    FormField,
-    IconButton,
-    Inline,
-    Input,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
-  import { ImagePlus, X } from '@lucide/vue'
+  import { Button, Dialog, FileUpload, Form, FormField, Input } from '@hina-ui/vue'
+  import { ImagePlus } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { EMOJI_MAX_FILE_BYTES } from '~/features/emoji/constants'
   import {
@@ -43,22 +32,14 @@
   const schema = computed(() => (isReplace.value ? emojiReplaceImageSchema : emojiUploadSchema))
 
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
-  const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
   const submitting = ref(false)
-  const filePreview = useFilePreview(fileInput)
   const values = reactive<{ file: File | null; name: string }>({ file: null, name: '' })
 
-  function setFile(file: File | null) {
-    values.file = file
-  }
-
   watch(open, next => {
-    if (next) {
-      form.value?.reset()
-      values.file = null
-      values.name = ''
-    }
-    filePreview.revoke()
+    if (!next) return
+    form.value?.reset()
+    values.file = null
+    values.name = ''
   })
 
   async function onSubmit() {
@@ -96,57 +77,20 @@
   <Dialog v-model:open="open" size="md" :title="header" :locked="submitting">
     <template #content>
       <Form ref="form" :values="values" :rules="schema" :disabled="submitting" @submit="onSubmit">
-        <FormField name="file" :label="fileLabel" required>
-          <input
-            ref="fileInput"
-            type="file"
+        <FormField
+          name="file"
+          :label="fileLabel"
+          required
+          :description="`支持 WebP / PNG / JPEG / GIF，最大 ${Math.round(EMOJI_MAX_FILE_BYTES / 1024)} KB`"
+        >
+          <FileUpload
+            v-model="values.file"
             accept="image/webp,image/png,image/jpeg,image/gif"
-            class="hidden"
-            @change="event => filePreview.onChange(setFile, event)"
-          />
-
-          <Card
-            v-if="!filePreview.previewUrl.value"
-            as="button"
-            type="button"
-            class="hn-state-layer w-full hn-interactive border-dashed"
-            @click="filePreview.open()"
+            :max-size="EMOJI_MAX_FILE_BYTES"
           >
-            <Stack align="center" gap="sm">
-              <ImagePlus class="size-8 text-muted" />
-              <Text size="sm" weight="medium">选择图片</Text>
-              <Text size="xs" tone="muted">
-                支持 WebP / PNG / JPEG / GIF，最大 {{ Math.round(EMOJI_MAX_FILE_BYTES / 1024) }} KB
-              </Text>
-            </Stack>
-          </Card>
-
-          <Card v-else :padded="false">
-            <Inline gap="sm" align="center" :wrap="false" class="p-3">
-              <HikariImage
-                :src="filePreview.previewUrl.value"
-                alt="预览"
-                class="size-16 rounded"
-                image-class="object-contain"
-              />
-              <Stack gap="xs" class="min-w-0 flex-1">
-                <Text size="xs" weight="medium" truncate>{{ values.file?.name }}</Text>
-                <Text size="xs" tone="muted">
-                  {{ Math.round((values.file?.size ?? 0) / 1024) }} KB
-                </Text>
-              </Stack>
-              <IconButton
-                label="移除图片"
-                variant="ghost"
-                tone="neutral"
-                size="sm"
-                pill
-                @click="filePreview.onClear(setFile)"
-              >
-                <X />
-              </IconButton>
-            </Inline>
-          </Card>
+            <template #icon><ImagePlus /></template>
+            选择或拖入图片
+          </FileUpload>
         </FormField>
 
         <FormField v-if="!isReplace" name="name" label="名称" required>

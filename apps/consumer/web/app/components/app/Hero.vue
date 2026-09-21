@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Heading, Stack, Tag, Text } from '@hina-ui/vue'
+  import { Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import type { AppPageData } from '~~/server/api/pages/app.get'
   import hinaWordmark from '~/assets/images/app/hina-wordmark.webp'
   import kvLandscape from '~/assets/images/app/kv-landscape.webp'
@@ -12,8 +12,11 @@
 </script>
 
 <template>
-  <section
-    class="relative isolate flex min-h-[calc(100dvh-var(--app-bottombar-height)-env(safe-area-inset-bottom))] flex-col justify-center overflow-hidden md:min-h-[100dvh]"
+  <Stack
+    as="section"
+    gap="none"
+    justify="center"
+    class="relative isolate min-h-[calc(100dvh-var(--app-bottombar-height)-env(safe-area-inset-bottom))] overflow-hidden md:min-h-[100dvh]"
   >
     <HikariImage
       :src="kvLandscape"
@@ -35,10 +38,12 @@
 
     <Stack gap="none" class="relative z-20 order-1 px-6 py-8 lg:order-none">
       <Stack gap="none" class="mx-auto w-full max-w-app">
-        <div
-          class="flex w-full flex-col items-center gap-5 text-center lg:ml-[34%] lg:w-[38%] lg:items-start lg:text-left"
+        <Stack
+          gap="none"
+          align="center"
+          class="w-full gap-5 text-center lg:ml-[34%] lg:w-[38%] lg:items-start lg:text-left"
         >
-          <div class="flex items-center gap-2.5">
+          <Inline gap="none" align="center" :wrap="false" class="gap-2.5">
             <HikariImage
               :src="hinaWordmark"
               alt="Hinagi"
@@ -49,7 +54,7 @@
               :preload="{ fetchPriority: 'high' }"
             />
             <Tag pill size="md" tone="accent">Hikarinagi 官方App!</Tag>
-          </div>
+          </Inline>
 
           <Heading :level="1" class="text-3xl font-bold tracking-tight text-nowrap sm:text-4xl">
             随时能刷，随时能看
@@ -61,8 +66,8 @@
           <AppDownloadButtons :release="release" :downloadable="downloadable" />
           <AppDownloadNotes :release="release" :downloadable="downloadable" />
           <AppDownloadQrCode :src="androidQr" :downloadable="downloadable" />
-        </div>
+        </Stack>
       </Stack>
     </Stack>
-  </section>
+  </Stack>
 </template>

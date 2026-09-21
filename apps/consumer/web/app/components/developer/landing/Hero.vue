@@ -36,7 +36,7 @@
 
 <template>
   <Stack as="section" gap="none" class="relative overflow-hidden border-b border-line">
-    <div class="hero-grid absolute inset-0" aria-hidden="true" />
+    <Stack gap="none" class="hero-grid absolute inset-0" aria-hidden="true" />
 
     <Flex
       direction="col"

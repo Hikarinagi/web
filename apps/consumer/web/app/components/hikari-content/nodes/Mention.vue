@@ -1,5 +1,7 @@
 <script setup lang="ts">
+  import { Tag, VisuallyHidden } from '@hina-ui/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
+  import { cn } from '~/utils/cn'
   import { useContentSummaries } from '../composables/useContentSummaries'
 
   defineOptions({ name: 'HikariContentNodesMention' })
@@ -28,13 +30,17 @@
     :data-mention-user-id="userId ?? ''"
   >
     <UserCardTrigger v-if="userId" :user-id="userId" show-on-click>
-      <span
-        :class="[
-          'inline-flex h-5.5 cursor-pointer items-center gap-1 rounded-full pr-2 text-sm leading-none font-medium transition-[background] duration-120 ease-out',
-          avatarSrc ? 'pl-0.75' : 'pl-2',
-          'bg-hikari-primary-50 text-hikari-primary-700 hover:bg-hikari-primary-100 active:bg-hikari-primary-200',
-          'dark:bg-hikari-primary-950 dark:text-hikari-primary-300 dark:hover:bg-hikari-primary-900 dark:active:bg-hikari-primary-800',
-        ]"
+      <Tag
+        pill
+        size="sm"
+        :class="
+          cn(
+            'h-5.5 cursor-pointer text-sm leading-none transition-[background] duration-120 ease-out',
+            avatarSrc ? 'ps-0.75 pe-2' : 'px-2',
+            'bg-hikari-primary-50 text-hikari-primary-700 hover:bg-hikari-primary-100 active:bg-hikari-primary-200',
+            'dark:bg-hikari-primary-950 dark:text-hikari-primary-300 dark:hover:bg-hikari-primary-900 dark:active:bg-hikari-primary-800',
+          )
+        "
       >
         <HikariImage
           v-if="avatarSrc"
@@ -45,17 +51,18 @@
           class="size-4 shrink-0 overflow-hidden rounded-full"
           image-class="size-full object-cover"
         >
-          <template #empty><span /></template>
-          <template #error><span /></template>
+          <template #empty><VisuallyHidden /></template>
+          <template #error><VisuallyHidden /></template>
         </HikariImage>
-        <span class="inline-flex items-center leading-none">@{{ displayName }}</span>
-      </span>
+        <span>@{{ displayName }}</span>
+      </Tag>
     </UserCardTrigger>
-    <span
+    <Tag
       v-else
-      class="inline-flex h-5.5 cursor-default items-center gap-1 rounded-full bg-(--editor-toolbar-item-hover) px-2 text-sm leading-none font-medium text-(--editor-text-muted)"
+      pill
+      size="sm"
+      class="h-5.5 cursor-default bg-(--editor-toolbar-item-hover) px-2 text-sm leading-none text-(--editor-text-muted)"
+      >@?</Tag
     >
-      <span class="inline-flex items-center leading-none">@?</span>
-    </span>
   </span>
 </template>

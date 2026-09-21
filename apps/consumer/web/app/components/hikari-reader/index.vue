@@ -359,7 +359,8 @@
 </script>
 
 <template>
-  <div
+  <Stack
+    gap="none"
     class="hikari-reader-root relative h-dvh overflow-hidden"
     :style="themeStyle"
     @pointerdown.capture="onRootPointerDown"
@@ -541,7 +542,7 @@
     </AnimatePresence>
 
     <Lightbox v-model:open="imagePreview.open.value" :items="imagePreview.items.value" />
-  </div>
+  </Stack>
 </template>
 
 <style scoped>

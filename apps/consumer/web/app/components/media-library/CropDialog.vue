@@ -122,7 +122,7 @@
 <template>
   <Dialog v-model:open="visible" :title="title" size="xl" :locked="saving">
     <template #content>
-      <Stack gap="none" class="h-[min(62vh,30rem)] overflow-hidden rounded-lg bg-surface-950">
+      <Stack gap="none" class="h-[min(62vh,30rem)] overflow-hidden rounded-lg bg-neutral-950">
         <ClientOnly>
           <AnimatePresence mode="wait">
             <motion.div

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Stack, Text } from '@hina-ui/vue'
+  import { Indicator, Inline, Stack, Text } from '@hina-ui/vue'
   import type { CheckInStatus } from '~/features/checkin/checkin'
 
   defineOptions({ name: 'CheckinMakeUpBar' })
@@ -12,18 +12,15 @@
   <Stack gap="sm">
     <Inline gap="md" class="gap-y-1">
       <Inline gap="xs" as="span">
-        <span class="size-3 rounded-full bg-accent/20" aria-hidden="true" />
+        <Indicator class="size-3 bg-accent/20" />
         <Text as="span" size="xs" tone="muted">已签到</Text>
       </Inline>
       <Inline gap="xs" as="span">
-        <span class="size-3 rounded-full bg-warning/30" aria-hidden="true" />
+        <Indicator class="size-3 bg-warning/30" />
         <Text as="span" size="xs" tone="muted">补签</Text>
       </Inline>
       <Inline gap="xs" as="span">
-        <span
-          class="size-3 rounded-full border border-dashed border-line-strong"
-          aria-hidden="true"
-        />
+        <Indicator class="size-3 border border-dashed border-line-strong bg-transparent" />
         <Text as="span" size="xs" tone="muted">漏签</Text>
       </Inline>
     </Inline>

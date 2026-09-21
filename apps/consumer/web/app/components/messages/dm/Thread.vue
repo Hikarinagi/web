@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
   import type { MediaValue } from '~/components/media-library/types'
   import type { DmEmojiSet, DmPeer, ThreadMessage } from '~/features/messages/dm'
@@ -23,7 +24,7 @@
 
 <template>
   <MessagesDmEmpty v-if="!peer" />
-  <div v-else class="flex h-full min-h-0 flex-col bg-surface-0 dark:bg-surface-900">
+  <Stack v-else gap="none" class="h-full min-h-0 bg-surface">
     <MessagesDmThreadHeader :peer="peer" @back="emit('back')" />
     <MessagesDmMessageList
       :messages="messages"
@@ -39,5 +40,5 @@
       :sending="sending"
       @send="(json, atts, sets) => emit('send', json, atts, sets)"
     />
-  </div>
+  </Stack>
 </template>

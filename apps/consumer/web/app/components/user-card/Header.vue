@@ -16,13 +16,13 @@
 
 <template>
   <Inline align="center" justify="between" :wrap="false" class="relative -mt-8 mb-3">
-    <Skeleton v-if="!user" class="z-10 size-16 rounded-full border-2 border-surface" />
+    <Skeleton v-if="!user" class="z-10 size-16 rounded-full border-2 border-line" />
     <Avatar
       v-else
       v-tooltip="frame?.name ?? null"
       :user="user"
       size="lg"
-      class="z-10 size-16 border-2 border-surface bg-subtle shadow-md"
+      class="z-10 size-16 border-2 border-line bg-subtle shadow-md"
       :class="frame ? 'cursor-pointer' : undefined"
       @click="frame && open(frame.id)"
     />

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Link, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import {
     getRevisionEditPath,
     getRevisionHistoryPath,
@@ -15,9 +17,9 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-1 text-xs leading-none text-muted">
-    <NuxtLink :to="historyTo">修订历史</NuxtLink>
-    <span aria-hidden="true">/</span>
-    <NuxtLink :to="editTo" target="_blank">修订此条目</NuxtLink>
-  </div>
+  <Inline gap="none" align="center" class="gap-1 text-xs leading-none text-muted">
+    <Link :as="NuxtLink" :to="historyTo" tone="neutral">修订历史</Link>
+    <Text as="span" size="xs" aria-hidden="true">/</Text>
+    <Link :as="NuxtLink" :to="editTo" target="_blank" tone="neutral">修订此条目</Link>
+  </Inline>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Heading, Inline, Stack } from '@hina-ui/vue'
+
   defineOptions({ name: 'GalgameExploreSection' })
   defineProps<{
     title: string
@@ -7,11 +9,11 @@
 </script>
 
 <template>
-  <section class="flex flex-col gap-4">
-    <div class="flex items-baseline gap-3">
-      <h2 class="text-2xl font-bold text-color">{{ title }}</h2>
-      <ViewAllLink v-if="to" :to="to" class="ml-auto" />
-    </div>
+  <Stack as="section" gap="none" class="gap-4">
+    <Inline gap="none" align="baseline" :wrap="false" class="gap-3">
+      <Heading :level="2" size="2xl">{{ title }}</Heading>
+      <ViewAllLink v-if="to" :to="to" class="ms-auto" />
+    </Inline>
     <slot />
-  </section>
+  </Stack>
 </template>

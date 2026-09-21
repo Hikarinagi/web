@@ -23,7 +23,6 @@
   >
     <IconButton
       v-if="visible"
-      v-tooltip="'还原此字段'"
       data-density="compact"
       label="还原此字段"
       variant="ghost"

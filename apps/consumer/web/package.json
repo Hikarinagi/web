@@ -25,7 +25,7 @@
     "@hikarinagi/config": "workspace:*",
     "@hikarinagi/editor-schema": "workspace:*",
     "@hikarinagi/shared": "workspace:*",
-    "@hina-ui/vue": "^1.7.3",
+    "@hina-ui/vue": "^1.7.4",
     "@lucide/vue": "^1.14.0",
     "@nuxt/content": "^3.16.0",
     "@nuxt/eslint": "1.15.2",
