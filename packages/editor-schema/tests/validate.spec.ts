@@ -139,7 +139,7 @@ describe('validateDocument: image_block attrs', () => {
     ['data:text/html,<script>'],
     ['vbscript:msgbox(1)'],
     ['file:///etc/passwd'],
-  ])('src=%s 协议被拒', src => {
+  ])('src=%s 协议被拒', (src: string) => {
     const r = validateDocument(
       imgDoc({ media_asset_id: 1, src, alt: null, caption: null, width: 0, height: 0 }),
       ARTICLE_PRESET,
@@ -344,14 +344,14 @@ describe('validateDocument: text_style 颜色', () => {
 
   it.each([['#ff0000'], ['#f00'], ['rgb(0, 216, 255)'], ['rgba(255,0,0,0.5)'], ['red']])(
     '安全颜色 %s 通过',
-    color => {
+    (color: string) => {
       expect(validateDocument(colored(color), ARTICLE_PRESET).ok).toBe(true)
     },
   )
 
   it.each([['var(--ba0_s, #000000)'], ['url(x)'], ['expression(1)'], ['#zzz'], ['rgb(0;0;0)']])(
     '不安全颜色 %s 被拒',
-    color => {
+    (color: string) => {
       const r = validateDocument(colored(color), ARTICLE_PRESET)
       expect(r.ok).toBe(false)
       expect(r.issues.some(i => i.code === 'invalid_attr_type')).toBe(true)

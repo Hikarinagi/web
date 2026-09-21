@@ -19,10 +19,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "generate": "openapi-typescript openapi/v3.json -o src/generated/v3.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsgo -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "openapi-typescript": "^7.13.0",
-    "typescript": "^5.8.0"
+    "typescript": "^6.0.3"
   }
 }

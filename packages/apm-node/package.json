@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest run",
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsgo -p tsconfig.json --noEmit"
   },
   "types": "dist/index.d.ts",
   "exports": {
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/node": "^22.20.3",
     "bullmq": "^5.81.5",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },
   "peerDependencies": {

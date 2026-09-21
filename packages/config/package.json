@@ -13,9 +13,9 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsgo -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "typescript": "^5.8.0"
+    "typescript": "^6.0.3"
   }
 }

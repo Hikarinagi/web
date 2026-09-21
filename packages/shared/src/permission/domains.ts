@@ -120,6 +120,17 @@ export const MANGA_PERMISSIONS = {
   SETTINGS_WRITE: 'manga.settings.write',
 } as const
 
+export const NOVEL_SOURCE_PERMISSIONS = {
+  DASHBOARD_READ: 'novel_source.dashboard.read',
+  SOURCES_READ: 'novel_source.sources.read',
+  SOURCES_WRITE: 'novel_source.sources.write',
+  VOLUMES_READ: 'novel_source.volumes.read',
+  VOLUMES_WRITE: 'novel_source.volumes.write',
+  BACKFILL_RUN: 'novel_source.backfill.run',
+  SETTINGS_READ: 'novel_source.settings.read',
+  SETTINGS_WRITE: 'novel_source.settings.write',
+} as const
+
 export const CATALOG_PERMISSIONS = {
   RUNS_READ: 'catalog.runs.read',
   SYNC_RUN: 'catalog.sync.run',
@@ -161,6 +172,7 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(SEARCH_PERMISSIONS),
   ...Object.values(TELEGRAM_PERMISSIONS),
   ...Object.values(MANGA_PERMISSIONS),
+  ...Object.values(NOVEL_SOURCE_PERMISSIONS),
   ...Object.values(CATALOG_PERMISSIONS),
   ...Object.values(LLM_PERMISSIONS),
   ...Object.values(GALGAME_DOWNLOAD_PERMISSIONS),
@@ -187,6 +199,7 @@ export type PermissionKey =
   | ValueOf<typeof SEARCH_PERMISSIONS>
   | ValueOf<typeof TELEGRAM_PERMISSIONS>
   | ValueOf<typeof MANGA_PERMISSIONS>
+  | ValueOf<typeof NOVEL_SOURCE_PERMISSIONS>
   | ValueOf<typeof CATALOG_PERMISSIONS>
   | ValueOf<typeof LLM_PERMISSIONS>
   | ValueOf<typeof GALGAME_DOWNLOAD_PERMISSIONS>

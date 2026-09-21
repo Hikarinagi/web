@@ -1573,6 +1573,182 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/novel-source/backfill": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelBackfillController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelSourceDashboardController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelSourceSettingsController_get"];
+        put: operations["AdminNovelSourceSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/source-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelSourceLinkController_list"];
+        put?: never;
+        post: operations["AdminNovelSourceLinkController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/source-links/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelSourceLinkController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/source-links/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelSourceLinkController_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/volume-sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelVolumeSourceController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/volume-sources/retry-failed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelVolumeSourceController_retryFailed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/volume-sources/throttles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelVolumeSourceController_throttles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/volume-sources/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelVolumeSourceController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/novel-source/volume-sources/{id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminNovelVolumeSourceController_retry"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/novel/series": {
         parameters: {
             query?: never;
@@ -11736,6 +11912,55 @@ export interface components {
             internal: number;
             total: number;
         };
+        AdminNovelSourceLinkCreatedDto: {
+            id: number;
+        };
+        AdminNovelSourceLinkItemDto: {
+            confidence: number;
+            created_at: string;
+            discovered_at: string | null;
+            id: number;
+            light_novel_id: number;
+            light_novel_name: string | null;
+            /** @enum {string} */
+            matched_by: "TITLE" | "AUTHOR" | "ISBN" | "NUMBER" | "COVER" | "LLM" | "MANUAL";
+            source_key: string;
+            source_series_id: string;
+            /** @enum {string} */
+            status: "PENDING" | "LINKED" | "REJECTED";
+            url: string | null;
+        };
+        AdminNovelSourceLinkResultDto: {
+            updated: number;
+        };
+        AdminNovelSourceThrottleDto: {
+            reason: string;
+            source_key: string;
+            until: string;
+        };
+        AdminNovelVolumeSourceItemDto: {
+            attempts: number;
+            built_at: string | null;
+            chapter_count: number;
+            confidence: number;
+            cover_distance: number | null;
+            error: string | null;
+            id: number;
+            is_active: boolean;
+            light_novel_volume_id: number;
+            /** @enum {string} */
+            matched_by: "TITLE" | "AUTHOR" | "ISBN" | "NUMBER" | "COVER" | "LLM" | "MANUAL";
+            next_attempt_at: string | null;
+            series_id: number | null;
+            source_key: string;
+            source_volume_id: string;
+            /** @enum {string} */
+            status: "PENDING" | "REVIEW" | "INGESTING" | "DONE" | "FAILED" | "THROTTLED" | "CANCELLED";
+            volume_name: string | null;
+        };
+        AdminNovelVolumeSourceResultDto: {
+            updated: number;
+        };
         AdminOauthProviderDto: {
             authorize_endpoint: string | null;
             /** @description 按钮品牌色 #RRGGBB */
@@ -13088,6 +13313,12 @@ export interface components {
             };
             /** @description 小写字母开头，仅小写字母/数字/下划线(provider 函数名约束) */
             tool_key: string;
+        };
+        CreateNovelSourceLinkDto: {
+            light_novel_id: number;
+            source_key: string;
+            source_series_id: string;
+            url?: string;
         };
         CreateOauthProviderDto: {
             authorize_endpoint?: string | null;
@@ -16325,6 +16556,14 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        NovelBackfillDto: {
+            light_novel_ids?: number[];
+            /** @default 200 */
+            limit: number;
+        };
+        NovelBackfillResultDto: {
+            enqueued: number;
+        };
         NovelSeriesItemDto: {
             /** @description 其中已有 EPUB 的分卷数 */
             available_count: number;
@@ -16354,6 +16593,63 @@ export interface components {
              * @enum {string}
              */
             status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        };
+        NovelSourceDashboardDto: {
+            links_pending: number;
+            queues: components["schemas"]["NovelSourceQueueStatusDto"][];
+            series_linked: number;
+            series_total: number;
+            volume_sources_done: number;
+            volume_sources_failed: number;
+            volumes_total: number;
+            volumes_with_epub: number;
+        };
+        NovelSourceEntryDto: {
+            enabled: boolean;
+            key: string;
+            priority: number;
+        };
+        NovelSourceIngestionDto: {
+            chapter_pace_ms: number;
+            max_attempts: number;
+            retry_base_ms: number;
+            retry_cap_ms: number;
+        };
+        NovelSourceMatchingDto: {
+            auto_accept_confidence: number;
+            cover_max_distance: number;
+            volume_accept_confidence: number;
+        };
+        NovelSourcePolicyDto: {
+            ingestion: components["schemas"]["NovelSourceIngestionDto"];
+            matching: components["schemas"]["NovelSourceMatchingDto"];
+            rediscover: components["schemas"]["NovelSourceRediscoverDto"];
+            sources: components["schemas"]["NovelSourceEntryDto"][];
+            sweeper: components["schemas"]["NovelSourceSweeperDto"];
+            throttle: components["schemas"]["NovelSourceThrottleSettingDto"];
+        };
+        NovelSourceQueueStatusDto: {
+            active: number;
+            delayed: number;
+            failed: number;
+            name: string;
+            paused: boolean;
+            waiting: number;
+        };
+        NovelSourceRediscoverDto: {
+            backpressure_max: number;
+            batch_size: number;
+            cooldown_hours: number;
+            enabled: boolean;
+        };
+        NovelSourceSweeperDto: {
+            backpressure_max: number;
+            batch_size: number;
+            cooldown_days: number;
+            enabled: boolean;
+        };
+        NovelSourceThrottleSettingDto: {
+            unreachable_cooldown_ms: number;
         };
         /**
          * @description 连载状态
@@ -18941,6 +19237,45 @@ export interface components {
             queue_remove_on_complete?: number;
             queue_remove_on_fail?: number;
             silent_reject_confidence?: number;
+        };
+        UpdateNovelSourceEntryDto: {
+            enabled: boolean;
+            key: string;
+            priority: number;
+        };
+        UpdateNovelSourceIngestionDto: {
+            chapter_pace_ms: number;
+            max_attempts: number;
+            retry_base_ms: number;
+            retry_cap_ms: number;
+        };
+        UpdateNovelSourceMatchingDto: {
+            auto_accept_confidence: number;
+            cover_max_distance: number;
+            volume_accept_confidence: number;
+        };
+        UpdateNovelSourcePolicyDto: {
+            ingestion: components["schemas"]["UpdateNovelSourceIngestionDto"];
+            matching: components["schemas"]["UpdateNovelSourceMatchingDto"];
+            rediscover: components["schemas"]["UpdateNovelSourceRediscoverDto"];
+            sources: components["schemas"]["UpdateNovelSourceEntryDto"][];
+            sweeper: components["schemas"]["UpdateNovelSourceSweeperDto"];
+            throttle: components["schemas"]["UpdateNovelSourceThrottleDto"];
+        };
+        UpdateNovelSourceRediscoverDto: {
+            backpressure_max: number;
+            batch_size: number;
+            cooldown_hours: number;
+            enabled: boolean;
+        };
+        UpdateNovelSourceSweeperDto: {
+            backpressure_max: number;
+            batch_size: number;
+            cooldown_days: number;
+            enabled: boolean;
+        };
+        UpdateNovelSourceThrottleDto: {
+            unreachable_cooldown_ms: number;
         };
         UpdateOauthProviderDto: {
             authorize_endpoint?: string | null;
@@ -22373,6 +22708,289 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    AdminNovelBackfillController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelBackfillDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelBackfillResultDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceDashboardController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSourceDashboardDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceSettingsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSourcePolicyDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceSettingsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelSourcePolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSourcePolicyDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceLinkController_list: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "LINKED" | "REJECTED";
+                source_key?: string;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AdminNovelSourceLinkItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminNovelSourceLinkController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelSourceLinkDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelSourceLinkCreatedDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceLinkController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelSourceLinkResultDto"];
+                };
+            };
+        };
+    };
+    AdminNovelSourceLinkController_reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelSourceLinkResultDto"];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeSourceController_list: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "REVIEW" | "INGESTING" | "DONE" | "FAILED" | "THROTTLED" | "CANCELLED";
+                source_key?: string;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AdminNovelVolumeSourceItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminNovelVolumeSourceController_retryFailed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelVolumeSourceResultDto"];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeSourceController_throttles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelSourceThrottleDto"][];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeSourceController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelVolumeSourceResultDto"];
+                };
+            };
+        };
+    };
+    AdminNovelVolumeSourceController_retry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminNovelVolumeSourceResultDto"];
+                };
             };
         };
     };

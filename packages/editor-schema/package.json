@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc -p tsconfig.build.cjs.json && node scripts/write-build-package-types.mjs",
     "inventory": "node scripts/generate-inventory.mjs",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsgo -p tsconfig.json --noEmit",
     "test": "jest"
   },
   "dependencies": {
@@ -37,7 +37,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.8.0"
+    "typescript": "^6.0.3"
   },
   "jest": {
     "moduleFileExtensions": [
