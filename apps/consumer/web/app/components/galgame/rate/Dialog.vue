@@ -1,10 +1,34 @@
 <script setup lang="ts">
   import { PenLine } from '@lucide/vue'
-  import Form from '@primevue/forms/form'
+  import {
+    Button,
+    Checkbox,
+    Dialog,
+    Form,
+    FormField,
+    FormLayout,
+    Inline,
+    NumberInput,
+    Space,
+    Stack,
+    Text,
+    Textarea,
+  } from '@hina-ui/vue'
   import { useRateForm } from '~/features/galgame/useRateForm'
-  import type { GalgameRate, UpsertGalgameRateBody } from '~/features/galgame/rate'
+  import {
+    GALGAME_RATE_DIMENSIONS,
+    GALGAME_STATUS_LABEL,
+    GALGAME_STATUS_ORDER,
+    type GalgameRate,
+    type UpsertGalgameRateBody,
+  } from '~/features/galgame/rate'
 
   defineOptions({ name: 'GalgameRateDialog' })
+
+  const statusOptions = GALGAME_STATUS_ORDER.filter(value => value !== 'PLAN').map(value => ({
+    value,
+    label: GALGAME_STATUS_LABEL[value],
+  }))
 
   const props = defineProps<{
     galgameId: number
@@ -16,19 +40,20 @@
   const visible = defineModel<boolean>('visible', { required: true })
 
   const {
-    formErrors,
     form,
+    values,
+    rules,
     submitting,
     detailOpen,
-    pendingReview,
     reviewing,
     isEdit,
     title,
-    initialValues,
     prepare,
     submit,
-    confirmClearScore,
-    confirmDelete,
+    save,
+    setDimension,
+    clearScore,
+    removeStatus,
   } = useRateForm({
     rate: () => props.rate,
     workTitle: () => props.workTitle,
@@ -48,144 +73,80 @@
     },
   })
 
-  watch(visible, async next => {
-    if (!next) return
-    prepare()
-    await nextTick()
-    form.value?.reset()
+  watch(visible, next => {
+    if (next) void prepare()
   })
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    :style="{ width: '92vw', maxWidth: '480px' }"
-    :pt="{ content: { class: 'px-0! pb-0!' } }"
-  >
-    <template #header>
-      <span class="text-[17px] font-bold text-color">{{ title }}</span>
+  <Dialog v-model:open="visible" :title="title" :locked="submitting">
+    <template #content>
+      <Form ref="form" :values="values" :rules="rules" @submit="submit">
+        <FormLayout>
+          <WorkRateStatusPills v-model="values.status" :options="statusOptions" />
+          <WorkRateScore v-model="values.rate" />
+
+          <FormField name="time_to_finish_hours" label="玩了多久">
+            <Inline align="center" gap="sm" :wrap="false">
+              <NumberInput
+                :model-value="values.time_to_finish_hours"
+                :min="0"
+                :max="9999"
+                :step-snapping="false"
+                :format-options="{ maximumFractionDigits: 1, useGrouping: false }"
+                class="w-40"
+                @update:model-value="value => (values.time_to_finish_hours = value ?? null)"
+              />
+              <Text size="sm" tone="muted">小时</Text>
+            </Inline>
+          </FormField>
+
+          <FormField name="rate_content" label="短评">
+            <Textarea
+              v-model="values.rate_content"
+              :rows="3"
+              autosize
+              placeholder="聊聊剧本、节奏、印象最深的桥段…一句话也行"
+              class="w-full"
+            />
+          </FormField>
+
+          <Stack gap="sm">
+            <Checkbox v-model="values.is_spoiler">包含剧透</Checkbox>
+            <Checkbox v-model="values.status_private">状态仅自己可见</Checkbox>
+          </Stack>
+
+          <WorkRateDimensions
+            v-model:open="detailOpen"
+            :dimensions="GALGAME_RATE_DIMENSIONS"
+            :values="values"
+            :update="setDimension"
+          />
+        </FormLayout>
+      </Form>
     </template>
 
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      :initial-values="initialValues"
-      class="flex flex-col"
-      @input="formErrors.clear"
-      @submit="submit"
-    >
-      <div class="flex flex-col gap-[22px] px-6 pb-6">
-        <GalgameRateStatusPills />
-        <GalgameRateScore />
-        <FormItem v-slot="{ id }" name="time_to_finish_hours" label="玩了多久">
-          <div class="flex items-center gap-2">
-            <!-- use-grouping=false is load-bearing: PrimeVue's InputNumber registers its
-                 inner InputText under the same form field name, so on mobile IME input the raw
-                 DOM string reaches the resolver. A grouped "1,234" would parse to NaN. -->
-            <InputNumber :input-id="id" :max-fraction-digits="1" :use-grouping="false" fluid />
-            <span class="shrink-0 text-[13px] text-surface-500">小时</span>
-          </div>
-        </FormItem>
-
-        <FormItem v-slot="{ id }" name="rate_content" label="短评">
-          <Textarea
-            :id="id"
-            rows="3"
-            fluid
-            auto-resize
-            placeholder="聊聊剧本、节奏、印象最深的桥段…一句话也行"
-          />
-        </FormItem>
-
-        <FormItem v-slot="{ id }" name="is_spoiler">
-          <div class="flex items-center gap-2.5">
-            <Checkbox :input-id="id" binary />
-            <label
-              :for="id"
-              class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
-            >
-              包含剧透
-            </label>
-          </div>
-        </FormItem>
-
-        <FormItem v-slot="{ id }" name="status_private">
-          <div class="flex items-center gap-2.5">
-            <Checkbox :input-id="id" binary />
-            <label
-              :for="id"
-              class="cursor-pointer text-[13px] text-surface-600 dark:text-surface-300"
-            >
-              状态仅自己可见
-            </label>
-          </div>
-        </FormItem>
-
-        <GalgameRateDimensions v-model:open="detailOpen" />
-      </div>
-
-      <div
-        class="flex items-center gap-3 border-t border-surface-100 px-6 py-4 dark:border-surface-800"
+    <template #footer>
+      <WorkRateDangerActions
+        v-if="isEdit"
+        :clear="clearScore"
+        :remove="removeStatus"
+        :disabled="submitting"
+      />
+      <Space size="flex" />
+      <Button
+        variant="ghost"
+        tone="neutral"
+        :loading="reviewing"
+        :disabled="submitting"
+        @click="save(true)"
       >
-        <template v-if="isEdit">
-          <Button
-            label="清除评分"
-            text
-            severity="secondary"
-            :disabled="submitting"
-            class="text-surface-500!"
-            @click="confirmClearScore"
-          />
-          <Button
-            label="移除状态"
-            text
-            severity="danger"
-            :disabled="submitting"
-            @click="confirmDelete"
-          />
-          <span class="flex-1" />
-          <Button
-            label="写长评"
-            text
-            severity="secondary"
-            type="submit"
-            :loading="reviewing"
-            :disabled="submitting"
-            @click="pendingReview = true"
-          >
-            <template #icon><PenLine class="size-4" /></template>
-          </Button>
-          <Button
-            label="更新状态"
-            type="submit"
-            :loading="submitting && !reviewing"
-            :disabled="submitting"
-          />
-        </template>
-        <template v-else>
-          <Button
-            label="写长评"
-            text
-            severity="secondary"
-            type="submit"
-            :loading="reviewing"
-            :disabled="submitting"
-            @click="pendingReview = true"
-          >
-            <template #icon><PenLine class="size-4" /></template>
-          </Button>
-          <span class="flex-1" />
-          <Button
-            label="更新状态"
-            type="submit"
-            :loading="submitting && !reviewing"
-            :disabled="submitting"
-          />
-        </template>
-      </div>
-    </Form>
+        <template #icon><PenLine /></template>
+        写长评
+      </Button>
+      <Button :loading="submitting && !reviewing" :disabled="submitting" @click="save()">
+        更新状态
+      </Button>
+    </template>
   </Dialog>
 </template>

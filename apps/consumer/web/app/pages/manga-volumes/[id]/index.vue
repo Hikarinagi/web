@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { mangaVolumeSeo } from '~/features/seo/manga-volume'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -28,10 +29,10 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <MangaVolumeHero :volume="data.volume" />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <MangaVolumeAbout :volume="data.volume" :contributors="data.contributors" />
 
       <MangaChapters
@@ -43,6 +44,6 @@
       />
 
       <MangaVolumeSeriesStrip :volume="data.volume" :volumes="data.volumes" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

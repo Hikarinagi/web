@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { lightNovelVolumeSeo } from '~/features/seo/light-novel-volume'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -41,7 +42,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <LightNovelVolumeHero
       :volume="data.volume"
       :light-novel="data.light_novel"
@@ -50,12 +51,12 @@
       :my-cover-vote="data.my_cover_vote"
     />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <LightNovelVolumeSeriesNav :previous="previousVolume" :next="nextVolume" />
 
       <LightNovelVolumeAbout :volume="data.volume" :contributors="data.contributors" />
 
       <LightNovelVolumeSeriesVolumes :volume="data.volume" :volumes="data.volumes" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Button, Inline, Progress, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { Play, RotateCcw } from '@lucide/vue'
   import type { SpaceBookshelfItem } from '~/features/space/space'
   import { timeFromNow } from '~/utils/time-format'
@@ -19,7 +21,7 @@
     if (i.is_finished) {
       segments.push(vol ? `已读完 · ${vol}` : '已读完')
     } else if (i.percentage <= 0) {
-      segments.push(vol ? `还没开始 · ${vol}` : '还没开始')
+      segments.push(vol ? `还未开始 · ${vol}` : '还未开始')
     } else {
       segments.push(vol ? `读到 ${vol}` : '阅读中')
       if (i.current_chapter_title) segments.push(i.current_chapter_title)
@@ -35,54 +37,48 @@
 </script>
 
 <template>
-  <div
-    class="flex gap-4 border-b border-surface-100 py-4 last:border-b-0 dark:border-surface-800/60"
-  >
+  <Inline gap="md" align="start" :wrap="false" class="border-b border-line py-4 last:border-b-0">
     <NuxtLink :to="`/light-novels/${item.light_novel_id}`" class="shrink-0">
       <HikariImage
         :src="item.cover"
         :alt="item.title"
-        class="h-[84px] w-[60px] rounded-md bg-surface-100 dark:bg-surface-800"
+        class="h-21 w-15 rounded-md bg-inset"
         image-class="size-full object-cover"
         :processing="{ width: 120, height: 168, fit: 'cover', quality: 80 }"
       />
     </NuxtLink>
 
-    <div class="flex min-w-0 flex-1 flex-col gap-1.5">
-      <div class="flex items-start justify-between gap-3">
-        <div class="min-w-0">
+    <Stack gap="xs" class="min-w-0 flex-1">
+      <Inline gap="sm" align="start" justify="between" :wrap="false">
+        <Stack gap="none" class="min-w-0">
           <NuxtLink
             :to="`/light-novels/${item.light_novel_id}`"
-            class="block truncate font-semibold text-color transition-colors hover:text-primary"
+            class="block truncate font-semibold transition-colors hover:text-accent-text"
           >
             {{ item.title }}
           </NuxtLink>
-          <p class="truncate text-xs text-muted-color">{{ metaLine }}</p>
-        </div>
+          <Text size="xs" tone="muted" truncate>{{ metaLine }}</Text>
+        </Stack>
         <Button
-          :label="ctaLabel"
-          size="small"
-          :severity="item.is_finished ? 'secondary' : undefined"
-          :outlined="item.is_finished"
-          as="router-link"
+          :as="NuxtLink"
           :to="`/light-novel-volumes/${item.current_volume_id}/read`"
+          size="sm"
+          :variant="item.is_finished ? 'outline' : 'solid'"
+          :tone="item.is_finished ? 'neutral' : 'accent'"
           class="shrink-0"
         >
           <template #icon>
-            <component :is="item.is_finished ? RotateCcw : Play" class="size-4" />
+            <component :is="item.is_finished ? RotateCcw : Play" />
           </template>
+          {{ ctaLabel }}
         </Button>
-      </div>
+      </Inline>
 
-      <p class="truncate text-[13px] text-muted-color">{{ statusLine }}</p>
-      <div class="flex items-center gap-2">
-        <div
-          class="h-1.5 max-w-sm flex-1 overflow-hidden rounded-full bg-surface-200 dark:bg-surface-800"
-        >
-          <div class="h-full rounded-full bg-primary" :style="{ width: `${pct}%` }" />
-        </div>
-        <span class="shrink-0 text-xs font-medium text-color">{{ pct }}%</span>
-      </div>
-    </div>
-  </div>
+      <Text size="sm" tone="muted" truncate>{{ statusLine }}</Text>
+      <Inline gap="sm" :wrap="false">
+        <Progress :value="pct" size="sm" aria-label="阅读进度" class="max-w-sm flex-1" />
+        <Text as="span" size="xs" weight="medium" class="shrink-0">{{ pct }}%</Text>
+      </Inline>
+    </Stack>
+  </Inline>
 </template>

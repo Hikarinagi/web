@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
 
   defineOptions({ name: 'MangaVolumeHeroMeta' })
@@ -17,13 +18,16 @@
 </script>
 
 <template>
-  <p
+  <Inline
     v-if="parts.length"
-    class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-surface-600 lg:justify-start dark:text-surface-300"
+    gap="none"
+    align="center"
+    wrap
+    class="justify-center gap-x-2 gap-y-1 lg:justify-start"
   >
     <template v-for="(part, i) in parts" :key="part">
-      <span v-if="i > 0" class="text-surface-300 dark:text-surface-600">·</span>
-      <span>{{ part }}</span>
+      <Text v-if="i > 0" as="span" size="sm" tone="faint">·</Text>
+      <Text as="span" size="sm" tone="muted">{{ part }}</Text>
     </template>
-  </p>
+  </Inline>
 </template>

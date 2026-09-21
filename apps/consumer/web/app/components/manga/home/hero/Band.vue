@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex, Grid, Heading, Inline, Stack } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { EASE } from '~/lib/motion'
@@ -17,11 +18,12 @@
     blur: 40,
   } as const
 
-  const sectionRef = ref<HTMLElement | null>(null)
+  const sectionRef = useTemplateRef('sectionRef')
+  const sectionEl = computed(() => unrefElement(sectionRef))
   const current = ref(0)
   const cycle = ref(0)
-  const hovered = useElementHover(sectionRef)
-  const { focused } = useFocusWithin(sectionRef)
+  const hovered = useElementHover(sectionEl)
+  const { focused } = useFocusWithin(sectionEl)
   const reducedMotion = usePreferredReducedMotion()
 
   const active = computed(() => props.slides[current.value])
@@ -40,12 +42,14 @@
 </script>
 
 <template>
-  <section
+  <Stack
     ref="sectionRef"
+    as="section"
+    gap="none"
     role="region"
     aria-roledescription="carousel"
     aria-label="漫画精选"
-    class="relative isolate overflow-hidden border-b border-surface"
+    class="relative isolate overflow-hidden border-b border-line"
     :class="
       slides.length
         ? 'min-h-[calc(21rem+var(--app-header-height))]'
@@ -53,7 +57,7 @@
     "
   >
     <template v-if="slides.length">
-      <div class="absolute inset-0 -z-20">
+      <Flex class="absolute inset-0 -z-20">
         <motion.div
           v-for="(slide, index) in slides"
           :key="slide.manga.id"
@@ -74,54 +78,65 @@
             <template #error><span /></template>
           </HikariImage>
         </motion.div>
-      </div>
+      </Flex>
       <div
-        class="absolute inset-0 -z-10 bg-linear-to-r from-surface-0/95 via-surface-0/85 to-surface-0/40 dark:from-surface-950/92 dark:via-surface-950/80 dark:to-surface-950/40"
+        class="absolute inset-0 -z-10 bg-linear-to-r from-surface/95 via-surface/85 to-surface/40"
+        aria-hidden="true"
       />
     </template>
     <div
       v-else
-      class="absolute inset-0 -z-10 bg-linear-to-r from-surface-0 via-surface-0 to-surface-100 dark:from-surface-950 dark:via-surface-950 dark:to-surface-900"
+      class="absolute inset-0 -z-10 bg-linear-to-r from-surface via-surface to-subtle"
+      aria-hidden="true"
     />
 
-    <div class="mx-auto box-content max-w-app px-6 pt-(--app-header-height)">
-      <h1 class="sr-only">漫画</h1>
-      <div v-if="slides.length" class="flex h-88 items-start justify-between gap-8">
-        <div class="flex min-w-0 flex-col items-start pt-12">
-          <div class="grid h-57 w-140 max-w-full">
-            <AnimatePresence :initial="false">
-              <motion.div
-                v-if="active"
-                :key="active.manga.id"
-                class="col-start-1 row-start-1 min-w-0"
-                :initial="{ opacity: 0 }"
-                :animate="{ opacity: 1 }"
-                :exit="{ opacity: 0 }"
-                :transition="{ duration: 0.5, ease: EASE }"
-              >
-                <MangaHomeHeroSlide :slide="active" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          <MangaHomeHeroStrips
-            v-if="rotatable"
-            class="mt-2.5"
-            :count="slides.length"
+    <Stack gap="none" class="px-6 pt-(--app-header-height)">
+      <Stack gap="none" class="mx-auto w-full max-w-app">
+        <Heading :level="1" class="sr-only">漫画</Heading>
+        <Inline
+          v-if="slides.length"
+          align="start"
+          justify="between"
+          :wrap="false"
+          gap="none"
+          class="h-88 gap-8"
+        >
+          <Stack align="start" gap="none" class="min-w-0 pt-12">
+            <Grid :cols="1" class="h-57 w-140 max-w-full">
+              <AnimatePresence :initial="false">
+                <motion.div
+                  v-if="active"
+                  :key="active.manga.id"
+                  class="col-start-1 row-start-1 min-w-0"
+                  :initial="{ opacity: 0 }"
+                  :animate="{ opacity: 1 }"
+                  :exit="{ opacity: 0 }"
+                  :transition="{ duration: 0.5, ease: EASE }"
+                >
+                  <MangaHomeHeroSlide :slide="active" />
+                </motion.div>
+              </AnimatePresence>
+            </Grid>
+            <MangaHomeHeroStrips
+              v-if="rotatable"
+              class="mt-2.5"
+              :count="slides.length"
+              :current="current"
+              :cycle="cycle"
+              :animated="autoplay"
+              :running="running"
+              @select="select"
+              @elapsed="show(current + 1)"
+            />
+          </Stack>
+          <MangaHomeHeroStack
+            class="mt-0.75 hidden shrink-0 lg:block"
+            :slides="slides"
             :current="current"
-            :cycle="cycle"
-            :animated="autoplay"
-            :running="running"
             @select="select"
-            @elapsed="show(current + 1)"
           />
-        </div>
-        <MangaHomeHeroStack
-          class="mt-0.75 hidden shrink-0 lg:block"
-          :slides="slides"
-          :current="current"
-          @select="select"
-        />
-      </div>
-    </div>
-  </section>
+        </Inline>
+      </Stack>
+    </Stack>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, SearchInput, SegmentedControl, Stack } from '@hina-ui/vue'
   import { Library } from '@lucide/vue'
   import {
     BOOKSHELF_STATUS_FILTERS,
@@ -31,45 +32,52 @@
 
   const hasQuery = computed(() => filter.value !== 'all' || search.value.trim().length > 0)
 
+  const FILTER_OPTIONS = BOOKSHELF_STATUS_FILTERS.map(f => ({ value: f.key, label: f.label }))
+
+  function selectFilter(value: string | number | undefined) {
+    const next = BOOKSHELF_STATUS_FILTERS.find(f => f.key === value)?.key
+    if (next) filter.value = next
+  }
+
   watch(filter, () => loadPage(1))
   const debouncedSearch = useDebounceFn(() => loadPage(1), 300)
   watch(search, () => debouncedSearch())
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <Stack gap="lg">
     <SpaceTabsBookshelfStatsBar :stats="bookshelf.stats" />
 
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-      <div class="flex flex-wrap items-center gap-2">
-        <Button
-          v-for="f in BOOKSHELF_STATUS_FILTERS"
-          :key="f.key"
-          unstyled
-          class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-          :class="
-            filter === f.key ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'
-          "
-          @click="filter = f.key"
-        >
-          {{ f.label }}
-        </Button>
-      </div>
-      <InputText v-model="search" placeholder="搜索书名" size="small" class="w-full sm:w-56" />
-    </div>
+    <Inline gap="sm" justify="between" class="sm:flex-nowrap">
+      <SegmentedControl
+        :model-value="filter"
+        :options="FILTER_OPTIONS"
+        size="sm"
+        aria-label="阅读状态"
+        @update:model-value="selectFilter"
+      />
+      <SearchInput
+        v-model="search"
+        placeholder="搜索书名"
+        size="sm"
+        class="w-full sm:w-56"
+        aria-label="搜索书名"
+      />
+    </Inline>
 
-    <LoadingOverlay v-if="list.items.length" :loading="pending" content-class="flex flex-col">
+    <Stack v-if="list.items.length" gap="none" class="relative">
       <SpaceTabsBookshelfBookCard
         v-for="item in list.items"
         :key="item.light_novel_id"
         :item="item"
       />
-    </LoadingOverlay>
+      <LoadingOverlay :visible="pending" />
+    </Stack>
     <SpaceEmptyState
       v-else
       :icon="Library"
-      :text="hasQuery ? '没有匹配的书' : '书架还空着'"
-      :description="hasQuery ? undefined : '在站内读过的轻小说会自动记录在这里'"
+      :text="hasQuery ? '没有匹配的书' : '书架空空如也'"
+      :description="hasQuery ? undefined : '在站内读过的轻小说会自动在此记录'"
     />
 
     <Paginator
@@ -79,5 +87,5 @@
       route="replace"
       @change="loadPage"
     />
-  </div>
+  </Stack>
 </template>

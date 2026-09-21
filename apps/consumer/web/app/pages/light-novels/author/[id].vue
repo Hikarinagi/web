@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { CATALOG_PAGE_SIZE, type CatalogSort } from '~/features/light-novel/catalog'
 
   defineOptions({ name: 'LightNovelAuthorPage' })
@@ -26,8 +27,8 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <LightNovelCatalogMasthead :masthead="data.masthead" :total="data.works.meta.total_items" />
     <LightNovelCatalog :initial="data.works" :total="data.works.meta.total_items" :load="load" />
-  </div>
+  </Stack>
 </template>

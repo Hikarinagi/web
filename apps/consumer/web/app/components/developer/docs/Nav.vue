@@ -1,11 +1,29 @@
 <script setup lang="ts">
-  import { ChevronRight, Search } from '@lucide/vue'
-  import { GUIDE_SECTIONS } from '~/features/developer/guide'
-  import type { ReferenceGroup } from '~~/server/features/developer/reference'
+  import {
+    Button,
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+    DisclosureIcon,
+    Inline,
+    NavLink,
+    ScrollArea,
+    SearchInput,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
+  import type { ComponentPublicInstance } from 'vue'
+  import type { GuideNavItem } from '~/features/developer/useGuide'
+  import type { ReferenceNavGroup } from '~~/server/features/developer/reference'
 
   defineOptions({ name: 'DeveloperDocsNav' })
 
-  const props = defineProps<{ groups: ReferenceGroup[]; activeId: string; scrollClass: string }>()
+  const props = defineProps<{
+    groups: ReferenceNavGroup[]
+    sections: GuideNavItem[]
+    scrollClass: string
+  }>()
   const emit = defineEmits<{ navigate: [] }>()
 
   const keyword = ref('')
@@ -14,8 +32,8 @@
 
   const sections = computed(() =>
     needle.value
-      ? GUIDE_SECTIONS.filter(section => section.title.toLowerCase().includes(needle.value))
-      : GUIDE_SECTIONS,
+      ? props.sections.filter(section => section.title.toLowerCase().includes(needle.value))
+      : props.sections,
   )
 
   const matched = computed(() =>
@@ -34,6 +52,7 @@
       .filter(group => group.operations.length > 0),
   )
 
+  const route = useRoute()
   const empty = computed(() => !sections.value.length && !matched.value.length)
   const isOpen = (tag: string) => needle.value !== '' || !collapsed.value.has(tag)
 
@@ -45,132 +64,140 @@
   }
 
   const methodClass = (method: string) => {
-    if (method === 'GET') return 'text-hikari-primary-600 dark:text-hikari-primary-400'
-    if (method === 'DELETE') return 'text-red-600 dark:text-red-400'
-    return 'text-amber-600 dark:text-amber-400'
+    if (method === 'GET') return 'text-accent-text'
+    if (method === 'DELETE') return 'text-danger-text'
+    return 'text-warning-text'
   }
 
-  const search = useTemplateRef<{ $el: HTMLInputElement }>('search')
+  const field = useTemplateRef<ComponentPublicInstance>('field')
   onKeyStroke('/', event => {
     const target = event.target as HTMLElement | null
     if (target && ['INPUT', 'TEXTAREA'].includes(target.tagName)) return
     event.preventDefault()
-    search.value?.$el?.focus()
+    unrefElement(field)?.querySelector('input')?.focus()
   })
 
-  const list = useTemplateRef<HTMLElement>('list')
+  const list = useTemplateRef<ComponentPublicInstance>('list')
   watch(
-    () => props.activeId,
+    () => route.path,
     async () => {
       await nextTick()
-      list.value?.querySelector('[aria-current="true"]')?.scrollIntoView({ block: 'nearest' })
+      unrefElement(list)
+        ?.querySelector('[aria-current="page"]')
+        ?.scrollIntoView({ block: 'nearest' })
     },
+    { immediate: true },
   )
-
-  const linkClass = (id: string) =>
-    id === props.activeId
-      ? 'bg-emphasis font-medium text-color'
-      : 'text-muted-color hover:bg-emphasis hover:text-color'
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <IconField>
-      <InputText
-        ref="search"
-        v-model="keyword"
-        fluid
-        size="small"
-        autocomplete="off"
-        placeholder="搜索文档与端点"
-        aria-label="搜索文档与端点"
-        @keydown.esc="keyword = ''"
-      />
-      <InputIcon><Search class="size-4" /></InputIcon>
-    </IconField>
+  <Stack gap="md">
+    <SearchInput
+      ref="field"
+      v-model="keyword"
+      size="sm"
+      autocomplete="off"
+      placeholder="搜索文档与端点"
+      aria-label="搜索文档与端点"
+      class="w-full"
+    />
 
-    <ScrollArea :class="scrollClass" shadow="none">
-      <div ref="list" class="flex flex-col gap-5">
-        <p v-if="empty" class="px-2 py-6 text-center text-sm text-muted-color">没有匹配的内容</p>
-        <div v-if="sections.length" class="flex flex-col gap-1">
-          <p
-            class="px-2 pb-1 font-mono text-xs font-semibold tracking-widest text-muted-color uppercase"
-          >
-            接入指南
-          </p>
-          <Button
-            v-for="section in sections"
-            :key="section.id"
-            unstyled
-            as="a"
-            :href="`#${section.id}`"
-            :aria-current="section.id === activeId ? 'true' : undefined"
-            class="rounded-md px-2 py-1.5 text-left text-sm transition-colors"
-            :class="linkClass(section.id)"
+    <ScrollArea :class="scrollClass" :shadow="false">
+      <Stack ref="list" gap="xl">
+        <Text v-if="empty" size="sm" tone="muted" class="px-2 py-6 text-center">
+          没有匹配的内容
+        </Text>
+
+        <Stack v-if="sections.length" gap="md">
+          <NavLink
+            :as="NuxtLink"
+            to="/developers/guide"
+            :active="route.path === '/developers/guide'"
+            class="font-mono text-xs font-semibold tracking-widest uppercase"
             @click="emit('navigate')"
           >
-            {{ section.title }}
-          </Button>
-        </div>
+            接入指南
+          </NavLink>
 
-        <div v-if="matched.length" class="flex flex-col gap-3">
-          <Button
-            unstyled
-            as="a"
-            href="#reference"
-            :aria-current="activeId === 'reference' ? 'true' : undefined"
-            class="rounded-md px-2 py-1 text-left font-mono text-xs font-semibold tracking-widest uppercase transition-colors"
-            :class="
-              activeId === 'reference'
-                ? 'bg-emphasis text-color'
-                : 'text-muted-color hover:bg-emphasis hover:text-color'
-            "
+          <Stack gap="xs">
+            <NavLink
+              v-for="section in sections"
+              :key="section.section"
+              :as="NuxtLink"
+              :to="section.path"
+              :active="route.path === section.path"
+              @click="emit('navigate')"
+            >
+              {{ section.title }}
+            </NavLink>
+          </Stack>
+        </Stack>
+
+        <Stack v-if="matched.length" gap="md">
+          <NavLink
+            :as="NuxtLink"
+            to="/developers/api"
+            :active="route.path === '/developers/api'"
+            class="font-mono text-xs font-semibold tracking-widest uppercase"
             @click="emit('navigate')"
           >
             端点参考
-          </Button>
+          </NavLink>
 
-          <div v-for="group in matched" :key="group.tag" class="flex flex-col gap-1">
-            <Button
-              unstyled
-              class="flex items-center gap-1.5 rounded-md px-2 py-1 text-left transition-colors hover:bg-emphasis"
-              :aria-expanded="isOpen(group.tag)"
-              @click="toggle(group.tag)"
-            >
-              <ChevronRight
-                class="size-3.5 shrink-0 text-muted-color transition-transform"
-                :class="isOpen(group.tag) ? 'rotate-90' : ''"
-              />
-              <span class="text-sm font-medium text-color">{{ group.title }}</span>
-              <span class="ml-auto font-mono text-xs text-muted-color">
-                {{ group.operations.length }}
-              </span>
-            </Button>
+          <Collapsible
+            v-for="group in matched"
+            :key="group.tag"
+            :open="isOpen(group.tag)"
+            @update:open="toggle(group.tag)"
+          >
+            <Stack gap="xs">
+              <Inline gap="xs" align="center" :wrap="false" class="pe-2">
+                <CollapsibleTrigger as-child>
+                  <Button
+                    variant="ghost"
+                    tone="neutral"
+                    size="sm"
+                    class="min-w-0 flex-1 justify-start"
+                  >
+                    <template #icon><DisclosureIcon direction="end" /></template>
+                    {{ group.title }}
+                  </Button>
+                </CollapsibleTrigger>
+                <Text as="span" size="xs" tone="muted" class="shrink-0 font-mono tabular-nums">
+                  {{ group.operations.length }}
+                </Text>
+              </Inline>
 
-            <template v-if="isOpen(group.tag)">
-              <Button
-                v-for="operation in group.operations"
-                :key="operation.id"
-                unstyled
-                as="a"
-                :href="`#${operation.id}`"
-                :aria-current="operation.id === activeId ? 'true' : undefined"
-                class="flex items-baseline gap-2 rounded-md px-2 py-1.5 text-sm transition-colors"
-                :class="linkClass(operation.id)"
-                @click="emit('navigate')"
-              >
-                <span
-                  class="w-11 shrink-0 font-mono text-xs font-semibold"
-                  :class="methodClass(operation.method)"
-                >
-                  {{ operation.method }}
-                </span>
-                <span class="truncate">{{ operation.summary }}</span>
-              </Button>
-            </template>
-          </div>
-        </div>
-      </div>
+              <CollapsibleContent>
+                <Stack gap="xs">
+                  <NavLink
+                    v-for="operation in group.operations"
+                    :key="operation.id"
+                    :as="NuxtLink"
+                    :to="`/developers/api/${operation.id}`"
+                    :active="route.path === `/developers/api/${operation.id}`"
+                    class="min-w-0 [&_[data-hn-label]]:min-w-0 [&_[data-hn-label]]:truncate"
+                    @click="emit('navigate')"
+                  >
+                    <template #icon>
+                      <Text
+                        as="span"
+                        size="xs"
+                        weight="semibold"
+                        class="w-11 shrink-0 font-mono"
+                        :class="methodClass(operation.method)"
+                      >
+                        {{ operation.method }}
+                      </Text>
+                    </template>
+                    {{ operation.summary }}
+                  </NavLink>
+                </Stack>
+              </CollapsibleContent>
+            </Stack>
+          </Collapsible>
+        </Stack>
+      </Stack>
     </ScrollArea>
-  </div>
+  </Stack>
 </template>

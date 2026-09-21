@@ -13,7 +13,7 @@
 
 <template>
   <div
-    class="mr-(--p-scrollbar-width) flex min-w-72 flex-col gap-0.5 rounded-md border border-surface bg-surface-0 p-3 shadow-lg dark:bg-surface-900"
+    class="hn-scrollbar-safe flex min-w-72 flex-col gap-0.5 rounded-md border border-surface bg-surface-0 p-3 shadow-lg dark:bg-surface-900"
   >
     <p class="text-sm font-semibold text-color">补签成功 · {{ date }}</p>
     <p class="flex items-center gap-1 text-xs text-muted-color">

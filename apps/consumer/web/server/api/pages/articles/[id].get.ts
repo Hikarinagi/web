@@ -6,18 +6,6 @@ import { definePageBffHandler } from '../../../utils/page-bff'
 
 type RelatedWork = ApiData<'/api/v3/articles/{id}', 'get'>['related_works'][number]
 
-async function loadAuthorStats(event: H3Event, authorId: number) {
-  const stats = await fetchBackendData(event, '/api/v3/user/{id}/statistics', {
-    path: { id: authorId },
-  }).catch(() => null)
-  if (!stats) return null
-  return {
-    article_count: stats.created_article_count,
-    played_count: stats.played_galgame_count,
-    read_count: stats.read_light_novel_count,
-  }
-}
-
 async function loadRecent(event: H3Event, authorId: number, excludeId: number) {
   const res = await fetchBackendData(event, '/api/v3/articles', {
     query: { creator_id: authorId, page: 1, page_size: 6 },
@@ -54,30 +42,28 @@ async function handler(event: H3Event) {
   const article = await fetchBackendData(event, '/api/v3/articles/{id}', { path: { id } })
   const authorId = article.creator?.id ?? null
 
-  const [author, author_stats, recent_articles, other_reviews, comments, favorite] =
-    await Promise.all([
-      authorId
-        ? fetchBackendData(event, '/api/v3/user/{id}', { path: { id: authorId } }).catch(() => null)
-        : null,
-      authorId ? loadAuthorStats(event, authorId) : null,
-      authorId ? loadRecent(event, authorId, id) : [],
-      loadOtherReviews(event, article.related_works),
-      fetchBackendData(event, '/api/v3/comments', {
-        query: {
-          target_type: 'article',
-          target_id: id,
-          page: 1,
-          page_size: COMMENT_PAGE_SIZE,
-          sort: focusComment != null ? 'time_desc' : 'hot',
-          ...(focusComment != null ? { focus_comment_id: focusComment } : {}),
-        },
-      }).catch(() => null),
-      fetchBackendData(event, '/api/v3/user/me/favorite/articles/{article_id}', {
-        path: { article_id: id },
-      }).catch(() => null),
-    ])
+  const [author, recent_articles, other_reviews, comments, favorite] = await Promise.all([
+    authorId
+      ? fetchBackendData(event, '/api/v3/user/{id}', { path: { id: authorId } }).catch(() => null)
+      : null,
+    authorId ? loadRecent(event, authorId, id) : [],
+    loadOtherReviews(event, article.related_works),
+    fetchBackendData(event, '/api/v3/comments', {
+      query: {
+        target_type: 'article',
+        target_id: id,
+        page: 1,
+        page_size: COMMENT_PAGE_SIZE,
+        sort: focusComment != null ? 'time_desc' : 'hot',
+        ...(focusComment != null ? { focus_comment_id: focusComment } : {}),
+      },
+    }).catch(() => null),
+    fetchBackendData(event, '/api/v3/user/me/favorite/articles/{article_id}', {
+      path: { article_id: id },
+    }).catch(() => null),
+  ])
 
-  return { article, author, author_stats, recent_articles, other_reviews, comments, favorite }
+  return { article, author, recent_articles, other_reviews, comments, favorite }
 }
 
 export type ArticlePageData = Awaited<ReturnType<typeof handler>>

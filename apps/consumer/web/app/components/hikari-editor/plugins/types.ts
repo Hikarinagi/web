@@ -32,13 +32,20 @@ export interface ToolbarItem {
   dropdownItems?: ToolbarDropdownItem[]
 }
 
+export interface EditorOverlay {
+  component: Component
+  presentation?: 'anchored' | 'dialog'
+  scroll?: 'host' | 'self'
+  title?: string
+}
+
 export interface EditorPlugin {
   id: string
   group: ToolbarGroup | null
   order: number
   extensions?: (ctx: EditorPluginContext) => Array<Extension | Node | Mark>
   toolbarItem?: ToolbarItem | null
-  overlays?: Record<string, Component>
+  overlays?: Record<string, Component | EditorOverlay>
   shortcut?: string | null
   description?: string
 }

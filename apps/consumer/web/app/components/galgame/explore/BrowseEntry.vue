@@ -1,28 +1,20 @@
 <script setup lang="ts">
+  import { Button, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { ArrowUpRight } from '@lucide/vue'
 
   defineOptions({ name: 'GalgameExploreBrowseEntry' })
 </script>
 
 <template>
-  <section class="flex flex-col gap-4 py-2 sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-100">
-        想按发售日、关键词筛选？
-      </h2>
-      <p class="text-sm text-surface-500 dark:text-surface-400">在图鉴中使用高级筛选功能</p>
-    </div>
-    <Button
-      as="router-link"
-      to="/galgames/browse"
-      label="进入图鉴"
-      icon-pos="right"
-      severity="secondary"
-      outlined
-    >
-      <template #icon>
-        <ArrowUpRight class="size-4" aria-hidden="true" />
-      </template>
+  <Inline as="section" gap="md" align="center" justify="between" class="flex-col py-2 sm:flex-row">
+    <Stack gap="xs" align="start">
+      <Heading :level="2" size="lg">想按发售日、关键词筛选？</Heading>
+      <Text as="p" size="sm" tone="muted">在图鉴中使用高级筛选功能</Text>
+    </Stack>
+    <Button :as="NuxtLink" to="/galgames/browse" variant="outline" tone="neutral">
+      进入图鉴
+      <template #trailing><ArrowUpRight /></template>
     </Button>
-  </section>
+  </Inline>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Stack, Tag, Text } from '@hina-ui/vue'
+
   defineOptions({ name: 'EmojiOwnedSetHeader' })
 
   defineProps<{
@@ -10,15 +12,15 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-1">
-    <div class="flex items-center gap-2">
-      <span class="truncate font-mono text-sm font-semibold">{{ name }}</span>
-      <Tag
-        :value="visibilityPublic ? '公开' : '私有'"
-        :severity="visibilityPublic ? 'success' : 'secondary'"
-        :pt="{ root: { class: 'text-[10px]!' } }"
-      />
-    </div>
-    <p class="text-xs text-muted-color">{{ emojiCount }} 个贴纸 · {{ subscriberCount }} 人订阅</p>
-  </div>
+  <Stack gap="xs" class="min-w-0">
+    <Inline gap="sm" align="center" :wrap="false" class="min-w-0">
+      <Text as="span" size="sm" weight="semibold" truncate class="min-w-0 font-mono">
+        {{ name }}
+      </Text>
+      <Tag size="sm" :tone="visibilityPublic ? 'success' : 'neutral'" class="shrink-0">
+        {{ visibilityPublic ? '公开' : '私有' }}
+      </Tag>
+    </Inline>
+    <Text size="xs" tone="muted">{{ emojiCount }} 个贴纸 · {{ subscriberCount }} 人订阅</Text>
+  </Stack>
 </template>

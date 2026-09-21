@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
 
   defineOptions({ name: 'MangasPage' })
@@ -14,43 +15,39 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <MangaHomeHeroBand :slides="data.hero.slides" />
-    <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-10">
-      <MangaHomeRail
-        title="热门连载"
-        to="/mangas/browse?status=serializing&sort=heat:desc"
-        :items="data.hot"
-        ranked
-      />
-      <MangaHomeUpdatesGrid
-        title="新刊"
-        meta="按发行时间排序"
-        to="/mangas/browse"
-        :items="data.updates.items"
-      />
-      <MangaHomeRankBoard :board="data.board" />
-      <MangaHomeRail
-        title="新作"
-        meta="最近开始连载"
-        to="/mangas/browse?sort=publication_date:desc"
-        :items="data.fresh"
-      />
-      <MangaHomeRail
-        v-if="data.magazine"
-        :title="data.magazine.name"
-        :meta="`${data.magazine.total} 部`"
-        :to="`/mangas/browse?magazine_id=${data.magazine.id}`"
-        :items="data.magazine.items"
-      />
-      <MangaHomeRail
-        title="完结佳作"
-        to="/mangas/browse?status=finished&sort=heat:desc"
-        :items="data.finished"
-        hide-status
-      />
-      <MangaHomeCollectionCards :collections="data.collections" />
-      <MangaHomeStream :cursor="data.updates.next_cursor" />
-    </div>
-  </div>
+    <Stack gap="none" class="px-6 py-10">
+      <Stack gap="none" class="mx-auto w-full max-w-app gap-14">
+        <MangaHomeRankBoard :board="data.board" />
+        <MangaHomeUpdatesGrid
+          title="新刊"
+          meta="按发行时间排序"
+          to="/mangas/browse"
+          :items="data.updates.items"
+        />
+        <MangaHomeRail
+          title="新作"
+          meta="最近开始连载"
+          to="/mangas/browse?sort=publication_date:desc"
+          :items="data.fresh"
+        />
+        <MangaHomeRail
+          v-if="data.magazine"
+          :title="data.magazine.name"
+          :meta="`${data.magazine.total} 部`"
+          :to="`/mangas/browse?magazine_id=${data.magazine.id}`"
+          :items="data.magazine.items"
+        />
+        <MangaHomeRail
+          title="完结佳作"
+          to="/mangas/browse?status=finished&sort=heat:desc"
+          :items="data.finished"
+          hide-status
+        />
+        <MangaHomeCollectionCards :collections="data.collections" />
+        <MangaHomeStream :cursor="data.updates.next_cursor" />
+      </Stack>
+    </Stack>
+  </Stack>
 </template>

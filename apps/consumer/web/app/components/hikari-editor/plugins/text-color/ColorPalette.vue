@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Grid, Stack } from '@hina-ui/vue'
   import { X } from '@lucide/vue'
   import type { Editor } from '@tiptap/vue-3'
   import { useEditorOverlays } from '../../composables/useEditorOverlays'
@@ -35,24 +36,26 @@
 </script>
 
 <template>
-  <div class="flex w-[180px] flex-col gap-3">
-    <div class="grid grid-cols-5 gap-2">
+  <Stack gap="sm" class="w-full sm:w-45">
+    <Grid :cols="5" gap="sm">
       <Button
         v-for="c in SWATCHES"
         :key="c.value"
-        v-tooltip.top="c.label"
+        v-tooltip="c.label"
         :aria-label="c.label"
-        rounded
-        class="h-7! w-7! border-2! p-0!"
-        :class="activeColor === c.value ? 'border-primary!' : 'border-transparent!'"
+        icon-only
+        pill
+        size="sm"
+        variant="outline"
+        class="border-2"
+        :class="activeColor === c.value ? 'border-accent' : 'border-transparent'"
         :style="{ backgroundColor: c.value }"
         @click="apply(c.value)"
       />
-    </div>
-    <Button size="small" severity="secondary" variant="text" label="清除颜色" @click="clear">
-      <template #icon>
-        <X :size="14" />
-      </template>
+    </Grid>
+    <Button variant="ghost" tone="neutral" size="sm" @click="clear">
+      <template #icon><X /></template>
+      清除颜色
     </Button>
-  </div>
+  </Stack>
 </template>

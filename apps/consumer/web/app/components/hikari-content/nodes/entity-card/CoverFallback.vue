@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <span class="absolute inset-0 flex items-center justify-center text-muted-color">
+  <span class="text-muted-color absolute inset-0 flex items-center justify-center">
     <component :is="icon" :size="size ?? 24" />
   </span>
 </template>

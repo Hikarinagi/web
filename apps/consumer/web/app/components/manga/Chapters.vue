@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaChapters' })
@@ -42,7 +43,7 @@
 </script>
 
 <template>
-  <div v-if="hasReadable || (showVolumes && volumes.length)" class="flex flex-col gap-5">
+  <Stack v-if="hasReadable || (showVolumes && volumes.length)" gap="none" class="gap-5">
     <MangaChaptersEpisodes
       v-if="hasReadable"
       :manga-id="mangaId"
@@ -53,5 +54,5 @@
       :volume-number="volumeNumber"
     />
     <MangaChaptersVolumes v-if="showVolumes && volumes.length" :volumes="volumes" />
-  </div>
+  </Stack>
 </template>

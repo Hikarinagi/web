@@ -1,24 +1,28 @@
 <script setup lang="ts">
+  import { Dialog } from '@hina-ui/vue'
   import { usePostComposerDialog } from './composables/usePostComposerDialog'
 
   defineOptions({ name: 'FeedComposerDialog' })
 
   const { open, submitting, close } = usePostComposerDialog()
+
+  function onOpenChange(value: boolean | undefined) {
+    if (!value) close()
+  }
 </script>
 
 <template>
   <Dialog
-    :visible="open"
-    modal
-    position="top"
-    :draggable="false"
-    :show-header="false"
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    class="mt-[8vh] w-[600px] max-w-[calc(100vw-2rem)]"
-    :pt="{ content: { class: 'p-0! overflow-hidden rounded-[inherit]' } }"
-    @update:visible="v => !v && close()"
+    :open="open"
+    title="发布图文"
+    placement="top"
+    size="xl"
+    :header="false"
+    :locked="submitting"
+    @update:open="onOpenChange"
   >
-    <FeedComposerDialogPanel />
+    <template #body>
+      <FeedComposerDialogPanel />
+    </template>
   </Dialog>
 </template>

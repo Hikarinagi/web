@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Badge, Center } from '@hina-ui/vue'
   import {
     AtSign,
     Bell,
@@ -63,28 +64,22 @@
 </script>
 
 <template>
-  <div class="relative shrink-0">
-    <div v-if="isStack" class="flex items-center">
-      <Avatar
-        v-for="(u, i) in stack"
-        :key="u.id"
-        :user="u"
-        card
-        shape="circle"
-        class="size-8! ring-2 ring-surface-0 dark:ring-surface-900"
-        :class="i > 0 ? '-ms-3.5' : ''"
-        :style="{ zIndex: stack.length - i }"
-      />
-    </div>
-    <Avatar v-else-if="primary" :user="primary" card shape="circle" class="size-10!" />
-    <span v-else class="grid size-10 place-items-center rounded-full bg-emphasis text-muted-color">
+  <Badge
+    :content="primary ? templateKey : null"
+    bare
+    placement="bottom-end"
+    :shape="isStack ? 'rect' : 'circle'"
+  >
+    <template #content>
+      <Center as="span" class="size-5 rounded-full bg-surface text-accent-text">
+        <component :is="icon" class="size-3" aria-hidden="true" />
+      </Center>
+    </template>
+
+    <AvatarStack v-if="isStack" :users="stack" size="lg" card />
+    <Avatar v-else-if="primary" :user="primary" card class="size-10!" />
+    <Center v-else as="span" class="size-10 rounded-full bg-subtle text-muted">
       <component :is="icon" class="size-5" aria-hidden="true" />
-    </span>
-    <span
-      v-if="primary"
-      class="absolute -inset-e-1 -bottom-1 z-10 grid size-5 place-items-center rounded-full bg-surface-0 text-primary ring-2 ring-surface-0 dark:bg-surface-900 dark:ring-surface-900"
-    >
-      <component :is="icon" class="size-3" aria-hidden="true" />
-    </span>
-  </div>
+    </Center>
+  </Badge>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { justifiedRows } from '~/features/galgame/justifiedRows'
 
@@ -35,23 +36,30 @@
 </script>
 
 <template>
-  <GalgameSection v-if="images.length" title="画廊" :meta="`${images.length} 张图片`">
-    <div ref="galleryRef" class="w-full">
+  <WorkSection v-if="images.length" title="画廊" :meta="`${images.length} 张图片`">
+    <Stack ref="galleryRef" gap="none" class="w-full">
       <HikariImageGroup class="flex flex-col gap-2">
-        <div v-for="(row, index) in rows" :key="index" class="flex gap-2">
+        <Inline
+          v-for="(row, index) in rows"
+          :key="index"
+          gap="none"
+          align="stretch"
+          :wrap="false"
+          class="gap-2"
+        >
           <HikariImage
             v-for="cell in row"
             :key="cell.item.id"
             :src="cell.item"
             :alt="`${title} 截图`"
-            class="shrink-0 overflow-hidden rounded-md border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-900"
+            class="shrink-0 rounded-md border border-line bg-subtle"
             image-class="size-full object-cover"
             :style="{ width: `${cell.width}px`, height: `${cell.height}px` }"
             :processing="thumbProcessing"
             preview
           />
-        </div>
+        </Inline>
       </HikariImageGroup>
-    </div>
-  </GalgameSection>
+    </Stack>
+  </WorkSection>
 </template>

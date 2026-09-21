@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { mangaSeo } from '~/features/seo/manga'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -28,7 +29,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <MangaHero
       :manga="data.manga"
       :chapters="data.chapters"
@@ -40,7 +41,7 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <MangaChapters
         :manga-id="data.manga.id"
         :chapters="data.chapters"
@@ -49,9 +50,12 @@
         :latest-chapter-at="data.manga.latest_chapter_at"
       />
 
-      <MangaRatesSummary :stats="data.rate_stats" :top-rates="data.top_rates" :manga-id="mangaId" />
-
-      <MangaMentions :posts="data.posts" />
+      <MangaRatesSummary
+        :stats="data.rate_stats"
+        :top-rates="data.top_rates"
+        :manga="data.manga"
+        :my-rate="data.my_rate"
+      />
 
       <MangaAbout
         :manga="data.manga"
@@ -63,6 +67,6 @@
       />
 
       <MangaCharacters :characters="data.characters" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

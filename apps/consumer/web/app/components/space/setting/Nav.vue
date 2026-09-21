@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Flex, NavLink } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { Bell, ShieldCheck, SlidersHorizontal, Shirt, User } from '@lucide/vue'
 
   defineOptions({ name: 'SpaceSettingNav' })
@@ -15,22 +17,18 @@
 </script>
 
 <template>
-  <nav class="flex flex-row gap-1 overflow-x-auto lg:flex-col">
-    <Button
+  <Flex as="nav" gap="xs" class="overflow-x-auto lg:flex-col">
+    <NavLink
       v-for="item in items"
       :key="item.to"
-      as="router-link"
+      :as="NuxtLink"
       :to="item.to"
-      unstyled
-      class="flex shrink-0 cursor-pointer items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors"
-      :class="
-        route.path === item.to
-          ? 'bg-primary/10 text-primary'
-          : 'text-muted-color hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800/60'
-      "
+      :label="item.label"
+      :active="route.path === item.to"
+      class="shrink-0"
     >
-      <component :is="item.icon" class="size-[18px] shrink-0" />
-      <span>{{ item.label }}</span>
-    </Button>
-  </nav>
+      <template #icon><component :is="item.icon" /></template>
+      {{ item.label }}
+    </NavLink>
+  </Flex>
 </template>

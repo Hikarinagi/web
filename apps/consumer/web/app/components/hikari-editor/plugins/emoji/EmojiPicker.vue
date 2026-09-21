@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Popover, ScrollArea, SimpleGrid, Skeleton, Stack } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
   import { useEditorOverlays } from '../../composables/useEditorOverlays'
   import { EDITOR_PLUGIN_CONTEXT_KEY } from '../../plugins/types'
@@ -69,28 +70,48 @@
   function onPickFromRecent(emoji: RecentEmoji) {
     insertEmoji(emoji.set_name, emoji.name, emoji.id)
   }
+
+  const previewOpen = ref(false)
+  const preview = shallowRef<{
+    src: string | null
+    name: string
+    setName: string | null
+    anchor: HTMLElement
+  } | null>(null)
+
+  function showPreview(emoji: Emoji, setName: string | null, anchor: HTMLElement) {
+    preview.value = { src: emoji.src?.src ?? null, name: emoji.name, setName, anchor }
+    previewOpen.value = true
+  }
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 md:w-[320px]">
-    <HikariEditorPluginsEmojiPickerTabBar :sets="sets" :active-id="activeId" @select="onTabClick">
+  <Stack gap="sm" class="min-h-0 grow px-(--hn-panel-p) pb-(--hn-panel-p) sm:w-80 sm:px-0 sm:pb-0">
+    <HikariEditorPluginsEmojiPickerTabBar
+      :sets="sets"
+      :active-id="activeId"
+      class="border-b pb-1 max-sm:order-last max-sm:border-t max-sm:border-b-0 max-sm:pt-1 max-sm:pb-0"
+      @select="onTabClick"
+    >
       <template #trailing>
         <HikariEditorPluginsEmojiPickerManageButton />
       </template>
     </HikariEditorPluginsEmojiPickerTabBar>
 
-    <ScrollArea ref="scrollerRef" class="grow md:h-80 md:grow-0">
+    <ScrollArea ref="scrollerRef" class="min-h-0 grow sm:h-80 sm:grow-0">
       <HikariEditorPluginsEmojiPickerSection id="recent" title="最近使用">
-        <div
-          v-if="!recentLoaded"
-          class="grid grid-cols-[repeat(auto-fill,minmax(40px,1fr))] gap-1 p-1"
-        >
-          <div v-for="i in 14" :key="i" class="flex h-10 w-10 items-center justify-center">
-            <Skeleton width="2rem" height="2rem" />
-          </div>
-        </div>
+        <SimpleGrid v-if="!recentLoaded" min="2.5rem" gap="xs" class="p-1">
+          <Center v-for="i in 14" :key="i" class="size-10">
+            <Skeleton class="size-8 rounded-sm" />
+          </Center>
+        </SimpleGrid>
         <HikariEditorPluginsEmojiPickerRecentEmpty v-else-if="!recent.length" />
-        <HikariEditorPluginsEmojiPickerEmojiGrid v-else :emojis="recent" @pick="onPickFromRecent" />
+        <HikariEditorPluginsEmojiPickerEmojiGrid
+          v-else
+          :emojis="recent"
+          @pick="onPickFromRecent"
+          @preview="(emoji, anchor) => showPreview(emoji, emoji.set_name, anchor)"
+        />
       </HikariEditorPluginsEmojiPickerSection>
 
       <HikariEditorPluginsEmojiPickerSection
@@ -102,8 +123,28 @@
         <HikariEditorPluginsEmojiPickerEmojiGrid
           :emojis="set.emojis"
           @pick="emoji => onPickFromSet(emoji, set.name)"
+          @preview="(emoji, anchor) => showPreview(emoji, set.name, anchor)"
         />
       </HikariEditorPluginsEmojiPickerSection>
     </ScrollArea>
-  </div>
+
+    <Popover
+      v-model:open="previewOpen"
+      :anchor="preview?.anchor ?? null"
+      :modal="false"
+      side="top"
+      :padded="false"
+      class="p-3"
+      @open-auto-focus="event => event.preventDefault()"
+    >
+      <template #content>
+        <HikariEditorPluginsEmojiPickerPreview
+          v-if="preview"
+          :src="preview.src"
+          :name="preview.name"
+          :set-name="preview.setName"
+        />
+      </template>
+    </Popover>
+  </Stack>
 </template>

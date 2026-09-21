@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Empty, Stack } from '@hina-ui/vue'
+  import { HardDriveDownload } from '@lucide/vue'
   import { useDownloadLink } from '~/features/galgame/useDownloadLink'
   import type { GalgameDownloadResource } from '~/features/galgame/download'
 
@@ -9,14 +11,11 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
-    <p
-      v-if="!resources.length"
-      class="rounded-xl border border-surface px-6 py-5 text-sm text-muted-color"
-    >
-      这部作品还没有可下载的资源
-    </p>
+  <Empty v-if="!resources.length" title="暂无可下载资源" description="这部作品还没有资源上传">
+    <template #icon><HardDriveDownload /></template>
+  </Empty>
 
+  <Stack v-else>
     <GalgameDownloadsResourceItem
       v-for="resource in resources"
       :key="resource.id"
@@ -25,5 +24,5 @@
       @download="download"
       @copy="copyLink"
     />
-  </div>
+  </Stack>
 </template>

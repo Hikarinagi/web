@@ -1,57 +1,30 @@
 <script setup lang="ts">
-  import { motion } from 'motion-v'
-  import logoUrl from '~/assets/images/creator-center2.webp'
-  import { TRANSITION } from '~/lib/motion'
+  import { Sidebar } from '@hina-ui/vue'
+  import logoUrl from '~/assets/images/creator-wordmark.svg'
 
-  const props = withDefaults(defineProps<{ collapsed?: boolean }>(), {
-    collapsed: false,
-  })
-
-  const logoMotion = computed(() => ({
-    height: props.collapsed ? 0 : 40,
-    marginBottom: props.collapsed ? -8 : 24,
-  }))
-  const logoContentMotion = computed(() => ({
-    opacity: props.collapsed ? 0 : 1,
-    x: props.collapsed ? -6 : 0,
-  }))
+  defineOptions({ name: 'CreatorShellSidebar' })
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col p-0 md:p-4">
-    <motion.div
-      class="shrink-0 overflow-hidden"
-      :initial="logoMotion"
-      :animate="logoMotion"
-      :transition="TRANSITION"
-      :aria-hidden="collapsed"
-    >
-      <motion.div
-        :initial="logoContentMotion"
-        :animate="logoContentMotion"
-        :transition="TRANSITION"
-      >
-        <NuxtLink
-          to="/create"
-          class="flex items-center px-2 pt-2"
-          aria-label="创作者中心"
-          :tabindex="collapsed ? -1 : undefined"
-        >
-          <HikariImage
-            :src="logoUrl"
-            alt="Hikarinagi 创作者中心"
-            class="h-8"
-            image-class="object-contain"
-            :lazy="false"
-            :skeleton="false"
-            :preload="{ fetchPriority: 'high' }"
-          />
-        </NuxtLink>
-      </motion.div>
-    </motion.div>
-    <ScrollArea class="min-h-0 flex-1">
-      <CreatorShellSidebarNav :collapsed="collapsed" />
-    </ScrollArea>
-    <CreatorShellSidebarUser :collapsed="collapsed" class="mt-6" />
-  </div>
+  <Sidebar label="创作者中心导航">
+    <template #wordmark>
+      <NuxtLink to="/create" class="flex items-center" aria-label="创作者中心">
+        <HikariImage
+          :src="logoUrl"
+          alt="Hikarinagi 创作者中心"
+          class="h-8"
+          image-class="object-contain object-left pl-2"
+          :lazy="false"
+          :skeleton="false"
+          :preload="{ fetchPriority: 'high' }"
+        />
+      </NuxtLink>
+    </template>
+
+    <CreatorShellSidebarNav />
+
+    <template #footer="{ state }">
+      <CreatorShellSidebarUser :state="state" />
+    </template>
+  </Sidebar>
 </template>

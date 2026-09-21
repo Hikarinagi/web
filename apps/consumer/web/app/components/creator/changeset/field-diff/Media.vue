@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Inline, Text } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
   import { mediaSrc } from './helpers'
 
@@ -11,10 +12,8 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-3">
-    <div
-      class="flex size-24 items-center justify-center overflow-hidden rounded-lg border border-red-500/30 bg-red-500/10"
-    >
+  <Inline gap="sm" align="center">
+    <Center class="size-24 overflow-hidden rounded-lg border border-danger-text/30 bg-danger-soft">
       <HikariImage
         v-if="from"
         :src="from"
@@ -23,11 +22,13 @@
         class="size-full"
         image-class="size-full object-cover"
       />
-      <span v-else class="text-xs text-muted-color">（空）</span>
-    </div>
-    <ArrowRight :size="14" class="shrink-0 text-muted-color" aria-hidden="true" />
-    <div
-      class="flex size-24 items-center justify-center overflow-hidden rounded-lg border border-green-500/30 bg-green-500/10"
+      <Text v-else as="span" size="xs" tone="muted">（空）</Text>
+    </Center>
+
+    <ArrowRight class="size-3.5 shrink-0 text-muted" aria-hidden="true" />
+
+    <Center
+      class="size-24 overflow-hidden rounded-lg border border-success-text/30 bg-success-soft"
     >
       <HikariImage
         v-if="to"
@@ -37,7 +38,7 @@
         class="size-full"
         image-class="size-full object-cover"
       />
-      <span v-else class="text-xs text-muted-color">（空）</span>
-    </div>
-  </div>
+      <Text v-else as="span" size="xs" tone="muted">（空）</Text>
+    </Center>
+  </Inline>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { AspectRatio, Grid, SegmentedControl, Stack, Text } from '@hina-ui/vue'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { subText, titleOf } from '~/features/manga/explore'
   import { topVotedMedia } from '~/utils/media/image'
@@ -17,36 +18,33 @@
 <template>
   <MangaHomeSection v-if="board.serializing.length || board.finished.length" title="人气榜">
     <template #actions>
-      <SelectButton
-        v-model="tab"
+      <SegmentedControl
+        :model-value="tab"
         :options="tabs"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
-        size="small"
-        class="ml-auto self-center"
+        size="sm"
+        class="ms-auto self-center"
         aria-label="人气榜范围"
+        @update:model-value="value => (tab = value as 'serializing' | 'finished')"
       />
     </template>
-    <div class="grid grid-cols-1 gap-x-10 gap-y-1 md:grid-cols-2">
+    <Grid :cols="1" class="gap-x-10 gap-y-1 md:grid-cols-2">
       <NuxtLink
         v-for="(item, index) in items"
         :key="item.id"
         :to="`/mangas/${item.id}`"
-        class="group flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-emphasis"
+        class="hn-state-layer flex hn-interactive items-center gap-3 rounded-lg px-2 py-2 hn-press-none"
       >
-        <span
-          class="w-8 shrink-0 text-center text-2xl leading-none font-bold tabular-nums"
-          :class="
-            index < 3
-              ? 'text-hikari-primary-500 dark:text-hikari-primary-400'
-              : 'text-surface-300 dark:text-surface-700'
-          "
+        <Text
+          as="span"
+          size="2xl"
+          class="w-8 shrink-0 text-center leading-none font-bold tabular-nums"
+          :class="rankTone(index)"
         >
           {{ index + 1 }}
-        </span>
-        <div
-          class="h-[62px] w-11 shrink-0 overflow-hidden rounded border border-surface bg-surface-100 dark:bg-surface-800"
+        </Text>
+        <AspectRatio
+          :ratio="7 / 10"
+          class="w-11 shrink-0 overflow-hidden rounded border border-line bg-subtle"
         >
           <HikariImage
             :src="topVotedMedia(item.covers)"
@@ -55,16 +53,12 @@
             image-class="object-cover object-top"
             preset="small"
           />
-        </div>
-        <div class="min-w-0 flex-1">
-          <p
-            class="truncate text-sm font-medium text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
-          >
-            {{ titleOf(item) }}
-          </p>
-          <p class="mt-0.5 text-xs text-muted-color">{{ subText(item) }}</p>
-        </div>
+        </AspectRatio>
+        <Stack gap="none" class="min-w-0 flex-1 gap-0.5">
+          <Text size="sm" weight="medium" truncate>{{ titleOf(item) }}</Text>
+          <Text size="xs" tone="muted">{{ subText(item) }}</Text>
+        </Stack>
       </NuxtLink>
-    </div>
+    </Grid>
   </MangaHomeSection>
 </template>

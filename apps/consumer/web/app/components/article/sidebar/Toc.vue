@@ -1,51 +1,38 @@
 <script setup lang="ts">
+  import { Anchor, Panel, ScrollArea } from '@hina-ui/vue'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
-  import { cn } from '~/utils/cn'
-  import { extractToc } from '~/features/article/toc'
-  import { useTocSpy } from '~/features/article/composables/useTocSpy'
+  import { extractToc, tocAnchorItems } from '~/features/article/toc'
 
   const props = defineProps<{ doc: ArticlePageData['article']['content_json'] }>()
 
   const entries = computed(() => extractToc(props.doc))
-  const { activeId, scrollTo } = useTocSpy(() => entries.value.map(e => e.id))
+  const items = computed(() => tocAnchorItems(entries.value))
 
   const scrollArea = useTemplateRef<{ viewport: HTMLElement | null }>('scrollArea')
-  watch(activeId, id => {
-    const vp = scrollArea.value?.viewport
-    if (!id || !vp) return
-    const active = vp.querySelector<HTMLElement>(`[data-toc-id="${id}"]`)
-    if (!active) return
+  const viewport = computed(() => scrollArea.value?.viewport ?? null)
+
+  function follow() {
+    const vp = viewport.value
+    const active = vp?.querySelector<HTMLElement>('a[aria-current]')
+    if (!vp || !active) return
     const top = active.getBoundingClientRect().top - vp.getBoundingClientRect().top + vp.scrollTop
     const bottom = top + active.offsetHeight
     if (top < vp.scrollTop) vp.scrollTo({ top: top - 8, behavior: 'smooth' })
     else if (bottom > vp.scrollTop + vp.clientHeight)
       vp.scrollTo({ top: bottom - vp.clientHeight + 8, behavior: 'smooth' })
+  }
+
+  useMutationObserver(viewport, follow, {
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['aria-current'],
   })
 </script>
 
 <template>
-  <ArticlePanel v-if="entries.length >= 2" title="目录">
+  <Panel v-if="entries.length >= 2" title="目录" :padded="false">
     <ScrollArea ref="scrollArea" class="max-h-80">
-      <div class="pb-2">
-        <Button
-          v-for="e in entries"
-          :key="e.id"
-          unstyled
-          :data-toc-id="e.id"
-          :class="
-            cn(
-              'block w-full cursor-pointer truncate px-4 py-1.5 text-left text-[13px] transition-colors',
-              e.level === 3 && 'pl-7',
-              activeId === e.id
-                ? 'font-semibold text-primary'
-                : 'text-muted-color hover:text-color',
-            )
-          "
-          @click="scrollTo(e.id)"
-        >
-          {{ e.text }}
-        </Button>
-      </div>
+      <Anchor :items="items" label="文章目录" class="px-(--hn-panel-p) pb-(--hn-panel-p)" />
     </ScrollArea>
-  </ArticlePanel>
+  </Panel>
 </template>

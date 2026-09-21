@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Tag } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { mangaSerialStatusLabel } from '~/features/manga/labels'
 
@@ -11,23 +12,11 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-center gap-2 lg:justify-start">
-    <Tag
-      :value="mangaSerialStatusLabel(manga.serial_status)"
-      class="border-0! bg-primary/10! px-2.5! py-1! text-sm! font-medium! text-primary!"
-    />
+  <Inline gap="sm" justify="center" wrap class="lg:justify-start">
+    <Tag tone="accent" size="md">{{ mangaSerialStatusLabel(manga.serial_status) }}</Tag>
     <NuxtLink v-if="magazine" :to="`/mangas/magazine/${magazine.id}`">
-      <Tag
-        :value="magazine.name"
-        severity="secondary"
-        class="cursor-pointer px-2.5! py-1! text-sm! font-medium! transition-colors hover:bg-surface-200! dark:hover:bg-surface-700!"
-      />
+      <Tag tone="neutral" size="md" class="hn-state-layer cursor-pointer">{{ magazine.name }}</Tag>
     </NuxtLink>
-    <Tag
-      v-if="manga.nsfw"
-      value="NSFW"
-      severity="danger"
-      class="px-2.5! py-1! text-sm! font-medium!"
-    />
-  </div>
+    <Tag v-if="manga.nsfw" tone="danger" size="md">NSFW</Tag>
+  </Inline>
 </template>

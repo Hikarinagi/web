@@ -1,14 +1,15 @@
 <script setup lang="ts">
+  import { Heading, Stack } from '@hina-ui/vue'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
 
   defineProps<{ article: ArticlePageData['article']; author: ArticlePageData['author'] }>()
 </script>
 
 <template>
-  <header class="flex flex-col gap-6">
+  <Stack as="header" gap="lg">
     <HikariImage
       v-if="article.cover"
-      :src="article.cover.src"
+      :src="article.cover"
       :alt="article.title"
       class="aspect-2/1 w-full overflow-hidden rounded-xl"
       image-class="size-full object-cover"
@@ -16,8 +17,8 @@
       preview
     />
 
-    <div class="flex flex-col gap-5">
-      <h1 class="text-[28px] leading-tight font-bold text-color">{{ article.title }}</h1>
+    <Stack gap="none" class="gap-5">
+      <Heading :level="1" size="2xl" class="leading-tight font-bold">{{ article.title }}</Heading>
 
       <ArticleAuthorBar
         v-if="article.creator"
@@ -29,6 +30,6 @@
       />
 
       <ArticleRelatedWorks v-if="article.related_works.length" :works="article.related_works" />
-    </div>
-  </header>
+    </Stack>
+  </Stack>
 </template>

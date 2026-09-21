@@ -8,7 +8,7 @@ export const FEED_TABS = [
   { key: 'following', label: '关注', icon: UserRoundCheck, auth: true },
 ] as const
 
-const DEFAULT_SCOPE: FeedScope = 'all'
+const DEFAULT_SCOPE: FeedScope = 'recommend'
 
 export function useFeedTabs(onSelect?: (key: FeedScope) => void) {
   const route = useRoute()

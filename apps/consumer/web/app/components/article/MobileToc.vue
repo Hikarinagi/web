@@ -1,17 +1,16 @@
 <script setup lang="ts">
+  import { Anchor, Sheet } from '@hina-ui/vue'
   import { ListTree } from '@lucide/vue'
   import { breakpointsTailwind } from '@vueuse/core'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
-  import { cn } from '~/utils/cn'
-  import { extractToc } from '~/features/article/toc'
-  import { useTocSpy } from '~/features/article/composables/useTocSpy'
+  import { extractToc, tocAnchorItems } from '~/features/article/toc'
 
   defineOptions({ name: 'ArticleMobileToc' })
 
   const props = defineProps<{ doc: ArticlePageData['article']['content_json'] }>()
 
   const entries = computed(() => extractToc(props.doc))
-  const { activeId, scrollTo } = useTocSpy(() => entries.value.map(e => e.id))
+  const items = computed(() => tocAnchorItems(entries.value))
 
   const breakpoints = useBreakpoints(breakpointsTailwind)
   const belowLg = breakpoints.smaller('lg')
@@ -28,44 +27,12 @@
       open.value = true
     },
   })
-
-  function select(id: string) {
-    scrollTo(id)
-    open.value = false
-  }
 </script>
 
 <template>
-  <Drawer
-    v-model:visible="open"
-    position="bottom"
-    :pt="{
-      root: { class: 'app-mobile-sheet h-auto! max-h-[72vh]!' },
-      content: { class: 'p-2! min-h-0 flex' },
-    }"
-  >
-    <template #header>
-      <h2 class="text-base font-semibold text-color">目录</h2>
+  <Sheet v-model:open="open" title="目录" class="h-[60dvh]">
+    <template #content>
+      <Anchor :items="items" label="文章目录" @click="open = false" />
     </template>
-
-    <ScrollArea class="min-h-0 flex-1">
-      <div class="pb-1">
-        <Button
-          v-for="e in entries"
-          :key="e.id"
-          unstyled
-          :class="
-            cn(
-              'block w-full cursor-pointer truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-emphasis',
-              e.level === 3 && 'pl-7',
-              activeId === e.id ? 'font-semibold text-primary' : 'text-muted-color',
-            )
-          "
-          @click="select(e.id)"
-        >
-          {{ e.text }}
-        </Button>
-      </div>
-    </ScrollArea>
-  </Drawer>
+  </Sheet>
 </template>

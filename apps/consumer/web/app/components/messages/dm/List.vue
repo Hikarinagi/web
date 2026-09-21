@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ScrollArea, Skeleton, Stack, Text } from '@hina-ui/vue'
   import type { Conversation, DmPeer } from '~/features/messages/dm'
 
   defineOptions({ name: 'MessagesDmList' })
@@ -7,7 +8,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <Stack gap="none">
     <ScrollArea class="min-h-0 flex-1">
       <slot />
 
@@ -21,14 +22,14 @@
         />
       </template>
 
-      <div v-else-if="pending" class="flex flex-col gap-2 p-3">
-        <Skeleton v-for="i in 7" :key="i" height="3.25rem" border-radius="0.5rem" />
-      </div>
+      <Stack v-else-if="pending" gap="sm" class="p-3">
+        <Skeleton v-for="i in 7" :key="i" class="h-13 rounded-lg" />
+      </Stack>
 
-      <div v-else class="flex flex-col items-start gap-1 px-4 py-8">
-        <p class="text-sm font-medium text-color">还没有私信</p>
-        <p class="text-[13px] text-muted-color">在其他用户的空间点击「私信」开始吧</p>
-      </div>
+      <Stack v-else gap="xs" align="start" class="px-4 py-8">
+        <Text as="p" size="sm" weight="medium">还没有私信</Text>
+        <Text as="p" size="xs" tone="muted">在其他用户的空间点击「私信」开始吧</Text>
+      </Stack>
     </ScrollArea>
-  </div>
+  </Stack>
 </template>

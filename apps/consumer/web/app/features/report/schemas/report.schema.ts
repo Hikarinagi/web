@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 import { REPORT_REASON_VALUES } from '../report'
 
@@ -23,4 +22,3 @@ export const reportSchema = v.pipe(
 )
 
 export type ReportFormValues = v.InferOutput<typeof reportSchema>
-export const reportResolver = valibotResolver(reportSchema)

@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 
 const dimension = v.nullish(
@@ -13,11 +12,9 @@ const dimension = v.nullish(
 
 const hours = v.nullish(
   v.pipe(
-    v.union([v.number('时长应为数字'), v.pipe(v.string('时长应为数字'), v.trim())], '时长应为数字'),
-    v.transform(val => (val === '' ? null : Number(val))),
-    v.check(val => val === null || Number.isFinite(val), '时长应为数字'),
-    v.check(val => val === null || val >= 0, '时长不能为负'),
-    v.check(val => val === null || val <= 9999, '时长不能超过 9999 小时'),
+    v.number('时长应为数字'),
+    v.minValue(0, '时长不能为负'),
+    v.maxValue(9999, '时长不能超过 9999 小时'),
   ),
   null,
 )
@@ -50,4 +47,3 @@ export const lightNovelRateSchema = v.object({
 })
 
 export type LightNovelRateValues = v.InferOutput<typeof lightNovelRateSchema>
-export const lightNovelRateResolver = valibotResolver(lightNovelRateSchema)

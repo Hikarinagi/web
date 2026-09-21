@@ -18,7 +18,7 @@
         v-for="item in items"
         :key="item.id"
         :item="item"
-        :class="cardClass ?? 'w-[150px]'"
+        :class="cardClass ?? 'w-37.5'"
       />
     </LightNovelExploreRailViewport>
   </LightNovelExploreSection>

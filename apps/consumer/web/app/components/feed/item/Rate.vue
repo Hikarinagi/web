@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Spoiler } from '@hina-ui/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
   defineProps<{
@@ -14,7 +15,7 @@
     <FeedWorkRefCard :work-ref="item.work_ref" :score="item.rate" />
     <p
       v-if="item.rate_content"
-      class="text-[15px] leading-relaxed wrap-anywhere whitespace-pre-wrap text-color"
+      class="text-base leading-relaxed wrap-anywhere whitespace-pre-wrap text-fg"
     >
       <Spoiler v-if="item.is_spoiler">{{ item.rate_content }}</Spoiler>
       <template v-else>{{ item.rate_content }}</template>

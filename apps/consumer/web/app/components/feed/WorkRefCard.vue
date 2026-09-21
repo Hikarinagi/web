@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Card, Inline, Rating, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { FeedWorkRef } from '~/features/feed/feed'
 
@@ -27,25 +28,32 @@
     :work-id="workRef.id"
     class="block"
   >
-    <NuxtLink
+    <Card
+      :as="NuxtLink"
       :to="to"
-      class="flex items-start gap-3 rounded-xl border border-surface-200 bg-surface-0 p-3 shadow-[0_1px_1.5px_rgba(15,23,42,0.05)] transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
+      :padded="false"
+      class="hn-state-layer z-1 flex hn-interactive items-start gap-3 rounded-xl p-3 shadow-xs hn-press-lg"
     >
+      <Ripple />
+
       <HikariImage
         :src="workRef.cover"
         :alt="workRef.title"
-        class="h-[68px] w-12 shrink-0 rounded"
+        class="h-17 w-12 shrink-0 rounded"
         image-class="size-full object-cover"
         :processing="{ q: 90 }"
       />
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <p class="truncate text-sm font-bold text-color">{{ workRef.title }}</p>
-        <p class="truncate text-xs text-muted-color">{{ meta }}</p>
-        <div v-if="score != null" class="flex items-center gap-1">
-          <Star class="size-3.5 fill-amber-400 text-amber-400" />
-          <span class="text-[13px] font-medium text-color">{{ score.toFixed(1) }}</span>
-        </div>
-      </div>
-    </NuxtLink>
+
+      <Stack gap="none" class="min-w-0 flex-1 gap-1">
+        <Text as="p" size="sm" weight="semibold" truncate class="font-bold">
+          {{ workRef.title }}
+        </Text>
+        <Text as="p" size="xs" tone="muted" truncate>{{ meta }}</Text>
+        <Inline v-if="score != null" gap="none" align="center" wrap class="gap-x-1.5 gap-y-0.5">
+          <Rating :model-value="score" :max="10" :stars="5" readonly size="sm" />
+          <Text as="span" size="sm" weight="medium">{{ score.toFixed(1) }}</Text>
+        </Inline>
+      </Stack>
+    </Card>
   </WorkCardTrigger>
 </template>

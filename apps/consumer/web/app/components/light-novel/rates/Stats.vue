@@ -1,66 +1,58 @@
 <script setup lang="ts">
-  import { Hash, Star } from '@lucide/vue'
-  import type { LightNovelRateKeyword, LightNovelRateStats } from '~/features/light-novel/rate'
+  import { LIGHT_NOVEL_STATUS_LABEL } from '~/features/light-novel/rate'
+  import type {
+    LightNovelRate,
+    LightNovelRateKeyword,
+    LightNovelRateStats,
+  } from '~/features/light-novel/rate'
+  import { useLightNovelRate } from '~/features/light-novel/useLightNovelRate'
 
   defineOptions({ name: 'LightNovelRatesStats' })
   const props = defineProps<{
     stats: LightNovelRateStats
     keywords: LightNovelRateKeyword[]
+    lightNovelId: number
+    workTitle: string
+    myRate: LightNovelRate | null
   }>()
 
-  const filledStars = computed(() => Math.round(props.stats.average ?? 0))
+  const rateCtl = useLightNovelRate(props.lightNovelId, props.myRate)
+  const dialogOpen = ref(false)
+
+  const statuses = computed(() =>
+    [
+      { key: 'completed', label: LIGHT_NOVEL_STATUS_LABEL.COMPLETED },
+      { key: 'going', label: LIGHT_NOVEL_STATUS_LABEL.GOING },
+      { key: 'on_hold', label: LIGHT_NOVEL_STATUS_LABEL.ON_HOLD },
+      { key: 'dropped', label: LIGHT_NOVEL_STATUS_LABEL.DROPPED },
+    ].map(row => ({ ...row, count: props.stats.status_counts[row.key as 'completed'] })),
+  )
+
+  const countLabel = computed(
+    () => `${props.stats.rated_count} 条评分 · ${props.stats.content_count} 条短评`,
+  )
 </script>
 
 <template>
-  <section
-    class="flex flex-col gap-5.5 rounded-2xl border border-surface-200 bg-surface-0 p-6 dark:border-surface-800 dark:bg-surface-900"
+  <RateStatsPanel
+    title="安利墙"
+    :average="stats.average"
+    :rated-count="stats.rated_count"
+    :count-label="countLabel"
+    :distribution="stats.distribution"
+    :statuses="statuses"
+    :keywords="keywords"
   >
-    <h2 class="text-[22px] font-bold text-surface-900 dark:text-surface-0">安利墙</h2>
-
-    <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
-      <div class="flex flex-col gap-2.5 lg:w-[220px] lg:shrink-0">
-        <div class="flex items-baseline gap-1">
-          <span class="text-[60px] leading-none font-semibold tabular-nums">
-            {{ stats.average != null ? stats.average.toFixed(1) : '—' }}
-          </span>
-          <span class="text-base text-surface-500 dark:text-surface-400">/ 10</span>
-        </div>
-        <div class="flex gap-0.5">
-          <Star
-            v-for="i in 10"
-            :key="i"
-            class="size-3.5"
-            :class="
-              i <= filledStars
-                ? 'fill-amber-400 text-amber-400'
-                : 'fill-surface-200 text-surface-200 dark:fill-surface-700 dark:text-surface-700'
-            "
-          />
-        </div>
-        <p class="text-xs text-surface-600 dark:text-surface-400">
-          {{ stats.rated_count }} 条评分 · {{ stats.content_count }} 条短评
-        </p>
-      </div>
-
-      <LightNovelRatesStatsScores :distribution="stats.distribution" />
-      <LightNovelRatesStatsProgress :counts="stats.status_counts" :played="stats.played_count" />
-    </div>
-
-    <div v-if="keywords.length" class="flex flex-wrap items-center gap-2">
-      <span class="text-xs font-medium text-surface-600 dark:text-surface-400">常被提到</span>
-      <span
-        v-for="kw in keywords"
-        :key="kw.word"
-        class="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 bg-surface-0 px-2.5 py-1 dark:border-surface-700 dark:bg-surface-900"
-      >
-        <Hash class="size-[11px] text-surface-400" />
-        <span class="text-xs font-medium text-surface-700 dark:text-surface-200">
-          {{ kw.word }}
-        </span>
-        <span class="text-[11px] font-semibold text-surface-500 tabular-nums dark:text-surface-400">
-          {{ kw.count }}
-        </span>
-      </span>
-    </div>
-  </section>
+    <template #action>
+      <RateStatsMyRateButton :score="rateCtl.score.value" @click="dialogOpen = true" />
+      <LightNovelRateDialog
+        v-model:visible="dialogOpen"
+        :light-novel-id="lightNovelId"
+        :rate="rateCtl.rate.value"
+        :work-title="workTitle"
+        :upsert="rateCtl.upsert"
+        :remove="rateCtl.remove"
+      />
+    </template>
+  </RateStatsPanel>
 </template>

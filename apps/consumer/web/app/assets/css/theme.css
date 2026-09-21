@@ -54,6 +54,9 @@
   --color-hikari-editor-dark-900: #18181b;
   --color-hikari-editor-dark-950: #09090b;
 
+  --color-hikari-reader-overlay: #0a0d12;
+  --color-hikari-reader-overlay-muted: #8b95a6;
+
   --color-hikari-red-50: #fff1f1;
   --color-hikari-red-100: #ffd6d6;
   --color-hikari-red-300: #ff9999;
@@ -96,6 +99,21 @@
   --color-hikari-cyan-500: #00cccc;
   --color-hikari-cyan-700: #009999;
 
+  --spacing-hikari-node: 0.8em;
+
+  --drop-shadow-hikari-art: 0 28px 52px rgba(15, 23, 42, 0.18);
+  --drop-shadow-hikari-art-dark: 0 28px 52px rgba(0, 0, 0, 0.42);
+
+  --shadow-hikari-cover: 0 24px 80px rgba(15, 23, 42, 0.18);
+  --shadow-hikari-cover-sm: 0 14px 44px rgba(15, 23, 42, 0.22);
+  --shadow-hikari-cover-xs: 0 6px 16px rgb(0 0 0 / 0.35);
+
+  --text-shadow-hikari-on-image: 0 1px 4px rgb(0 0 0 / 0.45);
+
+  --blur-hikari-2xs: 3px;
+  --blur-hikari-3xs: 1.5px;
+  --blur-hikari-4xs: 1px;
+
   --animate-mobile-nav-in: mobile-nav-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-mobile-nav-out: mobile-nav-out 0.12s cubic-bezier(0.4, 0, 1, 1);
 
@@ -130,7 +148,7 @@
 }
 
 :root {
-  --bprogress-color: var(--p-primary-color);
+  --bprogress-color: var(--hn-accent);
   --bprogress-height: 2px;
 
   --editor-page-bg: var(--color-hikari-surface-50);
@@ -151,7 +169,7 @@
 
   --editor-text-color: var(--color-hikari-surface-900);
   --editor-text-muted: var(--color-hikari-surface-500);
-  --editor-placeholder-color: var(--color-hikari-surface-400);
+  --editor-placeholder-color: var(--hn-fg-subtle);
 
   --editor-focus-ring: var(--color-hikari-primary-500);
   --editor-selection-bg: var(--color-hikari-primary-soft);
@@ -196,7 +214,6 @@ html.dark {
 
   --editor-text-color: var(--color-hikari-surface-100);
   --editor-text-muted: var(--color-hikari-surface-400);
-  --editor-placeholder-color: var(--color-hikari-surface-500);
 
   --editor-focus-ring: var(--color-hikari-primary-400);
 
@@ -220,4 +237,119 @@ html.dark {
 .bprogress {
   position: fixed;
   inset: 0;
+}
+
+:root {
+  --hikari-veil-side:
+    linear-gradient(
+      90deg,
+      var(--hn-surface) 0%,
+      rgba(255, 255, 255, 0.82) 44%,
+      rgba(255, 255, 255, 0.54) 100%
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--hn-surface) 76%, transparent),
+      color-mix(in srgb, var(--hn-surface) 76%, transparent)
+    );
+
+  --hikari-veil-diagonal:
+    linear-gradient(
+      115deg,
+      var(--hn-surface) 0%,
+      rgba(255, 255, 255, 0.86) 42%,
+      rgba(244, 114, 182, 0.12) 100%
+    ),
+    radial-gradient(circle at 18% 18%, rgba(57, 197, 187, 0.18), transparent 32%),
+    linear-gradient(
+      color-mix(in srgb, var(--hn-surface) 80%, transparent),
+      color-mix(in srgb, var(--hn-surface) 80%, transparent)
+    );
+
+  --hikari-veil-plain: linear-gradient(115deg, var(--hn-surface) 0%, var(--hn-bg-subtle) 100%);
+
+  --hikari-veil-soft:
+    linear-gradient(
+      to bottom right,
+      var(--hn-surface),
+      color-mix(in srgb, var(--hn-surface) 70%, transparent),
+      transparent
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--hn-surface) 85%, transparent),
+      color-mix(in srgb, var(--hn-surface) 85%, transparent)
+    );
+}
+
+html.dark {
+  --hikari-veil-side:
+    linear-gradient(
+      90deg,
+      var(--hn-surface) 0%,
+      rgba(3, 7, 18, 0.82) 45%,
+      rgba(3, 7, 18, 0.54) 100%
+    ),
+    linear-gradient(
+      color-mix(in srgb, var(--hn-surface) 72%, transparent),
+      color-mix(in srgb, var(--hn-surface) 72%, transparent)
+    );
+
+  --hikari-veil-diagonal:
+    linear-gradient(
+      115deg,
+      var(--hn-surface) 0%,
+      rgba(3, 7, 18, 0.86) 42%,
+      rgba(244, 114, 182, 0.12) 100%
+    ),
+    radial-gradient(circle at 18% 18%, rgba(124, 235, 224, 0.14), transparent 34%),
+    linear-gradient(
+      color-mix(in srgb, var(--hn-surface) 76%, transparent),
+      color-mix(in srgb, var(--hn-surface) 76%, transparent)
+    );
+}
+
+.hikari-hero-veil-side::after,
+.hikari-hero-veil-diagonal::after,
+.hikari-hero-veil-plain::after,
+.hikari-hero-veil-soft::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+}
+
+.hikari-hero-veil-side::after {
+  background-image: var(--hikari-veil-side);
+}
+
+.hikari-hero-veil-diagonal::after {
+  background-image: var(--hikari-veil-diagonal);
+}
+
+.hikari-hero-veil-plain::after {
+  background-image: var(--hikari-veil-plain);
+}
+
+.hikari-hero-veil-soft::after {
+  background-image: var(--hikari-veil-soft);
+}
+
+@media (width < 48rem) {
+  .hikari-table-stack table,
+  .hikari-table-stack tbody,
+  .hikari-table-stack tbody tr,
+  .hikari-table-stack tbody th,
+  .hikari-table-stack tbody td {
+    display: block;
+  }
+
+  .hikari-table-stack tbody td,
+  .hikari-table-stack tbody th {
+    height: auto;
+  }
+}
+
+@utility hikari-dot-grid {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 22px 22px;
+  color: color-mix(in oklab, var(--hn-fg-subtle) 22%, transparent);
 }

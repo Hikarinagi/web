@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Card, Center, Divider, Stack, Text } from '@hina-ui/vue'
   import type { GalgameRateListItem } from '~/features/galgame/rate'
 
   defineOptions({ name: 'GalgameRatesList' })
@@ -14,34 +15,22 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
-    <p
-      v-if="!items.length"
-      class="rounded-xl border border-surface-200 bg-surface-0 px-6 py-5 text-sm text-surface-500 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-400"
-    >
-      {{ filtered ? '没有符合筛选条件的短评' : '还没有人写短评' }}
-    </p>
+  <Stack gap="lg">
+    <Card v-if="!items.length">
+      <Text as="p" size="sm" tone="muted">
+        {{ filtered ? '没有符合筛选条件的短评' : '还没有人写短评' }}
+      </Text>
+    </Card>
 
-    <div v-else class="gap-4 md:columns-2">
+    <Columns v-else>
       <GalgameRatesItem v-for="r in items" :key="r.id" :rate="r" :galgame-id="galgameId" />
-    </div>
+    </Columns>
 
-    <div v-if="hasMore" class="flex justify-center">
-      <Button
-        label="加载更多"
-        severity="secondary"
-        outlined
-        :loading="pending"
-        @click="$emit('loadMore')"
-      />
-    </div>
-    <div
-      v-else-if="items.length"
-      class="flex items-center justify-center gap-3 text-xs text-surface-400 dark:text-surface-500"
-    >
-      <span class="h-px w-20 bg-surface-200 dark:bg-surface-700" />
-      已显示全部 {{ total }} 条
-      <span class="h-px w-20 bg-surface-200 dark:bg-surface-700" />
-    </div>
-  </div>
+    <Center v-if="hasMore">
+      <Button variant="outline" tone="neutral" :loading="pending" @click="$emit('loadMore')">
+        加载更多
+      </Button>
+    </Center>
+    <Divider v-else-if="items.length">已显示全部 {{ total }} 条</Divider>
+  </Stack>
 </template>

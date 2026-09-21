@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Button, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { MangaStreamBatch } from '~~/server/api/pages/mangas.get'
   import { statusText, titleOf } from '~/features/manga/explore'
   import { topVotedMedia } from '~/utils/media/image'
@@ -28,8 +30,12 @@
 </script>
 
 <template>
-  <section class="relative isolate overflow-hidden rounded-2xl border border-surface">
-    <div class="absolute inset-0 -z-20">
+  <Stack
+    gap="none"
+    as="section"
+    class="relative isolate overflow-hidden rounded-2xl border border-line"
+  >
+    <Stack gap="none" class="absolute inset-0 -z-20">
       <HikariImage
         :src="topVotedMedia(item.covers)"
         alt=""
@@ -41,44 +47,33 @@
         <template #empty><span /></template>
         <template #error><span /></template>
       </HikariImage>
-    </div>
-    <div
-      class="absolute inset-0 -z-10 bg-linear-to-r from-surface-0/95 via-surface-0/85 to-surface-0/40 dark:from-surface-950/92 dark:via-surface-950/80 dark:to-surface-950/40"
+    </Stack>
+    <Stack
+      gap="none"
+      aria-hidden="true"
+      class="absolute inset-0 -z-10 bg-linear-to-r from-canvas/95 via-canvas/85 to-canvas/40"
     />
-    <div class="flex items-center gap-6 p-6">
+    <Inline gap="lg" align="center" :wrap="false" class="p-6">
       <NuxtLink :to="`/mangas/${item.id}`" class="block w-30 shrink-0">
         <HikariImage
           :src="topVotedMedia(item.covers)"
           :alt="titleOf(item)"
-          class="aspect-2/3 w-full overflow-hidden rounded-lg shadow-[0px_10px_28px_0px_rgba(13,26,31,0.22)]"
+          class="aspect-2/3 w-full overflow-hidden rounded-lg shadow-lg"
           image-class="size-full object-cover object-top"
           preset="medium"
         />
       </NuxtLink>
-      <div class="flex min-w-0 flex-col items-start gap-2">
-        <p
-          class="text-xs font-semibold tracking-widest text-hikari-primary-600 uppercase dark:text-hikari-primary-400"
-        >
+      <Stack gap="sm" align="start" class="min-w-0">
+        <Text as="p" size="xs" weight="semibold" class="tracking-widest text-accent-text uppercase">
           完结经典
-        </p>
-        <h3 class="line-clamp-1 text-xl font-bold text-surface-950 dark:text-white">
-          {{ titleOf(item) }}
-        </h3>
-        <p class="h-5 text-sm text-muted-color">{{ factText }}</p>
-        <p
-          v-if="intro"
-          class="line-clamp-2 max-w-120 text-sm leading-5.5 text-surface-600 dark:text-surface-300"
-        >
+        </Text>
+        <Heading :level="3" size="xl" truncate>{{ titleOf(item) }}</Heading>
+        <Text as="p" size="sm" tone="muted" class="h-5">{{ factText }}</Text>
+        <Text v-if="intro" as="p" size="sm" tone="muted" class="line-clamp-2 max-w-120">
           {{ intro }}
-        </p>
-        <Button
-          as="router-link"
-          :to="`/mangas/${item.id}`"
-          label="看看这部"
-          size="small"
-          class="mt-1"
-        />
-      </div>
-    </div>
-  </section>
+        </Text>
+        <Button :as="NuxtLink" :to="`/mangas/${item.id}`" size="sm" class="mt-1">查看详情</Button>
+      </Stack>
+    </Inline>
+  </Stack>
 </template>

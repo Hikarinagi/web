@@ -1,4 +1,17 @@
 <script setup lang="ts">
+  import {
+    Combobox,
+    DatePicker,
+    FormField,
+    Input,
+    MultiCombobox,
+    MultiSelect,
+    NumberInput,
+    Select,
+    Switch,
+    TagsInput,
+    Textarea,
+  } from '@hina-ui/vue'
   import type { BackendEditorField, BackendEditorRef } from '~/features/creator/editor'
   import type { MediaValue } from '~/components/media-library/types'
   import type { EditorFieldPresentation } from '~/features/creator/editor/presentation'
@@ -14,20 +27,12 @@
   }>()
   const model = defineModel<unknown>()
 
-  // 子组件的 PrimeVue 输入由本组件手动桥接给外层 FormField。
-  // 否则 InputNumber 会同时被 FormField 注入和本组件 v-model 控制，清空 nullable 数字时会回弹旧值。
-  provide('$pcFormField', undefined)
-  provide('$pcForm', undefined)
-
   const disabled = computed(() => {
     const fn = props.presentation?.enableWhen
     return fn ? !fn(props.siblingValues ?? {}) : false
   })
 
-  const fieldId = useId()
   const label = computed(() => props.presentation?.label ?? props.field.field)
-
-  const showRequiredMark = computed(() => props.field.required === true)
 
   const hint = computed(
     () =>
@@ -45,6 +50,12 @@
     get: () => (typeof model.value === 'string' ? model.value : ''),
     set: value => {
       model.value = value === '' && props.field.nullable ? null : value
+    },
+  })
+  const asSelectValue = computed<string | number | null>({
+    get: () => (typeof model.value === 'string' ? model.value : null),
+    set: value => {
+      model.value = typeof value === 'string' && value !== '' ? value : null
     },
   })
   const asNumber = computed<number | null>({
@@ -65,6 +76,12 @@
       model.value = value
     },
   })
+  const asSelectArray = computed<Array<string | number>>({
+    get: () => (Array.isArray(model.value) ? (model.value as Array<string | number>) : []),
+    set: value => {
+      model.value = value.map(String)
+    },
+  })
   const asObjectArray = computed<Record<string, unknown>[]>({
     get: () => (Array.isArray(model.value) ? (model.value as Record<string, unknown>[]) : []),
     set: value => {
@@ -83,21 +100,37 @@
       model.value = value
     },
   })
-  const asDate = computed<Date | null>({
-    get: () => (model.value instanceof Date ? model.value : null),
+  const asIsoDate = computed<string | null>({
+    get: () => {
+      const value = model.value
+      if (!(value instanceof Date) || Number.isNaN(value.getTime())) return null
+      const month = `${value.getMonth() + 1}`.padStart(2, '0')
+      const day = `${value.getDate()}`.padStart(2, '0')
+      return `${value.getFullYear()}-${month}-${day}`
+    },
     set: value => {
-      model.value = value
+      if (!value) {
+        model.value = null
+        return
+      }
+      const [year, month, day] = value.split('-').map(Number)
+      model.value = new Date(year!, (month ?? 1) - 1, day ?? 1)
     },
   })
 </script>
 
 <template>
-  <div class="space-y-1.5">
-    <label :for="fieldId" class="flex items-center gap-1 text-sm font-medium">
+  <FormField
+    :name="field.field"
+    :required="field.required"
+    :description="hint"
+    description-placement="control"
+    :disabled="disabled"
+  >
+    <template #label>
       {{ label }}
-      <span v-if="showRequiredMark" class="text-red-500" aria-hidden="true">*</span>
       <CreatorEditorFieldReset v-model="model" :initial="initialValue" />
-    </label>
+    </template>
 
     <CreatorEditorScalarRefField
       v-if="field.value_type === 'ref'"
@@ -111,7 +144,6 @@
       v-else-if="presentation?.control === 'labels'"
       v-model="asObjectArray"
       :field="field"
-      :input-id="fieldId"
       :disabled="disabled"
     />
 
@@ -119,7 +151,6 @@
       v-else-if="presentation?.control === 'external-links'"
       v-model="asObjectArray"
       :field="field"
-      :input-id="fieldId"
       :disabled="disabled"
     />
 
@@ -127,7 +158,6 @@
       v-else-if="presentation?.control === 'steam-apps'"
       v-model="asObjectArray"
       :field="field"
-      :input-id="fieldId"
       :disabled="disabled"
     />
 
@@ -135,7 +165,6 @@
       v-else-if="field.value_type === 'object[]'"
       v-model="asObjectArray"
       :field="field"
-      :input-id="fieldId"
       :disabled="disabled"
     />
 
@@ -147,94 +176,54 @@
 
     <Select
       v-else-if="field.value_type === 'enum'"
-      v-model="asString"
-      :input-id="fieldId"
+      v-model="asSelectValue"
       :options="enumSelectOptions"
-      option-label="label"
-      option-value="value"
       :disabled="disabled"
-      :show-clear="field.nullable"
-      fluid
+      :clearable="field.nullable"
     />
     <MultiSelect
       v-else-if="field.value_type === 'enum[]'"
-      v-model="asArray"
-      :input-id="fieldId"
+      v-model="asSelectArray"
       :options="enumSelectOptions"
-      option-label="label"
-      option-value="value"
       :disabled="disabled"
-      fluid
     />
-    <Select
+    <Combobox
       v-else-if="presentation?.control === 'select'"
-      v-model="asString"
-      :input-id="fieldId"
+      v-model="asSelectValue"
       :options="presentation.options ?? []"
-      option-label="label"
-      option-value="value"
       :disabled="disabled"
-      :show-clear="field.nullable"
-      filter
-      fluid
+      :clearable="field.nullable"
     />
-    <MultiSelect
+    <MultiCombobox
       v-else-if="presentation?.control === 'multiselect'"
-      v-model="asArray"
-      :input-id="fieldId"
+      v-model="asSelectArray"
       :options="presentation.options ?? []"
-      option-label="label"
-      option-value="value"
-      :disabled="disabled"
-      filter
-      fluid
-    />
-    <ToggleSwitch
-      v-else-if="field.value_type === 'boolean'"
-      v-model="asBoolean"
-      :input-id="fieldId"
       :disabled="disabled"
     />
-    <InputNumber
+    <Switch v-else-if="field.value_type === 'boolean'" v-model="asBoolean" :disabled="disabled" />
+    <NumberInput
       v-else-if="field.value_type === 'int' || field.value_type === 'float'"
       v-model="asNumber"
-      :input-id="fieldId"
-      :max-fraction-digits="field.value_type === 'float' ? 2 : 0"
+      :format-options="{
+        maximumFractionDigits: field.value_type === 'float' ? 2 : 0,
+        useGrouping: false,
+      }"
       :disabled="disabled"
-      fluid
-      :use-grouping="false"
-      @input="event => (asNumber = typeof event.value === 'number' ? event.value : null)"
     />
-    <AutoComplete
-      v-else-if="field.value_type === 'string[]'"
-      v-model="asArray"
-      :input-id="fieldId"
-      multiple
-      :typeahead="false"
-      :disabled="disabled"
-      fluid
-    />
+    <TagsInput v-else-if="field.value_type === 'string[]'" v-model="asArray" :disabled="disabled" />
     <DatePicker
       v-else-if="field.value_type === 'date'"
-      v-model="asDate"
-      :input-id="fieldId"
-      date-format="yy-mm-dd"
+      v-model="asIsoDate"
       :disabled="disabled"
-      show-icon
-      show-button-bar
+      clearable
     />
     <Textarea
       v-else-if="presentation?.control === 'textarea'"
-      :id="fieldId"
       :model-value="asString.replace(/\r\n?/g, '\n')"
-      rows="4"
-      auto-resize
-      fluid
+      :autosize="{ minRows: 4 }"
       :disabled="disabled"
-      @update:model-value="value => (asString = typeof value === 'string' ? value : '')"
+      @update:model-value="value => (asString = value ?? '')"
     />
-    <InputText v-else :id="fieldId" v-model="asString" :disabled="disabled" fluid />
-
-    <small v-if="hint" class="block text-muted-color">{{ hint }}</small>
-  </div>
+    <Input v-else v-model="asString" :disabled="disabled" />
+  </FormField>
 </template>

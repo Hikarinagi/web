@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Inline, Link, Panel, Rating, Spoiler, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { workPath } from '#shared/utils/work'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
 
@@ -11,42 +12,36 @@
 </script>
 
 <template>
-  <ArticlePanel title="其它人写过这几部">
-    <div class="flex flex-col">
-      <div
+  <Panel title="其它人写过这几部" :padded="false">
+    <Stack gap="none" class="divide-y divide-line pb-2">
+      <Stack
         v-for="g in groups"
         :key="`${g.work.work_type}:${g.work.id}`"
-        class="border-t border-surface-100 px-4 py-3 first:border-t-0 dark:border-surface-800/60"
+        gap="sm"
+        class="px-(--hn-panel-p) py-3"
       >
-        <NuxtLink
-          :to="workTo(g.work)"
-          class="mb-2 block truncate text-[13px] font-semibold text-color transition-colors hover:text-primary"
-        >
-          {{ g.work.title }}
-        </NuxtLink>
-        <ul class="flex flex-col gap-2.5">
-          <li v-for="r in g.reviews" :key="r.id" class="flex flex-col gap-1">
-            <div class="flex items-center gap-2">
-              <Avatar :user="r.rater" card shape="circle" class="size-5! shrink-0" />
-              <UserName :user="r.rater" class="min-w-0 text-xs font-medium text-color" />
-              <span
-                v-if="r.rate != null"
-                class="ml-auto inline-flex shrink-0 items-center gap-0.5 text-xs font-semibold text-amber-500"
-              >
-                <Star class="size-3 fill-amber-400 text-amber-400" />
+        <Link :as="NuxtLink" :to="workTo(g.work)" tone="neutral" class="truncate">
+          <Text as="span" size="xs" weight="semibold">{{ g.work.title }}</Text>
+        </Link>
+        <Stack v-for="r in g.reviews" :key="r.id" gap="xs">
+          <Inline gap="sm" align="center" :wrap="false">
+            <Avatar :user="r.rater" card class="size-5! shrink-0" />
+            <UserName :user="r.rater" class="min-w-0 text-xs font-medium text-fg" />
+            <Inline v-if="r.rate != null" gap="xs" align="center" :wrap="false" class="ms-auto">
+              <Rating :model-value="r.rate" :max="10" :stars="5" readonly size="sm" />
+              <Text as="span" size="xs" weight="semibold" class="tabular-nums">
                 {{ r.rate.toFixed(1) }}
-              </span>
-            </div>
-            <p
-              class="text-xs leading-relaxed text-muted-color"
-              :class="{ 'line-clamp-2': !r.is_spoiler }"
-            >
-              <Spoiler v-if="r.is_spoiler" class="line-clamp-2">{{ r.rate_content }}</Spoiler>
-              <template v-else>{{ r.rate_content }}</template>
-            </p>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </ArticlePanel>
+              </Text>
+            </Inline>
+          </Inline>
+          <Spoiler v-if="r.is_spoiler" class="line-clamp-2 text-xs leading-relaxed text-muted">
+            {{ r.rate_content }}
+          </Spoiler>
+          <Text v-else size="xs" tone="muted" class="line-clamp-2 leading-relaxed">
+            {{ r.rate_content }}
+          </Text>
+        </Stack>
+      </Stack>
+    </Stack>
+  </Panel>
 </template>

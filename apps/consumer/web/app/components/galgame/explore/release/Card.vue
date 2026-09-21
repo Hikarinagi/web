@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Link, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { GalgamesPageData } from '~~/server/api/pages/galgames.get'
   import { producerText, titleOf } from '~/features/galgame/explore'
   import { topVotedMedia } from '~/utils/media/image'
@@ -23,6 +25,7 @@
     return Math.round(ratio * RELEASE_COVER_HEIGHT)
   })
   const cardStyle = computed(() => ({ width: `${coverWidth.value}px` }))
+  const coverStyle = { height: `${RELEASE_COVER_HEIGHT}px` }
   const processing = computed(() => ({
     width: coverWidth.value * 2,
     height: RELEASE_COVER_HEIGHT * 2,
@@ -44,13 +47,18 @@
 </script>
 
 <template>
-  <NuxtLink
+  <Link
+    :as="NuxtLink"
     :to="`/galgames/${item.id}`"
+    tone="neutral"
+    :underline="false"
     class="group flex shrink-0 flex-col gap-2"
     :style="cardStyle"
   >
-    <div
-      class="relative h-[258px] overflow-hidden rounded-lg border border-surface-200 bg-surface-100 transition-colors group-hover:border-surface-300 dark:border-surface-800 dark:bg-surface-800 dark:group-hover:border-surface-700"
+    <Stack
+      gap="none"
+      class="relative overflow-hidden rounded-lg border border-line bg-subtle transition-colors group-hover:border-line-strong"
+      :style="coverStyle"
     >
       <HikariImage
         :src="cover"
@@ -61,22 +69,30 @@
         :lazy="true"
         :skeleton="false"
       />
-      <span
+      <Text
         v-if="release"
-        class="absolute top-2 left-2 inline-flex h-6 items-center gap-1.5 rounded-md bg-surface-900/72 px-2 text-[11px] font-semibold text-white shadow-sm backdrop-blur"
+        as="span"
+        size="xs"
+        weight="semibold"
+        class="absolute top-2 left-2 inline-flex h-6 items-center gap-1.5 rounded-md bg-black/70 px-2 text-white shadow-sm backdrop-blur"
       >
         {{ release }}
-      </span>
-    </div>
-    <div class="flex min-w-0 flex-col gap-1">
-      <p
-        class="truncate text-sm font-semibold text-surface-900 transition-colors group-hover:text-primary dark:text-surface-100"
+      </Text>
+    </Stack>
+
+    <Stack gap="none" class="min-w-0 gap-1">
+      <Text
+        as="p"
+        size="sm"
+        weight="semibold"
+        truncate
+        class="transition-colors group-hover:text-accent-text"
       >
         {{ title }}
-      </p>
-      <p class="truncate text-xs font-medium text-surface-500 dark:text-surface-400">
+      </Text>
+      <Text as="p" size="xs" weight="medium" tone="muted" truncate>
         {{ producerText(item) }}
-      </p>
-    </div>
-  </NuxtLink>
+      </Text>
+    </Stack>
+  </Link>
 </template>

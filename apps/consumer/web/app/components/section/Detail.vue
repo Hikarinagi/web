@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import type { SectionPageData } from '~~/server/api/pages/sections/[id].get'
   import { sectionFeedSource } from '~/features/feed/sources'
 
@@ -11,40 +12,42 @@
 
 <template>
   <FeedPageShell>
-    <header class="mb-4 flex items-start gap-4">
-      <div class="size-12 shrink-0 overflow-hidden rounded-xl">
+    <Inline as="header" gap="md" align="start" :wrap="false" class="mb-4">
+      <Stack gap="none" class="size-12 shrink-0 overflow-hidden rounded-xl">
         <HikariImage
           v-if="section.icon || section.cover"
           :src="section.icon ?? section.cover"
           alt=""
           image-class="size-full object-cover"
         />
-        <div
+        <Center
           v-else
-          class="flex size-full items-center justify-center text-lg font-bold text-white"
-          :style="{ backgroundColor: section.color ?? 'var(--p-primary-500)' }"
+          class="size-full text-lg font-bold text-white"
+          :style="{ backgroundColor: section.color ?? 'var(--hn-accent)' }"
         >
           {{ section.name.slice(0, 1) }}
-        </div>
-      </div>
-      <div class="flex min-w-0 flex-1 flex-col gap-1.5">
-        <h1 class="text-2xl font-bold wrap-anywhere text-color">{{ section.name }}</h1>
-        <div class="flex items-center gap-2 text-xs text-muted-color">
-          <span>{{ section.use_count }} 篇内容</span>
-          <span>·</span>
-          <span>{{ section.follow_count }} 关注</span>
-        </div>
-        <p v-if="section.description" class="text-sm leading-relaxed text-muted-color">
+        </Center>
+      </Stack>
+
+      <Stack gap="none" class="min-w-0 flex-1 gap-1.5">
+        <Heading :level="1" size="2xl" class="font-bold wrap-anywhere">{{ section.name }}</Heading>
+        <Inline gap="sm" align="center" :wrap="false">
+          <Text as="span" size="xs" tone="muted">{{ section.use_count }} 篇内容</Text>
+          <Text as="span" size="xs" tone="muted">·</Text>
+          <Text as="span" size="xs" tone="muted">{{ section.follow_count }} 关注</Text>
+        </Inline>
+        <Text v-if="section.description" as="p" size="sm" tone="muted" class="leading-relaxed">
           {{ section.description }}
-        </p>
-      </div>
+        </Text>
+      </Stack>
+
       <FeedFollowButton
         :id="section.id"
         kind="section"
         :initial-following="section.followed"
         class="mt-1 shrink-0"
       />
-    </header>
+    </Inline>
 
     <FeedComposer :section-id="section.id" class="mb-4" />
     <FeedList :source="source" />

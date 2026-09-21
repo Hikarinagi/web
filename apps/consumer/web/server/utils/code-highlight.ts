@@ -18,5 +18,6 @@ export async function highlightCode(code: string, lang: CodeLang): Promise<strin
     lang,
     themes: { light: 'github-light', dark: 'github-dark' },
     defaultColor: false,
+    structure: 'inline',
   })
 }

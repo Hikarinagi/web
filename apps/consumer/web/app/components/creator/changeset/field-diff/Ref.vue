@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
 
   const props = defineProps<{
@@ -20,10 +21,14 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-2">
-    <span
+  <Inline gap="sm" align="center">
+    <Inline
       v-if="from != null"
-      class="inline-flex items-center gap-2 rounded-lg bg-red-500/10 px-2 py-1 text-red-700 dark:text-red-300"
+      as="span"
+      gap="sm"
+      align="center"
+      :wrap="false"
+      class="rounded-lg bg-danger-soft px-2 py-1 text-danger-text"
     >
       <HikariImage
         v-if="fromCover"
@@ -33,19 +38,26 @@
         class="size-7 shrink-0 overflow-hidden rounded"
         image-class="size-full object-cover"
       />
-      <span class="text-sm font-medium line-through">{{ fromName || `#${from}` }}</span>
-      <span class="font-mono text-xs line-through opacity-70">#{{ from }}</span>
-    </span>
-    <span
-      v-else
-      class="rounded bg-red-500/10 px-2 py-1 text-red-700 line-through dark:text-red-300"
-    >
+      <Text as="span" size="sm" weight="medium" class="text-inherit line-through">
+        {{ fromName || `#${from}` }}
+      </Text>
+      <Text as="span" size="xs" class="font-mono text-inherit line-through opacity-70">
+        #{{ from }}
+      </Text>
+    </Inline>
+    <Text v-else as="span" class="rounded bg-danger-soft px-2 py-1 text-danger-text line-through">
       （空）
-    </span>
-    <ArrowRight :size="14" class="shrink-0 text-muted-color" aria-hidden="true" />
-    <span
+    </Text>
+
+    <ArrowRight class="size-3.5 shrink-0 text-muted" aria-hidden="true" />
+
+    <Inline
       v-if="to != null"
-      class="inline-flex items-center gap-2 rounded-lg bg-green-500/10 px-2 py-1 text-green-700 dark:text-green-300"
+      as="span"
+      gap="sm"
+      align="center"
+      :wrap="false"
+      class="rounded-lg bg-success-soft px-2 py-1 text-success-text"
     >
       <HikariImage
         v-if="toCover"
@@ -55,11 +67,11 @@
         class="size-7 shrink-0 overflow-hidden rounded"
         image-class="size-full object-cover"
       />
-      <span class="text-sm font-medium">{{ toName || `#${to}` }}</span>
-      <span class="font-mono text-xs opacity-70">#{{ to }}</span>
-    </span>
-    <span v-else class="rounded bg-green-500/10 px-2 py-1 text-green-700 dark:text-green-300">
-      （空）
-    </span>
-  </div>
+      <Text as="span" size="sm" weight="medium" class="text-inherit">
+        {{ toName || `#${to}` }}
+      </Text>
+      <Text as="span" size="xs" class="font-mono text-inherit opacity-70">#{{ to }}</Text>
+    </Inline>
+    <Text v-else as="span" class="rounded bg-success-soft px-2 py-1 text-success-text">（空）</Text>
+  </Inline>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Grid } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaCharacters' })
@@ -9,13 +10,13 @@
 </script>
 
 <template>
-  <MangaSection v-if="characters.length" title="登场角色" :meta="`共 ${total} 位`">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <WorkSection v-if="characters.length" title="登场角色" :meta="`共 ${total} 位`">
+    <Grid :cols="1" gap="none" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <MangaCharactersCard
         v-for="item in characters"
         :key="`${item.role}-${item.character.id}`"
         :item="item"
       />
-    </div>
-  </MangaSection>
+    </Grid>
+  </WorkSection>
 </template>

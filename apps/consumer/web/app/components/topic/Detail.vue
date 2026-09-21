@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Hash } from '@lucide/vue'
   import type { TopicPageData } from '~~/server/api/pages/topics/[id].get'
   import { topicFeedSource } from '~/features/feed/sources'
 
@@ -11,28 +13,29 @@
 
 <template>
   <FeedPageShell>
-    <header class="mb-4 flex items-start gap-4">
-      <div class="flex min-w-0 flex-1 flex-col gap-2">
-        <h1 class="flex items-baseline gap-1 text-2xl font-bold wrap-anywhere text-color">
-          <span class="text-primary-500">#</span>
+    <Inline as="header" gap="md" align="start" :wrap="false" class="mb-4">
+      <Stack gap="sm" class="min-w-0 flex-1">
+        <Heading :level="1" size="2xl" class="flex items-center gap-1.5 font-bold wrap-anywhere">
+          <Hash class="size-6 shrink-0 text-accent-text" aria-hidden="true" />
           {{ topic.name }}
-        </h1>
-        <p v-if="topic.description" class="text-sm leading-relaxed text-muted-color">
+        </Heading>
+        <Text v-if="topic.description" as="p" size="sm" tone="muted" class="leading-relaxed">
           {{ topic.description }}
-        </p>
-        <div class="flex items-center gap-2 text-xs text-muted-color">
-          <span>{{ topic.use_count }} 篇内容</span>
-          <span>·</span>
-          <span>{{ topic.follow_count }} 关注</span>
-        </div>
-      </div>
+        </Text>
+        <Inline gap="sm" align="center" :wrap="false">
+          <Text as="span" size="xs" tone="muted">{{ topic.use_count }} 篇内容</Text>
+          <Text as="span" size="xs" tone="muted">·</Text>
+          <Text as="span" size="xs" tone="muted">{{ topic.follow_count }} 关注</Text>
+        </Inline>
+      </Stack>
+
       <FeedFollowButton
         :id="topic.id"
         kind="topic"
         :initial-following="topic.followed"
         class="mt-1 shrink-0"
       />
-    </header>
+    </Inline>
 
     <FeedComposer :topic="{ id: topic.id, name: topic.name }" class="mb-4" />
     <FeedList :source="source" />

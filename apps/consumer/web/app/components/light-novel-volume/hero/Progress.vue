@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Progress, Stack, Text } from '@hina-ui/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { timeFromNow } from '~/utils/time-format'
 
@@ -10,29 +11,24 @@
 </script>
 
 <template>
-  <div v-if="progress && pct > 0" class="mx-auto flex max-w-sm flex-col gap-1.5 lg:mx-0">
-    <div
-      class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-surface-500 dark:text-surface-400"
-    >
-      <span
-        class="font-medium"
-        :class="
-          done ? 'text-emerald-600 dark:text-emerald-400' : 'text-surface-700 dark:text-surface-200'
-        "
-      >
+  <Stack v-if="progress && pct > 0" gap="none" class="mx-auto max-w-sm gap-1.5 lg:mx-0">
+    <Inline gap="none" align="center" wrap class="gap-x-1.5 gap-y-0.5">
+      <Text as="span" size="xs" weight="medium" :tone="done ? 'success' : 'default'">
         {{ done ? '已读完' : `已读 ${Math.round(pct)}%` }}
-      </span>
-      <span v-if="progress.current_chapter_title" class="min-w-0 truncate">
+      </Text>
+      <Text
+        v-if="progress.current_chapter_title"
+        as="span"
+        size="xs"
+        tone="muted"
+        truncate
+        class="min-w-0"
+      >
         · 上次读到「{{ progress.current_chapter_title }}」
-      </span>
-      <span>· {{ timeFromNow(progress.last_read) }}</span>
-    </div>
-    <div class="h-1 overflow-hidden rounded-full bg-surface-200/70 dark:bg-surface-700/60">
-      <div
-        class="h-full rounded-full"
-        :class="done ? 'bg-emerald-500' : 'bg-primary'"
-        :style="{ width: `${pct}%` }"
-      />
-    </div>
-  </div>
+      </Text>
+      <Text as="span" size="xs" tone="muted">· {{ timeFromNow(progress.last_read) }}</Text>
+    </Inline>
+
+    <Progress :value="pct" size="sm" :tone="done ? 'success' : 'accent'" />
+  </Stack>
 </template>

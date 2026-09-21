@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Card, Inline, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { workPath } from '#shared/utils/work'
   import type { PostPageData } from '~~/server/api/pages/posts/[id].get'
 
@@ -13,15 +15,18 @@
 </script>
 
 <template>
-  <div v-if="visibleWorks.length" class="flex flex-col gap-2">
-    <span class="text-xs text-muted-color">提到了这些作品</span>
-    <div class="flex flex-wrap gap-2">
-      <NuxtLink
+  <Stack v-if="visibleWorks.length" gap="sm">
+    <Text as="span" size="xs" tone="muted">提到了这些作品</Text>
+    <Inline gap="sm">
+      <Card
         v-for="w in visibleWorks"
         :key="`${w.work_type}:${w.id}`"
+        :as="NuxtLink"
         :to="to(w)"
-        class="inline-flex items-center gap-2 rounded-lg border border-surface-200 bg-surface-0 py-1 pr-3 pl-1 transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
+        :padded="false"
+        class="hn-state-layer inline-flex hn-interactive items-center gap-2 py-1 ps-1 pe-3 shadow-none"
       >
+        <Ripple />
         <HikariImage
           :src="w.cover"
           :alt="w.title"
@@ -29,8 +34,8 @@
           image-class="size-full object-cover"
           :processing="{ q: 80 }"
         />
-        <span class="text-[13px] font-medium text-color">{{ w.title }}</span>
-      </NuxtLink>
-    </div>
-  </div>
+        <Text as="span" size="xs" weight="medium">{{ w.title }}</Text>
+      </Card>
+    </Inline>
+  </Stack>
 </template>

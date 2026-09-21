@@ -1,6 +1,6 @@
 <script setup lang="ts">
+  import { FormField, Popover, Select, Stack, Tag, Text } from '@hina-ui/vue'
   import { Tags } from '@lucide/vue'
-  import Popover from 'primevue/popover'
   import type { BackendEditorField } from '~/features/creator/editor'
   import type { EditorRelationRow } from '~/features/creator/editor/relation'
   import { enumLabel, enumOptions } from '~/features/creator/editor/presentation/enum-labels'
@@ -10,8 +10,6 @@
     attributes: NonNullable<BackendEditorField['attributes']>[number][]
   }>()
   const row = defineModel<EditorRelationRow>('row', { required: true })
-  const fieldId = useId()
-  const popRef = useTemplateRef<InstanceType<typeof Popover>>('popRef')
 
   const ATTR_LABEL: Record<string, string> = { language: '语言', kind: '类型' }
 
@@ -40,45 +38,45 @@
 </script>
 
 <template>
-  <Button
-    v-tooltip.top="summary || '标注封面语言与类型'"
-    unstyled
-    :class="[
-      'flex h-6 min-w-0 items-center gap-1 rounded-full px-2 text-[10px] font-medium transition-colors',
-      summary ? 'bg-surface-0/90 text-surface-900' : 'bg-surface-900/55 text-white',
-    ]"
-    @click="event => popRef?.toggle(event)"
-  >
-    <Tags :size="11" class="shrink-0" />
-    <span class="truncate">{{ summary || '标注' }}</span>
-  </Button>
+  <Popover align="start" class="w-56">
+    <Tag
+      v-tooltip="summary || '标注封面语言与类型'"
+      as="button"
+      type="button"
+      size="sm"
+      variant="solid"
+      :tone="summary ? 'neutral' : 'accent'"
+      class="hn-state-layer min-w-0 hn-interactive"
+    >
+      <Tags aria-hidden="true" />
+      <Text as="span" size="xs" truncate class="text-inherit">{{ summary || '标注' }}</Text>
+    </Tag>
 
-  <Popover ref="popRef">
-    <div class="flex w-56 flex-col gap-3">
-      <div v-for="attr in attributes" :key="attr.name" class="flex flex-col gap-1.5">
-        <label :for="`${fieldId}-${attr.name}`" class="text-xs font-medium">
-          {{ ATTR_LABEL[attr.name] ?? attr.name }}
-        </label>
-        <Select
-          :input-id="`${fieldId}-${attr.name}`"
-          :model-value="text(attr.name) || null"
-          :options="
-            attr.name === 'language'
-              ? LANGUAGE_OPTIONS
-              : enumOptions(attr.enum_name, attr.enum_values ?? [])
-          "
-          option-label="label"
-          option-value="value"
-          placeholder="未标注"
-          size="small"
-          show-clear
-          fluid
-          @update:model-value="
-            value => setAttr(attr.name, typeof value === 'string' ? value : null)
-          "
-        />
-        <small v-if="attr.help" class="text-xs text-muted-color">{{ attr.help }}</small>
-      </div>
-    </div>
+    <template #content>
+      <Stack gap="sm">
+        <FormField
+          v-for="attr in attributes"
+          :key="attr.name"
+          :label="ATTR_LABEL[attr.name] ?? attr.name"
+          :description="attr.help ?? undefined"
+          description-placement="control"
+        >
+          <Select
+            size="sm"
+            :model-value="text(attr.name) || null"
+            :options="
+              attr.name === 'language'
+                ? LANGUAGE_OPTIONS
+                : enumOptions(attr.enum_name, attr.enum_values ?? [])
+            "
+            placeholder="未标注"
+            clearable
+            @update:model-value="
+              value => setAttr(attr.name, typeof value === 'string' ? value : null)
+            "
+          />
+        </FormField>
+      </Stack>
+    </template>
   </Popover>
 </template>

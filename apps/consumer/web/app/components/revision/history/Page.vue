@@ -1,4 +1,18 @@
 <script setup lang="ts">
+  import {
+    Button,
+    Empty,
+    Heading,
+    Inline,
+    Stack,
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+    Text,
+  } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { ArrowLeft, History, SquarePen } from '@lucide/vue'
   import type { RevisionHistoryPageData } from '~~/server/api/pages/revisions/[type]/[id].get'
 
@@ -10,77 +24,64 @@
 </script>
 
 <template>
-  <div class="mx-auto flex max-w-app flex-col gap-7 px-6 py-10">
-    <header class="flex flex-col gap-5 border-b border-surface-200 pb-6 dark:border-surface-800">
-      <div class="flex flex-wrap items-center justify-between gap-3">
+  <Stack gap="lg" class="mx-auto max-w-app px-6 py-10">
+    <Stack as="header" gap="md" class="border-b border-line pb-6">
+      <Inline gap="sm" align="center" justify="between" wrap>
         <Button
-          as="router-link"
+          :as="NuxtLink"
           :to="pageData.resource.detail_to"
-          label="返回详情"
-          severity="secondary"
-          outlined
-          size="small"
+          variant="outline"
+          tone="neutral"
+          size="sm"
         >
-          <template #icon>
-            <ArrowLeft class="size-4" aria-hidden="true" />
-          </template>
+          <template #icon><ArrowLeft /></template>
+          返回详情
         </Button>
         <Button
-          as="router-link"
+          :as="NuxtLink"
           :to="pageData.resource.edit_to"
           target="_blank"
-          label="修订此条目"
-          severity="secondary"
-          outlined
-          size="small"
+          variant="outline"
+          tone="neutral"
+          size="sm"
         >
-          <template #icon>
-            <SquarePen class="size-4" aria-hidden="true" />
-          </template>
+          <template #icon><SquarePen /></template>
+          修订此条目
         </Button>
-      </div>
+      </Inline>
 
-      <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-2 text-sm text-muted-color">
+      <Stack gap="xs" align="start">
+        <Inline gap="sm" align="center">
           <History class="size-4" aria-hidden="true" />
-          <span>{{ pageData.resource.title }} 的修订历史</span>
-        </div>
-        <h1 class="text-2xl font-semibold tracking-normal text-surface-950 dark:text-surface-0">
-          {{ pageData.resource.title }}
-        </h1>
-        <p v-if="pageData.resource.subtitle" class="text-sm text-muted-color">
+          <Text as="span" size="sm" tone="muted">{{ pageData.resource.title }} 的修订历史</Text>
+        </Inline>
+        <Heading :level="1" size="2xl">{{ pageData.resource.title }}</Heading>
+        <Text v-if="pageData.resource.subtitle" as="p" size="sm" tone="muted">
           {{ pageData.resource.subtitle }}
-        </p>
-        <p class="text-sm text-muted-color">共 {{ meta.total_items }} 条修订记录</p>
-      </div>
-    </header>
+        </Text>
+        <Text as="p" size="sm" tone="muted">共 {{ meta.total_items }} 条修订记录</Text>
+      </Stack>
+    </Stack>
 
-    <div class="transition-opacity" :class="loading ? 'opacity-60' : 'opacity-100'">
-      <div
-        v-if="revisions.length"
-        class="overflow-hidden rounded-md border border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-900"
-      >
-        <div
-          class="hidden grid-cols-[112px_minmax(0,1fr)_172px] border-b border-surface-200 bg-surface-50 px-4 py-2 text-xs font-medium text-muted-color md:grid dark:border-surface-800 dark:bg-surface-900"
-        >
-          <span>版本</span>
-          <span>变更内容</span>
-          <span class="text-right">修订者</span>
-        </div>
-        <RevisionHistoryItem
-          v-for="revision in revisions"
-          :key="revision.id"
-          :revision="revision"
-          class="border-b border-surface-200 last:border-b-0 dark:border-surface-800"
-        />
-      </div>
-      <div
-        v-else
-        class="rounded-lg border border-dashed border-surface-200 py-8 text-center text-sm text-muted-color dark:border-surface-800"
-      >
-        还没有修订记录
-      </div>
-    </div>
+    <Stack gap="none" class="transition-opacity" :class="loading ? 'opacity-60' : 'opacity-100'">
+      <Table v-if="revisions.length" class="hikari-table-stack">
+        <TableHeader class="hidden md:table-header-group">
+          <TableRow>
+            <TableHead class="w-28 px-4 text-xs">版本</TableHead>
+            <TableHead class="px-4 text-xs">变更内容</TableHead>
+            <TableHead align="end" class="w-43 px-4 text-xs">修订者</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <RevisionHistoryItem
+            v-for="revision in revisions"
+            :key="revision.id"
+            :revision="revision"
+          />
+        </TableBody>
+      </Table>
+      <Empty v-else size="sm" title="还没有修订记录" />
+    </Stack>
 
     <Paginator
       v-model:page="page"
@@ -89,5 +90,5 @@
       route="replace"
       align="between"
     />
-  </div>
+  </Stack>
 </template>

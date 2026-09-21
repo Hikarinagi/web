@@ -1,22 +1,14 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { useExploreRails } from '~/features/light-novel/useExploreRails'
 
   defineOptions({ name: 'LightNovelExploreInfiniteRails' })
 
-  const { entries, loading, done, loadMore } = useExploreRails()
-  const sentinel = ref<HTMLElement | null>(null)
-
-  useIntersectionObserver(
-    sentinel,
-    ([entry]) => {
-      if (entry?.isIntersecting) void loadMore()
-    },
-    { rootMargin: '600px' },
-  )
+  const { entries, loading, failed, done, loadMore } = useExploreRails()
 </script>
 
 <template>
-  <div class="flex flex-col gap-14">
+  <Stack gap="none" class="gap-14">
     <template v-for="entry in entries" :key="entry.key">
       <PromotionBanner v-if="entry.kind === 'banner'" :banner="entry.banner" />
       <LightNovelExploreSeriesRail
@@ -27,15 +19,13 @@
         :items="entry.items"
       />
     </template>
-    <div ref="sentinel" aria-hidden="true" class="h-px" />
-    <div v-if="loading" class="flex justify-center py-4">
-      <Spinner :size="28" />
-    </div>
-    <p
-      v-else-if="done && entries.length"
-      class="py-4 text-center text-sm text-surface-400 dark:text-surface-500"
-    >
-      没有更多了
-    </p>
-  </div>
+
+    <StreamTail
+      :loading="loading"
+      :failed="failed"
+      :done="done"
+      :has-items="entries.length > 0"
+      @load="loadMore"
+    />
+  </Stack>
 </template>

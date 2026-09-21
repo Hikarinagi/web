@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Link, Panel, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { ArticlePageData } from '~~/server/api/pages/articles/[id].get'
   import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
 
@@ -8,13 +10,18 @@
 </script>
 
 <template>
-  <ArticlePanel title="作者最近写的">
-    <ul class="pb-1.5">
-      <li v-for="a in articles" :key="a.id">
-        <NuxtLink
-          :to="`/articles/${a.id}`"
-          class="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-surface-50 dark:hover:bg-surface-800/50"
-        >
+  <Panel title="作者最近写的" :padded="false">
+    <Stack gap="none" class="pb-2">
+      <Link
+        v-for="a in articles"
+        :key="a.id"
+        :as="NuxtLink"
+        :to="`/articles/${a.id}`"
+        tone="neutral"
+        class="hn-state-layer block hn-interactive px-(--hn-panel-p) py-2.5 hn-press-none"
+      >
+        <Ripple />
+        <Inline gap="md" align="center" :wrap="false">
           <HikariImage
             v-if="a.cover"
             :src="a.cover.src"
@@ -23,15 +30,15 @@
             image-class="size-full object-cover"
             :processing="{ q: 80 }"
           />
-          <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-            <p class="line-clamp-2 text-[13px] font-medium text-color">{{ a.title }}</p>
-            <span class="text-[11px] text-muted-color">
+          <Stack gap="xs" class="min-w-0 flex-1">
+            <Text as="span" size="xs" weight="medium" class="line-clamp-2">{{ a.title }}</Text>
+            <Text as="span" size="xs" tone="muted">
               {{ datePartFormat(a.created_at, TimeFormatEnum.M_D_CN) }} ·
               {{ views(a.view_count) }} 阅读
-            </span>
-          </div>
-        </NuxtLink>
-      </li>
-    </ul>
-  </ArticlePanel>
+            </Text>
+          </Stack>
+        </Inline>
+      </Link>
+    </Stack>
+  </Panel>
 </template>

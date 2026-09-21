@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaAbout' })
@@ -16,8 +17,8 @@
 </script>
 
 <template>
-  <MangaSection title="关于本作">
-    <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
+  <WorkSection title="关于本作">
+    <Flex direction="col" gap="xl" class="lg:flex-row lg:items-start">
       <MangaAboutIntro :manga="manga" :tags="tags" />
       <MangaAboutArchive
         :manga="manga"
@@ -26,7 +27,7 @@
         :contributors="contributors"
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />
-    </div>
+    </Flex>
     <MangaAboutStaff :people="people" />
-  </MangaSection>
+  </WorkSection>
 </template>

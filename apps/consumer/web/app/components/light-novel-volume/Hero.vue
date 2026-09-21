@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex, Heading, Link, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
   import { LibraryBig } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import {
@@ -38,25 +39,26 @@
 </script>
 
 <template>
-  <section
-    class="relative isolate overflow-hidden border-b border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-950"
+  <Stack
+    as="section"
+    gap="none"
+    class="hikari-hero-veil-diagonal relative isolate overflow-hidden border-b border-line bg-surface"
   >
     <HikariImage
       :src="banner"
       alt=""
-      class="absolute inset-0 -z-20 h-full w-full"
+      class="absolute inset-0 -z-20 size-full"
       image-class="object-cover"
       :processing="bannerProcessing"
     >
-      <template #empty><span /></template>
-      <template #error><span /></template>
+      <template #empty><VisuallyHidden /></template>
+      <template #error><VisuallyHidden /></template>
     </HikariImage>
-    <div class="absolute inset-0 -z-10 bg-surface-0/80 dark:bg-surface-950/76" />
-    <div
-      class="absolute inset-0 -z-10 bg-[linear-gradient(115deg,var(--p-surface-0)_0%,rgba(255,255,255,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(57,197,187,0.18),transparent_32%)] dark:bg-[linear-gradient(115deg,var(--p-surface-950)_0%,rgba(3,7,18,0.86)_42%,rgba(244,114,182,0.12)_100%),radial-gradient(circle_at_18%_18%,rgba(124,235,224,0.14),transparent_34%)]"
-    />
-    <div
-      class="mx-auto flex max-w-app flex-col gap-8 px-5 pt-[calc(var(--app-header-height)+2rem)] pb-10 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:pt-[calc(var(--app-header-height)+2.5rem)] lg:pb-12"
+
+    <Flex
+      direction="col"
+      gap="none"
+      class="mx-auto w-full max-w-app gap-8 px-5 pt-[calc(var(--app-header-height)+2rem)] pb-10 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:pt-[calc(var(--app-header-height)+2.5rem)] lg:pb-12"
     >
       <LightNovelVolumeHeroCover :cover="cover" :title="title">
         <WorkCoverVoteEntry
@@ -67,31 +69,32 @@
         />
       </LightNovelVolumeHeroCover>
 
-      <div class="w-full min-w-0 flex-1 space-y-4 text-center lg:text-left">
-        <NuxtLink
-          :to="`/light-novels/${lightNovel.id}`"
-          class="inline-flex max-w-full items-center gap-1.5 text-sm text-surface-500 transition-colors hover:text-hikari-primary-600 dark:text-surface-400 dark:hover:text-hikari-primary-400"
-        >
-          <LibraryBig class="size-4 shrink-0" aria-hidden="true" />
-          <span class="truncate">{{ seriesTitle }}</span>
+      <Stack gap="md" class="w-full min-w-0 flex-1 text-center lg:text-left">
+        <NuxtLink v-slot="{ href, navigate }" :to="`/light-novels/${lightNovel.id}`" custom>
+          <Link
+            :href="href ?? undefined"
+            tone="neutral"
+            :underline="false"
+            class="inline-flex max-w-full items-center gap-1.5 self-center text-sm text-muted hover:text-accent-text lg:self-start"
+            @click="navigate"
+          >
+            <LibraryBig class="size-4 shrink-0" aria-hidden="true" />
+            <Text as="span" size="sm" truncate>{{ seriesTitle }}</Text>
+          </Link>
         </NuxtLink>
 
-        <div class="space-y-3">
+        <Stack gap="none" class="gap-3">
           <LightNovelVolumeHeroBadges :volume="volume" />
-          <h1
-            class="text-3xl leading-tight font-semibold text-surface-950 md:text-4xl dark:text-surface-0"
-          >
+          <Heading :level="1" class="text-3xl leading-tight font-semibold md:text-4xl">
             {{ title }}
-          </h1>
-          <p v-if="originalName" class="text-lg leading-7 text-surface-600 dark:text-surface-300">
-            {{ originalName }}
-          </p>
-        </div>
+          </Heading>
+          <Text v-if="originalName" as="p" size="lg" tone="muted">{{ originalName }}</Text>
+        </Stack>
 
         <LightNovelVolumeHeroMeta :volume="volume" />
         <LightNovelVolumeHeroProgress :progress="progress" />
         <LightNovelVolumeHeroCta :volume="volume" :progress="progress" :my-rate="myRate" />
-      </div>
-    </div>
-  </section>
+      </Stack>
+    </Flex>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { inject } from 'vue'
   import { ENTITY_CARD_IN_EDITOR_KEY } from './context'
 
@@ -23,18 +24,22 @@
 </script>
 
 <template>
-  <aside
-    :class="[
-      'relative block overflow-hidden rounded-(--editor-panel-radius) bg-(--editor-toolbar-bg) p-3 text-inherit',
-      !inEditor && 'my-[0.8em]',
-    ]"
+  <Stack
+    as="aside"
+    gap="none"
+    :class="
+      cn(
+        'relative overflow-hidden rounded-(--editor-panel-radius) bg-(--editor-toolbar-bg) p-3 text-inherit',
+        !inEditor && 'my-hikari-node',
+      )
+    "
     v-bind="asideAttrs"
   >
     <NuxtLink v-if="href" :to="href" class="block text-inherit no-underline hover:no-underline">
       <slot />
     </NuxtLink>
-    <div v-else class="block cursor-default text-inherit opacity-60">
+    <Stack v-else gap="none" class="cursor-default text-inherit opacity-60">
       <slot />
-    </div>
-  </aside>
+    </Stack>
+  </Stack>
 </template>

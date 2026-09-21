@@ -74,7 +74,7 @@
             :y="edge.labelY"
             text-anchor="middle"
             dominant-baseline="central"
-            class="text-[11px] font-medium"
+            class="text-xs font-medium"
             :fill="toneOf(edge.variant)"
           >
             {{ edge.label }}
@@ -110,7 +110,7 @@
           :y="node.y + node.height / 2"
           text-anchor="middle"
           dominant-baseline="central"
-          class="fill-surface-900 text-[15px] font-semibold dark:fill-surface-50"
+          class="fill-fg text-sm font-semibold"
         >
           {{ node.label }}
         </text>

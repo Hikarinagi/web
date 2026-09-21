@@ -4,6 +4,7 @@ interface UseReaderInteractionsOptions {
   educationVisible: Ref<boolean>
   next: () => void
   previous: () => void
+  showChrome: () => void
   hideChrome: () => void
   toggleChrome: () => void
 }
@@ -11,20 +12,17 @@ interface UseReaderInteractionsOptions {
 export function useReaderInteractions(options: UseReaderInteractionsOptions) {
   let lastPointerType = 'mouse'
 
-  function onChromeIntent() {
+  function onChromeIntent(event: PointerEvent) {
     if (options.educationVisible.value) return
-    options.toggleChrome()
+    if (event.pointerType === 'mouse') options.hideChrome()
+    else options.toggleChrome()
   }
 
-  /**
-   * A touch long-press raises `contextmenu` on Android. The mobile reader does
-   * nothing on long-press, so neither do we — right-click stays a pointer-only
-   * shortcut.
-   */
   function onContextMenu(event: Event) {
     event.preventDefault()
     if (lastPointerType === 'touch') return
-    onChromeIntent()
+    if (options.educationVisible.value) return
+    options.showChrome()
   }
 
   function onKeydown(event: KeyboardEvent) {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button } from '@hina-ui/vue'
   import { ImagePlus } from '@lucide/vue'
   import type { ClassValue } from 'clsx'
   import { cn } from '~/utils/cn'
@@ -12,10 +13,9 @@
       mode?: MediaLibraryMode
       max?: number | undefined
       label?: string | null
-      iconSize?: number
       disabled?: boolean
     }>(),
-    { mode: 'single', iconSize: 26, max: undefined, label: null },
+    { mode: 'single', max: undefined, label: null },
   )
   const emit = defineEmits<{ pick: [media: MediaValue[]] }>()
   const attrs = useAttrs()
@@ -32,17 +32,14 @@
 
 <template>
   <Button
-    variant="outlined"
-    severity="secondary"
-    icon-pos="top"
+    variant="outline"
+    tone="neutral"
+    size="sm"
     :disabled="disabled"
-    :label="label ?? defaultLabel"
-    size="small"
-    :class="cn('aspect-square w-full!', attrs.class as ClassValue)"
+    :class="cn('aspect-square h-auto w-full flex-col', attrs.class as ClassValue)"
     @click="onClick"
   >
-    <template #icon>
-      <ImagePlus :size="iconSize" />
-    </template>
+    <template #icon><ImagePlus /></template>
+    {{ label ?? defaultLabel }}
   </Button>
 </template>

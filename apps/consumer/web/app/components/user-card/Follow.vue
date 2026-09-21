@@ -2,21 +2,26 @@
   import { UserCheck, UserPlus } from '@lucide/vue'
   import { useUserCardFollow } from './composables/useUserCardFollow'
 
-  const { isFollowing, toggling, toggleFollow } = useUserCardFollow()
+  defineOptions({ inheritAttrs: false })
+
+  const { isFollowing, toggling, confirmOpen, toggleFollow, unfollow } = useUserCardFollow()
 </script>
 
 <template>
   <Button
-    :label="isFollowing ? '已关注' : '关注'"
-    :severity="isFollowing ? 'secondary' : undefined"
-    :loading="toggling"
-    size="small"
-    rounded
     login-required
+    v-bind="$attrs"
+    :variant="isFollowing ? 'soft' : 'solid'"
+    :tone="isFollowing ? 'neutral' : 'accent'"
+    :loading="toggling"
+    pill
     @click="toggleFollow"
   >
-    <template v-if="!toggling" #icon>
-      <component :is="isFollowing ? UserCheck : UserPlus" class="size-4" />
+    <template #icon>
+      <component :is="isFollowing ? UserCheck : UserPlus" />
     </template>
+    {{ isFollowing ? '已关注' : '关注' }}
   </Button>
+
+  <UserUnfollowDialog v-model:open="confirmOpen" :confirm="unfollow" />
 </template>

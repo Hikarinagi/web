@@ -165,20 +165,20 @@
       @node-change="onNodeChange"
     >
       <div class="hikari-block-handle" :data-shown="shown">
-        <Button
-          v-tooltip.left="'在下方插入'"
-          unstyled
+        <button
+          v-tooltip="{ content: '在下方插入', side: 'left' }"
           type="button"
+          aria-label="在下方插入"
           draggable="false"
           class="hikari-block-handle__btn"
           @mousedown.prevent
           @click="onInsert"
         >
           <Plus :size="15" />
-        </Button>
+        </button>
         <div
           ref="gripRef"
-          v-tooltip.left="'拖动以移动，点击打开菜单'"
+          v-tooltip="{ content: '拖动以移动，点击打开菜单', side: 'left' }"
           role="button"
           aria-label="拖动以移动，点击打开菜单"
           class="hikari-block-handle__btn hikari-block-handle__grip"

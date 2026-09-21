@@ -13,7 +13,7 @@ import type {
 } from '~/components/reader/EducationOverlay.vue'
 
 // Bumped when the described gestures change so returning readers see it again.
-export const HIKARI_READER_EDUCATION_KEY = 'hikari-reader-education-seen-v1'
+export const HIKARI_READER_EDUCATION_KEY = 'hikari-reader-education-seen-v2'
 
 export interface ReaderEducationContext {
   /** Touch input. Rito binds its swipe and long-press gestures to touch only. */
@@ -29,8 +29,8 @@ function selectionHint(
     key: 'selection',
     placement,
     icon: TextSelect,
-    title: coarsePointer ? '长按 选中文字' : '拖选文字',
-    description: '可以高亮、划线，或写一条笔记',
+    title: coarsePointer ? '长按可以选中文字' : '拖动鼠标可以选中文字',
+    description: '选中之后可以高亮、划线或者添加笔记',
   }
 }
 
@@ -39,23 +39,24 @@ const TAP_ZONE_HINTS: readonly ReaderEducationHint[] = [
     key: 'previous',
     placement: 'left',
     icon: ChevronLeft,
-    title: '点左侧 上一页',
-    description: '左边 1/3 都算',
+    title: '点击左侧翻到上一页',
+    description: '屏幕左侧三分之一区域均可',
   },
   {
     key: 'next',
     placement: 'right',
     icon: ChevronRight,
-    title: '点右侧 下一页',
-    description: '右边 1/3 都算',
+    title: '点击右侧翻到下一页',
+    description: '屏幕右侧三分之一区域均可',
   },
 ]
 
 /**
  * What drives the reader differs by input device as much as by settings:
- * swiping and long-press exist only on touch, while a mouse leans on the
- * keyboard and the context menu. Tap zones cut across both, and are the one
- * mode that gives a mouse click a paging meaning.
+ * swiping exists only on touch, while a mouse leans on the keyboard. Tap zones
+ * cut across both, and are the one mode that gives a click a paging meaning.
+ * The context menu — long-press on touch, right-click otherwise — is the single
+ * route to the toolbar everywhere.
  */
 export function readerEducationHints(
   context: ReaderEducationContext,
@@ -69,8 +70,9 @@ export function readerEducationHints(
       {
         key: 'chrome',
         placement: 'center',
-        title: '点中间 呼出工具栏',
-        description: coarsePointer ? '左右滑动也能翻页' : '← → 和右键菜单也能用',
+        icon: MousePointer2,
+        title: coarsePointer ? '长按屏幕打开菜单' : '点击鼠标右键打开菜单',
+        description: '目录、书签与阅读设置都在菜单中',
       },
     ]
   }
@@ -81,42 +83,43 @@ export function readerEducationHints(
         key: 'previous',
         placement: 'left',
         icon: MoveRight,
-        title: '右滑 上一页',
-        description: '顺着翻页方向拖',
+        title: '向右滑动翻到上一页',
+        description: '顺着翻页的方向拖动',
       },
       {
         key: 'next',
         placement: 'right',
         icon: MoveLeft,
-        title: '左滑 下一页',
+        title: '向左滑动翻到下一页',
       },
       selectionHint(true, 'top'),
       {
         key: 'chrome',
         placement: 'center',
-        title: '单击 呼出工具栏',
-        description: '目录、书签、设置都在这里',
+        icon: MousePointer2,
+        title: '长按屏幕打开菜单',
+        description: '目录、书签与阅读设置都在菜单中',
       },
     ]
   }
 
   // Mouse without tap zones: clicking the page does nothing at all, so lead
-  // with the keys and the context menu — the only route to the toolbar here.
+  // with the keys and the context menu.
   return [
     {
       key: 'keys',
       placement: 'left',
       icon: Keyboard,
-      title: '← → 翻页',
-      description: '空格翻下一页，Home / End 跳首末页',
+      title: '使用左右方向键翻页',
+      description: '空格键翻到下一页，Home 与 End 键跳转到首末页',
     },
     selectionHint(false, 'right'),
     {
       key: 'chrome',
       placement: 'center',
       icon: MousePointer2,
-      title: '右键 呼出菜单',
-      description: '目录、书签、设置、工具栏都在这里',
+      title: '点击鼠标右键打开菜单',
+      description: '目录、书签与阅读设置都在菜单中',
     },
   ]
 }

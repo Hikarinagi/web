@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline } from '@hina-ui/vue'
   import { cn } from '~/utils/cn'
   import { displayName, isAutoUsername, type NamedUser } from '~/utils/user'
 
@@ -19,14 +20,21 @@
 </script>
 
 <template>
-  <span v-if="user" :class="cn('inline-flex min-w-0 items-baseline gap-1', attrs.class as string)">
+  <Inline
+    v-if="user"
+    as="span"
+    gap="xs"
+    align="baseline"
+    :wrap="false"
+    :class="cn('min-w-0', attrs.class as string)"
+  >
     <span class="min-w-0 truncate">{{ displayName(user) }}</span>
     <span
       v-if="handle && !isAutoUsername(user.name) && displayName(user) !== user.name"
-      :class="cn('shrink-0 font-normal text-muted-color', !full && 'hidden sm:inline', handleClass)"
+      :class="cn('shrink-0 font-normal text-muted', !full && 'hidden sm:inline', handleClass)"
     >
       @{{ user.name }}
     </span>
-  </span>
+  </Inline>
   <span v-else :class="cn('truncate', attrs.class as string)">{{ fallback }}</span>
 </template>

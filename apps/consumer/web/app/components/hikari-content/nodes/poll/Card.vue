@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Pencil } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import type { PollCardSummary } from '../../composables/useContentSummaries'
@@ -26,28 +27,24 @@
 </script>
 
 <template>
-  <div
+  <Card
     v-if="hasContent"
-    class="relative rounded-xl border border-surface bg-surface-0 p-3 dark:bg-surface-900"
-    :class="interactive ? 'my-[0.8em]' : ''"
+    :padded="false"
+    class="relative rounded-xl p-3"
+    :class="interactive ? 'my-hikari-node' : ''"
   >
-    <div v-if="canEdit" class="absolute top-4 right-4 z-10">
-      <Button
-        v-tooltip.top="'编辑投票'"
-        unstyled
-        type="button"
-        class="inline-flex size-7 items-center justify-center rounded-md text-muted-color transition-colors hover:bg-emphasis hover:text-color"
-        aria-label="编辑投票"
-        @click="openEdit"
-      >
-        <Pencil class="size-4" />
-      </Button>
-    </div>
-    <p class="mt-0! mb-2! text-sm font-semibold text-color" :class="{ 'pr-8': canEdit }">
-      <Tag class="size-sm mr-2">投票</Tag>
+    <Stack v-if="canEdit" gap="none" class="absolute top-4 right-4 z-10">
+      <IconButton login-required label="编辑投票" size="sm" @click="openEdit">
+        <Pencil />
+      </IconButton>
+    </Stack>
+
+    <Text as="p" size="sm" weight="semibold" class="mt-0! mb-2!" :class="canEdit ? 'pr-8' : ''">
+      <Tag tone="neutral" size="md" class="mr-2">投票</Tag>
       {{ question }}
-    </p>
-    <div class="flex flex-col gap-2">
+    </Text>
+
+    <Stack gap="sm">
       <HikariContentNodesPollOption
         v-for="row in rows"
         :key="row.key"
@@ -59,24 +56,15 @@
         :login-required="canVote"
         @pick="pick(row.id)"
       />
-    </div>
-    <div class="mt-3 flex items-center gap-1.5 text-xs text-muted-color">
-      <div v-if="voters.length" class="flex items-center">
-        <Avatar
-          v-for="(v, i) in voters"
-          :key="v.id"
-          :user="v"
-          card
-          shape="circle"
-          class="size-5! ring-2 ring-surface-0 dark:ring-surface-900"
-          :class="i > 0 ? '-ms-2' : ''"
-          :style="{ zIndex: voters.length - i }"
-        />
-      </div>
-      <span>{{ footerText }}</span>
-    </div>
-  </div>
-  <div v-else class="my-[0.8em] rounded-xl border border-surface p-4 text-sm text-muted-color">
-    投票不可用
-  </div>
+    </Stack>
+
+    <Inline gap="none" align="center" :wrap="false" class="mt-3 gap-1.5">
+      <AvatarStack v-if="voters.length" :users="voters" size="sm" card />
+      <Text as="span" size="xs" tone="muted">{{ footerText }}</Text>
+    </Inline>
+  </Card>
+
+  <Card v-else :padded="false" class="my-hikari-node rounded-xl p-4">
+    <Text as="span" size="sm" tone="muted">投票不可用</Text>
+  </Card>
 </template>

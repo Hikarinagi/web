@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { PeopleRelationPageData } from '~~/server/api/pages/people/[id]/[relation].get'
   import { readPageQuery } from '#shared/utils/query'
   import { entityTitle } from '~/features/entity/detail'
@@ -30,10 +31,10 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <EntityHero kind="person" :entity="data.person" />
 
-    <div class="mx-auto max-w-app px-6 py-10">
+    <Stack gap="none" class="mx-auto w-full max-w-app px-6 py-10">
       <EntityRelationView
         :back-to="`/people/${id}`"
         :back-label="`返回 ${name}`"
@@ -45,6 +46,6 @@
         :meta="data.relation.meta"
         :pending="pending"
       />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

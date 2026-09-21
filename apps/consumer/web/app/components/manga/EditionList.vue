@@ -1,4 +1,14 @@
 <script setup lang="ts">
+  import {
+    Button,
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+    DisclosureIcon,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
+
   defineOptions({ name: 'MangaEditionList' })
   const props = defineProps<{
     editions: { label: string; fields: Record<string, string> }[]
@@ -18,21 +28,22 @@
 </script>
 
 <template>
-  <div v-if="rows.length" class="flex flex-col gap-1.5">
-    <Button
-      unstyled
-      class="w-fit cursor-pointer text-xs text-hikari-primary-600 transition-colors hover:text-hikari-primary-700 dark:text-hikari-primary-400"
-      @click="open = !open"
-    >
-      {{ open ? '收起' : `其他版本 ${rows.length}` }}
-    </Button>
-    <ul v-if="open" class="flex flex-col gap-1">
-      <li v-for="row in rows" :key="row.label" class="min-w-0 text-xs">
-        <span class="text-surface-700 dark:text-surface-300">{{ row.label }}</span>
-        <span v-if="row.text" class="wrap-anywhere text-surface-500 dark:text-surface-400">
-          · {{ row.text }}
-        </span>
-      </li>
-    </ul>
-  </div>
+  <Collapsible v-if="rows.length" v-model:open="open" class="flex flex-col gap-1.5">
+    <CollapsibleTrigger as-child>
+      <Button variant="link" size="sm">
+        <template #trailing><DisclosureIcon /></template>
+        {{ open ? '收起' : `其他版本 ${rows.length}` }}
+      </Button>
+    </CollapsibleTrigger>
+    <CollapsibleContent>
+      <Stack as="ul" gap="none" class="gap-1">
+        <Text v-for="row in rows" :key="row.label" as="li" size="xs" class="min-w-0">
+          {{ row.label }}
+          <Text v-if="row.text" as="span" size="xs" tone="muted" class="wrap-anywhere">
+            · {{ row.text }}
+          </Text>
+        </Text>
+      </Stack>
+    </CollapsibleContent>
+  </Collapsible>
 </template>

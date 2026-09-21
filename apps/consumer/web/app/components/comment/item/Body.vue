@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { COMMENT_THREAD_KEY } from '~/features/comment/useThread'
   import type { CommentItem, CommentNode } from '~/features/comment/comment'
 
@@ -21,7 +22,7 @@
 </script>
 
 <template>
-  <div>
+  <Stack gap="none">
     <CommentEditor
       v-if="editing"
       :initial-content="comment.content_json ?? undefined"
@@ -37,7 +38,9 @@
       "
       @cancel="thread.setEditing(null)"
     />
-    <p v-else-if="comment.is_deleted" class="text-sm text-muted-color italic">该评论已删除</p>
+    <Text v-else-if="comment.is_deleted" as="p" size="sm" tone="muted" class="italic">
+      该评论已删除
+    </Text>
     <template v-else>
       <HikariContent
         v-if="comment.content_json"
@@ -46,17 +49,17 @@
         :emoji-sets="thread.emojiSets.value"
         preset="comment"
       />
-      <div v-if="comment.attachments.length" class="mt-2 flex max-w-[408px] flex-wrap gap-1.5">
+      <Inline v-if="comment.attachments.length" gap="none" class="mt-2 max-w-102 gap-1.5">
         <HikariImage
           v-for="a in comment.attachments"
           :key="a.media.id"
-          :src="a.media.src"
+          :src="a.media"
           :alt="''"
           preview
-          class="size-[132px] shrink-0 overflow-hidden rounded-lg"
+          class="size-33 shrink-0 overflow-hidden rounded-lg"
           image-class="size-full object-cover"
         />
-      </div>
+      </Inline>
     </template>
-  </div>
+  </Stack>
 </template>

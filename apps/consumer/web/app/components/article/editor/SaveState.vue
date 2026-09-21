@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Spinner } from '@hina-ui/vue'
   import { AlertCircle, Check, PencilLine } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { TRANSITION_FAST } from '~/lib/motion'
@@ -7,6 +8,8 @@
   defineOptions({ name: 'ArticleEditorSaveState' })
 
   const props = defineProps<{ state: SaveState; savedAt: Date | null }>()
+
+  const SLOT = 'absolute inset-0 inline-flex items-center justify-center'
 
   function clock(date: Date) {
     const h = date.getHours().toString().padStart(2, '0')
@@ -23,69 +26,58 @@
 </script>
 
 <template>
-  <div v-tooltip.top="detail" class="save-state" :aria-label="detail" role="status">
+  <Center
+    v-tooltip="detail"
+    inline
+    :aria-label="detail"
+    role="status"
+    class="relative size-4 flex-none"
+  >
     <AnimatePresence>
       <motion.span
         v-if="state === 'saving'"
         key="saving"
-        class="save-state__slot"
+        :class="SLOT"
         :initial="{ opacity: 0, scale: 0.7 }"
         :animate="{ opacity: 1, scale: 1 }"
         :exit="{ opacity: 0, scale: 0.7 }"
         :transition="TRANSITION_FAST"
       >
-        <Spinner :size="14" :label="null" />
+        <Spinner size="sm" aria-hidden="true" />
       </motion.span>
       <motion.span
         v-else-if="state === 'error'"
         key="error"
-        class="save-state__slot text-red-500"
+        :class="cn(SLOT, 'text-danger-text')"
         :initial="{ opacity: 0, scale: 0.7 }"
         :animate="{ opacity: 1, scale: 1 }"
         :exit="{ opacity: 0, scale: 0.7 }"
         :transition="TRANSITION_FAST"
       >
-        <AlertCircle :size="14" />
+        <AlertCircle class="size-3.5" />
       </motion.span>
       <motion.span
         v-else-if="state === 'saved'"
         key="saved"
-        class="save-state__slot text-green-600 dark:text-green-500"
+        :class="cn(SLOT, 'text-success-text')"
         :initial="{ opacity: 0, scale: 0.7 }"
         :animate="{ opacity: 1, scale: 1 }"
         :exit="{ opacity: 0, scale: 0.7 }"
         :transition="TRANSITION_FAST"
       >
-        <Check :size="14" />
+        <Check class="size-3.5" />
       </motion.span>
       <motion.span
         v-else
         key="idle"
-        class="save-state__slot text-muted-color"
+        :class="cn(SLOT, 'text-muted')"
         :initial="{ opacity: 0, scale: 0.7 }"
         :animate="{ opacity: 1, scale: 1 }"
         :exit="{ opacity: 0, scale: 0.7 }"
         :transition="TRANSITION_FAST"
       >
-        <PencilLine :size="14" />
+        <PencilLine class="size-3.5" />
       </motion.span>
     </AnimatePresence>
-  </div>
+  </Center>
 </template>
-
-<style scoped>
-  .save-state {
-    position: relative;
-    display: inline-flex;
-    width: 16px;
-    height: 16px;
-    flex: none;
-  }
-  .save-state__slot {
-    position: absolute;
-    inset: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-</style>

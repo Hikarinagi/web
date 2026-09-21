@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { lightNovelSeo } from '~/features/seo/light-novel'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -29,7 +30,7 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <LightNovelHero
       :light-novel="data.light_novel"
       :volumes="data.volumes"
@@ -41,13 +42,14 @@
       :progress="data.progress"
     />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <LightNovelVolumes :volumes="data.volumes" :progress="data.progress" />
 
       <LightNovelRatesSummary
         :stats="data.rate_stats"
         :top-rates="data.top_rates"
-        :light-novel-id="data.light_novel.id"
+        :light-novel="data.light_novel"
+        :my-rate="data.my_rate"
       />
 
       <LightNovelAbout
@@ -59,11 +61,9 @@
         :contributors="data.contributors"
       />
 
-      <LightNovelLongReviews :articles="data.articles" />
-
-      <LightNovelMentions :posts="data.posts" />
+      <WorkLongReviews :articles="data.articles" />
 
       <LightNovelRelations :relations="data.relations" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

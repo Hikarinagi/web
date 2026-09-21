@@ -1,64 +1,85 @@
 <script setup lang="ts">
-  import { breakpointsTailwind } from '@vueuse/core'
-  import type Popover from 'primevue/popover'
+  import { Popover, Sheet } from '@hina-ui/vue'
+  import { push } from 'notivue'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
 
   defineOptions({ name: 'FavoritePickerOverlay' })
 
-  defineProps<{ type: FavoriteEntityType; id: number; pickerTitle?: string }>()
+  const props = withDefaults(
+    defineProps<{ type: FavoriteEntityType; id: number; pickerTitle?: string }>(),
+    { pickerTitle: undefined },
+  )
 
-  const breakpoints = useBreakpoints(breakpointsTailwind)
-  const isMobile = breakpoints.smaller('md')
-
-  const popover = ref<InstanceType<typeof Popover> | null>(null)
-  const drawerOpen = ref(false)
+  const narrow = useNarrow()
+  const anchor = shallowRef<HTMLElement | null>(null)
+  const popoverOpen = ref(false)
+  const sheetOpen = ref(false)
+  const createOpen = ref(false)
   const sessionKey = ref(0)
+
+  const heading = computed(() => props.pickerTitle ?? '收藏到收藏夹')
 
   function open(event: Event) {
     sessionKey.value += 1
-    if (isMobile.value) {
-      drawerOpen.value = true
-    } else {
-      popover.value?.toggle(event)
+    if (narrow.value) {
+      sheetOpen.value = true
+      return
     }
+    anchor.value = (event.currentTarget ?? event.target) as HTMLElement
+    popoverOpen.value = true
   }
 
   function close() {
-    drawerOpen.value = false
-    popover.value?.hide()
+    sheetOpen.value = false
+    popoverOpen.value = false
+  }
+
+  function onCreated() {
+    push.success({ message: '已新建并收藏' })
   }
 
   defineExpose({ open })
 </script>
 
 <template>
+  <Sheet v-if="narrow" v-model:open="sheetOpen" :title="heading" class="h-[60dvh]">
+    <template #body>
+      <FavoriteCollectionPanel
+        :id="id"
+        :key="sessionKey"
+        :type="type"
+        :heading="heading"
+        show-done
+        @create="createOpen = true"
+        @done="close"
+      />
+    </template>
+  </Sheet>
+
   <Popover
-    v-if="!isMobile"
-    ref="popover"
-    :pt="{ root: { class: 'popover-no-arrow' }, content: { class: 'p-0! w-[360px]!' } }"
+    v-else
+    v-model:open="popoverOpen"
+    :anchor="anchor"
+    :padded="false"
+    align="end"
+    class="w-90"
   >
-    <FavoriteCollectionPanel :id="id" :key="sessionKey" :type="type" :heading="pickerTitle" />
+    <template #content>
+      <FavoriteCollectionPanel
+        :id="id"
+        :key="sessionKey"
+        :type="type"
+        :heading="heading"
+        class="max-h-96"
+        @create="createOpen = true"
+      />
+    </template>
   </Popover>
 
-  <Drawer
-    v-else
-    v-model:visible="drawerOpen"
-    position="bottom"
-    :show-close-icon="false"
-    :pt="{
-      root: { class: 'app-mobile-sheet h-[60vh]! max-h-[60vh]!' },
-      header: { style: 'display: none' },
-      content: { class: 'h-full! p-0!' },
-    }"
-  >
-    <FavoriteCollectionPanel
-      :id="id"
-      :key="sessionKey"
-      :type="type"
-      :heading="pickerTitle"
-      class="h-full! max-h-none!"
-      show-done
-      @done="close"
-    />
-  </Drawer>
+  <FavoriteCollectionCreateDialog
+    v-model:visible="createOpen"
+    :type="type"
+    :id="id"
+    @created="onCreated"
+  />
 </template>

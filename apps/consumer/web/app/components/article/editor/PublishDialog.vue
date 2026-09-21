@@ -1,15 +1,19 @@
 <script setup lang="ts">
-  import { breakpointsTailwind } from '@vueuse/core'
+  import { Button, Dialog, Sheet } from '@hina-ui/vue'
   import type { ArticleEditorHost } from './composables/useArticleEditor'
 
   defineOptions({ name: 'ArticleEditorPublishDialog' })
 
+  const narrow = useNarrow()
+  const mounted = useMounted()
+  const asSheet = computed(() => mounted.value && narrow.value)
+  const panel = computed(() => (asSheet.value ? Sheet : Dialog))
+  const panelProps = computed(() => (asSheet.value ? { class: 'h-[70dvh]' } : { size: 'md' }))
+
   const props = defineProps<{ host: ArticleEditorHost }>()
   const visible = defineModel<boolean>('visible', { default: false })
 
-  const { publishing } = props.host
-  const breakpoints = useBreakpoints(breakpointsTailwind)
-  const isMobile = breakpoints.smaller('md')
+  const { publishing, canPublish, publish } = props.host
 
   function close() {
     if (!publishing.value) visible.value = false
@@ -17,28 +21,20 @@
 </script>
 
 <template>
-  <Dialog
-    v-if="!isMobile"
-    v-model:visible="visible"
-    modal
-    header="发布设置"
-    :draggable="false"
-    :dismissable-mask="!publishing"
-    :close-on-escape="!publishing"
-    :style="{ width: '460px' }"
+  <component
+    :is="panel"
+    v-model:open="visible"
+    title="发布设置"
+    :locked="publishing"
+    v-bind="panelProps"
   >
-    <ArticleEditorPublishForm :host="host" @cancel="close" />
-  </Dialog>
+    <template #content>
+      <ArticleEditorPublishForm :host="host" />
+    </template>
 
-  <Drawer
-    v-else
-    v-model:visible="visible"
-    position="bottom"
-    header="发布设置"
-    :dismissable-mask="!publishing"
-    :close-on-escape="!publishing"
-    :pt="{ root: { class: 'app-mobile-sheet h-auto! max-h-[88dvh]!' } }"
-  >
-    <ArticleEditorPublishForm :host="host" @cancel="close" />
-  </Drawer>
+    <template #footer>
+      <Button variant="ghost" tone="neutral" :disabled="publishing" @click="close">取消</Button>
+      <Button :loading="publishing" :disabled="!canPublish" @click="publish">确认发布</Button>
+    </template>
+  </component>
 </template>

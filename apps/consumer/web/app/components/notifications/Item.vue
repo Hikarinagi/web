@@ -1,7 +1,8 @@
 <script setup lang="ts">
+  import { Card, Indicator, Ripple, Stack, Text, Time } from '@hina-ui/vue'
   import type { SystemMessageItem } from '~/features/notifications/notifications'
   import { useNotificationDrawer } from '~/features/notifications/useDrawer'
-  import { timeFromNow } from '~/utils/time-format'
+  import { cn } from '~/utils/cn'
 
   const props = defineProps<{ item: SystemMessageItem; compact?: boolean }>()
 
@@ -41,12 +42,18 @@
 </script>
 
 <template>
-  <Button
-    unstyled
-    class="flex w-full cursor-pointer items-start gap-3 rounded-xl px-3 text-left transition-colors hover:bg-emphasis"
-    :class="compact ? 'py-2.5' : 'py-3.5'"
+  <Card
+    as="button"
+    :padded="false"
+    :class="
+      cn(
+        'hn-state-layer flex w-full hn-interactive items-start gap-3 rounded-xl border-0 bg-transparent px-3 text-left shadow-none hn-press-none',
+        compact ? 'py-2.5' : 'py-3.5',
+      )
+    "
     @click="activate"
   >
+    <Ripple />
     <NotificationsActorAvatars
       :actor="item.actor"
       :actors="item.actors"
@@ -54,14 +61,14 @@
       :type="item.type"
     />
 
-    <div class="min-w-0 flex-1">
-      <p class="line-clamp-2 text-sm leading-relaxed text-color">
+    <Stack gap="xs" class="min-w-0 flex-1">
+      <Text as="p" size="sm" class="line-clamp-2 leading-relaxed">
         <UserName v-if="item.actor" :user="item.actor" :handle="false" class="font-medium" />
         {{ item.title }}
-      </p>
-      <p class="mt-1 text-xs text-muted-color">{{ timeFromNow(item.sent_at) }}</p>
-    </div>
+      </Text>
+      <Time :value="item.sent_at" format="relative" class="text-xs text-muted" />
+    </Stack>
 
-    <span v-if="!read" class="mt-1.5 size-2 shrink-0 rounded-full bg-primary" aria-hidden="true" />
-  </Button>
+    <Indicator v-if="!read" tone="accent" class="mt-1.5" />
+  </Card>
 </template>

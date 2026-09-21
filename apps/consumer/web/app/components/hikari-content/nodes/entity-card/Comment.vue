@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
   import { MessageSquareQuote } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { useContentSummaries } from '../../composables/useContentSummaries'
@@ -26,17 +27,30 @@
 </script>
 
 <template>
-  <aside
-    class="relative my-[0.8em] block overflow-hidden rounded-(--editor-panel-radius) border-s-2 border-(--editor-toolbar-item-hover) bg-(--editor-toolbar-bg) px-3.5 py-2.5 text-inherit"
+  <Stack
+    as="aside"
+    gap="none"
+    class="relative my-hikari-node overflow-hidden rounded-(--editor-panel-radius) border-s-2 border-(--editor-toolbar-item-hover) bg-(--editor-toolbar-bg) px-3.5 py-2.5 text-inherit"
     data-card-type="comment"
     :data-comment-id="id ?? ''"
   >
-    <div v-if="isDeleted || !summary" class="flex items-center gap-2 text-(--editor-text-muted)">
-      <MessageSquareQuote :size="15" class="flex-none" />
-      <span class="text-[13px]">{{ isDeleted ? '该评论已删除' : '评论不可用' }}</span>
-    </div>
+    <Inline
+      v-if="isDeleted || !summary"
+      gap="sm"
+      align="center"
+      :wrap="false"
+      class="text-(--editor-text-muted)"
+    >
+      <MessageSquareQuote class="size-3.75 flex-none" />
+      <Text as="span" size="sm">{{ isDeleted ? '该评论已删除' : '评论不可用' }}</Text>
+    </Inline>
     <template v-else>
-      <div class="flex items-center gap-1.5 text-[12px] text-(--editor-text-muted)">
+      <Inline
+        gap="none"
+        align="center"
+        :wrap="false"
+        class="gap-1.5 text-xs text-(--editor-text-muted)"
+      >
         <HikariImage
           v-if="avatarSrc"
           :src="avatarSrc"
@@ -46,20 +60,26 @@
           class="size-4 flex-none overflow-hidden rounded-full"
           image-class="size-full object-cover"
         >
-          <template #empty><span /></template>
-          <template #error><span /></template>
+          <template #empty><VisuallyHidden /></template>
+          <template #error><VisuallyHidden /></template>
         </HikariImage>
         <UserName :user="author" :handle="false" class="font-medium text-(--editor-text-color)" />
-      </div>
-      <div v-if="contentJson" class="hikari-content hikari-content--comment mt-1 text-[13px]">
+      </Inline>
+      <Stack
+        v-if="contentJson"
+        gap="none"
+        class="hikari-content hikari-content--comment mt-1 text-sm"
+      >
         <HikariContentDispatch :node="contentJson" />
-      </div>
-      <p
+      </Stack>
+      <Text
         v-else-if="excerpt"
-        class="mt-1 line-clamp-3 text-[13px] leading-relaxed whitespace-pre-wrap text-(--editor-text-color)"
+        as="p"
+        size="sm"
+        class="mt-1 line-clamp-3 leading-relaxed whitespace-pre-wrap text-(--editor-text-color)"
       >
         {{ excerpt }}
-      </p>
+      </Text>
     </template>
-  </aside>
+  </Stack>
 </template>

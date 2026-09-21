@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { DescriptionDetails, DescriptionList, DescriptionTerm, Flex, Link } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { STAFF_ROLE_LABELS, staffRoleLabel } from '~/features/galgame/labels'
 
@@ -28,29 +30,30 @@
 </script>
 
 <template>
-  <dl
-    class="divide-y divide-surface-100 overflow-hidden rounded-xl border border-surface-200 dark:divide-surface-800 dark:border-surface-800"
-  >
-    <div
+  <DescriptionList class="divide-y divide-line overflow-hidden rounded-xl border border-line">
+    <Flex
       v-for="group in groups"
       :key="group.label"
-      class="flex flex-col gap-1.5 px-5 py-3 sm:flex-row sm:items-baseline sm:gap-5 sm:py-3.5"
+      direction="col"
+      gap="none"
+      class="gap-1.5 px-5 py-3 sm:flex-row sm:items-baseline sm:gap-5 sm:py-3.5"
     >
-      <dt
-        class="shrink-0 text-[13px] font-medium text-surface-400 sm:w-24 sm:pt-px dark:text-surface-500"
-      >
+      <DescriptionTerm class="shrink-0 text-xs font-medium text-faint sm:w-24 sm:pt-px">
         {{ group.label }}
-      </dt>
-      <dd class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-        <NuxtLink
+      </DescriptionTerm>
+      <DescriptionDetails class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+        <Link
           v-for="person in group.people"
           :key="person.id"
+          :as="NuxtLink"
           :to="`/people/${person.id}`"
-          class="text-sm font-semibold text-surface-800 transition-colors hover:text-hikari-primary-600 dark:text-surface-100 dark:hover:text-hikari-primary-400"
+          tone="neutral"
+          :underline="false"
+          class="text-sm font-semibold hover:text-accent-text"
         >
           {{ person.trans_name || person.name }}
-        </NuxtLink>
-      </dd>
-    </div>
-  </dl>
+        </Link>
+      </DescriptionDetails>
+    </Flex>
+  </DescriptionList>
 </template>

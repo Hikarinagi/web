@@ -33,32 +33,34 @@ describe('readerEducationHints', () => {
     // Neither exists there: Rito binds swiping to touch events, and the tap
     // detector is off unless the pointer is coarse or tap zones are on.
     const copy = text(readerEducationHints({ coarsePointer: false, tapZones: false }))
-    expect(copy).not.toMatch(/滑/)
-    expect(copy).not.toMatch(/单击|点中间/)
-    expect(copy).toMatch(/← →/)
-    expect(copy).toMatch(/右键/)
+    expect(copy).not.toMatch(/滑动/)
+    expect(copy).not.toMatch(/点击左侧|点击右侧/)
+    expect(copy).toMatch(/左右方向键/)
+    expect(copy).toMatch(/鼠标右键/)
   })
 
-  it('teaches swiping and tap-to-toggle on touch', () => {
+  it('teaches swiping on touch, and sends the toolbar through the menu', () => {
     const copy = text(readerEducationHints({ coarsePointer: true, tapZones: false }))
-    expect(copy).toMatch(/右滑/)
-    expect(copy).toMatch(/左滑/)
-    expect(copy).toMatch(/单击 呼出工具栏/)
+    expect(copy).toMatch(/向右滑动/)
+    expect(copy).toMatch(/向左滑动/)
+    expect(copy).toMatch(/长按屏幕打开菜单/)
+    expect(copy).not.toMatch(/呼出工具栏/)
   })
 
   it('gives a mouse a paging click only when tap zones are on', () => {
     const copy = text(readerEducationHints({ coarsePointer: false, tapZones: true }))
-    expect(copy).toMatch(/点左侧/)
-    expect(copy).toMatch(/点右侧/)
-    expect(copy).toMatch(/点中间 呼出工具栏/)
+    expect(copy).toMatch(/点击左侧/)
+    expect(copy).toMatch(/点击右侧/)
+    expect(copy).toMatch(/点击鼠标右键打开菜单/)
+    expect(copy).not.toMatch(/点击中间/)
   })
 
   it('matches the selection gesture to the input device', () => {
     expect(text(readerEducationHints({ coarsePointer: true, tapZones: false }))).toMatch(
-      /长按 选中文字/,
+      /长按可以选中文字/,
     )
     expect(text(readerEducationHints({ coarsePointer: false, tapZones: false }))).toMatch(
-      /拖选文字/,
+      /拖动鼠标可以选中文字/,
     )
   })
 })
@@ -84,6 +86,6 @@ describe('mangaEducationHints', () => {
     expect(text(mangaEducationHints({ coarsePointer: true, zoomable: true }))).toMatch(/捏合/)
     const mouse = text(mangaEducationHints({ coarsePointer: false, zoomable: true }))
     expect(mouse).not.toMatch(/捏合/)
-    expect(mouse).toMatch(/双击 缩放/)
+    expect(mouse).toMatch(/双击/)
   })
 })

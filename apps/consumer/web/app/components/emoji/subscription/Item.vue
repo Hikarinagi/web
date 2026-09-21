@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Card, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { BookmarkX } from '@lucide/vue'
   import type { MyEmojiSubscription } from '~/features/emoji/composables/useMySubscriptions'
 
@@ -14,50 +15,44 @@
 </script>
 
 <template>
-  <Card :pt="{ body: { class: 'p-4!' }, content: { class: 'p-0!' } }">
-    <template #content>
-      <div class="flex flex-col gap-3">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex min-w-0 flex-col gap-1">
-            <div class="flex items-center gap-2">
-              <span class="truncate font-mono text-sm font-semibold">{{ sub.name }}</span>
-              <Tag
-                v-if="!sub.subscribable"
-                value="已下架"
-                severity="warn"
-                :pt="{ root: { class: 'text-[10px]!' } }"
-              />
-            </div>
-            <p class="text-xs text-muted-color">{{ sub.emojis.length }} 个贴纸</p>
-          </div>
-          <Button
-            severity="danger"
-            variant="text"
-            size="small"
-            label="取消订阅"
-            :loading="unsubscribing"
-            @click="emit('unsubscribe-request', sub.id, sub.name)"
-          >
-            <template v-if="!unsubscribing" #icon>
-              <BookmarkX class="size-4" />
-            </template>
-          </Button>
-        </div>
+  <Card>
+    <Stack gap="sm">
+      <Inline gap="sm" align="center" justify="between" :wrap="false">
+        <Stack gap="xs" class="min-w-0">
+          <Inline gap="sm" align="center">
+            <Text as="span" size="sm" weight="semibold" truncate class="font-mono">
+              {{ sub.name }}
+            </Text>
+            <Tag v-if="!sub.subscribable" tone="warning" size="sm">已下架</Tag>
+          </Inline>
+          <Text as="p" size="xs" tone="muted">{{ sub.emojis.length }} 个贴纸</Text>
+        </Stack>
+        <Button
+          variant="ghost"
+          tone="danger"
+          size="sm"
+          :loading="unsubscribing"
+          class="shrink-0"
+          @click="emit('unsubscribe-request', sub.id, sub.name)"
+        >
+          <template #icon><BookmarkX /></template>
+          取消订阅
+        </Button>
+      </Inline>
 
-        <div v-if="preview.length > 0" class="flex flex-wrap items-center gap-1.5">
-          <HikariImage
-            v-for="emoji in preview"
-            :key="emoji.id"
-            v-tooltip.top="`:${emoji.name}:`"
-            :src="emoji.src?.src"
-            :alt="emoji.name"
-            :processing="false"
-            class="size-6"
-            image-class="h-full w-full object-contain"
-          />
-          <span v-if="extraCount > 0" class="text-xs text-muted-color">+{{ extraCount }}</span>
-        </div>
-      </div>
-    </template>
+      <Inline v-if="preview.length > 0" gap="xs" align="center" wrap>
+        <HikariImage
+          v-for="emoji in preview"
+          :key="emoji.id"
+          v-tooltip="`:${emoji.name}:`"
+          :src="emoji.src?.src"
+          :alt="emoji.name"
+          :processing="false"
+          class="size-6"
+          image-class="h-full w-full object-contain"
+        />
+        <Text v-if="extraCount > 0" as="span" size="xs" tone="muted">+{{ extraCount }}</Text>
+      </Inline>
+    </Stack>
   </Card>
 </template>

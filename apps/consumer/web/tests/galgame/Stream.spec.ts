@@ -4,6 +4,7 @@ import { nextTick, ref } from 'vue'
 import type { Mock } from 'vitest'
 import { describe, expect, it, vi } from 'vitest'
 import Stream from '../../app/components/galgame/explore/recommend/Stream.vue'
+import StreamTail from '../../app/components/ui/StreamTail.vue'
 
 let observe: ((entries: { isIntersecting: boolean }[]) => void) | undefined
 let stream: {
@@ -53,9 +54,8 @@ describe('Galgame recommendation stream', () => {
     }
     mount(Stream, {
       global: {
+        components: { StreamTail },
         stubs: {
-          Button: true,
-          Spinner: true,
           GalgameExploreRecommendFeature: true,
           GalgameExploreRecommendRail: true,
           GalgameExploreRecommendGrid: true,

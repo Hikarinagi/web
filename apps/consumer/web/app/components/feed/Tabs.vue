@@ -1,24 +1,27 @@
 <script setup lang="ts">
+  import { Highlight, Inline, Stack, Text } from '@hina-ui/vue'
   import { motion } from 'motion-v'
   import type { FeedScope } from '~/features/feed/feed'
   import { useFeedTabs } from '~/features/feed/useFeedTabs'
-  import { TRANSITION } from '~/lib/motion'
 
-  const props = withDefaults(defineProps<{ orientation?: 'horizontal' | 'vertical' }>(), {
+  withDefaults(defineProps<{ orientation?: 'horizontal' | 'vertical' }>(), {
     orientation: 'horizontal',
   })
   const emit = defineEmits<{ select: [FeedScope] }>()
 
   const { tabs, active, select } = useFeedTabs(key => emit('select', key))
 
-  const indicatorId = computed(() => `feed-tab-indicator-${props.orientation}`)
+  const indicatorId = useId()
 </script>
 
 <template>
-  <div
+  <Inline
     v-if="orientation === 'horizontal'"
     role="tablist"
-    class="app-surface-blur sticky top-(--app-header-height) z-30 flex h-(--feed-tabs-height) items-end gap-8"
+    gap="none"
+    align="end"
+    :wrap="false"
+    class="sticky top-(--app-header-height) z-30 h-(--feed-tabs-height) gap-8 bg-surface/72 backdrop-blur-xl backdrop-saturate-200 dark:bg-surface/68"
   >
     <motion.button
       v-for="tab in tabs"
@@ -26,53 +29,61 @@
       type="button"
       role="tab"
       :aria-selected="active === tab.key"
-      class="group relative flex cursor-pointer flex-col items-center gap-2 rounded outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
+      class="group relative flex hn-interactive flex-col items-center gap-2 rounded"
       :while-press="{ opacity: 0.7 }"
       @click="select(tab.key)"
     >
-      <span
-        class="text-sm transition-colors duration-150"
+      <Text
+        as="span"
+        size="sm"
         :class="
-          active === tab.key
-            ? 'font-bold text-color'
-            : 'font-medium text-muted-color group-hover:text-color'
+          cn(
+            'transition-colors duration-150',
+            active === tab.key ? 'font-bold text-fg' : 'font-medium text-muted group-hover:text-fg',
+          )
         "
       >
         {{ tab.label }}
-      </span>
-      <span class="relative h-0.5 w-6">
-        <motion.span
+      </Text>
+      <Stack gap="none" as="span" class="relative h-0.5 w-6">
+        <Highlight
           v-if="active === tab.key"
-          :layout-id="indicatorId"
-          class="absolute inset-0 rounded-full bg-primary"
-          :transition="TRANSITION"
+          :id="indicatorId"
+          axis="x"
+          class="absolute inset-0 rounded-full bg-accent"
         />
-      </span>
+      </Stack>
     </motion.button>
-  </div>
+  </Inline>
 
-  <div v-else role="tablist" aria-orientation="vertical" class="flex flex-col gap-1">
+  <Stack v-else role="tablist" aria-orientation="vertical" gap="xs">
     <motion.button
       v-for="tab in tabs"
       :key="tab.key"
       type="button"
       role="tab"
       :aria-selected="active === tab.key"
-      class="group relative flex cursor-pointer items-center gap-3 rounded-lg py-2.5 pr-3 pl-4 transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 dark:focus-visible:ring-primary-900"
-      :class="active === tab.key ? 'text-color' : 'text-muted-color hover:bg-emphasis'"
+      :class="
+        cn(
+          'group hn-state-layer relative flex hn-interactive items-center gap-3 hn-press-none',
+          'rounded-lg py-2.5 ps-4 pe-3 transition-colors duration-150',
+          '[--hn-state-selected-opacity:0]',
+          active === tab.key ? 'text-fg' : 'text-muted',
+        )
+      "
       :while-press="{ opacity: 0.7 }"
       @click="select(tab.key)"
     >
-      <motion.span
+      <Highlight
         v-if="active === tab.key"
-        :layout-id="indicatorId"
-        class="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary"
-        :transition="TRANSITION"
+        :id="indicatorId"
+        axis="y"
+        class="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-full bg-accent"
       />
       <component :is="tab.icon" class="size-4 shrink-0" aria-hidden="true" />
-      <span class="text-sm" :class="active === tab.key ? 'font-bold' : 'font-medium'">
+      <Text as="span" size="sm" :class="active === tab.key ? 'font-bold' : 'font-medium'">
         {{ tab.label }}
-      </span>
+      </Text>
     </motion.button>
-  </div>
+  </Stack>
 </template>

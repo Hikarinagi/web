@@ -1,16 +1,13 @@
 <script setup lang="ts">
+  import { Button, Card, IconButton, Inline, Link, NumberInput, Stack, Text } from '@hina-ui/vue'
   import { Plus, X } from '@lucide/vue'
   import type { BackendEditorField } from '~/features/creator/editor'
 
   const props = defineProps<{
     field: BackendEditorField
-    inputId?: string
     disabled?: boolean
   }>()
   const model = defineModel<Record<string, unknown>[]>({ default: () => [] })
-
-  provide('$pcFormField', undefined)
-  provide('$pcForm', undefined)
 
   const maxRows = computed(() => props.field.max_length ?? 10)
   const canAdd = computed(() => model.value.length < maxRows.value)
@@ -51,64 +48,57 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div
-      v-for="(row, index) in model"
-      :key="index"
-      class="flex items-center gap-2 rounded-lg border p-2"
-      :class="
-        isDuplicate(row)
-          ? 'border-red-300 dark:border-red-700'
-          : 'border-(--p-form-field-border-color)'
-      "
-    >
-      <div class="min-w-0 flex-1">
-        <InputNumber
-          :input-id="index === 0 ? inputId : undefined"
+  <Stack gap="sm" align="stretch">
+    <Card v-for="(row, index) in model" :key="index" :padded="false">
+      <Inline gap="sm" align="center" :wrap="false" class="p-2">
+        <NumberInput
           :model-value="appId(row)"
           placeholder="1144400"
-          size="small"
-          :use-grouping="false"
+          size="sm"
           :min="1"
+          :format-options="{ useGrouping: false }"
           :invalid="isDuplicate(row)"
           :disabled="disabled"
-          fluid
+          class="min-w-0 flex-1"
           @update:model-value="value => setRow(index, typeof value === 'number' ? value : null)"
         />
-      </div>
-      <a
-        v-if="appId(row)"
-        :href="`https://store.steampowered.com/app/${appId(row)}/`"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="shrink-0 text-xs text-muted-color underline-offset-2 hover:underline"
-      >
-        打开商店页
-      </a>
-      <Button
-        type="button"
-        unstyled
-        class="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
-        :aria-label="`移除第 ${index + 1} 行`"
-        :disabled="disabled"
-        @click="removeRow(index)"
-      >
-        <template #icon><X :size="14" /></template>
-      </Button>
-    </div>
+        <Link
+          v-if="appId(row)"
+          :href="`https://store.steampowered.com/app/${appId(row)}/`"
+          target="_blank"
+          rel="noopener noreferrer"
+          tone="neutral"
+          class="shrink-0 text-xs"
+        >
+          打开商店页
+        </Link>
+        <IconButton
+          :label="`移除第 ${index + 1} 行`"
+          variant="ghost"
+          tone="danger"
+          size="sm"
+          pill
+          :disabled="disabled"
+          class="shrink-0"
+          @click="removeRow(index)"
+        >
+          <X />
+        </IconButton>
+      </Inline>
+    </Card>
 
     <Button
-      type="button"
-      severity="secondary"
-      variant="outlined"
-      label="添加 Steam App"
+      variant="outline"
+      tone="neutral"
+      size="sm"
       class="self-start"
       :disabled="disabled || !canAdd"
       @click="addRow"
     >
-      <template #icon><Plus :size="14" /></template>
+      <template #icon><Plus /></template>
+      添加 Steam App
     </Button>
 
-    <span class="text-xs text-muted-color">{{ model.length }} / {{ maxRows }}</span>
-  </div>
+    <Text size="xs" tone="muted">{{ model.length }} / {{ maxRows }}</Text>
+  </Stack>
 </template>

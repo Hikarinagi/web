@@ -1,13 +1,24 @@
 <script setup lang="ts">
-  import Form, { type FormInstance, type FormSubmitEvent } from '@primevue/forms/form'
+  import {
+    Button,
+    Card,
+    Dialog,
+    Form,
+    FormField,
+    IconButton,
+    Inline,
+    Input,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
   import { ImagePlus, X } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { EMOJI_MAX_FILE_BYTES } from '~/features/emoji/constants'
   import {
-    emojiReplaceImageResolver,
-    emojiUploadResolver,
-    type EmojiUploadValues,
+    emojiReplaceImageSchema,
+    emojiUploadSchema,
   } from '~/features/emoji/schemas/emoji-upload.schema'
+  import { getFieldErrors } from '~/utils/api/error'
 
   type CreatedEmoji = ApiData<'/api/v3/emoji/sets/{id}/emojis', 'post'>
   type ReplacedEmoji = ApiData<'/api/v3/emoji/sets/{setId}/emojis/{emojiId}/src', 'put'>
@@ -29,30 +40,33 @@
   )
   const fileLabel = computed(() => (isReplace.value ? '新图片' : '图片文件'))
   const submitLabel = computed(() => (isReplace.value ? '替换' : '上传'))
+  const schema = computed(() => (isReplace.value ? emojiReplaceImageSchema : emojiUploadSchema))
 
-  const formErrors = useFormErrors(
-    isReplace.value ? emojiReplaceImageResolver : emojiUploadResolver,
-  )
-  const form = useTemplateRef<FormInstance>('form')
+  const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
   const submitting = ref(false)
   const filePreview = useFilePreview(fileInput)
+  const values = reactive<{ file: File | null; name: string }>({ file: null, name: '' })
+
+  function setFile(file: File | null) {
+    values.file = file
+  }
 
   watch(open, next => {
     if (next) {
-      formErrors.clear()
       form.value?.reset()
+      values.file = null
+      values.name = ''
     }
     filePreview.revoke()
   })
 
-  async function onSubmit(event: FormSubmitEvent) {
-    if (!event.valid || submitting.value) return
+  async function onSubmit() {
+    if (submitting.value || !values.file) return
     submitting.value = true
     try {
-      const file = (event.values as { file: File }).file
       const body = new FormData()
-      body.append('file', file)
+      body.append('file', values.file)
       let result: DoneEmoji
       if (props.emoji) {
         result = await hikariRequest('/api/v3/emoji/sets/{setId}/emojis/{emojiId}/src', {
@@ -61,7 +75,7 @@
           body,
         })
       } else {
-        body.append('name', (event.values as EmojiUploadValues).name)
+        body.append('name', values.name.trim())
         result = await hikariRequest('/api/v3/emoji/sets/{id}/emojis', {
           method: 'post',
           path: { id: props.setId },
@@ -71,7 +85,7 @@
       open.value = false
       emit('done', result)
     } catch (error) {
-      await formErrors.apply(error, form.value)
+      form.value?.setErrors(getFieldErrors(error))
     } finally {
       submitting.value = false
     }
@@ -79,88 +93,77 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="open"
-    modal
-    :header="header"
-    :dismissable-mask="!submitting"
-    :close-on-escape="!submitting"
-    :style="{ width: '92vw', maxWidth: '28rem' }"
-  >
-    <Form
-      ref="form"
-      :resolver="formErrors.resolver"
-      class="flex flex-col gap-4"
-      @input="formErrors.clear"
-      @submit="onSubmit"
-    >
-      <FormItem v-slot="{ field }" name="file" :label="fileLabel" required>
-        <input
-          ref="fileInput"
-          type="file"
-          accept="image/webp,image/png,image/jpeg,image/gif"
-          class="hidden"
-          @change="event => filePreview.onChange(value => field.props.onInput({ value }), event)"
-        />
-        <div
-          v-if="!filePreview.previewUrl.value"
-          class="flex flex-col items-center gap-2 rounded-lg border border-dashed border-surface-200 py-8 dark:border-surface-700"
-          @click="filePreview.open"
-        >
-          <ImagePlus class="size-8 text-muted-color" />
-          <Button
-            label="选择图片"
-            severity="secondary"
-            size="small"
-            @click="
-              e => {
-                filePreview.open()
-                e.stopPropagation()
-              }
-            "
+  <Dialog v-model:open="open" size="md" :title="header" :locked="submitting">
+    <template #content>
+      <Form ref="form" :values="values" :rules="schema" :disabled="submitting" @submit="onSubmit">
+        <FormField name="file" :label="fileLabel" required>
+          <input
+            ref="fileInput"
+            type="file"
+            accept="image/webp,image/png,image/jpeg,image/gif"
+            class="hidden"
+            @change="event => filePreview.onChange(setFile, event)"
           />
-          <p class="text-xs text-muted-color">
-            支持 WebP / PNG / JPEG / GIF，最大 {{ Math.round(EMOJI_MAX_FILE_BYTES / 1024) }} KB
-          </p>
-        </div>
-        <div
-          v-else
-          class="flex items-center gap-3 rounded-lg p-3 ring-1 ring-surface-200 dark:ring-surface-700"
-        >
-          <HikariImage
-            :src="filePreview.previewUrl.value"
-            alt="预览"
-            class="size-16 rounded"
-            image-class="object-contain"
-          />
-          <div class="flex grow flex-col gap-1 text-xs">
-            <p class="font-medium">{{ (field.value as File | null)?.name }}</p>
-            <p class="text-muted-color">
-              {{ Math.round(((field.value as File | null)?.size ?? 0) / 1024) }} KB
-            </p>
-          </div>
-          <Button
-            severity="secondary"
-            variant="text"
-            size="small"
-            rounded
-            @click="filePreview.onClear(value => field.props.onInput({ value }))"
+
+          <Card
+            v-if="!filePreview.previewUrl.value"
+            as="button"
+            type="button"
+            class="hn-state-layer w-full hn-interactive border-dashed"
+            @click="filePreview.open()"
           >
-            <template #icon>
-              <X class="size-4" />
-            </template>
-          </Button>
-        </div>
-      </FormItem>
+            <Stack align="center" gap="sm">
+              <ImagePlus class="size-8 text-muted" />
+              <Text size="sm" weight="medium">选择图片</Text>
+              <Text size="xs" tone="muted">
+                支持 WebP / PNG / JPEG / GIF，最大 {{ Math.round(EMOJI_MAX_FILE_BYTES / 1024) }} KB
+              </Text>
+            </Stack>
+          </Card>
 
-      <FormItem v-if="!isReplace" v-slot="{ id }" name="name" label="名称" required>
-        <InputText :id="id" autocomplete="off" fluid placeholder="描述这个贴纸，会显示为 :name:" />
-      </FormItem>
+          <Card v-else :padded="false">
+            <Inline gap="sm" align="center" :wrap="false" class="p-3">
+              <HikariImage
+                :src="filePreview.previewUrl.value"
+                alt="预览"
+                class="size-16 rounded"
+                image-class="object-contain"
+              />
+              <Stack gap="xs" class="min-w-0 flex-1">
+                <Text size="xs" weight="medium" truncate>{{ values.file?.name }}</Text>
+                <Text size="xs" tone="muted">
+                  {{ Math.round((values.file?.size ?? 0) / 1024) }} KB
+                </Text>
+              </Stack>
+              <IconButton
+                label="移除图片"
+                variant="ghost"
+                tone="neutral"
+                size="sm"
+                pill
+                @click="filePreview.onClear(setFile)"
+              >
+                <X />
+              </IconButton>
+            </Inline>
+          </Card>
+        </FormField>
 
-      <div class="flex justify-end gap-3 pt-2">
-        <Button label="取消" severity="secondary" :disabled="submitting" @click="open = false" />
-        <Button :label="submitLabel" type="submit" :loading="submitting" />
-      </div>
-    </Form>
+        <FormField v-if="!isReplace" name="name" label="名称" required>
+          <Input
+            v-model="values.name"
+            autocomplete="off"
+            placeholder="描述这个贴纸，会显示为 :name:"
+          />
+        </FormField>
+      </Form>
+    </template>
+
+    <template #footer>
+      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="open = false">
+        取消
+      </Button>
+      <Button :loading="submitting" @click="form?.submit()">{{ submitLabel }}</Button>
+    </template>
   </Dialog>
 </template>

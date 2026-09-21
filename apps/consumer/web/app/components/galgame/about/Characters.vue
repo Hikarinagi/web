@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Grid, Heading, Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameAboutCharacters' })
@@ -6,14 +7,14 @@
 </script>
 
 <template>
-  <div v-if="characters.length" class="flex flex-col gap-4">
-    <h3 class="text-[15px] font-bold text-surface-700 dark:text-surface-200">出场角色与声优</h3>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <Stack v-if="characters.length" gap="none" class="gap-4">
+    <Heading :level="3" size="base" class="font-bold">出场角色与声优</Heading>
+    <Grid :cols="1" gap="none" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <GalgameAboutCharacterCard
         v-for="item in characters"
         :key="`${item.role}-${item.character.id}`"
         :item="item"
       />
-    </div>
-  </div>
+    </Grid>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Tag, Text, type DataTableColumn } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { Plus, Shield, Lock } from '@lucide/vue'
   import type { BackendPermissionGroupList } from '~/features/creator/governance'
@@ -7,9 +8,33 @@
   const page = defineModel<number>('page', { required: true })
   const emit = defineEmits<{ created: [] }>()
 
+  type Row = BackendPermissionGroupList['items'][number]
+
+  const columns: DataTableColumn<Row>[] = [
+    { key: 'id', label: '#', field: 'id', width: 56 },
+    { key: 'name', label: '名称', minWidth: 160 },
+    {
+      key: 'description',
+      label: '描述',
+      accessor: row => row.description || '—',
+      truncate: true,
+      cellClass: 'text-muted',
+    },
+    { key: 'permissions', label: '权限', width: 96 },
+    { key: 'created_by', label: '创建人', width: 128 },
+    {
+      key: 'created_at',
+      label: '创建时间',
+      field: 'created_at',
+      width: 160,
+      format: value => timeFormat(value as string),
+      cellClass: 'text-muted',
+    },
+  ]
+
   const dialogOpen = ref(false)
 
-  function openDetail(row: { id: number }) {
+  function openDetail(row: Row) {
     void navigateTo(`/create/governance/groups/${row.id}`)
   }
 </script>
@@ -20,59 +45,34 @@
     title="权限组"
     :icon="Shield"
     :list="list"
+    :columns="columns"
     :loading="loading"
+    empty-text="还没有权限组"
     @row-click="openDetail"
   >
     <template #actions>
-      <Button label="新建" size="small" @click="dialogOpen = true">
-        <template #icon>
-          <Plus :size="15" />
-        </template>
+      <Button size="sm" @click="dialogOpen = true">
+        <template #icon><Plus /></template>
+        新建
       </Button>
     </template>
-    <template #empty>
-      <CreatorEmpty text="还没有权限组" />
-    </template>
-    <Column header="#" class="w-14">
-      <template #body="{ data: row }">{{ row.id }}</template>
-    </Column>
-    <Column header="名称" class="min-w-40">
-      <template #body="{ data: row }">
-        <span class="flex items-center gap-2 font-medium">
-          {{ row.name }}
-          <Lock
-            v-if="row.is_system"
-            v-tooltip.top="'系统权限组，不可编辑'"
-            :size="13"
-            class="text-muted-color"
-          />
-        </span>
-      </template>
-    </Column>
-    <Column header="描述">
-      <template #body="{ data: row }">
-        <span class="line-clamp-1 text-muted-color">{{ row.description || '—' }}</span>
-      </template>
-    </Column>
-    <Column header="权限" class="w-24">
-      <template #body="{ data: row }">
-        <Tag
-          severity="secondary"
-          :value="`${row.permissions.length} 项`"
-          :pt="{ root: { class: 'text-xs!' } }"
+
+    <template #cell-name="{ row }">
+      <Inline gap="xs" align="center" :wrap="false">
+        <Text as="span" size="sm" weight="medium">{{ row.name }}</Text>
+        <Lock
+          v-if="row.is_system"
+          v-tooltip="'系统权限组，不可编辑'"
+          class="size-3.5 shrink-0 text-muted"
         />
-      </template>
-    </Column>
-    <Column header="创建人" class="w-32">
-      <template #body="{ data: row }">
-        <UserName :user="row.created_by" :handle="false" fallback="系统" class="text-muted-color" />
-      </template>
-    </Column>
-    <Column header="创建时间" class="w-40">
-      <template #body="{ data: row }">
-        <span class="text-muted-color">{{ timeFormat(row.created_at) }}</span>
-      </template>
-    </Column>
+      </Inline>
+    </template>
+    <template #cell-permissions="{ row }">
+      <Tag size="sm" tone="neutral">{{ row.permissions.length }} 项</Tag>
+    </template>
+    <template #cell-created_by="{ row }">
+      <UserName :user="row.created_by" :handle="false" fallback="系统" class="text-muted" />
+    </template>
   </CreatorDataTable>
 
   <CreatorGovernanceGroupsCreateDialog v-model:visible="dialogOpen" @created="emit('created')" />

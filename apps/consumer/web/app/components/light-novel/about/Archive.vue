@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { BookMarked, Building2, CalendarDays, Eye, Layers, Tags } from '@lucide/vue'
   import { getLightNovelProducerRelationLabel, getNovelStatusLabel } from '#imports'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
@@ -32,66 +34,41 @@
 
 <template>
   <ResourceArchiveCard>
-    <div class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
-      <div class="flex items-center gap-2.5">
-        <BookMarked class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          {{ getNovelStatusLabel(lightNovel.novel_status) }}
-        </span>
-      </div>
-      <div class="flex items-center gap-2.5">
-        <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ publicationText }}</span>
-      </div>
-      <div v-if="lightNovel.total_volumes" class="flex items-center gap-2.5">
-        <Layers class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          全 {{ lightNovel.total_volumes }} 卷
-        </span>
-      </div>
-      <div v-for="g in producerGroups" :key="g.label" class="flex items-center gap-2.5">
-        <Building2 class="size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 items-center gap-1.5">
-          <span class="shrink-0 text-xs text-surface-400">{{ g.label }}</span>
-          <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-            <template v-for="(p, i) in g.items" :key="p.id">
-              <span v-if="i > 0">/</span>
-              <NuxtLink
-                v-if="g.relation === 'bunko'"
-                :to="`/light-novels/bunko/${p.id}`"
-                class="transition-colors hover:text-hikari-primary-600 dark:hover:text-hikari-primary-400"
-              >
-                {{ p.name }}
-              </NuxtLink>
-              <span v-else>{{ p.name }}</span>
-            </template>
-          </span>
-        </span>
-      </div>
-      <div v-if="lightNovel.read_times" class="flex items-center gap-2.5">
-        <Eye class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          {{ lightNovel.read_times }} 次阅读
-        </span>
-      </div>
-      <div v-if="lightNovel.other_names.length" class="flex items-start gap-2.5">
-        <Tags class="mt-0.5 size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-600 dark:text-surface-400">
-          {{ aliasesText }}
-        </span>
-      </div>
-    </div>
+    <Stack gap="sm" class="px-5 py-3.5">
+      <ResourceArchiveRow :icon="BookMarked">
+        {{ getNovelStatusLabel(lightNovel.novel_status) }}
+      </ResourceArchiveRow>
+      <ResourceArchiveRow :icon="CalendarDays">{{ publicationText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="lightNovel.total_volumes" :icon="Layers">
+        全 {{ lightNovel.total_volumes }} 卷
+      </ResourceArchiveRow>
 
-    <div v-if="bangumiUrl" class="flex gap-2 px-5 pb-4">
-      <a
-        :href="bangumiUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md border border-surface-200 px-2.5 py-1 text-[11px] font-semibold text-surface-600 transition-colors hover:bg-surface-50 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800"
+      <ResourceArchiveRow
+        v-for="g in producerGroups"
+        :key="g.label"
+        :icon="Building2"
+        :label="g.label"
       >
-        Bangumi
-      </a>
-    </div>
+        <template v-for="(p, i) in g.items" :key="p.id">
+          <Text v-if="i > 0" as="span" size="sm" tone="faint">/</Text>
+          <Link v-if="g.relation === 'bunko'" :as="NuxtLink" :to="`/light-novels/bunko/${p.id}`">
+            {{ p.name }}
+          </Link>
+          <Text v-else as="span" size="sm">{{ p.name }}</Text>
+        </template>
+      </ResourceArchiveRow>
+
+      <ResourceArchiveRow v-if="lightNovel.read_times" :icon="Eye">
+        {{ lightNovel.read_times }} 次阅读
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="lightNovel.other_names.length" :icon="Tags" align="start">
+        {{ aliasesText }}
+      </ResourceArchiveRow>
+    </Stack>
+
+    <Inline v-if="bangumiUrl" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip :href="bangumiUrl">Bangumi</ResourceArchiveExternalChip>
+    </Inline>
 
     <template #footer>
       <ResourceArchiveContributorFooter

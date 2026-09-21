@@ -62,7 +62,7 @@
           <AnimatePresence>
             <motion.div
               v-if="visible"
-              class="pointer-events-auto inline-flex origin-bottom flex-col items-center gap-1 rounded-lg border border-surface-200 bg-surface-0 px-3.5 py-2.5 shadow-[0_8px_24px_rgb(0_0_0/0.12)] dark:border-surface-700 dark:bg-surface-900 dark:shadow-[0_8px_24px_rgb(0_0_0/0.4)]"
+              class="pointer-events-auto inline-flex origin-bottom flex-col items-center gap-1 rounded-lg border border-line bg-surface px-3.5 py-2.5 shadow-lg"
               :initial="{ opacity: 0, scale: 0.95, y: 4 }"
               :animate="{ opacity: 1, scale: 1, y: 0 }"
               :exit="{ opacity: 0, scale: 0.95, y: 4 }"

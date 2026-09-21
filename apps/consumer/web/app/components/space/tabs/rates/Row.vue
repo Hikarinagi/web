@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { SquarePen, Star } from '@lucide/vue'
+  import { IconButton, Inline, Rating, Stack, Tag, Text } from '@hina-ui/vue'
+  import { SquarePen } from '@lucide/vue'
   import { workPath } from '#shared/utils/work'
   import {
     RATE_DIMENSION_LABELS,
@@ -25,58 +26,47 @@
 <template>
   <NuxtLink
     :to="workPath(item.work_type, item.id)"
-    class="group flex gap-4 border-b border-surface-100 py-4 last:border-b-0 dark:border-surface-800/60"
+    class="group flex gap-4 border-b border-line py-4 last:border-b-0"
   >
     <HikariImage
       :src="item.cover"
       :alt="item.title"
-      class="h-[84px] w-[60px] shrink-0 rounded-md bg-surface-100 dark:bg-surface-800"
+      class="h-21 w-15 shrink-0 rounded-md bg-inset"
       image-class="size-full object-cover"
       :processing="{ width: 120, height: 168, fit: 'cover', quality: 80 }"
     />
-    <div class="flex min-w-0 flex-1 flex-col gap-2">
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex min-w-0 items-center gap-2">
-          <p class="truncate font-semibold text-color transition-colors group-hover:text-primary">
+    <Stack gap="sm" class="min-w-0 flex-1">
+      <Inline gap="sm" align="start" justify="between" :wrap="false">
+        <Inline gap="sm" class="min-w-0" :wrap="false">
+          <Text weight="semibold" truncate class="transition-colors group-hover:text-accent-text">
             {{ item.title }}
-          </p>
-          <span
-            v-if="statusLabel"
-            class="shrink-0 rounded bg-surface-100 px-1.5 py-0.5 text-[11px] font-medium text-muted-color dark:bg-surface-800"
-          >
-            {{ statusLabel }}
-          </span>
-        </div>
-        <div class="flex shrink-0 items-center gap-1">
+          </Text>
+          <Tag v-if="statusLabel" size="sm" class="shrink-0">{{ statusLabel }}</Tag>
+        </Inline>
+        <Inline gap="xs" :wrap="false" class="shrink-0">
           <template v-if="item.rate">
-            <Star class="size-4 fill-amber-400 text-amber-400" />
-            <span class="font-semibold text-color">{{ item.rate }}</span>
+            <Rating :model-value="item.rate" :max="10" :stars="5" readonly size="sm" />
+            <Text as="span" weight="semibold">{{ item.rate }}</Text>
           </template>
-          <Button
+          <IconButton
             v-if="isSelf"
-            v-tooltip.top="'编辑'"
-            text
-            rounded
-            severity="secondary"
-            size="small"
-            aria-label="编辑标记"
+            label="编辑标记"
+            size="sm"
+            pill
             :loading="busy"
             @click.stop.prevent="emit('edit', item)"
           >
-            <template #icon><SquarePen class="size-4" /></template>
-          </Button>
-        </div>
-      </div>
+            <SquarePen />
+          </IconButton>
+        </Inline>
+      </Inline>
 
       <RateDimensionChips v-if="dimensions.length" :dimensions="dimensions" />
-      <p
-        v-else-if="item.rate_content"
-        class="line-clamp-2 text-[13px] text-surface-600 dark:text-surface-300"
-      >
+      <Text v-else-if="item.rate_content" size="sm" tone="muted" class="line-clamp-2">
         “{{ item.rate_content }}”
-      </p>
+      </Text>
 
-      <p class="text-xs text-muted-color">{{ rateDateLine(item) }}</p>
-    </div>
+      <Text size="xs" tone="muted">{{ rateDateLine(item) }}</Text>
+    </Stack>
   </NuxtLink>
 </template>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Button, FormField, Inline, Input, Slider, Stack, Text } from '@hina-ui/vue'
+
   const props = defineProps<{
     initialAlt: string | null
     initialCaption: string | null
@@ -28,53 +30,33 @@
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-3 md:w-[360px]">
-    <div class="flex flex-col gap-1">
-      <label for="image-meta-alt" class="text-sm font-medium text-muted-color">
-        alt（可访问性描述）
-      </label>
-      <InputText
-        id="image-meta-alt"
-        v-model="alt"
-        autofocus
-        fluid
-        size="small"
-        placeholder="为屏幕阅读器添加描述"
-      />
-    </div>
-    <div class="flex flex-col gap-1">
-      <label for="image-meta-caption" class="text-sm font-medium text-muted-color">图注</label>
-      <InputText
-        id="image-meta-caption"
-        v-model="caption"
-        fluid
-        size="small"
-        placeholder="图片说明"
-      />
-    </div>
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center justify-between">
-        <label class="text-sm font-medium text-muted-color">宽度</label>
-        <span class="text-sm text-color tabular-nums">{{ Math.round(widthPercent) }}%</span>
-      </div>
+  <Stack gap="sm" class="w-full sm:w-90">
+    <FormField name="alt" label="alt（可访问性描述）">
+      <Input v-model="alt" autofocus size="sm" placeholder="为屏幕阅读器添加描述" />
+    </FormField>
+
+    <FormField name="caption" label="图注">
+      <Input v-model="caption" size="sm" placeholder="图片说明" />
+    </FormField>
+
+    <Stack gap="xs">
+      <Inline gap="sm" align="center" justify="between">
+        <Text as="span" size="sm" weight="medium" tone="muted">宽度</Text>
+        <Text as="span" size="sm" class="tabular-nums">{{ Math.round(widthPercent) }}%</Text>
+      </Inline>
       <Slider v-model="widthPercent" :min="MIN_PERCENT" :max="MAX_PERCENT" :step="1" />
-      <div class="flex flex-wrap content-evenly justify-evenly">
+      <Inline gap="xs" justify="between">
         <Button
           v-for="point in SNAP_POINTS"
           :key="point"
-          unstyled
-          type="button"
-          :class="[
-            'rounded px-2 py-0.5 text-xs transition-colors',
-            Math.round(widthPercent) === point
-              ? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-              : 'text-muted-color hover:bg-surface-100 dark:hover:bg-surface-800',
-          ]"
+          size="sm"
+          variant="ghost"
+          :tone="Math.round(widthPercent) === point ? 'accent' : 'neutral'"
           @click="snapTo(point)"
         >
           {{ point }}%
         </Button>
-      </div>
-    </div>
-  </div>
+      </Inline>
+    </Stack>
+  </Stack>
 </template>

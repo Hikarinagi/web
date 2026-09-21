@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Heading, Inline, Stack, TableCell, TableRow, Text } from '@hina-ui/vue'
   import { summarizeRevisionDiff } from '~/features/revision/diff'
   import type { RevisionSummaryWithDiff } from '~/features/revision/resources'
   import { timeFormat } from '~/utils/time-format'
@@ -9,63 +10,73 @@
 </script>
 
 <template>
-  <div
-    class="grid bg-surface-0 transition-colors hover:bg-surface-50 md:grid-cols-[112px_minmax(0,1fr)_172px] dark:bg-surface-900 dark:hover:bg-surface-800/40"
-  >
-    <div
-      class="flex items-start justify-between gap-3 border-b border-surface-100 px-4 py-3 md:block md:border-r md:border-b-0 md:border-surface-200 md:py-4 dark:border-surface-800"
-    >
-      <div class="font-mono text-sm font-medium text-surface-900 dark:text-surface-0">
-        v{{ revision.version }}
-      </div>
-      <div class="mt-0.5 text-xs text-muted-color md:mt-1">
-        {{ timeFormat(revision.created_at) }}
-      </div>
-    </div>
+  <TableRow>
+    <TableCell class="px-4 py-3 align-top md:border-e md:border-line md:py-4">
+      <Inline gap="none" align="start" justify="between" :wrap="false" class="gap-3 md:flex-col">
+        <Text as="span" size="sm" weight="medium" class="font-mono">v{{ revision.version }}</Text>
+        <Text as="span" size="xs" tone="muted" class="md:mt-1">
+          {{ timeFormat(revision.created_at) }}
+        </Text>
+      </Inline>
+    </TableCell>
 
-    <div class="min-w-0 px-4 py-3 md:py-4">
-      <div class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h2
-          class="min-w-0 flex-1 truncate text-sm font-medium text-surface-900 dark:text-surface-0"
-        >
+    <TableCell class="px-4 py-3 align-top md:py-4">
+      <Inline gap="none" align="baseline" wrap class="min-w-0 gap-x-3 gap-y-1">
+        <Heading :level="2" size="sm" truncate class="min-w-0 flex-1 font-medium">
           {{ revision.summary || '未填写修订摘要' }}
-        </h2>
-        <span class="text-xs text-muted-color">
+        </Heading>
+        <Text as="span" size="xs" tone="muted">
           {{ diffSummary.changeCount ? `${diffSummary.changeCount} 项变更` : '无字段变更' }}
-        </span>
-      </div>
+        </Text>
+      </Inline>
 
-      <div
+      <Stack
         v-if="diffSummary.rows.length"
-        class="mt-3 overflow-hidden rounded-md border border-surface-100 dark:border-surface-800"
+        gap="none"
+        class="mt-3 divide-y divide-line overflow-hidden rounded-md border border-line"
       >
-        <div
+        <Inline
           v-for="(row, index) in diffSummary.rows"
           :key="index"
-          class="grid grid-cols-[3rem_minmax(0,1fr)] gap-x-2 border-b border-surface-100 px-2.5 py-1.5 text-xs leading-5 last:border-b-0 sm:grid-cols-[3rem_7rem_minmax(0,1fr)] dark:border-surface-800"
+          gap="none"
+          align="start"
+          wrap
+          class="gap-x-2 px-2.5 py-1.5 leading-5"
         >
-          <span class="text-muted-color">{{ row.action }}</span>
-          <span class="truncate text-surface-700 dark:text-surface-200">{{ row.label }}</span>
-          <span class="col-span-2 min-w-0 truncate text-muted-color sm:col-span-1">
+          <Text as="span" size="xs" tone="muted" class="w-12 shrink-0">{{ row.action }}</Text>
+          <Text as="span" size="xs" truncate class="min-w-0 flex-1 sm:w-28 sm:flex-none">
+            {{ row.label }}
+          </Text>
+          <Text
+            as="span"
+            size="xs"
+            tone="muted"
+            truncate
+            class="w-full min-w-0 sm:w-auto sm:flex-1"
+          >
             {{ row.summary }}
-          </span>
-        </div>
-        <div
+          </Text>
+        </Inline>
+
+        <Text
           v-if="diffSummary.hiddenCount > 0"
-          class="border-t border-surface-100 px-2.5 py-1.5 text-xs leading-5 text-muted-color dark:border-surface-800"
+          as="p"
+          size="xs"
+          tone="muted"
+          class="px-2.5 py-1.5 leading-5"
         >
           还有 {{ diffSummary.hiddenCount }} 项变更
-        </div>
-      </div>
-    </div>
+        </Text>
+      </Stack>
+    </TableCell>
 
-    <div
-      class="flex min-w-0 items-center gap-2 border-t border-surface-100 px-4 py-3 text-xs md:justify-end md:border-t-0 md:border-l md:border-surface-200 md:py-4 dark:border-surface-800"
-    >
-      <UserCardTrigger :user-id="revision.editor.id">
-        <Avatar :user="revision.editor" shape="circle" class="size-6!" />
-      </UserCardTrigger>
-      <UserName :user="revision.editor" class="min-w-0 text-surface-700 dark:text-surface-200" />
-    </div>
-  </div>
+    <TableCell class="px-4 py-3 align-middle md:border-s md:border-line md:py-4">
+      <Inline gap="sm" align="center" :wrap="false" class="min-w-0 md:justify-end">
+        <UserCardTrigger :user-id="revision.editor.id">
+          <Avatar :user="revision.editor" class="size-6!" />
+        </UserCardTrigger>
+        <UserName :user="revision.editor" class="min-w-0 text-xs" />
+      </Inline>
+    </TableCell>
+  </TableRow>
 </template>

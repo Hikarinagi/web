@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Button, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { MangaHomePageData } from '~~/server/api/pages/mangas.get'
   import { statusText, titleOf } from '~/features/manga/explore'
 
@@ -34,28 +36,27 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-2">
-    <div class="flex flex-wrap items-center gap-1.5">
+  <Stack align="start" gap="sm">
+    <Inline gap="none" class="gap-1.5">
       <Tag
         v-for="(tag, index) in tags"
         :key="tag"
-        :value="tag"
-        :severity="index === 0 ? undefined : 'secondary'"
-        class="px-2! py-0.5! text-xs! font-medium!"
-      />
-    </div>
-    <h2 class="line-clamp-1 text-3xl leading-9.5 font-bold text-surface-950 dark:text-white">
+        :tone="index === 0 ? 'accent' : 'neutral'"
+        weight="medium"
+      >
+        {{ tag }}
+      </Tag>
+    </Inline>
+    <Heading :level="2" size="2xl" class="line-clamp-1 text-3xl leading-9.5">
       {{ title }}
-    </h2>
-    <p class="h-5 max-w-full truncate text-sm text-muted-color">
+    </Heading>
+    <Text size="sm" tone="muted" truncate class="h-5 max-w-full">
       {{ originalTitle }}
-    </p>
-    <p class="line-clamp-1 h-5 text-sm text-muted-color">{{ factText }}</p>
-    <p
-      class="line-clamp-2 h-11 max-w-120 text-sm leading-5.5 text-surface-600 dark:text-surface-300"
-    >
+    </Text>
+    <Text size="sm" tone="muted" class="line-clamp-1 h-5">{{ factText }}</Text>
+    <Text size="sm" tone="muted" class="line-clamp-2 h-11 max-w-120 leading-5.5">
       {{ slide.intro ?? '' }}
-    </p>
-    <Button as="router-link" :to="`/mangas/${slide.manga.id}`" label="看看这部" />
-  </div>
+    </Text>
+    <Button :as="NuxtLink" :to="`/mangas/${slide.manga.id}`">查看详情</Button>
+  </Stack>
 </template>

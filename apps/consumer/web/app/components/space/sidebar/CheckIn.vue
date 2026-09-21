@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Panel, Stack, Text } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
 
   defineOptions({ name: 'SpaceSidebarCheckIn' })
@@ -17,25 +18,28 @@
 </script>
 
 <template>
-  <FeedSidebarPanel title="签到">
-    <div class="flex flex-col gap-3 px-4 pb-4">
-      <div class="flex items-end justify-between">
-        <div class="flex items-baseline gap-1.5">
+  <Panel title="签到" :padded="false">
+    <Stack gap="sm" class="px-(--hn-panel-p) pb-(--hn-panel-p)">
+      <Inline gap="sm" align="end" justify="between" :wrap="false">
+        <Inline as="span" gap="xs" align="baseline">
           <HikariPoint class="size-5 self-center" aria-hidden="true" />
-          <span class="text-2xl font-bold text-color">{{ points }}</span>
-          <span class="text-[13px] text-muted-color">光点</span>
-        </div>
+          <Text as="span" size="2xl" weight="semibold">{{ points }}</Text>
+          <Text as="span" size="xs" tone="muted">光点</Text>
+        </Inline>
         <Button
-          :label="checkedIn ? '签到日历' : '去签到'"
-          size="small"
-          :severity="checkedIn ? 'secondary' : undefined"
+          size="sm"
+          :variant="checkedIn ? 'soft' : 'solid'"
+          :tone="checkedIn ? 'neutral' : 'accent'"
+          class="shrink-0"
           @click="checkin.open()"
-        />
-      </div>
-      <p class="text-xs text-muted-color">
+        >
+          {{ checkedIn ? '签到日历' : '去签到' }}
+        </Button>
+      </Inline>
+      <Text size="xs" tone="muted">
         <template v-if="streak !== null">当前连续签到 {{ streak }} 天 ·</template>
         历史最长连续签到 {{ longest }} 天
-      </p>
-    </div>
-  </FeedSidebarPanel>
+      </Text>
+    </Stack>
+  </Panel>
 </template>

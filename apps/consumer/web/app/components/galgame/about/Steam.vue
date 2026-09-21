@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { GalgameSteamData } from '~~/server/api/pages/galgames/[id]/steam.get'
 
   defineOptions({ name: 'GalgameAboutSteam' })
@@ -13,7 +14,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
+  <Stack gap="none" class="gap-3">
     <GalgameAboutSteamCard v-for="app in apps" :key="app.app_id" :app="app" />
 
     <template v-if="!apps.length">
@@ -29,5 +30,5 @@
         @retry="refresh()"
       />
     </template>
-  </div>
+  </Stack>
 </template>

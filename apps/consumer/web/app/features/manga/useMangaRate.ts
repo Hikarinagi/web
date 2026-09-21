@@ -1,7 +1,7 @@
 import type { MangaRate, MangaRateStatus, UpsertMangaRateBody } from './rate'
 
 export function useMangaRate(mangaId: number, initial: MangaRate | null) {
-  const rate = ref<MangaRate | null>(initial)
+  const rate = useState<MangaRate | null>(`manga-rate-${mangaId}`, () => initial)
   const pending = ref(false)
   const status = computed(() => rate.value?.status ?? null)
   const statusPrivate = computed(() => rate.value?.status_private ?? false)

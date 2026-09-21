@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Center } from '@hina-ui/vue'
   import { X } from '@lucide/vue'
   import type { ClassValue } from 'clsx'
   import { cn } from '~/utils/cn'
@@ -28,11 +29,11 @@
     :class="cn('size-40', attrs.class as ClassValue)"
     @pick="setOne"
   />
-  <div
+  <Center
     v-else
     :class="
       cn(
-        'group relative size-40 overflow-hidden rounded-lg border border-surface-200 transition-colors dark:border-surface-700',
+        'group relative size-40 overflow-hidden rounded-lg border border-line transition-colors',
         disabled && 'opacity-60',
         attrs.class as ClassValue,
       )
@@ -45,20 +46,21 @@
       class="size-full"
       image-class="size-full object-cover"
     >
-      <template #empty><span /></template>
-      <template #error><span /></template>
+      <template #empty />
+      <template #error />
     </HikariImage>
-    <div class="absolute top-1.5 right-1.5">
-      <Button
-        v-if="!disabled"
-        unstyled
-        class="flex size-6 items-center justify-center rounded-full bg-surface-900/60 text-white opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-        @click.stop="clear"
-      >
-        <template #icon>
-          <X :size="14" />
-        </template>
-      </Button>
-    </div>
-  </div>
+    <Button
+      v-if="!disabled"
+      variant="solid"
+      tone="neutral"
+      size="sm"
+      icon-only
+      pill
+      aria-label="移除"
+      class="absolute top-1.5 right-1.5 size-6 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
+      @click.stop="clear"
+    >
+      <template #icon><X class="size-3.5" /></template>
+    </Button>
+  </Center>
 </template>

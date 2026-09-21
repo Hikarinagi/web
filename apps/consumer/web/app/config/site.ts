@@ -2,6 +2,13 @@ export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSqua
 
 export type FeatureFlagKey = 'manga_section' | 'app_download'
 
+export type HeaderNavBadgeTone = 'accent' | 'neutral' | 'success' | 'warning' | 'danger' | 'info'
+
+export interface HeaderNavBadge {
+  label: string
+  tone?: HeaderNavBadgeTone
+}
+
 export interface HeaderNavItem {
   label: string
   to: string
@@ -9,6 +16,7 @@ export interface HeaderNavItem {
   match: 'exact' | 'prefix'
   flag?: FeatureFlagKey
   desktopOnly?: boolean
+  badge?: HeaderNavBadge
 }
 
 export type FooterSocialIcon = 'telegram' | 'github'
@@ -64,6 +72,7 @@ export const SITE_CONFIG = {
       match: 'prefix',
       flag: 'app_download',
       desktopOnly: true,
+      badge: { label: 'Beta', tone: 'accent' },
     },
   ],
   footerSocial: [

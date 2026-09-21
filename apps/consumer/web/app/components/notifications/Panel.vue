@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Heading, Inline, ScrollArea, Spinner, Stack, Text } from '@hina-ui/vue'
   import type { SystemMessageItem } from '~/features/notifications/notifications'
 
   defineProps<{ items: SystemMessageItem[]; loading?: boolean }>()
@@ -6,20 +7,20 @@
 </script>
 
 <template>
-  <div class="flex w-80 flex-col">
-    <div class="flex items-center justify-between pb-1">
-      <h2 class="text-sm font-semibold text-color">消息</h2>
+  <Stack gap="none" class="w-80">
+    <Inline gap="sm" align="center" justify="between" :wrap="false" class="pb-1">
+      <Heading :level="2" size="sm">消息</Heading>
       <ViewAllLink to="/messages" class="text-xs" @click="emit('close')">查看全部</ViewAllLink>
-    </div>
+    </Inline>
 
-    <div v-if="loading" class="flex justify-center py-8">
-      <Spinner :size="28" />
-    </div>
+    <Center v-if="loading" class="py-8">
+      <Spinner size="lg" />
+    </Center>
     <ScrollArea v-else-if="items.length" class="-mx-2 max-h-96">
-      <div class="flex flex-col" @click="emit('close')">
+      <Stack gap="none" @click="emit('close')">
         <NotificationsItem v-for="m in items" :key="m.id" :item="m" compact />
-      </div>
+      </Stack>
     </ScrollArea>
-    <p v-else class="py-8 text-center text-sm text-muted-color">还没有消息</p>
-  </div>
+    <Text v-else size="sm" tone="muted" class="py-8 text-center">还没有消息</Text>
+  </Stack>
 </template>

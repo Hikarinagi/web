@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Grid } from '@hina-ui/vue'
   import { mapVoiceItems } from '~/features/entity/relations'
 
   defineOptions({ name: 'EntityVoiceSection' })
@@ -17,8 +18,8 @@
 
 <template>
   <EntitySection v-if="items.length" :title="title" :meta="`${total} 个角色`" :more-to="moreTo">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <Grid :cols="1" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <EntityVoiceCard v-for="item in items" :key="item.to" :item="item" />
-    </div>
+    </Grid>
   </EntitySection>
 </template>

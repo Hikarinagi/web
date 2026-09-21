@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Card, SegmentedControl, SimpleGrid, Stack, Tag, Text } from '@hina-ui/vue'
   import type { ShopDecoration } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
 
@@ -37,48 +38,48 @@
     { label: '头像框', value: 'AVATAR_FRAME' },
     { label: '徽章', value: 'BADGE' },
   ]
+
+  function onType(value: string | number | undefined) {
+    if (value === 'AVATAR_FRAME' || value === 'BADGE') type.value = value
+  }
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
-    <SelectButton
-      v-model="type"
+  <Stack gap="lg">
+    <SegmentedControl
+      :model-value="type"
       :options="typeOptions"
-      option-label="label"
-      option-value="value"
-      :allow-empty="false"
-      size="small"
+      size="sm"
+      aria-label="装扮类型"
       class="self-start"
+      @update:model-value="onType"
     />
 
-    <div v-for="group in groups" :key="group.key">
-      <p class="mb-2 text-sm font-medium text-muted-color">{{ group.label }}</p>
-      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        <div
-          v-for="item in group.items"
-          :key="item.id"
-          class="relative rounded-xl border border-surface"
-        >
+    <Stack v-for="group in groups" :key="group.key" gap="sm">
+      <Text size="sm" weight="medium" tone="muted">{{ group.label }}</Text>
+      <SimpleGrid min="10rem" gap="sm">
+        <Card v-for="item in group.items" :key="item.id" :padded="false" class="relative">
           <SpaceSettingDecorationTile :me="me" :decoration="item">
             <template #footer>
-              <Tag v-if="ownedIds.has(item.id)" value="已拥有" severity="secondary" rounded />
+              <Tag v-if="ownedIds.has(item.id)" pill>已拥有</Tag>
               <Button
                 v-else-if="item.price != null"
-                size="small"
-                severity="secondary"
+                size="sm"
+                variant="soft"
+                tone="neutral"
                 @click="emit('buy', item)"
               >
-                <HikariPoint class="size-3.5" aria-hidden="true" />
-                <span class="ml-1">{{ item.price }}</span>
+                <template #icon><HikariPoint aria-hidden="true" /></template>
+                {{ item.price }}
               </Button>
-              <Tag v-else :value="acquireHint(item)" severity="secondary" rounded />
+              <Tag v-else pill>{{ acquireHint(item) }}</Tag>
             </template>
           </SpaceSettingDecorationTile>
           <SpaceSettingDecorationInfo :decoration="item" class="absolute top-1.5 right-1.5 z-20" />
-        </div>
-      </div>
-    </div>
+        </Card>
+      </SimpleGrid>
+    </Stack>
 
-    <p v-if="!groups.length" class="text-sm text-muted-color">还没有上架的装扮</p>
-  </div>
+    <Text v-if="!groups.length" size="sm" tone="muted">还没有上架的装扮</Text>
+  </Stack>
 </template>

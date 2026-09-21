@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Text } from '@hina-ui/vue'
   import { fmt } from './helpers'
 
   const props = defineProps<{
@@ -10,14 +11,14 @@
 </script>
 
 <template>
-  <p
+  <Text
     class="rounded-lg px-3 py-2 whitespace-pre-wrap"
     :class="
       variant === 'added'
-        ? 'bg-green-500/10 text-green-700 dark:text-green-300'
-        : 'bg-red-500/10 text-red-700 line-through dark:text-red-300'
+        ? 'bg-success-soft text-success-text'
+        : 'bg-danger-soft text-danger-text line-through'
     "
   >
     {{ fmt(value) }}
-  </p>
+  </Text>
 </template>

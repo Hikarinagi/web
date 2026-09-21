@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Grid, Heading, Stack } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   defineOptions({ name: 'LightNovelAboutCharacters' })
@@ -6,14 +7,14 @@
 </script>
 
 <template>
-  <div v-if="characters.length" class="flex flex-col gap-4">
-    <h3 class="text-[15px] font-bold text-surface-700 dark:text-surface-200">登场角色</h3>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <Stack v-if="characters.length" gap="none" class="gap-4">
+    <Heading :level="3" size="base" class="font-bold">登场角色</Heading>
+    <Grid :cols="1" gap="none" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <LightNovelAboutCharacterCard
         v-for="item in characters"
         :key="`${item.role}-${item.character.id}`"
         :item="item"
       />
-    </div>
-  </div>
+    </Grid>
+  </Stack>
 </template>

@@ -18,6 +18,14 @@ export const useAuthStore = defineStore('auth', () => {
     if (prevId !== nextId) emitAuthChange()
   }
 
+  if (import.meta.client) {
+    watch(
+      () => user.value?.id ?? null,
+      id => useApm().identify(id === null ? null : String(id)),
+      { immediate: true },
+    )
+  }
+
   function setLoading(nextLoading: boolean) {
     loading.value = nextLoading
   }

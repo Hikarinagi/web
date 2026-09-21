@@ -1,14 +1,17 @@
 <script setup lang="ts">
+  import { DropdownMenu, DropdownMenuItem, Inline } from '@hina-ui/vue'
   import { CornerUpLeft, Ellipsis, Flag, Pencil, Pin, Trash2 } from '@lucide/vue'
-  import type MenuType from 'primevue/menu'
-  import type { MenuItem } from 'primevue/menuitem'
+  import type { Component } from 'vue'
   import { COMMENT_THREAD_KEY } from '~/features/comment/useThread'
   import type { CommentItem, CommentNode } from '~/features/comment/comment'
   import type { ReportBody } from '~/features/report/report'
 
   defineOptions({ name: 'CommentItemActions' })
 
-  interface ActionMenuItem extends MenuItem {
+  interface ActionMenuItem {
+    label: string
+    icon: Component
+    danger?: boolean
     loginRequired?: boolean
     action: () => void
   }
@@ -24,7 +27,8 @@
 
   const thread = inject(COMMENT_THREAD_KEY)!
   const auth = useAuthStore()
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
+  const { requireLogin } = useAuthGate()
   const reportVisible = ref(false)
 
   const isMine = computed(() => auth.user?.id != null && props.comment.author?.id === auth.user.id)
@@ -37,12 +41,12 @@
   const votingKind = computed(() => thread.voting.value.get(props.comment.id) ?? null)
   const isVoting = computed(() => votingKind.value !== null)
 
-  const menu = ref<InstanceType<typeof MenuType>>()
   const menuItems = computed<ActionMenuItem[]>(() => {
     const items: ActionMenuItem[] = []
     if (canPin.value) {
       items.push({
         label: props.comment.is_pinned ? '取消置顶' : '置顶',
+        icon: Pin,
         action: confirmTogglePin,
       })
     }
@@ -50,54 +54,46 @@
       if (props.comment.can_edit) {
         items.push({
           label: '编辑',
-          action: () => {
-            menu.value?.hide()
-            thread.setEditing(props.comment.id)
-          },
+          icon: Pencil,
+          action: () => thread.setEditing(props.comment.id),
         })
       }
-      items.push({ label: '删除', action: confirmDelete })
+      items.push({ label: '删除', icon: Trash2, danger: true, action: confirmDelete })
     } else {
-      items.push({ label: '举报', loginRequired: true, action: openReport })
+      items.push({ label: '举报', icon: Flag, loginRequired: true, action: openReport })
     }
     return items
   })
 
   function confirmTogglePin() {
-    menu.value?.hide()
     const pinned = props.comment.is_pinned
-    confirm.require({
-      group: 'app-shell',
-      header: pinned ? '取消置顶' : '置顶评论',
-      message: pinned
+    confirm({
+      title: pinned ? '取消置顶' : '置顶评论',
+      description: pinned
         ? '确定取消置顶这条评论吗？'
         : '确定置顶这条评论吗？置顶后会显示在评论区顶部。',
-      acceptLabel: pinned ? '取消置顶' : '置顶',
-      rejectLabel: '取消',
-      onAccept: ({ close }: { close: () => void }) => {
-        close()
+      confirmText: pinned ? '取消置顶' : '置顶',
+      cancelText: '取消',
+      onConfirm: () => {
         thread.togglePin(props.comment)
       },
     })
   }
 
   function confirmDelete() {
-    menu.value?.hide()
-    confirm.require({
-      group: 'app-shell',
-      header: '删除评论',
-      message: '删除后无法恢复，确定删除这条评论吗？',
-      acceptLabel: '删除',
-      rejectLabel: '取消',
-      onAccept: ({ close }: { close: () => void }) => {
-        close()
+    confirm({
+      title: '删除评论',
+      description: '删除后无法恢复，确定删除这条评论吗？',
+      confirmText: '删除',
+      cancelText: '取消',
+      tone: 'danger',
+      onConfirm: () => {
         thread.remove(props.comment)
       },
     })
   }
 
   function openReport() {
-    menu.value?.hide()
     reportVisible.value = true
   }
 
@@ -111,73 +107,63 @@
 </script>
 
 <template>
-  <div class="flex items-center gap-5 text-muted-color">
+  <Inline gap="lg">
     <Button
       login-required
-      text
-      size="small"
-      :severity="myVote === 1 ? undefined : 'secondary'"
+      variant="ghost"
+      :tone="myVote === 1 ? 'accent' : 'neutral'"
+      size="sm"
       :loading="votingKind === 'like'"
       :disabled="isVoting"
-      :label="comment.like_count.toString()"
-      class="-mx-2 -my-1 gap-1.5! px-2! py-1! hover:bg-transparent! active:bg-transparent!"
-      :class="{ 'hover:text-color!': myVote !== 1 }"
+      aria-label="赞"
       @click="thread.vote(comment, 'like')"
     >
       <template #icon><InteractionLikeIcon :active="myVote === 1" /></template>
+      {{ comment.like_count }}
     </Button>
     <Button
       login-required
-      text
-      size="small"
-      :severity="myVote === -1 ? undefined : 'secondary'"
+      variant="ghost"
+      :tone="myVote === -1 ? 'accent' : 'neutral'"
+      size="sm"
+      icon-only
       :loading="votingKind === 'dislike'"
       :disabled="isVoting"
-      class="-mx-2 -my-1 w-auto! px-2! py-1! hover:bg-transparent! active:bg-transparent!"
-      :class="{ 'hover:text-color!': myVote !== -1 }"
+      aria-label="踩"
       @click="thread.vote(comment, 'dislike')"
     >
       <template #icon><InteractionDislikeIcon :active="myVote === -1" /></template>
     </Button>
     <Button
       login-required
-      text
-      size="small"
-      severity="secondary"
-      label="回复"
-      class="-mx-2 -my-1 gap-1.5! px-2! py-1! hover:bg-transparent! hover:text-color! active:bg-transparent!"
+      variant="ghost"
+      tone="neutral"
+      size="sm"
       @click="thread.setReplyTarget(comment)"
     >
       <template #icon><CornerUpLeft /></template>
+      回复
     </Button>
-    <Button
-      v-if="!isReply"
-      text
-      size="small"
-      severity="secondary"
-      aria-label="更多"
-      class="-mx-2 -my-1 w-auto! px-2! py-1! hover:bg-transparent! hover:text-color! active:bg-transparent!"
-      @click="(e: MouseEvent) => menu?.toggle(e)"
-    >
-      <template #icon><Ellipsis /></template>
-    </Button>
-    <Menu v-if="!isReply" ref="menu" :model="menuItems" popup>
-      <template #item="{ item }">
-        <Button
-          unstyled
-          :login-required="item.loginRequired"
-          class="flex w-full items-center gap-2 px-3 py-1.5 text-sm"
-          :class="item.label === '删除' ? 'text-red-500' : 'text-color'"
-          @click="item.action"
+
+    <DropdownMenu v-if="!isReply" label="评论操作" align="end">
+      <IconButton label="更多" :tooltip="false" size="sm" aria-haspopup="menu">
+        <Ellipsis />
+      </IconButton>
+
+      <template #content>
+        <DropdownMenuItem
+          v-for="item in menuItems"
+          :key="item.label"
+          :tone="item.danger ? 'danger' : undefined"
+          @select="item.loginRequired && !requireLogin() ? undefined : item.action()"
         >
-          <Pencil v-if="item.label === '编辑'" class="size-4" />
-          <Trash2 v-else-if="item.label === '删除'" class="size-4" />
-          <Pin v-else-if="item.label === '置顶' || item.label === '取消置顶'" class="size-4" />
-          <Flag v-else class="size-4" />
+          <template #icon>
+            <component :is="item.icon" />
+          </template>
           {{ item.label }}
-        </Button>
+        </DropdownMenuItem>
       </template>
-    </Menu>
+    </DropdownMenu>
     <ReportDialog v-model:visible="reportVisible" title="举报评论" :submit="submitReport" />
-  </div>
+  </Inline>
 </template>

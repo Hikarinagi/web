@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Center, Flex, Ripple, SimpleGrid, Text } from '@hina-ui/vue'
   import { Check } from '@lucide/vue'
   import type { OwnedDecoration } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
@@ -17,34 +18,38 @@
   const selected = computed(() => new Set(props.selectedIds))
   const atLimit = computed(() => props.selectedIds.length >= props.limit)
 
-  const TILE_CLASS =
-    'relative w-full cursor-pointer rounded-xl border transition-colors disabled:cursor-default disabled:opacity-50'
-  const CHECK_CLASS =
-    'absolute left-1.5 top-1.5 inline-flex size-4 items-center justify-center rounded-full bg-primary text-white'
+  function tileClass(active: boolean) {
+    return cn(
+      'hn-state-layer w-full hn-interactive text-start hn-press-lg disabled:opacity-50',
+      active && 'border-accent bg-accent-soft',
+    )
+  }
 </script>
 
 <template>
-  <div v-if="items.length" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-    <div v-for="item in items" :key="item.id" class="relative">
-      <Button
-        unstyled
+  <SimpleGrid v-if="items.length" min="10rem" gap="sm">
+    <Flex v-for="item in items" :key="item.id" class="relative">
+      <Card
+        as="button"
+        :padded="false"
         :disabled="equipping || (atLimit && !selected.has(item.id))"
-        :class="[
-          TILE_CLASS,
-          selected.has(item.id)
-            ? 'border-primary bg-primary/5'
-            : 'border-surface hover:bg-emphasis',
-        ]"
+        :class="tileClass(selected.has(item.id))"
         @click="emit('toggle', item.id)"
       >
-        <SpaceSettingDecorationTile :me="me" :decoration="item" />
-        <span v-if="selected.has(item.id)" :class="CHECK_CLASS">
+        <Ripple :disabled="equipping" />
+        <Center
+          v-if="selected.has(item.id)"
+          inline
+          as="span"
+          class="absolute top-1.5 left-1.5 z-10 size-4 rounded-full bg-accent text-accent-on"
+        >
           <Check :size="11" :stroke-width="3" />
-        </span>
-      </Button>
+        </Center>
+        <SpaceSettingDecorationTile :me="me" :decoration="item" />
+      </Card>
       <SpaceSettingDecorationInfo :decoration="item" class="absolute top-1.5 right-1.5 z-20" />
-    </div>
-  </div>
+    </Flex>
+  </SimpleGrid>
 
-  <p v-else class="text-sm text-muted-color">还没有徽章</p>
+  <Text v-else size="sm" tone="muted">还没有徽章</Text>
 </template>

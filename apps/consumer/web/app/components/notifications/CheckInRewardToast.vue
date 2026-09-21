@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Stack, Text } from '@hina-ui/vue'
   import type { NotivueItem } from 'notivue'
   import type { CheckInRewardToastProps } from '~/features/checkin/checkin'
 
@@ -13,19 +14,23 @@
 </script>
 
 <template>
-  <div
-    class="mr-(--p-scrollbar-width) flex min-w-72 flex-col gap-0.5 rounded-md border border-surface bg-surface-0 p-3 shadow-lg dark:bg-surface-900"
-  >
-    <p class="text-sm font-semibold text-color">签到成功 · {{ date }}</p>
-    <p class="flex items-center gap-1 text-xs text-muted-color">
-      <span>获得</span>
-      <HikariPoint class="size-3.5" aria-hidden="true" />
-      <span class="font-medium text-color">{{ points }}</span>
-    </p>
-    <p v-if="milestone" class="flex items-center gap-1 text-xs font-medium text-primary">
-      <span>连续签到{{ milestone.days }}天达成，</span>
-      <span>+{{ milestone.bonus }}</span>
-      <HikariPoint class="size-3.5" aria-hidden="true" />
-    </p>
-  </div>
+  <Card :padded="false" class="hn-scrollbar-safe min-w-72 rounded-md p-3 shadow-lg">
+    <Stack gap="none" class="gap-0.5">
+      <Text as="p" size="sm" weight="semibold">签到成功 · {{ date }}</Text>
+
+      <Inline gap="none" align="center" :wrap="false" class="gap-1">
+        <Text as="span" size="xs" tone="muted">获得</Text>
+        <HikariPoint class="size-3.5" aria-hidden="true" />
+        <Text as="span" size="xs" weight="medium">{{ points }}</Text>
+      </Inline>
+
+      <Inline v-if="milestone" gap="none" align="center" :wrap="false" class="gap-1">
+        <Text as="span" size="xs" weight="medium" tone="accent">
+          连续签到{{ milestone.days }}天达成，
+        </Text>
+        <Text as="span" size="xs" weight="medium" tone="accent">+{{ milestone.bonus }}</Text>
+        <HikariPoint class="size-3.5" aria-hidden="true" />
+      </Inline>
+    </Stack>
+  </Card>
 </template>

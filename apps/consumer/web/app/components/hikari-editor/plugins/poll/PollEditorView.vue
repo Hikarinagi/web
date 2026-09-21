@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline } from '@hina-ui/vue'
   import { Pencil, Trash2 } from '@lucide/vue'
   import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3'
   import { useContentSummaries } from '~/components/hikari-content/composables/useContentSummaries'
@@ -95,7 +96,7 @@
   <NodeViewWrapper
     as="div"
     :class="[
-      'group/card relative my-[0.8em] rounded-(--editor-panel-radius) border-[1.5px] transition-[border-color,box-shadow] duration-120 ease-out',
+      'group/card relative my-hikari-node rounded-(--editor-panel-radius) border-2 transition-[border-color,box-shadow] duration-120 ease-out',
       selected ? 'border-(--editor-focus-ring)' : 'border-transparent',
     ]"
     :style="
@@ -108,34 +109,22 @@
       <HikariContentNodesPollCard :node="adaptedNode" :interactive="false" />
     </div>
 
-    <div
-      :class="[
-        'absolute top-2 right-2 z-10 flex gap-1 transition-opacity duration-150',
+    <Inline
+      gap="xs"
+      :wrap="false"
+      class="absolute top-2 right-2 z-10 transition-opacity duration-150"
+      :class="
         selected
           ? 'opacity-100'
-          : 'opacity-100 md:opacity-0 md:group-hover/card:opacity-100 md:focus-within:opacity-100',
-      ]"
+          : 'opacity-100 md:opacity-0 md:group-hover/card:opacity-100 md:focus-within:opacity-100'
+      "
     >
-      <Button
-        v-tooltip.top="'编辑'"
-        unstyled
-        type="button"
-        class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-150 hover:bg-black/75"
-        aria-label="编辑投票"
-        @click="openEdit"
-      >
-        <Pencil class="size-4" />
-      </Button>
-      <Button
-        v-tooltip.top="'删除'"
-        unstyled
-        type="button"
-        class="inline-flex size-7 items-center justify-center rounded-md bg-black/55 text-white transition-colors duration-150 hover:bg-hikari-red-500"
-        aria-label="删除投票"
-        @click="deleteNode"
-      >
-        <Trash2 class="size-4" />
-      </Button>
-    </div>
+      <HikariEditorNodeViewChromeButton label="编辑投票" @click="openEdit">
+        <Pencil />
+      </HikariEditorNodeViewChromeButton>
+      <HikariEditorNodeViewChromeButton label="删除投票" tone="danger" @click="deleteNode">
+        <Trash2 />
+      </HikariEditorNodeViewChromeButton>
+    </Inline>
   </NodeViewWrapper>
 </template>

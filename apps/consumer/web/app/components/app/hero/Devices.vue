@@ -11,18 +11,16 @@
       light: shotFeed,
       dark: shotFeedDark,
       alt: '社区动态',
-      frame:
-        'w-[132px] -rotate-6 lg:absolute lg:top-1/2 lg:left-0 lg:w-[196px] lg:-translate-y-1/2',
+      frame: 'w-33 -rotate-6 lg:absolute lg:top-1/2 lg:left-0 lg:w-49 lg:-translate-y-1/2',
       bezel:
-        'rounded-[1.5rem] border-[5px] border-surface-800 bg-surface-800 shadow-2xl lg:rounded-[2rem] lg:border-[7px]',
+        'rounded-3xl border-[5px] border-neutral-800 bg-neutral-800 shadow-2xl lg:rounded-4xl lg:border-[7px]',
     },
     {
       light: shotNovel,
       dark: shotNovelDark,
       alt: '轻小说详情',
-      frame:
-        'w-[118px] rotate-5 lg:absolute lg:top-1/2 lg:left-[16%] lg:w-[168px] lg:-translate-y-[46%]',
-      bezel: 'rounded-[1.8rem] border-[6px] border-surface-700 bg-surface-700 shadow-xl',
+      frame: 'w-29.5 rotate-5 lg:absolute lg:top-1/2 lg:left-[16%] lg:w-42 lg:-translate-y-[46%]',
+      bezel: 'rounded-4xl border-[6px] border-neutral-700 bg-neutral-700 shadow-xl',
     },
   ]
 </script>

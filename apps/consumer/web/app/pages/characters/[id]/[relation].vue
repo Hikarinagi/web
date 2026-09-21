@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { RELATION_LIST_PAGE_SIZE } from '~/features/entity/entity'
+  import { Stack } from '@hina-ui/vue'
+  import type { CharacterRelationPageData } from '~~/server/api/pages/characters/[id]/[relation].get'
+  import { readPageQuery } from '#shared/utils/query'
   import { entityTitle } from '~/features/entity/detail'
   import { ENTITY_RELATION_CONFIG } from '~/features/entity/relations'
-  import { useEntityRelation } from '~/features/entity/useEntityRelation'
 
   definePageMeta({ container: 'full', scrollToTop: false })
 
@@ -12,34 +13,17 @@
   const config = ENTITY_RELATION_CONFIG.character[relation]
   if (!config) throw createError({ statusCode: 404, statusMessage: 'Not Found' })
 
-  const { data } = await useHikariApiData(`/api/pages/characters/${id}/${relation}`, {
+  const page = computed(() => readPageQuery(route.query))
+  const request = computed(
+    () =>
+      `/api/pages/characters/${id}/${relation}${page.value > 1 ? `?page=${page.value}` : ''}` as `/api/pages/${string}`,
+  )
+  const { data, pending } = await useHikariApiData<CharacterRelationPageData>(request, {
     fatal: true,
+    watch: [request],
   })
   await redirectIfMerged(data)
 
-  const query = (page: number) => ({
-    page,
-    page_size: RELATION_LIST_PAGE_SIZE,
-    sort: 'recent' as const,
-  })
-  function loader(page: number) {
-    if (relation === 'light-novels')
-      return hikariRequest('/api/v3/characters/{id}/light-novels', {
-        path: { id },
-        query: query(page),
-      })
-    if (relation === 'mangas')
-      return hikariRequest(
-        '/api/v3/characters/{id}/mangas' as unknown as '/api/v3/characters/{id}/galgames',
-        { path: { id }, query: query(page) },
-      )
-    return hikariRequest('/api/v3/characters/{id}/galgames', { path: { id }, query: query(page) })
-  }
-
-  const { items, total, pending, hasMore, loadMore } = useEntityRelation(
-    data.value!.relation,
-    loader,
-  )
   const name = computed(() => (data.value ? entityTitle('character', data.value.character) : ''))
 
   useHikariSeoMeta({
@@ -48,22 +32,21 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <EntityHero kind="character" :entity="data.character" />
 
-    <div class="mx-auto max-w-app px-6 py-10">
+    <Stack gap="none" class="mx-auto w-full max-w-app px-6 py-10">
       <EntityRelationView
         :back-to="`/characters/${id}`"
         :back-label="`返回 ${name}`"
         :title="config.title"
         :mode="config.mode"
         :variant="config.variant"
-        :total="total"
-        :raw-items="items"
+        :total="data.relation.meta.total_items"
+        :raw-items="data.relation.items"
+        :meta="data.relation.meta"
         :pending="pending"
-        :has-more="hasMore"
-        @load-more="loadMore"
       />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

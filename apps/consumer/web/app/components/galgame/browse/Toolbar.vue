@@ -1,4 +1,15 @@
 <script setup lang="ts">
+  import {
+    Checkbox,
+    Divider,
+    IconButton,
+    Inline,
+    Input,
+    InputGroup,
+    MultiSelect,
+    Select,
+    Text,
+  } from '@hina-ui/vue'
   import { Search } from '@lucide/vue'
   import type { GalgameBrowseState } from '~/features/galgame/explore'
   import { GALGAME_SORT_OPTIONS, sortValue } from '~/features/galgame/explore'
@@ -31,19 +42,16 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-2.5">
+  <Inline gap="none" class="gap-2.5">
     <Select
       v-model="sort"
       :options="GALGAME_SORT_OPTIONS"
-      option-label="label"
-      option-value="value"
       :disabled="disabled"
-      size="small"
       class="w-40"
-      @change="changeSort"
+      @update:model-value="changeSort"
     />
 
-    <span class="h-5 w-px bg-surface-200 dark:bg-surface-700" />
+    <Divider orientation="vertical" class="h-5 self-center" />
 
     <GalgameBrowsePlatformPopover
       :model-value="state.platforms"
@@ -52,19 +60,14 @@
     <MultiSelect
       :model-value="state.origin_lang"
       :options="LANGUAGE_OPTIONS"
-      option-label="label"
-      option-value="value"
       placeholder="语言"
-      size="small"
-      :max-selected-labels="0"
-      :selected-items-label="'语言 ({0})'"
       class="w-32"
-      @update:model-value="value => patch({ origin_lang: value })"
+      @update:model-value="value => patch({ origin_lang: value.map(String) })"
     />
 
-    <span class="h-5 w-px bg-surface-200 dark:bg-surface-700" />
+    <Divider orientation="vertical" class="h-5 self-center" />
 
-    <GalgameBrowseEntitySearchPopover
+    <BrowseEntityMultiPopover
       target="producer"
       kind="producer"
       label="厂商"
@@ -72,12 +75,8 @@
       :model-value="state.producer_ids"
       @update:model-value="value => patch({ producer_ids: value })"
     />
-    <GalgameBrowseTagFilterPopover
-      :groups="state.tag_groups"
-      :disabled="disabled"
-      @update="patch"
-    />
-    <GalgameBrowseEntitySearchPopover
+    <BrowseTagFilterPopover :groups="state.tag_groups" :disabled="disabled" @update="patch" />
+    <BrowseEntityMultiPopover
       target="person"
       kind="staff"
       label="staff"
@@ -85,41 +84,31 @@
       @update:model-value="value => patch({ staff_person_ids: value })"
     />
 
-    <div class="flex max-w-full shrink-0 flex-wrap items-center gap-3">
-      <InputGroup class="w-48 shrink-0">
-        <InputText
+    <Inline gap="md" class="max-w-full shrink-0">
+      <InputGroup :disabled="disabled" class="w-48 shrink-0">
+        <Input
           v-model="search"
-          size="small"
           placeholder="作品名 / 别名 / ID"
           class="min-w-0"
-          :disabled="disabled"
           @keyup.enter="submitSearch"
         />
-        <Button
-          v-tooltip.top="'搜索'"
-          severity="secondary"
-          size="small"
-          :disabled="disabled"
-          aria-label="搜索"
-          @click="submitSearch"
-        >
-          <Search class="size-4" />
-        </Button>
+        <IconButton label="搜索" :disabled="disabled" @click="submitSearch">
+          <Search />
+        </IconButton>
       </InputGroup>
-      <label
-        class="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-surface-500 dark:text-surface-400"
+
+      <Checkbox
+        :model-value="state.include_dev"
+        size="sm"
+        class="shrink-0"
+        @update:model-value="value => patch({ include_dev: value === true })"
       >
-        <Checkbox
-          :model-value="state.include_dev"
-          binary
-          input-id="browse-include-dev"
-          @update:model-value="value => patch({ include_dev: value })"
-        />
         含开发中/中止
-      </label>
-      <span class="shrink-0 text-xs whitespace-nowrap text-surface-500 dark:text-surface-400">
+      </Checkbox>
+
+      <Text size="xs" tone="muted" class="shrink-0 whitespace-nowrap">
         共 {{ total.toLocaleString() }} 部
-      </span>
-    </div>
-  </div>
+      </Text>
+    </Inline>
+  </Inline>
 </template>

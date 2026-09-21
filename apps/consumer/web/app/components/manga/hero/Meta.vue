@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Text } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaHeroMeta' })
@@ -30,7 +31,7 @@
 </script>
 
 <template>
-  <p v-if="parts.length" class="text-[15px] text-surface-600 dark:text-surface-300">
+  <Text v-if="parts.length" as="p" size="base" tone="muted">
     {{ parts.join('  ·  ') }}
-  </p>
+  </Text>
 </template>

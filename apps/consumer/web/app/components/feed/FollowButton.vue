@@ -9,9 +9,9 @@
       kind: 'topic' | 'section'
       id: number
       initialFollowing?: boolean
-      size?: 'small' | 'large'
+      size?: 'sm' | 'md' | 'lg'
     }>(),
-    { initialFollowing: false, size: 'small' },
+    { initialFollowing: false, size: 'sm' },
   )
 
   const { following, pending, toggle } = useFollowTag(props.kind, props.id, props.initialFollowing)
@@ -21,14 +21,15 @@
   <Button
     login-required
     :size="size"
-    :label="following ? '已关注' : '关注'"
-    :severity="following ? 'secondary' : undefined"
+    :variant="following ? 'soft' : 'solid'"
+    :tone="following ? 'neutral' : 'accent'"
     :loading="pending"
     class="shrink-0"
     @click="toggle"
   >
     <template #icon>
-      <component :is="following ? Check : Plus" class="size-3.5" />
+      <component :is="following ? Check : Plus" />
     </template>
+    {{ following ? '已关注' : '关注' }}
   </Button>
 </template>

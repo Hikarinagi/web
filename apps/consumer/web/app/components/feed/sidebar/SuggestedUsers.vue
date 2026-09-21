@@ -1,21 +1,29 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { SidebarSuggestedUser } from '~/features/feed/sidebar'
 
   defineProps<{ users: SidebarSuggestedUser[] }>()
 </script>
 
 <template>
-  <ul class="pb-1.5">
-    <li v-for="user in users" :key="user.id" class="flex items-center gap-3 px-4 py-3">
+  <Stack gap="none" class="pb-1.5">
+    <Inline
+      v-for="user in users"
+      :key="user.id"
+      gap="md"
+      align="center"
+      :wrap="false"
+      class="px-(--hn-panel-p) py-3"
+    >
       <Avatar :user="user" card class="size-9! shrink-0" />
-      <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-        <UserName :user="user" class="text-[13px] font-semibold text-color" />
-        <p v-if="user.signature" class="truncate text-xs text-muted-color">{{ user.signature }}</p>
-        <p v-if="user.mutual_count > 0" class="truncate text-[11px] text-surface-400">
+      <Stack gap="none" class="min-w-0 flex-1 gap-0.5">
+        <UserName :user="user" class="text-xs font-semibold text-fg" />
+        <Text v-if="user.signature" size="xs" tone="muted" truncate>{{ user.signature }}</Text>
+        <Text v-if="user.mutual_count > 0" size="xs" tone="faint" truncate>
           {{ user.mutual_count }} 个共同关注
-        </p>
-      </div>
+        </Text>
+      </Stack>
       <CommunityFollowButton :user-id="user.id" />
-    </li>
-  </ul>
+    </Inline>
+  </Stack>
 </template>

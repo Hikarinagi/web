@@ -1,6 +1,18 @@
 <script setup lang="ts">
-  import { Plus, X } from '@lucide/vue'
-  import Popover from 'primevue/popover'
+  import {
+    Button,
+    Chip,
+    FormField,
+    Inline,
+    Input,
+    NumberInput,
+    Popover,
+    Select,
+    Stack,
+    Switch,
+    Text,
+  } from '@hina-ui/vue'
+  import { Plus } from '@lucide/vue'
   import type { BackendEditorField, BackendEntitySummary } from '~/features/creator/editor'
   import type { EditorRelationRow, RelationRefValue } from '~/features/creator/editor/relation'
   import { relationRefValues } from '~/features/creator/editor/relation'
@@ -17,7 +29,6 @@
   }>()
   const row = defineModel<EditorRelationRow>('row', { required: true })
   const emit = defineEmits<{ remove: [] }>()
-  const fieldId = useId()
 
   const imageClass = computed(() =>
     cn('size-full', props.target === 'producer' ? 'object-contain' : 'object-cover object-top'),
@@ -27,14 +38,16 @@
       row.value.target.cover ?? (ENTITY_KINDS.includes(props.target) ? ENTITY_FALLBACK_IMAGE : ''),
   )
 
-  const popRef = useTemplateRef<InstanceType<typeof Popover>>('popRef')
+  const anchor = shallowRef<HTMLElement | null>(null)
+  const open = ref(false)
 
   defineExpose({
     toggle(event: Event) {
-      popRef.value?.toggle(event)
+      anchor.value = (event.currentTarget ?? event.target) as HTMLElement
+      open.value = !open.value
     },
     hide() {
-      popRef.value?.hide()
+      open.value = false
     },
   })
 
@@ -66,7 +79,7 @@
   }
   function onRemove() {
     emit('remove')
-    popRef.value?.hide()
+    open.value = false
   }
 
   // ref 属性(如声优)各自复用实体 picker;同一 popover 内多个 ref 属性共用一个 Dialog。
@@ -115,125 +128,108 @@
 </script>
 
 <template>
-  <Popover ref="popRef">
-    <div class="flex flex-col gap-4" style="min-width: 18rem">
-      <div class="flex items-center gap-2">
-        <HikariImage
-          :src="cover"
-          alt=""
-          preset="small"
-          class="size-8 shrink-0 rounded bg-surface-100 dark:bg-surface-800"
-          :image-class="imageClass"
+  <Popover v-model:open="open" :anchor="anchor" align="start" class="w-72">
+    <template #content>
+      <Stack gap="md">
+        <Inline gap="sm" align="center" :wrap="false">
+          <HikariImage
+            :src="cover"
+            alt=""
+            preset="small"
+            class="size-8 shrink-0 rounded bg-subtle"
+            :image-class="imageClass"
+          >
+            <template #empty />
+            <template #error />
+          </HikariImage>
+          <Stack gap="none" class="min-w-0">
+            <Text as="span" size="sm" weight="semibold" truncate>
+              {{ row.target.name || `#${row.target_id}` }}
+            </Text>
+            <Text as="span" size="xs" tone="muted" class="font-mono">#{{ row.target_id }}</Text>
+          </Stack>
+        </Inline>
+
+        <FormField
+          v-for="attr in attributes"
+          :key="attr.name"
+          :label="ATTR_LABEL[attr.name] ?? attr.name"
+          :description="attr.help ?? undefined"
+          description-placement="control"
+          :required="attr.name === 'relation'"
         >
-          <template #empty><span /></template>
-          <template #error><span /></template>
-        </HikariImage>
-        <div class="flex min-w-0 flex-col">
-          <span class="truncate text-sm font-semibold">
-            {{ row.target.name || `#${row.target_id}` }}
-          </span>
-          <span class="font-mono text-xs text-muted-color">#{{ row.target_id }}</span>
-        </div>
-      </div>
+          <Select
+            v-if="attr.value_type === 'enum'"
+            size="sm"
+            :model-value="asString(attr.name) || null"
+            :options="enumOptions(attr.enum_name, attr.enum_values ?? [])"
+            :clearable="attr.name !== 'relation'"
+            @update:model-value="v => setAttr(attr.name, typeof v === 'string' ? v : null)"
+          />
+          <NumberInput
+            v-else-if="attr.value_type === 'int' || attr.value_type === 'float'"
+            size="sm"
+            :model-value="asNumber(attr.name)"
+            :format-options="{
+              maximumFractionDigits: attr.value_type === 'float' ? 2 : 0,
+              useGrouping: false,
+            }"
+            @update:model-value="v => setAttr(attr.name, typeof v === 'number' ? v : null)"
+          />
+          <Switch
+            v-else-if="attr.value_type === 'boolean'"
+            :model-value="asBoolean(attr.name)"
+            @update:model-value="v => setAttr(attr.name, v === true)"
+          />
+          <Input
+            v-else
+            size="sm"
+            :model-value="asString(attr.name)"
+            @update:model-value="v => setAttr(attr.name, v ? v : null)"
+          />
+        </FormField>
 
-      <div v-for="attr in attributes" :key="attr.name" class="flex flex-col gap-1.5">
-        <label :for="`${fieldId}-${attr.name}`" class="text-xs font-medium">
-          {{ ATTR_LABEL[attr.name] ?? attr.name }}
-          <span v-if="attr.name === 'relation'" class="text-red-500">*</span>
-        </label>
-        <Select
-          v-if="attr.value_type === 'enum'"
-          :input-id="`${fieldId}-${attr.name}`"
-          :model-value="asString(attr.name)"
-          :options="enumOptions(attr.enum_name, attr.enum_values ?? [])"
-          option-label="label"
-          option-value="value"
-          fluid
-          size="small"
-          :show-clear="attr.name !== 'relation'"
-          @update:model-value="v => setAttr(attr.name, typeof v === 'string' ? v : null)"
-        />
-        <InputNumber
-          v-else-if="attr.value_type === 'int' || attr.value_type === 'float'"
-          :input-id="`${fieldId}-${attr.name}`"
-          :model-value="asNumber(attr.name)"
-          :max-fraction-digits="attr.value_type === 'float' ? 2 : 0"
-          :use-grouping="false"
-          fluid
-          size="small"
-          @input="event => setAttr(attr.name, typeof event.value === 'number' ? event.value : null)"
-          @update:model-value="v => setAttr(attr.name, typeof v === 'number' ? v : null)"
-        />
-        <ToggleSwitch
-          v-else-if="attr.value_type === 'boolean'"
-          :input-id="`${fieldId}-${attr.name}`"
-          :model-value="asBoolean(attr.name)"
-          @update:model-value="v => setAttr(attr.name, v === true)"
-        />
-        <InputText
-          v-else
-          :id="`${fieldId}-${attr.name}`"
-          :model-value="asString(attr.name)"
-          fluid
-          size="small"
-          @update:model-value="
-            v => setAttr(attr.name, typeof v === 'string' && v !== '' ? v : null)
-          "
-        />
-        <small v-if="attr.help" class="text-xs text-muted-color">{{ attr.help }}</small>
-      </div>
-
-      <div v-for="refAttr in refAttributes" :key="refAttr.name" class="flex flex-col gap-1.5">
-        <span class="text-xs font-medium">{{ REF_ATTR_LABEL[refAttr.name] ?? refAttr.name }}</span>
-        <div class="flex flex-wrap gap-1.5">
-          <span
-            v-for="value in refValues(refAttr.name)"
-            :key="value.id"
-            class="inline-flex items-center gap-1.5 rounded-full bg-surface-100 px-1.5 py-0.5 dark:bg-surface-800"
-          >
-            <HikariImage
-              :src="value.cover ?? ''"
-              alt=""
-              preset="small"
-              class="size-5 shrink-0 rounded-full bg-surface-200 dark:bg-surface-700"
-              image-class="size-full object-cover object-top"
+        <FormField
+          v-for="refAttr in refAttributes"
+          :key="refAttr.name"
+          :label="REF_ATTR_LABEL[refAttr.name] ?? refAttr.name"
+          :description="refAttr.help ?? undefined"
+          description-placement="control"
+        >
+          <Inline gap="xs">
+            <Chip
+              v-for="value in refValues(refAttr.name)"
+              :key="value.id"
+              size="sm"
+              removable
+              @remove="removeRef(refAttr.name, value.id)"
             >
-              <template #empty><span /></template>
-              <template #error><span /></template>
-            </HikariImage>
-            <span class="text-xs">{{ value.name || `#${value.id}` }}</span>
-            <Button
-              unstyled
-              class="flex size-4 items-center justify-center rounded-full text-muted-color transition-colors hover:text-red-500"
-              :aria-label="`移除 ${value.name || value.id}`"
-              @click="removeRef(refAttr.name, value.id)"
-            >
-              <template #icon><X :size="12" /></template>
+              <template #icon>
+                <HikariImage
+                  :src="value.cover ?? ''"
+                  alt=""
+                  preset="small"
+                  class="size-5 shrink-0 rounded-full bg-subtle"
+                  image-class="size-full object-cover object-top"
+                >
+                  <template #empty />
+                  <template #error />
+                </HikariImage>
+              </template>
+              {{ value.name || `#${value.id}` }}
+            </Chip>
+            <Button variant="outline" tone="neutral" size="sm" @click="openPicker(refAttr)">
+              <template #icon><Plus /></template>
+              {{ refValues(refAttr.name).length ? '编辑' : '添加' }}
             </Button>
-          </span>
-          <Button
-            :label="refValues(refAttr.name).length ? '编辑' : '添加'"
-            severity="secondary"
-            variant="outlined"
-            size="small"
-            @click="openPicker(refAttr)"
-          >
-            <template #icon><Plus :size="13" /></template>
-          </Button>
-        </div>
-        <small v-if="refAttr.help" class="text-xs text-muted-color">{{ refAttr.help }}</small>
-      </div>
+          </Inline>
+        </FormField>
 
-      <div class="flex justify-end pt-1">
-        <Button
-          label="从关联中移除"
-          variant="text"
-          severity="danger"
-          size="small"
-          @click="onRemove"
-        />
-      </div>
-    </div>
+        <Inline justify="end">
+          <Button variant="ghost" tone="danger" size="sm" @click="onRemove">从关联中移除</Button>
+        </Inline>
+      </Stack>
+    </template>
   </Popover>
 
   <CreatorEditorRelationPickerDialog

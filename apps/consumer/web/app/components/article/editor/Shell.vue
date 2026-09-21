@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Alert, Button, Center, Dialog, Divider, Inline, Input, Stack, Text } from '@hina-ui/vue'
   import { ImagePlus, Star } from '@lucide/vue'
   import { useArticleEditor, type ArticleReviewContext } from './composables/useArticleEditor'
 
@@ -81,33 +82,42 @@
 </script>
 
 <template>
-  <div class="flex min-h-[calc(100vh-4rem)] flex-col">
-    <div
-      class="sticky top-(--app-header-height) z-20 border-b border-surface-200/75 bg-surface-0/85 shadow-[0_2px_5px_rgba(15,23,42,0.04)] backdrop-blur-xl dark:border-surface-800/75 dark:bg-surface-950/80"
-      :style="{ '--editor-toolbar-bg': 'transparent', '--editor-toolbar-border': 'transparent' }"
+  <Stack gap="none" class="min-h-[calc(100vh-var(--app-header-height))]">
+    <Stack
+      gap="none"
+      class="sticky top-(--app-header-height) z-20 border-b border-line bg-surface/85 shadow-xs backdrop-blur-xl"
     >
-      <div class="flex justify-center px-4">
+      <Center>
         <HikariEditorToolbar :editor="editor" :items="plugins" :context="pluginContext" />
-      </div>
-    </div>
+      </Center>
+    </Stack>
 
-    <div class="article-canvas mx-auto w-[600px] max-w-full flex-1 px-4 pt-8 pb-28 sm:px-0">
-      <Message v-if="editingPublishedArticle" severity="warn" :closable="false" class="mb-5">
+    <Stack
+      gap="none"
+      class="article-canvas mx-auto w-150 max-w-full flex-1 px-4 pt-8 pb-28 sm:px-0"
+    >
+      <Alert v-model:open="editingPublishedArticle" tone="warning" class="mb-5">
         这篇文章是从已发布状态进入编辑的。任何修改都会自动转为草稿，需要重新提交后才会再次公开。
-      </Message>
+      </Alert>
 
-      <div
+      <Inline
         v-if="isReview"
-        class="mb-4 flex w-fit items-center gap-1.5 rounded-lg border border-surface px-3 py-1.5 text-[13px] text-muted-color"
+        gap="none"
+        align="center"
+        :wrap="false"
+        class="mb-4 w-fit gap-1.5 rounded-lg border border-line px-3 py-1.5"
       >
-        <Star class="size-3.5 fill-amber-400 text-amber-400" />
-        <span v-if="reviewWorkTitle" class="text-color">正在为「{{ reviewWorkTitle }}」写长评</span>
-        <span v-else>这是一篇长评 · 已关联你的评分</span>
-      </div>
+        <Star class="size-3.5 fill-warning text-warning" />
+        <Text v-if="reviewWorkTitle" as="span" size="xs">
+          正在为「{{ reviewWorkTitle }}」写长评
+        </Text>
+        <Text v-else as="span" size="xs" tone="muted">这是一篇长评 · 已关联你的评分</Text>
+      </Inline>
 
-      <div
+      <Stack
         v-if="cover"
-        class="group/cover relative overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800"
+        gap="none"
+        class="group/cover relative overflow-hidden rounded-xl border border-line"
       >
         <HikariImage
           :src="cover.src"
@@ -116,70 +126,67 @@
           image-class="size-full object-cover"
           :processing="{ q: 85 }"
         />
-        <div
-          class="absolute top-3 right-3 flex gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover/cover:opacity-100 md:focus-within:opacity-100"
+        <Inline
+          gap="sm"
+          :wrap="false"
+          class="absolute top-3 right-3 opacity-100 transition-opacity md:opacity-0 md:group-hover/cover:opacity-100 md:focus-within:opacity-100"
         >
-          <Button
-            unstyled
-            class="cursor-pointer rounded-lg bg-surface-900/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-surface-900/70"
-            @click="openCoverLibrary"
-          >
+          <Button variant="solid" tone="neutral" size="sm" @click="openCoverLibrary">
             更换封面
           </Button>
-          <Button
-            unstyled
-            class="cursor-pointer rounded-lg bg-surface-900/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-surface-900/70"
-            @click="removeCover"
-          >
-            移除
-          </Button>
-        </div>
-      </div>
+          <Button variant="solid" tone="neutral" size="sm" @click="removeCover">移除</Button>
+        </Inline>
+      </Stack>
       <Button
         v-else
-        unstyled
-        class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-dashed border-surface-300 px-3 py-1.5 text-sm text-muted-color transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-surface-600"
+        variant="outline"
+        tone="neutral"
+        size="sm"
+        class="w-fit border-dashed"
         @click="openCoverLibrary"
       >
-        <ImagePlus :size="17" />
-        <span>添加封面</span>
+        <template #icon><ImagePlus /></template>
+        添加封面
       </Button>
 
-      <InputText
+      <Input
         v-model="title"
-        unstyled
+        variant="bare"
         autofocus
         maxlength="200"
         placeholder="标题"
-        class="mt-5 w-full border-0 bg-transparent text-4xl leading-tight font-bold text-color outline-none placeholder:text-(--editor-placeholder-color)"
+        class="mt-5 h-auto text-4xl leading-tight font-bold [--hn-input-px:0]"
       />
 
       <HikariEditor v-if="editor" :editor="editor" class="mt-4" />
-    </div>
+    </Stack>
 
-    <div
-      class="sticky bottom-0 z-20 border-t border-surface-200/75 bg-surface-0/85 backdrop-blur-xl dark:border-surface-800/75 dark:bg-surface-950/80"
+    <Stack
+      gap="none"
+      class="sticky bottom-0 z-20 border-t border-line bg-surface/85 backdrop-blur-xl"
     >
-      <div
-        class="mx-auto flex w-[600px] max-w-full items-center justify-between gap-3 px-4 py-3 sm:px-0"
+      <Inline
+        gap="none"
+        align="center"
+        justify="between"
+        :wrap="false"
+        class="mx-auto w-150 max-w-full gap-3 px-4 py-3 sm:px-0"
       >
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 text-xs text-muted-color">
+        <Inline gap="none" align="center" :wrap="false" class="gap-3">
+          <Inline gap="sm" align="center" :wrap="false">
             <ArticleEditorSaveState :state="saveState" :saved-at="savedAt" />
-            <span class="min-w-14 tabular-nums">{{ charCount }} 字</span>
-          </div>
-          <div class="h-4 w-px bg-surface-200 dark:bg-surface-700" />
+            <Text as="span" size="xs" tone="muted" class="min-w-14 tabular-nums">
+              {{ charCount }} 字
+            </Text>
+          </Inline>
+          <Divider orientation="vertical" class="h-4" />
           <HikariEditorUndoRedo :editor="editor" />
-        </div>
-        <Button
-          label="发布"
-          size="small"
-          :loading="publishing"
-          :disabled="!canPublish"
-          @click="publishOpen = true"
-        />
-      </div>
-    </div>
+        </Inline>
+        <Button size="sm" :loading="publishing" :disabled="!canPublish" @click="publishOpen = true">
+          发布
+        </Button>
+      </Inline>
+    </Stack>
 
     <HikariEditorBubbleMenu :editor="editor" :items="plugins" :context="pluginContext" />
     <HikariEditorBlockHandle :editor="editor" />
@@ -188,35 +195,14 @@
     <ArticleEditorPublishDialog v-model:visible="publishOpen" :host="host" />
     <ArticleEditorDraftChooser v-if="props.articleId === null && !isReview" @restore="onRestore" />
 
-    <Dialog
-      v-model:visible="leavePromptOpen"
-      modal
-      header="空白草稿"
-      :draggable="false"
-      dismissable-mask
-      :style="{ width: '26rem' }"
-    >
-      <p class="text-sm leading-6 text-muted-color">要保存此草稿吗？</p>
+    <Dialog v-model:open="leavePromptOpen" title="空白草稿" size="sm">
+      <template #content>
+        <Text tone="muted">要保存此草稿吗？</Text>
+      </template>
       <template #footer>
-        <Button label="保留" severity="secondary" text @click="leaveTo" />
-        <Button label="删除草稿" severity="danger" @click="discardDraft" />
+        <Button variant="ghost" tone="neutral" @click="leaveTo">保留</Button>
+        <Button tone="danger" @click="discardDraft">删除草稿</Button>
       </template>
     </Dialog>
-  </div>
+  </Stack>
 </template>
-
-<style scoped>
-  :deep(.editor-toolbar) {
-    width: max-content;
-    max-width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .article-canvas :deep(.hikari-editor-surface) {
-    font-size: 17px;
-    line-height: 1.8;
-  }
-  .article-canvas :deep(.ProseMirror) {
-    min-height: 50vh;
-  }
-</style>

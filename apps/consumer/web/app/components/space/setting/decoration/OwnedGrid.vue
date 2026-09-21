@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Center, Flex, Ripple, SimpleGrid, Stack, Text } from '@hina-ui/vue'
   import { Check } from '@lucide/vue'
   import type { OwnedDecoration } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
@@ -13,51 +14,59 @@
   }>()
   const emit = defineEmits<{ equip: [number | null] }>()
 
-  const TILE_CLASS =
-    'relative w-full cursor-pointer rounded-xl border transition-colors disabled:cursor-default disabled:opacity-60'
-  const CHECK_CLASS =
-    'absolute left-1.5 top-1.5 inline-flex size-4 items-center justify-center rounded-full bg-primary text-white'
+  function tileClass(selected: boolean) {
+    return cn(
+      'hn-state-layer w-full hn-interactive text-start hn-press-lg disabled:opacity-60',
+      selected && 'border-accent bg-accent-soft',
+    )
+  }
 </script>
 
 <template>
-  <div>
-    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-      <Button
-        unstyled
+  <Stack gap="sm">
+    <SimpleGrid min="10rem" gap="sm">
+      <Card
+        as="button"
+        :padded="false"
         :disabled="equipping"
-        :class="[
-          TILE_CLASS,
-          selectedId === null ? 'border-primary bg-primary/5' : 'border-surface hover:bg-emphasis',
-        ]"
+        :class="tileClass(selectedId === null)"
         @click="emit('equip', null)"
       >
-        <SpaceSettingDecorationTile :me="me" :decoration="null" />
-        <span v-if="selectedId === null" :class="CHECK_CLASS">
+        <Ripple :disabled="equipping" />
+        <Center
+          v-if="selectedId === null"
+          inline
+          as="span"
+          class="absolute top-1.5 left-1.5 z-10 size-4 rounded-full bg-accent text-accent-on"
+        >
           <Check :size="11" :stroke-width="3" />
-        </span>
-      </Button>
+        </Center>
+        <SpaceSettingDecorationTile :me="me" :decoration="null" />
+      </Card>
 
-      <div v-for="item in items" :key="item.id" class="relative">
-        <Button
-          unstyled
+      <Flex v-for="item in items" :key="item.id" class="relative">
+        <Card
+          as="button"
+          :padded="false"
           :disabled="equipping"
-          :class="[
-            TILE_CLASS,
-            selectedId === item.id
-              ? 'border-primary bg-primary/5'
-              : 'border-surface hover:bg-emphasis',
-          ]"
+          :class="tileClass(selectedId === item.id)"
           @click="emit('equip', item.id)"
         >
-          <SpaceSettingDecorationTile :me="me" :decoration="item" />
-          <span v-if="selectedId === item.id" :class="CHECK_CLASS">
+          <Ripple :disabled="equipping" />
+          <Center
+            v-if="selectedId === item.id"
+            inline
+            as="span"
+            class="absolute top-1.5 left-1.5 z-10 size-4 rounded-full bg-accent text-accent-on"
+          >
             <Check :size="11" :stroke-width="3" />
-          </span>
-        </Button>
+          </Center>
+          <SpaceSettingDecorationTile :me="me" :decoration="item" />
+        </Card>
         <SpaceSettingDecorationInfo :decoration="item" class="absolute top-1.5 right-1.5 z-20" />
-      </div>
-    </div>
+      </Flex>
+    </SimpleGrid>
 
-    <p v-if="!items.length" class="mt-3 text-sm text-muted-color">还没有头像框</p>
-  </div>
+    <Text v-if="!items.length" size="sm" tone="muted">还没有头像框</Text>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { getCoverMediaLayout } from '~/utils/media/layout'
 
@@ -15,17 +16,17 @@
 </script>
 
 <template>
-  <div class="relative mx-auto w-44 shrink-0 sm:w-52">
+  <Stack gap="none" class="relative mx-auto w-44 shrink-0 sm:w-52">
     <HikariImage
       :src="cover"
       :alt="title"
-      class="rounded-xl shadow-[0_14px_44px_rgba(15,23,42,0.22)] ring-1 ring-black/5 dark:ring-white/10"
-      :style="{ aspectRatio: layout.aspectRatio }"
+      class="rounded-xl shadow-hikari-cover-sm ring-1 ring-black/5 dark:ring-white/10"
+      :ratio="layout.ratio"
       image-class="object-cover"
       :processing="layout.processing"
       :preload="{ fetchPriority: 'high' }"
       preview
     />
     <slot />
-  </div>
+  </Stack>
 </template>

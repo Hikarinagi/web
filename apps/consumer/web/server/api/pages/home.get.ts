@@ -10,7 +10,7 @@ const SEEDABLE_SCOPES: FeedScope[] = ['recommend', 'latest', 'all']
 async function handler(event: H3Event) {
   const raw = getQuery(event).tab
   const requested = Array.isArray(raw) ? raw[0] : raw
-  const scope = SEEDABLE_SCOPES.find(item => item === requested) ?? 'all'
+  const scope = SEEDABLE_SCOPES.find(item => item === requested) ?? 'recommend'
 
   const [feed, sidebar] = await Promise.all([
     fetchBackendData(event, '/api/v3/feed', {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { IconButton } from '@hina-ui/vue'
   import { RotateCcw } from '@lucide/vue'
 
   const props = defineProps<{ initial: unknown }>()
@@ -15,22 +16,23 @@
 
 <template>
   <Transition
-    enter-active-class="transition-opacity duration-150"
-    leave-active-class="transition-opacity duration-150"
+    enter-active-class="hn-transition"
+    leave-active-class="hn-transition"
     enter-from-class="opacity-0"
     leave-to-class="opacity-0"
   >
-    <Button
+    <IconButton
       v-if="visible"
-      v-tooltip.top="'还原此字段'"
-      unstyled
-      aria-label="还原此字段"
-      class="ml-1 inline-flex size-5 items-center justify-center rounded text-muted-color transition-colors hover:bg-surface-100 hover:text-color dark:hover:bg-surface-800"
+      v-tooltip="'还原此字段'"
+      data-density="compact"
+      label="还原此字段"
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      class="order-1"
       @click="reset"
     >
-      <template #icon>
-        <RotateCcw :size="12" />
-      </template>
-    </Button>
+      <RotateCcw />
+    </IconButton>
   </Transition>
 </template>

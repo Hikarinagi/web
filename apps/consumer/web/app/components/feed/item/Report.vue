@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { BackendFeedItem } from '~/features/feed/feed'
   import { feedTypeLabel } from '~/features/feed/feed'
+  import { reportRate } from '~/features/report/rate'
   import type { ReportBody } from '~/features/report/report'
 
   defineOptions({ name: 'FeedItemReport' })
@@ -30,46 +31,18 @@
         return
       case 'galgame_rate':
       case 'galgame_status':
-        await hikariRequest<'/api/v3/galgames/{id}/rates/{rateId}/report', 'post'>(
-          '/api/v3/galgames/{id}/rates/{rateId}/report',
-          {
-            method: 'post',
-            path: { id: props.item.work_ref.id, rateId: props.item.id },
-            body,
-          },
-        )
+        await reportRate('galgame_rate', props.item.work_ref.id, props.item.id, body)
         return
       case 'light_novel_rate':
       case 'light_novel_status':
-        await hikariRequest<'/api/v3/light-novels/{id}/rates/{rateId}/report', 'post'>(
-          '/api/v3/light-novels/{id}/rates/{rateId}/report',
-          {
-            method: 'post',
-            path: { id: props.item.work_ref.id, rateId: props.item.id },
-            body,
-          },
-        )
+        await reportRate('light_novel_rate', props.item.work_ref.id, props.item.id, body)
         return
       case 'manga_rate':
       case 'manga_status':
-        await hikariRequest<'/api/v3/mangas/{id}/rates/{rateId}/report', 'post'>(
-          '/api/v3/mangas/{id}/rates/{rateId}/report',
-          {
-            method: 'post',
-            path: { id: props.item.work_ref.id, rateId: props.item.id },
-            body,
-          },
-        )
+        await reportRate('manga_rate', props.item.work_ref.id, props.item.id, body)
         return
       case 'light_novel_volume_rate':
-        await hikariRequest<'/api/v3/light-novel-volumes/{id}/rates/{rateId}/report', 'post'>(
-          '/api/v3/light-novel-volumes/{id}/rates/{rateId}/report',
-          {
-            method: 'post',
-            path: { id: props.item.volume_ref.id, rateId: props.item.id },
-            body,
-          },
-        )
+        await reportRate('light_novel_volume_rate', props.item.volume_ref.id, props.item.id, body)
     }
   }
 </script>

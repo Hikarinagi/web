@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
 
   defineOptions({ name: 'SpaceHeroBanner' })
@@ -9,7 +10,7 @@
 </script>
 
 <template>
-  <div class="relative h-40 w-full overflow-hidden sm:h-52">
+  <Flex class="relative h-40 w-full overflow-hidden bg-linear-120 from-inset to-accent/15 sm:h-52">
     <HikariImage
       v-if="cover"
       :src="cover.src"
@@ -18,9 +19,5 @@
       image-class="object-cover"
       :processing="processing"
     />
-    <div
-      v-else
-      class="absolute inset-0 bg-[linear-gradient(120deg,var(--p-surface-200)_0%,rgba(57,197,187,0.18)_100%)] dark:bg-[linear-gradient(120deg,var(--p-surface-800)_0%,rgba(57,197,187,0.12)_100%)]"
-    />
-  </div>
+  </Flex>
 </template>

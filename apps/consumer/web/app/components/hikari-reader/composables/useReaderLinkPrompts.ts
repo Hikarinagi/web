@@ -22,7 +22,7 @@ function targetLabel(event: { resolvedLabel?: string; text: string; href: string
 }
 
 export function useReaderLinkPrompts(options: UseReaderLinkPromptsOptions) {
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const returnPrompt = shallowRef<ReturnPrompt | null>(null)
   let unsubscribe: (() => void) | null = null
   let promptId = 0
@@ -62,32 +62,24 @@ export function useReaderLinkPrompts(options: UseReaderLinkPromptsOptions) {
     unsubscribe = controller.on('linkClick', event => {
       options.suppressTap?.()
       if (event.type === 'external') {
-        confirm.require({
-          group: 'app-shell',
-          header: '打开外部链接',
-          message: `即将在新标签页打开：${labelFor(event.href)}`,
-          rejectLabel: '取消',
-          acceptLabel: '打开',
-          defaultFocus: 'reject',
-          onAccept: ({ close }) => {
-            event.navigate()
-            close()
-          },
+        confirm({
+          title: '打开外部链接',
+          description: `即将在新标签页打开：${labelFor(event.href)}`,
+          cancelText: '取消',
+          confirmText: '打开',
+          onConfirm: () => event.navigate(),
         })
         return
       }
 
       const previousSpread = options.currentSpread.value
-      confirm.require({
-        group: 'app-shell',
-        header: '章节跳转',
-        message: `即将跳转到：${targetLabel(event)}`,
-        rejectLabel: '取消',
-        acceptLabel: '跳转',
-        defaultFocus: 'accept',
-        onAccept: ({ close }) => {
+      confirm({
+        title: '章节跳转',
+        description: `即将跳转到：${targetLabel(event)}`,
+        cancelText: '取消',
+        confirmText: '跳转',
+        onConfirm: () => {
           event.navigate()
-          close()
           if (controller.currentSpread !== previousSpread) {
             showPrompt(targetLabel(event), previousSpread)
           }

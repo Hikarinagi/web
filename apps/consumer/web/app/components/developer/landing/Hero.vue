@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { Flex, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
+
   defineOptions({ name: 'DeveloperLandingHero' })
 
   const TITLE = 'Code Together'
@@ -32,52 +35,56 @@
 </script>
 
 <template>
-  <section class="relative overflow-hidden border-b border-surface">
+  <Stack as="section" gap="none" class="relative overflow-hidden border-b border-line">
     <div class="hero-grid absolute inset-0" aria-hidden="true" />
 
-    <div
-      class="relative z-10 mx-auto box-content flex min-h-[calc(360px+var(--app-header-height))] max-w-app flex-col justify-center gap-12 px-6 pt-[calc(var(--app-header-height)+48px)] pb-16 lg:flex-row lg:items-center lg:gap-16"
+    <Flex
+      direction="col"
+      justify="center"
+      gap="none"
+      class="relative z-10 box-content min-h-[calc(360px+var(--app-header-height))] px-6 pt-[calc(var(--app-header-height)+48px)] pb-16"
     >
-      <div class="flex max-w-xl flex-1 flex-col items-start gap-5">
-        <p
-          class="font-mono text-xs font-semibold tracking-widest text-hikari-primary-600 uppercase dark:text-hikari-primary-400"
-        >
-          Hikarinagi Developers
-        </p>
+      <Flex
+        direction="col"
+        gap="none"
+        class="mx-auto w-full max-w-app gap-12 lg:flex-row lg:items-center lg:gap-16"
+      >
+        <Stack gap="none" align="start" class="max-w-xl flex-1 gap-5">
+          <Heading
+            :level="1"
+            :aria-label="TITLE"
+            class="font-mono text-5xl font-extrabold tracking-tight lg:text-6xl"
+          >
+            <span aria-hidden="true" v-text="typed" />
+            <span
+              aria-hidden="true"
+              class="text-accent"
+              :class="{ 'hero-caret': !typing }"
+              v-text="'_'"
+            />
+          </Heading>
 
-        <h1
-          class="font-mono text-5xl font-extrabold tracking-tight text-color lg:text-6xl"
-          :aria-label="TITLE"
-        >
-          <span aria-hidden="true" v-text="typed" />
-          <span
-            aria-hidden="true"
-            class="text-hikari-primary-500"
-            :class="{ 'hero-caret': !typing }"
-            v-text="'_'"
-          />
-        </h1>
+          <Text as="p" size="lg" tone="muted">使用 Hikarinagi 的公开数据构建你的应用</Text>
 
-        <p class="text-lg text-muted-color">使用 Hikarinagi 的公开数据构建你的应用。</p>
+          <Inline gap="md" align="center">
+            <Button :as="NuxtLink" to="/developers/guide">查看文档</Button>
+            <Button
+              login-required
+              variant="outline"
+              tone="neutral"
+              @click="navigateTo('/developers/console')"
+            >
+              进入控制台
+            </Button>
+          </Inline>
+        </Stack>
 
-        <div class="flex flex-wrap items-center gap-3">
-          <Button label="查看文档" as="router-link" to="/developers/docs" />
-          <Button
-            label="进入控制台"
-            severity="secondary"
-            outlined
-            login-required
-            as="router-link"
-            to="/developers/console"
-          />
-        </div>
-      </div>
-
-      <div class="w-full max-w-xl min-w-0 flex-1">
-        <DeveloperLandingHeroTerminal />
-      </div>
-    </div>
-  </section>
+        <Stack gap="none" class="w-full max-w-xl min-w-0 flex-1">
+          <DeveloperLandingHeroTerminal />
+        </Stack>
+      </Flex>
+    </Flex>
+  </Stack>
 </template>
 
 <style scoped>

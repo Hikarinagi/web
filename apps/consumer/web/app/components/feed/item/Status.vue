@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, Link, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { workPath as toWorkPath } from '#shared/utils/work'
   import type { FeedItemByType } from '~/features/feed/feed'
   import { finishHours, statusVerb } from '~/features/feed/feed'
@@ -33,16 +35,16 @@
 </script>
 
 <template>
-  <p class="flex items-center gap-1.5 text-[15px] text-color">
-    <component :is="icon" class="mt-0.5 size-4 shrink-0 text-primary" />
-    <span>
+  <Inline gap="none" align="center" :wrap="false" class="gap-1.5">
+    <component :is="icon" class="mt-0.5 size-4 shrink-0 text-accent-text" />
+    <Text as="span">
       {{ verb }}
       <WorkCardTrigger :work-type="item.work_ref.work_type" :work-id="item.work_ref.id">
-        <NuxtLink :to="workPath" class="font-medium transition-colors hover:text-primary">
+        <Link :as="NuxtLink" :to="workPath" tone="neutral" class="font-medium">
           《{{ item.work_ref.title }}》
-        </NuxtLink>
+        </Link>
       </WorkCardTrigger>
-      <span v-if="hours" class="text-muted-color">· {{ timeLabel }} {{ hours }}</span>
-    </span>
-  </p>
+      <Text v-if="hours" as="span" tone="muted">· {{ timeLabel }} {{ hours }}</Text>
+    </Text>
+  </Inline>
 </template>

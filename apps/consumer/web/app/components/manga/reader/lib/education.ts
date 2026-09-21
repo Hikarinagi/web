@@ -2,7 +2,7 @@ import { Keyboard, MoveLeft, MoveRight, ZoomIn } from '@lucide/vue'
 import type { ReaderEducationHint } from '~/components/reader/EducationOverlay.vue'
 
 // Bumped when the gesture set changes so returning readers see it again.
-export const MANGA_READER_EDUCATION_KEY = 'hikari-manga-reader-education-seen-v2'
+export const MANGA_READER_EDUCATION_KEY = 'hikari-manga-reader-education-seen-v3'
 
 export interface MangaEducationContext {
   coarsePointer: boolean
@@ -10,11 +10,6 @@ export interface MangaEducationContext {
   zoomable: boolean
 }
 
-/**
- * Paging works the same for mouse and touch here — the stage drives it from
- * pointer events — but zooming does not: pinch needs touch, and the scrolling
- * fits have no zoom at all.
- */
 export function mangaEducationHints(
   context: MangaEducationContext,
 ): readonly ReaderEducationHint[] {
@@ -48,7 +43,7 @@ export function mangaEducationHints(
             key: 'zoom',
             placement: 'top' as const,
             icon: ZoomIn,
-            title: coarsePointer ? '双击 / 捏合 缩放' : '双击 缩放',
+            title: coarsePointer ? '双击 / 捏合 缩放' : '双击 / Ctrl 滚轮 缩放',
             description: '放大后先平移，拖到边缘才继续翻页',
           },
         ]
@@ -56,8 +51,8 @@ export function mangaEducationHints(
     {
       key: 'chrome',
       placement: 'center',
-      title: '单击 呼出工具栏',
-      description: coarsePointer ? '调整设置、快速跳页都在这里' : '右键也可以，设置和跳页都在这里',
+      title: coarsePointer ? '轻触 呼出工具栏' : '右键 呼出工具栏',
+      description: coarsePointer ? '调整设置、快速跳页' : '左键单击收起，可调整设置与快速跳页',
     },
   ]
 }

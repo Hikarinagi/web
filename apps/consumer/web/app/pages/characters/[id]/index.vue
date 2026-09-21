@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { characterSeo } from '~/features/seo/character'
 
   definePageMeta({ container: 'full' })
@@ -22,10 +23,10 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <EntityHero kind="character" :entity="data.character" />
 
-    <div class="mx-auto flex max-w-app flex-col gap-10 px-6 py-12">
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <EntityAbout kind="character" :entity="data.character" :contributors="data.contributors" />
       <EntityWorkSection
         title="出场作品"
@@ -46,6 +47,6 @@
         variant="character-manga"
         :more-base="`/characters/${id}/mangas`"
       />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import { ArrowRight } from '@lucide/vue'
 
   const props = defineProps<{
@@ -11,32 +12,33 @@
 </script>
 
 <template>
-  <div class="flex items-center gap-2">
+  <Inline gap="sm" align="center" :wrap="false">
     <template v-if="changed">
-      <span
-        class="rounded bg-red-500/10 px-1.5 py-0.5 text-xs text-red-700 line-through dark:text-red-300"
+      <Text
+        as="span"
+        size="xs"
+        class="rounded bg-danger-soft px-1.5 py-0.5 text-danger-text line-through"
       >
         {{ oldValue ?? '' }}
-      </span>
-      <ArrowRight :size="12" class="shrink-0 text-muted-color" aria-hidden="true" />
-      <span
-        class="rounded bg-green-500/10 px-1.5 py-0.5 text-xs text-green-700 dark:text-green-300"
-      >
+      </Text>
+      <ArrowRight class="size-3 shrink-0 text-muted" aria-hidden="true" />
+      <Text as="span" size="xs" class="rounded bg-success-soft px-1.5 py-0.5 text-success-text">
         {{ value ?? '' }}
-      </span>
+      </Text>
     </template>
-    <span
+    <Text
       v-else
-      class="text-sm"
+      as="span"
+      size="sm"
       :class="
         kind === 'added'
-          ? 'text-green-700 dark:text-green-300'
+          ? 'text-success-text'
           : kind === 'removed'
-            ? 'text-red-700 line-through dark:text-red-300'
+            ? 'text-danger-text line-through'
             : ''
       "
     >
       {{ value ?? '' }}
-    </span>
-  </div>
+    </Text>
+  </Inline>
 </template>

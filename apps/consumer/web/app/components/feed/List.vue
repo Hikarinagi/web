@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Center, Spinner, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { FeedSource } from '~/features/feed/sources'
   import { useFeedList } from '~/features/feed/useFeedList'
@@ -37,7 +38,7 @@
         :exit="{ opacity: 0, scale: 0.94 }"
         :transition="TRANSITION_FAST"
       >
-        <Spinner :size="28" />
+        <Spinner size="lg" />
       </motion.div>
     </AnimatePresence>
 
@@ -45,23 +46,24 @@
       <FeedSkeleton v-if="loading && !itemCount && !topRefreshOpen" />
 
       <template v-else>
-        <div v-if="pinnedRows.length">
-          <div
+        <Stack v-if="pinnedRows.length" gap="none">
+          <Stack
             v-for="r in pinnedRows"
             :key="r.key"
-            class="border-surface-200 dark:border-surface-800"
-            :class="{ 'border-t': r.index > 0 }"
+            gap="none"
+            class="border-line"
+            :class="r.index > 0 ? 'border-t' : ''"
           >
             <FeedCluster :cluster="r.cluster" />
-          </div>
-        </div>
+          </Stack>
+        </Stack>
 
         <div :ref="setVirtualRoot" class="relative [overflow-anchor:none]" :style="virtualStyle">
           <div
             v-for="r in virtualRows"
             :key="r.key"
             :ref="el => setVirtualRow(r.key, r.index, el)"
-            class="absolute inset-x-0 border-surface-200 dark:border-surface-800"
+            class="absolute inset-x-0 border-line"
             :class="{ 'border-t': r.index > 0 }"
             :style="r.style"
           >
@@ -75,18 +77,21 @@
           class="h-px [overflow-anchor:none]"
         />
 
-        <div v-if="showFooterLoading" class="flex justify-center py-6 [overflow-anchor:none]">
-          <Spinner :size="28" />
-        </div>
-        <p
+        <Center v-if="showFooterLoading" class="py-6 [overflow-anchor:none]">
+          <Spinner size="lg" />
+        </Center>
+        <Text
           v-else-if="!nextCursor && itemCount"
-          class="py-6 text-center text-sm text-muted-color [overflow-anchor:none]"
+          as="p"
+          size="sm"
+          tone="muted"
+          class="py-6 text-center [overflow-anchor:none]"
         >
           没有更多了
-        </p>
-        <p v-else-if="!itemCount" class="py-16 text-center text-sm text-muted-color">
+        </Text>
+        <Text v-else-if="!itemCount" as="p" size="sm" tone="muted" class="py-16 text-center">
           {{ emptyText }}
-        </p>
+        </Text>
       </template>
     </motion.div>
   </div>

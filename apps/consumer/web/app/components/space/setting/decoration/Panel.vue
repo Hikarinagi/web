@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Panel, Stack } from '@hina-ui/vue'
   import { useDecoration, type DecorationData } from '~/features/space/useDecoration'
   import type { CurrentUser } from '~/types/auth'
 
@@ -31,7 +32,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <Stack gap="lg">
     <SpaceSettingDecorationPreview
       :me="me"
       :frame="selectedFrame"
@@ -39,7 +40,7 @@
       :points="points"
     />
 
-    <CardPanel title="头像框">
+    <Panel title="头像框">
       <SpaceSettingDecorationOwnedGrid
         :me="me"
         :items="ownedFrames"
@@ -47,9 +48,9 @@
         :equipping="equippingFrame"
         @equip="equipFrame"
       />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel
+    <Panel
       title="徽章"
       :description="`最多同时佩戴 ${badgeLimit} 枚（已佩戴 ${selectedBadgeIds.length} / ${badgeLimit}）`"
     >
@@ -61,9 +62,9 @@
         :limit="badgeLimit"
         @toggle="toggleBadge"
       />
-    </CardPanel>
+    </Panel>
 
-    <CardPanel title="装扮图鉴">
+    <Panel title="装扮图鉴">
       <SpaceSettingDecorationCatalog
         :me="me"
         :frames="catalogFrames"
@@ -71,6 +72,6 @@
         :owned-ids="ownedIds"
         @buy="purchase"
       />
-    </CardPanel>
-  </div>
+    </Panel>
+  </Stack>
 </template>

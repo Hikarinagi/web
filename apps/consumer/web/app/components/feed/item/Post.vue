@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack, Text } from '@hina-ui/vue'
   import type { FeedItemByType } from '~/features/feed/feed'
 
   const props = defineProps<{ item: FeedItemByType<'post'> }>()
@@ -12,14 +13,12 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <p v-if="showTitle" class="text-base leading-snug font-semibold text-color">{{ title }}</p>
-    <p v-if="body" class="text-[15px] leading-relaxed whitespace-pre-wrap text-color">
-      {{ body }}
-    </p>
+  <Stack gap="none" class="gap-3">
+    <Text v-if="showTitle" as="p" weight="semibold" class="leading-snug">{{ title }}</Text>
+    <Text v-if="body" as="p" class="leading-relaxed whitespace-pre-wrap">{{ body }}</Text>
     <FeedItemCovers :covers="item.covers" :total="item.cover_count" />
-    <div v-if="item.poll" class="relative z-1">
+    <Stack v-if="item.poll" gap="none" class="relative z-1">
       <HikariContentNodesPollCard :poll="item.poll" />
-    </div>
-  </div>
+    </Stack>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import { timeFromNow } from '#imports'
   import { workPath as toWorkPath } from '#shared/utils/work'
   import type { FeedGroup } from '~/features/feed/feed'
@@ -26,21 +27,19 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-2">
-    <div class="flex min-w-0 items-center gap-2 text-sm">
-      <UserName v-if="!hideName" :user="group.author" class="min-w-0 font-semibold text-color" />
-      <span class="flex shrink-0 items-center gap-1 text-muted-color">
-        <span>{{ time }}</span>
-      </span>
-    </div>
+  <Stack gap="sm" class="min-w-0">
+    <Inline gap="sm" align="center" :wrap="false" class="min-w-0 text-sm">
+      <UserName v-if="!hideName" :user="group.author" class="min-w-0 font-semibold text-fg" />
+      <Text as="span" size="sm" tone="muted" class="shrink-0">{{ time }}</Text>
+    </Inline>
 
-    <p class="flex items-center gap-1.5 text-[15px] text-color">
-      <component :is="icon" class="size-4 shrink-0 text-primary" />
-      <span>{{ summary }}</span>
-    </p>
+    <Inline gap="none" align="center" :wrap="false" class="gap-1.5">
+      <component :is="icon" class="size-4 shrink-0 text-accent-text" />
+      <Text as="span">{{ summary }}</Text>
+    </Inline>
 
-    <ScrollArea axis="x" shadow="end">
-      <div class="flex min-w-max gap-2 pb-1">
+    <ScrollArea direction="horizontal">
+      <Inline gap="sm" :wrap="false" class="min-w-max pb-1">
         <WorkCardTrigger
           v-for="item in covers"
           :key="item.id"
@@ -61,7 +60,7 @@
             />
           </NuxtLink>
         </WorkCardTrigger>
-      </div>
+      </Inline>
     </ScrollArea>
-  </div>
+  </Stack>
 </template>

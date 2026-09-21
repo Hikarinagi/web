@@ -1,15 +1,21 @@
-import { computePosition, flip, offset, shift, type VirtualElement } from '@floating-ui/dom'
-import { VueRenderer } from '@tiptap/vue-3'
-import type { Range } from '@tiptap/core'
+import { ref, shallowRef, watch, type Ref } from 'vue'
+import type { ApiData } from '@hikarinagi/api-contract/v3'
+import type { Editor, Range } from '@tiptap/core'
 import type { PluginKey } from '@tiptap/pm/state'
 import type { SuggestionOptions, SuggestionProps } from '@tiptap/suggestion'
-import { watch, type Ref } from 'vue'
-import MentionSuggestionList from '../MentionSuggestionList.vue'
+import type { OverlayAnchor } from '@hina-ui/vue'
 
-interface SuggestionListExposed {
-  onArrowDown: () => void
-  onArrowUp: () => void
-  onEnter: () => void
+export type MentionUser = ApiData<'/api/v3/user', 'get'>['items'][number]
+
+interface MentionSession {
+  ownerId: symbol
+  editor: Editor
+  query: string
+  items: MentionUser[]
+  loading: boolean
+  resolved: boolean
+  anchor: OverlayAnchor
+  command: (item: MentionUser) => void
 }
 
 interface SuggestionState {
@@ -18,15 +24,46 @@ interface SuggestionState {
   query: string | null
 }
 
+const session = shallowRef<MentionSession | null>(null)
+const highlighted = ref(0)
+
+export function useMentionSuggestion() {
+  function hide(editor?: Editor) {
+    if (editor && session.value?.editor !== editor) return
+    session.value = null
+  }
+
+  function move(delta: number) {
+    const items = session.value?.items ?? []
+    if (!items.length) return false
+    highlighted.value = (highlighted.value + delta + items.length) % items.length
+    return true
+  }
+
+  function commit(index = highlighted.value) {
+    const current = session.value
+    const item = current?.items[index]
+    if (!current || !item) return false
+    current.command(item)
+    return true
+  }
+
+  return { session, highlighted, hide, move, commit }
+}
+
 export function createMentionSuggestionRender(
+  ownerId: symbol,
   loadingRef: Ref<boolean>,
   resolvedRef: Ref<boolean>,
   pluginKey: PluginKey,
 ): SuggestionOptions['render'] {
+  const menu = useMentionSuggestion()
+
   return () => {
-    let component: VueRenderer | null = null
-    let popup: HTMLElement | null = null
-    let unwatchState: (() => void) | null = null
+    let live: SuggestionProps | null = null
+    let anchor: OverlayAnchor | null = null
+    let lastRect: DOMRect | null = null
+    let stopWatch: (() => void) | null = null
 
     function isCurrent(props: SuggestionProps) {
       const state = pluginKey.getState(props.editor.state) as SuggestionState | undefined
@@ -39,65 +76,47 @@ export function createMentionSuggestionRender(
       )
     }
 
-    function cleanup() {
-      unwatchState?.()
-      unwatchState = null
-      if (popup) {
-        popup.remove()
-        popup = null
+    function publish() {
+      const props = live
+      if (!props || !anchor) return
+      session.value = {
+        ownerId,
+        editor: props.editor,
+        query: props.query,
+        items: props.items as MentionUser[],
+        loading: loadingRef.value,
+        resolved: resolvedRef.value,
+        anchor,
+        command: props.command,
       }
-      component?.destroy()
-      component = null
     }
 
-    function reposition(clientRect: (() => DOMRect | null) | null | undefined) {
-      if (!popup || !clientRect) return
-      const rect = clientRect()
-      if (!rect) {
-        cleanup()
-        return
-      }
-      const virtualEl: VirtualElement = {
-        getBoundingClientRect: () => rect,
-      }
-      void computePosition(virtualEl, popup, {
-        placement: 'bottom-start',
-        middleware: [offset(8), flip(), shift({ padding: 8 })],
-      }).then(({ x, y }) => {
-        if (!popup) return
-        Object.assign(popup.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-        })
-      })
+    function cleanup() {
+      stopWatch?.()
+      stopWatch = null
+      const editor = live?.editor
+      live = null
+      anchor = null
+      lastRect = null
+      menu.hide(editor)
     }
 
     return {
       onStart: props => {
         if (!isCurrent(props)) return
         cleanup()
-        component = new VueRenderer(MentionSuggestionList, {
-          props: {
-            items: props.items,
-            loading: loadingRef.value,
-            resolved: resolvedRef.value,
-            query: props.query,
-            command: props.command,
+        live = props
+        highlighted.value = 0
+        anchor = {
+          contextElement: props.editor.view.dom,
+          getBoundingClientRect: () => {
+            const rect = live?.clientRect?.()
+            if (rect) lastRect = rect
+            return lastRect ?? new DOMRect()
           },
-          editor: props.editor,
-        })
-        popup = document.createElement('div')
-        popup.style.position = 'absolute'
-        popup.style.left = '0'
-        popup.style.top = '0'
-        popup.style.zIndex = '11000'
-        popup.appendChild(component.element as HTMLElement)
-        document.body.appendChild(popup)
-        reposition(props.clientRect)
-
-        unwatchState = watch(loadingRef, loading => {
-          component?.updateProps({ loading })
-        })
+        }
+        publish()
+        stopWatch = watch([loadingRef, resolvedRef], publish)
       },
 
       onUpdate: props => {
@@ -105,39 +124,28 @@ export function createMentionSuggestionRender(
           cleanup()
           return
         }
-        component?.updateProps({
-          items: props.items,
-          loading: loadingRef.value,
-          resolved: resolvedRef.value,
-          query: props.query,
-          command: props.command,
-        })
-        reposition(props.clientRect)
+        live = props
+        if (highlighted.value >= props.items.length) highlighted.value = 0
+        publish()
       },
 
       onKeyDown: props => {
         if (props.event.isComposing || props.event.keyCode === 229) return false
-        const inst = component?.ref as SuggestionListExposed | undefined
         switch (props.event.key) {
           case 'ArrowDown':
-            inst?.onArrowDown()
-            return true
+            return menu.move(1)
           case 'ArrowUp':
-            inst?.onArrowUp()
-            return true
+            return menu.move(-1)
           case 'Enter':
           case 'Tab':
-            inst?.onEnter()
-            return true
+            return menu.commit()
           case 'Escape':
             return true
         }
         return false
       },
 
-      onExit: () => {
-        cleanup()
-      },
+      onExit: cleanup,
     }
   }
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import { Users } from '@lucide/vue'
   import { useUserCardFollow } from './composables/useUserCardFollow'
   import type { UserCardData } from './composables/useUserCard'
@@ -11,16 +12,18 @@
 </script>
 
 <template>
-  <div class="mt-3 flex items-center gap-1.5 text-xs text-muted-color">
+  <Inline align="center" gap="none" class="mt-3 gap-1.5 text-muted">
     <Users class="size-3.5" />
-    <span>
-      <strong class="font-semibold text-color">{{ user.following_count }}</strong>
+    <Text as="span" size="xs" tone="muted">
+      <Text as="strong" size="xs" weight="semibold" class="text-fg">
+        {{ user.following_count }}
+      </Text>
       关注
-    </span>
-    <span>·</span>
-    <span>
-      <strong class="font-semibold text-color">{{ followerCount }}</strong>
+    </Text>
+    <Text as="span" size="xs" tone="muted">·</Text>
+    <Text as="span" size="xs" tone="muted">
+      <Text as="strong" size="xs" weight="semibold" class="text-fg">{{ followerCount }}</Text>
       粉丝
-    </span>
-  </div>
+    </Text>
+  </Inline>
 </template>

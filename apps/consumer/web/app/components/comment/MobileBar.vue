@@ -13,11 +13,19 @@
   const thread = inject(COMMENT_THREAD_KEY)!
   const { emojiSets, posting, replyTarget, postRoot, postReply, setReplyTarget } = thread
 
-  const { toggle, busy } = useLike(actions.type)
-  const view = useLikeView(actions.type, actions.id, () => ({
-    like_count: actions.likeCount,
-    liked: actions.liked,
+  const { toggle, busy } = useLike(actions.like.kind)
+  const view = useLikeView(actions.like.kind, actions.like.id, () => ({
+    like_count: actions.like.count,
+    liked: actions.like.liked,
   }))
+
+  function like() {
+    const parentId = actions.like.parentId
+    void toggle(
+      actions.like.id,
+      parentId != null ? { parentId, liked: view.value.liked } : undefined,
+    )
+  }
 
   const expanded = ref(false)
   const composerRef = ref<{ focus: () => void; reset: () => void }>()
@@ -61,7 +69,7 @@
 
 <template>
   <div
-    class="fixed inset-x-0 bottom-0 z-40 border-t border-surface bg-surface-0/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-[1.8] md:hidden dark:bg-surface-950/90"
+    class="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl backdrop-saturate-200 md:hidden"
   >
     <div v-if="expanded" class="px-3 py-2.5">
       <CommentComposer
@@ -79,38 +87,35 @@
     <div v-else class="flex items-center gap-1 px-3 py-2.5">
       <button
         type="button"
-        class="mr-1 h-9 min-w-0 flex-1 truncate rounded-full bg-surface-100 px-4 text-left text-sm text-muted-color transition-colors hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700"
+        class="bg-surface-100 text-muted-color hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 mr-1 h-9 min-w-0 flex-1 truncate rounded-full px-4 text-left text-sm transition-colors"
         @click="expand"
       >
         {{ placeholder }}
       </button>
       <Button
         login-required
-        text
-        :severity="view.liked ? undefined : 'secondary'"
+        variant="ghost"
+        :tone="view.liked ? 'accent' : 'neutral'"
         :loading="busy"
         :disabled="busy"
-        :label="view.like_count.toString()"
         aria-label="赞"
-        class="h-9! shrink-0 gap-1! rounded-full! px-3!"
-        @click="toggle(actions.id)"
+        pill
+        class="h-9! shrink-0 px-3!"
+        @click="like"
       >
         <template #icon><InteractionLikeIcon :active="view.liked" /></template>
+        {{ view.like_count }}
       </Button>
       <FavoriteToggle
-        :id="actions.id"
-        :type="actions.type"
-        :initial-favorited="actions.favorited"
+        :id="actions.favorite.id"
+        :type="actions.favorite.type"
+        :initial-favorited="actions.favorite.favorited"
         variant="bar"
-        :picker-title="actions.pickerTitle"
-        class="size-9! shrink-0 rounded-full!"
+        :picker-title="actions.favorite.pickerTitle"
+        pill
+        class="size-9! shrink-0"
       />
-      <ShareButton
-        text
-        severity="secondary"
-        :to="`/${actions.type}s/${actions.id}`"
-        class="size-9! shrink-0 rounded-full!"
-      />
+      <ShareButton :to="actions.shareTo" pill class="size-9! shrink-0" />
     </div>
   </div>
 </template>

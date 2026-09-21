@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { useContentSummaries } from '../../composables/useContentSummaries'
@@ -28,7 +29,7 @@
     id-attr="data-character-id"
     :href="href"
   >
-    <div class="relative z-1 flex items-center gap-3.5">
+    <Inline gap="none" align="center" :wrap="false" class="relative z-1 gap-3.5">
       <HikariImage
         :src="image"
         :alt="name"
@@ -37,12 +38,12 @@
         image-class="size-full object-cover object-top"
         :fallback-src="ENTITY_FALLBACK_IMAGE"
       />
-      <div class="flex min-w-0 flex-1 flex-col gap-[3px]">
-        <span class="truncate text-[15px] font-semibold text-(--editor-text-color)">
+      <Stack gap="none" class="min-w-0 flex-1 gap-0.5">
+        <Text as="span" weight="semibold" truncate class="text-(--editor-text-color)">
           {{ name }}
-        </span>
-        <span class="text-[11px] text-(--editor-text-muted)">角色</span>
-      </div>
-    </div>
+        </Text>
+        <Text as="span" size="xs" class="text-(--editor-text-muted)">角色</Text>
+      </Stack>
+    </Inline>
   </HikariContentNodesEntityCardContainer>
 </template>

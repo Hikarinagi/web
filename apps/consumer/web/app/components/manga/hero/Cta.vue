@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline } from '@hina-ui/vue'
   import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
@@ -53,28 +54,23 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-stretch justify-center gap-3 lg:justify-start">
-    <Button
-      v-if="progress"
-      :label="`继续阅读 ${getMangaEpisodeLabel(progress.chapter)}`"
-      @click="read(progress.chapter.id)"
-    >
+  <Inline justify="center" class="lg:justify-start">
+    <Button v-if="progress" size="lg" @click="read(progress.chapter.id)">
       <template #icon>
-        <Play :size="17" aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
+      继续阅读 {{ getMangaEpisodeLabel(progress.chapter) }}
     </Button>
-    <Button
-      v-else-if="startTarget"
-      :label="`开始阅读 ${getMangaEpisodeLabel(startTarget)}`"
-      @click="read(startTarget.id)"
-    >
+    <Button v-else-if="startTarget" size="lg" @click="read(startTarget.id)">
       <template #icon>
-        <Play :size="17" aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
+      开始阅读 {{ getMangaEpisodeLabel(startTarget) }}
     </Button>
 
     <WorkStatusMenu
-      :tone="progress || startTarget ? 'secondary' : 'primary'"
+      size="lg"
+      :tone="progress || startTarget ? 'neutral' : 'accent'"
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"
@@ -84,25 +80,31 @@
       @privacy="rateCtl.setPrivacy"
     />
 
-    <Button v-if="rateMode === 'chip'" severity="secondary" outlined @click="dialogOpen = true">
-      <span class="inline-flex items-center gap-1.5">
-        <Star class="size-4 fill-amber-500 text-amber-500" />
-        <span class="text-[15px] font-semibold text-color">
-          {{ rateCtl.score.value?.toFixed(1) }}
-        </span>
-        <Pencil class="size-3 text-muted-color" />
-      </span>
-    </Button>
     <Button
-      v-else-if="rateMode === 'prompt'"
-      login-required
-      severity="secondary"
-      label="写个评分"
-      icon-pos="right"
-      outlined
+      v-if="rateMode === 'chip'"
+      size="lg"
+      variant="outline"
+      tone="neutral"
       @click="dialogOpen = true"
     >
-      <template #icon><ArrowRight class="size-3.5" /></template>
+      <template #icon>
+        <Star class="fill-current text-warning" />
+      </template>
+      {{ rateCtl.score.value?.toFixed(1) }}
+      <template #trailing>
+        <Pencil class="text-muted" />
+      </template>
+    </Button>
+    <Button
+      login-required
+      v-else-if="rateMode === 'prompt'"
+      size="lg"
+      variant="outline"
+      tone="neutral"
+      @click="dialogOpen = true"
+    >
+      写个评分
+      <template #trailing><ArrowRight /></template>
     </Button>
 
     <FavoriteToggle
@@ -110,9 +112,11 @@
       type="manga"
       :initial-favorited="favorited"
       variant="icon"
+      size="lg"
       :picker-title="pickerTitle"
     />
-    <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" severity="secondary" outlined />
+    <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" size="lg" />
+    <WorkEditButton resource-type="manga" :resource-id="mangaId" size="lg" />
 
     <MangaRateDialog
       v-model:visible="dialogOpen"
@@ -121,5 +125,5 @@
       :upsert="rateCtl.upsert"
       :remove="rateCtl.remove"
     />
-  </div>
+  </Inline>
 </template>

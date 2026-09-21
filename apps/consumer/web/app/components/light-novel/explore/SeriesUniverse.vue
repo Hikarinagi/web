@@ -24,7 +24,7 @@
         :key="`${card.item.id}-${index}`"
         :item="card.item"
         :badge="card.badge"
-        class="w-[140px]"
+        class="w-35"
       />
     </LightNovelExploreRailViewport>
   </LightNovelExploreSection>

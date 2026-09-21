@@ -10,13 +10,10 @@ export interface HoverCardController<TData> {
   state: Ref<HoverCardOpenState<TData> | null>
   getCached: (key: string) => TData | undefined
   fetchData: (open: HoverCardOpenState<TData>) => Promise<TData | null>
-  cancelHide: () => void
-  requestHide: () => void
   hideNow: () => void
 }
 
 const SHOW_DELAY_MS = 300
-const HIDE_DELAY_MS = 100
 
 export function createHoverCard<TData>() {
   const cache = new Map<string, TData>()
@@ -47,7 +44,7 @@ export function createHoverCard<TData>() {
     const state: Ref<OpenState | null> = ref(null)
     const pendingShow: Ref<OpenState | null> = ref(null)
 
-    const { start: scheduleShow, stop: cancelShow } = useTimeoutFn(
+    const { start: scheduleShow, stop: stopShowTimer } = useTimeoutFn(
       () => {
         if (pendingShow.value) state.value = pendingShow.value
         pendingShow.value = null
@@ -56,51 +53,33 @@ export function createHoverCard<TData>() {
       { immediate: false },
     )
 
-    const { start: scheduleHide, stop: cancelHide } = useTimeoutFn(
-      () => {
-        state.value = null
-      },
-      HIDE_DELAY_MS,
-      { immediate: false },
-    )
-
-    function clearShowTimer() {
-      cancelShow()
+    function abortShow() {
+      stopShowTimer()
       pendingShow.value = null
     }
 
     function requestShow(open: OpenState) {
-      cancelHide()
-      if (state.value?.key === open.key) {
-        clearShowTimer()
+      abortShow()
+      if (state.value) {
         state.value = open
         return
       }
-      clearShowTimer()
       pendingShow.value = open
       scheduleShow()
     }
 
     function showNow(open: OpenState) {
-      clearShowTimer()
-      cancelHide()
+      abortShow()
       state.value = open
     }
 
-    function requestHide() {
-      clearShowTimer()
-      if (state.value === null) return
-      scheduleHide()
-    }
-
     function hideNow() {
-      clearShowTimer()
-      cancelHide()
+      abortShow()
       state.value = null
     }
 
     function hideForAnchor(anchor: HTMLElement) {
-      if (pendingShow.value?.anchor === anchor) clearShowTimer()
+      if (pendingShow.value?.anchor === anchor) abortShow()
       if (state.value?.anchor === anchor) hideNow()
     }
 
@@ -122,10 +101,9 @@ export function createHoverCard<TData>() {
       state,
       requestShow,
       showNow,
-      requestHide,
+      abortShow,
       hideNow,
       hideForAnchor,
-      cancelHide,
       getCached,
       fetchData,
       invalidate,

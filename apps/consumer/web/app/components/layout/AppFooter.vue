@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import logoUrl from '~/assets/images/logo.png'
+  import { Button, Flex, Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
+  import logoUrl from '~/assets/images/wordmark.svg'
   import { SITE_CONFIG } from '~/config/site'
 
   const flags = useFeatureFlags()
@@ -10,53 +12,66 @@
 </script>
 
 <template>
-  <footer class="hidden border-t border-surface bg-surface-50 md:block dark:bg-surface-950">
-    <div
-      class="mx-auto flex max-w-app flex-col gap-6 px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-4"
+  <Stack as="footer" gap="none" class="hidden border-t border-line bg-canvas md:block">
+    <Flex
+      direction="col"
+      gap="lg"
+      class="mx-auto max-w-app px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-4"
     >
-      <div class="flex flex-col gap-2">
+      <Stack gap="sm">
         <NuxtLink to="/" :aria-label="SITE_CONFIG.name" class="w-fit">
           <HikariImage
             :src="logoUrl"
             :alt="SITE_CONFIG.name"
-            class="aspect-963/183 h-6"
+            class="aspect-792/191 h-6"
             image-class="object-contain"
             :skeleton="false"
           />
         </NuxtLink>
-        <p class="text-sm text-muted-color">{{ SITE_CONFIG.description }}</p>
-      </div>
+        <Text as="p" size="sm" tone="muted">{{ SITE_CONFIG.description }}</Text>
+      </Stack>
 
-      <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-5">
-        <div class="order-2 flex flex-col gap-1 text-sm text-muted-color md:order-1 md:items-end">
-          <p>
+      <Flex direction="col" gap="md" class="md:flex-row md:items-center md:gap-5">
+        <Stack gap="xs" class="order-2 md:order-1 md:items-end">
+          <Text as="p" size="sm" tone="muted">
             © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
-            <button
-              v-tooltip.top="buildLabel"
-              type="button"
-              class="rounded-xs tabular-nums outline-hikari-primary-500 transition-colors hover:text-color focus-visible:outline-2 focus-visible:outline-offset-2"
+            <Button
+              v-tooltip="buildLabel"
+              variant="link"
+              tone="neutral"
+              size="sm"
+              class="h-auto px-0 align-baseline tabular-nums"
               @click="changelogOpen = true"
             >
               {{ appVersion }}
-            </button>
-          </p>
-          <div class="flex gap-4">
-            <NuxtLink
+            </Button>
+          </Text>
+          <Inline gap="md" :wrap="false">
+            <Link
               v-if="flags.app_download"
+              :as="NuxtLink"
               to="/app"
-              class="w-fit transition-colors hover:text-color"
+              tone="neutral"
+              :underline="false"
+              class="w-fit text-sm text-muted"
             >
               下载 App
-            </NuxtLink>
-            <NuxtLink to="/developers" class="w-fit transition-colors hover:text-color">
+            </Link>
+            <Link
+              :as="NuxtLink"
+              to="/developers"
+              tone="neutral"
+              :underline="false"
+              class="w-fit text-sm text-muted"
+            >
               开发者平台
-            </NuxtLink>
-          </div>
-        </div>
+            </Link>
+          </Inline>
+        </Stack>
         <LayoutFooterSocial class="order-1 md:order-2" />
-      </div>
-    </div>
+      </Flex>
+    </Flex>
 
     <ChangelogDialog v-model:visible="changelogOpen" />
-  </footer>
+  </Stack>
 </template>

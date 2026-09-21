@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex, Heading, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { getGalgameBannerSource, getGalgameCover } from '~/utils/media/galgame'
 
@@ -26,28 +27,28 @@
 </script>
 
 <template>
-  <section
+  <Stack
+    as="section"
+    gap="none"
     data-galgame-hero
-    class="relative isolate overflow-hidden border-b border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-950"
+    class="hikari-hero-veil-side relative isolate overflow-hidden border-b border-line bg-surface"
   >
     <HikariImage
       :src="banner"
       alt=""
-      class="absolute inset-0 -z-20 h-full w-full"
+      class="absolute inset-0 -z-20 size-full"
       image-class="object-cover"
       :processing="bannerProcessing"
     >
-      <template #empty>
-        <span />
-      </template>
-      <template #error><span /></template>
+      <template #empty><VisuallyHidden /></template>
+      <template #error><VisuallyHidden /></template>
     </HikariImage>
-    <div class="absolute inset-0 -z-10 bg-surface-0/76 dark:bg-surface-950/72" />
-    <div
-      class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,var(--p-surface-0)_0%,rgba(255,255,255,0.82)_44%,rgba(255,255,255,0.54)_100%)] dark:bg-[linear-gradient(90deg,var(--p-surface-950)_0%,rgba(3,7,18,0.82)_45%,rgba(3,7,18,0.54)_100%)]"
-    />
-    <div
-      class="mx-auto flex min-h-[calc(520px+var(--app-header-height))] max-w-app flex-col justify-end gap-8 px-5 pt-[calc(var(--app-header-height)+2.25rem)] pb-12 sm:px-6 sm:pt-[calc(var(--app-header-height)+3rem)] lg:min-h-[calc(540px+var(--app-header-height))] lg:flex-row lg:items-center lg:justify-start lg:gap-10 lg:py-14"
+
+    <Flex
+      direction="col"
+      justify="end"
+      gap="none"
+      class="mx-auto min-h-[calc(520px+var(--app-header-height))] w-full max-w-app gap-8 px-5 pt-[calc(var(--app-header-height)+2.25rem)] pb-12 sm:px-6 sm:pt-[calc(var(--app-header-height)+3rem)] lg:min-h-[calc(540px+var(--app-header-height))] lg:flex-row lg:items-center lg:justify-start lg:gap-10 lg:py-14"
     >
       <GalgameHeroCover :cover="cover" :title="title">
         <WorkCoverVoteEntry
@@ -58,21 +59,16 @@
         />
       </GalgameHeroCover>
 
-      <div class="w-full min-w-0 flex-1 space-y-6 text-center lg:text-left">
-        <div class="space-y-3">
+      <Stack gap="lg" class="w-full min-w-0 flex-1 text-center lg:text-left">
+        <Stack gap="none" class="gap-3">
           <GalgameHeroBadges :galgame="galgame" />
-          <h1
-            class="text-3xl leading-tight font-semibold text-surface-950 md:text-4xl lg:text-5xl dark:text-surface-0"
-          >
+          <Heading :level="1" class="text-3xl leading-tight font-semibold md:text-4xl lg:text-5xl">
             {{ title }}
-          </h1>
-          <p
-            v-if="originTitle && originTitle !== title"
-            class="text-lg leading-7 text-surface-600 dark:text-surface-300"
-          >
+          </Heading>
+          <Text v-if="originTitle && originTitle !== title" as="p" size="lg" tone="muted">
             {{ originTitle }}
-          </p>
-        </div>
+          </Text>
+        </Stack>
 
         <GalgameHeroMeta :galgame="galgame" :producers="producers" />
         <GalgameHeroLinks :galgame="galgame" />
@@ -83,7 +79,7 @@
           :my-rate="myRate"
           :favorited="favorited"
         />
-      </div>
-    </div>
-  </section>
+      </Stack>
+    </Flex>
+  </Stack>
 </template>

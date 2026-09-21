@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
+
   defineOptions({ name: 'GalgamesPage' })
   definePageMeta({ container: 'full' })
 
@@ -12,18 +14,20 @@
 </script>
 
 <template>
-  <div v-if="data" class="-mt-(--app-header-height)">
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameExploreHero :mosaic="data.mosaic" />
 
-    <div class="mx-auto box-content flex max-w-app flex-col gap-14 px-6 py-12">
-      <GalgameExploreReleaseRow :release="data.release" />
-      <GalgameExploreReleaseRow
-        title="上月发售"
-        :release="data.last_month"
-        :to="data.last_month.browse_to"
-      />
-      <GalgameExploreBrowseEntry />
-      <GalgameExploreRecommendStream />
-    </div>
-  </div>
+    <Stack gap="none" class="px-6 py-12">
+      <Stack gap="none" class="mx-auto w-full max-w-app gap-14">
+        <GalgameExploreReleaseRow :release="data.release" />
+        <GalgameExploreReleaseRow
+          title="上月发售"
+          :release="data.last_month"
+          :to="data.last_month.browse_to"
+        />
+        <GalgameExploreBrowseEntry />
+        <GalgameExploreRecommendStream />
+      </Stack>
+    </Stack>
+  </Stack>
 </template>

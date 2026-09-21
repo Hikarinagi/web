@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { CalendarDays, Eye, FileText, Hash, Tag } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
 
@@ -20,30 +21,17 @@
 
 <template>
   <ResourceArchiveCard>
-    <div class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
-      <div class="flex items-center gap-2.5">
-        <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ publicationText }}</span>
-      </div>
-      <div v-if="volume.pages" class="flex items-center gap-2.5">
-        <FileText class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ volume.pages }} 页</span>
-      </div>
-      <div v-if="priceText" class="flex items-center gap-2.5">
-        <Tag class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ priceText }}</span>
-      </div>
-      <div v-if="volume.isbn" class="flex items-center gap-2.5">
-        <Hash class="size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-          {{ volume.isbn }}
-        </span>
-      </div>
-      <div v-if="volume.read_times" class="flex items-center gap-2.5">
-        <Eye class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ volume.read_times }} 次阅读</span>
-      </div>
-    </div>
+    <Stack gap="sm" class="px-5 py-3.5">
+      <ResourceArchiveRow :icon="CalendarDays">{{ publicationText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.pages" :icon="FileText"
+        >{{ volume.pages }} 页</ResourceArchiveRow
+      >
+      <ResourceArchiveRow v-if="priceText" :icon="Tag">{{ priceText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.isbn" :icon="Hash">{{ volume.isbn }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.read_times" :icon="Eye">
+        {{ volume.read_times }} 次阅读
+      </ResourceArchiveRow>
+    </Stack>
 
     <template #footer>
       <ResourceArchiveContributorFooter

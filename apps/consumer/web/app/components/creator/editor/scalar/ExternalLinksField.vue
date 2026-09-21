@@ -1,16 +1,13 @@
 <script setup lang="ts">
+  import { Button, Card, IconButton, Inline, Input, Stack, Text } from '@hina-ui/vue'
   import { Plus, X } from '@lucide/vue'
   import type { BackendEditorField } from '~/features/creator/editor'
 
   const props = defineProps<{
     field: BackendEditorField
-    inputId?: string
     disabled?: boolean
   }>()
   const model = defineModel<Record<string, unknown>[]>({ default: () => [] })
-
-  provide('$pcFormField', undefined)
-  provide('$pcForm', undefined)
 
   const maxRows = computed(() => props.field.max_length ?? 50)
   const canAdd = computed(() => model.value.length < maxRows.value)
@@ -52,79 +49,61 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div
-      v-for="(row, index) in model"
-      :key="index"
-      class="flex items-center gap-2 rounded-lg border p-2"
-      :class="
-        isDuplicate(row)
-          ? 'border-red-300 dark:border-red-700'
-          : 'border-(--p-form-field-border-color)'
-      "
-    >
-      <div class="min-w-0 flex-1">
-        <InputText
-          :id="index === 0 ? inputId : undefined"
+  <Stack gap="sm" align="stretch">
+    <Card v-for="(row, index) in model" :key="index" :padded="false">
+      <Inline gap="sm" align="center" :wrap="false" class="p-2">
+        <Input
           :model-value="text(row, 'name')"
           placeholder="来源标识，如 steam"
-          size="small"
+          size="sm"
           :disabled="disabled"
-          fluid
-          @update:model-value="
-            value => setRow(index, 'name', typeof value === 'string' ? value : '')
-          "
+          class="min-w-0 flex-1"
+          @update:model-value="value => setRow(index, 'name', value ?? '')"
         />
-      </div>
-      <div class="min-w-0 flex-1">
-        <InputText
+        <Input
           :model-value="text(row, 'label')"
           placeholder="显示名称"
-          size="small"
+          size="sm"
           :disabled="disabled"
-          fluid
-          @update:model-value="
-            value => setRow(index, 'label', typeof value === 'string' ? value : '')
-          "
+          class="min-w-0 flex-1"
+          @update:model-value="value => setRow(index, 'label', value ?? '')"
         />
-      </div>
-      <div class="min-w-0 flex-2">
-        <InputText
+        <Input
           :model-value="text(row, 'url')"
           placeholder="https://"
-          size="small"
+          size="sm"
           :disabled="disabled"
           :invalid="isDuplicate(row)"
-          fluid
-          @update:model-value="
-            value => setRow(index, 'url', typeof value === 'string' ? value : '')
-          "
+          class="min-w-0 flex-2"
+          @update:model-value="value => setRow(index, 'url', value ?? '')"
         />
-      </div>
-      <Button
-        type="button"
-        unstyled
-        class="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-color transition-colors hover:bg-surface-100 hover:text-red-500 dark:hover:bg-surface-800"
-        :aria-label="`移除第 ${index + 1} 行`"
-        :disabled="disabled"
-        @click="removeRow(index)"
-      >
-        <template #icon><X :size="14" /></template>
-      </Button>
-    </div>
+        <IconButton
+          :label="`移除第 ${index + 1} 行`"
+          variant="ghost"
+          tone="danger"
+          size="sm"
+          pill
+          :disabled="disabled"
+          class="shrink-0"
+          @click="removeRow(index)"
+        >
+          <X />
+        </IconButton>
+      </Inline>
+    </Card>
 
     <Button
-      type="button"
-      severity="secondary"
-      variant="outlined"
-      label="添加链接"
+      variant="outline"
+      tone="neutral"
+      size="sm"
       class="self-start"
       :disabled="disabled || !canAdd"
       @click="addRow"
     >
-      <template #icon><Plus :size="14" /></template>
+      <template #icon><Plus /></template>
+      添加链接
     </Button>
 
-    <span class="text-xs text-muted-color">{{ model.length }} / {{ maxRows }}</span>
-  </div>
+    <Text size="xs" tone="muted">{{ model.length }} / {{ maxRows }}</Text>
+  </Stack>
 </template>

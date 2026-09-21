@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Alert, List, ListItem, Spinner, Stack, Text } from '@hina-ui/vue'
   import type { EpubReview, EpubReviewStatus } from '~/features/light-novel-volume/epub-correction'
 
   defineOptions({ name: 'LightNovelVolumeEpubReviewResult' })
@@ -32,37 +33,35 @@
   const failed = computed(() =>
     props.mode === 'fix' ? '校验失败，请稍后重试；你的报告已记录。' : '校验失败，请稍后重试。',
   )
+
+  const result = computed(() => {
+    switch (props.status) {
+      case 'PASSED':
+        return { tone: 'success' as const, text: passed.value }
+      case 'NEEDS_HUMAN':
+        return { tone: 'info' as const, text: needsHuman.value }
+      case 'REJECTED':
+        return { tone: 'warning' as const, text: rejected.value }
+      default:
+        return { tone: 'danger' as const, text: failed.value }
+    }
+  })
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div v-if="!isTerminal" class="flex flex-col items-center gap-3 py-6 text-center">
-      <Spinner :size="40" />
-      <p class="text-sm font-medium text-color">正在自动校验你上传的文件…</p>
-      <p class="text-xs text-muted-color">{{ pendingHint }}</p>
-    </div>
+  <Stack gap="md">
+    <Stack v-if="!isTerminal" gap="sm" align="center" class="py-6 text-center">
+      <Spinner size="lg" />
+      <Text size="sm" weight="medium">正在自动校验你上传的文件…</Text>
+      <Text size="xs" tone="muted">{{ pendingHint }}</Text>
+    </Stack>
 
-    <template v-else>
-      <Message v-if="status === 'PASSED'" severity="success" :closable="false">
-        {{ passed }}
-      </Message>
-      <Message v-else-if="status === 'NEEDS_HUMAN'" severity="info" :closable="false">
-        {{ needsHuman }}
-      </Message>
-      <Message v-else-if="status === 'REJECTED'" severity="warn" :closable="false">
-        {{ rejected }}
-      </Message>
-      <Message v-else severity="error" :closable="false">{{ failed }}</Message>
+    <Alert :open="isTerminal" :tone="result.tone">{{ result.text }}</Alert>
 
-      <ul
-        v-if="review?.reasons?.length && status !== 'PASSED'"
-        class="flex flex-col gap-1.5 text-sm text-muted-color"
-      >
-        <li v-for="(reason, index) in review?.reasons ?? []" :key="index" class="flex gap-2">
-          <span aria-hidden="true">·</span>
-          <span>{{ reason }}</span>
-        </li>
-      </ul>
-    </template>
-  </div>
+    <List v-if="isTerminal && review?.reasons?.length && status !== 'PASSED'">
+      <ListItem v-for="(reason, index) in review?.reasons ?? []" :key="index">
+        <Text as="span" size="sm" tone="muted">{{ reason }}</Text>
+      </ListItem>
+    </List>
+  </Stack>
 </template>

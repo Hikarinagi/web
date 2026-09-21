@@ -43,6 +43,10 @@
 }
 
 /* prose: 标题 / 列表 / 引用 / 代码 / hr / strong/em/s / link mark */
+.hikari-content :is(h2, h3, h4)[id] {
+  scroll-margin-top: calc(var(--app-header-height) + 1.5rem);
+}
+
 .hikari-content h2 {
   font-size: 24px;
   font-weight: 700;
@@ -121,8 +125,14 @@
 }
 .hikari-content .hikari-table-scroll {
   max-height: 70vh;
-  --hikari-scroll-shadow-inset-y: var(--hikari-table-head-h, 0px);
-  --hikari-scroll-shadow-inset-x: var(--hikari-table-head-w, 0px);
+}
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-start'],
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='y-end'] {
+  inset-inline-start: var(--hikari-table-head-w, 0px);
+}
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-start'],
+.hikari-content .hikari-table-scroll .hn-scroll-shadow[data-side='x-end'] {
+  inset-block-start: var(--hikari-table-head-h, 0px);
 }
 .hikari-content table {
   table-layout: fixed;
@@ -189,15 +199,15 @@
 /* 仅作用于 link mark (Text.vue 输出的内联文字链接,带 hikari-content-link class).
  * 不命中 entity-card 整卡 NuxtLink / 其它包装 <a>,避免污染外层 wrapper 文字色. */
 .hikari-content a.hikari-content-link {
-  color: var(--p-primary-color);
+  color: var(--hn-accent-text);
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
-  text-decoration-color: color-mix(in srgb, var(--p-primary-color) 40%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--hn-accent-text) 40%, transparent);
   transition: text-decoration-color 120ms ease-out;
 }
 .hikari-content a.hikari-content-link:hover {
-  text-decoration-color: var(--p-primary-color);
+  text-decoration-color: var(--hn-accent-text);
 }
 .hikari-content .hikari-table-sentinel {
   position: absolute;
@@ -223,7 +233,7 @@
 }
 .hikari-content .tableWrapper.is-pinned .hikari-table-sticky__clip {
   opacity: 1;
-  box-shadow: 0 8px 12px -10px color-mix(in oklab, var(--p-surface-950) 45%, transparent);
+  box-shadow: 0 8px 12px -10px var(--hn-scroll-shadow);
 }
 .hikari-editor-surface .hikari-table-shadows {
   position: sticky;
@@ -256,35 +266,19 @@
 }
 .hikari-editor-surface .hikari-table-shadow.is-top {
   top: var(--hikari-table-head-h, 0px);
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
-    transparent
-  );
+  background: linear-gradient(to bottom, var(--hn-scroll-shadow), transparent);
 }
 .hikari-editor-surface .hikari-table-shadow.is-bottom {
   top: calc(var(--hikari-table-vp-h, 0px) - 16px);
-  background: linear-gradient(
-    to top,
-    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
-    transparent
-  );
+  background: linear-gradient(to top, var(--hn-scroll-shadow), transparent);
 }
 .hikari-editor-surface .hikari-table-shadow.is-left {
   left: var(--hikari-table-head-w, 0px);
-  background: linear-gradient(
-    to right,
-    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
-    transparent
-  );
+  background: linear-gradient(to right, var(--hn-scroll-shadow), transparent);
 }
 .hikari-editor-surface .hikari-table-shadow.is-right {
   left: calc(var(--hikari-table-vp-w, 0px) - 16px);
-  background: linear-gradient(
-    to left,
-    color-mix(in oklab, var(--p-surface-950) 14%, transparent),
-    transparent
-  );
+  background: linear-gradient(to left, var(--hn-scroll-shadow), transparent);
 }
 
 .hikari-editor-surface th,
@@ -424,4 +418,29 @@
   border-bottom: 1px dashed var(--editor-text-muted);
   border-radius: 2px;
   padding: 0 1px;
+}
+
+.hikari-editor-surface .ProseMirror {
+  outline: none;
+}
+
+.hikari-editor-surface .ProseMirror,
+.hikari-editor-surface .ProseMirror * {
+  overflow-anchor: none;
+}
+
+.hikari-editor-surface .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--hn-fg-subtle);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.article-canvas .hikari-editor-surface {
+  font-size: 17px;
+  line-height: 1.8;
+}
+.article-canvas .ProseMirror {
+  min-height: 50vh;
 }

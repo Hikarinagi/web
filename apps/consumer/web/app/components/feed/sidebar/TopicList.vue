@@ -1,27 +1,30 @@
 <script setup lang="ts">
+  import { Inline, Link, Ripple, Stack, Tag, Text } from '@hina-ui/vue'
   import { Hash } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { SidebarTopic } from '~/features/feed/sidebar'
 
   defineProps<{ topics: SidebarTopic[] }>()
 </script>
 
 <template>
-  <ul class="pb-1.5">
-    <li v-for="topic in topics" :key="topic.id">
-      <NuxtLink
-        :to="`/topics/${topic.id}`"
-        class="flex items-center gap-2.5 px-4 py-2.5 transition-colors hover:bg-surface-50 dark:hover:bg-surface-800/50"
-      >
-        <Hash :size="14" class="shrink-0 text-muted-color" />
-        <span class="min-w-0 flex-1 truncate text-[13px] font-medium text-color">
+  <Stack gap="none" class="pb-1.5">
+    <Link
+      v-for="topic in topics"
+      :key="topic.id"
+      :as="NuxtLink"
+      :to="`/topics/${topic.id}`"
+      tone="neutral"
+      class="hn-state-layer block hn-interactive px-(--hn-panel-p) py-2.5 hn-press-none"
+    >
+      <Ripple />
+      <Inline gap="none" align="center" :wrap="false" class="gap-2.5">
+        <Hash class="size-3.5 shrink-0 text-muted" />
+        <Text as="span" size="xs" weight="medium" truncate class="min-w-0 flex-1">
           {{ topic.name }}
-        </span>
-        <span
-          class="shrink-0 rounded bg-primary-100 px-1.5 py-px text-[11px] font-semibold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300"
-        >
-          {{ topic.use_count }}
-        </span>
-      </NuxtLink>
-    </li>
-  </ul>
+        </Text>
+        <Tag tone="accent" size="sm" class="shrink-0 font-semibold">{{ topic.use_count }}</Tag>
+      </Inline>
+    </Link>
+  </Stack>
 </template>

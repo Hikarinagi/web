@@ -1,8 +1,7 @@
 <script setup lang="ts">
+  import { DropdownMenu, DropdownMenuItem } from '@hina-ui/vue'
   import type { Editor } from '@tiptap/vue-3'
-  import Menu from 'primevue/menu'
-  import type { MenuItem } from 'primevue/menuitem'
-  import { ref, useTemplateRef } from 'vue'
+  import { ref, shallowRef } from 'vue'
   import type { EditorPluginContext, ToolbarDropdownItem } from '../plugins/types'
 
   const props = defineProps<{
@@ -10,51 +9,42 @@
     context: EditorPluginContext
   }>()
 
-  const model = ref<MenuItem[]>([])
-  const menuRef = useTemplateRef<InstanceType<typeof Menu>>('menuRef')
+  const items = shallowRef<ToolbarDropdownItem[]>([])
+  const anchor = shallowRef<HTMLElement | null>(null)
+  const open = ref(false)
 
-  function open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement, event: Event) {
+  function isDisabled(item: ToolbarDropdownItem) {
     const editor = props.editor
-    model.value = dropdownItems.map(item => ({
-      label: item.label,
-      disabled: editor === null || (item.isDisabled?.(editor) ?? false),
-      __dropdownItem: item,
-      command: () => {
-        if (!editor) return
-        item.onClick(editor, props.context, triggerEl)
-      },
-    }))
-    nextTick(() => menuRef.value?.toggle(event))
+    return editor === null || (item.isDisabled?.(editor) ?? false)
   }
 
-  defineExpose({ open })
+  function select(item: ToolbarDropdownItem) {
+    const editor = props.editor
+    if (!editor || !anchor.value) return
+    item.onClick(editor, props.context, anchor.value)
+  }
+
+  defineExpose({
+    open(dropdownItems: ToolbarDropdownItem[], triggerEl: HTMLElement) {
+      items.value = dropdownItems
+      anchor.value = triggerEl
+      open.value = true
+    },
+  })
 </script>
 
 <template>
-  <Menu ref="menuRef" :model="model" popup>
-    <template #item="{ item }">
-      <a class="dropdown-item">
-        <component
-          :is="(item as { __dropdownItem: ToolbarDropdownItem }).__dropdownItem.icon"
-          :size="16"
-        />
-        <span>{{ item.label }}</span>
-      </a>
+  <DropdownMenu v-model:open="open" :anchor="anchor" label="插入" align="start">
+    <template #content>
+      <DropdownMenuItem
+        v-for="item in items"
+        :key="item.label"
+        :disabled="isDisabled(item)"
+        @select="select(item)"
+      >
+        <template #icon><component :is="item.icon" /></template>
+        {{ item.label }}
+      </DropdownMenuItem>
     </template>
-  </Menu>
+  </DropdownMenu>
 </template>
-
-<style scoped>
-  .dropdown-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    color: var(--editor-text-color);
-    cursor: pointer;
-  }
-  li[data-p-disabled='true'] .dropdown-item {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-</style>

@@ -1,4 +1,15 @@
 <script setup lang="ts">
+  import {
+    Card,
+    Checkbox,
+    IconButton,
+    Inline,
+    Input,
+    InputGroup,
+    SegmentedControl,
+    Select,
+    Text,
+  } from '@hina-ui/vue'
   import { Search } from '@lucide/vue'
   import type { LightNovelBrowseState } from '~/features/light-novel/explore'
   import {
@@ -11,6 +22,10 @@
   defineOptions({ name: 'LightNovelBrowseToolbar' })
   const props = defineProps<{ state: LightNovelBrowseState; total: number; disabled?: boolean }>()
   const emit = defineEmits<{ update: [value: Partial<LightNovelBrowseState>] }>()
+
+  function loadBunko(search?: string) {
+    return hikariRequest('/api/v3/light-novels/bunko', { query: { search } })
+  }
 
   const search = ref(props.state.search ?? '')
   const sort = ref(sortValue(props.state))
@@ -39,90 +54,76 @@
 </script>
 
 <template>
-  <div
-    class="flex flex-col gap-3 rounded-xl border border-surface-200 bg-surface-0 px-5 py-4 dark:border-surface-800 dark:bg-surface-900"
-  >
-    <div class="flex items-center gap-3">
-      <InputGroup class="min-w-0 flex-1">
-        <InputText
+  <Card :padded="false" class="flex flex-col gap-3 rounded-xl px-5 py-4 shadow-none">
+    <Inline gap="md" :wrap="false">
+      <InputGroup :disabled="disabled" class="min-w-0 flex-1">
+        <Input
           v-model="search"
-          size="small"
           placeholder="作品名 / 别名"
           class="min-w-0"
-          :disabled="disabled"
           @keyup.enter="submitSearch"
         />
-        <Button
-          v-tooltip.top="'搜索'"
-          severity="secondary"
-          size="small"
-          :disabled="disabled"
-          aria-label="搜索"
-          @click="submitSearch"
-        >
-          <Search class="size-4" />
-        </Button>
+        <IconButton label="搜索" :disabled="disabled" @click="submitSearch">
+          <Search />
+        </IconButton>
       </InputGroup>
 
       <Select
         v-model="sort"
         :options="LIGHT_NOVEL_SORT_OPTIONS"
-        option-label="label"
-        option-value="value"
         :disabled="disabled"
-        size="small"
         class="w-44 shrink-0"
-        @change="changeSort"
+        @update:model-value="changeSort"
       />
-      <span class="shrink-0 text-xs whitespace-nowrap text-surface-500 dark:text-surface-400">
+      <Text size="xs" tone="muted" class="shrink-0 whitespace-nowrap">
         共 {{ total.toLocaleString() }} 部
-      </span>
-    </div>
+      </Text>
+    </Inline>
 
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-2.5">
-      <SelectButton
+    <Inline gap="none" class="gap-x-3 gap-y-2.5">
+      <SegmentedControl
         :model-value="state.novel_status ?? ALL"
         :options="statusOptions"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
         :disabled="disabled"
-        size="small"
         aria-label="连载状态"
-        @change="event => patch({ novel_status: event.value === ALL ? undefined : event.value })"
+        @update:model-value="
+          value =>
+            patch({
+              novel_status:
+                value === ALL ? undefined : (value as LightNovelBrowseState['novel_status']),
+            })
+        "
       />
       <Select
         :model-value="state.decade ?? ALL"
         :options="decadeOptions"
-        option-label="label"
-        option-value="value"
         :disabled="disabled"
-        size="small"
         class="w-32"
         aria-label="年代"
-        @update:model-value="value => patch({ decade: value === ALL ? undefined : value })"
+        @update:model-value="
+          value =>
+            patch({
+              decade: value === ALL ? undefined : (value as LightNovelBrowseState['decade']),
+            })
+        "
       />
-      <LightNovelBrowseBunkoPopover
+      <BrowseEntityPickerPopover
+        kind="bunko"
+        noun="文库"
+        :load="loadBunko"
         :model-value="state.bunko_id"
         :disabled="disabled"
         @update:model-value="value => patch({ bunko_id: value })"
       />
-      <LightNovelBrowseTagFilterPopover
-        :groups="state.tag_groups"
-        :disabled="disabled"
-        @update="patch"
-      />
-      <label
-        class="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-surface-500 dark:text-surface-400"
+      <BrowseTagFilterPopover :groups="state.tag_groups" :disabled="disabled" @update="patch" />
+      <Checkbox
+        :model-value="state.readable"
+        size="sm"
+        class="shrink-0"
+        @update:model-value="value => patch({ readable: value === true })"
       >
-        <Checkbox
-          :model-value="state.readable"
-          binary
-          input-id="ln-browse-readable"
-          @update:model-value="value => patch({ readable: value })"
-        />
         仅站内可读
-      </label>
-    </div>
-  </div>
+      </Checkbox>
+    </Inline>
+  </Card>
 </template>

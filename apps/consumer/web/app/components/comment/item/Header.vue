@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Tag, Text } from '@hina-ui/vue'
   import { timeFromNow } from '#imports'
   import { CornerDownRight, Pin } from '@lucide/vue'
   import type { CommentItem, CommentNode } from '~/features/comment/comment'
@@ -18,31 +19,29 @@
 </script>
 
 <template>
-  <header class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
-    <UserName :user="author" fallback="已注销" class="font-semibold text-color" />
+  <Inline as="header" gap="none" align="center" class="gap-x-2 gap-y-1 text-sm">
+    <UserName :user="author" fallback="已注销" class="font-semibold text-fg" />
     <UserBadges :user="author" />
-    <Tag v-if="isAuthor" value="作者" :pt="{ root: { class: 'text-xs!' } }" />
-    <Tag
-      v-if="comment.is_pinned"
-      value="置顶"
-      severity="secondary"
-      :pt="{ root: { class: 'text-xs!' } }"
-    >
-      <template #icon><Pin class="size-3" /></template>
+    <Tag v-if="isAuthor" tone="accent">作者</Tag>
+    <Tag v-if="comment.is_pinned" tone="neutral">
+      <Pin class="size-3" />
+      置顶
     </Tag>
-    <span v-if="replyTo" class="inline-flex items-center gap-1 text-xs text-muted-color">
+    <Inline
+      v-if="replyTo"
+      as="span"
+      gap="none"
+      align="center"
+      :wrap="false"
+      class="gap-1 text-xs text-muted"
+    >
       <CornerDownRight class="size-3 shrink-0" />
-      <span class="inline-flex items-center gap-1">
+      <Inline as="span" gap="none" align="center" :wrap="false" class="gap-1">
         回复
-        <UserName
-          :user="replyTo"
-          :handle="false"
-          fallback="已注销"
-          class="font-medium text-color"
-        />
-      </span>
-    </span>
-    <span class="text-xs text-muted-color">· {{ timeFromNow(comment.created_at) }}</span>
-    <span v-if="isEdited" class="text-xs text-surface-400">已编辑</span>
-  </header>
+        <UserName :user="replyTo" :handle="false" fallback="已注销" class="font-medium text-fg" />
+      </Inline>
+    </Inline>
+    <Text as="span" size="xs" tone="muted">· {{ timeFromNow(comment.created_at) }}</Text>
+    <Text v-if="isEdited" as="span" size="xs" tone="faint">已编辑</Text>
+  </Inline>
 </template>

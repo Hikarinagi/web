@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Heading, Inline, Stack, VisuallyHidden } from '@hina-ui/vue'
   import { PenLine } from '@lucide/vue'
   import type { GalgamesPageData } from '~~/server/api/pages/galgames.get'
 
@@ -42,9 +43,9 @@
 
   function aspectRatioOf(item: MosaicItem) {
     const { width, height } = item
-    if (!width || !height) return `${DESIGN_COLUMN_WIDTH} / 329`
+    if (!width || !height) return DESIGN_COLUMN_WIDTH / 329
 
-    return `${width} / ${height}`
+    return width / height
   }
 
   function processingOf(item: MosaicItem, width: number) {
@@ -61,61 +62,53 @@
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-white dark:bg-surface-950">
-    <div class="absolute inset-0 bg-white dark:bg-surface-950" aria-hidden="true">
-      <div
-        class="flex h-full min-w-full gap-2 overflow-hidden bg-white blur-[1.5px] dark:bg-surface-950"
-      >
-        <div
+  <Stack as="section" gap="none" class="relative overflow-hidden bg-surface">
+    <Stack gap="none" aria-hidden="true" class="absolute inset-0 bg-surface">
+      <Inline gap="sm" :wrap="false" class="h-full min-w-full overflow-hidden blur-hikari-3xs">
+        <Stack
           v-for="(column, columnIndex) in columns"
           :key="`column-${columnIndex}`"
-          class="flex h-full w-58.25 shrink-0 flex-col gap-2 overflow-hidden bg-white dark:bg-surface-950"
+          gap="sm"
+          class="h-full w-58.25 shrink-0 overflow-hidden bg-surface"
         >
           <HikariImage
             v-for="item in column"
             :key="item.id"
             :src="item.source"
             :alt="item.alt"
-            class="w-full shrink-0 overflow-hidden bg-surface-100 dark:bg-surface-800"
-            :style="{ aspectRatio: aspectRatioOf(item) }"
+            class="w-full shrink-0 overflow-hidden bg-subtle"
+            :ratio="aspectRatioOf(item)"
             image-class="size-full object-cover"
             :processing="processingOf(item, 320)"
             :lazy="true"
             :skeleton="false"
           >
-            <template #empty><span /></template>
-            <template #error><span /></template>
+            <template #empty><VisuallyHidden /></template>
+            <template #error><VisuallyHidden /></template>
           </HikariImage>
-        </div>
-      </div>
-    </div>
-    <div class="absolute inset-0 bg-surface-0/76 dark:bg-surface-950/72" aria-hidden="true" />
-    <div
-      class="absolute inset-0 bg-[linear-gradient(90deg,var(--p-surface-0)_0%,rgba(255,255,255,0.82)_44%,rgba(255,255,255,0.54)_100%)] dark:bg-[linear-gradient(90deg,var(--p-surface-950)_0%,rgba(3,7,18,0.82)_45%,rgba(3,7,18,0.54)_100%)]"
-      aria-hidden="true"
-    />
+        </Stack>
+      </Inline>
+    </Stack>
+    <Stack gap="none" aria-hidden="true" class="absolute inset-0 bg-(image:--hikari-veil-side)" />
 
-    <div
-      class="relative z-10 mx-auto box-content flex min-h-[calc(112px+var(--app-header-height))] max-w-app items-center px-6 pt-[calc(var(--app-header-height)+16px)] pb-6 xl:min-h-[calc(140px+var(--app-header-height))] xl:pb-7"
+    <Inline
+      gap="none"
+      align="center"
+      :wrap="false"
+      class="relative z-10 box-content min-h-[calc(112px+var(--app-header-height))] px-6 pt-[calc(var(--app-header-height)+16px)] pb-6 xl:min-h-[calc(140px+var(--app-header-height))] xl:pb-7"
     >
-      <div class="max-w-4xl">
-        <h1 class="text-2xl leading-tight font-semibold text-surface-950 dark:text-white">
-          在 Hikarinagi 记录你的游戏状态
-        </h1>
-        <Button
-          login-required
-          label="记录进度"
-          icon-pos="right"
-          size="small"
-          class="mt-3"
-          @click="recordOpen = true"
-        >
-          <template #icon>
-            <PenLine class="size-4" aria-hidden="true" />
-          </template>
-        </Button>
-      </div>
-    </div>
+      <Stack gap="none" class="mx-auto w-full max-w-app">
+        <Stack gap="none" align="start" class="max-w-4xl gap-3">
+          <Heading :level="1" size="2xl" class="leading-tight">
+            在 Hikarinagi 记录你的游戏状态
+          </Heading>
+          <Button login-required @click="recordOpen = true">
+            记录状态
+            <template #trailing><PenLine /></template>
+          </Button>
+        </Stack>
+      </Stack>
+    </Inline>
     <GalgameExploreRecordDialog v-model:visible="recordOpen" />
-  </section>
+  </Stack>
 </template>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Stack, Text } from '@hina-ui/vue'
   import { ImagePlus, X } from '@lucide/vue'
   import { useMediaLibrary } from '~/components/media-library/composables/useMediaLibrary'
   import type { MediaValue } from '~/components/media-library/types'
@@ -28,34 +29,30 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
+  <Inline gap="md" align="center" wrap>
     <DeveloperConsoleAppIcon :src="props.src" :name="props.name" size="lg" />
-    <div class="min-w-0">
-      <p class="text-sm font-medium text-color">应用图标</p>
-      <p class="mt-1 text-xs text-muted-color">展示在用户的授权页与账号中心，选图后裁剪为圆形</p>
-      <div class="mt-2.5 flex items-center gap-2">
-        <Button
-          :label="props.src ? '更换图标' : '选择图标'"
-          size="small"
-          severity="secondary"
-          variant="outlined"
-          :loading="choosing"
-          @click="pick"
-        >
-          <template #icon><ImagePlus class="size-4" /></template>
+    <Stack gap="sm" class="min-w-0">
+      <Stack gap="xs">
+        <Text as="span" size="sm" weight="medium">应用图标</Text>
+        <Text as="span" size="xs" tone="muted">展示在用户的授权页与账号中心，选图后裁剪为圆形</Text>
+      </Stack>
+      <Inline gap="sm" align="center">
+        <Button variant="outline" tone="neutral" size="sm" :loading="choosing" @click="pick">
+          <template #icon><ImagePlus /></template>
+          {{ props.src ? '更换图标' : '选择图标' }}
         </Button>
         <Button
           v-if="props.src"
-          label="移除"
-          size="small"
-          severity="secondary"
-          variant="text"
+          variant="ghost"
+          tone="neutral"
+          size="sm"
           @click="emit('picked', null)"
         >
-          <template #icon><X class="size-4" /></template>
+          <template #icon><X /></template>
+          移除
         </Button>
-      </div>
-    </div>
+      </Inline>
+    </Stack>
 
     <MediaLibraryCropDialog
       v-model:visible="cropVisible"
@@ -66,5 +63,5 @@
       :output-height="256"
       @cropped="media => emit('picked', media)"
     />
-  </div>
+  </Inline>
 </template>

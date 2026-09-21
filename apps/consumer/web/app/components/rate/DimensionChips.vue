@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Tag, Text } from '@hina-ui/vue'
   import type { RateDimensionChip } from '~/features/rate/dimensions'
 
   defineOptions({ name: 'RateDimensionChips' })
@@ -6,10 +7,10 @@
 </script>
 
 <template>
-  <div v-if="dimensions.length" class="flex flex-wrap items-center gap-1.5">
-    <Tag v-for="d in dimensions" :key="d.label" class="px-2! py-0.5! text-xs! font-medium!">
-      <span class="text-muted-color">{{ d.label }}</span>
-      <span class="ml-1 font-semibold text-color">{{ d.score }}</span>
+  <Inline v-if="dimensions.length" gap="xs" class="flex-wrap">
+    <Tag v-for="d in dimensions" :key="d.label" variant="soft" tone="neutral" size="sm">
+      <Text as="span" size="xs" tone="muted">{{ d.label }}</Text>
+      <Text as="span" size="xs" weight="semibold">{{ d.score }}</Text>
     </Tag>
-  </div>
+  </Inline>
 </template>

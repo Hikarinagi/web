@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Inline, NavLink } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { BookImage, BookOpen, GamepadDirectional, MessagesSquare, Smartphone } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
   import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
@@ -21,68 +23,61 @@
 
     return route.path === item.to || route.path.startsWith(`${item.to}/`)
   }
-
-  function itemClass(active: boolean) {
-    return cn(
-      'inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-all duration-200 ease-out',
-      'focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:outline-none',
-      active
-        ? 'bg-primary/10 text-primary shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--p-primary-color),transparent_78%),0_1px_6px_color-mix(in_srgb,var(--p-primary-color),transparent_88%)]'
-        : 'text-surface-600 hover:bg-primary/5 hover:text-primary dark:text-surface-300',
-    )
-  }
-
-  const capsuleClass = cn(
-    'inline-flex h-9 items-center rounded-full transition-opacity duration-200 ease-out hover:opacity-85',
-    'focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:outline-none',
-  )
 </script>
 
 <template>
-  <nav class="hidden items-center md:flex" aria-label="主导航">
-    <div
-      class="flex items-center gap-1 rounded-full border border-surface-200/55 bg-surface-0/42 p-1 shadow-[0_1px_8px_rgba(15,23,42,0.045)] backdrop-blur-xl backdrop-saturate-[1.8] dark:border-surface-800/60 dark:bg-surface-950/38 dark:shadow-[0_1px_8px_rgba(0,0,0,0.18)]"
+  <Inline
+    as="nav"
+    gap="none"
+    align="center"
+    :wrap="false"
+    class="hidden md:flex"
+    aria-label="主导航"
+  >
+    <Inline
+      gap="xs"
+      align="center"
+      :wrap="false"
+      class="rounded-full border border-line bg-surface/42 p-1 shadow-xs backdrop-blur-xl backdrop-saturate-200"
     >
-      <NuxtLink
-        v-for="item in navItems"
-        :key="item.to"
-        :to="item.to"
-        :class="itemClass(isActive(item))"
-        :aria-current="isActive(item) ? 'location' : undefined"
-      >
-        <component :is="navIconMap[item.icon]" class="size-4" aria-hidden="true" />
-        <span>{{ item.label }}</span>
-      </NuxtLink>
-      <NuxtLink
+      <LayoutHeaderNavBadge v-for="item in navItems" :key="item.to" :badge="item.badge">
+        <NavLink
+          :as="NuxtLink"
+          :to="item.to"
+          :active="isActive(item)"
+          :class="cn('rounded-full ps-3 pe-3 font-medium', isActive(item) && 'text-accent-text')"
+        >
+          <template #icon>
+            <component :is="navIconMap[item.icon]" aria-hidden="true" />
+          </template>
+          {{ item.label }}
+        </NavLink>
+      </LayoutHeaderNavBadge>
+
+      <NavLink
         v-for="item in promoItems"
         :key="`promo-${item.id}`"
+        :as="NuxtLink"
         :to="item.link"
         :target="item.open_in_new ? '_blank' : undefined"
-        :aria-label="item.icon_only ? item.label : undefined"
-        :class="item.icon_only && item.icon ? capsuleClass : itemClass(false)"
+        :class="
+          cn('rounded-full font-medium', item.icon_only && item.icon ? 'ps-0 pe-0' : 'ps-3 pe-3')
+        "
       >
-        <HikariImage
-          v-if="item.icon_only && item.icon"
-          :src="item.icon"
-          :alt="item.label"
-          class="h-8 w-auto"
-          image-class="h-8 w-auto max-w-44 object-contain"
-          :skeleton="false"
-          :lazy="false"
-        />
-        <template v-else>
+        <template v-if="item.icon" #icon>
           <HikariImage
-            v-if="item.icon"
             :src="item.icon"
             :alt="item.label"
-            class="size-4"
-            image-class="size-4 object-contain"
+            :class="item.icon_only ? 'h-8 w-auto' : 'size-4'"
+            :image-class="
+              item.icon_only ? 'h-8 w-auto max-w-44 object-contain' : 'size-4 object-contain'
+            "
             :skeleton="false"
             :lazy="false"
           />
-          <span>{{ item.label }}</span>
         </template>
-      </NuxtLink>
-    </div>
-  </nav>
+        <template v-if="!(item.icon_only && item.icon)">{{ item.label }}</template>
+      </NavLink>
+    </Inline>
+  </Inline>
 </template>

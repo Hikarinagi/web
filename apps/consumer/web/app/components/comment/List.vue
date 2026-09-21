@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Stack, Text } from '@hina-ui/vue'
+  import type { ComponentPublicInstance } from 'vue'
   import { COMMENT_THREAD_KEY } from '~/features/comment/useThread'
 
   defineOptions({ name: 'CommentList' })
@@ -11,14 +13,14 @@
   // 已删除评论只在「顶层 + 有子回复」时保留 tombstone(承载回复线索);顶层无子的删除评论不显示。
   const visibleItems = computed(() => items.value.filter(c => !c.is_deleted || c.child_total > 0))
 
-  const listEl = ref<HTMLElement | null>(null)
-  const topSentinel = ref<HTMLElement | null>(null)
-  const bottomSentinel = ref<HTMLElement | null>(null)
+  const listEl = ref<ComponentPublicInstance | null>(null)
+  const topSentinel = ref<ComponentPublicInstance | null>(null)
+  const bottomSentinel = ref<ComponentPublicInstance | null>(null)
   const loadingUp = ref(false)
 
   // 视口顶部第一个仍可见的评论，作为向上加载的锚
   function topAnchor(): HTMLElement | null {
-    const nodes = listEl.value?.querySelectorAll<HTMLElement>('article[id^="comment-"]')
+    const nodes = unrefElement(listEl)?.querySelectorAll<HTMLElement>('article[id^="comment-"]')
     if (!nodes) return null
     for (const n of nodes) if (n.getBoundingClientRect().bottom > 0) return n
     return null
@@ -57,32 +59,34 @@
 </script>
 
 <template>
-  <div>
-    <p v-if="!visibleItems.length && !loading" class="py-8 text-center text-sm text-muted-color">
+  <Stack gap="none">
+    <Text v-if="!visibleItems.length && !loading" size="sm" tone="muted" class="py-8 text-center">
       还没有人评论，你来发第一条！
-    </p>
+    </Text>
 
     <template v-else>
-      <div ref="topSentinel" class="h-px" />
-      <div v-if="loadingUp" class="space-y-6 pb-6">
+      <Stack ref="topSentinel" gap="none" aria-hidden="true" class="h-px" />
+      <Stack v-if="loadingUp" gap="lg" class="pb-6">
         <CommentItemSkeleton v-for="i in 2" :key="i" />
-      </div>
+      </Stack>
 
-      <div ref="listEl" class="space-y-6">
+      <Stack ref="listEl" gap="lg">
         <CommentItem v-for="c in visibleItems" :key="c.id" :comment="c" :author-id="authorId" />
-      </div>
+      </Stack>
 
-      <div ref="bottomSentinel" class="h-px" />
+      <Stack ref="bottomSentinel" gap="none" aria-hidden="true" class="h-px" />
 
-      <div v-if="loading && !loadingUp" class="space-y-6 pt-6">
+      <Stack v-if="loading && !loadingUp" gap="lg" class="pt-6">
         <CommentItemSkeleton v-for="i in 2" :key="i" />
-      </div>
-      <p
+      </Stack>
+      <Text
         v-else-if="!hasMoreDown && visibleItems.length"
-        class="py-5 text-center text-xs text-muted-color"
+        size="xs"
+        tone="muted"
+        class="py-5 text-center"
       >
         没有更多了
-      </p>
+      </Text>
     </template>
-  </div>
+  </Stack>
 </template>

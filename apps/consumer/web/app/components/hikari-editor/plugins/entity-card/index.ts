@@ -66,6 +66,10 @@ export const entityCard: EditorPlugin = {
     dropdownItems,
   },
   overlays: {
-    'entity-card': EntityCardSearch,
+    'entity-card': {
+      component: EntityCardSearch,
+      presentation: 'dialog',
+      title: '插入条目',
+    },
   },
 }

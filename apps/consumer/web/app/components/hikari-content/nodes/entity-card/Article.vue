@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { Newspaper } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { useContentSummaries } from '../../composables/useContentSummaries'
@@ -31,12 +32,12 @@
     id-attr="data-article-id"
     :href="href"
   >
-    <div class="relative z-1 flex items-center gap-3.5">
+    <Inline gap="none" align="center" :wrap="false" class="relative z-1 gap-3.5">
       <HikariImage
         :src="cover"
         :alt="title"
         preset="small"
-        class="h-[72px] w-32 flex-none overflow-hidden rounded bg-(--editor-toolbar-item-hover)"
+        class="h-18 w-32 flex-none overflow-hidden rounded bg-(--editor-toolbar-item-hover)"
         image-class="size-full object-cover"
       >
         <template #empty>
@@ -46,17 +47,26 @@
           <HikariContentNodesEntityCardCoverFallback :icon="Newspaper" :size="28" />
         </template>
       </HikariImage>
-      <div class="flex min-w-0 flex-1 flex-col gap-1.5">
-        <span
-          class="line-clamp-2 text-[15px] leading-snug font-semibold text-(--editor-text-color)"
+      <Stack gap="none" class="min-w-0 flex-1 gap-1.5">
+        <Text
+          as="span"
+          weight="semibold"
+          class="line-clamp-2 leading-snug text-(--editor-text-color)"
         >
           {{ title }}
-        </span>
-        <div class="flex items-center gap-2.5 text-[11px] text-(--editor-text-muted)">
+        </Text>
+        <Inline
+          gap="none"
+          align="center"
+          :wrap="false"
+          class="gap-2.5 text-xs text-(--editor-text-muted)"
+        >
           <UserName v-if="author" :user="author" :handle="false" class="font-medium" />
-          <span v-if="meta">{{ meta }}</span>
-        </div>
-      </div>
-    </div>
+          <Text v-if="meta" as="span" size="xs" class="text-(--editor-text-muted)">
+            {{ meta }}
+          </Text>
+        </Inline>
+      </Stack>
+    </Inline>
   </HikariContentNodesEntityCardContainer>
 </template>

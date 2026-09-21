@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Text } from '@hina-ui/vue'
   import { RotateCcw } from '@lucide/vue'
   import { motion } from 'motion-v'
 
@@ -16,24 +17,24 @@
 <template>
   <motion.div
     data-reader-ui
-    class="reader-link-return fixed left-1/2 z-30 flex w-[calc(100vw-1.5rem)] max-w-2xl items-center gap-3 rounded-full px-4 py-2"
-    :style="{ translate: '-50% 0' }"
+    class="reader-link-return fixed inset-x-3 z-30 mx-auto flex max-w-2xl items-center gap-3 rounded-full px-4 py-2"
     :initial="{ opacity: 0, scale: 0.96, y: 8 }"
     :animate="{ opacity: 1, scale: 1, y: 0 }"
     :exit="{ opacity: 0, scale: 0.96, y: 6 }"
   >
-    <span class="min-w-0 flex-1 truncate text-sm">已跳转到 {{ label }}</span>
+    <Text as="span" size="sm" truncate class="min-w-0 flex-1 text-inherit">
+      已跳转到 {{ label }}
+    </Text>
     <Button
-      rounded
-      severity="secondary"
-      size="small"
-      label="返回"
-      class="reader-link-return-button shrink-0"
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      pill
+      class="reader-link-return-button shrink-0 text-(--reader-icon)"
       @click="emit('back')"
     >
-      <template #icon>
-        <RotateCcw :size="14" aria-hidden="true" />
-      </template>
+      <template #icon><RotateCcw /></template>
+      返回
     </Button>
   </motion.div>
 </template>
@@ -48,23 +49,13 @@
     backdrop-filter: blur(18px) saturate(1.6);
   }
 
-  .reader-link-return :deep(.p-button) {
-    color: var(--reader-icon);
+  .reader-link-return-button {
+    white-space: nowrap;
     transition: background-color 140ms ease;
   }
 
-  .reader-link-return-button {
-    white-space: nowrap;
-  }
-
-  .reader-link-return :deep(.p-button:not(:disabled):hover),
-  .reader-link-return :deep(.p-button:not(:disabled):focus-visible) {
+  .reader-link-return-button:not(:disabled):hover,
+  .reader-link-return-button:not(:disabled):focus-visible {
     background: var(--reader-icon-hover-bg);
-  }
-
-  @media (max-width: 640px) {
-    .reader-link-return {
-      bottom: max(env(safe-area-inset-bottom), 0.75rem);
-    }
   }
 </style>

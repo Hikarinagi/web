@@ -1,7 +1,7 @@
 import type { LightNovelRate, LightNovelRateStatus, UpsertLightNovelRateBody } from './rate'
 
 export function useLightNovelRate(lightNovelId: number, initial: LightNovelRate | null) {
-  const rate = ref<LightNovelRate | null>(initial)
+  const rate = useState<LightNovelRate | null>(`light-novel-rate-${lightNovelId}`, () => initial)
   const pending = ref(false)
   const status = computed(() => rate.value?.status ?? null)
   const statusPrivate = computed(() => rate.value?.status_private ?? false)

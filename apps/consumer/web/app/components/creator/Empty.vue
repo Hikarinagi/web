@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Empty } from '@hina-ui/vue'
   import type { Component } from 'vue'
 
   defineProps<{
@@ -8,8 +9,9 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center gap-2 py-10 text-center">
-    <component :is="icon" v-if="icon" :size="28" class="text-muted-color opacity-60" />
-    <p class="text-sm text-muted-color">{{ text }}</p>
-  </div>
+  <Empty :title="text" :icon="false">
+    <template v-if="icon" #icon>
+      <component :is="icon" class="size-7 text-muted opacity-60" />
+    </template>
+  </Empty>
 </template>

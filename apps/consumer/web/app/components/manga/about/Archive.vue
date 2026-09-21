@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { Button, Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import {
     Barcode,
     BookMarked,
@@ -67,106 +69,72 @@
 
 <template>
   <ResourceArchiveCard>
-    <div class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
-      <div class="flex items-center gap-2.5">
-        <BookMarked class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          {{ mangaSerialStatusLabel(manga.serial_status) }}
-        </span>
-      </div>
-      <div v-if="publicationText" class="flex items-center gap-2.5">
-        <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 items-center gap-1.5">
-          <span class="shrink-0 text-xs text-surface-400">
-            {{ publicationEndText ? '连载期间' : '开始连载' }}
-          </span>
-          <span class="text-surface-700 dark:text-surface-300">
-            {{ publicationText }}
-            <template v-if="publicationEndText">~ {{ publicationEndText }}</template>
-          </span>
-        </span>
-      </div>
-      <div v-if="magazines.length" class="flex items-center gap-2.5">
-        <Newspaper class="size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 items-center gap-1.5">
-          <span class="shrink-0 text-xs text-surface-400">连载杂志</span>
-          <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-            <template v-for="(magazine, index) in magazines" :key="magazine.id">
-              <span v-if="index > 0">/</span>
-              <NuxtLink
-                :to="`/mangas/magazine/${magazine.id}`"
-                class="transition-colors hover:text-hikari-primary-600 dark:hover:text-hikari-primary-400"
-              >
-                {{ magazine.name }}
-              </NuxtLink>
-            </template>
-          </span>
-        </span>
-      </div>
-      <div v-if="publishers.length" class="flex items-start gap-2.5">
-        <Building2 class="mt-0.5 size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 flex-col gap-0.5">
-          <span class="flex min-w-0 items-center gap-1.5">
-            <span class="shrink-0 text-xs text-surface-400">出版社</span>
-            <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-              {{ publishersText }}
-            </span>
-          </span>
+    <Stack gap="sm" class="px-5 py-3.5">
+      <ResourceArchiveRow :icon="BookMarked">
+        {{ mangaSerialStatusLabel(manga.serial_status) }}
+      </ResourceArchiveRow>
+
+      <ResourceArchiveRow
+        v-if="publicationText"
+        :icon="CalendarDays"
+        :label="publicationEndText ? '连载期间' : '开始连载'"
+      >
+        {{ publicationText }}
+        <template v-if="publicationEndText">~ {{ publicationEndText }}</template>
+      </ResourceArchiveRow>
+
+      <ResourceArchiveRow v-if="magazines.length" :icon="Newspaper" label="连载杂志">
+        <template v-for="(magazine, index) in magazines" :key="magazine.id">
+          <Text v-if="index > 0" as="span" size="sm" tone="faint">/</Text>
+          <Link :as="NuxtLink" :to="`/mangas/magazine/${magazine.id}`">{{ magazine.name }}</Link>
+        </template>
+      </ResourceArchiveRow>
+
+      <ResourceArchiveRow v-if="publishers.length" :icon="Building2" align="start" label="出版社">
+        <Stack gap="none" align="start">
+          <Text as="span" size="sm">{{ publishersText }}</Text>
           <Button
             v-if="publishers.length > 1"
-            unstyled
-            class="w-fit text-xs text-hikari-primary-600 transition-colors hover:text-hikari-primary-700 dark:text-hikari-primary-400"
+            variant="link"
+            size="sm"
+            class="px-0"
             @click="publishersOpen = !publishersOpen"
           >
             {{ publishersOpen ? '收起' : `其他出版社 ${publishers.length - 1} 家` }}
           </Button>
-        </span>
-      </div>
-      <div v-if="volumeCount" class="flex items-center gap-2.5">
-        <Layers class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">单行本 {{ volumeCount }} 卷</span>
-      </div>
-      <div v-if="bookFacts" class="flex items-center gap-2.5">
-        <BookOpen class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ bookFacts }}</span>
-      </div>
-      <div v-if="manga.isbn" class="flex items-center gap-2.5">
-        <Barcode class="size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 items-center gap-1.5">
-          <span class="shrink-0 text-xs text-surface-400">ISBN</span>
-          <span class="wrap-anywhere text-surface-700 dark:text-surface-300">{{ manga.isbn }}</span>
-        </span>
-      </div>
-      <div v-if="homepageHost" class="flex items-center gap-2.5">
-        <Globe class="size-3.5 shrink-0 text-surface-400" />
-        <a
+        </Stack>
+      </ResourceArchiveRow>
+
+      <ResourceArchiveRow v-if="volumeCount" :icon="Layers"
+        >单行本 {{ volumeCount }} 卷</ResourceArchiveRow
+      >
+      <ResourceArchiveRow v-if="bookFacts" :icon="BookOpen">{{ bookFacts }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="manga.isbn" :icon="Barcode" label="ISBN">{{
+        manga.isbn
+      }}</ResourceArchiveRow>
+
+      <ResourceArchiveRow v-if="homepageHost" :icon="Globe">
+        <Link
+          as="a"
           :href="manga.homepage!"
           target="_blank"
           rel="noopener noreferrer"
-          class="min-w-0 truncate text-surface-700 transition-colors hover:text-hikari-primary-600 dark:text-surface-300 dark:hover:text-hikari-primary-400"
+          class="truncate"
         >
           {{ homepageHost }}
-        </a>
-      </div>
-      <div v-if="manga.other_names.length" class="flex items-start gap-2.5">
-        <Tags class="mt-0.5 size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-600 dark:text-surface-400">
-          {{ aliasesText }}
-        </span>
-      </div>
-      <MangaEditionList v-if="manga.editions?.length" :editions="manga.editions" />
-    </div>
+        </Link>
+      </ResourceArchiveRow>
 
-    <div v-if="bangumiUrl" class="flex gap-2 px-5 pb-4">
-      <a
-        :href="bangumiUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md border border-surface-200 px-2.5 py-1 text-[11px] font-semibold text-surface-600 transition-colors hover:bg-surface-50 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800"
-      >
-        Bangumi
-      </a>
-    </div>
+      <ResourceArchiveRow v-if="manga.other_names.length" :icon="Tags" align="start">
+        {{ aliasesText }}
+      </ResourceArchiveRow>
+
+      <MangaEditionList v-if="manga.editions?.length" :editions="manga.editions" />
+    </Stack>
+
+    <Inline v-if="bangumiUrl" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip :href="bangumiUrl">Bangumi</ResourceArchiveExternalChip>
+    </Inline>
 
     <template #footer>
       <ResourceArchiveContributorFooter

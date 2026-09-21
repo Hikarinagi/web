@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Text } from '@hina-ui/vue'
   import { Building2, CalendarDays } from '@lucide/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
@@ -26,16 +27,20 @@
 </script>
 
 <template>
-  <div
-    class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-surface-600 lg:justify-start dark:text-surface-300"
-  >
-    <span class="inline-flex items-center gap-2">
+  <Inline gap="none" align="center" wrap class="justify-center gap-x-6 gap-y-3 lg:justify-start">
+    <Text as="span" size="sm" tone="muted" class="inline-flex items-center gap-2">
       <CalendarDays :size="17" class="shrink-0" aria-hidden="true" />
       {{ releaseText }}
-    </span>
-    <span v-if="producerNames" class="inline-flex items-center gap-2">
+    </Text>
+    <Text
+      v-if="producerNames"
+      as="span"
+      size="sm"
+      tone="muted"
+      class="inline-flex items-center gap-2"
+    >
       <Building2 :size="17" class="shrink-0" aria-hidden="true" />
       {{ producerNames }}
-    </span>
-  </div>
+    </Text>
+  </Inline>
 </template>

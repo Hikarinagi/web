@@ -1928,6 +1928,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "website": {
@@ -2970,6 +2976,12 @@
           },
           "type": {
             "description": "厂商类型",
+            "enum": [
+              "COMPANY",
+              "DOUJIN",
+              "INDIVIDUAL",
+              "MAGAZINE"
+            ],
             "type": "string"
           },
           "updated_at": {
@@ -4067,7 +4079,7 @@
   "paths": {
     "/v3/characters/{id}": {
       "get": {
-        "operationId": "OpenCharacterController_getById",
+        "operationId": "character.get",
         "parameters": [
           {
             "in": "path",
@@ -4101,7 +4113,7 @@
     },
     "/v3/galgames/{id}": {
       "get": {
-        "operationId": "OpenGalgameController_getById",
+        "operationId": "galgame.get",
         "parameters": [
           {
             "in": "path",
@@ -4135,7 +4147,7 @@
     },
     "/v3/galgames/{id}/characters": {
       "get": {
-        "operationId": "OpenGalgameController_getCharacters",
+        "operationId": "galgame.characters.list",
         "parameters": [
           {
             "in": "path",
@@ -4180,7 +4192,7 @@
     },
     "/v3/galgames/{id}/developers": {
       "get": {
-        "operationId": "OpenGalgameController_getDevelopers",
+        "operationId": "galgame.developers.list",
         "parameters": [
           {
             "in": "path",
@@ -4217,7 +4229,7 @@
     },
     "/v3/galgames/{id}/producers": {
       "get": {
-        "operationId": "OpenGalgameController_getProducers",
+        "operationId": "galgame.producers.list",
         "parameters": [
           {
             "in": "path",
@@ -4254,7 +4266,7 @@
     },
     "/v3/galgames/{id}/relations": {
       "get": {
-        "operationId": "OpenGalgameController_getRelations",
+        "operationId": "galgame.relations.list",
         "parameters": [
           {
             "in": "path",
@@ -4291,7 +4303,7 @@
     },
     "/v3/galgames/{id}/staff": {
       "get": {
-        "operationId": "OpenGalgameController_getStaff",
+        "operationId": "galgame.staff.list",
         "parameters": [
           {
             "in": "path",
@@ -4336,7 +4348,7 @@
     },
     "/v3/light-novels/{id}": {
       "get": {
-        "operationId": "OpenLightNovelController_getById",
+        "operationId": "light-novel.get",
         "parameters": [
           {
             "in": "path",
@@ -4370,7 +4382,7 @@
     },
     "/v3/light-novels/{id}/characters": {
       "get": {
-        "operationId": "OpenLightNovelController_getCharacters",
+        "operationId": "light-novel.characters.list",
         "parameters": [
           {
             "in": "path",
@@ -4415,7 +4427,7 @@
     },
     "/v3/light-novels/{id}/people": {
       "get": {
-        "operationId": "OpenLightNovelController_getPeople",
+        "operationId": "light-novel.people.list",
         "parameters": [
           {
             "in": "path",
@@ -4464,7 +4476,7 @@
     },
     "/v3/light-novels/{id}/producers": {
       "get": {
-        "operationId": "OpenLightNovelController_getProducers",
+        "operationId": "light-novel.producers.list",
         "parameters": [
           {
             "in": "path",
@@ -4513,7 +4525,7 @@
     },
     "/v3/light-novels/{id}/volumes": {
       "get": {
-        "operationId": "OpenLightNovelController_getVolumes",
+        "operationId": "light-novel.volumes.list",
         "parameters": [
           {
             "in": "path",
@@ -4563,7 +4575,7 @@
     },
     "/v3/mangas/{id}": {
       "get": {
-        "operationId": "OpenMangaController_getById",
+        "operationId": "manga.get",
         "parameters": [
           {
             "in": "path",
@@ -4597,7 +4609,7 @@
     },
     "/v3/mangas/{id}/characters": {
       "get": {
-        "operationId": "OpenMangaController_getCharacters",
+        "operationId": "manga.characters.list",
         "parameters": [
           {
             "in": "path",
@@ -4642,7 +4654,7 @@
     },
     "/v3/mangas/{id}/people": {
       "get": {
-        "operationId": "OpenMangaController_getPeople",
+        "operationId": "manga.people.list",
         "parameters": [
           {
             "in": "path",
@@ -4679,7 +4691,7 @@
     },
     "/v3/mangas/{id}/producers": {
       "get": {
-        "operationId": "OpenMangaController_getProducers",
+        "operationId": "manga.producers.list",
         "parameters": [
           {
             "in": "path",
@@ -4716,7 +4728,7 @@
     },
     "/v3/mangas/{id}/volumes": {
       "get": {
-        "operationId": "OpenMangaController_getVolumes",
+        "operationId": "manga.volumes.list",
         "parameters": [
           {
             "in": "path",
@@ -4753,7 +4765,7 @@
     },
     "/v3/people/{id}": {
       "get": {
-        "operationId": "OpenPersonController_getById",
+        "operationId": "person.get",
         "parameters": [
           {
             "in": "path",
@@ -4787,7 +4799,7 @@
     },
     "/v3/producers/{id}": {
       "get": {
-        "operationId": "OpenProducerController_getById",
+        "operationId": "producer.get",
         "parameters": [
           {
             "in": "path",
@@ -4821,7 +4833,7 @@
     },
     "/v3/search": {
       "get": {
-        "operationId": "OpenSearchController_search",
+        "operationId": "search",
         "parameters": [
           {
             "description": "搜索关键词",
@@ -4912,7 +4924,7 @@
     },
     "/v3/user/me": {
       "get": {
-        "operationId": "OpenUserController_getMe",
+        "operationId": "user.profile.get",
         "parameters": [],
         "responses": {
           "200": {
@@ -4937,7 +4949,7 @@
     },
     "/v3/user/me/collections": {
       "get": {
-        "operationId": "OpenUserCollectionController_list",
+        "operationId": "user.collection.list",
         "parameters": [],
         "responses": {
           "200": {
@@ -4963,7 +4975,7 @@
         ]
       },
       "post": {
-        "operationId": "OpenUserCollectionController_create",
+        "operationId": "user.collection.create",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -4998,7 +5010,7 @@
     },
     "/v3/user/me/collections/{id}": {
       "delete": {
-        "operationId": "OpenUserCollectionController_remove",
+        "operationId": "user.collection.remove",
         "parameters": [
           {
             "in": "path",
@@ -5023,7 +5035,7 @@
         ]
       },
       "get": {
-        "operationId": "OpenUserCollectionController_get",
+        "operationId": "user.collection.get",
         "parameters": [
           {
             "in": "path",
@@ -5055,7 +5067,7 @@
         ]
       },
       "patch": {
-        "operationId": "OpenUserCollectionController_update",
+        "operationId": "user.collection.update",
         "parameters": [
           {
             "in": "path",
@@ -5099,7 +5111,7 @@
     },
     "/v3/user/me/collections/{id}/galgames/{work_id}": {
       "delete": {
-        "operationId": "OpenUserCollectionController_removeGalgame",
+        "operationId": "user.collection.galgame.remove",
         "parameters": [
           {
             "in": "path",
@@ -5132,7 +5144,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserCollectionController_addGalgame",
+        "operationId": "user.collection.galgame.add",
         "parameters": [
           {
             "in": "path",
@@ -5184,7 +5196,7 @@
     },
     "/v3/user/me/collections/{id}/items": {
       "get": {
-        "operationId": "OpenUserCollectionController_items",
+        "operationId": "user.collection.items.list",
         "parameters": [
           {
             "in": "path",
@@ -5263,7 +5275,7 @@
     },
     "/v3/user/me/collections/{id}/light-novels/{work_id}": {
       "delete": {
-        "operationId": "OpenUserCollectionController_removeLightNovel",
+        "operationId": "user.collection.light-novel.remove",
         "parameters": [
           {
             "in": "path",
@@ -5296,7 +5308,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserCollectionController_addLightNovel",
+        "operationId": "user.collection.light-novel.add",
         "parameters": [
           {
             "in": "path",
@@ -5348,7 +5360,7 @@
     },
     "/v3/user/me/collections/{id}/mangas/{work_id}": {
       "delete": {
-        "operationId": "OpenUserCollectionController_removeManga",
+        "operationId": "user.collection.manga.remove",
         "parameters": [
           {
             "in": "path",
@@ -5381,7 +5393,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserCollectionController_addManga",
+        "operationId": "user.collection.manga.add",
         "parameters": [
           {
             "in": "path",
@@ -5433,7 +5445,7 @@
     },
     "/v3/user/me/rates": {
       "get": {
-        "operationId": "OpenUserRateController_list",
+        "operationId": "user.rate.list",
         "parameters": [
           {
             "in": "query",
@@ -5532,7 +5544,7 @@
     },
     "/v3/user/me/rates/galgames/{id}": {
       "delete": {
-        "operationId": "OpenUserRateController_withdrawGalgame",
+        "operationId": "user.rate.galgame.withdraw",
         "parameters": [
           {
             "in": "path",
@@ -5557,7 +5569,7 @@
         ]
       },
       "get": {
-        "operationId": "OpenUserRateController_getGalgame",
+        "operationId": "user.rate.galgame.get",
         "parameters": [
           {
             "in": "path",
@@ -5589,7 +5601,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserRateController_upsertGalgame",
+        "operationId": "user.rate.galgame.upsert",
         "parameters": [
           {
             "in": "path",
@@ -5633,7 +5645,7 @@
     },
     "/v3/user/me/rates/light-novels/{id}": {
       "delete": {
-        "operationId": "OpenUserRateController_withdrawLightNovel",
+        "operationId": "user.rate.light-novel.withdraw",
         "parameters": [
           {
             "in": "path",
@@ -5658,7 +5670,7 @@
         ]
       },
       "get": {
-        "operationId": "OpenUserRateController_getLightNovel",
+        "operationId": "user.rate.light-novel.get",
         "parameters": [
           {
             "in": "path",
@@ -5690,7 +5702,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserRateController_upsertLightNovel",
+        "operationId": "user.rate.light-novel.upsert",
         "parameters": [
           {
             "in": "path",
@@ -5734,7 +5746,7 @@
     },
     "/v3/user/me/rates/mangas/{id}": {
       "delete": {
-        "operationId": "OpenUserRateController_withdrawManga",
+        "operationId": "user.rate.manga.withdraw",
         "parameters": [
           {
             "in": "path",
@@ -5759,7 +5771,7 @@
         ]
       },
       "get": {
-        "operationId": "OpenUserRateController_getManga",
+        "operationId": "user.rate.manga.get",
         "parameters": [
           {
             "in": "path",
@@ -5791,7 +5803,7 @@
         ]
       },
       "put": {
-        "operationId": "OpenUserRateController_upsertManga",
+        "operationId": "user.rate.manga.upsert",
         "parameters": [
           {
             "in": "path",

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Card, Heading, Inline, Progress, Stack, Tag, Text } from '@hina-ui/vue'
   import { ExternalLink, Volume2 } from '@lucide/vue'
   import type { GalgameSteamData } from '~~/server/api/pages/galgames/[id]/steam.get'
 
@@ -12,18 +13,11 @@
       .join(' · ')
   })
 
-  const meter = computed(() => {
-    const review = props.app.review
-    if (!review) return []
-
-    const color =
-      review.percent >= 80
-        ? 'var(--p-green-500)'
-        : review.percent >= 40
-          ? 'var(--p-amber-500)'
-          : 'var(--p-red-500)'
-
-    return [{ label: review.desc, value: review.percent, color }]
+  const reviewTone = computed(() => {
+    const percent = props.app.review?.percent ?? 0
+    if (percent >= 80) return 'success' as const
+    if (percent >= 40) return 'warning' as const
+    return 'danger' as const
   })
 
   const tags = computed(() => {
@@ -46,10 +40,8 @@
 </script>
 
 <template>
-  <article
-    class="overflow-hidden rounded-xl border border-surface-200 bg-surface-0 dark:border-surface-800 dark:bg-surface-900"
-  >
-    <div class="flex flex-col gap-4 p-4 sm:flex-row">
+  <Card as="article" :padded="false" class="overflow-hidden">
+    <Inline gap="none" align="stretch" :wrap="false" class="flex-col gap-4 p-4 sm:flex-row">
       <HikariImage
         :src="app.header_image"
         :alt="app.name"
@@ -57,82 +49,75 @@
         image-class="size-full object-cover"
       />
 
-      <div class="flex min-w-0 flex-1 flex-col gap-2">
-        <div class="flex items-start justify-between gap-3">
-          <h4 class="min-w-0 text-base font-semibold text-surface-900 dark:text-surface-0">
-            {{ app.name }}
-          </h4>
-          <div class="flex shrink-0 items-center gap-2">
-            <Tag v-if="app.region_locked" severity="warn" value="国区不可用" />
+      <Stack gap="sm" class="min-w-0 flex-1">
+        <Inline gap="none" align="start" justify="between" :wrap="false" class="gap-3">
+          <Heading :level="4" size="base" class="min-w-0">{{ app.name }}</Heading>
+          <Inline gap="sm" align="center" :wrap="false" class="shrink-0">
+            <Tag v-if="app.region_locked" tone="warning">国区不可用</Tag>
             <template v-else-if="app.is_free || app.price">
-              <Tag
-                v-if="app.price && app.price.discount_percent > 0"
-                severity="success"
-                :value="`-${app.price.discount_percent}%`"
-              />
-              <span
+              <Tag v-if="app.price && app.price.discount_percent > 0" tone="success">
+                -{{ app.price.discount_percent }}%
+              </Tag>
+              <Text
                 v-if="app.price?.original"
-                class="text-xs text-surface-400 line-through dark:text-surface-500"
+                as="span"
+                size="xs"
+                tone="faint"
+                class="line-through"
               >
                 {{ app.price.original }}
-              </span>
-              <span class="text-[15px] font-semibold text-surface-900 dark:text-surface-0">
+              </Text>
+              <Text as="span" size="sm" weight="semibold">
                 {{ app.price ? app.price.final : '免费' }}
-              </span>
+              </Text>
             </template>
-          </div>
-        </div>
+          </Inline>
+        </Inline>
 
-        <p
-          v-if="app.short_description"
-          class="line-clamp-2 text-[13px] leading-5 text-surface-600 dark:text-surface-400"
-        >
+        <Text v-if="app.short_description" as="p" size="sm" tone="muted" class="line-clamp-2">
           {{ app.short_description }}
-        </p>
+        </Text>
 
-        <p v-if="credit" class="text-[13px] text-surface-500 dark:text-surface-400">
-          {{ credit }}
-        </p>
+        <Text v-if="credit" as="p" size="sm" tone="muted">{{ credit }}</Text>
 
         <Button
           as="a"
           :href="app.url"
           target="_blank"
           rel="noopener noreferrer"
-          severity="secondary"
-          size="small"
-          label="在 Steam 上查看"
+          variant="soft"
+          tone="neutral"
+          size="sm"
           class="mt-auto self-start"
         >
-          <template #icon>
-            <ExternalLink :size="14" />
-          </template>
+          <template #icon><ExternalLink /></template>
+          在 Steam 上查看
         </Button>
-      </div>
-    </div>
+      </Stack>
+    </Inline>
 
-    <div
-      v-if="app.review || tags.length"
-      class="flex flex-col gap-3 border-t border-surface-200 bg-surface-50 p-4 dark:border-surface-800 dark:bg-surface-950"
-    >
-      <MeterGroup v-if="meter.length" :value="meter" label-position="start" class="gap-2!" />
+    <Stack v-if="app.review || tags.length" gap="sm" class="border-t border-line bg-subtle p-4">
+      <Progress
+        v-if="app.review"
+        :value="app.review.percent"
+        :label="app.review.desc"
+        :tone="reviewTone"
+        show-value
+        size="sm"
+      />
 
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <div v-if="tags.length" class="flex flex-wrap gap-1.5">
-          <Tag
-            v-for="tag in tags"
-            :key="tag.key"
-            :severity="tag.highlight ? undefined : 'secondary'"
-          >
+      <Inline gap="sm" align="center" justify="between" wrap>
+        <Inline v-if="tags.length" gap="xs" wrap>
+          <Tag v-for="tag in tags" :key="tag.key" :tone="tag.highlight ? 'accent' : 'neutral'">
             {{ tag.label }}
-            <Volume2 v-if="tag.audio" v-tooltip.top="'含完整语音'" :size="11" />
+            <Volume2 v-if="tag.audio" v-tooltip="'含完整语音'" :size="11" />
           </Tag>
-        </div>
+        </Inline>
 
-        <p v-if="app.review" class="text-xs text-surface-500 dark:text-surface-400">
+        <Text v-if="app.review" as="p" size="xs" tone="muted">
           {{ app.review.total.toLocaleString('zh-CN') }} 条评价
-        </p>
-      </div>
-    </div>
-  </article>
+        </Text>
+      </Inline>
+    </Stack>
+  </Card>
 </template>

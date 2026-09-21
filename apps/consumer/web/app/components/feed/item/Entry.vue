@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { feedItemBlocksNsfw, type FeedRow } from '~/features/feed/feed'
+  import { Stack } from '@hina-ui/vue'
+  import { feedItemBlocksNsfw, feedItemPath, type FeedRow } from '~/features/feed/feed'
 
   const props = defineProps<{ row: FeedRow; hideName?: boolean }>()
 
@@ -7,16 +8,14 @@
   const blocked = computed(
     () => props.row.kind === 'item' && shouldBlockNsfw(feedItemBlocksNsfw(props.row.item)),
   )
-  const detailTo = computed(() =>
-    props.row.kind === 'item' && props.row.item.type === 'post'
-      ? `/posts/${props.row.item.id}`
-      : null,
-  )
-  const detailLabel = computed(() =>
-    props.row.kind === 'item' && props.row.item.type === 'post'
-      ? props.row.item.title || '查看图文'
-      : '查看',
-  )
+  const detailTo = computed(() => (props.row.kind === 'item' ? feedItemPath(props.row.item) : null))
+  const detailLabel = computed(() => {
+    if (props.row.kind !== 'item') return '查看'
+    const item = props.row.item
+    if (item.type === 'post') return item.title || '查看图文'
+    if (item.type === 'article') return item.title || '查看文章'
+    return '查看评分'
+  })
   const hotComment = computed(() =>
     props.row.kind === 'item' &&
     (props.row.item.type === 'post' || props.row.item.type === 'article')
@@ -37,9 +36,17 @@
 </script>
 
 <template>
-  <article
+  <Stack
     v-if="!blocked"
-    class="relative -mx-2 flex min-w-0 flex-col gap-2 px-2 py-4.5 transition-colors hover:bg-surface-50 dark:hover:bg-surface-900/60"
+    as="article"
+    gap="sm"
+    :class="
+      cn(
+        'relative -mx-2 min-w-0 px-2 py-4.5',
+        detailTo &&
+          'hn-state-layer hn-interactive hn-press-none active:after:opacity-(--hn-state-press-opacity)!',
+      )
+    "
   >
     <NuxtLink v-if="detailTo" :to="detailTo" class="absolute inset-0" :aria-label="detailLabel" />
     <FeedItemGroup v-if="row.kind === 'group'" :group="row.group" :hide-name="hideName" />
@@ -74,5 +81,5 @@
         :to="hotCommentTo"
       />
     </template>
-  </article>
+  </Stack>
 </template>

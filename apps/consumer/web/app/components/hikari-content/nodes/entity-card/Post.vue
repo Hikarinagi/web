@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import { MessageSquareText } from '@lucide/vue'
   import type { EditorNode } from '@hikarinagi/editor-schema'
   import { useContentSummaries } from '../../composables/useContentSummaries'
@@ -26,7 +27,7 @@
 
 <template>
   <HikariContentNodesEntityCardContainer :id="id" type="post" id-attr="data-post-id" :href="href">
-    <div class="relative z-1 flex items-center gap-3.5">
+    <Inline gap="none" align="center" :wrap="false" class="relative z-1 gap-3.5">
       <HikariImage
         :src="cover"
         :alt="title"
@@ -41,15 +42,22 @@
           <HikariContentNodesEntityCardCoverFallback :icon="MessageSquareText" />
         </template>
       </HikariImage>
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <span class="truncate text-[15px] font-semibold text-(--editor-text-color)">
+      <Stack gap="none" class="min-w-0 flex-1 gap-1">
+        <Text as="span" weight="semibold" truncate class="text-(--editor-text-color)">
           {{ title }}
-        </span>
-        <div class="flex items-center gap-2.5 text-[11px] text-(--editor-text-muted)">
+        </Text>
+        <Inline
+          gap="none"
+          align="center"
+          :wrap="false"
+          class="gap-2.5 text-xs text-(--editor-text-muted)"
+        >
           <UserName v-if="author" :user="author" :handle="false" class="font-medium" />
-          <span v-if="meta">{{ meta }}</span>
-        </div>
-      </div>
-    </div>
+          <Text v-if="meta" as="span" size="xs" class="text-(--editor-text-muted)">
+            {{ meta }}
+          </Text>
+        </Inline>
+      </Stack>
+    </Inline>
   </HikariContentNodesEntityCardContainer>
 </template>

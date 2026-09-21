@@ -8,8 +8,9 @@
       node: EditorNode
       eager?: boolean
       selected?: boolean
+      preview?: boolean
     }>(),
-    { eager: false, selected: false },
+    { eager: false, selected: false, preview: true },
   )
 
   const src = computed(() => (props.node.attrs?.src as string | undefined) ?? '')
@@ -23,6 +24,9 @@
     const h = props.node.attrs?.height
     return typeof h === 'number' && h > 0 ? h : null
   })
+  const previewSize = computed(() =>
+    width.value && height.value ? { width: width.value, height: height.value } : undefined,
+  )
   const widthPercent = computed(() => {
     const w = props.node.attrs?.width_percent
     return typeof w === 'number' && w > 0 ? w : 100
@@ -52,7 +56,7 @@
 <template>
   <figure
     ref="figureRef"
-    class="group relative mx-auto my-[0.8em] overflow-hidden rounded-(--editor-panel-radius) border-[1.5px] bg-(--editor-toolbar-bg) transition-[border-color,box-shadow] duration-120 ease-out"
+    class="group relative mx-auto my-hikari-node overflow-hidden rounded-(--editor-panel-radius) border-2 bg-(--editor-toolbar-bg) transition-[border-color,box-shadow] duration-120 ease-out"
     :class="[selected ? 'border-(--editor-focus-ring)' : 'border-transparent']"
     data-card-type="image"
     :data-media-asset-id="mediaAssetId"
@@ -67,7 +71,8 @@
       :skeleton="!eager"
       class="block size-full"
       image-class="size-full object-contain"
-      preview
+      :preview="preview"
+      :preview-size="previewSize"
     />
     <slot name="chrome" />
   </figure>

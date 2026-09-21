@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Tag } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { platformLabel } from '~/features/galgame/platforms'
   import { devStatusLabel } from '~/features/galgame/labels'
@@ -11,21 +12,21 @@
   const devStatus = computed(() => {
     const status = props.galgame.dev_status
     if (!status || status === 'RELEASED') return null
-    return { label: devStatusLabel(status), severity: status === 'CANCELLED' ? 'danger' : 'warn' }
+    return {
+      label: devStatusLabel(status),
+      tone: status === 'CANCELLED' ? ('danger' as const) : ('warning' as const),
+    }
   })
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
-    <Tag v-if="devStatus" :value="devStatus.label" :severity="devStatus.severity" />
-    <Tag v-if="galgame.nsfw" value="NSFW" severity="danger" />
-    <Tag v-if="galgame.adv_type" :value="galgame.adv_type" severity="info" />
-    <Tag
-      v-for="platform in galgame.platforms"
-      :key="platform"
-      :value="platformLabel(platform)"
-      severity="secondary"
-    />
-    <Tag v-if="!galgame.platforms.length" value="PC" severity="secondary" />
-  </div>
+  <Inline gap="sm" align="center" justify="center" wrap class="lg:justify-start">
+    <Tag v-if="devStatus" :tone="devStatus.tone" size="md">{{ devStatus.label }}</Tag>
+    <Tag v-if="galgame.nsfw" tone="danger" size="md">NSFW</Tag>
+    <Tag v-if="galgame.adv_type" tone="info" size="md">{{ galgame.adv_type }}</Tag>
+    <Tag v-for="platform in galgame.platforms" :key="platform" tone="neutral" size="md">
+      {{ platformLabel(platform) }}
+    </Tag>
+    <Tag v-if="!galgame.platforms.length" tone="neutral" size="md">PC</Tag>
+  </Inline>
 </template>

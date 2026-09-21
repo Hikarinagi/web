@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Link, Ripple, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
 
@@ -12,9 +13,12 @@
 </script>
 
 <template>
-  <div
-    class="group relative flex h-20 items-center gap-3 rounded-xl border border-surface-200 bg-surface-0 px-3.5 py-3 transition-colors hover:border-surface-300 dark:border-surface-800 dark:bg-surface-900 dark:hover:border-surface-700"
+  <Card
+    :padded="false"
+    class="hn-state-layer flex h-20 hn-interactive items-center gap-3 rounded-xl px-3.5 py-3 hn-press-lg"
   >
+    <Ripple />
+
     <HikariImage
       :src="item.character.image?.src"
       :alt="name"
@@ -24,32 +28,47 @@
       preset="thumbnail"
       :fallback-src="ENTITY_FALLBACK_IMAGE"
     >
-      <template #error><span /></template>
+      <template #error><VisuallyHidden /></template>
     </HikariImage>
-    <div class="flex min-w-0 flex-1 flex-col gap-1">
-      <NuxtLink
-        :to="`/characters/${item.character.id}`"
-        class="truncate text-sm font-bold text-surface-900 transition-colors group-hover:text-hikari-primary-600 after:absolute after:inset-0 dark:text-surface-0 dark:group-hover:text-hikari-primary-400"
-      >
-        {{ name }}
+
+    <Stack gap="xs" class="min-w-0 flex-1">
+      <NuxtLink v-slot="{ href, navigate }" :to="`/characters/${item.character.id}`" custom>
+        <Link
+          :href="href ?? undefined"
+          tone="neutral"
+          :underline="false"
+          class="truncate text-sm font-bold after:absolute after:inset-0"
+          @click="navigate"
+        >
+          {{ name }}
+        </Link>
       </NuxtLink>
-      <p
+
+      <Inline
         v-if="actors.length"
-        class="relative z-10 flex w-fit max-w-full items-center gap-1 text-xs text-surface-600 dark:text-surface-400"
+        gap="xs"
+        align="center"
+        :wrap="false"
+        class="relative z-10 w-fit max-w-full"
       >
-        <span class="shrink-0 text-[11px] text-surface-400">CV</span>
-        <span class="truncate">
+        <Text as="span" size="xs" tone="faint" class="shrink-0">CV</Text>
+        <Text as="span" size="xs" tone="muted" truncate>
           <template v-for="(actor, index) in actors" :key="actor.id">
-            <span v-if="index" aria-hidden="true" class="px-1">/</span>
-            <NuxtLink
-              :to="`/people/${actor.id}`"
-              class="transition-colors hover:text-hikari-primary-600 hover:underline dark:hover:text-hikari-primary-400"
-            >
-              {{ actor.name }}
+            <Text v-if="index" as="span" aria-hidden="true" class="px-1">/</Text>
+            <NuxtLink v-slot="{ href, navigate }" :to="`/people/${actor.id}`" custom>
+              <Link
+                :href="href ?? undefined"
+                tone="neutral"
+                :underline="false"
+                class="transition-colors hover:text-accent-text hover:underline"
+                @click="navigate"
+              >
+                {{ actor.name }}
+              </Link>
             </NuxtLink>
           </template>
-        </span>
-      </p>
-    </div>
-  </div>
+        </Text>
+      </Inline>
+    </Stack>
+  </Card>
 </template>

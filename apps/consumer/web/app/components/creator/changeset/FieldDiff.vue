@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { isEmpty, isMedia } from './field-diff/helpers'
 
   const props = defineProps<{
@@ -45,19 +46,13 @@
 </script>
 
 <template>
-  <div class="rounded-xl border border-surface-200 dark:border-surface-800">
-    <div
-      class="flex items-center gap-2 border-b border-surface-200 px-4 py-2.5 dark:border-surface-800"
-    >
-      <span
-        class="rounded bg-surface-100 px-1.5 py-0.5 text-xs text-muted-color dark:bg-surface-800"
-      >
-        {{ OP_LABEL[kind] ?? kind }}
-      </span>
-      <span class="text-sm font-medium">{{ label }}</span>
-    </div>
+  <Card :padded="false" class="rounded-xl shadow-none">
+    <Inline gap="sm" align="center" :wrap="false" class="border-b border-line px-4 py-2.5">
+      <Tag size="sm" tone="neutral">{{ OP_LABEL[kind] ?? kind }}</Tag>
+      <Text as="span" size="sm" weight="medium">{{ label }}</Text>
+    </Inline>
 
-    <div class="p-4 text-sm">
+    <Stack gap="none" class="p-4 text-sm">
       <CreatorChangesetFieldDiffBlock v-if="mode === 'added'" :op="op" variant="added" />
       <CreatorChangesetFieldDiffBlock v-else-if="mode === 'removed'" :op="op" variant="removed" />
       <CreatorChangesetFieldDiffInline v-else-if="mode === 'inline'" :op="op" />
@@ -80,7 +75,7 @@
         variant="remove"
       />
       <CreatorChangesetFieldDiffRelationUpdate v-else-if="mode === 'relation-update'" :op="op" />
-      <p v-else class="text-muted-color">关系目标 #{{ op.target_id }}</p>
-    </div>
-  </div>
+      <Text v-else tone="muted">关系目标 #{{ op.target_id }}</Text>
+    </Stack>
+  </Card>
 </template>

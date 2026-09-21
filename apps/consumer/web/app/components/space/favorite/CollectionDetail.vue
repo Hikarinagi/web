@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Chip, Grid, Inline, Stack } from '@hina-ui/vue'
   import { Lock } from '@lucide/vue'
   import type { SpaceCollectionDetailPageData } from '~~/server/api/pages/space/[id]/favorites/[cid].get'
   import { useCollectionDetail } from '~/features/favorite/composables/useCollectionDetail'
@@ -24,7 +25,7 @@
 </script>
 
 <template>
-  <div class="py-8">
+  <Stack gap="none" class="py-8">
     <SpaceFavoriteDetailHeader
       :collection="collection"
       :owner="data.owner"
@@ -35,26 +36,24 @@
       @delete="confirmDeleteCollection"
     />
 
-    <div class="mt-5 flex flex-wrap items-center gap-2">
-      <Button
+    <Inline gap="sm" class="mt-5">
+      <Chip
         v-for="f in COLLECTION_TYPE_FILTERS"
         :key="f.key"
-        unstyled
-        class="cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-        :class="
-          activeType === f.key ? 'bg-primary/10 text-primary' : 'text-muted-color hover:text-color'
-        "
-        @click="activeType = f.key"
+        selectable
+        :selected="activeType === f.key"
+        :tone="activeType === f.key ? 'accent' : 'neutral'"
+        @update:selected="activeType = f.key"
       >
         {{ f.label }} {{ chipCount(f.key) }}
-      </Button>
-    </div>
+      </Chip>
+    </Inline>
 
-    <LoadingOverlay
+    <Grid
       v-if="list.items.length"
-      class="mt-5"
-      :loading="pending"
-      content-class="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4 lg:grid-cols-5"
+      :cols="3"
+      gap="none"
+      class="relative mt-5 gap-x-4 gap-y-6 sm:grid-cols-4 lg:grid-cols-5"
     >
       <SpaceFavoriteItemCard
         v-for="item in list.items"
@@ -63,7 +62,8 @@
         :is-self="data.is_self"
         @remove="confirmRemoveItem(item)"
       />
-    </LoadingOverlay>
+      <LoadingOverlay :visible="pending" />
+    </Grid>
     <SpaceEmptyState v-else :icon="Lock" text="这个分类下还没有收藏" />
 
     <Paginator
@@ -82,5 +82,5 @@
       :collection="collection"
       @saved="onCollectionSaved"
     />
-  </div>
+  </Stack>
 </template>

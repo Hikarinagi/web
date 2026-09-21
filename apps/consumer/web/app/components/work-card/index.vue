@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Star } from '@lucide/vue'
+  import { Inline, Link, Rating, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { workPath, workTypeLabel } from '#shared/utils/work'
   import type { WorkCardData } from './composables/useWorkCard'
 
@@ -16,16 +17,17 @@
 </script>
 
 <template>
-  <div
-    class="w-80 overflow-hidden rounded-xl border border-surface-200 bg-surface-0 shadow-[0_16px_48px_rgba(0,0,0,0.18)] dark:border-surface-700 dark:bg-surface-900"
-  >
+  <Stack gap="none">
     <WorkCardSkeleton v-if="!work" />
-    <NuxtLink
+    <Link
       v-else
+      :as="NuxtLink"
       :to="to"
-      class="block p-3 transition-colors hover:bg-surface-50 dark:hover:bg-surface-900/60"
+      tone="neutral"
+      :underline="false"
+      class="flex flex-col p-3 transition-colors hover:bg-subtle"
     >
-      <div class="flex gap-3">
+      <Inline gap="none" align="stretch" :wrap="false" class="gap-3">
         <HikariImage
           :src="work.cover"
           :alt="work.title"
@@ -33,31 +35,42 @@
           image-class="size-full object-cover"
           :processing="{ q: 90 }"
         />
-        <div class="flex min-w-0 flex-1 flex-col gap-1">
-          <p class="line-clamp-2 text-sm font-bold text-color">{{ work.title }}</p>
-          <p v-if="work.original_title" class="line-clamp-1 text-xs text-muted-color">
+        <Stack gap="none" class="min-w-0 flex-1 gap-1">
+          <Text as="p" size="sm" weight="semibold" class="line-clamp-2 font-bold">
+            {{ work.title }}
+          </Text>
+          <Text v-if="work.original_title" as="p" size="xs" tone="muted" class="line-clamp-1">
             {{ work.original_title }}
-          </p>
-          <p v-if="meta" class="line-clamp-1 text-xs text-muted-color">{{ meta }}</p>
-          <div v-if="work.average_rate != null" class="mt-auto flex items-center gap-1 pt-1">
-            <Star class="size-3.5 fill-amber-400 text-amber-400" />
-            <span class="text-sm font-semibold text-color">{{ work.average_rate.toFixed(1) }}</span>
-            <span class="text-xs text-muted-color">· {{ work.rated_count }} 人评分</span>
-          </div>
-          <p v-else class="mt-auto pt-1 text-xs text-muted-color">暂无评分</p>
-        </div>
-      </div>
-      <div
+          </Text>
+          <Text v-if="meta" as="p" size="xs" tone="muted" class="line-clamp-1">{{ meta }}</Text>
+
+          <Inline
+            v-if="work.average_rate != null"
+            gap="none"
+            align="center"
+            wrap
+            class="mt-auto gap-x-1.5 gap-y-0.5 pt-1"
+          >
+            <Rating :model-value="work.average_rate" :max="10" :stars="5" readonly size="sm" />
+            <Text as="span" size="sm" weight="semibold">{{ work.average_rate.toFixed(1) }}</Text>
+            <Text as="span" size="xs" tone="muted">· {{ work.rated_count }} 人评分</Text>
+          </Inline>
+          <Text v-else as="p" size="xs" tone="muted" class="mt-auto pt-1">暂无评分</Text>
+        </Stack>
+      </Inline>
+
+      <Stack
         v-if="work.intro || work.aliases.length"
-        class="mt-2.5 border-t border-surface-100 pt-2.5 dark:border-surface-800"
+        gap="none"
+        class="mt-2.5 border-t border-line pt-2.5"
       >
-        <p v-if="work.intro" class="line-clamp-3 text-xs leading-relaxed text-muted-color">
+        <Text v-if="work.intro" as="p" size="xs" tone="muted" class="line-clamp-3 leading-relaxed">
           {{ work.intro }}
-        </p>
-        <p v-if="work.aliases.length" class="text-muted-color/80 mt-1.5 line-clamp-1 text-[11px]">
+        </Text>
+        <Text v-if="work.aliases.length" as="p" size="xs" tone="faint" class="mt-1.5 line-clamp-1">
           别名：{{ work.aliases.join(' / ') }}
-        </p>
-      </div>
-    </NuxtLink>
-  </div>
+        </Text>
+      </Stack>
+    </Link>
+  </Stack>
 </template>

@@ -88,7 +88,12 @@ export const mention: EditorPlugin = {
               }
             }
           },
-          render: createMentionSuggestionRender(loadingRef, resolvedRef, mentionSuggestionKey),
+          render: createMentionSuggestionRender(
+            ctx.ownerId,
+            loadingRef,
+            resolvedRef,
+            mentionSuggestionKey,
+          ),
           command: ({
             editor,
             range,

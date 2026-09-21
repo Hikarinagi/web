@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { DescriptionDetails, DescriptionList, DescriptionTerm, Panel, Stack } from '@hina-ui/vue'
   import type { SpacePageData } from '~~/server/api/pages/space/[id].get'
 
   defineOptions({ name: 'SpaceSidebar' })
@@ -40,28 +41,29 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <Stack gap="lg">
     <SpaceSidebarCheckIn v-if="isSelf && status" :status="status" />
 
-    <FeedSidebarPanel title="资料">
-      <dl class="flex flex-col gap-3 px-4 pb-4">
-        <div
-          v-for="row in infoRows"
-          :key="row.label"
-          class="flex items-center justify-between text-sm"
-        >
-          <dt class="text-muted-color">{{ row.label }}</dt>
-          <dd class="font-semibold text-color">{{ row.value }}</dd>
-        </div>
-      </dl>
-    </FeedSidebarPanel>
+    <Panel title="资料" :padded="false">
+      <DescriptionList
+        class="grid grid-cols-2 gap-y-3 px-(--hn-panel-p) pb-(--hn-panel-p) text-sm [&>dd]:m-0! [&>dt]:m-0!"
+      >
+        <template v-for="row in infoRows" :key="row.label">
+          <DescriptionTerm class="font-normal text-muted">{{ row.label }}</DescriptionTerm>
+          <DescriptionDetails class="text-end font-semibold text-fg">
+            {{ row.value }}
+          </DescriptionDetails>
+        </template>
+      </DescriptionList>
+    </Panel>
 
-    <FeedSidebarPanel
+    <Panel
       v-if="going.items.length"
       title="正在玩 · 正在读"
       :count="going.meta.total_items"
+      :padded="false"
     >
       <FeedSidebarStatusBoard :items="going.items" />
-    </FeedSidebarPanel>
-  </div>
+    </Panel>
+  </Stack>
 </template>

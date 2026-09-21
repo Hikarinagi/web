@@ -1,13 +1,21 @@
 import { createRequire } from 'node:module'
 import tailwindcss from '@tailwindcss/vite'
-import HikarinagiTheme from './app/theme'
-import zhCN from 'primelocale/zh-CN.json'
 
 const requirePkg = createRequire(import.meta.url)
 const ritoVersion = {
   core: (requirePkg('@ritojs/core/package.json') as { version: string }).version,
   kit: (requirePkg('@ritojs/kit/package.json') as { version: string }).version,
 }
+
+const openSpec = requirePkg('@hikarinagi/api-contract/openapi/open.json') as {
+  paths: Record<string, Record<string, { operationId?: string }>>
+}
+const apiReferenceRoutes = Object.values(openSpec.paths).flatMap(methods =>
+  Object.values(methods)
+    .map(operation => operation.operationId)
+    .filter((id): id is string => Boolean(id))
+    .map(id => `/developers/api/${id}`),
+)
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -22,11 +30,12 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     'notivue/nuxt',
     'motion-v/nuxt',
-    '@primevue/nuxt-module',
     '@vueuse/nuxt',
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
     'nuxt-schema-org',
+    '@nuxt/content',
+    '@hikarinagi/apm-browser/nuxt',
   ],
 
   site: { url: 'https://www.hikarinagi.org', name: 'Hikarinagi' },
@@ -62,6 +71,13 @@ export default defineNuxtConfig({
     disallow: ['/auth', '/login', '/register'],
   },
 
+  nitro: {
+    prerender: {
+      crawlLinks: false,
+      routes: ['/developers/api', ...apiReferenceRoutes],
+    },
+  },
+
   icon: {
     serverBundle: {
       collections: ['simple-icons'],
@@ -85,7 +101,17 @@ export default defineNuxtConfig({
     ],
   },
 
+  content: {
+    renderer: { anchorLinks: false },
+  },
+
   components: [
+    {
+      path: '~/components/content',
+      pathPrefix: false,
+      global: true,
+      pattern: '*.vue',
+    },
     {
       path: '~/components/ui',
       pathPrefix: false,
@@ -94,7 +120,7 @@ export default defineNuxtConfig({
     {
       path: '~/components',
       pattern: '**/*.vue',
-      ignore: ['ui/**', 'hikari-editor/legacy/**'],
+      ignore: ['ui/**', 'content/**', 'hikari-editor/legacy/**'],
     },
   ],
 
@@ -162,34 +188,6 @@ export default defineNuxtConfig({
 
   image: {
     provider: 'none',
-  },
-
-  primevue: {
-    autoImport: false,
-    components: {
-      exclude: ['Editor', 'Chart', 'Image', 'ProgressSpinner'],
-      name: item => {
-        if (item.name === 'Button') return 'PrimeButton'
-        if (item.name === 'Avatar') return 'PrimeAvatar'
-        if (item.name === 'ConfirmDialog') return 'PrimeConfirmDialog'
-        if (item.name === 'Dialog') return 'PrimeDialog'
-        if (item.name === 'Paginator') return 'PrimePaginator'
-        return item.name
-      },
-    },
-    directives: {
-      exclude: ['Tooltip'],
-    },
-    options: {
-      ripple: true,
-      theme: {
-        preset: HikarinagiTheme,
-        options: {
-          darkModeSelector: '.dark',
-        },
-      },
-      locale: zhCN['zh-CN'],
-    },
   },
 
   notivue: {

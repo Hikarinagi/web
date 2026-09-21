@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Card, Inline, Link, Rating, Space, Spoiler, Stack, Tag, Text } from '@hina-ui/vue'
   import { BookText, Clock, Star } from '@lucide/vue'
   import {
     LIGHT_NOVEL_RATE_DIMENSIONS,
@@ -9,10 +10,12 @@
   import { pickRateDimensions } from '~/features/rate/dimensions'
   import { LIGHT_NOVEL_STATUS_ICON as STATUS_ICON } from '~/features/rate/status-icon'
   import { useRateVote } from '~/features/light-novel/useRateVote'
+  import { ratePath } from '~/features/rate/permalink'
   import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'LightNovelRatesItem' })
   const props = defineProps<{ rate: LightNovelRateListItem; lightNovelId: number }>()
+  const permalink = computed(() => ratePath('LIGHT_NOVEL', props.lightNovelId, props.rate.id))
 
   const { vote, votingKind } = useRateVote(props.lightNovelId)
 
@@ -29,80 +32,114 @@
 </script>
 
 <template>
-  <article
-    class="mb-4 flex break-inside-avoid flex-col gap-3.5 rounded-xl border border-surface-200 bg-surface-0 p-4 dark:border-surface-800 dark:bg-surface-900"
-  >
-    <div class="flex items-center gap-3">
-      <Avatar :user="rate.rater" card shape="circle" class="size-10! shrink-0" />
-      <div class="flex min-w-0 flex-1 flex-col gap-1">
-        <div class="flex flex-wrap items-center gap-2">
-          <UserName
-            :user="rate.rater"
-            class="text-sm font-medium text-surface-900 dark:text-surface-0"
-          />
+  <Card as="article" class="mb-4 break-inside-avoid">
+    <Stack gap="sm">
+      <Inline gap="sm" align="center" :wrap="false">
+        <Avatar :user="rate.rater" card class="size-10! shrink-0" />
+
+        <Inline gap="sm" align="center" wrap class="min-w-0 flex-1">
+          <UserName :user="rate.rater" class="text-sm font-medium" />
           <NuxtLink
             v-if="rate.volume"
+            v-slot="{ href, navigate }"
             :to="`/light-novel-volumes/${rate.volume.id}`"
-            class="inline-flex items-center gap-1 rounded-md border border-surface-200 bg-surface-100 px-2 py-0.5 text-[11px] font-medium text-surface-600 transition-colors hover:text-hikari-primary-600 dark:border-surface-700 dark:bg-surface-800 dark:text-surface-300 dark:hover:text-hikari-primary-400"
+            custom
           >
-            <BookText class="size-[11px]" />
-            {{ volumeLabel }}
+            <Tag
+              as="a"
+              :href="href"
+              variant="outline"
+              class="hover:text-accent-text"
+              @click="navigate"
+            >
+              <BookText />
+              {{ volumeLabel }}
+            </Tag>
           </NuxtLink>
-          <span
-            v-if="highlyRated"
-            class="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300"
-          >
-            <Star class="size-[11px] fill-amber-400 text-amber-400" />
+          <Tag v-if="highlyRated" tone="warning">
+            <Star class="fill-warning text-warning" />
             高赞
-          </span>
-        </div>
-        <div class="flex items-center gap-2 text-[11px] text-surface-500 dark:text-surface-400">
-          <span v-if="readHours" class="flex items-center gap-1">
-            <Clock class="size-[11px]" />
-            {{ readHours }} 小时
-          </span>
-          <span v-if="readHours" class="text-surface-300 dark:text-surface-600">·</span>
-          <span v-if="rate.status" class="flex items-center gap-1">
-            <component :is="STATUS_ICON[rate.status]" class="size-[11px]" />
-            {{ LIGHT_NOVEL_STATUS_LABEL[rate.status] }}
-          </span>
-          <span v-if="rate.status" class="text-surface-300 dark:text-surface-600">·</span>
-          <span>{{ timeFromNow(rate.created_at) }}</span>
-        </div>
-      </div>
-      <span v-if="rate.rate != null" class="flex shrink-0 items-center gap-1">
-        <Star class="size-3.5 fill-amber-400 text-amber-400" />
-        <span class="text-base font-semibold text-surface-900 tabular-nums dark:text-surface-0">
-          {{ rate.rate }}
-        </span>
-      </span>
-    </div>
+          </Tag>
+        </Inline>
 
-    <RateDimensionChips :dimensions="dimensions" />
+        <Inline v-if="rate.rate != null" gap="xs" align="center" :wrap="false" class="shrink-0">
+          <Rating :model-value="rate.rate" :max="10" :stars="5" readonly size="sm" />
+          <Text as="span" size="base" weight="semibold" class="tabular-nums">{{ rate.rate }}</Text>
+        </Inline>
+      </Inline>
 
-    <p
-      v-if="rate.rate_content"
-      class="text-sm leading-[22px] wrap-anywhere text-surface-700 dark:text-surface-300"
-    >
-      <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
-      <template v-else>{{ rate.rate_content }}</template>
-    </p>
+      <Inline gap="xs" align="center" wrap>
+        <Text
+          v-if="readHours"
+          as="span"
+          size="xs"
+          tone="muted"
+          class="inline-flex shrink-0 items-center gap-1"
+        >
+          <Clock class="size-3" />
+          {{ readHours }} 小时
+        </Text>
+        <Text v-if="readHours" as="span" size="xs" tone="faint">·</Text>
+        <Text
+          v-if="rate.status"
+          as="span"
+          size="xs"
+          tone="muted"
+          class="inline-flex shrink-0 items-center gap-1"
+        >
+          <component :is="STATUS_ICON[rate.status]" class="size-3" />
+          {{ LIGHT_NOVEL_STATUS_LABEL[rate.status] }}
+        </Text>
+        <Text v-if="rate.status" as="span" size="xs" tone="faint">·</Text>
+        <NuxtLink v-slot="{ href, navigate }" :to="permalink" custom>
+          <Link
+            :href="href ?? undefined"
+            tone="neutral"
+            :underline="false"
+            class="shrink-0 text-xs text-muted"
+            @click="navigate"
+          >
+            {{ timeFromNow(rate.created_at) }}
+          </Link>
+        </NuxtLink>
+      </Inline>
 
-    <div class="flex items-center gap-4">
-      <Button
-        login-required
-        text
-        size="small"
-        :severity="rate.my_value === 1 ? undefined : 'secondary'"
-        :loading="votingKind === 'like'"
-        :disabled="!!votingKind"
-        :label="rate.like_count.toString()"
-        class="-mx-2 -my-1 gap-1.5! px-2! py-1! text-xs! font-semibold! hover:bg-transparent! active:bg-transparent!"
-        :class="{ 'hover:text-surface-700! dark:hover:text-surface-200!': rate.my_value !== 1 }"
-        @click="vote(rate, 'like')"
+      <RateDimensionChips :dimensions="dimensions" />
+
+      <Text
+        v-if="rate.rate_content"
+        as="p"
+        size="sm"
+        class="leading-relaxed wrap-anywhere whitespace-pre-wrap"
       >
-        <template #icon><InteractionLikeIcon :active="rate.my_value === 1" /></template>
-      </Button>
-    </div>
-  </article>
+        <Spoiler v-if="rate.is_spoiler">{{ rate.rate_content }}</Spoiler>
+        <template v-else>{{ rate.rate_content }}</template>
+      </Text>
+
+      <Inline gap="lg" align="center" :wrap="false">
+        <Button
+          login-required
+          variant="ghost"
+          :tone="rate.my_value === 1 ? 'accent' : 'neutral'"
+          size="sm"
+          :loading="votingKind === 'like'"
+          :disabled="!!votingKind"
+          aria-label="赞"
+          @click="vote(rate, 'like')"
+        >
+          <template #icon><InteractionLikeIcon :active="rate.my_value === 1" /></template>
+          {{ rate.like_count }}
+        </Button>
+
+        <Space />
+
+        <RateReportMenu
+          kind="light_novel_rate"
+          :work-id="lightNovelId"
+          :rate-id="rate.id"
+          :rater-id="rate.rater.id"
+        />
+      </Inline>
+    </Stack>
+  </Card>
 </template>

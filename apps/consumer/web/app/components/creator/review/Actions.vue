@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Inline, Stack, Textarea } from '@hina-ui/vue'
   import { Check, MessageSquare, X } from '@lucide/vue'
 
   const props = defineProps<{
@@ -8,11 +9,11 @@
   }>()
   const emit = defineEmits<{ reviewed: [] }>()
 
-  const confirm = useConfirm()
+  const { confirm } = useHikariConfirm()
   const body = ref('')
   const submitting = ref(false)
 
-  async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT', close?: () => void) {
+  async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT') {
     if (submitting.value) return
     submitting.value = true
     try {
@@ -30,7 +31,6 @@
         })
       }
       body.value = ''
-      close?.()
       emit('reviewed')
     } catch (error) {
       emit('reviewed')
@@ -48,55 +48,48 @@
     const meta =
       decision === 'APPROVE'
         ? {
-            header: '通过并合并',
-            message: `确认通过此变更请求？合并后修改将立即生效。${batchNote}`,
-            acceptLabel: '确认合并',
+            title: '通过并合并',
+            description: `确认通过此变更请求？合并后修改将立即生效。${batchNote}`,
+            confirmText: '确认合并',
           }
         : {
-            header: '驳回变更请求',
-            message: `确认驳回此变更请求？驳回后该请求将关闭，作者需重新发起新的变更请求。${batchNote}`,
-            acceptLabel: '确认驳回',
+            title: '驳回变更请求',
+            description: `确认驳回此变更请求？驳回后该请求将关闭，作者需重新发起新的变更请求。${batchNote}`,
+            confirmText: '确认驳回',
           }
-    confirm.require({
-      group: 'app-shell',
+    confirm({
       ...meta,
-      rejectLabel: '取消',
-      closeOnEscape: false,
-      loading: () => submitting.value,
-      onAccept: ({ close }) => void submitReview(decision, close).catch(() => {}),
+      cancelText: '取消',
+      onConfirm: () => submitReview(decision),
     })
   }
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
-    <Textarea v-model="body" rows="3" placeholder="审核意见（可选，驳回时建议填写理由）" fluid />
-    <div class="flex flex-wrap justify-end gap-2">
+  <Stack gap="sm">
+    <Textarea
+      v-model="body"
+      :rows="3"
+      placeholder="审核意见（可选，驳回时建议填写理由）"
+      class="w-full"
+    />
+    <Inline gap="sm" justify="end">
       <Button
-        label="评论"
-        severity="secondary"
+        tone="neutral"
         :disabled="submitting || !body.trim()"
         @click="submitReview('COMMENT')"
       >
-        <template #icon>
-          <MessageSquare :size="15" />
-        </template>
+        <template #icon><MessageSquare /></template>
+        评论
       </Button>
-      <Button
-        label="驳回"
-        severity="danger"
-        :disabled="submitting"
-        @click="confirmReview('REJECT')"
-      >
-        <template #icon>
-          <X :size="15" />
-        </template>
+      <Button tone="danger" :disabled="submitting" @click="confirmReview('REJECT')">
+        <template #icon><X /></template>
+        驳回
       </Button>
-      <Button label="通过并合并" :disabled="submitting" @click="confirmReview('APPROVE')">
-        <template #icon>
-          <Check :size="15" />
-        </template>
+      <Button :disabled="submitting" @click="confirmReview('APPROVE')">
+        <template #icon><Check /></template>
+        通过并合并
       </Button>
-    </div>
-  </div>
+    </Inline>
+  </Stack>
 </template>

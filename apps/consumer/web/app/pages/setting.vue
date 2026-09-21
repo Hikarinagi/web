@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Flex, Heading, Stack, Text } from '@hina-ui/vue'
   import { SETTING_ME_KEY } from '~/features/space/setting-context'
 
   defineOptions({ name: 'PageSpaceSetting' })
@@ -23,20 +24,24 @@
 </script>
 
 <template>
-  <div v-if="data" class="py-8">
-    <header class="mb-6">
-      <h1 class="text-2xl font-bold text-color">设置</h1>
-      <p class="mt-1 text-sm text-muted-color">管理你的资料、账号安全与内容偏好</p>
-    </header>
+  <Stack v-if="data" gap="lg" class="py-8">
+    <Stack as="header" gap="xs">
+      <Heading :level="1" size="2xl" class="font-bold">设置</Heading>
+      <Text size="sm" tone="muted">管理你的资料、账号安全与内容偏好</Text>
+    </Stack>
 
-    <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-      <aside class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-56 lg:shrink-0">
+    <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start lg:gap-8">
+      <Stack
+        as="aside"
+        gap="none"
+        class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)] lg:w-56 lg:shrink-0"
+      >
         <SpaceSettingNav />
-      </aside>
+      </Stack>
 
-      <div class="min-w-0 flex-1">
+      <Stack gap="none" class="min-w-0 flex-1">
         <NuxtPage />
-      </div>
-    </div>
-  </div>
+      </Stack>
+    </Flex>
+  </Stack>
 </template>

@@ -1,18 +1,11 @@
 <script setup lang="ts">
+  import { IconButton } from '@hina-ui/vue'
+
   const { current, cycle } = useThemeMode()
 </script>
 
 <template>
-  <Button
-    v-tooltip="current.label"
-    :aria-label="current.label"
-    rounded
-    severity="secondary"
-    variant="text"
-    @click="cycle"
-  >
-    <template #icon>
-      <component :is="current.icon" class="text-color" aria-hidden="true" />
-    </template>
-  </Button>
+  <IconButton :label="current.label" pill @click="cycle">
+    <component :is="current.icon" aria-hidden="true" />
+  </IconButton>
 </template>

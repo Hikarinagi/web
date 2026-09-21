@@ -1,20 +1,22 @@
 <script setup lang="ts">
+  import { Inline, Skeleton, Stack } from '@hina-ui/vue'
+
   defineOptions({ name: 'CommentItemSkeleton' })
 </script>
 
 <template>
-  <div class="flex gap-3.5">
-    <Skeleton shape="circle" size="2.25rem" />
-    <div class="flex-1 space-y-2">
-      <div class="flex gap-2">
-        <Skeleton width="80px" height="0.875rem" />
-        <Skeleton width="50px" height="0.75rem" />
-      </div>
-      <Skeleton width="100%" height="0.75rem" />
-      <Skeleton width="65%" height="0.75rem" />
-      <div class="flex gap-3 pt-1">
-        <Skeleton v-for="j in 3" :key="j" width="36px" height="0.75rem" />
-      </div>
-    </div>
-  </div>
+  <Inline gap="sm" align="start" :wrap="false">
+    <Skeleton class="size-9 shrink-0 rounded-full" />
+    <Stack gap="sm" class="min-w-0 flex-1">
+      <Inline gap="sm" align="center">
+        <Skeleton class="h-3.5 w-20" />
+        <Skeleton class="h-3 w-12.5" />
+      </Inline>
+      <Skeleton class="h-3 w-full" />
+      <Skeleton class="h-3 w-2/3" />
+      <Inline gap="sm" class="pt-1">
+        <Skeleton v-for="j in 3" :key="j" class="h-3 w-9" />
+      </Inline>
+    </Stack>
+  </Inline>
 </template>

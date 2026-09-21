@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getCoverMediaLayout } from '~/utils/media/layout'
 
@@ -13,12 +14,12 @@
 </script>
 
 <template>
-  <div class="relative mx-auto w-48 shrink-0 sm:w-56">
+  <Stack gap="none" class="relative mx-auto w-48 shrink-0 sm:w-56">
     <HikariImage
       :src="cover"
       :alt="title"
-      class="rounded-xl shadow-[0_14px_44px_rgba(15,23,42,0.22)] ring-1 ring-black/5 dark:ring-white/10"
-      :style="{ aspectRatio: layout.aspectRatio }"
+      class="rounded-xl shadow-hikari-cover-sm ring-1 ring-black/5 dark:ring-white/10"
+      :ratio="layout.ratio"
       image-class="object-cover"
       :processing="layout.processing"
       :preload="{ fetchPriority: 'high' }"
@@ -27,5 +28,5 @@
       <template #empty><MangaCoverFallback :title="title" /></template>
       <template #error><MangaCoverFallback :title="title" /></template>
     </HikariImage>
-  </div>
+  </Stack>
 </template>

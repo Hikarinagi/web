@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack, Text } from '@hina-ui/vue'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { entityHref, type SearchHit } from '~/features/search/search'
 
@@ -6,24 +7,31 @@
 </script>
 
 <template>
-  <NuxtLink :to="entityHref(hit)" class="group flex w-full flex-col items-center gap-2 text-center">
+  <NuxtLink
+    :to="entityHref(hit)"
+    class="group flex w-full hn-interactive flex-col items-center gap-2 text-center hn-press-none"
+  >
     <HikariImage
       :src="hit.cover"
       :alt="hit.title"
-      class="size-20 rounded-full border border-surface-200 bg-surface-100 dark:border-surface-800 dark:bg-surface-800"
+      class="size-20 rounded-full border border-line bg-subtle"
       image-class="object-cover object-top"
       preset="avatar"
       :fallback-src="ENTITY_FALLBACK_IMAGE"
     />
-    <div class="flex w-full flex-col gap-0.5">
-      <p
-        class="truncate text-sm font-medium text-surface-900 transition-colors group-hover:text-hikari-primary-600 dark:text-surface-100 dark:group-hover:text-hikari-primary-400"
+    <Stack gap="none" class="w-full gap-0.5">
+      <Text
+        as="span"
+        size="sm"
+        weight="medium"
+        truncate
+        class="hn-transition group-hover:text-accent-text"
       >
         {{ hit.title }}
-      </p>
-      <p v-if="hit.subtitle" class="truncate text-xs text-surface-500 dark:text-surface-400">
+      </Text>
+      <Text v-if="hit.subtitle" as="span" size="xs" tone="muted" truncate>
         {{ hit.subtitle }}
-      </p>
-    </div>
+      </Text>
+    </Stack>
   </NuxtLink>
 </template>

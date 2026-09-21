@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { Barcode, BookOpen, Building2, CalendarDays, ListOrdered, Tag } from '@lucide/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
 
@@ -20,39 +21,21 @@
 
 <template>
   <ResourceArchiveCard>
-    <div class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
-      <div class="flex items-center gap-2.5">
-        <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ publicationText }}</span>
-      </div>
-      <div v-if="volume.page_count" class="flex items-center gap-2.5">
-        <BookOpen class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ volume.page_count }} 页</span>
-      </div>
-      <div v-if="volume.chapter_count" class="flex items-center gap-2.5">
-        <ListOrdered class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          收录 {{ volume.chapter_count }} 话
-        </span>
-      </div>
-      <div v-if="volume.publisher" class="flex items-center gap-2.5">
-        <Building2 class="size-3.5 shrink-0 text-surface-400" />
-        <span class="wrap-anywhere text-surface-700 dark:text-surface-300">
-          {{ volume.publisher }}
-        </span>
-      </div>
-      <div v-if="priceText" class="flex items-center gap-2.5">
-        <Tag class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ priceText }}</span>
-      </div>
-      <div v-if="volume.isbn" class="flex items-center gap-2.5">
-        <Barcode class="size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-          {{ volume.isbn }}
-        </span>
-      </div>
+    <Stack gap="sm" class="px-5 py-3.5">
+      <ResourceArchiveRow :icon="CalendarDays">{{ publicationText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.page_count" :icon="BookOpen">
+        {{ volume.page_count }} 页
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.chapter_count" :icon="ListOrdered">
+        收录 {{ volume.chapter_count }} 话
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.publisher" :icon="Building2">
+        {{ volume.publisher }}
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="priceText" :icon="Tag">{{ priceText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volume.isbn" :icon="Barcode">{{ volume.isbn }}</ResourceArchiveRow>
       <MangaEditionList v-if="volume.editions?.length" :editions="volume.editions" />
-    </div>
+    </Stack>
 
     <template #footer>
       <ResourceArchiveContributorFooter

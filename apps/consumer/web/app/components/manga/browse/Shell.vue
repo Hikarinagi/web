@@ -1,7 +1,11 @@
 <script setup lang="ts">
   import type { MangasBrowsePageData } from '~~/server/api/pages/mangas/browse.get'
   import type { MangaBrowseState } from '~/features/manga/explore'
+  import { BookImage } from '@lucide/vue'
+  import { overlayText, subText, titleOf } from '~/features/manga/explore'
+  import { topVotedMedia } from '~/utils/media/image'
   import { BROWSE_FILTER_KEY, useBrowseFilter } from '~/features/manga/useBrowseFilter'
+  import { BROWSE_FILTER_RECALL_KEY } from '~/features/browse/filter'
 
   defineOptions({ name: 'MangaBrowseShell' })
   const props = defineProps<{
@@ -25,6 +29,7 @@
     { immediate: true },
   )
   provide(BROWSE_FILTER_KEY, filter)
+  provide(BROWSE_FILTER_RECALL_KEY, filter)
 
   function clearFilters() {
     emit('update', {
@@ -42,33 +47,34 @@
 </script>
 
 <template>
-  <div class="mx-auto flex max-w-app flex-col gap-5 px-6 py-10">
-    <div class="flex flex-col gap-1">
-      <h1 class="text-2xl font-bold text-surface-950 dark:text-white">漫画图鉴</h1>
-      <p class="text-sm text-surface-600 dark:text-surface-400">
-        浏览 Hikarinagi 数据库中的所有漫画条目
-      </p>
-    </div>
-
-    <MangaBrowseToolbar
-      :state="state"
-      :total="data.list.meta.total_items"
-      :disabled="pending"
-      @update="emit('update', $event)"
-    />
-
-    <MangaBrowseChipsBar />
-
-    <div id="manga-browse-list" data-list-wrapper class="flex flex-col gap-5">
-      <MangaBrowseGrid :list="data.list" :pending="pending" @clear="clearFilters" />
-
-      <Paginator
-        :meta="data.list.meta"
-        :loading="pending"
-        route="push"
-        align="center"
-        scroll-target="#manga-browse-list"
+  <BrowsePageShell
+    title="漫画图鉴"
+    description="浏览 Hikarinagi 数据库中的所有漫画条目"
+    list-id="manga-browse-list"
+    :items="data.list.items"
+    :meta="data.list.meta"
+    :icon="BookImage"
+    empty-title="没有符合条件的漫画"
+    :pending="pending"
+    @clear="clearFilters"
+  >
+    <template #filters>
+      <MangaBrowseToolbar
+        :state="state"
+        :total="data.list.meta.total_items"
+        :disabled="pending"
+        @update="emit('update', $event)"
       />
-    </div>
-  </div>
+    </template>
+
+    <template #card="{ item }">
+      <BrowseWorkCard
+        :to="`/mangas/${item.id}`"
+        :title="titleOf(item)"
+        :sub="subText(item)"
+        :cover="topVotedMedia(item.covers)"
+        :overlay="overlayText(item)"
+      />
+    </template>
+  </BrowsePageShell>
 </template>

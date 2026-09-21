@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Inline, Link, Stack } from '@hina-ui/vue'
   import {
     Building2,
     CalendarDays,
@@ -60,83 +61,56 @@
 
 <template>
   <ResourceArchiveCard>
-    <div class="flex flex-col gap-2.5 px-5 py-3.5 text-[13px]">
-      <div v-if="galgame.adv_type" class="flex items-center gap-2.5">
-        <Tag class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ galgame.adv_type }}</span>
-      </div>
-      <div class="flex items-center gap-2.5">
-        <CalendarDays class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ releaseText }}</span>
-      </div>
-      <div v-if="platformsText" class="flex items-center gap-2.5">
-        <Monitor class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ platformsText }}</span>
-      </div>
-      <div v-if="galgame.origin_lang" class="flex items-center gap-2.5">
-        <Languages class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">
-          {{ langLabel(galgame.origin_lang) }}
-        </span>
-      </div>
-      <div v-if="galgame.engine" class="flex items-center gap-2.5">
-        <Cpu class="size-3.5 shrink-0 text-surface-400" />
-        <span class="text-surface-700 dark:text-surface-300">{{ galgame.engine }}</span>
-      </div>
-      <div v-if="priceText" class="flex items-start gap-2.5">
-        <Coins class="mt-0.5 size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-          {{ priceText }}
-        </span>
-      </div>
-      <div v-for="g in producerGroups" :key="g.label" class="flex items-center gap-2.5">
-        <Building2 class="size-3.5 shrink-0 text-surface-400" />
-        <span class="flex min-w-0 items-center gap-1.5">
-          <span class="shrink-0 text-xs text-surface-400">{{ g.label }}</span>
-          <span class="min-w-0 wrap-anywhere text-surface-700 dark:text-surface-300">
-            {{ g.text }}
-          </span>
-        </span>
-      </div>
-      <div v-if="galgame.homepage" class="flex items-center gap-2.5">
-        <Link2 class="size-3.5 shrink-0 text-surface-400" />
-        <a
+    <Stack gap="sm" class="px-5 py-3.5">
+      <ResourceArchiveRow v-if="galgame.adv_type" :icon="Tag">{{
+        galgame.adv_type
+      }}</ResourceArchiveRow>
+      <ResourceArchiveRow :icon="CalendarDays">{{ releaseText }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="platformsText" :icon="Monitor">{{
+        platformsText
+      }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="galgame.origin_lang" :icon="Languages">
+        {{ langLabel(galgame.origin_lang) }}
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="galgame.engine" :icon="Cpu">{{
+        galgame.engine
+      }}</ResourceArchiveRow>
+      <ResourceArchiveRow v-if="priceText" :icon="Coins" align="start">{{
+        priceText
+      }}</ResourceArchiveRow>
+      <ResourceArchiveRow
+        v-for="g in producerGroups"
+        :key="g.label"
+        :icon="Building2"
+        :label="g.label"
+      >
+        {{ g.text }}
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="galgame.homepage" :icon="Link2">
+        <Link
+          as="a"
           :href="galgame.homepage"
           target="_blank"
           rel="noopener noreferrer"
-          class="truncate text-sky-700 hover:underline dark:text-sky-400"
+          class="truncate"
         >
           {{ homepageText }}
-        </a>
-      </div>
-      <div v-if="galgame.aliases.length" class="flex items-start gap-2.5">
-        <Tags class="mt-0.5 size-3.5 shrink-0 text-surface-400" />
-        <span class="min-w-0 wrap-anywhere text-surface-600 dark:text-surface-400">
-          {{ aliasesText }}
-        </span>
-      </div>
-    </div>
+        </Link>
+      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="galgame.aliases.length" :icon="Tags" align="start">
+        {{ aliasesText }}
+      </ResourceArchiveRow>
+    </Stack>
 
-    <div v-if="galgame.vndb_id || galgame.bangumi_game_id" class="flex gap-2 px-5 pb-4">
-      <a
-        v-if="vndbUrl"
-        :href="vndbUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md border border-surface-200 px-2.5 py-1 text-[11px] font-semibold text-surface-600 transition-colors hover:bg-surface-50 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800"
-      >
-        VNDB
-      </a>
-      <a
+    <Inline v-if="galgame.vndb_id || galgame.bangumi_game_id" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip v-if="vndbUrl" :href="vndbUrl">VNDB</ResourceArchiveExternalChip>
+      <ResourceArchiveExternalChip
         v-if="galgame.bangumi_game_id"
         :href="`https://bgm.tv/subject/${galgame.bangumi_game_id}`"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="rounded-md border border-surface-200 px-2.5 py-1 text-[11px] font-semibold text-surface-600 transition-colors hover:bg-surface-50 dark:border-surface-700 dark:text-surface-300 dark:hover:bg-surface-800"
       >
         Bangumi
-      </a>
-    </div>
+      </ResourceArchiveExternalChip>
+    </Inline>
 
     <template #footer>
       <ResourceArchiveContributorFooter

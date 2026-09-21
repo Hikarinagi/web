@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Center, Stack, Text } from '@hina-ui/vue'
   import type { Component } from 'vue'
   import { cn } from '~/utils/cn'
 
@@ -37,28 +38,35 @@
 </script>
 
 <template>
-  <div class="absolute inset-0 z-50 overflow-y-auto bg-black/72">
-    <div
-      class="flex min-h-full flex-col items-center justify-center gap-4 px-6 py-10 sm:relative sm:block sm:h-full sm:min-h-0 sm:p-0"
+  <Stack gap="none" class="absolute inset-0 z-50 overflow-y-auto bg-black/72">
+    <Stack
+      gap="md"
+      align="center"
+      justify="center"
+      class="min-h-full px-6 py-10 sm:relative sm:block sm:h-full sm:min-h-0 sm:p-0"
     >
-      <div
+      <Stack
         v-for="hint in hints"
         :key="hint.key"
+        gap="xs"
+        align="center"
         :class="
           cn(
-            'flex w-60 flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-[#0a0d12]/92 px-6 py-5 text-center',
+            'w-60 rounded-xl border border-white/10 bg-hikari-reader-overlay/92 px-6 py-5 text-center',
             PLACEMENT_CLASS[hint.placement],
           )
         "
       >
         <component :is="hint.icon" v-if="hint.icon" :size="22" class="text-primary" aria-hidden />
-        <p class="text-sm font-semibold text-white">{{ hint.title }}</p>
-        <p v-if="hint.description" class="text-xs text-[#8b95a6]">{{ hint.description }}</p>
-      </div>
+        <Text as="p" size="sm" weight="semibold" class="text-white">{{ hint.title }}</Text>
+        <Text v-if="hint.description" as="p" size="xs" class="text-hikari-reader-overlay-muted">
+          {{ hint.description }}
+        </Text>
+      </Stack>
 
-      <div class="sm:absolute sm:bottom-[16%] sm:left-1/2 sm:-translate-x-1/2">
-        <Button rounded :label="confirmLabel" @click="emit('dismiss')" />
-      </div>
-    </div>
-  </div>
+      <Center class="sm:absolute sm:bottom-[16%] sm:left-1/2 sm:-translate-x-1/2">
+        <Button pill @click="emit('dismiss')">{{ confirmLabel }}</Button>
+      </Center>
+    </Stack>
+  </Stack>
 </template>

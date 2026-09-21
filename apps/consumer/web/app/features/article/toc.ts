@@ -6,6 +6,23 @@ export interface TocEntry {
   level: number
 }
 
+export interface TocAnchorItem {
+  id: string
+  label: string
+  children?: TocAnchorItem[]
+}
+
+export function tocAnchorItems(entries: TocEntry[]): TocAnchorItem[] {
+  const out: TocAnchorItem[] = []
+  for (const entry of entries) {
+    const node: TocAnchorItem = { id: entry.id, label: entry.text }
+    const parent = entry.level === 3 ? out.at(-1) : null
+    if (parent) (parent.children ??= []).push(node)
+    else out.push(node)
+  }
+  return out
+}
+
 type DocNode = {
   type?: string
   attrs?: Record<string, unknown> | null

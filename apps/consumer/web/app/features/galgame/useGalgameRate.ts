@@ -1,7 +1,7 @@
 import type { GalgameRate, GalgameRateStatus, UpsertGalgameRateBody } from './rate'
 
 export function useGalgameRate(galgameId: number, initial: GalgameRate | null) {
-  const rate = ref<GalgameRate | null>(initial)
+  const rate = useState<GalgameRate | null>(`galgame-rate-${galgameId}`, () => initial)
   const pending = ref(false)
   const status = computed(() => rate.value?.status ?? null)
   const statusPrivate = computed(() => rate.value?.status_private ?? false)

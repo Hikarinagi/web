@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Button, Code, Grid, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Home, RefreshCw } from '@lucide/vue'
   import type { NuxtError } from '#app'
   import { isRecord } from '#shared/utils/record'
@@ -45,8 +46,8 @@
   })
   const mainClass = computed(() =>
     cn(
-      'mx-auto min-h-[calc(100vh-4rem)] max-w-app px-6',
-      'grid w-full items-center justify-items-center gap-8 text-center md:grid-cols-[minmax(0,0.95fr)_minmax(320px,1.05fr)] md:justify-items-stretch md:text-left',
+      'mx-auto max-w-app px-6',
+      'w-full items-center justify-items-center gap-8 text-center md:grid-cols-2 md:justify-items-stretch md:text-left',
       props.showHeader
         ? 'min-h-[calc(100dvh-var(--app-header-height))] pt-(--app-header-height)'
         : 'min-h-dvh',
@@ -77,59 +78,63 @@
 
 <template>
   <LayoutAppHeader v-if="showHeader" />
-  <main :class="mainClass">
-    <div class="flex max-w-xl flex-col items-center md:items-start">
-      <Tag :value="String(statusCode)" :severity="isNotFound ? 'info' : 'danger'" class="mb-5" />
-      <h1 class="text-4xl leading-tight font-semibold sm:text-5xl">
+  <Grid as="main" :cols="1" gap="none" :class="mainClass">
+    <Stack gap="none" align="center" class="max-w-xl md:items-start">
+      <Tag :tone="isNotFound ? 'info' : 'danger'" size="md" class="mb-5">{{ statusCode }}</Tag>
+      <Heading :level="1" class="text-4xl leading-tight font-semibold sm:text-5xl">
         {{ title }}
-      </h1>
-      <p class="mt-4 max-w-lg text-base leading-7 text-surface-600 dark:text-surface-300">
+      </Heading>
+      <Text as="p" size="base" tone="muted" class="mt-4 max-w-lg leading-7">
         {{ description }}
-      </p>
-      <p
-        v-if="requestId"
-        class="mt-4 flex max-w-lg items-center gap-2 text-xs text-surface-500 dark:text-surface-400"
-      >
-        <span class="shrink-0">Request ID</span>
-        <code
-          class="truncate rounded bg-surface-100 px-2 py-1 font-mono text-[11px] text-surface-700 dark:bg-surface-800 dark:text-surface-200"
-        >
-          {{ requestId }}
-        </code>
-      </p>
-      <p
+      </Text>
+
+      <Inline v-if="requestId" gap="sm" align="center" :wrap="false" class="mt-4 max-w-lg">
+        <Text as="span" size="xs" tone="muted" class="shrink-0">Request ID</Text>
+        <Code class="truncate text-xs">{{ requestId }}</Code>
+      </Inline>
+
+      <Text
         v-if="detail"
-        class="mt-5 max-w-lg rounded-md border border-surface-200 bg-surface-50 px-4 py-3 text-left text-sm leading-6 text-surface-600 dark:border-surface-800 dark:bg-surface-900 dark:text-surface-300"
+        as="p"
+        size="sm"
+        tone="muted"
+        class="mt-5 max-w-lg rounded-md border border-line bg-subtle px-4 py-3 text-left leading-6"
       >
         {{ detail }}
-      </p>
+      </Text>
 
-      <div class="mt-8 flex w-auto items-center gap-3">
-        <Button label="返回首页" @click="goHome">
+      <Inline class="mt-8">
+        <Button @click="goHome">
           <template #icon>
-            <Home :size="17" aria-hidden="true" />
+            <Home aria-hidden="true" />
           </template>
+          返回首页
         </Button>
-        <Button label="重新加载" severity="secondary" outlined @click="reloadPage">
+        <Button variant="outline" tone="neutral" @click="reloadPage">
           <template #icon>
-            <RefreshCw :size="17" aria-hidden="true" />
+            <RefreshCw aria-hidden="true" />
           </template>
+          重新加载
         </Button>
-      </div>
-    </div>
+      </Inline>
+    </Stack>
 
-    <div
-      class="relative mx-auto hidden w-full max-w-[320px] items-end justify-center md:mx-0 md:flex md:max-w-none"
+    <Inline
+      gap="none"
+      align="end"
+      justify="center"
+      :wrap="false"
+      class="relative mx-auto hidden w-full max-w-80 md:mx-0 md:flex md:max-w-none"
     >
       <HikariImage
         :src="image"
         :alt="isNotFound ? '什么都没有...' : '页面加载失败'"
         class="relative aspect-square w-full overflow-visible"
-        image-class="object-contain drop-shadow-[0_28px_52px_rgba(15,23,42,0.18)] dark:drop-shadow-[0_28px_52px_rgba(0,0,0,0.42)]"
+        image-class="object-contain drop-shadow-hikari-art dark:drop-shadow-hikari-art-dark"
         :lazy="false"
         :skeleton="false"
         :preload="{ fetchPriority: 'high' }"
       />
-    </div>
-  </main>
+    </Inline>
+  </Grid>
 </template>

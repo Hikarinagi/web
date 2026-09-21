@@ -6,9 +6,9 @@
 </script>
 
 <template>
-  <ScrollArea axis="x" shadow="end" arrows class="-mx-6">
+  <ScrollRail class="-mx-6">
     <div :class="contentClass">
       <slot />
     </div>
-  </ScrollArea>
+  </ScrollRail>
 </template>

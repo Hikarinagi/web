@@ -135,6 +135,15 @@ export function useStageZoom(options: UseStageZoomOptions) {
     })
   }
 
+  function zoomBy(factor: number, point: ZoomPoint) {
+    if (!options.enabled()) return
+    const next = clamp(scale.value * factor, MIN_SCALE, MAX_SCALE)
+    if (next === scale.value) return
+    stopAnimation()
+    scaleAround(next, toCentreOffset(point))
+    clampTranslate()
+  }
+
   function beginPinch(a: ZoomPoint, b: ZoomPoint) {
     if (!options.enabled()) return
     stopAnimation()
@@ -216,6 +225,7 @@ export function useStageZoom(options: UseStageZoomOptions) {
     style,
     reset,
     toggleAt,
+    zoomBy,
     beginPinch,
     updatePinch,
     endPinch,

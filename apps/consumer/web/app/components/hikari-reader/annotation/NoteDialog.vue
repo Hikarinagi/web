@@ -1,6 +1,7 @@
 <script setup lang="ts">
+  import { computed, ref, watch } from 'vue'
+  import { Blockquote, Button, Dialog, Inline, Stack, Text, Textarea } from '@hina-ui/vue'
   import { NotebookPen } from '@lucide/vue'
-  import { ref, watch } from 'vue'
   import { DEFAULT_ANNOTATION_COLOR } from '../composables/useReaderAnnotations'
 
   defineOptions({ name: 'HikariReaderAnnotationNoteDialog' })
@@ -34,6 +35,7 @@
 
   const note = ref('')
   const color = ref<string>(DEFAULT_ANNOTATION_COLOR)
+  const creating = computed(() => props.mode === 'create')
 
   watch(visible, value => {
     if (!value) return
@@ -56,51 +58,37 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:visible="visible"
-    modal
-    :draggable="false"
-    :close-on-escape="true"
-    :dismissable-mask="true"
-    class="mx-4 w-[calc(100vw-2rem)] max-w-md"
-  >
-    <template #header>
-      <div class="flex items-center gap-2">
-        <NotebookPen :size="18" class="text-primary" aria-hidden="true" />
-        <span class="text-base font-semibold">
-          {{ mode === 'create' ? '添加标注' : '编辑标注' }}
-        </span>
-      </div>
+  <Dialog v-model:open="visible" :title="creating ? '添加标注' : '编辑标注'">
+    <template #icon><NotebookPen /></template>
+
+    <template #content>
+      <Stack gap="sm">
+        <Blockquote v-if="preview" class="line-clamp-3 text-sm">{{ preview }}</Blockquote>
+
+        <Inline
+          v-if="showColor"
+          gap="sm"
+          align="center"
+          justify="between"
+          class="rounded-md border border-line px-3 py-2"
+        >
+          <Text as="span" size="sm" tone="muted">颜色</Text>
+          <HikariReaderAnnotationColorPicker v-model="color" />
+        </Inline>
+
+        <Textarea
+          v-model="note"
+          autosize
+          autofocus
+          aria-label="标注内容"
+          placeholder="记录想法..."
+        />
+      </Stack>
     </template>
 
-    <div class="space-y-3">
-      <div v-if="preview" class="rounded-md bg-surface-100 px-3 py-2 dark:bg-surface-800">
-        <p class="line-clamp-3 text-sm leading-6 text-muted-color">
-          {{ preview }}
-        </p>
-      </div>
-      <div
-        v-if="showColor"
-        class="flex items-center justify-between gap-3 rounded-md border border-surface-200 px-3 py-2 dark:border-surface-700"
-      >
-        <span class="text-sm text-muted-color">颜色</span>
-        <HikariReaderAnnotationColorPicker v-model="color" />
-      </div>
-      <Textarea
-        v-model="note"
-        rows="3"
-        auto-resize
-        class="w-full"
-        placeholder="记录想法..."
-        autofocus
-      />
-    </div>
-
     <template #footer>
-      <div class="flex justify-end gap-2">
-        <Button label="取消" severity="secondary" variant="text" @click="cancel" />
-        <Button :label="mode === 'create' ? '添加' : '保存'" @click="submit" />
-      </div>
+      <Button variant="ghost" tone="neutral" @click="cancel">取消</Button>
+      <Button @click="submit">{{ creating ? '添加' : '保存' }}</Button>
     </template>
   </Dialog>
 </template>

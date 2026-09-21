@@ -15,9 +15,7 @@
 </script>
 
 <template>
-  <div
-    class="flex flex-wrap items-center gap-1 text-[11px] leading-none text-surface-500 dark:text-surface-400"
-  >
+  <div class="flex flex-wrap items-center gap-1 text-xs leading-none text-muted">
     <NuxtLink :to="historyTo">修订历史</NuxtLink>
     <span aria-hidden="true">/</span>
     <NuxtLink :to="editTo" target="_blank">修订此条目</NuxtLink>

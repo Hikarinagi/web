@@ -30,8 +30,8 @@
     <UserCardTrigger v-if="userId" :user-id="userId" show-on-click>
       <span
         :class="[
-          'inline-flex h-[22px] cursor-pointer items-center gap-1 rounded-full pr-2 text-sm leading-none font-medium transition-[background] duration-120 ease-out',
-          avatarSrc ? 'pl-[3px]' : 'pl-2',
+          'inline-flex h-5.5 cursor-pointer items-center gap-1 rounded-full pr-2 text-sm leading-none font-medium transition-[background] duration-120 ease-out',
+          avatarSrc ? 'pl-0.75' : 'pl-2',
           'bg-hikari-primary-50 text-hikari-primary-700 hover:bg-hikari-primary-100 active:bg-hikari-primary-200',
           'dark:bg-hikari-primary-950 dark:text-hikari-primary-300 dark:hover:bg-hikari-primary-900 dark:active:bg-hikari-primary-800',
         ]"
@@ -53,7 +53,7 @@
     </UserCardTrigger>
     <span
       v-else
-      class="inline-flex h-[22px] cursor-default items-center gap-1 rounded-full bg-(--editor-toolbar-item-hover) px-2 text-sm leading-none font-medium text-(--editor-text-muted)"
+      class="inline-flex h-5.5 cursor-default items-center gap-1 rounded-full bg-(--editor-toolbar-item-hover) px-2 text-sm leading-none font-medium text-(--editor-text-muted)"
     >
       <span class="inline-flex items-center leading-none">@?</span>
     </span>

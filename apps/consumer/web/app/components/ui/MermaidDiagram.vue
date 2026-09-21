@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { SegmentedControl } from '@hina-ui/vue'
   import { Code, Columns2, Workflow } from '@lucide/vue'
   import { layoutMermaid } from '~/features/mermaid/layout'
   import { parseMermaid } from '~/features/mermaid/parse'
@@ -32,29 +33,21 @@
 <template>
   <figure class="group/figure relative">
     <div
-      class="mode-switch absolute top-3 left-3 z-20 opacity-0 transition-opacity group-hover/figure:opacity-100 focus-within:opacity-100 max-lg:opacity-100"
+      class="absolute top-3 left-3 z-20 opacity-0 transition-opacity group-hover/figure:opacity-100 focus-within:opacity-100 max-lg:opacity-100"
     >
-      <SelectButton
-        v-model="mode"
-        :options="MODES"
-        option-label="label"
-        option-value="value"
-        :allow-empty="false"
-        size="small"
-        aria-label="视图模式"
-      >
+      <SegmentedControl v-model="mode" :options="MODES" size="sm" aria-label="视图模式">
         <template #option="{ option }">
           <component :is="option.icon" class="size-4" />
           <span class="sr-only">{{ option.label }}</span>
         </template>
-      </SelectButton>
+      </SegmentedControl>
     </div>
 
     <div class="grid gap-3" :class="mode === 'split' ? 'lg:grid-cols-2' : 'grid-cols-1'">
       <div
         v-show="mode !== 'code'"
         ref="frame"
-        class="diagram group relative touch-none overflow-hidden rounded-2xl border border-surface bg-surface-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-hikari-primary-500 dark:bg-surface-950"
+        class="group relative touch-none overflow-hidden rounded-2xl border border-line bg-canvas hikari-dot-grid focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
         :class="dragging ? 'cursor-grabbing' : 'cursor-grab'"
         :style="{ height: PANEL_HEIGHT }"
         tabindex="0"
@@ -75,16 +68,3 @@
     <figcaption class="sr-only">{{ alt }}</figcaption>
   </figure>
 </template>
-
-<style scoped>
-  .mode-switch :deep(.p-togglebutton:focus:not(:focus-visible)) {
-    outline: none;
-    box-shadow: none;
-  }
-
-  .diagram {
-    background-image: radial-gradient(currentColor 1px, transparent 1px);
-    background-size: 22px 22px;
-    color: color-mix(in oklab, var(--p-surface-500) 22%, transparent);
-  }
-</style>

@@ -1,4 +1,3 @@
-import { valibotResolver } from '@primevue/forms/resolvers/valibot'
 import * as v from 'valibot'
 import { EMOJI_MAX_FILE_BYTES, EMOJI_NAME_REGEX } from '../constants'
 
@@ -22,8 +21,6 @@ const nameField = v.pipe(
 
 export const emojiUploadSchema = v.object({ file: fileField, name: nameField })
 export type EmojiUploadValues = v.InferOutput<typeof emojiUploadSchema>
-export const emojiUploadResolver = valibotResolver(emojiUploadSchema)
 
 export const emojiReplaceImageSchema = v.object({ file: fileField })
 export type EmojiReplaceImageValues = v.InferOutput<typeof emojiReplaceImageSchema>
-export const emojiReplaceImageResolver = valibotResolver(emojiReplaceImageSchema)

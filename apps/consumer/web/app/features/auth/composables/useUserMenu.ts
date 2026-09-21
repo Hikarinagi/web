@@ -9,8 +9,18 @@ import {
   UserRound,
   Shirt,
 } from '@lucide/vue'
-import type { MenuItem } from 'primevue/menuitem'
 import HikariPoint from '~/components/ui/HikariPoint.vue'
+
+export interface UserMenuItem {
+  key?: string
+  label?: string
+  iconComponent?: Component
+  command?: () => void
+  danger?: boolean
+  separator?: boolean
+  balance?: number
+  modeLabel?: string
+}
 
 export function useUserMenu() {
   const auth = useAuthStore()
@@ -27,7 +37,7 @@ export function useUserMenu() {
     if (user.value) void checkin.ensureStatus()
   })
 
-  const menuItems = computed<MenuItem[]>(() => {
+  const menuItems = computed<UserMenuItem[]>(() => {
     const id = user.value?.id
     return [
       {

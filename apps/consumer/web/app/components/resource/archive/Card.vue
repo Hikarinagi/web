@@ -1,11 +1,8 @@
 <script setup lang="ts">
+  import { Card, Divider, Heading, Stack } from '@hina-ui/vue'
   import type { VNodeChild } from 'vue'
-  import { cn } from '#imports'
 
-  defineOptions({
-    name: 'ResourceArchiveCard',
-    inheritAttrs: false,
-  })
+  defineOptions({ name: 'ResourceArchiveCard' })
 
   defineSlots<{
     default?: (props: Record<string, never>) => VNodeChild
@@ -22,41 +19,21 @@
       footerSeparated: true,
     },
   )
-
-  const attrs = useAttrs()
-  const cardClass = computed(() =>
-    cn(
-      'flex w-full flex-col rounded-xl border border-surface-200 bg-surface-0 lg:w-[280px] lg:shrink-0 dark:border-surface-800 dark:bg-surface-900',
-      attrs.class as string | undefined,
-    ),
-  )
-  const cardAttrs = computed(() => {
-    const { class: _class, ...rest } = attrs
-    return rest
-  })
 </script>
 
 <template>
-  <Card unstyled v-bind="cardAttrs" :class="cardClass">
-    <template #content>
-      <div class="flex w-full flex-col">
-        <h3
-          v-if="props.title"
-          class="px-5 pt-4 text-[15px] font-bold text-surface-900 dark:text-surface-0"
-        >
-          {{ props.title }}
-        </h3>
+  <Card :padded="false" class="w-full lg:w-70 lg:shrink-0">
+    <Stack gap="none" class="w-full">
+      <Heading v-if="props.title" :level="3" size="base" class="px-5 pt-4">
+        {{ props.title }}
+      </Heading>
 
-        <slot />
+      <slot />
 
-        <template v-if="$slots.footer">
-          <div
-            v-if="props.footerSeparated"
-            class="h-px w-full bg-surface-100 dark:bg-surface-800"
-          />
-          <slot name="footer" />
-        </template>
-      </div>
-    </template>
+      <template v-if="$slots.footer">
+        <Divider v-if="props.footerSeparated" decorative />
+        <slot name="footer" />
+      </template>
+    </Stack>
   </Card>
 </template>

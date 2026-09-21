@@ -118,8 +118,7 @@ export function useHikariApiData<TPath extends ApiPath, TMethod extends ApiMetho
 
   const method = options?.method ? options.method.toUpperCase() : 'GET'
   const resolvedOptions = options as
-    | (HikariApiDataOptions<unknown> & { path?: Record<string, ApiPathParamValue> })
-    | undefined
+    (HikariApiDataOptions<unknown> & { path?: Record<string, ApiPathParamValue> }) | undefined
   const pathParams = resolvedOptions?.path
   const { path: _path, ...fetchOptions } = resolvedOptions ?? {}
 

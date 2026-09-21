@@ -2,38 +2,32 @@
   import { FileUp, Flag } from '@lucide/vue'
 
   defineOptions({ name: 'LightNovelVolumeEpubActions' })
-  defineProps<{ volumeId: number; available: boolean }>()
+  defineProps<{ volumeId: number; available: boolean; size?: 'sm' | 'md' | 'lg' }>()
 
   const open = ref(false)
 </script>
 
 <template>
-  <Button
+  <IconButton
+    login-required
     v-if="available"
-    v-tooltip.bottom="'报告问题'"
-    login-required
-    severity="secondary"
-    outlined
-    aria-label="报告 EPUB 问题"
+    label="报告 EPUB 问题"
+    side="bottom"
+    :size="size"
     @click="open = true"
   >
-    <template #icon>
-      <Flag class="size-[1em]" aria-hidden="true" />
-    </template>
-  </Button>
-  <Button
+    <Flag aria-hidden="true" />
+  </IconButton>
+  <IconButton
+    login-required
     v-else
-    v-tooltip.bottom="'补充 EPUB'"
-    login-required
-    severity="secondary"
-    outlined
-    aria-label="补充 EPUB"
+    label="补充 EPUB"
+    side="bottom"
+    :size="size"
     @click="open = true"
   >
-    <template #icon>
-      <FileUp class="size-[1em]" aria-hidden="true" />
-    </template>
-  </Button>
+    <FileUp aria-hidden="true" />
+  </IconButton>
 
   <LightNovelVolumeEpubFeedbackDialog
     v-if="available"
