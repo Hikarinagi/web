@@ -101,6 +101,8 @@
 
   --spacing-hikari-node: 0.8em;
 
+  --aspect-make-up-card: 366 / 512;
+
   --drop-shadow-hikari-art: 0 28px 52px rgba(15, 23, 42, 0.18);
   --drop-shadow-hikari-art-dark: 0 28px 52px rgba(0, 0, 0, 0.42);
 

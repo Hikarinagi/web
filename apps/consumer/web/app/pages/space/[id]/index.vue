@@ -27,7 +27,7 @@
       <Flex direction="col" gap="lg" class="lg:flex-row lg:gap-8">
         <SpaceTabSection :user-id="id" :initial="data" />
 
-        <CommunitySidebar follow class="lg:w-85">
+        <CommunitySidebar follow class="lg:block lg:w-85">
           <SpaceSidebar
             :statistics="data.statistics"
             :going="data.going"

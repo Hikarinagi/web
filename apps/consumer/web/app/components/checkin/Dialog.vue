@@ -15,6 +15,7 @@
     checkIn,
     makeUp,
     changeMonth,
+    openPurchase,
   } = useCheckin()
 </script>
 
@@ -29,8 +30,9 @@
           :month="month"
           :records-month="recordsMonth"
           :loading="recordsLoading"
-          :make-up="makeUp"
           @change-month="changeMonth"
+          @make-up="makeUp"
+          @purchase="openPurchase"
         />
         <CheckinMakeUpBar :status="status" />
       </Stack>

@@ -10,6 +10,7 @@ export interface PurchaseItem {
 interface PurchaseRequest extends PurchaseItem {
   title?: string
   confirmLabel?: string
+  note?: string
   balance: number
   onConfirm: () => Promise<void>
 }
@@ -19,6 +20,7 @@ interface PurchaseState {
   submitting: boolean
   title: string
   confirmLabel: string
+  note: string
   item: PurchaseItem | null
   balance: number
   handler: (() => Promise<void>) | null
@@ -29,6 +31,7 @@ const state = reactive<PurchaseState>({
   submitting: false,
   title: '兑换确认',
   confirmLabel: '兑换',
+  note: '',
   item: null,
   balance: 0,
   handler: null,
@@ -38,6 +41,7 @@ export function usePurchaseDialog() {
   function open(req: PurchaseRequest) {
     state.title = req.title ?? '兑换确认'
     state.confirmLabel = req.confirmLabel ?? '兑换'
+    state.note = req.note ?? ''
     state.item = {
       name: req.name,
       description: req.description ?? null,

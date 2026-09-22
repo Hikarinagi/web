@@ -7,6 +7,7 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   CHECK_IN_MILESTONE_ADD: '连签里程碑',
   CHECK_IN_MAKE_UP_SUBTRACT: '补签',
   DECORATION_PURCHASE_SUBTRACT: '兑换装扮',
+  MAKE_UP_CARD_PURCHASE_SUBTRACT: '购买补签卡',
   SYSTEM_ADD: '系统发放',
   SYSTEM_SUBTRACT: '系统扣除',
   RATE_ADD: '评分',

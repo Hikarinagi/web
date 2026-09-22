@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 import { toast } from '@hina-ui/vue'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { usePurchaseDialog } from './usePurchaseDialog'
+import { usePurchaseDialog } from '~/features/purchase/usePurchaseDialog'
 
 type DecorationDetail = ApiData<'/api/v3/decorations/{id}', 'get'>
 

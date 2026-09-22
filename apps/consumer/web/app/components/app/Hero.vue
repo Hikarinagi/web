@@ -6,7 +6,7 @@
 
   defineOptions({ name: 'AppHero' })
 
-  const props = defineProps<{ release: AppPageData['release']; androidQr: string | null }>()
+  const props = defineProps<{ release: AppPageData['release']; androidUrl: string | null }>()
 
   const downloadable = computed(() => props.release.available)
 </script>
@@ -65,7 +65,7 @@
 
           <AppDownloadButtons :release="release" :downloadable="downloadable" />
           <AppDownloadNotes :release="release" :downloadable="downloadable" />
-          <AppDownloadQrCode :src="androidQr" :downloadable="downloadable" />
+          <AppDownloadQrCode :url="androidUrl" :downloadable="downloadable" />
         </Stack>
       </Stack>
     </Stack>

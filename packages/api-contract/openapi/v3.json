@@ -2403,6 +2403,7 @@
               "CHECK_IN_MILESTONE_ADD",
               "CHECK_IN_MAKE_UP_SUBTRACT",
               "DECORATION_PURCHASE_SUBTRACT",
+              "MAKE_UP_CARD_PURCHASE_SUBTRACT",
               "SYSTEM_ADD",
               "SYSTEM_SUBTRACT",
               "RATE_ADD",
@@ -5903,7 +5904,19 @@
           "check_in_daily_point_min": {
             "type": "number"
           },
+          "check_in_make_up_card_monthly_limit": {
+            "type": "number"
+          },
+          "check_in_make_up_card_price_step": {
+            "type": "number"
+          },
+          "check_in_make_up_card_valid_days": {
+            "type": "number"
+          },
           "check_in_make_up_cost_step": {
+            "type": "number"
+          },
+          "check_in_make_up_window_days": {
             "type": "number"
           },
           "check_in_max_make_up_per_month": {
@@ -5921,6 +5934,10 @@
           "check_in_daily_point_max",
           "check_in_make_up_cost_step",
           "check_in_max_make_up_per_month",
+          "check_in_make_up_window_days",
+          "check_in_make_up_card_price_step",
+          "check_in_make_up_card_monthly_limit",
+          "check_in_make_up_card_valid_days",
           "check_in_milestones"
         ],
         "type": "object"
@@ -16721,13 +16738,108 @@
         ],
         "type": "object"
       },
+      "MakeUpCardItemDto": {
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "price",
+          "expires_at",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "MakeUpCardListDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MakeUpCardItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "MakeUpCardPurchaseResultDto": {
+        "properties": {
+          "card": {
+            "$ref": "#/components/schemas/MakeUpCardStatusDto"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "points": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "price",
+          "expires_at",
+          "points",
+          "card"
+        ],
+        "type": "object"
+      },
+      "MakeUpCardStatusDto": {
+        "properties": {
+          "available": {
+            "type": "number"
+          },
+          "next_price": {
+            "type": "number"
+          },
+          "purchase_limit": {
+            "type": "number"
+          },
+          "purchased": {
+            "type": "number"
+          },
+          "valid_days": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "available",
+          "purchased",
+          "purchase_limit",
+          "next_price",
+          "valid_days"
+        ],
+        "type": "object"
+      },
       "MakeUpCheckInDto": {
         "properties": {
           "date": {
             "type": "string"
+          },
+          "method": {
+            "enum": [
+              "points",
+              "card"
+            ],
+            "type": "string"
           }
         },
         "required": [
+          "method",
           "date"
         ],
         "type": "object"
@@ -16740,12 +16852,20 @@
           "date": {
             "type": "string"
           },
+          "method": {
+            "enum": [
+              "points",
+              "card"
+            ],
+            "type": "string"
+          },
           "streak": {
             "type": "number"
           }
         },
         "required": [
           "date",
+          "method",
           "cost",
           "streak"
         ],
@@ -16753,6 +16873,9 @@
       },
       "MakeUpStatusDto": {
         "properties": {
+          "card": {
+            "$ref": "#/components/schemas/MakeUpCardStatusDto"
+          },
           "limit": {
             "type": "number"
           },
@@ -16764,13 +16887,18 @@
           },
           "used": {
             "type": "number"
+          },
+          "window_days": {
+            "type": "number"
           }
         },
         "required": [
           "used",
           "limit",
           "remaining",
-          "next_cost"
+          "next_cost",
+          "window_days",
+          "card"
         ],
         "type": "object"
       },
@@ -20379,6 +20507,7 @@
               "CHECK_IN_MILESTONE_ADD",
               "CHECK_IN_MAKE_UP_SUBTRACT",
               "DECORATION_PURCHASE_SUBTRACT",
+              "MAKE_UP_CARD_PURCHASE_SUBTRACT",
               "SYSTEM_ADD",
               "SYSTEM_SUBTRACT",
               "RATE_ADD",
@@ -24157,6 +24286,7 @@
               "CHECK_IN_MILESTONE_ADD",
               "CHECK_IN_MAKE_UP_SUBTRACT",
               "DECORATION_PURCHASE_SUBTRACT",
+              "MAKE_UP_CARD_PURCHASE_SUBTRACT",
               "SYSTEM_ADD",
               "SYSTEM_SUBTRACT",
               "RATE_ADD",
@@ -29994,9 +30124,29 @@
             "minimum": 0,
             "type": "number"
           },
+          "check_in_make_up_card_monthly_limit": {
+            "maximum": 366,
+            "minimum": 0,
+            "type": "number"
+          },
+          "check_in_make_up_card_price_step": {
+            "maximum": 1000000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "check_in_make_up_card_valid_days": {
+            "maximum": 3650,
+            "minimum": 1,
+            "type": "number"
+          },
           "check_in_make_up_cost_step": {
             "maximum": 1000000,
             "minimum": 0,
+            "type": "number"
+          },
+          "check_in_make_up_window_days": {
+            "maximum": 3650,
+            "minimum": 1,
             "type": "number"
           },
           "check_in_max_make_up_per_month": {
@@ -34352,6 +34502,7 @@
                 "CHECK_IN_MILESTONE_ADD",
                 "CHECK_IN_MAKE_UP_SUBTRACT",
                 "DECORATION_PURCHASE_SUBTRACT",
+                "MAKE_UP_CARD_PURCHASE_SUBTRACT",
                 "SYSTEM_ADD",
                 "SYSTEM_SUBTRACT",
                 "RATE_ADD",
@@ -64762,6 +64913,46 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MakeUpResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserCheckIn"
+        ]
+      }
+    },
+    "/api/v3/user/me/check-ins/make-up-cards": {
+      "get": {
+        "operationId": "UserCheckInController_getMakeUpCards",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeUpCardListDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserCheckIn"
+        ]
+      },
+      "post": {
+        "operationId": "UserCheckInController_purchaseMakeUpCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeUpCardPurchaseResultDto"
                 }
               }
             },

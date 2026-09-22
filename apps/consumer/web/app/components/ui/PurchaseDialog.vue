@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Alert, Button, Center, Dialog, Inline, Stack, Text } from '@hina-ui/vue'
-  import { usePurchaseDialog } from '~/features/decoration/usePurchaseDialog'
+  import { usePurchaseDialog } from '~/features/purchase/usePurchaseDialog'
 
   defineOptions({ name: 'UiPurchaseDialog' })
 
@@ -55,7 +55,7 @@
             </Inline>
           </Inline>
           <Inline align="center" justify="between" class="border-t border-line pt-2">
-            <Text as="span" size="sm" tone="muted">兑换后</Text>
+            <Text as="span" size="sm" tone="muted">剩余</Text>
             <Inline gap="xs" align="center">
               <HikariPoint class="size-4" aria-hidden="true" />
               <Text as="span" size="sm" weight="medium" :tone="affordable ? 'default' : 'danger'">
@@ -64,6 +64,8 @@
             </Inline>
           </Inline>
         </Stack>
+
+        <Text v-if="state.note" size="sm" tone="muted">{{ state.note }}</Text>
 
         <Alert :open="!affordable" tone="danger">光点不足</Alert>
       </Stack>

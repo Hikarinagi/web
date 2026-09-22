@@ -1,6 +1,6 @@
 import { toast } from '@hina-ui/vue'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { usePurchaseDialog } from '~/features/decoration/usePurchaseDialog'
+import { usePurchaseDialog } from '~/features/purchase/usePurchaseDialog'
 
 export type ShopDecoration = ApiData<'/api/v3/decorations', 'get'>['items'][number]
 export type OwnedDecoration = ApiData<'/api/v3/user/me/decorations', 'get'>['items'][number]

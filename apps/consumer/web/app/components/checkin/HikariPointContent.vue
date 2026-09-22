@@ -15,10 +15,16 @@
         （即 hikari point）是 Hikarinagi 的通用货币。
       </Text>
       <Text size="sm">
-        你可以通过包括每日签到在内的各种方式（将在下方列出）获取光点！光点可以用来兑换装扮，你随时可以在
+        你可以通过包括每日签到在内的各种方式（将在下方列出）获取光点！光点可以用来兑换装扮和购买道具，你随时可以在
         <NuxtLink v-slot="{ href, navigate }" to="/setting/decoration" custom>
           <Link :href="href ?? undefined" class="mx-0.5 font-medium" @click="navigate">
             我的装扮
+          </Link>
+        </NuxtLink>
+        和
+        <NuxtLink v-slot="{ href, navigate }" to="/setting/items" custom>
+          <Link :href="href ?? undefined" class="mx-0.5 font-medium" @click="navigate">
+            我的道具
           </Link>
         </NuxtLink>
         页查看详情。
@@ -70,14 +76,5 @@
       </Inline>
     </Card>
     <Skeleton v-else class="h-88 rounded-xl" />
-
-    <Stack gap="none" class="gap-1.5 border-t border-line pt-4">
-      <Text size="xs" tone="muted" class="leading-5">
-        *需要注意的是，如果你违反社区规则，我们可能会扣除你的光点作为惩罚
-      </Text>
-      <Text size="xs" tone="muted" class="leading-5">
-        *光点系统还在持续进化中～我们会在未来提供更多用法和玩法，敬请期待！
-      </Text>
-    </Stack>
   </Stack>
 </template>

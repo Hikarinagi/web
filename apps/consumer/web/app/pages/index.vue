@@ -50,12 +50,7 @@
 <template>
   <FeedPageShell v-if="data" lock-overscroll flush>
     <template #top>
-      <!-- 移动端拉满整屏：抵消 PageShell 的 px-4,再把内容边距补回来，
-           否则 sticky 的毛玻璃条两侧会漏出下面滚动的内容。 -->
-      <FeedTabs
-        class="-mx-4 w-[calc(100%+2rem)] px-4 sm:mx-0 sm:w-full sm:px-0 xl:hidden"
-        @select="requestFeedRefresh"
-      />
+      <FeedTabs class="-mx-4 w-[calc(100%+2rem)] px-4 lg:hidden" @select="requestFeedRefresh" />
     </template>
 
     <template #nav>

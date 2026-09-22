@@ -10672,6 +10672,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/check-ins/make-up-cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserCheckInController_getMakeUpCards"];
+        put?: never;
+        post: operations["UserCheckInController_purchaseMakeUpCard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/check-ins/status": {
         parameters: {
             query?: never;
@@ -12347,7 +12363,7 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
             user: components["schemas"]["PointRecordUserDto"];
         };
         AdminPromoBannerDto: {
@@ -13194,7 +13210,11 @@ export interface components {
         CheckInSettingsDto: {
             check_in_daily_point_max: number;
             check_in_daily_point_min: number;
+            check_in_make_up_card_monthly_limit: number;
+            check_in_make_up_card_price_step: number;
+            check_in_make_up_card_valid_days: number;
             check_in_make_up_cost_step: number;
+            check_in_make_up_window_days: number;
             check_in_max_make_up_per_month: number;
             check_in_milestones: components["schemas"]["CheckInMilestoneInputDto"][];
         };
@@ -15956,19 +15976,47 @@ export interface components {
             change_request_id: number | null;
             existing_id: number | null;
         };
+        MakeUpCardItemDto: {
+            created_at: string;
+            expires_at: string;
+            id: number;
+            price: number;
+        };
+        MakeUpCardListDto: {
+            items: components["schemas"]["MakeUpCardItemDto"][];
+        };
+        MakeUpCardPurchaseResultDto: {
+            card: components["schemas"]["MakeUpCardStatusDto"];
+            expires_at: string;
+            points: number;
+            price: number;
+        };
+        MakeUpCardStatusDto: {
+            available: number;
+            next_price: number;
+            purchase_limit: number;
+            purchased: number;
+            valid_days: number;
+        };
         MakeUpCheckInDto: {
             date: string;
+            /** @enum {string} */
+            method: "points" | "card";
         };
         MakeUpResultDto: {
             cost: number;
             date: string;
+            /** @enum {string} */
+            method: "points" | "card";
             streak: number;
         };
         MakeUpStatusDto: {
+            card: components["schemas"]["MakeUpCardStatusDto"];
             limit: number;
             next_cost: number;
             remaining: number;
             used: number;
+            window_days: number;
         };
         ManagedContentItemDto: {
             /** @enum {string} */
@@ -16857,7 +16905,7 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
         };
         NamedEntityAdminItemDto: {
             /** Format: date-time */
@@ -17968,7 +18016,7 @@ export interface components {
         };
         PointReasonTotalDto: {
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
             total: number;
         };
         PointRecordUserDto: {
@@ -19367,7 +19415,11 @@ export interface components {
         UpdateCheckInSettingsDto: {
             check_in_daily_point_max?: number;
             check_in_daily_point_min?: number;
+            check_in_make_up_card_monthly_limit?: number;
+            check_in_make_up_card_price_step?: number;
+            check_in_make_up_card_valid_days?: number;
             check_in_make_up_cost_step?: number;
+            check_in_make_up_window_days?: number;
             check_in_max_make_up_per_month?: number;
             check_in_milestones?: components["schemas"]["CheckInMilestoneInputDto"][];
         };
@@ -21097,7 +21149,7 @@ export interface operations {
         parameters: {
             query: {
                 owner_id?: number;
-                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
                 action?: "ADD" | "SUBTRACT";
                 from?: string;
                 to?: string;
@@ -38337,6 +38389,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MakeUpResultDto"];
+                };
+            };
+        };
+    };
+    UserCheckInController_getMakeUpCards: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MakeUpCardListDto"];
+                };
+            };
+        };
+    };
+    UserCheckInController_purchaseMakeUpCard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MakeUpCardPurchaseResultDto"];
                 };
             };
         };

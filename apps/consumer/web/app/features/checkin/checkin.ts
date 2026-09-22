@@ -15,6 +15,7 @@ export interface CheckInRewardToastProps {
 export interface CheckInMakeUpToastProps {
   cost: number
   date: string
+  method: 'points' | 'card'
 }
 
 export function pad2(value: number) {

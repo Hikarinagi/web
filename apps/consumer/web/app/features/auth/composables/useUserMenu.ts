@@ -3,6 +3,7 @@ import {
   CalendarCheck,
   LayoutDashboard,
   LogOut,
+  Package,
   Palette,
   Settings,
   Terminal,
@@ -70,6 +71,12 @@ export function useUserMenu() {
         label: '我的装扮',
         iconComponent: Shirt,
         command: () => void navigateTo('/setting/decoration'),
+      },
+      {
+        key: 'items',
+        label: '我的道具',
+        iconComponent: Package,
+        command: () => void navigateTo('/setting/items'),
       },
       {
         key: 'site',

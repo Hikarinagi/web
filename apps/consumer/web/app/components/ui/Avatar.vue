@@ -80,7 +80,7 @@
       as="span"
       v-bind="forwarded"
       :aria-label="resolvedAriaLabel"
-      :class="frame ? 'relative inline-flex shrink-0' : 'contents'"
+      :class="frame ? 'relative isolate inline-flex shrink-0' : 'contents'"
     >
       <HnAvatar
         :name="resolvedName"

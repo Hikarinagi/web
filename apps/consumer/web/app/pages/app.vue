@@ -19,6 +19,6 @@
     v-if="data"
     class="-mt-(--app-header-height)"
     :release="data.release"
-    :android-qr="data.android_qr"
+    :android-url="data.android_url"
   />
 </template>

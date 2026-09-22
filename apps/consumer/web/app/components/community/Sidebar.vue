@@ -77,7 +77,7 @@
     ref="host"
     as="aside"
     gap="none"
-    class="relative hidden w-90 shrink-0 lg:block"
+    class="relative hidden w-90 shrink-0"
     :style="follow && sidebarH ? { minHeight: `${sidebarH}px` } : undefined"
   >
     <template v-if="follow">
