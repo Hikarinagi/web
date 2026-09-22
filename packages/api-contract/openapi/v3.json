@@ -1417,6 +1417,79 @@
         ],
         "type": "object"
       },
+      "AdminNovelSourceAccountDto": {
+        "properties": {
+          "daily_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "downloads_today": {
+            "type": "number"
+          },
+          "last_error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "last_login_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "login": {
+            "nullable": true,
+            "type": "string"
+          },
+          "quota_left": {
+            "nullable": true,
+            "type": "number"
+          },
+          "secret_set": {
+            "type": "boolean"
+          },
+          "session_set": {
+            "type": "boolean"
+          },
+          "source_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_key",
+          "login",
+          "secret_set",
+          "session_set",
+          "daily_limit",
+          "downloads_today",
+          "quota_left",
+          "last_login_at",
+          "last_error"
+        ],
+        "type": "object"
+      },
+      "AdminNovelSourceAccountTestDto": {
+        "properties": {
+          "daily_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "downloads_today": {
+            "nullable": true,
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok",
+          "message",
+          "downloads_today",
+          "daily_limit"
+        ],
+        "type": "object"
+      },
       "AdminNovelSourceLinkCreatedDto": {
         "properties": {
           "id": {
@@ -1443,10 +1516,18 @@
           "id": {
             "type": "number"
           },
+          "light_novel_author": {
+            "nullable": true,
+            "type": "string"
+          },
           "light_novel_id": {
             "type": "number"
           },
           "light_novel_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "light_novel_original_name": {
             "nullable": true,
             "type": "string"
           },
@@ -1468,6 +1549,10 @@
           "source_series_id": {
             "type": "string"
           },
+          "source_title": {
+            "nullable": true,
+            "type": "string"
+          },
           "status": {
             "enum": [
               "PENDING",
@@ -1485,8 +1570,11 @@
           "id",
           "light_novel_id",
           "light_novel_name",
+          "light_novel_original_name",
+          "light_novel_author",
           "source_key",
           "source_series_id",
+          "source_title",
           "url",
           "matched_by",
           "confidence",
@@ -1504,6 +1592,60 @@
         },
         "required": [
           "updated"
+        ],
+        "type": "object"
+      },
+      "AdminNovelSourcePreviewDto": {
+        "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "source_key": {
+            "type": "string"
+          },
+          "source_series_id": {
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volumes": {
+            "items": {
+              "$ref": "#/components/schemas/AdminNovelSourcePreviewVolumeDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "source_key",
+          "source_series_id",
+          "url",
+          "title",
+          "author",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "AdminNovelSourcePreviewVolumeDto": {
+        "properties": {
+          "label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label",
+          "volume_number"
         ],
         "type": "object"
       },
@@ -1555,6 +1697,9 @@
           "is_active": {
             "type": "boolean"
           },
+          "last_chapter": {
+            "type": "number"
+          },
           "light_novel_volume_id": {
             "type": "number"
           },
@@ -1574,14 +1719,30 @@
             "nullable": true,
             "type": "string"
           },
-          "series_id": {
+          "report": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NovelVolumeBuildReportDto"
+              }
+            ],
             "nullable": true,
+            "type": "object"
+          },
+          "series_id": {
             "type": "number"
+          },
+          "series_name": {
+            "nullable": true,
+            "type": "string"
           },
           "source_key": {
             "type": "string"
           },
           "source_volume_id": {
+            "type": "string"
+          },
+          "source_volume_label": {
+            "nullable": true,
             "type": "string"
           },
           "status": {
@@ -1596,6 +1757,10 @@
             ],
             "type": "string"
           },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          },
           "volume_name": {
             "nullable": true,
             "type": "string"
@@ -1606,17 +1771,22 @@
           "light_novel_volume_id",
           "volume_name",
           "series_id",
+          "series_name",
           "source_key",
           "source_volume_id",
+          "source_volume_label",
+          "url",
           "matched_by",
           "confidence",
           "cover_distance",
           "status",
           "attempts",
           "chapter_count",
+          "last_chapter",
           "is_active",
           "error",
           "built_at",
+          "report",
           "next_attempt_at"
         ],
         "type": "object"
@@ -1629,6 +1799,340 @@
         },
         "required": [
           "updated"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkActionResultDto": {
+        "properties": {
+          "enqueued": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "enqueued"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkDetailDto": {
+        "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "available_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/AdminNovelWorkLinkDto"
+            },
+            "type": "array"
+          },
+          "located_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "primary_source_key": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volumes": {
+            "items": {
+              "$ref": "#/components/schemas/AdminNovelWorkVolumeDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "author",
+          "cover",
+          "primary_source_key",
+          "located_at",
+          "available_sources",
+          "links",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkItemDto": {
+        "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "linked_sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "links_pending": {
+            "type": "number"
+          },
+          "located_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sources_active": {
+            "type": "number"
+          },
+          "sources_failed": {
+            "type": "number"
+          },
+          "sources_review": {
+            "type": "number"
+          },
+          "volumes_total": {
+            "type": "number"
+          },
+          "volumes_with_epub": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "author",
+          "cover",
+          "volumes_total",
+          "volumes_with_epub",
+          "linked_sources",
+          "links_pending",
+          "sources_active",
+          "sources_review",
+          "sources_failed",
+          "located_at"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkLinkDto": {
+        "properties": {
+          "confidence": {
+            "type": "number"
+          },
+          "discovered_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "matched_by": {
+            "enum": [
+              "TITLE",
+              "AUTHOR",
+              "ISBN",
+              "NUMBER",
+              "COVER",
+              "LLM",
+              "MANUAL"
+            ],
+            "type": "string"
+          },
+          "source_key": {
+            "type": "string"
+          },
+          "source_series_id": {
+            "type": "string"
+          },
+          "source_title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "LINKED",
+              "REJECTED"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source_key",
+          "source_series_id",
+          "source_title",
+          "url",
+          "matched_by",
+          "confidence",
+          "status",
+          "discovered_at"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkVolumeDto": {
+        "properties": {
+          "epub_origin": {
+            "enum": [
+              "none",
+              "source",
+              "other",
+              "curated"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/AdminNovelWorkVolumeSourceDto"
+            },
+            "type": "array"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "volume_number",
+          "name",
+          "name_cn",
+          "publication_date",
+          "epub_origin",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "AdminNovelWorkVolumeSourceDto": {
+        "properties": {
+          "built_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_count": {
+            "type": "number"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "cover_distance": {
+            "nullable": true,
+            "type": "number"
+          },
+          "error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "matched_by": {
+            "enum": [
+              "TITLE",
+              "AUTHOR",
+              "ISBN",
+              "NUMBER",
+              "COVER",
+              "LLM",
+              "MANUAL"
+            ],
+            "type": "string"
+          },
+          "report": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NovelVolumeBuildReportDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "source_key": {
+            "type": "string"
+          },
+          "source_volume_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "REVIEW",
+              "INGESTING",
+              "DONE",
+              "FAILED",
+              "THROTTLED",
+              "CANCELLED"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source_key",
+          "source_volume_label",
+          "url",
+          "matched_by",
+          "confidence",
+          "cover_distance",
+          "status",
+          "chapter_count",
+          "is_active",
+          "error",
+          "built_at",
+          "report"
         ],
         "type": "object"
       },
@@ -7147,12 +7651,13 @@
             "type": "string"
           },
           "provider": {
-            "description": "openai-compatible | anthropic | google | deepseek",
+            "description": "openai-compatible | anthropic | google | deepseek | typesafe",
             "enum": [
               "openai-compatible",
               "anthropic",
               "google",
-              "deepseek"
+              "deepseek",
+              "typesafe"
             ],
             "type": "string"
           },
@@ -7213,23 +7718,20 @@
             "minimum": 1,
             "type": "number"
           },
+          "source": {
+            "description": "源站书号，或包含书号的源站链接",
+            "maxLength": 1024,
+            "type": "string"
+          },
           "source_key": {
             "maxLength": 64,
-            "type": "string"
-          },
-          "source_series_id": {
-            "maxLength": 255,
-            "type": "string"
-          },
-          "url": {
-            "maxLength": 1024,
             "type": "string"
           }
         },
         "required": [
           "light_novel_id",
           "source_key",
-          "source_series_id"
+          "source"
         ],
         "type": "object"
       },
@@ -20076,9 +20578,9 @@
           "links_pending": {
             "type": "number"
           },
-          "queues": {
+          "recent_errors": {
             "items": {
-              "$ref": "#/components/schemas/NovelSourceQueueStatusDto"
+              "$ref": "#/components/schemas/NovelSourceRecentErrorDto"
             },
             "type": "array"
           },
@@ -20088,10 +20590,16 @@
           "series_total": {
             "type": "number"
           },
-          "volume_sources_done": {
-            "type": "number"
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/NovelSourceHealthDto"
+            },
+            "type": "array"
           },
-          "volume_sources_failed": {
+          "volume_status": {
+            "$ref": "#/components/schemas/NovelVolumeStatusCountsDto"
+          },
+          "volumes_from_source": {
             "type": "number"
           },
           "volumes_total": {
@@ -20107,9 +20615,10 @@
           "links_pending",
           "volumes_total",
           "volumes_with_epub",
-          "volume_sources_done",
-          "volume_sources_failed",
-          "queues"
+          "volumes_from_source",
+          "volume_status",
+          "sources",
+          "recent_errors"
         ],
         "type": "object"
       },
@@ -20121,14 +20630,82 @@
           "key": {
             "type": "string"
           },
+          "kind": {
+            "enum": [
+              "text",
+              "file"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "priority": {
             "type": "number"
           }
         },
         "required": [
           "key",
+          "kind",
           "enabled",
           "priority"
+        ],
+        "type": "object"
+      },
+      "NovelSourceHealthDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "text",
+              "file"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "last_built_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "links_linked": {
+            "type": "number"
+          },
+          "links_pending": {
+            "type": "number"
+          },
+          "links_rejected": {
+            "type": "number"
+          },
+          "source_key": {
+            "type": "string"
+          },
+          "throttle_reason": {
+            "nullable": true,
+            "type": "string"
+          },
+          "throttled_until": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volumes_done": {
+            "type": "number"
+          },
+          "volumes_failed": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "source_key",
+          "kind",
+          "enabled",
+          "links_linked",
+          "links_pending",
+          "links_rejected",
+          "volumes_done",
+          "volumes_failed",
+          "throttled_until",
+          "throttle_reason",
+          "last_built_at"
         ],
         "type": "object"
       },
@@ -20171,6 +20748,24 @@
           "auto_accept_confidence",
           "volume_accept_confidence",
           "cover_max_distance"
+        ],
+        "type": "object"
+      },
+      "NovelSourcePipelineStatusDto": {
+        "properties": {
+          "paused": {
+            "type": "boolean"
+          },
+          "queues": {
+            "items": {
+              "$ref": "#/components/schemas/NovelSourceQueueStatusDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "queues",
+          "paused"
         ],
         "type": "object"
       },
@@ -20239,6 +20834,38 @@
         ],
         "type": "object"
       },
+      "NovelSourceRecentErrorDto": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "series_id": {
+            "type": "number"
+          },
+          "source_key": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "volume_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_source_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "volume_source_id",
+          "series_id",
+          "volume_name",
+          "source_key",
+          "error",
+          "updated_at"
+        ],
+        "type": "object"
+      },
       "NovelSourceRediscoverDto": {
         "properties": {
           "backpressure_max": {
@@ -20287,12 +20914,16 @@
       },
       "NovelSourceThrottleSettingDto": {
         "properties": {
+          "rate_limit_cooldown_ms": {
+            "type": "number"
+          },
           "unreachable_cooldown_ms": {
             "type": "number"
           }
         },
         "required": [
-          "unreachable_cooldown_ms"
+          "unreachable_cooldown_ms",
+          "rate_limit_cooldown_ms"
         ],
         "type": "object"
       },
@@ -20311,6 +20942,56 @@
           "PAUSED": "休刊",
           "SERIALIZING": "连载中"
         }
+      },
+      "NovelVolumeBuildReportDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "cached_chapters": {
+            "type": "number"
+          },
+          "chapters": {
+            "type": "number"
+          },
+          "duplicate_images": {
+            "type": "number"
+          },
+          "has_cover": {
+            "type": "boolean"
+          },
+          "inline_images": {
+            "type": "number"
+          },
+          "missing_images": {
+            "type": "number"
+          },
+          "plates": {
+            "type": "number"
+          },
+          "text_chars": {
+            "type": "number"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "chapters",
+          "text_chars",
+          "plates",
+          "inline_images",
+          "duplicate_images",
+          "missing_images",
+          "cached_chapters",
+          "has_cover",
+          "bytes",
+          "warnings"
+        ],
+        "type": "object"
       },
       "NovelVolumeDetailDto": {
         "properties": {
@@ -20673,6 +21354,41 @@
           "confidence",
           "submitter",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "NovelVolumeStatusCountsDto": {
+        "properties": {
+          "cancelled": {
+            "type": "number"
+          },
+          "done": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "ingesting": {
+            "type": "number"
+          },
+          "pending": {
+            "type": "number"
+          },
+          "review": {
+            "type": "number"
+          },
+          "throttled": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "pending",
+          "review",
+          "ingesting",
+          "done",
+          "failed",
+          "throttled",
+          "cancelled"
         ],
         "type": "object"
       },
@@ -29808,7 +30524,8 @@
               "openai-compatible",
               "anthropic",
               "google",
-              "deepseek"
+              "deepseek",
+              "typesafe"
             ],
             "type": "string"
           },
@@ -30079,6 +30796,27 @@
         },
         "type": "object"
       },
+      "UpdateNovelSourceAccountDto": {
+        "properties": {
+          "daily_limit": {
+            "description": "每日下载上限；留空表示未知或不限",
+            "maximum": 100000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "login": {
+            "description": "登录名或邮箱；密钥型账号留空",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "secret": {
+            "description": "密码或密钥；留空表示不改",
+            "maxLength": 1024,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "UpdateNovelSourceEntryDto": {
         "properties": {
           "enabled": {
@@ -30244,13 +30982,18 @@
       },
       "UpdateNovelSourceThrottleDto": {
         "properties": {
+          "rate_limit_cooldown_ms": {
+            "minimum": 60000,
+            "type": "number"
+          },
           "unreachable_cooldown_ms": {
             "minimum": 1000,
             "type": "number"
           }
         },
         "required": [
-          "unreachable_cooldown_ms"
+          "unreachable_cooldown_ms",
+          "rate_limit_cooldown_ms"
         ],
         "type": "object"
       },
@@ -36923,6 +37666,121 @@
         ]
       }
     },
+    "/api/v3/admin/novel-source/accounts": {
+      "get": {
+        "operationId": "AdminNovelSourceAccountController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminNovelSourceAccountDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/accounts/{source_key}": {
+      "delete": {
+        "operationId": "AdminNovelSourceAccountController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "source_key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      },
+      "put": {
+        "operationId": "AdminNovelSourceAccountController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "source_key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNovelSourceAccountDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelSourceAccountDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/accounts/{source_key}/test": {
+      "post": {
+        "operationId": "AdminNovelSourceAccountController_test",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "source_key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelSourceAccountTestDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
     "/api/v3/admin/novel-source/backfill": {
       "post": {
         "operationId": "AdminNovelBackfillController_run",
@@ -36964,6 +37822,90 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/NovelSourceDashboardDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/pipeline": {
+      "get": {
+        "operationId": "AdminNovelSourcePipelineController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelSourcePipelineStatusDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/pipeline/drain": {
+      "post": {
+        "operationId": "AdminNovelSourcePipelineController_drain",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelSourcePipelineStatusDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/pipeline/pause": {
+      "post": {
+        "operationId": "AdminNovelSourcePipelineController_pause",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelSourcePipelineStatusDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/pipeline/resume": {
+      "post": {
+        "operationId": "AdminNovelSourcePipelineController_resume",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelSourcePipelineStatusDto"
                 }
               }
             },
@@ -37133,6 +38075,47 @@
         ]
       }
     },
+    "/api/v3/admin/novel-source/source-links/preview": {
+      "get": {
+        "operationId": "AdminNovelSourceLinkController_preview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source_key",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "type": "string"
+            }
+          },
+          {
+            "description": "源站书号，或包含书号的源站链接",
+            "in": "query",
+            "name": "source",
+            "required": true,
+            "schema": {
+              "maxLength": 1024,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelSourcePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
     "/api/v3/admin/novel-source/source-links/{id}/confirm": {
       "post": {
         "operationId": "AdminNovelSourceLinkController_confirm",
@@ -37212,6 +38195,15 @@
                 "CANCELLED"
               ],
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "series_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
             }
           },
           {
@@ -37321,6 +38313,36 @@
         ]
       }
     },
+    "/api/v3/admin/novel-source/volume-sources/throttles/{source_key}": {
+      "delete": {
+        "operationId": "AdminNovelVolumeSourceController_liftThrottle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "source_key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelVolumeSourceResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
     "/api/v3/admin/novel-source/volume-sources/{id}/cancel": {
       "post": {
         "operationId": "AdminNovelVolumeSourceController_cancel",
@@ -37370,6 +38392,184 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AdminNovelVolumeSourceResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/works": {
+      "get": {
+        "operationId": "AdminNovelSourceWorkController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "link_status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "none",
+                "pending",
+                "linked"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "missing_only",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AdminNovelWorkItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/works/{id}": {
+      "get": {
+        "operationId": "AdminNovelSourceWorkController_detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelWorkDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/works/{id}/discover": {
+      "post": {
+        "operationId": "AdminNovelSourceWorkController_discover",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelWorkActionResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/works/{id}/locate": {
+      "post": {
+        "operationId": "AdminNovelSourceWorkController_locate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelWorkActionResultDto"
                 }
               }
             },
