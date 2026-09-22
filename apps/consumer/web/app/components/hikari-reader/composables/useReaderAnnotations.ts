@@ -1,5 +1,5 @@
 import { computed, onBeforeUnmount, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { Reader } from '@ritojs/core'
 import type {
   ReadingPosition,
@@ -106,7 +106,7 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
     if (!controller) return null
     const position = options.currentPosition.value
     if (!position) {
-      push.warning({ message: '当前位置尚未就绪' })
+      toast.warning('当前位置尚未就绪')
       return null
     }
     const created = controller.addAnnotation({
@@ -115,7 +115,7 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
       note: input.note,
     })
     if (!created) {
-      push.warning({ message: '请先选择文字' })
+      toast.warning('请先选择文字')
       return null
     }
     selection.value = null
@@ -161,7 +161,7 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
         toast: false,
       })
     } catch {
-      push.error({ message: '更新标注失败，请稍后重试' })
+      toast.danger('更新标注失败，请稍后重试')
     }
   }
 
@@ -180,7 +180,7 @@ export function useReaderAnnotations(options: UseReaderAnnotationsOptions) {
       })
       backendIds.delete(id)
     } catch {
-      push.error({ message: '删除标注失败，请稍后重试' })
+      toast.danger('删除标注失败，请稍后重试')
     }
   }
 

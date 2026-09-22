@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { InjectionKey, Ref } from 'vue'
 import type { BackendChangeRequestDetail } from '~/features/creator/contribution'
 import type { BackendEditorRef, BackendEditorSchema } from '~/features/creator/editor'
@@ -227,7 +227,7 @@ export function useChangeRequestEditor(params: {
     changeset.value = next
     if (params.onReview?.(next, needsReview.value)) return
     if (next.length === 0) {
-      push.info({ message: '没有检测到任何修改' })
+      toast.info('没有检测到任何修改')
       return
     }
     dialogOpen.value = true

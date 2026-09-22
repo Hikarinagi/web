@@ -1,6 +1,14 @@
 <script setup lang="ts">
-  import { Button, Dialog, FileUpload, Form, FormField, Select, Textarea } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import {
+    Button,
+    Dialog,
+    FileUpload,
+    Form,
+    FormField,
+    Select,
+    Textarea,
+    toast,
+  } from '@hina-ui/vue'
   import {
     EPUB_REPORT_REASON_OPTIONS,
     EPUB_REPORT_REASON_VALUES,
@@ -42,7 +50,7 @@
     try {
       const mode = await submit({ reason, description: values.description })
       if (mode === 'reported') {
-        push.success({ message: '已收到，我们会尽快核实' })
+        toast.success('已收到，我们会尽快核实')
         visible.value = false
       }
     } catch (error) {

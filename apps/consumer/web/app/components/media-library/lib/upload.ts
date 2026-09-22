@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { MediaValue } from '../types'
 
 const ACCEPT = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
@@ -20,12 +20,12 @@ function getImageLimit(): Promise<number | null> {
 
 export async function validateImage(source: File | Blob): Promise<boolean> {
   if (!isAcceptedImage(source)) {
-    push.error({ message: '不支持的图片格式' })
+    toast.danger('不支持的图片格式')
     return false
   }
   const max = await getImageLimit()
   if (max && source.size > max) {
-    push.error({ message: `图片不能超过 ${Math.floor(max / 1024 / 1024)} MB` })
+    toast.danger(`图片不能超过 ${Math.floor(max / 1024 / 1024)} MB`)
     return false
   }
   return true

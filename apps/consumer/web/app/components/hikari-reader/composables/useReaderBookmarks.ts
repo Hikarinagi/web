@@ -1,6 +1,6 @@
 import type { ReadingPosition } from '@ritojs/kit'
 import type { Reader } from '@ritojs/core'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { ShallowRef } from 'vue'
 import { computed, ref } from 'vue'
 import type { BackendReaderVolumeState } from '~/components/hikari-reader/types'
@@ -39,7 +39,7 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
     const reader = options.reader.value
     if (!reader) return null
     if (hasCurrent.value) {
-      push.warning({ message: '当前位置已有书签' })
+      toast.warning('当前位置已有书签')
       return null
     }
     const position = options.currentPosition.value
@@ -80,12 +80,12 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
       if (idx !== -1) {
         list.value = list.value.map((item, i) => (i === idx ? saved : item))
       }
-      push.success({ message: '已添加书签' })
+      toast.success('已添加书签')
       return saved
     } catch {
       const idx = findIndexByClientId(clientId)
       if (idx !== -1) list.value = list.value.filter((_, i) => i !== idx)
-      push.error({ message: '添加书签失败，请稍后重试' })
+      toast.danger('添加书签失败，请稍后重试')
       return null
     }
   }
@@ -113,7 +113,7 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
       list.value = list.value.map(item => (item.id === id ? saved : item))
     } catch {
       list.value = list.value.map(item => (item.id === id ? previous : item))
-      push.error({ message: '更新书签失败，请稍后重试' })
+      toast.danger('更新书签失败，请稍后重试')
     }
   }
 
@@ -134,7 +134,7 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
         (a, b) =>
           Date.parse(b.modified_at ?? b.created_at) - Date.parse(a.modified_at ?? a.created_at),
       )
-      push.error({ message: '删除书签失败，请稍后重试' })
+      toast.danger('删除书签失败，请稍后重试')
     }
   }
 
@@ -142,7 +142,7 @@ export function useReaderBookmarks(options: UseReaderBookmarksOptions) {
     const position = positionOf(bookmark)
     if (!position) return
     void options.goToPosition(position).catch(() => {
-      push.error({ message: '跳转到书签位置失败' })
+      toast.danger('跳转到书签位置失败')
     })
   }
 

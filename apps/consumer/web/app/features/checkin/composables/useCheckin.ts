@@ -1,11 +1,6 @@
-import { push } from 'notivue'
-import type {
-  CheckInLoadingToastProps,
-  CheckInMakeUpToastProps,
-  CheckInRecord,
-  CheckInRewardToastProps,
-  CheckInStatus,
-} from '../checkin'
+import { toast } from '@hina-ui/vue'
+import { NotificationsCheckInMakeUpToast, NotificationsCheckInRewardToast } from '#components'
+import type { CheckInRecord, CheckInStatus } from '../checkin'
 import { monthOf } from '../checkin'
 
 const visible = ref(false)
@@ -65,21 +60,15 @@ export function useCheckin() {
   async function checkIn() {
     if (checking.value || status.value?.checked_in_today) return
     checking.value = true
-    const notice = push.promise<CheckInLoadingToastProps>({
-      message: '签到中…',
-      props: { kind: 'check-in-loading' },
-    })
+    const id = toast.loading('签到中…')
     try {
       const result = await hikariRequest<'/api/v3/user/me/check-ins', 'post'>(
         '/api/v3/user/me/check-ins',
         { method: 'POST' },
       )
-      notice.resolve<CheckInRewardToastProps>({
-        message: result.milestone
-          ? `签到成功，获得 ${result.points} 光点 · 连续签到${result.milestone.days}天达成，+${result.milestone.bonus} 光点`
-          : `签到成功，获得光点 x ${result.points}`,
+      toast.custom(NotificationsCheckInRewardToast, {
+        id,
         props: {
-          kind: 'check-in-reward',
           date: result.date,
           points: result.points,
           milestone: result.milestone,
@@ -91,7 +80,7 @@ export function useCheckin() {
       ]).catch(() => {})
       return result
     } catch {
-      notice.clear()
+      toast.dismiss(id)
     } finally {
       checking.value = false
     }
@@ -100,22 +89,19 @@ export function useCheckin() {
   async function makeUp(date: string) {
     if (makingUp.value) return
     makingUp.value = true
-    const notice = push.promise<CheckInLoadingToastProps>({
-      message: '补签中…',
-      props: { kind: 'check-in-loading' },
-    })
+    const id = toast.loading('补签中…')
     try {
       const result = await hikariRequest<'/api/v3/user/me/check-ins/make-up', 'post'>(
         '/api/v3/user/me/check-ins/make-up',
         { method: 'POST', body: { date } },
       )
-      notice.resolve<CheckInMakeUpToastProps>({
-        message: `补签成功 · ${result.date}，消耗 ${result.cost} 光点`,
-        props: { kind: 'check-in-make-up', cost: result.cost, date: result.date },
+      toast.custom(NotificationsCheckInMakeUpToast, {
+        id,
+        props: { cost: result.cost, date: result.date },
       })
       await Promise.all([loadStatus(), loadRecords(month.value)]).catch(() => {})
     } catch {
-      notice.clear()
+      toast.dismiss(id)
     } finally {
       makingUp.value = false
     }

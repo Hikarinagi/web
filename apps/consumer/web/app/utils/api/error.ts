@@ -5,7 +5,7 @@ import {
   type ApiFieldError,
   type HikariBizCode,
 } from '@hikarinagi/shared'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import { isRecord } from '#shared/utils/record'
 
 const HTTP_STATUS_MESSAGE: Partial<Record<number, string>> = {
@@ -98,10 +98,7 @@ export function showApiErrorToast(error: HikariApiError) {
   if (!import.meta.client) return
 
   const detail = formatDetails(error.details)
-  push.error({
-    title: '请求失败',
-    message: detail ? `${error.message}\n${detail}` : error.message,
-  })
+  toast.danger(error.message, { description: detail || undefined })
 }
 
 export function isAuthError(error: unknown) {

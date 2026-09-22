@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { MediaValue } from '../types'
 
 function fileNameOf(media: MediaValue, url: string) {
@@ -31,12 +31,12 @@ export async function downloadMedia(items: MediaValue[], resolve: (media: MediaV
     }
   }
   if (failed === items.length) {
-    push.error({ message: '下载失败' })
+    toast.danger('下载失败')
     return
   }
   if (failed) {
-    push.warning({ message: `${failed} 张下载失败` })
+    toast.warning(`${failed} 张下载失败`)
     return
   }
-  if (items.length > 1) push.success({ message: `已下载 ${items.length} 张` })
+  if (items.length > 1) toast.success(`已下载 ${items.length} 张`)
 }

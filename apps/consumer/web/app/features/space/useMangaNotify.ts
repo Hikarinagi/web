@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { NotificationPageData } from '~~/server/api/pages/setting/notification.get'
 
 type MangaNotifySetting = NotificationPageData['manga']
@@ -19,7 +19,7 @@ export function useMangaNotify(initial: MangaNotifySetting) {
       )
       setting.value = { ...next, statuses: [...next.statuses] }
       current.value = { ...next, statuses: [...next.statuses] }
-      push.success({ message: '已更新追更提醒' })
+      toast.success('已更新追更提醒')
     } catch {
       setting.value = { ...current.value, statuses: [...current.value.statuses] }
     } finally {

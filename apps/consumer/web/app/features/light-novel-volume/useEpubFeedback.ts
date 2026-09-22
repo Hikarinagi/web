@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import { isTerminalStatus, type EpubReview } from './epub-correction'
 import { toEpubReportBody, type EpubReportReason } from './epub-report'
 
@@ -21,7 +21,7 @@ function getEpubLimit(): Promise<number | null> {
 async function validateEpub(picked: File): Promise<boolean> {
   const max = await getEpubLimit()
   if (max && picked.size > max) {
-    push.error({ message: `EPUB 不能超过 ${Math.floor(max / 1024 / 1024)} MB` })
+    toast.danger(`EPUB 不能超过 ${Math.floor(max / 1024 / 1024)} MB`)
     return false
   }
   return true

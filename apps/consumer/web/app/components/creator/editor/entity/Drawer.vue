@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Drawer, Skeleton, Stack } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Drawer, Skeleton, Stack, toast } from '@hina-ui/vue'
   import { useEntityDrawer } from '~/features/creator/composables/useEntityDrawer'
   import {
     WORKSPACE_SESSION_KEY,
@@ -58,9 +57,9 @@
         name: result.resource.title,
         cover: result.resource.cover,
       })
-      push.success({ message: '修改已生效' })
+      toast.success('修改已生效')
     } else {
-      push.success({ message: mineCr.value ? '已更新变更请求' : '已提交，等待审核' })
+      toast.success(mineCr.value ? '已更新变更请求' : '已提交，等待审核')
     }
     emit('close')
   }
@@ -77,7 +76,7 @@
       needsReview: payload.needsReview,
       openChangeRequestId: mineCr.value?.id ?? null,
     })
-    push.success({ message: '已暂存，随本次会话一起提交' })
+    toast.success('已暂存，随本次会话一起提交')
     emit('close')
   }
 </script>

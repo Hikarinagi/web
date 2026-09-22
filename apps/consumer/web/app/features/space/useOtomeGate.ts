@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 
 export function useOtomeGate(initial: boolean) {
   const auth = useAuthStore()
@@ -17,7 +17,7 @@ export function useOtomeGate(initial: boolean) {
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
       current.value = value
-      push.success({ message: '已更新内容偏好' })
+      toast.success('已更新内容偏好')
     } catch {
       enabled.value = current.value
     } finally {

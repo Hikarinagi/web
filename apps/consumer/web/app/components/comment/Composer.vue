@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Stack, Text } from '@hina-ui/vue'
+  import { Card, Inline, Stack, Text } from '@hina-ui/vue'
   import { CornerDownRight } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
@@ -43,6 +43,7 @@
   }>()
 
   const auth = useAuthStore()
+  const { requireLogin } = useAuthGate()
   const loginButtonRef = ref<{ $el?: HTMLElement }>()
   const editorRef = ref<{ focus: () => void; reset: () => void }>()
 
@@ -80,20 +81,21 @@
     </AnimatePresence>
 
     <Inline gap="md" align="start">
-      <Avatar :user="auth.user" class="size-9! shrink-0" />
+      <Avatar :user="auth.user" class="size-10! shrink-0" />
       <Stack gap="none" class="min-w-0 flex-1">
-        <Button
-          login-required
+        <Card
           v-if="!auth.isAuthenticated"
           ref="loginButtonRef"
-          variant="outline"
-          tone="neutral"
-          size="sm"
-          block
-          class="justify-start rounded-(--editor-chrome-radius) px-3 text-muted"
+          as="button"
+          type="button"
+          :padded="false"
+          class="hn-state-layer hn-interactive rounded-(--editor-chrome-radius) px-3 py-2.25 text-start"
+          @click="requireLogin"
         >
-          {{ placeholder }}
-        </Button>
+          <Text size="sm" class="leading-normal text-(--editor-placeholder-color)">
+            {{ placeholder }}
+          </Text>
+        </Card>
         <CommentEditor
           v-else
           ref="editorRef"

@@ -12,6 +12,7 @@
     Section,
     Stack,
     Text,
+    toast,
   } from '@hina-ui/vue'
   import { Plus, Trash2 } from '@lucide/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
@@ -56,7 +57,7 @@
   async function onSubmit() {
     if (busy.value) return
     if (props.app.redirect_uris.includes(values.uri)) {
-      push.error({ message: '该地址已存在' })
+      toast.danger('该地址已存在')
       return
     }
     try {

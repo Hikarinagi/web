@@ -13,9 +13,7 @@ const DEFAULT_SCOPE: FeedScope = 'recommend'
 export function useFeedTabs(onSelect?: (key: FeedScope) => void) {
   const route = useRoute()
   const router = useRouter()
-  const auth = useAuthStore()
-  const { toLogin } = useAuthGate()
-  const { currentPath } = useAuthReturn()
+  const { requireLogin } = useAuthGate()
 
   const scope = computed<FeedScope>(() => {
     const raw = Array.isArray(route.query.tab) ? route.query.tab[0] : route.query.tab
@@ -27,10 +25,7 @@ export function useFeedTabs(onSelect?: (key: FeedScope) => void) {
   function select(key: FeedScope) {
     const tab = FEED_TABS.find(item => item.key === key)
     if (!tab) return
-    if (tab.auth && !auth.isAuthenticated) {
-      toLogin('login', currentPath.value)
-      return
-    }
+    if (tab.auth && !requireLogin()) return
     const target = { path: '/', query: key === DEFAULT_SCOPE ? {} : { tab: key } }
     if (route.path === '/') void router.replace(target)
     else void router.push(target)

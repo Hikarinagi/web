@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Panel, Stack, Text } from '@hina-ui/vue'
+  import { Button, Inline, Panel, Stack, Text, toast } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import { AlertTriangle } from '@lucide/vue'
 
@@ -22,7 +22,7 @@
           body: { enabled: !props.app.enabled },
         },
       )
-      push.success({ message: props.app.enabled ? '应用已停用' : '应用已启用' })
+      toast.success(props.app.enabled ? '应用已停用' : '应用已启用')
       emit('changed')
     } finally {
       busy.value = false
@@ -46,7 +46,7 @@
         '/api/v3/user/me/developer/apps/{client_id}',
         { method: 'delete', path: { client_id: props.app.client_id } },
       )
-      push.success({ message: '应用已删除' })
+      toast.success('应用已删除')
       await navigateTo('/developers/console')
     } finally {
       busy.value = false

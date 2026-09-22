@@ -1,4 +1,5 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
+import { NotificationsDmToast } from '#components'
 import type { UnreadSummary } from '~/features/notifications/notifications'
 import type { DmNewEvent } from '~/features/messages/dm'
 import { useUnread } from '~/features/notifications/useUnread'
@@ -15,7 +16,7 @@ export default defineNuxtPlugin(() => {
   on<{ count: number }>('unread:dm', payload => dmUnread.set(payload.count))
   on<DmNewEvent>('dm:new', ({ peer }) => {
     if (router.currentRoute.value.path === '/messages') return
-    push.info({ message: `${displayName(peer)} 给你发了一条私信`, props: { kind: 'dm', peer } })
+    toast.custom(NotificationsDmToast, { props: { peer } })
   })
 
   watch(

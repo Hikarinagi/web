@@ -7,20 +7,14 @@ export type CheckInResult = ApiData<'/api/v3/user/me/check-ins', 'post'>
 export type CheckInMilestone = NonNullable<CheckInResult['milestone']>
 
 export interface CheckInRewardToastProps {
-  kind: 'check-in-reward'
   date: string
   points: number
   milestone: CheckInMilestone | null
 }
 
 export interface CheckInMakeUpToastProps {
-  kind: 'check-in-make-up'
   cost: number
   date: string
-}
-
-export interface CheckInLoadingToastProps {
-  kind: 'check-in-loading'
 }
 
 export function pad2(value: number) {

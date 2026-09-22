@@ -9,8 +9,8 @@ export default defineNuxtRouteMiddleware(async to => {
   }
   if (!can(required)) {
     if (import.meta.client) {
-      const { push } = await import('notivue')
-      push.warning({ message: '没有权限访问该页面' })
+      const { toast } = await import('@hina-ui/vue')
+      toast.warning('没有权限访问该页面')
     }
     return navigateTo('/create')
   }

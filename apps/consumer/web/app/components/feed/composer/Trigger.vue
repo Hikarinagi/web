@@ -9,10 +9,15 @@
 </script>
 
 <template>
-  <Inline gap="md" :wrap="false" class="cursor-text px-4 py-4" @click="$emit('compose')">
+  <Inline
+    gap="md"
+    :wrap="false"
+    class="cursor-text px-4 py-4 text-(length:--composer-text-size) leading-(--composer-leading)"
+    @click="$emit('compose')"
+  >
     <Avatar :user="auth.user" class="size-9! shrink-0" />
-    <Text class="flex-1 text-base leading-relaxed text-(--editor-placeholder-color)">
-      分享你最近的想法、推荐、打卡
+    <Text size="inherit" class="flex-1 text-(--editor-placeholder-color)">
+      分享你的发现、推荐…
     </Text>
     <SegmentedControl
       :options="COMPOSER_KIND_OPTIONS"

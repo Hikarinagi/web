@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Popover, Sheet } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Popover, Sheet, toast } from '@hina-ui/vue'
   import type { FavoriteEntityType } from '~/features/favorite/entity'
 
   defineOptions({ name: 'FavoritePickerOverlay' })
@@ -35,7 +34,7 @@
   }
 
   function onCreated() {
-    push.success({ message: '已新建并收藏' })
+    toast.success('已新建并收藏')
   }
 
   defineExpose({ open })

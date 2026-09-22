@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Button, Panel, Skeleton, Stack, Text } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Button, Panel, Skeleton, Stack, Text, toast } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { EDITOR_VALUES_KEY } from '~/features/creator/composables/useChangeRequestEditor'
   import { useEntityBackfill } from '~/features/creator/composables/useEntityBackfill'
@@ -43,12 +42,12 @@
     try {
       const ids = readExternalIds(props.resourceType, values)
       if (!ids) {
-        push.warning({ message: '此条目没有登记 Bangumi / VNDB 外部源 ID，无法补全关联实体' })
+        toast.warning('此条目没有登记 Bangumi / VNDB 外部源 ID，无法补全关联实体')
         return
       }
       const loaded = await loadWorkRoster(props.resourceType, ids)
       if (!loaded) {
-        push.error({ message: '拉取外部源数据失败，稍后重试' })
+        toast.danger('拉取外部源数据失败，稍后重试')
         return
       }
       roster.value = loaded
@@ -70,8 +69,8 @@
         for (let task = tasks.shift(); task; task = tasks.shift()) await task()
       }
       await Promise.all(Array.from({ length: 4 }, () => worker()))
-      if (fail) push.error({ message: `${fail} 项补全失败，可重试` })
-      else push.success({ message: '关联实体资料补全已暂存，随本次提交生效' })
+      if (fail) toast.danger(`${fail} 项补全失败，可重试`)
+      else toast.success('关联实体资料补全已暂存，随本次提交生效')
     } finally {
       running.value = false
     }

@@ -1,5 +1,5 @@
 import type { Form } from '@hina-ui/vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import { getFieldErrors } from '~/utils/api/error'
 
 export function useChangeUsernameForm(onSuccess: () => void) {
@@ -18,7 +18,7 @@ export function useChangeUsernameForm(onSuccess: () => void) {
         { method: 'PATCH', body: { username: values.username.trim() } },
       )
       auth.setUser(updated)
-      push.success({ message: '用户名已修改' })
+      toast.success('用户名已修改')
       onSuccess()
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))

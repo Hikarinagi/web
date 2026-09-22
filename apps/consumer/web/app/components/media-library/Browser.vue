@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { Center, ScrollArea, Stack, Text } from '@hina-ui/vue'
+  import { Center, ScrollArea, Stack, Text, toast } from '@hina-ui/vue'
   import { CloudUpload } from '@lucide/vue'
-  import { push } from 'notivue'
   import { useMediaCollection } from './composables/useMediaCollection'
   import { useMediaLibrary } from './composables/useMediaLibrary'
   import { downloadMedia } from './lib/download'
@@ -32,7 +31,7 @@
       return
     }
     if (max.value != null && selected.value.length >= max.value) {
-      push.info({ message: `最多选择 ${max.value} 张` })
+      toast.info(`最多选择 ${max.value} 张`)
       return
     }
     selected.value = [...selected.value, media]
@@ -49,7 +48,7 @@
     if (!added.length) return
     selected.value = [...selected.value, ...added]
     if (max.value != null && picks.filter(p => !existing.has(p.id)).length > added.length) {
-      push.info({ message: `最多选择 ${max.value} 张` })
+      toast.info(`最多选择 ${max.value} 张`)
     }
   }
 
@@ -113,7 +112,7 @@
 
   async function copyLink(media: MediaValue) {
     await copy(mediaUrl(media))
-    push.success({ message: '链接已复制' })
+    toast.success('链接已复制')
   }
 
   function requestDelete(items: MediaValue[]) {

@@ -1,5 +1,5 @@
 import type { Form } from '@hina-ui/vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { MediaValue } from '~/components/media-library/types'
 import type { CurrentUser } from '~/types/auth'
 import { getFieldErrors } from '~/utils/api/error'
@@ -44,7 +44,7 @@ export function useProfileForm(user: CurrentUser) {
         },
       })
       auth.setUser(updated)
-      push.success({ message: '资料已更新' })
+      toast.success('资料已更新')
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))
     } finally {

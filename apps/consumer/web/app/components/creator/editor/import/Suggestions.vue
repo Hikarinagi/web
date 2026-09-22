@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Button, Heading, Panel, Stack } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Button, Heading, Panel, Stack, toast } from '@hina-ui/vue'
   import {
     buildRosterActions,
     type RosterAction,
@@ -72,8 +71,8 @@
         for (let task = tasks.shift(); task; task = tasks.shift()) await task()
       }
       await Promise.all(Array.from({ length: 4 }, () => worker()))
-      if (failed.value.size) push.error({ message: `${failed.value.size} 项应用失败，可重试` })
-      else push.success({ message: '所选对齐操作已应用，随本次提交生效' })
+      if (failed.value.size) toast.danger(`${failed.value.size} 项应用失败，可重试`)
+      else toast.success('所选对齐操作已应用，随本次提交生效')
     } finally {
       running.value = false
     }

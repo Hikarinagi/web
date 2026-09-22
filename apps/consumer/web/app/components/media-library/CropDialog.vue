@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { Button, Center, Dialog, IconButton, Skeleton, Stack } from '@hina-ui/vue'
+  import { Button, Center, Dialog, IconButton, Skeleton, Stack, toast } from '@hina-ui/vue'
   import { RotateCcw } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
-  import { push } from 'notivue'
   import {
     CircleStencil,
     Cropper,
@@ -77,13 +76,13 @@
     try {
       const canvas = cropper.value?.getResult().canvas
       if (!canvas) {
-        push.error({ message: '无法生成裁剪结果' })
+        toast.danger('无法生成裁剪结果')
         return
       }
 
       const blob = await toBlob(canvas)
       if (!blob) {
-        push.error({ message: '无法生成裁剪结果' })
+        toast.danger('无法生成裁剪结果')
         return
       }
 
@@ -94,7 +93,7 @@
       emit('cropped', result)
       visible.value = false
     } catch {
-      push.error({ message: '当前图片无法在浏览器中裁剪' })
+      toast.danger('当前图片无法在浏览器中裁剪')
     } finally {
       saving.value = false
     }

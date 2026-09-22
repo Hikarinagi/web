@@ -171,6 +171,9 @@
   --editor-text-muted: var(--color-hikari-surface-500);
   --editor-placeholder-color: var(--hn-fg-subtle);
 
+  --composer-text-size: 0.9375rem;
+  --composer-leading: 1.65;
+
   --editor-focus-ring: var(--color-hikari-primary-500);
   --editor-selection-bg: var(--color-hikari-primary-soft);
 
@@ -346,6 +349,11 @@ html.dark {
   .hikari-table-stack tbody th {
     height: auto;
   }
+}
+
+@utility hikari-brand-inline {
+  height: 1.2em;
+  vertical-align: -0.264em;
 }
 
 @utility hikari-dot-grid {

@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 
 export function useDownloadLink(galgameId: number) {
   const pendingFileId = ref<number | null>(null)
@@ -32,9 +32,9 @@ export function useDownloadLink(galgameId: number) {
     const minutes = Math.round(link.expires_in / 60)
     try {
       await navigator.clipboard.writeText(link.file_url)
-      push.success({ message: `链接已复制，${minutes} 分钟内有效` })
+      toast.success(`链接已复制，${minutes} 分钟内有效`)
     } catch {
-      push.error({ message: '复制失败，请手动长按链接复制' })
+      toast.danger('复制失败，请手动长按链接复制')
     }
   }
 

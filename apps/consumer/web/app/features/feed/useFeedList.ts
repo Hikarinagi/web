@@ -1,5 +1,5 @@
 import { ChevronUp, RefreshCw } from '@lucide/vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { Ref } from 'vue'
 import { clusterFeed, feedItemBlocksNsfw, foldFeed } from './feed'
 import { feedKey } from './height'
@@ -199,11 +199,11 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
 
   function notifyRefresh(count: number) {
     if (count > 0) {
-      push.success({ message: `已更新 ${count} 条动态` })
+      toast.success(`已更新 ${count} 条动态`)
       return
     }
 
-    push.info({ message: '暂无新动态' })
+    toast.info('暂无新动态')
   }
 
   return {

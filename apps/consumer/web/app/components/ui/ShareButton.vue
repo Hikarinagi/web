@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { Button, DropdownMenu, DropdownMenuItem, IconButton } from '@hina-ui/vue'
+  import { Button, DropdownMenu, DropdownMenuItem, IconButton, toast } from '@hina-ui/vue'
   import { Check, Copy, Share2 } from '@lucide/vue'
   import { useClipboard } from '@vueuse/core'
-  import { push } from 'notivue'
 
   defineOptions({ name: 'ShareButton', inheritAttrs: false })
 
@@ -34,12 +33,12 @@
 
   async function copyLink() {
     if (!isSupported.value) {
-      push.error({ message: '复制失败' })
+      toast.danger('复制失败')
       return
     }
 
     await copy(shareUrl())
-    push.success({ message: '链接已复制' })
+    toast.success('链接已复制')
   }
 </script>
 

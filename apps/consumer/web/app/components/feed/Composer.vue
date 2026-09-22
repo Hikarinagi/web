@@ -7,11 +7,7 @@
   const props = defineProps<{ topic?: ComposerTopic; sectionId?: number }>()
 
   const auth = useAuthStore()
-  const { toLogin } = useAuthGate()
-
-  function onCompose() {
-    toLogin('login')
-  }
+  const { requireLogin } = useAuthGate()
 </script>
 
 <template>
@@ -21,6 +17,6 @@
       :topic="props.topic"
       :section-id="props.sectionId"
     />
-    <FeedComposerTrigger v-else @compose="onCompose" />
+    <FeedComposerTrigger v-else @compose="requireLogin" />
   </Card>
 </template>

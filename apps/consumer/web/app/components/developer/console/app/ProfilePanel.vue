@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  import { Button, Form, FormField, Heading, Inline, Input, Section, Stack } from '@hina-ui/vue'
+  import {
+    Button,
+    Form,
+    FormField,
+    Heading,
+    Inline,
+    Input,
+    Section,
+    Stack,
+    toast,
+  } from '@hina-ui/vue'
   import type { DeveloperAppPageData } from '~~/server/api/pages/developers/console/apps/[clientId].get'
   import type { MediaValue } from '~/components/media-library/types'
   import {
@@ -51,7 +61,7 @@
         },
       )
       logo.value = undefined
-      push.success({ message: '应用信息已更新' })
+      toast.success('应用信息已更新')
       emit('changed')
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))

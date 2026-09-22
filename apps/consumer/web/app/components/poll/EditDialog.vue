@@ -30,7 +30,7 @@
       await state.value.onSave?.(def)
       close()
     } catch {
-      /* notivue surfaces the error */
+      /* the request utility surfaces the error */
     } finally {
       submitting.value = false
     }

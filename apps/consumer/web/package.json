@@ -74,7 +74,6 @@
     "embla-carousel-vue": "^8.6.0",
     "eslint": "^9.39.4",
     "motion-v": "^2.2.1",
-    "notivue": "^2.4.5",
     "nuxt": "^4.4.6",
     "nuxt-schema-org": "^6.2.3",
     "overlayscrollbars": "^2.16.0",

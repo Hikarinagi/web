@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Button, Dialog, Form, FormField, Input } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Button, Dialog, Form, FormField, Input, toast } from '@hina-ui/vue'
   import { nicknameSchema } from '~/features/space/schemas/setting.schema'
   import { getFieldErrors } from '~/utils/api/error'
 
@@ -46,7 +45,7 @@
         },
       })
       auth.setUser(updated)
-      push.success({ message: '昵称已设置' })
+      toast.success('昵称已设置')
       open.value = false
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))

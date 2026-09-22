@@ -9,7 +9,7 @@
     <Stack gap="md">
       <Heading :level="2" size="base">登录，看你的专属动态</Heading>
       <Inline gap="sm">
-        <Button login-required class="flex-1">登录</Button>
+        <Button class="flex-1" @click="toLogin('login')">登录</Button>
         <Button variant="outline" tone="neutral" @click="toLogin('register')">注册</Button>
       </Inline>
     </Stack>

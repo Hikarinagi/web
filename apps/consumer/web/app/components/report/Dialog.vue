@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Button, Dialog, Form, FormField, Select, Textarea } from '@hina-ui/vue'
-  import { push } from 'notivue'
+  import { Button, Dialog, Form, FormField, Select, Textarea, toast } from '@hina-ui/vue'
   import {
     REPORT_REASON_OPTIONS,
     toReportBody,
@@ -42,7 +41,7 @@
     submitting.value = true
     try {
       await props.submit(toReportBody({ reason, description: values.description }))
-      push.success({ message: '举报已提交' })
+      toast.success('举报已提交')
       visible.value = false
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))

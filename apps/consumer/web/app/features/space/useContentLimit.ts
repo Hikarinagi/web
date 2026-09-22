@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { CurrentUser } from '~/types/auth'
 
 type ContentLimit = CurrentUser['content_limit']
@@ -20,7 +20,7 @@ export function useContentLimit(initial: ContentLimit) {
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
       current.value = value
-      push.success({ message: '已更新内容偏好' })
+      toast.success('已更新内容偏好')
     } catch {
       selected.value = current.value
     } finally {

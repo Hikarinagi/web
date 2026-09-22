@@ -1,5 +1,7 @@
 import type { AuthMode } from '~/types/auth'
 
+const promptOpen = ref(false)
+
 export function useAuthGate() {
   const route = useRoute()
   const auth = useAuthStore()
@@ -24,9 +26,9 @@ export function useAuthGate() {
 
   function requireLogin() {
     if (auth.isAuthenticated) return true
-    toLogin('login')
+    promptOpen.value = true
     return false
   }
 
-  return { toLogin, requireLogin }
+  return { toLogin, requireLogin, promptOpen }
 }

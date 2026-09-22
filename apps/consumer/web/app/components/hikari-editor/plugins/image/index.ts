@@ -3,7 +3,7 @@ import { ImageBlockExtension } from '@hikarinagi/editor-schema'
 import type { Editor } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import { useMediaLibrary } from '~/components/media-library/composables/useMediaLibrary'
 import { isAcceptedImage, uploadImage } from '~/components/media-library/lib/upload'
 import type { MediaValue } from '~/components/media-library/types'
@@ -42,14 +42,10 @@ function clipboardImages(event: ClipboardEvent): File[] {
 
 async function uploadAndInsert(editor: Editor, files: File[]) {
   for (const file of files) {
-    const note = isAcceptedImage(file) ? push.promise({ message: '正在上传图片…' }) : null
+    const id = isAcceptedImage(file) ? toast.loading('正在上传图片…') : null
     const media = await uploadImage(file)
-    if (media) {
-      insertUploadedImage(editor, media)
-      note?.clear()
-    } else {
-      note?.destroy()
-    }
+    if (media) insertUploadedImage(editor, media)
+    if (id !== null) toast.dismiss(id)
   }
 }
 

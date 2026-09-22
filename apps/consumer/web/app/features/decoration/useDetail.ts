@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 import { usePurchaseDialog } from './usePurchaseDialog'
 
@@ -64,7 +64,7 @@ export function useDecorationDetail() {
           body: { decoration_id: target.id },
         })
         ownedIds.value = new Set([...ownedIds.value, target.id])
-        push.success({ message: '已收入装扮库' })
+        toast.success('已收入装扮库')
       },
     })
   }

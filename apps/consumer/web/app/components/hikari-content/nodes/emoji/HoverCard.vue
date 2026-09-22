@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Text } from '@hina-ui/vue'
+  import { Stack, Text } from '@hina-ui/vue'
   import { SmilePlus } from '@lucide/vue'
   import { useUserEmojiCatalog } from '~/components/hikari-editor/plugins/emoji/composables/useUserEmojiCatalog'
 
@@ -43,28 +43,30 @@
 </script>
 
 <template>
-  <HikariImage
-    :src="src"
-    :alt="`:${code}:`"
-    :processing="false"
-    :draggable="false"
-    class="size-28"
-    image-class="h-full w-full object-contain"
-  />
-  <Text as="span" size="xs" tone="muted" class="font-mono">:{{ code }}:</Text>
-  <Text v-if="setName" as="span" size="xs" tone="faint">{{ setName }}</Text>
-  <Button
-    login-required
-    variant="soft"
-    tone="neutral"
-    size="sm"
-    pill
-    :loading="submitting"
-    :disabled="disabled"
-    class="mt-1 w-36"
-    @click="onSubscribe"
-  >
-    <template #icon><SmilePlus /></template>
-    {{ label }}
-  </Button>
+  <Stack gap="xs" align="center">
+    <HikariImage
+      :src="src"
+      :alt="`:${code}:`"
+      :processing="false"
+      :draggable="false"
+      class="size-28"
+      image-class="h-full w-full object-contain"
+    />
+    <Text as="span" size="xs" tone="muted" class="font-mono">:{{ code }}:</Text>
+    <Text v-if="setName" as="span" size="xs" tone="faint">{{ setName }}</Text>
+    <Button
+      login-required
+      variant="soft"
+      tone="neutral"
+      size="sm"
+      pill
+      :loading="submitting"
+      :disabled="disabled"
+      class="mt-1 w-36"
+      @click="onSubscribe"
+    >
+      <template #icon><SmilePlus /></template>
+      {{ label }}
+    </Button>
+  </Stack>
 </template>

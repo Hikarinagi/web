@@ -28,7 +28,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@nuxt/icon',
-    'notivue/nuxt',
     'motion-v/nuxt',
     '@vueuse/nuxt',
     '@nuxtjs/sitemap',
@@ -87,12 +86,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [
-    '@bprogress/core/css',
-    '~/assets/css/main.css',
-    'notivue/notification.css',
-    'notivue/animations.css',
-  ],
+  css: ['@bprogress/core/css', '~/assets/css/main.css'],
 
   imports: {
     dirs: ['~/features/**/composables/*', '~/labels/*'],
@@ -136,6 +130,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
+      include: ['@hikarinagi/shared'],
       exclude: ['@ritojs/core', '@ritojs/kit'],
     },
   },
@@ -191,20 +186,5 @@ export default defineNuxtConfig({
 
   image: {
     provider: 'none',
-  },
-
-  notivue: {
-    position: 'top-right',
-    limit: 4,
-    enqueue: true,
-    avoidDuplicates: true,
-    notifications: {
-      global: {
-        duration: 5000,
-      },
-      error: {
-        duration: 6000,
-      },
-    },
   },
 })

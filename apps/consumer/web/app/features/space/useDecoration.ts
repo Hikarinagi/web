@@ -1,4 +1,4 @@
-import { push } from 'notivue'
+import { toast } from '@hina-ui/vue'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 import { usePurchaseDialog } from '~/features/decoration/usePurchaseDialog'
 
@@ -87,7 +87,7 @@ export function useDecoration(
     const current = selectedBadgeIds.value
     const has = current.includes(badgeId)
     if (!has && current.length >= BADGE_LIMIT) {
-      push.warning({ message: `最多佩戴 ${BADGE_LIMIT} 枚徽章` })
+      toast.warning(`最多佩戴 ${BADGE_LIMIT} 枚徽章`)
       return
     }
     const previous = current
@@ -127,7 +127,7 @@ export function useDecoration(
       body: { decoration_id: id },
     })
     await refresh()
-    push.success({ message: '已收入装扮库' })
+    toast.success('已收入装扮库')
   }
 
   return {

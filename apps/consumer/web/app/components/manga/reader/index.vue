@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { Center, Flex, Spinner, Stack, Text } from '@hina-ui/vue'
+  import { Center, Flex, Spinner, Stack, Text, toast } from '@hina-ui/vue'
   import { useMediaQuery } from '@vueuse/core'
   import { AnimatePresence, motion } from 'motion-v'
-  import { push } from 'notivue'
   import type { MangaReadPageData } from '~~/server/api/pages/mangas/reader/[id]/[chapterId].get'
   import { useMangaRate } from '~/features/manga/useMangaRate'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
@@ -85,7 +84,7 @@
   async function markGoing() {
     try {
       await rate.setStatus('GOING', false)
-      push.success({ message: '已标记在看' })
+      toast.success('已标记在看')
     } catch {
       /* empty */
     }

@@ -32,7 +32,7 @@
           v-model="title"
           variant="bare"
           maxlength="200"
-          placeholder="加个标题（选填）"
+          placeholder="标题"
           :class="
             cn(
               'h-auto pb-1.5 text-base font-semibold [--hn-input-px:0px]',
@@ -55,7 +55,8 @@
     >
       <Text
         v-if="!editor"
-        class="leading-relaxed text-(--editor-placeholder-color)"
+        size="inherit"
+        class="text-(--editor-placeholder-color)"
         :style="{ minHeight: 'var(--composer-min-h)' }"
       >
         分享你的发现、推荐…
@@ -68,10 +69,12 @@
 <style scoped>
   .composer-input {
     padding-top: 6px;
+    font-size: var(--composer-text-size);
+    line-height: var(--composer-leading);
   }
   .composer-input :deep(.hikari-editor-surface) {
-    font-size: 15px;
-    line-height: 1.65;
+    font-size: var(--composer-text-size);
+    line-height: var(--composer-leading);
   }
   .composer-input :deep(.ProseMirror) {
     min-height: var(--composer-min-h);
