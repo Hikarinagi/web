@@ -46,7 +46,7 @@
           <Inline gap="none" align="center" :wrap="false" class="gap-2.5">
             <HikariImage
               :src="hinaWordmark"
-              alt="Hinagi"
+              alt="Hina"
               class="aspect-[1200/490] h-9 w-auto dark:brightness-0 dark:invert"
               image-class="aspect-[1200/490] h-9 w-auto object-contain"
               :lazy="false"

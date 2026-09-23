@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import { Container, Stack } from '@hina-ui/vue'
 
   const route = useRoute()
   const footerMode = computed(() => route.meta.footer)
@@ -14,16 +14,16 @@
     ),
   )
   const mainClass = computed(() =>
-    cn('flex-1 pt-(--app-header-height)', !fluid.value && 'mx-auto w-full max-w-app px-4 sm:px-6'),
+    cn('flex-1 pt-(--app-header-height)', fluid.value ? 'max-w-none px-0 sm:px-0' : 'max-w-app'),
   )
 </script>
 
 <template>
   <Stack gap="none" :class="shellClass">
     <LayoutAppHeader :flush="route.meta.headerFlush === true" />
-    <Stack as="main" gap="none" :class="mainClass">
+    <Container as="main" :class="mainClass">
       <slot />
-    </Stack>
+    </Container>
     <LayoutAppFooter
       v-if="footerMode !== false"
       :class="footerMode === 'desktop' ? 'hidden md:block' : null"

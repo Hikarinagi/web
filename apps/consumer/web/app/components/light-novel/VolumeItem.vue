@@ -25,10 +25,10 @@
   const to = computed(() => `/light-novel-volumes/${props.volume.id}`)
 
   const pct = computed(() => Math.min(100, Math.max(0, props.progress?.percentage ?? 0)))
-  const done = computed(() => pct.value >= 99.5)
+  const done = computed(() => props.progress?.finished ?? false)
   const stateLabel = computed(() => {
-    if (!props.progress || pct.value <= 0) return '没有读过'
     if (done.value) return '已读完'
+    if (pct.value <= 0) return '没有读过'
     return `已读 ${Math.round(pct.value)}%`
   })
 </script>
@@ -60,8 +60,8 @@
         {{ volume.online_reading_is_collection ? 'EPUB 合集' : 'EPUB' }}
       </Tag>
       <Progress
-        v-if="progress && pct > 0"
-        :value="pct"
+        v-if="done || pct > 0"
+        :value="done ? 100 : pct"
         size="sm"
         :tone="done ? 'success' : 'accent'"
         class="absolute inset-x-0 bottom-0"

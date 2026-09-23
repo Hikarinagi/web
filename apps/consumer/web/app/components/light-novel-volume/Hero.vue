@@ -16,6 +16,10 @@
     progress: LightNovelVolumePageData['progress']
     myRate: LightNovelVolumePageData['my_rate']
     myCoverVote: LightNovelVolumePageData['my_cover_vote']
+    precedingCount: number
+  }>()
+  const emit = defineEmits<{
+    progressChange: [NonNullable<LightNovelVolumePageData['progresses']>]
   }>()
 
   const title = computed(() => getLightNovelVolumeTitle(props.volume))
@@ -92,7 +96,12 @@
         </Stack>
 
         <LightNovelVolumeHeroMeta :volume="volume" />
-        <LightNovelVolumeHeroProgress :progress="progress" />
+        <LightNovelVolumeHeroProgress
+          :volume-id="volume.id"
+          :progress="progress"
+          :preceding-count="precedingCount"
+          @change="emit('progressChange', $event)"
+        />
         <LightNovelVolumeHeroCta :volume="volume" :progress="progress" :my-rate="myRate" />
       </Stack>
     </Flex>

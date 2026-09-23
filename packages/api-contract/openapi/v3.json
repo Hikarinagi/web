@@ -14879,8 +14879,16 @@
             "nullable": true,
             "type": "string"
           },
+          "finished": {
+            "type": "boolean"
+          },
           "last_read": {
             "format": "date-time",
+            "type": "string"
+          },
+          "marked_finished_at": {
+            "format": "date-time",
+            "nullable": true,
             "type": "string"
           },
           "percentage": {
@@ -14894,7 +14902,9 @@
           "volume_id",
           "percentage",
           "current_chapter_title",
-          "last_read"
+          "last_read",
+          "finished",
+          "marked_finished_at"
         ],
         "type": "object"
       },
@@ -19317,6 +19327,14 @@
         "required": [
           "read"
         ],
+        "type": "object"
+      },
+      "MarkVolumeFinishedDto": {
+        "properties": {
+          "through": {
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "MePermissionsDto": {
@@ -62799,6 +62817,74 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReadingBookmarkDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Reader"
+        ]
+      }
+    },
+    "/api/v3/reader/volumes/{volume_id}/finished": {
+      "delete": {
+        "operationId": "ReaderController_unmarkFinished",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "volume_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelProgressOverviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Reader"
+        ]
+      },
+      "put": {
+        "operationId": "ReaderController_markFinished",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "volume_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkVolumeFinishedDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelProgressOverviewDto"
                 }
               }
             },

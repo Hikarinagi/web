@@ -24,9 +24,19 @@ async function handler(event: H3Event) {
         path: { id },
       }).catch(() => null),
     ])
-  const progress = progress_overview?.progresses?.find(entry => entry.volume_id === id) ?? null
+  const progresses = progress_overview?.progresses ?? null
+  const progress = progresses?.find(entry => entry.volume_id === id) ?? null
 
-  return { volume, light_novel, volumes, contributors, progress, my_rate, my_cover_vote }
+  return {
+    volume,
+    light_novel,
+    volumes,
+    contributors,
+    progress,
+    progresses,
+    my_rate,
+    my_cover_vote,
+  }
 }
 
 export type LightNovelVolumePageData = Awaited<ReturnType<typeof handler>>

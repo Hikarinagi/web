@@ -9920,6 +9920,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/reader/volumes/{volume_id}/finished": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ReaderController_markFinished"];
+        post?: never;
+        delete: operations["ReaderController_unmarkFinished"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/reader/volumes/{volume_id}/progress": {
         parameters: {
             query?: never;
@@ -15490,8 +15506,11 @@ export interface components {
         };
         LightNovelProgressEntryDto: {
             current_chapter_title: string | null;
+            finished: boolean;
             /** Format: date-time */
             last_read: string;
+            /** Format: date-time */
+            marked_finished_at: string | null;
             percentage: number;
             volume_id: number;
         };
@@ -16599,6 +16618,9 @@ export interface components {
         };
         MarkReadResDto: {
             read: boolean;
+        };
+        MarkVolumeFinishedDto: {
+            through?: boolean;
         };
         MePermissionsDto: {
             permissions: string[];
@@ -37215,6 +37237,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReadingBookmarkDto"];
+                };
+            };
+        };
+    };
+    ReaderController_markFinished: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                volume_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkVolumeFinishedDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelProgressOverviewDto"];
+                };
+            };
+        };
+    };
+    ReaderController_unmarkFinished: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                volume_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelProgressOverviewDto"];
                 };
             };
         };

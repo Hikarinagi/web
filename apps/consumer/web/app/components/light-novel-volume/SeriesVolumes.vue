@@ -3,10 +3,15 @@
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
 
   defineOptions({ name: 'LightNovelVolumeSeriesVolumes' })
-  defineProps<{
+  const props = defineProps<{
     volume: LightNovelVolumePageData['volume']
     volumes: LightNovelVolumePageData['volumes']
+    progresses: LightNovelVolumePageData['progresses']
   }>()
+
+  const progressMap = computed(
+    () => new Map((props.progresses ?? []).map(item => [item.volume_id, item])),
+  )
 </script>
 
 <template>
@@ -16,6 +21,8 @@
         v-for="item in volumes"
         :key="item.id"
         :volume="item"
+        :progress="progressMap.get(item.id) ?? null"
+        :tracked="progresses != null"
         :active="item.id === volume.id"
       />
     </Grid>

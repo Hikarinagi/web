@@ -2,6 +2,7 @@
   import { Stack } from '@hina-ui/vue'
   import { lightNovelVolumeSeo } from '~/features/seo/light-novel-volume'
   import { useViewPing } from '~/features/interaction/useViewPing'
+  import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
 
   definePageMeta({
     container: 'full',
@@ -30,6 +31,15 @@
       : undefined,
   )
 
+  function applyProgresses(progresses: NonNullable<LightNovelVolumePageData['progresses']>) {
+    if (!data.value) return
+    data.value = {
+      ...data.value,
+      progresses,
+      progress: progresses.find(entry => entry.volume_id === data.value?.volume.id) ?? null,
+    }
+  }
+
   const seo = computed(() => (data.value ? lightNovelVolumeSeo(data.value) : null))
 
   useHikariSeoMeta({
@@ -49,6 +59,8 @@
       :progress="data.progress"
       :my-rate="data.my_rate"
       :my-cover-vote="data.my_cover_vote"
+      :preceding-count="currentIndex + 1"
+      @progress-change="applyProgresses"
     />
 
     <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
@@ -56,7 +68,11 @@
 
       <LightNovelVolumeAbout :volume="data.volume" :contributors="data.contributors" />
 
-      <LightNovelVolumeSeriesVolumes :volume="data.volume" :volumes="data.volumes" />
+      <LightNovelVolumeSeriesVolumes
+        :volume="data.volume"
+        :volumes="data.volumes"
+        :progresses="data.progresses"
+      />
     </Stack>
   </Stack>
 </template>

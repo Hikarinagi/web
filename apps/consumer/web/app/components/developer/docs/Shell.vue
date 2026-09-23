@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <Inline gap="none" align="start" :wrap="false" class="mx-auto max-w-header lg:gap-10">
+  <Inline gap="none" align="start" :wrap="false" class="mx-auto w-full max-w-header lg:gap-10">
     <Stack
       as="nav"
       gap="none"
