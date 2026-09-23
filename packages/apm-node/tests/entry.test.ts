@@ -243,6 +243,20 @@ describe('entry sampler', () => {
     expect(decide(0, {}, SpanKind.SERVER)).toBe(SamplingDecision.NOT_RECORD)
   })
 
+  it('samples crawler roots at the bot rate and leaves humans and children alone', () => {
+    const bot = {
+      'user_agent.original': 'Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)',
+    }
+    const human = {
+      'user_agent.original': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130.0',
+    }
+    expect(decide(1, { bot: 0 }, SpanKind.SERVER, bot)).toBe(SamplingDecision.NOT_RECORD)
+    expect(decide(1, { bot: 0 }, SpanKind.SERVER, human)).toBe(SamplingDecision.RECORD_AND_SAMPLED)
+    expect(decide(1, {}, SpanKind.SERVER, bot)).toBe(SamplingDecision.RECORD_AND_SAMPLED)
+    expect(decide(0, { bot: 1 }, SpanKind.SERVER, bot)).toBe(SamplingDecision.RECORD_AND_SAMPLED)
+    expect(decide(1, { bot: 0 }, SpanKind.CONSUMER, bot)).toBe(SamplingDecision.RECORD_AND_SAMPLED)
+  })
+
   it('drops BullMQ housekeeping roots regardless of rate', () => {
     const name = (spanName: string, kind: SpanKind) =>
       entrySampler(1).shouldSample(ROOT_CONTEXT, traceId, spanName, kind, {}, []).decision

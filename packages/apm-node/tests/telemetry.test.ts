@@ -10,6 +10,7 @@ import {
   failSpan,
   identify,
   log,
+  nameRoute,
   setSpanAttributes,
   spanOfRequest,
   startNodeTelemetry,
@@ -78,7 +79,10 @@ describe('node telemetry', () => {
     upstream = http.createServer((req, res) => {
       setSpanAttributes({ 'upstream.custom': 'yes' })
       spanOfRequest(req)?.setAttribute(ATTR_REQUEST_ID, 'req-42')
-      if (req.url?.startsWith('/api/v3/user/me')) identify(42, req)
+      if (req.url?.startsWith('/api/v3/user/me')) {
+        identify(42, req)
+        nameRoute('get', '/api/v3/user/:who', { origin: true })
+      }
       res.writeHead(200, { 'content-type': 'application/json', 'hikari-request-id': 'req-42' })
       res.end(
         JSON.stringify({
@@ -138,7 +142,9 @@ describe('node telemetry', () => {
       stringValue: 'req-42',
     })
     expect(attr(server, 'hikari.entry')).toBe('http')
-    expect(attr(server, 'hikari.entry_name')).toBe('GET /api/v3/user/me')
+    expect(attr(server, 'hikari.entry_name')).toBe('GET /api/v3/user/:who')
+    expect(attr(server, 'http.route')).toBe('/api/v3/user/:who')
+    expect(attr(server, 'hikari.origin_name')).toBe('GET /api/v3/user/:who')
     expect(attr(server, 'hikari.origin')).toBe('unknown')
     expect(attr(server, 'hikari.caller')).toBe('hikari-web')
     expect(attr(server, 'user.id')).toBe('42')

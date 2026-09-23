@@ -145,6 +145,7 @@ describe('events and errors', () => {
     apm.identify('7')
     apm.pageView({
       path: '/galgames/1?tab=info&token=secret',
+      route: '/galgames/:id',
       title: 'Galgame',
       referrer: 'https://www.hikarinagi.org/?q=1',
     })
@@ -163,6 +164,11 @@ describe('events and errors', () => {
     expect(attr(logs[1], 'sticky')).toEqual({ boolValue: true })
     expect(attr(logs[1], 'user.id')).toEqual({ stringValue: '7' })
     expect(attr(logs[1], 'url.path')).toEqual({ stringValue: '/galgames/1' })
+    expect(attr(logs[1], 'hikari.entry_name')).toEqual({ stringValue: '/galgames/:id' })
+    expect(attr(logs[1], 'hikari.origin_name')).toEqual({ stringValue: '/galgames/:id' })
+    expect(apm.baggage()).toBe(
+      'hikari.origin=browser,hikari.origin_name=%2Fgalgames%2F%3Aid,hikari.caller=hikari-web,hikari.caller_name=%2Fgalgames%2F%3Aid',
+    )
   })
 
   it('captures errors with stack traces and a per-minute budget', async () => {

@@ -329,6 +329,11 @@ function serializeCookies(cookies: Map<string, string>) {
   return Array.from(cookies, ([name, value]) => `${name}=${value}`).join('; ')
 }
 
+export function hasSessionCookies(event: H3Event) {
+  const cookies = parseCookieHeader(getAuthContext(event).headers.get(COOKIE_HEADER) ?? '')
+  return cookies.has(AUTH_ACCESS_TOKEN_COOKIE) || cookies.has(AUTH_REFRESH_TOKEN_COOKIE)
+}
+
 function hasRefreshToken(headers: Headers) {
   return parseCookieHeader(headers.get(COOKIE_HEADER) ?? '').has(AUTH_REFRESH_TOKEN_COOKIE)
 }

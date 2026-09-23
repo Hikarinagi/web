@@ -1,5 +1,5 @@
-import { AUTH_ACCESS_TOKEN_COOKIE, AUTH_REFRESH_TOKEN_COOKIE } from '@hikarinagi/shared'
 import { fetchBackendData, isBackendApiError } from '../../server/utils/backend-api'
+import { hasSessionCookies } from '../../server/utils/backend-request'
 
 export default defineNuxtPlugin({
   name: 'auth-init',
@@ -10,18 +10,8 @@ export default defineNuxtPlugin({
     auth.setLoading(true)
 
     try {
-      const cookieHeader = useRequestHeader('cookie')
-      const hasAuthCookie =
-        cookieHeader?.includes(`${AUTH_ACCESS_TOKEN_COOKIE}=`) ||
-        cookieHeader?.includes(`${AUTH_REFRESH_TOKEN_COOKIE}=`)
-
-      if (!hasAuthCookie) {
-        auth.setUser(null)
-        return
-      }
-
       const event = useRequestEvent()
-      if (!event) {
+      if (!event || !hasSessionCookies(event)) {
         auth.setUser(null)
         return
       }

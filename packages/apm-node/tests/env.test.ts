@@ -16,6 +16,8 @@ describe('optionsFromEnv', () => {
       APP_VERSION: '3.0.0',
       APM_ENVIRONMENT: 'staging',
       APM_SAMPLE_RATE: '0.25',
+      APM_SAMPLE_RATE_QUEUE: '0.1',
+      APM_SAMPLE_RATE_BOT: '0.05',
     })
     expect(options).toMatchObject({
       service: 'hikari-api',
@@ -24,6 +26,7 @@ describe('optionsFromEnv', () => {
       endpoint: 'http://apm:5030/',
       key: 'hkapm_x',
       sampleRate: 0.25,
+      sampleRates: { queue: 0.1, bot: 0.05 },
       requestIdHeader: 'hikari-request-id',
     })
     expect(
@@ -53,8 +56,12 @@ describe('presets', () => {
     const load = (name: string) => {
       if (name === '@fastify/otel') {
         return class {
-          constructor(config: { requestHook: (span: any, request: any) => void }) {
+          constructor(config: {
+            instrumentHandler: boolean
+            requestHook: (span: any, request: any) => void
+          }) {
             created.push(name)
+            expect(config.instrumentHandler).toBe(false)
             const span = { setAttribute: vi.fn() }
             config.requestHook(span, { id: 'req-1' })
             expect(span.setAttribute).toHaveBeenCalledWith('hikari.request_id', 'req-1')
@@ -64,8 +71,9 @@ describe('presets', () => {
       if (name === '@prisma/instrumentation') {
         return {
           PrismaInstrumentation: class {
-            constructor() {
+            constructor(config: { ignoreSpanTypes: string[] }) {
               created.push(name)
+              expect(config.ignoreSpanTypes).toEqual(['prisma:client:serialize'])
             }
           },
         }

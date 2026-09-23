@@ -1,4 +1,7 @@
-import { fetchBackendData } from '../../server/utils/backend-api'
+import type { ApiData } from '@hikarinagi/api-contract/v3'
+import type { ApiResponse } from '@hikarinagi/shared'
+
+type SiteConfig = ApiData<'/api/v3/site/config', 'get'>
 
 export default defineNuxtPlugin({
   name: 'site-config',
@@ -7,8 +10,10 @@ export default defineNuxtPlugin({
     const event = useRequestEvent()
     if (!event) return
     try {
-      const config = await fetchBackendData(event, '/api/v3/site/config')
-      flags.value = { ...flags.value, ...config.feature_flags }
+      const body = await event.$fetch<ApiResponse<SiteConfig>>('/api/v3/site/config', {
+        headers: { accept: 'application/json' },
+      })
+      if (body.success) flags.value = { ...flags.value, ...body.data.feature_flags }
     } catch {
       // keep defaults (all flags off) when the config request fails
     }

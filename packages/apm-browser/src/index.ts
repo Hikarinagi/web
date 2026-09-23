@@ -14,3 +14,4 @@ export type {
   StatusCode,
 } from './types.js'
 export { instrumentFetch, type FetchInstrumentationOptions } from './fetch.js'
+export { routePattern, UNMATCHED_ROUTE, type MatchedRoute } from './route.js'

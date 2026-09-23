@@ -33,6 +33,8 @@ export function sampleRatesFromEnv(env: NodeJS.ProcessEnv): SampleRates {
     const rate = rateOf(env[`APM_SAMPLE_RATE_${entry.toUpperCase()}`])
     if (rate !== undefined) rates[entry as Entry] = rate
   }
+  const bot = rateOf(env.APM_SAMPLE_RATE_BOT)
+  if (bot !== undefined) rates.bot = bot
   return rates
 }
 
@@ -79,6 +81,7 @@ const factories: Record<Preset, (load: Loader) => Instrumentation> = {
     return new Ctor({
       registerOnInitialization: true,
       instrumentHooks: false,
+      instrumentHandler: false,
       requestHook: (span, request) => {
         const route = request.routeOptions?.url
         const entryName = route ? `${request.method ?? 'GET'} ${route}` : undefined
@@ -103,9 +106,9 @@ const factories: Record<Preset, (load: Loader) => Instrumentation> = {
   },
   prisma: load => {
     const { PrismaInstrumentation } = load('@prisma/instrumentation') as {
-      PrismaInstrumentation: new () => Instrumentation
+      PrismaInstrumentation: new (config: { ignoreSpanTypes: string[] }) => Instrumentation
     }
-    return new PrismaInstrumentation()
+    return new PrismaInstrumentation({ ignoreSpanTypes: ['prisma:client:serialize'] })
   },
   ioredis: load => {
     const { IORedisInstrumentation } = load('@opentelemetry/instrumentation-ioredis') as {
@@ -119,6 +122,7 @@ const factories: Record<Preset, (load: Loader) => Instrumentation> = {
 type FastifyCtor = new (config: {
   registerOnInitialization: boolean
   instrumentHooks: boolean
+  instrumentHandler: boolean
   requestHook: (
     span: { setAttribute: (key: string, value: string) => unknown },
     request: {

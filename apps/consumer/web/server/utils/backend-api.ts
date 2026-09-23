@@ -12,11 +12,18 @@ import type {
   ApiPathOption,
   ApiQueryOption,
 } from '#shared/utils/api-contract'
-import type { ApiFailure, ApiResponse } from '@hikarinagi/shared'
-import { setResponseStatus, type H3Event } from 'h3'
+import {
+  HIKARI_BIZ_CODE,
+  HIKARI_REQUEST_ID_HEADER,
+  type ApiError,
+  type ApiFailure,
+  type ApiResponse,
+} from '@hikarinagi/shared'
+import { getRequestHeader, setResponseStatus, type H3Event } from 'h3'
 import { normalizeApiPath, resolveApiPath, type ApiPathParamValue } from '#shared/utils/api-path'
 import { isRecord } from '#shared/utils/record'
 import {
+  hasSessionCookies,
   requestBackendWithAuthRefresh,
   serverRuntimeConfig,
   type BackendRequestMethod,
@@ -42,6 +49,8 @@ type BackendApiGetRequestOptions<TPath extends ApiPath> = Omit<
 > & {
   method?: ApiMethodInput<ApiGetMethod<TPath>>
 }
+
+const guestRejections = new Map<string, ApiError>()
 
 export class BackendApiError extends Error {
   readonly status: number
@@ -78,6 +87,10 @@ export async function fetchBackendData<TPath extends ApiPath, TMethod extends Ap
       })
     | undefined
   const { body, method = 'get', path: pathParams, query } = requestOptions ?? {}
+  const guest = !hasSessionCookies(event)
+  const operation = `${method.toUpperCase()} ${path}`
+  const rejection = guest ? guestRejections.get(operation) : undefined
+  if (rejection) throw new BackendApiError(401, guestFailure(event, rejection))
   const normalizedPath = normalizeApiPath(resolveApiPath(path, pathParams), apiBase).replace(
     /^\/+/,
     '',
@@ -96,7 +109,12 @@ export async function fetchBackendData<TPath extends ApiPath, TMethod extends Ap
     response._data
 
   if (isApiSuccess<ApiData<TPath, TMethod>>(responseBody)) return responseBody.data
-  if (isApiFailure(responseBody)) throw new BackendApiError(response.status, responseBody)
+  if (isApiFailure(responseBody)) {
+    if (guest && responseBody.error.code === HIKARI_BIZ_CODE.AUTH_UNAUTHENTICATED) {
+      guestRejections.set(operation, responseBody.error)
+    }
+    throw new BackendApiError(response.status, responseBody)
+  }
   if (response.status >= 400) throw new BackendApiError(response.status, responseBody)
 
   return responseBody as ApiData<TPath, TMethod>
@@ -109,6 +127,15 @@ export function isBackendApiError(error: unknown): error is BackendApiError {
 export function sendBackendError(event: H3Event, error: BackendApiError): never {
   setResponseStatus(event, error.status)
   return error.body as never
+}
+
+function guestFailure(event: H3Event, error: ApiError): ApiFailure {
+  return {
+    success: false,
+    error,
+    request_id: getRequestHeader(event, HIKARI_REQUEST_ID_HEADER) ?? '',
+    timestamp: new Date().toISOString(),
+  }
 }
 
 function isApiSuccess<TData>(response: unknown): response is { success: true; data: TData } {

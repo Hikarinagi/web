@@ -40,7 +40,7 @@ export {
   type Entry,
   type SampleRates,
 } from './entry'
-export { captureError, errorParts, failSpan, log, track, type LogLevel } from './api'
+export { captureError, errorParts, failSpan, log, nameRoute, track, type LogLevel } from './api'
 export { tick } from './schedule'
 
 export const ATTR_REQUEST_ID = 'hikari.request_id'

@@ -10,6 +10,8 @@ import {
   requestBackendWithAuthRefresh,
   type BackendRequestMethod,
 } from '../../utils/backend-request'
+import { cachedPublicBackendBody } from '../../utils/public-cache'
+import { isPublicCachedRequest } from '../../utils/public-paths'
 
 const REQUEST_BODY_METHODS = new Set(['DELETE', 'PATCH', 'POST', 'PUT'])
 
@@ -18,7 +20,11 @@ export default defineEventHandler(async (event): Promise<unknown> => {
   const method = event.method.toUpperCase()
   const apiPath = getRouterParam(event, 'path') ?? ''
   const apiBase = String(config.apiBase).replace(/\/$/, '')
-  const targetUrl = `${apiBase}/${apiPath}${getRequestURL(event).search}`
+  const search = getRequestURL(event).search
+  const targetUrl = `${apiBase}/${apiPath}${search}`
+  if (isPublicCachedRequest(method, apiPath, search)) {
+    return cachedPublicBackendBody(apiBase, apiPath)
+  }
   const requestBody = REQUEST_BODY_METHODS.has(method) ? await readRawBody(event, false) : undefined
 
   try {

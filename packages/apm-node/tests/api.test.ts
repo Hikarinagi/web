@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { captureError, errorParts, failSpan, log, track } from '../src/api'
+import { captureError, errorParts, failSpan, log, nameRoute, track } from '../src/api'
 
 describe('api entry', () => {
   it('is a safe no-op before any sdk is registered', () => {
@@ -16,5 +16,11 @@ describe('api entry', () => {
     expect(errorParts(new RangeError('bad'))).toMatchObject({ type: 'RangeError', message: 'bad' })
     expect(errorParts('plain')).toEqual({ type: 'Error', message: 'plain' })
     expect(errorParts({ code: 7 })).toEqual({ type: 'Error', message: '{"code":7}' })
+  })
+})
+
+describe('nameRoute', () => {
+  it('is a no-op without an active span', () => {
+    expect(() => nameRoute('get', '/people/:id')).not.toThrow()
   })
 })

@@ -2,6 +2,7 @@ import { defineNuxtPlugin, useRouter, useRuntimeConfig } from 'nuxt/app'
 
 import { createApm } from '../../apm.js'
 import { instrumentFetch } from '../../fetch.js'
+import { routePattern } from '../../route.js'
 import type { Apm } from '../../types.js'
 import type { ApmRuntimeConfig } from '../module.js'
 import { installApm } from './composables.js'
@@ -37,9 +38,13 @@ export default defineNuxtPlugin({
     })
     nuxtApp.hook('app:created', () => {
       const router = useRouter()
-      const view = (to: { path: string; fullPath: string }, referrer: string) =>
+      const view = (
+        to: { path: string; fullPath: string; matched: ReadonlyArray<{ path: string }> },
+        referrer: string,
+      ) =>
         apm.pageView({
           path: to.path,
+          route: routePattern(to.matched),
           query: to.fullPath.includes('?') ? to.fullPath.slice(to.fullPath.indexOf('?')) : '',
           referrer,
         })

@@ -72,6 +72,7 @@ export interface Span {
 
 export interface PageView {
   path: string
+  route?: string
   query?: string
   title?: string
   referrer?: string

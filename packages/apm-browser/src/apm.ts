@@ -73,6 +73,7 @@ export function createApm(options: ApmOptions): Apm {
   const errorBudget = { windowStart: now(), used: 0, limit: options.errorsPerMinute ?? 20 }
   let userId: string | null = null
   let currentPath = typeof location === 'undefined' ? '' : pathOf(location.pathname).path
+  let currentRoute = currentPath
 
   function identity(): Attributes {
     return {
@@ -80,9 +81,9 @@ export function createApm(options: ApmOptions): Apm {
       ...(userId ? { 'user.id': userId } : {}),
       ...(currentPath ? { 'url.path': currentPath } : {}),
       'hikari.entry': ENTRY,
-      'hikari.entry_name': currentPath,
+      'hikari.entry_name': currentRoute,
       'hikari.origin': ENTRY,
-      'hikari.origin_name': currentPath,
+      'hikari.origin_name': currentRoute,
     }
   }
 
@@ -107,9 +108,9 @@ export function createApm(options: ApmOptions): Apm {
     },
 
     baggage(): string {
-      const path = encodeURIComponent(currentPath)
+      const route = encodeURIComponent(currentRoute)
       const service = encodeURIComponent(options.service)
-      return `hikari.origin=${ENTRY},hikari.origin_name=${path},hikari.caller=${service},hikari.caller_name=${path}`
+      return `hikari.origin=${ENTRY},hikari.origin_name=${route},hikari.caller=${service},hikari.caller_name=${route}`
     },
 
     startSpan(name: string, spanOptions: SpanOptions = {}): Span {
@@ -158,6 +159,7 @@ export function createApm(options: ApmOptions): Apm {
     pageView(view: PageView): void {
       const { path, query } = pathOf(view.path)
       currentPath = path
+      currentRoute = view.route || path
       const referrer = view.referrer ? pathOf(view.referrer) : null
       apm.track(EVENT_PAGE_VIEW, {
         'url.path': path,

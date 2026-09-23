@@ -27,13 +27,11 @@ import {
   type SpanProcessor,
 } from '@opentelemetry/sdk-trace-base'
 
-import { SCOPE } from './api'
+import { ATTR_ENTRY_NAME, ATTR_ORIGIN_NAME, SCOPE } from './api'
 
-export { SCOPE }
+export { ATTR_ENTRY_NAME, ATTR_ORIGIN_NAME, SCOPE }
 export const ATTR_ENTRY = 'hikari.entry'
-export const ATTR_ENTRY_NAME = 'hikari.entry_name'
 export const ATTR_ORIGIN = 'hikari.origin'
-export const ATTR_ORIGIN_NAME = 'hikari.origin_name'
 export const ATTR_CALLER = 'hikari.caller'
 export const ATTR_CALLER_NAME = 'hikari.caller_name'
 export const ATTR_USER_ID = 'user.id'
@@ -105,7 +103,7 @@ function text(value: AttributeValue | undefined): string | undefined {
 
 function requestName(span: Span): string {
   const method = text(span.attributes['http.request.method'])
-  const path = text(span.attributes['url.path']) ?? text(span.attributes['http.route'])
+  const path = text(span.attributes['http.route']) ?? text(span.attributes['url.path'])
   return method && path ? `${method} ${path}` : span.name
 }
 
@@ -243,7 +241,13 @@ export class EntryLogProcessor implements LogRecordProcessor {
   }
 }
 
-export type SampleRates = Partial<Record<Entry, number>>
+export type SampleRates = Partial<Record<Entry | 'bot', number>>
+
+const BOT_USER_AGENT = /bot|spider|crawl/i
+
+export function isBotAgent(userAgent: string | undefined): boolean {
+  return !!userAgent && BOT_USER_AGENT.test(userAgent)
+}
 
 export function entrySampler(defaultRate: number, rates: SampleRates = {}): Sampler {
   const ratios = new Map<number, TraceIdRatioBasedSampler>()
@@ -259,6 +263,13 @@ export function entrySampler(defaultRate: number, rates: SampleRates = {}): Samp
     shouldSample(context, traceId, spanName, spanKind, attributes) {
       if (isHousekeeping(spanName, spanKind)) return { decision: SamplingDecision.NOT_RECORD }
       const entry = (text(attributes[ATTR_ENTRY]) as Entry | undefined) ?? classifyRoot(spanKind)
+      if (
+        rates.bot !== undefined &&
+        spanKind === SpanKind.SERVER &&
+        isBotAgent(text(attributes['user_agent.original']))
+      ) {
+        return ratio(rates.bot).shouldSample(context, traceId)
+      }
       return ratio(rates[entry] ?? defaultRate).shouldSample(context, traceId)
     },
     toString: () => 'EntrySampler',

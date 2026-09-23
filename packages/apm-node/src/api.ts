@@ -2,6 +2,9 @@ import { SpanStatusCode, trace, type Attributes } from '@opentelemetry/api'
 import { logs, SeverityNumber } from '@opentelemetry/api-logs'
 
 export const SCOPE = '@hikarinagi/apm-node'
+export const ATTR_ENTRY_NAME = 'hikari.entry_name'
+export const ATTR_ORIGIN_NAME = 'hikari.origin_name'
+export const ATTR_HTTP_ROUTE = 'http.route'
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal'
 
@@ -64,4 +67,15 @@ export function failSpan(error: unknown, attributes: Attributes = {}): void {
   span.recordException(error instanceof Error ? error : parts.message)
   span.setStatus({ code: SpanStatusCode.ERROR, message: parts.message.slice(0, 1024) })
   span.setAttributes(attributes)
+}
+
+export function nameRoute(method: string, route: string, options: { origin?: boolean } = {}): void {
+  const span = trace.getActiveSpan()
+  if (!span || !route) return
+  const name = `${method.toUpperCase()} ${route}`
+  span.setAttributes({
+    [ATTR_HTTP_ROUTE]: route,
+    [ATTR_ENTRY_NAME]: name,
+    ...(options.origin ? { [ATTR_ORIGIN_NAME]: name } : {}),
+  })
 }
