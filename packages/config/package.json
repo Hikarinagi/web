@@ -9,7 +9,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./eslint/service-files": "./eslint/service-files.mjs"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

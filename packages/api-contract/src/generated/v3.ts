@@ -7461,6 +7461,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novel-volumes/epub/identify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LightNovelVolumeController_identifyEpubs"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novel-volumes/epub/limits": {
         parameters: {
             query?: never;
@@ -7469,6 +7485,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["LightNovelVolumeController_epubLimits"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novel-volumes/wanted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelVolumeController_getWanted"];
         put?: never;
         post?: never;
         delete?: never;
@@ -10914,6 +10946,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/epub/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserEpubCorrectionController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/favorite/articles": {
         parameters: {
             query?: never;
@@ -14224,6 +14272,17 @@ export interface components {
             /** @description 分卷 ID */
             ids: number[];
         };
+        EpubCorrectionDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            decided_at: string | null;
+            id: number;
+            reasons: string[];
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
+            volume: components["schemas"]["LightNovelVolumeSummaryDto"];
+        };
         EpubDuplicateGroupDto: {
             /** @description 文件 sha256 */
             epub_sha: string;
@@ -14236,6 +14295,43 @@ export interface components {
             name: string | null;
             series: components["schemas"]["EpubResourceSeriesDto"];
             volume_number: number | null;
+        };
+        EpubIdentificationDto: {
+            /** @description 0 至 100 */
+            confidence: number | null;
+            key: string;
+            series: components["schemas"]["EpubIdentifiedSeriesDto"] | null;
+            /** @enum {string} */
+            verdict: "missing" | "present" | "unknown" | "bundle";
+            volume: components["schemas"]["LightNovelVolumeListItemDto"] | null;
+        };
+        EpubIdentifiedSeriesDto: {
+            id: number;
+            name: string;
+            name_cn: string | null;
+        };
+        EpubIdentifyDto: {
+            files: components["schemas"]["EpubIdentifyFileDto"][];
+        };
+        EpubIdentifyFileDto: {
+            /**
+             * @description OPF 中的 dc:creator
+             * @default []
+             */
+            creators: string[];
+            filename: string;
+            /**
+             * @description OPF 中看起来像 ISBN 的 dc:identifier
+             * @default []
+             */
+            isbns: string[];
+            /** @description 由客户端生成、在本次请求内唯一的文件标识 */
+            key: string;
+            /** @description OPF 中的 dc:title */
+            title?: string | null;
+        };
+        EpubIdentifyResultDto: {
+            items: components["schemas"]["EpubIdentificationDto"][];
         };
         EpubOverviewDto: {
             /** @description 被多个分卷共用的文件数 */
@@ -15814,6 +15910,20 @@ export interface components {
             online_reading_is_collection: boolean;
             volume_id: number;
         };
+        LightNovelVolumeListItemDto: {
+            covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            has_epub: boolean;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            /** Format: date-time */
+            publication_date: string | null;
+            series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
+            volume_label: string | null;
+            volume_number: number | null;
+            /** @enum {string} */
+            volume_type: "MAIN" | "EXTRA";
+        };
         LightNovelVolumeRateDetailDto: {
             /** Format: date-time */
             created_at: string;
@@ -15858,6 +15968,29 @@ export interface components {
             id: number;
             name: string;
             name_cn: string | null;
+            nsfw: boolean;
+        };
+        LightNovelVolumeWantedDto: {
+            /** @enum {string} */
+            auto_status: "none" | "pending" | "failed";
+            covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            /** Format: date-time */
+            publication_date: string | null;
+            series: components["schemas"]["LightNovelVolumeWantedSeriesDto"];
+            volume_label: string | null;
+            volume_number: number | null;
+            /** @enum {string} */
+            volume_type: "MAIN" | "EXTRA";
+        };
+        LightNovelVolumeWantedSeriesDto: {
+            id: number;
+            name: string;
+            name_cn: string | null;
+            /** @enum {string} */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
             nsfw: boolean;
         };
         LlmCredentialDto: {
@@ -32883,9 +33016,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["LightNovelVolumeSummaryDto"][];
+                        items: components["schemas"]["LightNovelVolumeListItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    LightNovelVolumeController_identifyEpubs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EpubIdentifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EpubIdentifyResultDto"];
                 };
             };
         };
@@ -32905,6 +33061,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EpubUploadLimitsDto"];
+                };
+            };
+        };
+    };
+    LightNovelVolumeController_getWanted: {
+        parameters: {
+            query: {
+                search?: string;
+                sort?: "popular" | "recent";
+                /** @description 只看某种连载状态的系列 */
+                novel_status?: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+                /** @description 按自动采集状态筛选：none 没有来源、pending 采集中、failed 采集失败 */
+                auto?: "none" | "pending" | "failed";
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LightNovelVolumeWantedDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -38882,6 +39069,31 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["DraftListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    UserEpubCorrectionController_getList: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EpubCorrectionDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };

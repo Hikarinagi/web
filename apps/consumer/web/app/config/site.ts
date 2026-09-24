@@ -1,4 +1,5 @@
-export type HeaderNavIcon = 'gamepad' | 'bookOpen' | 'bookImage' | 'messagesSquare' | 'smartphone'
+export type HeaderNavIcon =
+  'gamepad' | 'bookOpen' | 'bookImage' | 'bookUp' | 'messagesSquare' | 'smartphone'
 
 export type FeatureFlagKey = 'manga_section' | 'app_download'
 
@@ -64,6 +65,13 @@ export const SITE_CONFIG = {
       icon: 'bookImage',
       match: 'prefix',
       flag: 'manga_section',
+    },
+    {
+      label: '投稿',
+      to: '/contribute',
+      icon: 'bookUp',
+      match: 'prefix',
+      desktopOnly: true,
     },
     {
       label: 'App',

@@ -1,7 +1,14 @@
 <script setup lang="ts">
   import { Inline, NavLink } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { BookImage, BookOpen, GamepadDirectional, MessagesSquare, Smartphone } from '@lucide/vue'
+  import {
+    BookImage,
+    BookOpen,
+    BookUp,
+    GamepadDirectional,
+    MessagesSquare,
+    Smartphone,
+  } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
   import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
   import { cn } from '~/utils/cn'
@@ -14,6 +21,7 @@
     gamepad: GamepadDirectional,
     bookOpen: BookOpen,
     bookImage: BookImage,
+    bookUp: BookUp,
     messagesSquare: MessagesSquare,
     smartphone: Smartphone,
   } satisfies Record<HeaderNavIcon, Component>
@@ -31,7 +39,7 @@
     gap="none"
     align="center"
     :wrap="false"
-    class="hidden md:flex"
+    class="hidden lg:flex"
     aria-label="主导航"
   >
     <Inline
@@ -45,7 +53,12 @@
           :as="NuxtLink"
           :to="item.to"
           :active="isActive(item)"
-          :class="cn('rounded-full ps-3 pe-3 font-medium', isActive(item) && 'text-accent-text')"
+          :class="
+            cn(
+              'rounded-full ps-2.5 pe-2.5 font-medium xl:ps-3 xl:pe-3',
+              isActive(item) && 'text-accent-text',
+            )
+          "
         >
           <template #icon>
             <component :is="navIconMap[item.icon]" aria-hidden="true" />

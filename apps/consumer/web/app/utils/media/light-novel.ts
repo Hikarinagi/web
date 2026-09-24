@@ -19,11 +19,15 @@ export function getLightNovelCoverSrc(lightNovel: LightNovelDetail) {
   return getLightNovelCover(lightNovel)?.src || undefined
 }
 
-export function getLightNovelVolumeTitle(volume: LightNovelVolume) {
+export function getLightNovelVolumeTitle(
+  volume: Pick<LightNovelVolume, 'name' | 'name_cn' | 'volume_label' | 'volume_number'>,
+) {
   return volume.name_cn || volume.name || getLightNovelVolumeLabel(volume) || '未命名'
 }
 
-export function getLightNovelVolumeLabel(volume: LightNovelVolume) {
+export function getLightNovelVolumeLabel(
+  volume: Pick<LightNovelVolume, 'volume_label' | 'volume_number'>,
+) {
   return (
     volume.volume_label || (volume.volume_number != null ? `第 ${volume.volume_number} 卷` : null)
   )

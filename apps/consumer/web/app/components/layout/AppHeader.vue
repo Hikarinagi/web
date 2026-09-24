@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Button, IconButton, Inline, Space, Stack } from '@hina-ui/vue'
   import { useScroll } from '@vueuse/core'
-  import { ArrowLeft, LogIn } from '@lucide/vue'
+  import { ArrowLeft, LogIn, Menu } from '@lucide/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import { NuxtLink } from '#components'
   import logoUrl from '~/assets/images/wordmark.svg'
@@ -19,6 +19,7 @@
   const { y } = useScroll(() => (import.meta.client ? window : null))
   const mounted = useMounted()
   const transparent = computed(() => !props.flush && y.value <= 8)
+  const menuOpen = ref(false)
 
   const headerTitle = useState<string>('hikari:header-title', () => '')
   const isTopLevel = computed(() => HEADER_NAV_ITEMS.some(item => item.to === route.path))
@@ -59,12 +60,26 @@
       class="relative mx-auto h-(--app-header-height) w-full max-w-header px-4"
     >
       <Inline gap="lg" align="center" :wrap="false" class="min-w-0">
+        <IconButton
+          v-if="!showMobileTitle"
+          label="菜单"
+          :tooltip="false"
+          pill
+          aria-haspopup="dialog"
+          :aria-expanded="menuOpen"
+          class="-ml-1.5 lg:hidden"
+          @click="menuOpen = true"
+        >
+          <Menu aria-hidden="true" />
+        </IconButton>
+        <LayoutHeaderMobileMenu v-model:open="menuOpen" />
+
         <Inline
           v-if="showMobileTitle"
           gap="none"
           align="center"
           :wrap="false"
-          class="min-w-0 gap-1 md:hidden"
+          class="min-w-0 gap-1 lg:hidden"
         >
           <IconButton label="返回" :tooltip="false" pill class="-ml-1.5" @click="goBack">
             <ArrowLeft aria-hidden="true" />
@@ -84,21 +99,20 @@
         </Inline>
 
         <NuxtLink
-          :class="cn('shrink-0 items-center', showMobileTitle ? 'hidden md:flex' : 'flex')"
+          :class="cn('shrink-0 items-center', showMobileTitle ? 'hidden lg:flex' : 'flex')"
           to="/"
           :aria-label="SITE_CONFIG.name"
         >
           <HikariImage
             :src="logoUrl"
             :alt="SITE_CONFIG.name"
-            class="aspect-792/191 h-5 md:h-7"
+            class="aspect-792/191 h-5 lg:h-7"
             image-class="object-contain"
             :lazy="false"
             :skeleton="false"
             :preload="{ fetchPriority: 'high' }"
           />
         </NuxtLink>
-
         <LayoutHeaderDesktopNav />
       </Inline>
 
@@ -114,17 +128,17 @@
             label="登录"
             :tooltip="false"
             pill
-            class="md:hidden"
+            class="lg:hidden"
             @click="toLogin('login')"
           >
             <LogIn aria-hidden="true" />
           </IconButton>
-          <Inline gap="sm" class="hidden md:flex md:gap-4">
+          <Inline gap="sm" class="hidden lg:flex lg:gap-4">
             <Button :as="NuxtLink" :to="loginTo" variant="ghost" tone="neutral">登录</Button>
             <Button :as="NuxtLink" :to="registerTo">注册</Button>
           </Inline>
         </template>
-        <Space v-else size="xs" class="size-9 md:w-37" />
+        <Space v-else size="xs" class="size-9 lg:w-37" />
       </Inline>
     </Inline>
   </Stack>

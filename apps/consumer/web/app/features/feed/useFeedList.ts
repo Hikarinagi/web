@@ -13,6 +13,7 @@ const TOP_SCROLL_TOLERANCE = 2
 const TOP_SCROLL_TIMEOUT_MS = 1800
 const PULL_DAMPING = 0.4
 const PULL_MAX = 96
+const ANCHORED_OVERLAY = '[data-reka-popper-content-wrapper]:not(:has([role="tooltip"]))'
 
 export function useFeedList(source: FeedSource, active: Ref<boolean>) {
   const { items, nextCursor, loading, loaded, ensure, loadMore, refresh } = useFeedStream(source)
@@ -50,6 +51,8 @@ export function useFeedList(source: FeedSource, active: Ref<boolean>) {
     'touchstart',
     (event: TouchEvent) => {
       if (!active.value || topRefreshing.value || window.scrollY > 0) return
+      if (!(event.target instanceof Element) || !event.target.closest('main')) return
+      if (document.querySelector(ANCHORED_OVERLAY)) return
       pullStartY = event.touches[0]?.clientY ?? 0
       pulling = true
     },

@@ -2,6 +2,39 @@
   --font-sans: 'Noto Sans SC', 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
+  --color-contribute-shadow: #232321;
+  --color-contribute-paper: #ede7d9;
+  --color-contribute-paper-hover: #f5f0e5;
+  --color-contribute-paper-edge: #d2c7b5;
+  --color-contribute-ink: #37332d;
+  --color-contribute-floor: #8b887d;
+  --color-contribute-contact-shadow: #37332d66;
+  --color-contribute-table-light: #ede5d5;
+  --color-contribute-table-shade: #ddd2be;
+  --color-contribute-paper-subtle: color-mix(
+    in srgb,
+    var(--color-contribute-ink) 6%,
+    var(--color-contribute-paper)
+  );
+  --color-contribute-paper-soft: color-mix(
+    in srgb,
+    var(--color-contribute-ink) 8%,
+    var(--color-contribute-paper)
+  );
+  --color-contribute-paper-inset: color-mix(
+    in srgb,
+    var(--color-contribute-ink) 10%,
+    var(--color-contribute-paper)
+  );
+  --color-contribute-ink-muted: color-mix(in srgb, var(--color-contribute-ink) 72%, transparent);
+  --color-contribute-ink-subtle: color-mix(in srgb, var(--color-contribute-ink) 56%, transparent);
+  --color-contribute-ink-disabled: color-mix(in srgb, var(--color-contribute-ink) 38%, transparent);
+  --color-contribute-ink-border: color-mix(in srgb, var(--color-contribute-ink) 28%, transparent);
+  --color-contribute-ink-outline: color-mix(in srgb, var(--color-contribute-ink) 30%, transparent);
+  --color-contribute-scroll-shadow: #37332d1a;
+  --color-contribute-stamp-red: #b8412c;
+  --color-contribute-stamp-blue: #35578f;
+
   --color-hikari-primary-50: #effdfb;
   --color-hikari-primary-100: #d7faf6;
   --color-hikari-primary-200: #aff4ed;
@@ -111,6 +144,13 @@
   --shadow-hikari-cover-xs: 0 6px 16px rgb(0 0 0 / 0.35);
 
   --text-shadow-hikari-on-image: 0 1px 4px rgb(0 0 0 / 0.45);
+  --shadow-contribute-paper: 0 1px 1px #37332d1a, 0 5px 12px #37332d0d;
+  --shadow-contribute-paper-sm:
+    0 1px 2px #37332d0f, 0 2px 4px -1px #37332d0a, 0 4px 8px -2px #37332d0a;
+  --shadow-contribute-paper-md:
+    0 2px 4px #37332d0d, 0 6px 12px -3px #37332d12, 0 16px 32px -12px #37332d17;
+  --shadow-contribute-paper-lg:
+    0 4px 8px #37332d0d, 0 16px 32px -8px #37332d1a, 0 40px 80px -24px #37332d29;
 
   --blur-hikari-2xs: 3px;
   --blur-hikari-3xs: 1.5px;
@@ -142,6 +182,34 @@
       transform: scaleY(0.95);
     }
   }
+}
+
+/* Scene coordinates belong to the fixed archive composition, independent of UI spacing. */
+:root {
+  --contribute-stage-min: 36rem;
+  --contribute-art-ratio: 16 / 9;
+  --contribute-art-width: max(100cqw, calc(100cqh * var(--contribute-art-ratio)));
+  --contribute-mobile-anchor: 0.73;
+  --contribute-shelf-height: 40%;
+  --contribute-table-crop: polygon(0 53%, 100% 62%, 100% 100%, 0 100%);
+  --contribute-table-lit: 1.06;
+  --contribute-paper-hover-opacity: 0.06;
+  --contribute-paper-press-opacity: 0.1;
+  --contribute-paper-selected-opacity: 0.14;
+  --contribute-hand-shadow: 0 1px 1px #37332d38;
+  --contribute-visitor-x: 61%;
+  --contribute-visitor-top: 30%;
+  --contribute-visitor-width: 22%;
+  --contribute-visitor-ratio: 2 / 3;
+  --contribute-left-hand-crop: inset(48% 65% 45% 16%);
+  --contribute-right-hand-crop: polygon(67% 47%, 85% 47%, 85% 54%, 73% 54%, 72% 52%, 70% 51%);
+  --contribute-desk-x: 9%;
+  --contribute-desk-y: 9%;
+  --contribute-desk-width: 25rem;
+  --contribute-desk-width-large: 30rem;
+  --contribute-upload-height: 11rem;
+  --contribute-queue-height: 70svh;
+  --contribute-queue-body: min(24rem, calc(var(--contribute-queue-height) - var(--spacing) * 32));
 }
 
 @theme inline {

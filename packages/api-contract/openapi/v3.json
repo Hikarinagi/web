@@ -9779,6 +9779,51 @@
         ],
         "type": "object"
       },
+      "EpubCorrectionDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decided_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "RUNNING",
+              "PASSED",
+              "REJECTED",
+              "NEEDS_HUMAN",
+              "FAILED"
+            ],
+            "type": "string"
+          },
+          "volume": {
+            "$ref": "#/components/schemas/LightNovelVolumeSummaryDto"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "reasons",
+          "created_at",
+          "decided_at",
+          "volume"
+        ],
+        "type": "object"
+      },
       "EpubDuplicateGroupDto": {
         "properties": {
           "epub_sha": {
@@ -9825,6 +9870,149 @@
           "name",
           "volume_number",
           "series"
+        ],
+        "type": "object"
+      },
+      "EpubIdentificationDto": {
+        "properties": {
+          "confidence": {
+            "description": "0 至 100",
+            "nullable": true,
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "series": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EpubIdentifiedSeriesDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "verdict": {
+            "enum": [
+              "missing",
+              "present",
+              "unknown",
+              "bundle"
+            ],
+            "type": "string"
+          },
+          "volume": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelVolumeListItemDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "key",
+          "verdict",
+          "confidence",
+          "volume",
+          "series"
+        ],
+        "type": "object"
+      },
+      "EpubIdentifiedSeriesDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn"
+        ],
+        "type": "object"
+      },
+      "EpubIdentifyDto": {
+        "properties": {
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/EpubIdentifyFileDto"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "type": "object"
+      },
+      "EpubIdentifyFileDto": {
+        "properties": {
+          "creators": {
+            "default": [],
+            "description": "OPF 中的 dc:creator",
+            "items": {
+              "maxLength": 200,
+              "type": "string"
+            },
+            "maxItems": 10,
+            "type": "array"
+          },
+          "filename": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "isbns": {
+            "default": [],
+            "description": "OPF 中看起来像 ISBN 的 dc:identifier",
+            "items": {
+              "maxLength": 40,
+              "type": "string"
+            },
+            "maxItems": 10,
+            "type": "array"
+          },
+          "key": {
+            "description": "由客户端生成、在本次请求内唯一的文件标识",
+            "maxLength": 64,
+            "type": "string"
+          },
+          "title": {
+            "description": "OPF 中的 dc:title",
+            "maxLength": 500,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "filename",
+          "creators",
+          "isbns"
+        ],
+        "type": "object"
+      },
+      "EpubIdentifyResultDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EpubIdentificationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
         ],
         "type": "object"
       },
@@ -16065,6 +16253,66 @@
         ],
         "type": "object"
       },
+      "LightNovelVolumeListItemDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelVolumeCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "has_epub": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "series": {
+            "$ref": "#/components/schemas/LightNovelVolumeSummarySeriesDto"
+          },
+          "volume_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_type": {
+            "enum": [
+              "MAIN",
+              "EXTRA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_type",
+          "volume_number",
+          "volume_label",
+          "publication_date",
+          "covers",
+          "series",
+          "has_epub"
+        ],
+        "type": "object"
+      },
       "LightNovelVolumeRateDetailDto": {
         "properties": {
           "created_at": {
@@ -16247,6 +16495,105 @@
           "name",
           "name_cn",
           "nsfw"
+        ],
+        "type": "object"
+      },
+      "LightNovelVolumeWantedDto": {
+        "properties": {
+          "auto_status": {
+            "enum": [
+              "none",
+              "pending",
+              "failed"
+            ],
+            "type": "string"
+          },
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelVolumeCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "series": {
+            "$ref": "#/components/schemas/LightNovelVolumeWantedSeriesDto"
+          },
+          "volume_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_type": {
+            "enum": [
+              "MAIN",
+              "EXTRA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_type",
+          "volume_number",
+          "volume_label",
+          "publication_date",
+          "covers",
+          "series",
+          "auto_status"
+        ],
+        "type": "object"
+      },
+      "LightNovelVolumeWantedSeriesDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "enum": [
+              "SERIALIZING",
+              "FINISHED",
+              "PAUSED",
+              "ABANDONED"
+            ],
+            "type": "string"
+          },
+          "nsfw": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "nsfw",
+          "novel_status"
         ],
         "type": "object"
       },
@@ -54833,7 +55180,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/LightNovelVolumeSummaryDto"
+                        "$ref": "#/components/schemas/LightNovelVolumeListItemDto"
                       },
                       "type": "array"
                     },
@@ -54857,6 +55204,37 @@
         ]
       }
     },
+    "/api/v3/light-novel-volumes/epub/identify": {
+      "post": {
+        "operationId": "LightNovelVolumeController_identifyEpubs",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EpubIdentifyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpubIdentifyResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelVolume"
+        ]
+      }
+    },
     "/api/v3/light-novel-volumes/epub/limits": {
       "get": {
         "operationId": "LightNovelVolumeController_epubLimits",
@@ -54867,6 +55245,115 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EpubUploadLimitsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelVolume"
+        ]
+      }
+    },
+    "/api/v3/light-novel-volumes/wanted": {
+      "get": {
+        "operationId": "LightNovelVolumeController_getWanted",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "popular",
+              "enum": [
+                "popular",
+                "recent"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看某种连载状态的系列",
+            "in": "query",
+            "name": "novel_status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "SERIALIZING",
+                "FINISHED",
+                "PAUSED",
+                "ABANDONED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "按自动采集状态筛选：none 没有来源、pending 采集中、failed 采集失败",
+            "in": "query",
+            "name": "auto",
+            "required": false,
+            "schema": {
+              "enum": [
+                "none",
+                "pending",
+                "failed"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/LightNovelVolumeWantedDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },
@@ -65751,6 +66238,64 @@
         },
         "tags": [
           "UserContent"
+        ]
+      }
+    },
+    "/api/v3/user/me/epub/corrections": {
+      "get": {
+        "operationId": "UserEpubCorrectionController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EpubCorrectionDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "UserEpubCorrection"
         ]
       }
     },

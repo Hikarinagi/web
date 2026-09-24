@@ -4,6 +4,7 @@
   import {
     BookImage,
     BookOpen,
+    BookUp,
     FileText,
     GamepadDirectional,
     Image as ImageIcon,
@@ -34,6 +35,7 @@
     gamepad: GamepadDirectional,
     bookOpen: BookOpen,
     bookImage: BookImage,
+    bookUp: BookUp,
     messagesSquare: MessagesSquare,
     smartphone: Smartphone,
   } satisfies Record<HeaderNavIcon, Component>
