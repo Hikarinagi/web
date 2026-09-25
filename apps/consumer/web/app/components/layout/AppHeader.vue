@@ -6,6 +6,7 @@
   import { NuxtLink } from '#components'
   import logoUrl from '~/assets/images/wordmark.svg'
   import { HEADER_NAV_ITEMS, SITE_CONFIG } from '~/config/site'
+  import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
   import { TRANSITION_FAST } from '~/lib/motion'
   import { cn } from '~/utils/cn'
 
@@ -20,6 +21,7 @@
   const mounted = useMounted()
   const transparent = computed(() => !props.flush && y.value <= 8)
   const menuOpen = ref(false)
+  const { items: promoItems } = useHeaderPromoNav()
 
   const headerTitle = useState<string>('hikari:header-title', () => '')
   const isTopLevel = computed(() => HEADER_NAV_ITEMS.some(item => item.to === route.path))
@@ -72,7 +74,7 @@
         >
           <Menu aria-hidden="true" />
         </IconButton>
-        <LayoutHeaderMobileMenu v-model:open="menuOpen" />
+        <LayoutHeaderMobileMenu v-model:open="menuOpen" :promo-items="promoItems" />
 
         <Inline
           v-if="showMobileTitle"
@@ -113,7 +115,7 @@
             :preload="{ fetchPriority: 'high' }"
           />
         </NuxtLink>
-        <LayoutHeaderDesktopNav />
+        <LayoutHeaderDesktopNav :promo-items="promoItems" />
       </Inline>
 
       <Inline as="nav" gap="sm" align="center" :wrap="false" class="shrink-0">

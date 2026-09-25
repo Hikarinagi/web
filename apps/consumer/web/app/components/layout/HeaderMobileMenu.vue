@@ -10,13 +10,13 @@
     Smartphone,
   } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
-  import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
+  import type { PromoNavItem } from '~/features/promotion/placement'
 
+  defineProps<{ promoItems: PromoNavItem[] }>()
   const open = defineModel<boolean>('open', { default: false })
 
   const route = useRoute()
   const navItems = useHeaderNav()
-  const { items: promoItems } = useHeaderPromoNav()
 
   const navIconMap = {
     gamepad: GamepadDirectional,

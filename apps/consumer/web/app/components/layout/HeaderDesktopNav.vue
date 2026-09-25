@@ -10,11 +10,12 @@
     Smartphone,
   } from '@lucide/vue'
   import type { HeaderNavIcon, HeaderNavItem } from '~/config/site'
-  import { useHeaderPromoNav } from '~/features/promotion/useHeaderPromoNav'
+  import type { PromoNavItem } from '~/features/promotion/placement'
   import { cn } from '~/utils/cn'
 
+  defineProps<{ promoItems: PromoNavItem[] }>()
+
   const route = useRoute()
-  const { items: promoItems } = useHeaderPromoNav()
   const navItems = useHeaderNav()
 
   const navIconMap = {

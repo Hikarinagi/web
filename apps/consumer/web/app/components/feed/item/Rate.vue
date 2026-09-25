@@ -14,7 +14,9 @@
   <Stack gap="none" class="gap-3">
     <FeedWorkRefCard :work-ref="item.work_ref" :score="item.rate" />
     <Text v-if="item.rate_content" class="leading-relaxed wrap-anywhere whitespace-pre-wrap">
-      <Spoiler v-if="item.is_spoiler">{{ item.rate_content }}</Spoiler>
+      <Spoiler v-if="item.is_spoiler" force-fallback class="pointer-events-none">{{
+        item.rate_content
+      }}</Spoiler>
       <template v-else>{{ item.rate_content }}</template>
     </Text>
   </Stack>
