@@ -7013,6 +7013,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/apm/alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InternalApmController_alert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/apm/issues/assigned": {
         parameters: {
             query?: never;
@@ -12609,6 +12625,13 @@ export interface components {
             rybbit_enabled: boolean;
             rybbit_host: string | null;
             rybbit_site_id: string | null;
+        };
+        ApmAlertDto: {
+            message: string;
+            recipient_ids: number[];
+            title: string;
+            /** Format: uri */
+            url?: string;
         };
         ApmAssigneeDto: {
             /** @description 头像对象存储路径 */
@@ -32381,6 +32404,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    InternalApmController_alert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApmAlertDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApmNotifyQueuedDto"];
+                };
             };
         };
     };

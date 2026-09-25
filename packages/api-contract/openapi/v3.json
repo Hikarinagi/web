@@ -3101,6 +3101,38 @@
         ],
         "type": "object"
       },
+      "ApmAlertDto": {
+        "properties": {
+          "message": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "recipient_ids": {
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "url": {
+            "format": "uri",
+            "maxLength": 2048,
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipient_ids",
+          "title",
+          "message"
+        ],
+        "type": "object"
+      },
       "ApmAssigneeDto": {
         "properties": {
           "avatar": {
@@ -53969,6 +54001,37 @@
         },
         "tags": [
           "Galgame"
+        ]
+      }
+    },
+    "/api/v3/internal/apm/alerts": {
+      "post": {
+        "operationId": "InternalApmController_alert",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApmAlertDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApmNotifyQueuedDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "InternalApm"
         ]
       }
     },
