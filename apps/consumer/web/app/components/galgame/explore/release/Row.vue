@@ -26,7 +26,12 @@
 
 <template>
   <Stack v-if="release.items.length" as="section" gap="md">
-    <Inline gap="md" align="center" justify="between" class="flex-col py-2 sm:flex-row">
+    <Inline
+      gap="md"
+      align="start"
+      justify="between"
+      class="flex-col py-2 sm:flex-row sm:items-center"
+    >
       <Stack gap="xs" align="start">
         <Inline gap="sm" align="baseline">
           <Heading :level="2" size="2xl">{{ heading }}</Heading>

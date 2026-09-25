@@ -7,7 +7,13 @@
 </script>
 
 <template>
-  <Inline as="section" gap="md" align="center" justify="between" class="flex-col py-2 sm:flex-row">
+  <Inline
+    as="section"
+    gap="md"
+    align="start"
+    justify="between"
+    class="flex-col py-2 sm:flex-row sm:items-center"
+  >
     <Stack gap="xs" align="start">
       <Heading :level="2" size="lg">想按发售日、关键词筛选？</Heading>
       <Text as="p" size="sm" tone="muted">在图鉴中使用高级筛选功能</Text>
