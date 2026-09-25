@@ -6,6 +6,8 @@ export type SpanKind = 'internal' | 'server' | 'client' | 'producer' | 'consumer
 
 export type StatusCode = 'unset' | 'ok' | 'error'
 
+export type FetchOutcome = 'ok' | 'client_error' | 'fault' | 'network' | 'aborted' | 'external'
+
 export interface SpanRecord {
   traceId: string
   spanId: string

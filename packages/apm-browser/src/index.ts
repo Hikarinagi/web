@@ -6,6 +6,7 @@ export type {
   ApmOptions,
   AttributeValue,
   Attributes,
+  FetchOutcome,
   PageView,
   Span,
   SpanEnd,
@@ -13,5 +14,5 @@ export type {
   SpanOptions,
   StatusCode,
 } from './types.js'
-export { instrumentFetch, type FetchInstrumentationOptions } from './fetch.js'
+export { ATTR_OUTCOME, instrumentFetch, type FetchInstrumentationOptions } from './fetch.js'
 export { routePattern, UNMATCHED_ROUTE, type MatchedRoute } from './route.js'

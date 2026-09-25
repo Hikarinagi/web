@@ -1,11 +1,14 @@
 import { pathOf } from './redact.js'
-import type { Apm, Attributes, SpanEnd } from './types.js'
+import type { Apm, Attributes, FetchOutcome, SpanEnd } from './types.js'
 
 export interface FetchInstrumentationOptions {
   origin: string
+  firstPartyOrigins?: readonly string[]
   requestIdHeader?: string
   ignore?: (url: string) => boolean
 }
+
+export const ATTR_OUTCOME = 'hikari.outcome'
 
 const PATCHED = Symbol.for('hikarinagi.apm.fetch')
 
@@ -16,6 +19,7 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
   const original = target.fetch
   if (!original || original[PATCHED]) return () => {}
   const requestIdHeader = (options.requestIdHeader ?? 'hikari-request-id').toLowerCase()
+  const firstParty = new Set([options.origin, ...(options.firstPartyOrigins ?? [])])
 
   const patched: FetchLike = async function (
     this: unknown,
@@ -27,6 +31,7 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
     const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
     const target = targetOf(url, options.origin)
     const same = target?.origin === options.origin
+    const own = target ? firstParty.has(target.origin) : true
     const path = target ? target.pathname : pathOf(url, options.origin).path
     const attributes: Attributes = { 'http.request.method': method, 'url.path': path }
     if (target) {
@@ -49,14 +54,10 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
     }
     try {
       const response = await original.call(this, input, request)
-      span.end(await outcomeOf(response, requestIdHeader))
+      span.end(await outcomeOf(response, requestIdHeader, own))
       return response
     } catch (error) {
-      span.end({
-        status: 'error',
-        message: messageOf(error),
-        attributes: { 'error.type': nameOf(error) },
-      })
+      span.end(failureOf(error, own))
       throw error
     }
   }
@@ -67,7 +68,11 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
   }
 }
 
-async function outcomeOf(response: Response, requestIdHeader: string): Promise<SpanEnd> {
+async function outcomeOf(
+  response: Response,
+  requestIdHeader: string,
+  own: boolean,
+): Promise<SpanEnd> {
   const attributes: Attributes = { 'http.response.status_code': response.status }
   let requestId = response.headers.get(requestIdHeader) ?? undefined
   let code: string | undefined
@@ -85,11 +90,27 @@ async function outcomeOf(response: Response, requestIdHeader: string): Promise<S
   }
   if (requestId) attributes['hikari.request_id'] = requestId
   if (code) attributes['hikari.biz_code'] = code
-  return {
-    status: response.ok ? 'ok' : 'error',
-    ...(response.ok ? {} : { message: code ?? `HTTP ${response.status}` }),
-    attributes,
+  const outcome: FetchOutcome = response.ok
+    ? 'ok'
+    : !own
+      ? 'external'
+      : response.status >= 500
+        ? 'fault'
+        : 'client_error'
+  attributes[ATTR_OUTCOME] = outcome
+  if (outcome === 'ok') return { status: 'ok', attributes }
+  if (outcome === 'fault') {
+    return { status: 'error', message: code ?? `HTTP ${response.status}`, attributes }
   }
+  return { status: 'unset', attributes }
+}
+
+function failureOf(error: unknown, own: boolean): SpanEnd {
+  const type = nameOf(error)
+  const outcome: FetchOutcome = type === 'AbortError' ? 'aborted' : own ? 'network' : 'external'
+  const attributes: Attributes = { 'error.type': type, [ATTR_OUTCOME]: outcome }
+  if (outcome !== 'network') return { status: 'unset', attributes }
+  return { status: 'error', message: messageOf(error), attributes }
 }
 
 function urlOf(input: RequestInfo | URL, origin: string): string {
@@ -107,8 +128,7 @@ function targetOf(url: string, origin: string): URL | null {
 }
 
 function messageOf(error: unknown): string {
-  if (error instanceof Error)
-    return error.name === 'AbortError' ? 'aborted' : error.message || 'network error'
+  if (error instanceof Error) return error.message || 'network error'
   return String(error)
 }
 

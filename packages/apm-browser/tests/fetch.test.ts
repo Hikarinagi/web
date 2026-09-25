@@ -114,7 +114,7 @@ describe('instrumentFetch', () => {
     expect(attr(own, 'server.port')).toBeUndefined()
   })
 
-  it('marks api failures with the biz code from the envelope', async () => {
+  it('keeps first-party 4xx out of the error status but records the biz code', async () => {
     responder = async () =>
       new Response('{"success":false,"error":{"code":"COMMON_NOT_FOUND"},"request_id":"req-9"}', {
         status: 404,
@@ -124,12 +124,27 @@ describe('instrumentFetch', () => {
     expect(await response.json()).toMatchObject({ success: false })
     await apm.flush()
     const span = spansOf(sent)[0]
-    expect(span.status).toEqual({ code: 2, message: 'COMMON_NOT_FOUND' })
+    expect(span.status).toEqual({ code: 0 })
+    expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'client_error' })
+    expect(attr(span, 'http.response.status_code')).toEqual({ intValue: '404' })
     expect(attr(span, 'hikari.biz_code')).toEqual({ stringValue: 'COMMON_NOT_FOUND' })
     expect(attr(span, 'hikari.request_id')).toEqual({ stringValue: 'req-9' })
   })
 
-  it('records network failures and rethrows', async () => {
+  it('marks first-party 5xx as a fault', async () => {
+    responder = async () =>
+      new Response('{"success":false,"error":{"code":"COMMON_INTERNAL"}}', {
+        status: 502,
+        headers: { 'content-type': 'application/json' },
+      })
+    await fetch('/api/v3/shelf')
+    await apm.flush()
+    const span = spansOf(sent)[0]
+    expect(span.status).toEqual({ code: 2, message: 'COMMON_INTERNAL' })
+    expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'fault' })
+  })
+
+  it('records first-party network failures as errors and rethrows', async () => {
     responder = async () => {
       throw new TypeError('Failed to fetch')
     }
@@ -137,7 +152,48 @@ describe('instrumentFetch', () => {
     await apm.flush()
     const span = spansOf(sent)[0]
     expect(span.status).toEqual({ code: 2, message: 'Failed to fetch' })
+    expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'network' })
     expect(attr(span, 'error.type')).toEqual({ stringValue: 'TypeError' })
+  })
+
+  it('treats an aborted request as no error', async () => {
+    responder = async () => {
+      throw new DOMException('The user aborted a request.', 'AbortError')
+    }
+    await expect(fetch('/api/v3/promotions/nav-items')).rejects.toThrow('aborted')
+    await apm.flush()
+    const span = spansOf(sent)[0]
+    expect(span.status).toEqual({ code: 0 })
+    expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'aborted' })
+    expect(attr(span, 'error.type')).toEqual({ stringValue: 'AbortError' })
+  })
+
+  it('never turns a third-party failure into an error', async () => {
+    responder = async input =>
+      String(input).includes('blocked')
+        ? Promise.reject(new TypeError('Failed to fetch'))
+        : new Response('nope', { status: 401 })
+    await fetch('https://analysis.example/api/track', { method: 'POST' })
+    await expect(fetch('https://blocked.example/api/track', { method: 'POST' })).rejects.toThrow()
+    await apm.flush()
+    const [rejected, blocked] = spansOf(sent)
+    expect(rejected.status).toEqual({ code: 0 })
+    expect(attr(rejected, 'hikari.outcome')).toEqual({ stringValue: 'external' })
+    expect(attr(rejected, 'http.response.status_code')).toEqual({ intValue: '401' })
+    expect(blocked.status).toEqual({ code: 0 })
+    expect(attr(blocked, 'hikari.outcome')).toEqual({ stringValue: 'external' })
+    expect(attr(blocked, 'error.type')).toEqual({ stringValue: 'TypeError' })
+  })
+
+  it('counts configured first-party origins as our own', async () => {
+    uninstall()
+    uninstall = instrumentFetch(apm, { origin, firstPartyOrigins: ['https://api.hikarinagi.org'] })
+    responder = async () => new Response('{"success":false}', { status: 503 })
+    await fetch('https://api.hikarinagi.org/v3/health')
+    await apm.flush()
+    const span = spansOf(sent)[0]
+    expect(span.status).toEqual({ code: 2, message: 'HTTP 503' })
+    expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'fault' })
   })
 
   it('installs once and restores the original on uninstall', () => {
