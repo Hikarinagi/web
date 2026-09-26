@@ -33,6 +33,7 @@
   <Stack v-else-if="detail" gap="lg" align="start">
     <HikariContent
       v-if="detail.content_json && hasBody"
+      class="w-full wrap-anywhere"
       :doc="detail.content_json"
       :summaries="detail.entity_summaries"
       :emoji-sets="detail.emoji_sets"
