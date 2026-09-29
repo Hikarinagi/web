@@ -10,10 +10,11 @@
 </script>
 
 <template>
-  <Stack gap="md">
-    <CreatorContributionStatsHeatmap v-if="data" :stats="data.stats" />
-    <CreatorReviewQueueSection :entries="data?.review_entries" />
-    <CreatorContributionPendingSection :list="data?.pending" />
-    <CreatorContributionActivityFeed :initial-items="data?.activity ?? []" />
+  <Stack v-if="data" gap="lg">
+    <CreatorReviewQueueSection :counts="data.review_counts" />
+    <CreatorProjectSection :novels="data.novels" :mangas="data.mangas" />
+    <CreatorContributionPendingSection :list="data.pending" />
+    <CreatorContributionStatsHeatmap :stats="data.stats" />
+    <CreatorContributionActivityFeed :initial-items="data.activity" />
   </Stack>
 </template>

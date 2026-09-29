@@ -77,9 +77,7 @@
       <Stack align="center" gap="none" class="gap-1.5">
         <Text as="span" size="xs" :class="subtleText">下一话</Text>
         <Text as="span" size="md" weight="semibold" :class="strongText">{{ nextTitle }}</Text>
-        <Text as="span" size="xs" :class="subtleText">
-          登录后免费阅读全部章节，还可以随时随地同步阅读进度
-        </Text>
+        <Text as="span" size="xs" :class="subtleText"> 登录后继续阅读，并同步阅读进度 </Text>
       </Stack>
       <Button login-required pill class="px-5">登录 / 注册</Button>
     </Card>

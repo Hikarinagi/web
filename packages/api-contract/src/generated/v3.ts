@@ -2149,6 +2149,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/platform/workbench": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminWorkbenchPolicyController_get"];
+        put: operations["AdminWorkbenchPolicyController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/promotions/banners": {
         parameters: {
             query?: never;
@@ -2211,6 +2227,38 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["AdminPromoNavItemController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/reader/download/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDownloadPolicyController_get"];
+        put: operations["AdminDownloadPolicyController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/reader/novel/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNovelReaderController_get"];
+        put: operations["AdminNovelReaderController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v3/admin/reader/render-reports": {
@@ -7477,6 +7525,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novel-volumes/contributors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelVolumeController_getTopContributors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novel-volumes/epub/identify": {
         parameters: {
             query?: never;
@@ -8181,6 +8245,502 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novels/{light_novel_id}/terms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelTermController_getList"];
+        put?: never;
+        post: operations["LightNovelTermController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-chapters/contributors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaChapterController_getTopContributors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-chapters/wanted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaChapterController_getWanted"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-page-tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaPageTaskController_cancel"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-project-notes/{note_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaNoteController_removeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-project-notes/{note_id}/resolved": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaNoteController_resolveById"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-project-pages/{page_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaPageController_removeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-project-pages/{page_id}/images/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaPageController_setImage"];
+        post?: never;
+        delete: operations["MangaPageController_clearImage"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-project-pages/{page_id}/regions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaPageController_getRegions"];
+        put: operations["MangaPageController_saveRegions"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectController_getList"];
+        put?: never;
+        post: operations["MangaProjectController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["MangaProjectController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_approve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_archive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/labelplus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaLabelPlusController_export"];
+        put?: never;
+        post: operations["MangaLabelPlusController_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectMemberController_getList"];
+        put?: never;
+        post: operations["MangaProjectMemberController_add"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/members/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaProjectMemberController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["MangaProjectMemberController_updateRole"];
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/pages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectPageController_getList"];
+        put?: never;
+        post: operations["MangaProjectPageController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/pages/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaProjectPageController_reorder"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/regions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectRegionController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectController_getReview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectTaskController_getList"];
+        put?: never;
+        post: operations["MangaProjectTaskController_request"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_withdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-region-translations/{translation_id}/proofread": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaRegionTranslationController_proofread"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-region-translations/{translation_id}/select": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaRegionTranslationController_select"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-text-regions/{region_id}/lock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaRegionController_lock"];
+        delete: operations["MangaRegionController_unlock"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-text-regions/{region_id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaRegionController_getNotes"];
+        put?: never;
+        post: operations["MangaRegionController_createNote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-text-regions/{region_id}/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaRegionController_setState"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-text-regions/{region_id}/translations/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaRegionController_saveMine"];
+        post?: never;
+        delete: operations["MangaRegionController_removeMine"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-volumes/{id}": {
         parameters: {
             query?: never;
@@ -8639,6 +9199,518 @@ export interface paths {
         get: operations["MangaController_getVolumes"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-chapters/{chapter_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["NovelChapterController_removeById"];
+        options?: never;
+        head?: never;
+        patch: operations["NovelChapterController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/novel-chapters/{chapter_id}/pretranslations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelPretranslationController_getList"];
+        put?: never;
+        post: operations["NovelPretranslationController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-chapters/{chapter_id}/segments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelChapterController_getSegments"];
+        put: operations["NovelChapterController_saveSegments"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-notes/{note_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["NovelNoteController_removeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-notes/{note_id}/resolved": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["NovelNoteController_resolveById"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_getList"];
+        put?: never;
+        post: operations["NovelProjectController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["NovelProjectController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_approve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_archive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/chapters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectChapterController_getList"];
+        put?: never;
+        post: operations["NovelProjectChapterController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/credits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_getCredits"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_importFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/import/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_importCurrent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/import/current/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_previewCurrent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/import/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_previewFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectMemberController_getList"];
+        put?: never;
+        post: operations["NovelProjectMemberController_add"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/members/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["NovelProjectMemberController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["NovelProjectMemberController_updateRole"];
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_getReleases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectController_getReview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectController_withdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/lock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelSegmentController_lock"];
+        delete: operations["NovelSegmentController_unlock"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/memory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelSegmentTranslationController_getMemory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelSegmentController_getNotes"];
+        put?: never;
+        post: operations["NovelSegmentController_createNote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/revisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelSegmentController_getRevisions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["NovelSegmentController_setState"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-segments/{segment_id}/translations/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["NovelSegmentTranslationController_saveMine"];
+        post?: never;
+        delete: operations["NovelSegmentTranslationController_removeMine"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-terms/{term_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["NovelTermController_removeById"];
+        options?: never;
+        head?: never;
+        patch: operations["NovelTermController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/novel-translations/{translation_id}/proofread": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["NovelTranslationController_proofread"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-translations/{translation_id}/select": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelTranslationController_select"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9808,6 +10880,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/reader/mangas/{manga_id}/chapters/{chapter_id}/pages/{id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaReaderController_read"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/reader/mangas/{manga_id}/progress": {
         parameters: {
             query?: never;
@@ -9872,6 +10960,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/reader/me/novel/notification": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelNotifyController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["NovelNotifyController_update"];
+        trace?: never;
+    };
     "/api/v3/reader/me/reading": {
         parameters: {
             query?: never;
@@ -9913,7 +11017,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["ReaderController_createSession"];
+        post: operations["ReaderSessionController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/reader/sessions/{id}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReaderSessionController_read"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -10624,6 +11744,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/translation-teams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TranslationTeamController_getList"];
+        put?: never;
+        post: operations["TranslationTeamController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/translation-teams/{team_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TranslationTeamController_getById"];
+        put?: never;
+        post?: never;
+        delete: operations["TranslationTeamController_removeById"];
+        options?: never;
+        head?: never;
+        patch: operations["TranslationTeamController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/translation-teams/{team_id}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TranslationTeamMemberController_getList"];
+        put?: never;
+        post: operations["TranslationTeamMemberController_add"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/translation-teams/{team_id}/members/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["TranslationTeamMemberController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["TranslationTeamMemberController_updateRole"];
+        trace?: never;
+    };
     "/api/v3/uploads/images": {
         parameters: {
             query?: never;
@@ -10702,6 +11886,38 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["UserController_updateMe"];
+        trace?: never;
+    };
+    "/api/v3/user/me/ai-quota": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AiQuotaController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/ai-quota/purchase": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AiQuotaController_purchase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v3/user/me/check-ins": {
@@ -10940,6 +12156,22 @@ export interface paths {
          * @description 生成新的 client_secret 并立即使旧密钥失效，新密钥仅在本次响应中返回一次
          */
         post: operations["DeveloperAppController_rotateSecret"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/download/cards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DownloadCardController_status"];
+        put?: never;
+        post: operations["DownloadCardController_purchase"];
         delete?: never;
         options?: never;
         head?: never;
@@ -11330,6 +12562,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/manga/download/mangas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaDownloadController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/manga/download/mangas/{id}/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaDownloadController_download"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/manga/download/mangas/{id}/plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaDownloadController_plan"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/media": {
         parameters: {
             query?: never;
@@ -11357,6 +12637,54 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["UserMediaController_deleteOne"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/novel/download/series/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelDownloadController_series"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/novel/download/series/{id}/plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelDownloadController_plan"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/novel/download/volumes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelDownloadController_status"];
+        put?: never;
+        post: operations["NovelDownloadController_download"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -11530,6 +12858,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["CurrentUserTopicController_getMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/translation-teams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CurrentUserTranslationTeamController_getMine"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11868,7 +13212,23 @@ export interface components {
             status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
             summary: string;
         };
+        AddMangaProjectMemberDto: {
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER";
+            user_id: number;
+        };
+        AddNovelProjectMemberDto: {
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "REVIEWER";
+            user_id: number;
+        };
         AddPermissionGroupMemberDto: {
+            user_id: number;
+        };
+        AddTranslationTeamMemberDto: {
+            /** @enum {string} */
+            role: "ADMIN" | "MEMBER";
+            /** @description 要加入的用户 ID */
             user_id: number;
         };
         AdjustPointDto: {
@@ -12443,7 +13803,7 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
             user: components["schemas"]["PointRecordUserDto"];
         };
         AdminPromoBannerDto: {
@@ -12617,6 +13977,18 @@ export interface components {
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
+        };
+        AiQuotaDto: {
+            /** @description 每 1 积分可兑换的字数 */
+            chars_per_point: number;
+            /** @description 兑换得到的额外额度余额（字） */
+            credit_chars: number;
+            /** @description 每日免费额度（字） */
+            daily_chars: number;
+            /** @description 今日还可使用（字） */
+            remaining: number;
+            /** @description 今日已用（字） */
+            used_today: number;
         };
         AnalyticsSettingsDto: {
             openpanel_api_url: string | null;
@@ -13455,6 +14827,11 @@ export interface components {
             subject: components["schemas"]["ContextRefDto"] | null;
             topics: string[];
         };
+        ContentContributorDto: {
+            /** @description 贡献的卷数或话数 */
+            count: number;
+            user: components["schemas"]["UserRefDto"];
+        };
         ContentDetailDto: {
             content: string | null;
             context: components["schemas"]["ContentContextDto"] | null;
@@ -13736,11 +15113,86 @@ export interface components {
             /** @description 小写字母开头，仅小写字母/数字/下划线(provider 函数名约束) */
             tool_key: string;
         };
+        CreateMangaNoteDto: {
+            content: string;
+        };
+        CreateMangaPageTasksDto: {
+            /** @description 仅对 DETECT 生效：完成后自动继续机翻与擦除原文 */
+            follow?: boolean;
+            /**
+             * @description DETECT 标出文本框并识别原文、OCR 识别空白文本框、TRANSLATE 机翻、INPAINT 擦除原文
+             * @enum {string}
+             */
+            kind: "DETECT" | "OCR" | "TRANSLATE" | "INPAINT";
+            /** @description 只处理这些页；不传时处理全部页 */
+            page_ids?: number[];
+        };
+        CreateMangaProjectDto: {
+            /** @description 翻译已有的一话时填写 */
+            chapter_id?: number | null;
+            chapter_name?: string | null;
+            /** @description 话数，例如 12 或 12.5 */
+            chapter_number?: string | null;
+            /** @enum {string} */
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            /** @enum {string} */
+            mode: "UPLOAD" | "TRANSLATION";
+            series_id: number;
+            /**
+             * @description 图源或原文的语言
+             * @enum {string}
+             */
+            source_lang: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
+            /**
+             * @description 译文语言，翻译项目必填
+             * @enum {string}
+             */
+            target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
+            team_id?: number | null;
+            volume_number?: number | null;
+        };
+        CreateNovelChapterDto: {
+            /** @description 排序键，缺省时排在最后 */
+            sort_key?: number;
+            /** @description 原文标题，翻译项目使用 */
+            source_title?: string | null;
+            title: string;
+        };
+        CreateNovelNoteDto: {
+            content: string;
+        };
+        CreateNovelProjectDto: {
+            light_novel_volume_id: number;
+            /** @enum {string} */
+            mode: "ENTRY" | "TRANSLATION";
+            /**
+             * @description 正文或原文的语言
+             * @enum {string}
+             */
+            source_lang: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
+            /**
+             * @description 译文语言，翻译项目必填
+             * @enum {string}
+             */
+            target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
+            /** @description 归属的团队 */
+            team_id?: number | null;
+        };
         CreateNovelSourceLinkDto: {
             light_novel_id: number;
             /** @description 源站书号，或包含书号的源站链接 */
             source: string;
             source_key: string;
+        };
+        CreateNovelTermDto: {
+            character_id?: number | null;
+            /** @description 是否为禁用译法 */
+            forbidden?: boolean;
+            note?: string | null;
+            /** @description 原文写法 */
+            source: string;
+            /** @description 译法；禁用术语时为不应使用的译法 */
+            target: string;
         };
         CreateOauthProviderDto: {
             authorize_endpoint?: string | null;
@@ -13875,6 +15327,14 @@ export interface components {
             alg: "RS256";
         };
         CreateTopicDto: {
+            name: string;
+        };
+        CreateTranslationTeamDto: {
+            /** @description 头像的媒体资源 ID */
+            avatar_id?: number | null;
+            /** @description 团队简介 */
+            description?: string | null;
+            /** @description 团队名称 */
             name: string;
         };
         CursorMetaDto: {
@@ -14041,6 +15501,29 @@ export interface components {
             snapshot: {
                 [key: string]: unknown;
             };
+        };
+        DownloadCardsDto: {
+            available: number;
+            cards_used: number;
+            manga_band_size: number;
+            manga_count: number;
+            novel_band_size: number;
+            novel_count: number;
+            points: number;
+            price: number;
+            purchased: number;
+        };
+        DownloadPolicyDto: {
+            card_price: number;
+            manga_band_size: number;
+            manga_concurrent_transfers: number;
+            manga_daily_bytes_limit: number;
+            manga_hourly_transfer_limit: number;
+            manga_image_concurrency: number;
+            manga_package_bytes: number;
+            manga_package_pages: number;
+            manga_transfer_timeout_seconds: number;
+            novel_band_size: number;
         };
         DraftListItemDto: {
             char_count: number;
@@ -14914,14 +16397,19 @@ export interface components {
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
         };
+        FileTransferDto: {
+            p: string;
+        };
         FirstTimeBonusInputDto: {
             article: number;
             comment: number;
             contribution: number;
+            epub: number;
             post: number;
             rate: number;
             reading: number;
             review: number;
+            translation: number;
         };
         ForceRejectDto: {
             note?: string;
@@ -15486,6 +16974,30 @@ export interface components {
             next: number;
             retired: number;
         };
+        ImportMangaLabelPlusDto: {
+            /** @description LabelPlus 翻译稿的全文 */
+            content: string;
+            /** @description 先清空对应页面上已有的文本框 */
+            replace?: boolean;
+            /**
+             * @description 稿中文字作为原文还是译文导入
+             * @enum {string}
+             */
+            target: "source" | "translation";
+        };
+        ImportNovelBookDto: {
+            /** @description 要导入的章节：预览中的段落范围，按升序排列且无重叠 */
+            chapters: components["schemas"]["ImportNovelChapterDto"][];
+            /** @description 是否先清空已有章节再导入 */
+            replace?: boolean;
+        };
+        ImportNovelChapterDto: {
+            /** @description 预览段落列表中的起始位置（含） */
+            from: number;
+            title: string;
+            /** @description 预览段落列表中的结束位置（不包括） */
+            to: number;
+        };
         InstantGroupDto: {
             items: components["schemas"]["SearchHitDto"][];
             /** @enum {string} */
@@ -15900,12 +17412,19 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             download_times: number;
+            /** @description 当前电子书由用户投稿并通过审核时为投稿者，其他来源为空 */
+            epub_provider: components["schemas"]["UserRefDto"] | null;
             id: number;
             isbn: string | null;
             name: string | null;
             name_cn: string | null;
             online_reading_available: boolean;
             online_reading_is_collection: boolean;
+            /**
+             * @description 在线阅读版本是站内翻译项目发布时的翻译质量，其他来源为空
+             * @enum {string|null}
+             */
+            online_reading_translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
             pages: number | null;
             price_amount: number | null;
             price_currency: string | null;
@@ -15932,6 +17451,15 @@ export interface components {
             online_reading_available: boolean;
             online_reading_is_collection: boolean;
             volume_id: number;
+        };
+        LightNovelVolumeLabelDto: {
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            volume_label: string | null;
+            volume_number: number | null;
+            /** @enum {string} */
+            volume_type: "MAIN" | "EXTRA";
         };
         LightNovelVolumeListItemDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
@@ -15966,6 +17494,11 @@ export interface components {
             name_cn: string | null;
             online_reading_available: boolean;
             online_reading_is_collection: boolean;
+            /**
+             * @description 在线阅读版本是站内翻译项目发布时的翻译质量，其他来源为空
+             * @enum {string|null}
+             */
+            online_reading_translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
             /** Format: date-time */
             publication_date: string | null;
             relation: string;
@@ -15994,27 +17527,27 @@ export interface components {
             nsfw: boolean;
         };
         LightNovelVolumeWantedDto: {
-            /** @enum {string} */
-            auto_status: "none" | "pending" | "failed";
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
             id: number;
             name: string | null;
             name_cn: string | null;
+            previous: components["schemas"]["LightNovelVolumeLabelDto"];
+            /** @description 进行中的项目 */
+            projects: components["schemas"]["LightNovelVolumeWantedProjectDto"][];
             /** Format: date-time */
             publication_date: string | null;
-            series: components["schemas"]["LightNovelVolumeWantedSeriesDto"];
+            /** @description 读完上一卷的读者人数 */
+            readers: number;
+            series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
             volume_label: string | null;
             volume_number: number | null;
             /** @enum {string} */
             volume_type: "MAIN" | "EXTRA";
         };
-        LightNovelVolumeWantedSeriesDto: {
-            id: number;
-            name: string;
-            name_cn: string | null;
+        LightNovelVolumeWantedProjectDto: {
             /** @enum {string} */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
-            nsfw: boolean;
+            mode: "ENTRY" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
         };
         LlmCredentialDto: {
             /** @description 脱敏提示，如 ····wxyz;不返回完整 key */
@@ -16226,6 +17759,13 @@ export interface components {
             publication_date: string | null;
             top_cover: components["schemas"]["RatedMediaAssetDto"] | null;
         };
+        MangaChapterLabelDto: {
+            chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+        };
         MangaChapterRelationDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
@@ -16239,6 +17779,11 @@ export interface components {
             readable: boolean;
             sort_key: number;
             sources_count: number;
+            /**
+             * @description 经共建工作台发布的译本标注；采集来的章节为空
+             * @enum {string|null}
+             */
+            translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
             volume_number: number | null;
         };
         MangaChapterStatusDto: {
@@ -16249,6 +17794,31 @@ export interface components {
         };
         /** @enum {string} */
         MangaChapterType: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+        MangaChapterWantedDto: {
+            chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            previous: components["schemas"]["MangaChapterLabelDto"];
+            /** @description 进行中的项目 */
+            projects: components["schemas"]["MangaChapterWantedProjectDto"][];
+            /** @description 阅读进度停在上一话的读者人数 */
+            readers: number;
+            series: components["schemas"]["MangaChapterWantedSeriesDto"];
+        };
+        MangaChapterWantedProjectDto: {
+            /** @enum {string} */
+            mode: "UPLOAD" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
+        };
+        MangaChapterWantedSeriesDto: {
+            covers: components["schemas"]["MangaCoverRelationDto"][];
+            id: number;
+            name: string;
+            name_cn: string | null;
+            nsfw: boolean;
+        };
         MangaCharacterRelationDto: {
             character: components["schemas"]["CharacterPreviewDto"];
             role: components["schemas"]["CharacterRole"];
@@ -16322,6 +17892,35 @@ export interface components {
             updated_at: string;
             views: number;
         };
+        MangaDownloadFileDto: {
+            max_cards: number;
+            p: string;
+            page_ids: number[];
+            revision: string;
+        };
+        MangaDownloadPartDto: {
+            byte_size: number;
+            file_name: string;
+            page_ids: number[];
+            required_cards: number;
+            revision: string;
+        };
+        MangaDownloadPlanDto: {
+            chapter_ids: number[];
+        };
+        MangaDownloadPlanResultDto: {
+            available: number;
+            cards_used: number;
+            manga_band_size: number;
+            manga_count: number;
+            novel_band_size: number;
+            novel_count: number;
+            parts: components["schemas"]["MangaDownloadPartDto"][];
+            points: number;
+            price: number;
+            purchased: number;
+            required_cards: number;
+        };
         MangaEditionDto: {
             fields: {
                 [key: string]: string;
@@ -16346,6 +17945,19 @@ export interface components {
             image_quality: number;
             max_image_dimension: number;
         };
+        MangaLabelPlusFileDto: {
+            /** @description LabelPlus 翻译稿全文，换行为 CRLF */
+            content: string;
+            filename: string;
+        };
+        MangaLabelPlusImportResultDto: {
+            /** @description 按顺序对上的页数 */
+            pages: number;
+            /** @description 新建的文本框数 */
+            regions: number;
+            /** @description 稿中多出、项目里没有对应页面的页数 */
+            skipped_pages: number;
+        };
         /** @enum {string} */
         MangaListing: "AUTO" | "SHOWN" | "HIDDEN";
         MangaListingStateDto: {
@@ -16362,12 +17974,44 @@ export interface components {
         MangaMatchingSettingDto: {
             auto_accept_confidence: number;
         };
+        MangaNoteDto: {
+            content: string;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            region: components["schemas"]["MangaNoteRegionDto"];
+            region_id: string;
+            /**
+             * Format: date-time
+             * @description 批注标记为已处理的时间
+             */
+            resolved_at: string | null;
+            user: components["schemas"]["UserRefDto"];
+        };
+        MangaNoteRegionDto: {
+            page_id: number;
+        };
         MangaNotifySettingDto: {
             enabled: boolean;
             on_favorite: boolean;
             on_progress: boolean;
             on_status: boolean;
             statuses: ("GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN")[];
+        };
+        MangaPageTaskDto: {
+            attempts: number;
+            /** Format: date-time */
+            created_at: string;
+            error: string | null;
+            id: number;
+            /** @enum {string} */
+            kind: "DETECT" | "OCR" | "TRANSLATE" | "INPAINT";
+            page_id: number;
+            requester: components["schemas"]["UserRefDto"];
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "CANCELLED";
+            /** Format: date-time */
+            updated_at: string;
         };
         MangaPipelineStatusDto: {
             paused: boolean;
@@ -16397,6 +18041,112 @@ export interface components {
             read_chapter_ids: number[];
             /** @description 进度章节首页短时签名缩略图地址 */
             thumbnail: string | null;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        MangaProjectChapterRefDto: {
+            chapter_number: string | null;
+            id: number;
+            name: string | null;
+        };
+        MangaProjectDto: {
+            chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
+            chapter_name: string | null;
+            chapter_number: string | null;
+            /** @enum {string} */
+            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            /** Format: date-time */
+            last_activity_at: string;
+            /** @description 未修改机翻达到该百分比时，发布标注为机翻 */
+            machine_label_percent: number;
+            /** @enum {string} */
+            mode: "UPLOAD" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
+            page_count: number;
+            /** Format: date-time */
+            published_at: string | null;
+            series: components["schemas"]["MangaSummaryDto"];
+            source_lang: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            target_lang: string | null;
+            team: components["schemas"]["TranslationTeamSummaryDto"] | null;
+            viewer_capabilities: ("manage" | "label" | "translate" | "proofread" | "redraw" | "typeset" | "finalize")[];
+            viewer_reviewer: boolean;
+            /** @enum {string|null} */
+            viewer_role: "OWNER" | "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER" | null;
+            volume_number: number | null;
+        };
+        MangaProjectListEntryDto: {
+            chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
+            chapter_name: string | null;
+            chapter_number: string | null;
+            /** @enum {string} */
+            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            /** Format: date-time */
+            last_activity_at: string;
+            /** @enum {string} */
+            mode: "UPLOAD" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
+            progress: components["schemas"]["MangaProjectProgressDto"];
+            series: components["schemas"]["MangaSummaryDto"];
+            source_lang: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            target_lang: string | null;
+            team: components["schemas"]["TranslationTeamSummaryDto"] | null;
+            volume_number: number | null;
+        };
+        MangaProjectMemberDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER";
+            user: components["schemas"]["UserRefDto"];
+        };
+        MangaProjectPageDto: {
+            /** @description 选定译文由机翻修改而来的文本框数 */
+            assisted_count: number;
+            cleaned_image: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 清理图的限时访问地址 */
+            cleaned_url: string | null;
+            done_count: number;
+            height: number;
+            id: number;
+            /** @description 选定译文仍是未修改机翻的文本框数 */
+            machine_count: number;
+            original_image: components["schemas"]["MediaAssetDto"];
+            /** @description 原图的限时访问地址 */
+            original_url: string;
+            region_count: number;
+            rendered_image: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 成品图的限时访问地址 */
+            rendered_url: string | null;
+            sort_key: number;
+            /** @description 0 未处理、10 已标注、20 已翻译、30 已嵌字 */
+            state: number;
+            width: number;
+        };
+        MangaProjectProgressDto: {
+            /** @description 页数 */
+            pages: number;
+            /** @description 已有成品图的页数 */
+            rendered: number;
+        };
+        MangaProjectReviewDto: {
+            confidence: number | null;
+            decision: string | null;
+            /** @description 审核员在最新提交后写的批注 */
+            notes: components["schemas"]["MangaNoteDto"][];
+            reasons: string[];
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             /** Format: date-time */
             updated_at: string;
         };
@@ -16523,9 +18273,9 @@ export interface components {
         };
         MangaReaderPageDto: {
             height: number | null;
+            id: number;
+            mime_type: string | null;
             page_number: number;
-            /** @description 短时签名图片地址 */
-            src: string;
             width: number | null;
         };
         MangaReaderSeriesDto: {
@@ -16559,6 +18309,66 @@ export interface components {
             batch_size: number;
             cooldown_hours: number;
             enabled: boolean;
+        };
+        MangaRegionDeleteDto: {
+            base_version: number;
+            /** Format: uuid */
+            id: string;
+        };
+        MangaRegionLockDto: {
+            id: string;
+            /** Format: date-time */
+            lock_expires_at: string | null;
+            locked_by: number | null;
+        };
+        MangaRegionStateDto: {
+            id: string;
+            state: number;
+        };
+        MangaRegionTranslationDto: {
+            from_machine: boolean;
+            id: number;
+            machine: boolean;
+            /** @description 机器翻译的原稿 */
+            machine_text: string | null;
+            proofread_text: string | null;
+            proofreader_id: number | null;
+            selected: boolean;
+            text: string;
+            /** Format: date-time */
+            updated_at: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        MangaRegionUpsertDto: {
+            /** @description 修改已有文本框时带上读取到的版本号 */
+            base_version?: number;
+            /**
+             * Format: uuid
+             * @description 文本框 ID，新文本框由客户端生成
+             */
+            id: string;
+            /**
+             * @description 框内文字或框外文字
+             * @enum {string}
+             */
+            position: "INSIDE" | "OUTSIDE";
+            sort_key: number;
+            /** @description 原文 */
+            source_text: string;
+            /** @description 嵌字样式 */
+            style?: {
+                [key: string]: unknown;
+            } | null;
+            /** @description 外框顶点 [x, y] 列表，坐标为比例；没有外框时为空数组 */
+            vertices: number[][];
+            /** @description 标记点横坐标，占页面宽度的比例 */
+            x: number;
+            /** @description 标记点纵坐标，占页面高度的比例 */
+            y: number;
+        };
+        MangaRegionVersionDto: {
+            id: string;
+            version: number;
         };
         MangaRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
@@ -16704,6 +18514,33 @@ export interface components {
         MangaTagRelationDto: {
             likes: number;
             tag: components["schemas"]["TagPreviewDto"];
+        };
+        MangaTextRegionDto: {
+            id: string;
+            /** Format: date-time */
+            lock_expires_at: string | null;
+            locked_by: number | null;
+            /** @description 原文是否来自自动识别且未经修改 */
+            machine: boolean;
+            page_id: number;
+            /** @enum {string} */
+            position: "INSIDE" | "OUTSIDE";
+            sort_key: number;
+            source_text: string;
+            /** @description 0 空、10 需修改、20 已译、30 已定稿 */
+            state: number;
+            style: {
+                [key: string]: unknown;
+            } | null;
+            translations: components["schemas"]["MangaRegionTranslationDto"][];
+            version: number;
+            vertices: number[][];
+            x: number;
+            y: number;
+        };
+        MangaTranslationResultDto: {
+            region_state: number;
+            translation: components["schemas"]["MangaRegionTranslationDto"];
         };
         MangaUpdateNotifySettingDto: {
             batch_size: number;
@@ -17083,7 +18920,14 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
+        };
+        MyTranslationTeamDto: {
+            avatar: components["schemas"]["MediaAssetDto"] | null;
+            id: number;
+            name: string;
+            /** @enum {string} */
+            role: "OWNER" | "ADMIN" | "MEMBER";
         };
         NamedEntityAdminItemDto: {
             /** Format: date-time */
@@ -17104,6 +18948,329 @@ export interface components {
         };
         NovelBackfillResultDto: {
             enqueued: number;
+        };
+        NovelChapterDto: {
+            /** @description 选定译文由机翻修改而来的段落数 */
+            assisted_count: number;
+            /** @description 已完成的正文段落数（已译或已定稿） */
+            done_count: number;
+            id: number;
+            /** @description 选定译文仍是未修改机翻的段落数 */
+            machine_count: number;
+            /** @description 正文段落数，不含插图与分隔 */
+            segment_count: number;
+            sort_key: number;
+            source_title: string | null;
+            title: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        NovelCreditDto: {
+            /** @description 署名，多人用顿号分隔 */
+            names: string;
+            /** @description 职责，例如图源、扫图、修图 */
+            role: string;
+        };
+        NovelCreditLineDto: {
+            /** @description 署名 */
+            names: string;
+            /** @description 职责 */
+            role: string;
+        };
+        NovelCreditsDto: {
+            /** @description 发布时写入电子书的完整署名，含自动生成与补充的部分 */
+            lines: components["schemas"]["NovelCreditLineDto"][];
+        };
+        NovelDownloadFileDto: {
+            max_cards: number;
+            p: string;
+            revision?: string | null;
+        };
+        NovelDownloadPartDto: {
+            file_name: string;
+            id: number;
+            required_cards: number;
+            revision: string | null;
+        };
+        NovelDownloadPlanDto: {
+            volume_ids: number[];
+        };
+        NovelDownloadPlanResultDto: {
+            available: number;
+            cards_used: number;
+            manga_band_size: number;
+            manga_count: number;
+            novel_band_size: number;
+            novel_count: number;
+            parts: components["schemas"]["NovelDownloadPartDto"][];
+            points: number;
+            price: number;
+            purchased: number;
+            required_cards: number;
+        };
+        NovelDownloadSeriesDto: {
+            available: number;
+            cards_used: number;
+            manga_band_size: number;
+            manga_count: number;
+            novel_band_size: number;
+            novel_count: number;
+            points: number;
+            price: number;
+            purchased: number;
+            volumes: components["schemas"]["NovelDownloadVolumeDto"][];
+        };
+        NovelDownloadStatusDto: {
+            available: number;
+            cards_used: number;
+            file_name: string;
+            manga_band_size: number;
+            manga_count: number;
+            novel_band_size: number;
+            novel_count: number;
+            points: number;
+            price: number;
+            purchased: number;
+            required_cards: number;
+            revision: string | null;
+            series_id: number;
+            unlocked: boolean;
+        };
+        NovelDownloadVolumeDto: {
+            id: number;
+            label: string;
+        };
+        NovelImportBlockDto: {
+            caption: string | null;
+            /** @enum {string} */
+            kind: "TEXT" | "IMAGE" | "BREAK";
+            text: string | null;
+        };
+        NovelImportChapterDto: {
+            /** @description 段落列表中的起始位置（含） */
+            from: number;
+            /** @description 是否建议导入该章节；默认情况下不导入封面、目录和类似页面 */
+            included: boolean;
+            title: string;
+            /** @description 段落列表中的结束位置（不包括） */
+            to: number;
+        };
+        NovelImportPreviewDto: {
+            blocks: components["schemas"]["NovelImportBlockDto"][];
+            chapters: components["schemas"]["NovelImportChapterDto"][];
+        };
+        NovelImportResultDto: {
+            chapters: number;
+            images: number;
+            segments: number;
+        };
+        NovelMemoryMatchDto: {
+            /** @description 是否来自同一系列 */
+            same_series: boolean;
+            /** @description 0 到 1 的相似度 */
+            score: number;
+            source_text: string;
+            target_text: string;
+        };
+        NovelNoteDto: {
+            content: string;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            /**
+             * Format: date-time
+             * @description 批注标记为已处理的时间
+             */
+            resolved_at: string | null;
+            segment: components["schemas"]["NovelNoteSegmentDto"];
+            segment_id: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        NovelNoteSegmentDto: {
+            chapter_id: number;
+        };
+        NovelNotifySettingDto: {
+            enabled: boolean;
+            on_favorite: boolean;
+            on_progress: boolean;
+            on_status: boolean;
+            statuses: ("GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN")[];
+        };
+        NovelPretranslationDto: {
+            attempts: number;
+            /** @description 已计费的原文字数 */
+            chars: number;
+            /** Format: date-time */
+            created_at: string;
+            error: string | null;
+            id: number;
+            segment_count: number;
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "CANCELLED";
+            /** Format: date-time */
+            updated_at: string;
+        };
+        NovelProjectDto: {
+            /** @description 导入时所依据的 EPUB 摘要 */
+            based_on_sha: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** @description 发起人补充的署名 */
+            credits: components["schemas"]["NovelCreditLineDto"][];
+            id: number;
+            /** Format: date-time */
+            last_activity_at: string;
+            /** @description 未修改机翻达到该百分比时，发布标注为机翻 */
+            machine_label_percent: number;
+            /** @enum {string} */
+            mode: "ENTRY" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
+            source_lang: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            target_lang: string | null;
+            team: components["schemas"]["TranslationTeamSummaryDto"] | null;
+            /** @description 当前用户在项目中拥有的能力 */
+            viewer_capabilities: ("manage" | "write" | "translate" | "proofread" | "finalize")[];
+            /** @description 当前用户是否有工作台审核权限 */
+            viewer_reviewer: boolean;
+            /**
+             * @description 当前用户在项目中的角色
+             * @enum {string|null}
+             */
+            viewer_role: "OWNER" | "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "REVIEWER" | null;
+            volume: components["schemas"]["LightNovelVolumeSummaryDto"];
+        };
+        NovelProjectListEntryDto: {
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            /** Format: date-time */
+            last_activity_at: string;
+            /** @enum {string} */
+            mode: "ENTRY" | "TRANSLATION";
+            owner: components["schemas"]["UserRefDto"];
+            progress: components["schemas"]["NovelProjectProgressDto"];
+            source_lang: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            target_lang: string | null;
+            team: components["schemas"]["TranslationTeamSummaryDto"] | null;
+            volume: components["schemas"]["LightNovelVolumeSummaryDto"];
+        };
+        NovelProjectMemberDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "REVIEWER";
+            user: components["schemas"]["UserRefDto"];
+        };
+        NovelProjectProgressDto: {
+            /** @description 章节数 */
+            chapters: number;
+            /** @description 已完成的正文段落数 */
+            done: number;
+            /** @description 正文段落数 */
+            segments: number;
+        };
+        NovelProjectReviewDto: {
+            confidence: number | null;
+            decision: string | null;
+            /** @description 审核员在最新提交后写的批注 */
+            notes: components["schemas"]["NovelNoteDto"][];
+            reasons: string[];
+            /** @enum {string} */
+            status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
+            /** Format: date-time */
+            updated_at: string;
+        };
+        NovelQaIssueDto: {
+            /** @enum {string} */
+            code: "empty" | "forbidden_term" | "line_count" | "term_missing" | "halfwidth_punctuation" | "inconsistent";
+            /** @enum {string} */
+            level: "error" | "warning";
+            message: string;
+        };
+        NovelReaderPolicyDto: {
+            daily_bytes_limit: number;
+            daily_export_limit: number;
+            daily_volume_limit: number;
+            hourly_transfer_limit: number;
+            hourly_volume_limit: number;
+            max_active_sessions: number;
+            max_concurrent_transfers: number;
+            session_ttl_seconds: number;
+            transfer_timeout_seconds: number;
+        };
+        NovelReleaseDto: {
+            /** Format: date-time */
+            created_at: string;
+            epub_sha: string;
+            id: number;
+            publisher: components["schemas"]["UserRefDto"];
+            /** @enum {string|null} */
+            quality: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
+            version: number;
+        };
+        NovelSegmentDeleteDto: {
+            base_version: number;
+            /** Format: uuid */
+            id: string;
+        };
+        NovelSegmentDto: {
+            caption: string | null;
+            id: string;
+            image: components["schemas"]["MediaAssetDto"] | null;
+            /** @enum {string} */
+            kind: "TEXT" | "IMAGE" | "BREAK";
+            /** Format: date-time */
+            lock_expires_at: string | null;
+            locked_by: number | null;
+            sort_key: number;
+            /** @description 0 空、10 需修改、20 已译、30 已定稿 */
+            state: number;
+            text: string | null;
+            translations: components["schemas"]["NovelTranslationDto"][];
+            /** Format: date-time */
+            updated_at: string;
+            version: number;
+        };
+        NovelSegmentLockDto: {
+            id: string;
+            /** Format: date-time */
+            lock_expires_at: string | null;
+            locked_by: number | null;
+        };
+        NovelSegmentRevisionDto: {
+            /** Format: date-time */
+            created_at: string;
+            editor: components["schemas"]["UserRefDto"];
+            id: number;
+            text: string;
+            translation_id: number | null;
+        };
+        NovelSegmentStateDto: {
+            id: string;
+            state: number;
+        };
+        NovelSegmentUpsertDto: {
+            /** @description 修改已有段落时带上读取到的版本号，新段落不传 */
+            base_version?: number;
+            caption?: string | null;
+            /**
+             * Format: uuid
+             * @description 段落 ID，新段落由客户端生成
+             */
+            id: string;
+            image_id?: number | null;
+            /** @enum {string} */
+            kind: "TEXT" | "IMAGE" | "BREAK";
+            sort_key: number;
+            text?: string | null;
+        };
+        NovelSegmentVersionDto: {
+            id: string;
+            version: number;
         };
         NovelSeriesItemDto: {
             /** @description 其中已有 EPUB 的分卷数 */
@@ -17227,6 +19394,40 @@ export interface components {
          * @enum {string}
          */
         NovelStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+        NovelTermDto: {
+            character_id: number | null;
+            creator: components["schemas"]["UserRefDto"];
+            forbidden: boolean;
+            id: number;
+            light_novel_id: number;
+            note: string | null;
+            source: string;
+            target: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        NovelTranslationDto: {
+            /** @description 是否由机器翻译草稿修改而来 */
+            from_machine: boolean;
+            id: number;
+            /** @description 是否仍是未修改的机器翻译 */
+            machine: boolean;
+            /** @description 机器翻译的原稿 */
+            machine_text: string | null;
+            proofread_text: string | null;
+            proofreader_id: number | null;
+            selected: boolean;
+            text: string;
+            /** Format: date-time */
+            updated_at: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        NovelTranslationResultDto: {
+            issues: components["schemas"]["NovelQaIssueDto"][];
+            /** @description 段落当前状态 */
+            segment_state: number;
+            translation: components["schemas"]["NovelTranslationDto"];
+        };
         NovelVolumeBuildReportDto: {
             bytes: number;
             cached_chapters: number;
@@ -18174,6 +20375,7 @@ export interface components {
             article: components["schemas"]["PointChannelInputDto"];
             comment: components["schemas"]["PointChannelInputDto"];
             contribution: components["schemas"]["PointChannelInputDto"];
+            epub: components["schemas"]["PointChannelInputDto"];
             event: components["schemas"]["PointEventInputDto"] | null;
             first_time: components["schemas"]["FirstTimeBonusInputDto"];
             frozen: boolean;
@@ -18182,6 +20384,7 @@ export interface components {
             reading: components["schemas"]["PointChannelInputDto"];
             review: components["schemas"]["PointChannelInputDto"];
             review_min_length: number;
+            translation: components["schemas"]["PointChannelInputDto"];
         };
         PointEventInputDto: {
             ends_at: string | null;
@@ -18194,7 +20397,7 @@ export interface components {
         };
         PointReasonTotalDto: {
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
             total: number;
         };
         PointRecordUserDto: {
@@ -18462,6 +20665,14 @@ export interface components {
             link: string;
             open_in_new: boolean;
         };
+        ProofreadMangaTranslationDto: {
+            /** @description 传 null 清除校对稿 */
+            text: string | null;
+        };
+        ProofreadNovelTranslationDto: {
+            /** @description 传 null 清除校对稿 */
+            text: string | null;
+        };
         ProvisionUserDto: {
             /** Format: email */
             email: string;
@@ -18517,8 +20728,16 @@ export interface components {
         };
         /** @enum {string} */
         PublishStatus: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        PurchaseAiQuotaDto: {
+            /** @description 用于兑换的积分 */
+            points: number;
+        };
         PurchaseDecorationDto: {
             decoration_id: number;
+        };
+        PurchaseDownloadCardsDto: {
+            /** @default 1 */
+            quantity: number;
         };
         QueueStatusDto: {
             active: number;
@@ -18647,7 +20866,9 @@ export interface components {
             epub_sha: string | null;
             /** Format: date-time */
             expires_at: string;
-            url: string;
+            /** Format: uuid */
+            id: string;
+            p: string;
         };
         ReaderSettingsDto: {
             background_color: string;
@@ -18791,6 +21012,14 @@ export interface components {
             engine?: "pg_trgm" | "manticore" | "opensearch";
             fresh?: boolean;
         };
+        RejectMangaProjectDto: {
+            /** @description 退回原因 */
+            reason: string;
+        };
+        RejectNovelProjectDto: {
+            /** @description 退回原因 */
+            reason: string;
+        };
         RejectReviewGroupApplicationDto: {
             rejection_reason: string;
         };
@@ -18821,6 +21050,10 @@ export interface components {
         ReleaseNoteSectionInputDto: {
             items: components["schemas"]["ReleaseNoteItemInputDto"][];
             type: string;
+        };
+        ReorderMangaPagesDto: {
+            /** @description 按新顺序排列的全部页面 ID */
+            page_ids: number[];
         };
         ReportBulkDto: {
             items: components["schemas"]["ReportRefDto"][];
@@ -18883,8 +21116,20 @@ export interface components {
         };
         /** @enum {string} */
         ReportStatus: "PENDING" | "RESOLVED" | "REJECTED";
+        RequestNovelPretranslationDto: {
+            /** @description 要翻译的段落；不传则翻译本章所有还没有译文的正文段落 */
+            segment_ids?: string[];
+        };
         ResetIdentityPasswordDto: {
             new_password: string;
+        };
+        ResolveMangaNoteDto: {
+            /** @description 批注是否已处理 */
+            resolved: boolean;
+        };
+        ResolveNovelNoteDto: {
+            /** @description 批注是否已处理 */
+            resolved: boolean;
         };
         ResolvedCharacterDto: {
             actors: components["schemas"]["ResolvedEntityDto"][];
@@ -19060,6 +21305,28 @@ export interface components {
             /** @description Rybbit site_id（公开值） */
             site_id: string;
         };
+        SaveMangaRegionsDto: {
+            deletes: components["schemas"]["MangaRegionDeleteDto"][];
+            upserts: components["schemas"]["MangaRegionUpsertDto"][];
+        };
+        SaveMangaRegionsResultDto: {
+            deleted: string[];
+            versions: components["schemas"]["MangaRegionVersionDto"][];
+        };
+        SaveMangaTranslationDto: {
+            text: string;
+        };
+        SaveNovelSegmentsDto: {
+            deletes: components["schemas"]["NovelSegmentDeleteDto"][];
+            upserts: components["schemas"]["NovelSegmentUpsertDto"][];
+        };
+        SaveNovelSegmentsResultDto: {
+            deleted: string[];
+            versions: components["schemas"]["NovelSegmentVersionDto"][];
+        };
+        SaveNovelTranslationDto: {
+            text: string;
+        };
         ScreenshotDto: {
             sexual: number;
             url: string;
@@ -19144,6 +21411,20 @@ export interface components {
             listing: components["schemas"]["MangaListing"];
             /** @description 覆盖原因，便于后续复核 */
             reason?: string;
+        };
+        SetMangaRegionStateDto: {
+            /**
+             * @description 10 需修改、20 已译、30 已定稿
+             * @enum {number}
+             */
+            state: 10 | 20 | 30;
+        };
+        SetNovelSegmentStateDto: {
+            /**
+             * @description 10 需修改、20 已译、30 已定稿
+             * @enum {number}
+             */
+            state: 10 | 20 | 30;
         };
         SetSearchEngineDto: {
             /** @enum {string} */
@@ -19260,7 +21541,7 @@ export interface components {
             comment_id: number | null;
             id: number | null;
             /** @enum {string} */
-            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm";
+            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm" | "novel_project" | "manga_project";
             work_id: number | null;
         };
         TagDetailDto: {
@@ -19477,6 +21758,42 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        TranslationTeamDto: {
+            avatar: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            description: string | null;
+            id: number;
+            member_count: number;
+            name: string;
+            owner: components["schemas"]["UserRefDto"];
+            /**
+             * @description 当前用户在团队中的角色
+             * @enum {string|null}
+             */
+            viewer_role: "OWNER" | "ADMIN" | "MEMBER" | null;
+        };
+        TranslationTeamListItemDto: {
+            avatar: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            description: string | null;
+            id: number;
+            member_count: number;
+            name: string;
+        };
+        TranslationTeamMemberDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** @enum {string} */
+            role: "OWNER" | "ADMIN" | "MEMBER";
+            user: components["schemas"]["UserRefDto"];
+        };
+        TranslationTeamSummaryDto: {
+            avatar: components["schemas"]["MediaAssetDto"] | null;
+            id: number;
+            name: string;
+        };
         TrendingItemDto: {
             count: number;
             keyword: string;
@@ -19663,6 +21980,18 @@ export interface components {
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
+        UpdateDownloadPolicyDto: {
+            card_price: number;
+            manga_band_size: number;
+            manga_concurrent_transfers: number;
+            manga_daily_bytes_limit: number;
+            manga_hourly_transfer_limit: number;
+            manga_image_concurrency: number;
+            manga_package_bytes: number;
+            manga_package_pages: number;
+            manga_transfer_timeout_seconds: number;
+            novel_band_size: number;
+        };
         UpdateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
             description?: string;
@@ -19791,6 +22120,18 @@ export interface components {
             duration_ms?: number;
             page: number;
         };
+        UpdateMangaProjectDto: {
+            chapter_name?: string | null;
+            chapter_number?: string | null;
+            /** @enum {string} */
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            team_id?: number | null;
+            volume_number?: number | null;
+        };
+        UpdateMangaProjectMemberDto: {
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER";
+        };
         UpdateMangaSourcePolicyDto: {
             ingestion: components["schemas"]["MangaIngestionSettingDto"];
             matching: components["schemas"]["MangaMatchingSettingDto"];
@@ -19833,6 +22174,43 @@ export interface components {
             queue_remove_on_complete?: number;
             queue_remove_on_fail?: number;
             silent_reject_confidence?: number;
+        };
+        UpdateNovelChapterDto: {
+            sort_key?: number;
+            source_title?: string | null;
+            title?: string;
+        };
+        UpdateNovelNotifyDto: {
+            enabled?: boolean;
+            /** @description 对收藏的作品推送 */
+            on_favorite?: boolean;
+            /** @description 对有阅读进度的作品推送 */
+            on_progress?: boolean;
+            /** @description 对有状态标记的作品推送 */
+            on_status?: boolean;
+            /** @description 哪些状态标记会触发推送 */
+            statuses?: ("GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN")[];
+        };
+        UpdateNovelProjectDto: {
+            /** @description 发起人补充的署名，发布时附在自动生成的署名之后 */
+            credits?: components["schemas"]["NovelCreditDto"][];
+            /** @description 归属的团队，传 null 取消 */
+            team_id?: number | null;
+        };
+        UpdateNovelProjectMemberDto: {
+            /** @enum {string} */
+            role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "REVIEWER";
+        };
+        UpdateNovelReaderDto: {
+            daily_bytes_limit: number;
+            daily_export_limit: number;
+            daily_volume_limit: number;
+            hourly_transfer_limit: number;
+            hourly_volume_limit: number;
+            max_active_sessions: number;
+            max_concurrent_transfers: number;
+            session_ttl_seconds: number;
+            transfer_timeout_seconds: number;
         };
         UpdateNovelSourceAccountDto: {
             /** @description 每日下载上限；留空表示未知或不限 */
@@ -19881,6 +22259,13 @@ export interface components {
         UpdateNovelSourceThrottleDto: {
             rate_limit_cooldown_ms: number;
             unreachable_cooldown_ms: number;
+        };
+        UpdateNovelTermDto: {
+            character_id?: number | null;
+            forbidden?: boolean;
+            note?: string | null;
+            source?: string;
+            target?: string;
         };
         UpdateOauthProviderDto: {
             authorize_endpoint?: string | null;
@@ -19941,6 +22326,7 @@ export interface components {
             article: components["schemas"]["PointChannelInputDto"];
             comment: components["schemas"]["PointChannelInputDto"];
             contribution: components["schemas"]["PointChannelInputDto"];
+            epub: components["schemas"]["PointChannelInputDto"];
             event: components["schemas"]["PointEventInputDto"] | null;
             first_time: components["schemas"]["FirstTimeBonusInputDto"];
             frozen: boolean;
@@ -19949,6 +22335,8 @@ export interface components {
             reading: components["schemas"]["PointChannelInputDto"];
             review: components["schemas"]["PointChannelInputDto"];
             review_min_length: number;
+            /** @description 单次奖励按每一千字或每一页计 */
+            translation: components["schemas"]["PointChannelInputDto"];
         };
         UpdatePollDto: {
             allow_change?: boolean;
@@ -20076,6 +22464,18 @@ export interface components {
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
+        UpdateTranslationTeamDto: {
+            /** @description 头像的媒体资源 ID */
+            avatar_id?: number | null;
+            /** @description 团队简介 */
+            description?: string | null;
+            /** @description 团队名称 */
+            name?: string;
+        };
+        UpdateTranslationTeamMemberDto: {
+            /** @enum {string} */
+            role: "ADMIN" | "MEMBER";
+        };
         UpdateVolumeCurationDto: {
             epub_curated: boolean;
         };
@@ -20087,6 +22487,10 @@ export interface components {
             locked?: boolean;
             nsfw?: boolean;
             otome?: boolean;
+        };
+        UpdateWorkbenchPolicyDto: {
+            ai: components["schemas"]["WorkbenchAiPolicyInputDto"];
+            projects: components["schemas"]["WorkbenchProjectsPolicyInputDto"];
         };
         UploadLimitsDto: {
             /** @description Max image upload size in bytes (server-enforced) */
@@ -20352,6 +22756,30 @@ export interface components {
             /** @enum {string} */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
+        };
+        WorkbenchAiPolicyInputDto: {
+            /** @description 每批送入模型的段落数 */
+            batch_segments: number;
+            /** @description 一光点兑换的字数 */
+            chars_per_point: number;
+            /** @description 提示词附带的前文段落数 */
+            context_segments: number;
+            /** @description 每人每天免费的 AI 翻译字数 */
+            daily_chars: number;
+            /** @description 多模态模型识别一页漫画折算的字数 */
+            vision_page_chars: number;
+        };
+        WorkbenchPolicyDto: {
+            ai: components["schemas"]["WorkbenchAiPolicyInputDto"];
+            projects: components["schemas"]["WorkbenchProjectsPolicyInputDto"];
+        };
+        WorkbenchProjectsPolicyInputDto: {
+            /** @description 导入文件的大小上限（MB） */
+            import_max_mb: number;
+            /** @description 段落锁的有效秒数，客户端按心跳续期 */
+            lock_ttl_seconds: number;
+            /** @description 无活动多少天后标记为停滞并释放 */
+            stale_days: number;
         };
     };
     responses: never;
@@ -21327,7 +23755,7 @@ export interface operations {
         parameters: {
             query: {
                 owner_id?: number;
-                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD";
+                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
                 action?: "ADD" | "SUBTRACT";
                 from?: string;
                 to?: string;
@@ -24302,6 +26730,48 @@ export interface operations {
             };
         };
     };
+    AdminWorkbenchPolicyController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkbenchPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminWorkbenchPolicyController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkbenchPolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkbenchPolicyDto"];
+                };
+            };
+        };
+    };
     AdminPromoBannerController_list: {
         parameters: {
             query: {
@@ -24525,6 +26995,90 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminPromoNavItemDto"];
+                };
+            };
+        };
+    };
+    AdminDownloadPolicyController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminDownloadPolicyController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDownloadPolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminNovelReaderController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelReaderPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminNovelReaderController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelReaderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelReaderPolicyDto"];
                 };
             };
         };
@@ -33069,6 +35623,25 @@ export interface operations {
             };
         };
     };
+    LightNovelVolumeController_getTopContributors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentContributorDto"][];
+                };
+            };
+        };
+    };
     LightNovelVolumeController_identifyEpubs: {
         parameters: {
             query?: never;
@@ -33114,12 +35687,6 @@ export interface operations {
     LightNovelVolumeController_getWanted: {
         parameters: {
             query: {
-                search?: string;
-                sort?: "popular" | "recent";
-                /** @description 只看某种连载状态的系列 */
-                novel_status?: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
-                /** @description 按自动采集状态筛选：none 没有来源、pending 采集中、failed 采集失败 */
-                auto?: "none" | "pending" | "failed";
                 page: number;
                 page_size: number;
             };
@@ -34312,6 +36879,1007 @@ export interface operations {
             };
         };
     };
+    LightNovelTermController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                light_novel_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTermController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                light_novel_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelTermDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermDto"];
+                };
+            };
+        };
+    };
+    MangaChapterController_getTopContributors: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentContributorDto"][];
+                };
+            };
+        };
+    };
+    MangaChapterController_getWanted: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaChapterWantedDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    MangaPageTaskController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaNoteController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaNoteController_resolveById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveMangaNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNoteDto"];
+                };
+            };
+        };
+    };
+    MangaPageController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaPageController_setImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+                kind: "rendered" | "cleaned";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectPageDto"];
+                };
+            };
+        };
+    };
+    MangaPageController_clearImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+                kind: "rendered" | "cleaned";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectPageDto"];
+                };
+            };
+        };
+    };
+    MangaPageController_getRegions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaTextRegionDto"][];
+                };
+            };
+        };
+    };
+    MangaPageController_saveRegions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveMangaRegionsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveMangaRegionsResultDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_getList: {
+        parameters: {
+            query: {
+                /** @description 按漫画筛选 */
+                series_id?: number;
+                /** @description 按团队筛选 */
+                team_id?: number;
+                status?: ("DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED")[];
+                mode?: "UPLOAD" | "TRANSLATION";
+                /** @description 只看我参与的项目 */
+                mine?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaProjectListEntryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    MangaProjectController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMangaProjectDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMangaProjectDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaProjectController_archive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaLabelPlusController_export: {
+        parameters: {
+            query: {
+                /** @description 导出原文还是选用的译文 */
+                content: "source" | "translation";
+            };
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaLabelPlusFileDto"];
+                };
+            };
+        };
+    };
+    MangaLabelPlusController_import: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportMangaLabelPlusDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaLabelPlusImportResultDto"];
+                };
+            };
+        };
+    };
+    MangaProjectMemberController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectMemberDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectMemberController_add: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddMangaProjectMemberDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectMemberDto"];
+                };
+            };
+        };
+    };
+    MangaProjectMemberController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaProjectMemberController_updateRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMangaProjectMemberDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectMemberDto"];
+                };
+            };
+        };
+    };
+    MangaProjectPageController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectPageDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectPageController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectPageDto"];
+                };
+            };
+        };
+    };
+    MangaProjectPageController_reorder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReorderMangaPagesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectPageDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectRegionController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaTextRegionDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectController_reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectMangaProjectDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaProjectController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_getReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectReviewDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaProjectTaskController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaPageTaskDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectTaskController_request: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMangaPageTasksDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaPageTaskDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectController_withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MangaRegionTranslationController_proofread: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                translation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProofreadMangaTranslationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaTranslationResultDto"];
+                };
+            };
+        };
+    };
+    MangaRegionTranslationController_select: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                translation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRegionStateDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_lock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRegionLockDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_unlock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRegionLockDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_getNotes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNoteDto"][];
+                };
+            };
+        };
+    };
+    MangaRegionController_createNote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMangaNoteDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNoteDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_setState: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetMangaRegionStateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRegionStateDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_saveMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveMangaTranslationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaTranslationResultDto"];
+                };
+            };
+        };
+    };
+    MangaRegionController_removeMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRegionStateDto"];
+                };
+            };
+        };
+    };
     MangaVolumeController_getById: {
         parameters: {
             query?: never;
@@ -34625,7 +38193,10 @@ export interface operations {
     };
     MangaController_getChapters: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description 还返回没有页面且不等待自动采集的章节 */
+                wanted?: boolean;
+            };
             header?: never;
             path: {
                 id: number;
@@ -35026,6 +38597,1010 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaVolumeRelationDto"][];
+                };
+            };
+        };
+    };
+    NovelChapterController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelChapterController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelChapterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelChapterDto"];
+                };
+            };
+        };
+    };
+    NovelPretranslationController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelPretranslationDto"][];
+                };
+            };
+        };
+    };
+    NovelPretranslationController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestNovelPretranslationDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelPretranslationDto"][];
+                };
+            };
+        };
+    };
+    NovelChapterController_getSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentDto"][];
+                };
+            };
+        };
+    };
+    NovelChapterController_saveSegments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveNovelSegmentsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveNovelSegmentsResultDto"];
+                };
+            };
+        };
+    };
+    NovelNoteController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelNoteController_resolveById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveNovelNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelNoteDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_getList: {
+        parameters: {
+            query: {
+                /** @description 按分卷筛选 */
+                light_novel_volume_id?: number;
+                /** @description 按系列筛选 */
+                series_id?: number;
+                /** @description 按团队筛选 */
+                team_id?: number;
+                status?: ("DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED")[];
+                mode?: "ENTRY" | "TRANSLATION";
+                /** @description 只看自己创建或参与的项目 */
+                mine?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["NovelProjectListEntryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    NovelProjectController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelProjectDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelProjectDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelProjectController_archive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectDto"];
+                };
+            };
+        };
+    };
+    NovelProjectChapterController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelChapterDto"][];
+                };
+            };
+        };
+    };
+    NovelProjectChapterController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelChapterDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelChapterDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_getCredits: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelCreditsDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_importFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** @description ImportNovelChapterDto 的 JSON 数组；范围来自同一文件的导入预览 */
+                    chapters: string;
+                    /** Format: binary */
+                    file: string;
+                    /** @enum {string} */
+                    replace?: "true" | "false";
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelImportResultDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_importCurrent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportNovelBookDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelImportResultDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_previewCurrent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelImportPreviewDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_previewFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelImportPreviewDto"];
+                };
+            };
+        };
+    };
+    NovelProjectMemberController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectMemberDto"][];
+                };
+            };
+        };
+    };
+    NovelProjectMemberController_add: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddNovelProjectMemberDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectMemberDto"];
+                };
+            };
+        };
+    };
+    NovelProjectMemberController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelProjectMemberController_updateRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelProjectMemberDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectMemberDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectNovelProjectDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelProjectController_getReleases: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelReleaseDto"][];
+                };
+            };
+        };
+    };
+    NovelProjectController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_getReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelProjectReviewDto"];
+                };
+            };
+        };
+    };
+    NovelProjectController_submit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelProjectController_withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelSegmentController_lock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentLockDto"];
+                };
+            };
+        };
+    };
+    NovelSegmentController_unlock: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentLockDto"];
+                };
+            };
+        };
+    };
+    NovelSegmentTranslationController_getMemory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelMemoryMatchDto"][];
+                };
+            };
+        };
+    };
+    NovelSegmentController_getNotes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelNoteDto"][];
+                };
+            };
+        };
+    };
+    NovelSegmentController_createNote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelNoteDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelNoteDto"];
+                };
+            };
+        };
+    };
+    NovelSegmentController_getRevisions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentRevisionDto"][];
+                };
+            };
+        };
+    };
+    NovelSegmentController_setState: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetNovelSegmentStateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentVersionDto"];
+                };
+            };
+        };
+    };
+    NovelSegmentTranslationController_saveMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveNovelTranslationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTranslationResultDto"];
+                };
+            };
+        };
+    };
+    NovelSegmentTranslationController_removeMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentStateDto"];
+                };
+            };
+        };
+    };
+    NovelTermController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                term_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    NovelTermController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                term_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelTermDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermDto"];
+                };
+            };
+        };
+    };
+    NovelTranslationController_proofread: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                translation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProofreadNovelTranslationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTranslationResultDto"];
+                };
+            };
+        };
+    };
+    NovelTranslationController_select: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                translation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSegmentStateDto"];
                 };
             };
         };
@@ -37137,6 +41712,33 @@ export interface operations {
             };
         };
     };
+    MangaReaderController_read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                manga_id: number;
+                chapter_id: number;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FileTransferDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
     MangaProgressController_get: {
         parameters: {
             query?: never;
@@ -37271,6 +41873,48 @@ export interface operations {
             };
         };
     };
+    NovelNotifyController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelNotifySettingDto"];
+                };
+            };
+        };
+    };
+    NovelNotifyController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNovelNotifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelNotifySettingDto"];
+                };
+            };
+        };
+    };
     ReaderController_getReadingShelf: {
         parameters: {
             query: {
@@ -37317,7 +41961,7 @@ export interface operations {
             };
         };
     };
-    ReaderController_createSession: {
+    ReaderSessionController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -37336,6 +41980,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReaderSessionDto"];
+                };
+            };
+        };
+    };
+    ReaderSessionController_read: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };
@@ -38492,6 +43157,219 @@ export interface operations {
             };
         };
     };
+    TranslationTeamController_getList: {
+        parameters: {
+            query: {
+                /** @description 按名称搜索 */
+                keyword?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TranslationTeamListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    TranslationTeamController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTranslationTeamDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslationTeamDto"];
+                };
+            };
+        };
+    };
+    TranslationTeamController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslationTeamDto"];
+                };
+            };
+        };
+    };
+    TranslationTeamController_removeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TranslationTeamController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTranslationTeamDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslationTeamDto"];
+                };
+            };
+        };
+    };
+    TranslationTeamMemberController_getList: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                team_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TranslationTeamMemberDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    TranslationTeamMemberController_add: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddTranslationTeamMemberDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslationTeamMemberDto"];
+                };
+            };
+        };
+    };
+    TranslationTeamMemberController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TranslationTeamMemberController_updateRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                team_id: number;
+                user_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTranslationTeamMemberDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslationTeamMemberDto"];
+                };
+            };
+        };
+    };
     UploadController_upload: {
         parameters: {
             query?: never;
@@ -38627,6 +43505,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PrivateUserDto"];
+                };
+            };
+        };
+    };
+    AiQuotaController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiQuotaDto"];
+                };
+            };
+        };
+    };
+    AiQuotaController_purchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PurchaseAiQuotaDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiQuotaDto"];
                 };
             };
         };
@@ -39087,6 +44007,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeveloperAppSecretDto"];
+                };
+            };
+        };
+    };
+    DownloadCardController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadCardsDto"];
+                };
+            };
+        };
+    };
+    DownloadCardController_purchase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PurchaseDownloadCardsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadCardsDto"];
                 };
             };
         };
@@ -40082,6 +45044,77 @@ export interface operations {
             };
         };
     };
+    MangaDownloadController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadCardsDto"];
+                };
+            };
+        };
+    };
+    MangaDownloadController_download: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MangaDownloadFileDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    MangaDownloadController_plan: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MangaDownloadPlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaDownloadPlanResultDto"];
+                };
+            };
+        };
+    };
     UserMediaController_getMine: {
         parameters: {
             query: {
@@ -40123,6 +45156,98 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    NovelDownloadController_series: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelDownloadSeriesDto"];
+                };
+            };
+        };
+    };
+    NovelDownloadController_plan: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelDownloadPlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelDownloadPlanResultDto"];
+                };
+            };
+        };
+    };
+    NovelDownloadController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelDownloadStatusDto"];
+                };
+            };
+        };
+    };
+    NovelDownloadController_download: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelDownloadFileDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
             };
         };
     };
@@ -40407,6 +45532,25 @@ export interface operations {
                         items: components["schemas"]["SidebarTopicDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    CurrentUserTranslationTeamController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyTranslationTeamDto"][];
                 };
             };
         };

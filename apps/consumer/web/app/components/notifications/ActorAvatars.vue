@@ -6,6 +6,7 @@
     BookOpen,
     GitPullRequest,
     Heart,
+    Languages,
     Megaphone,
     MessageCircle,
     Shirt,
@@ -54,7 +55,13 @@
       case 'group.removed':
         return Users
       case 'epub.result':
+      case 'novel.update':
         return BookOpen
+      case 'workbench.submitted':
+      case 'workbench.approved':
+      case 'workbench.rejected':
+      case 'workbench.stale':
+        return Languages
       case 'achievement.unlock':
         return Shirt
       default:

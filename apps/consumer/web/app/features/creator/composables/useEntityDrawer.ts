@@ -1,8 +1,7 @@
-import {
-  ENTITY_RESOURCE_TYPE,
-  type WorkspaceEntityTarget,
-} from '~/features/creator/composables/useWorkspaceSession'
-import type { BackendChangeRequestDetail } from '~/features/creator/contribution'
+import type {
+  BackendChangeRequestDetail,
+  BackendChangeRequestSummary,
+} from '~/features/creator/contribution'
 import type { BackendEditorRef, BackendEditorSchema } from '~/features/creator/editor'
 
 export interface EntityDrawerData {
@@ -14,7 +13,11 @@ export interface EntityDrawerData {
 }
 
 export function useEntityDrawer(
-  editing: () => { target: WorkspaceEntityTarget; id: number } | null,
+  editing: () => {
+    slug: string
+    resourceType: BackendChangeRequestSummary['resource_type']
+    id: number
+  } | null,
 ) {
   const auth = useAuthStore()
   const loading = ref(false)
@@ -27,47 +30,55 @@ export function useEntityDrawer(
   })
   const blocked = computed(() => !!data.value?.openCr && !mineCr.value)
 
-  watch(editing, async current => {
-    if (!current) return
-    data.value = null
-    failed.value = false
-    loading.value = true
-    try {
-      const [schema, snapshot, openList] = await Promise.all([
-        hikariRequest('/api/v3/contribution/schemas/{resource_type}', {
-          path: { resource_type: current.target },
-        }),
-        hikariRequest('/api/v3/contribution/snapshots/{resource_type}/{id}', {
-          path: { resource_type: current.target, id: current.id },
-        }),
-        hikariRequest('/api/v3/change-requests', {
-          query: {
-            resource_type: ENTITY_RESOURCE_TYPE[current.target],
-            resource_id: current.id,
-            status: 'PENDING',
-            page: 1,
-            page_size: 1,
-          },
-        }),
-      ])
-      const openId = openList.items[0]?.id ?? null
-      const openCr = openId
-        ? await hikariRequest('/api/v3/change-requests/{id}', { path: { id: openId } })
-        : null
-      if (editing() !== current) return
-      data.value = {
-        schema,
-        snapshot: snapshot.snapshot as Record<string, unknown>,
-        refs: (snapshot.refs ?? {}) as Record<string, BackendEditorRef>,
-        resource: snapshot.resource,
-        openCr,
+  const keyOf = (target: ReturnType<typeof editing>) =>
+    target ? `${target.slug}:${target.id}` : null
+
+  watch(
+    () => keyOf(editing()),
+    async key => {
+      const current = editing()
+      if (!key || !current) return
+      data.value = null
+      failed.value = false
+      loading.value = true
+      try {
+        const [schema, snapshot, openList] = await Promise.all([
+          hikariRequest('/api/v3/contribution/schemas/{resource_type}', {
+            path: { resource_type: current.slug },
+          }),
+          hikariRequest('/api/v3/contribution/snapshots/{resource_type}/{id}', {
+            path: { resource_type: current.slug, id: current.id },
+          }),
+          hikariRequest('/api/v3/change-requests', {
+            query: {
+              resource_type: current.resourceType,
+              resource_id: current.id,
+              status: 'PENDING',
+              page: 1,
+              page_size: 1,
+            },
+          }),
+        ])
+        const openId = openList.items[0]?.id ?? null
+        const openCr = openId
+          ? await hikariRequest('/api/v3/change-requests/{id}', { path: { id: openId } })
+          : null
+        if (keyOf(editing()) !== key) return
+        data.value = {
+          schema,
+          snapshot: snapshot.snapshot as Record<string, unknown>,
+          refs: (snapshot.refs ?? {}) as Record<string, BackendEditorRef>,
+          resource: snapshot.resource,
+          openCr,
+        }
+      } catch {
+        if (keyOf(editing()) === key) failed.value = true
+      } finally {
+        if (keyOf(editing()) === key) loading.value = false
       }
-    } catch {
-      if (editing() === current) failed.value = true
-    } finally {
-      if (editing() === current) loading.value = false
-    }
-  })
+    },
+    { immediate: true },
+  )
 
   return { loading, failed, data, mineCr, blocked }
 }

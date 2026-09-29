@@ -5,6 +5,7 @@ import { code } from './code'
 import { codeBlock } from './code-block'
 import { command } from './command'
 import { emoji } from './emoji'
+import { emphasis } from './emphasis'
 import { entityCard } from './entity-card'
 import { heading } from './heading'
 import { horizontalRule } from './horizontal-rule'
@@ -14,6 +15,8 @@ import { link } from './link'
 import { mention } from './mention'
 import { orderedList } from './ordered-list'
 import { poll } from './poll'
+import { ruby } from './ruby'
+import { segmentId } from './segment-id'
 import { spoiler } from './spoiler'
 import { strike } from './strike'
 import { table } from './table'
@@ -49,6 +52,8 @@ const COMMENT_PLUGINS: EditorPlugin[] = [mention, emoji, link, spoiler, entityCa
 
 const PRIVATE_MESSAGE_PLUGINS: EditorPlugin[] = [emoji]
 
+const NOVEL_CHAPTER_PLUGINS: EditorPlugin[] = [segmentId, ruby, emphasis, horizontalRule, image]
+
 const POST_PLUGINS: EditorPlugin[] = [
   bold,
   italic,
@@ -80,5 +85,6 @@ export function useEditorPlugins(profile: EditorProfile): EditorPlugin[] {
   if (profile === 'comment') return [...COMMENT_PLUGINS].sort(byGroupOrder)
   if (profile === 'post') return [...POST_PLUGINS].sort(byGroupOrder)
   if (profile === 'private_message') return [...PRIVATE_MESSAGE_PLUGINS].sort(byGroupOrder)
+  if (profile === 'novel_chapter') return [...NOVEL_CHAPTER_PLUGINS].sort(byGroupOrder)
   return []
 }

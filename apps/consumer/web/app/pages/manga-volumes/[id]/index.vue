@@ -30,7 +30,7 @@
 
 <template>
   <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
-    <MangaVolumeHero :volume="data.volume" />
+    <MangaVolumeHero :volume="data.volume" :chapters="data.chapters" />
 
     <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <MangaVolumeAbout :volume="data.volume" :contributors="data.contributors" />

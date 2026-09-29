@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Empty, Heading, Inline, SegmentedControl, Stack, Text } from '@hina-ui/vue'
+  import { Empty, Heading, Inline, SegmentedControl, Space, Stack, Text } from '@hina-ui/vue'
   import { AnimatePresence, motion } from 'motion-v'
   import type { ComponentPublicInstance } from 'vue'
   import type { EditorDocument } from '@hikarinagi/editor-schema'
@@ -82,6 +82,18 @@
     120,
   )
   const showDock = computed(() => inComments.value || replyTarget.value !== null)
+
+  const dockBar = ref<ComponentPublicInstance>()
+  const { left: sectionLeft, width: sectionWidth } = useElementBounding(sectionRef)
+  const { height: dockHeight } = useElementSize(
+    dockBar,
+    { width: 0, height: 0 },
+    { box: 'border-box' },
+  )
+  const dockStyle = computed(() => ({
+    left: `${sectionLeft.value}px`,
+    width: `calc(${sectionWidth.value}px + 0.75rem)`,
+  }))
 
   const replyToName = computed(() => {
     const a = replyTarget.value?.author
@@ -191,9 +203,16 @@
         <CommentList :author-id="authorId" />
       </Stack>
 
+      <Space
+        v-if="showDock"
+        size="xs"
+        :class="cn('mt-6', detailActions && 'max-md:hidden')"
+        :style="{ height: `${dockHeight}px` }"
+      />
       <AnimatePresence>
         <motion.div
           v-if="showDock"
+          ref="dockBar"
           key="dock"
           :initial="{ y: '100%' }"
           :animate="{ y: '0%' }"
@@ -201,10 +220,11 @@
           :transition="TRANSITION"
           :class="
             cn(
-              'sticky bottom-0 z-10 mt-6 -ml-3 border-t border-line bg-canvas py-4 pl-3',
+              'fixed bottom-0 z-10 -ml-3 border-t border-line bg-canvas py-4 pl-3',
               detailActions && 'max-md:hidden',
             )
           "
+          :style="dockStyle"
         >
           <CommentComposer
             ref="dockRef"

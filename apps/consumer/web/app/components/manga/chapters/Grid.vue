@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Card, Grid, Inline, Tag, Text } from '@hina-ui/vue'
   import { cn } from '~/utils/cn'
+  import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
@@ -72,6 +73,9 @@
           {{ subtitle(chapter) }}
         </Text>
         <Text v-if="chapter.page_count" as="span" size="xs" tone="muted" class="ms-auto shrink-0">
+          <template v-if="chapter.translation">
+            {{ TRANSLATION_QUALITY_LABEL[chapter.translation] }} ·
+          </template>
           {{ chapter.page_count }} P
         </Text>
       </Inline>

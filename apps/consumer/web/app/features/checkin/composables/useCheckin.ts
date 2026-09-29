@@ -1,6 +1,6 @@
 import { toast } from '@hina-ui/vue'
 import { NotificationsCheckInMakeUpToast, NotificationsCheckInRewardToast } from '#components'
-import makeUpCardUrl from '~/assets/images/make-up-card.webp'
+import { makeUpCardItem } from '~/features/items/make-up-card'
 import { usePurchaseDialog } from '~/features/purchase/usePurchaseDialog'
 import type { CheckInRecord, CheckInStatus } from '../checkin'
 import { monthOf } from '../checkin'
@@ -122,12 +122,9 @@ export function useCheckin() {
       return
     }
     purchaseDialog.open({
+      ...makeUpCardItem(card, current.make_up.window_days),
       title: '购买补签卡',
       confirmLabel: '购买并补签',
-      name: '补签卡',
-      description: `补签最近 ${current.make_up.window_days} 天内的漏签日，有效期 ${card.valid_days} 天。本月已购 ${card.purchased} / ${card.purchase_limit} 张。`,
-      image: { src: makeUpCardUrl },
-      price: card.next_price,
       balance: current.points,
       note: `购买后将立即用于补签 ${date}`,
       onConfirm: async () => {

@@ -18,7 +18,7 @@
   <Panel title="贡献日历" :description="`过去 1 年共 ${stats.range.count} 次贡献`">
     <template #icon><CalendarRange /></template>
     <Stack gap="sm" class="select-none" :style="{ maxWidth: `${D.width}px` }">
-      <ScrollArea class="min-w-0">
+      <ScrollArea direction="horizontal" class="min-w-0">
         <Flex
           class="relative"
           :style="{ width: `${D.width}px`, height: `${D.height}px` }"

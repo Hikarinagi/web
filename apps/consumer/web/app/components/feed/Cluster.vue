@@ -7,13 +7,7 @@
 </script>
 
 <template>
-  <Inline gap="none" align="start" :wrap="false" class="relative gap-3 px-2">
-    <Stack
-      v-if="cluster.rows.length > 1"
-      gap="none"
-      aria-hidden="true"
-      class="pointer-events-none absolute top-9 bottom-2 left-[27.5px] w-px bg-line-strong"
-    />
+  <Inline gap="none" align="start" :wrap="false" class="gap-3 px-2">
     <Stack
       gap="none"
       class="sticky z-10 self-start py-4.5"
@@ -23,7 +17,7 @@
         :user="cluster.author"
         card
         card-show-on-click
-        class="size-10! shrink-0 border border-line ring-4 ring-canvas"
+        class="size-10! shrink-0 border border-line"
       />
     </Stack>
     <Stack gap="none" class="min-w-0 flex-1">

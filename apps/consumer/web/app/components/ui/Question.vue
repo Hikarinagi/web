@@ -59,7 +59,7 @@
 
   <Dialog v-model:open="visible" :title="title" :size="size">
     <template #content>
-      <Text tone="muted" size="sm" class="leading-6">
+      <Text as="div" tone="muted" size="sm" class="leading-6">
         <slot />
       </Text>
     </template>

@@ -16,6 +16,12 @@
   const { data } = await useHikariApiData<SpaceCollectionDetailPageData>(pageRequest, {
     fatal: true,
   })
+  if (data.value && data.value.owner_id !== ownerId) {
+    await navigateTo(`/space/${data.value.owner_id}/favorites/${cid}${suffix}`, {
+      redirectCode: 301,
+      replace: true,
+    })
+  }
 
   useHikariSeoMeta({
     title: () =>

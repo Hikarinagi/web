@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { CreatorContributionsPageData } from '~~/server/api/pages/create/contributions.get'
 
-  definePageMeta({ title: '变更请求' })
+  definePageMeta({ title: '我的变更请求' })
 
   const page = ref(1)
   const status = ref<string>()

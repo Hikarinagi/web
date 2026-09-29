@@ -28,10 +28,10 @@ const MONTH_LABELS = [
 
 const LEVEL_CLASSES = [
   'bg-inset',
-  'bg-primary-200 dark:bg-primary-900',
-  'bg-primary-400 dark:bg-primary-700',
-  'bg-primary-500 dark:bg-primary-500',
-  'bg-primary-700 dark:bg-primary-300',
+  'bg-accent/25',
+  'bg-accent/50',
+  'bg-accent/75',
+  'bg-accent',
 ] as const
 
 type HeatmapCell = {

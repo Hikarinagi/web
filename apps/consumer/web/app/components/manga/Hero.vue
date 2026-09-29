@@ -82,6 +82,7 @@
           :progress="progress"
           :favorited="favorited ?? false"
         />
+        <MangaHeroContribute :manga-id="manga.id" />
       </Stack>
     </Flex>
   </Stack>

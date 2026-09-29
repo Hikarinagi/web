@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { NavLink, SidebarGroup } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { CREATOR_NAV } from '~/features/creator/nav'
+  import { CREATOR_NAV, type CreatorNavItem } from '~/features/creator/nav'
 
   defineOptions({ name: 'CreatorShellSidebarNav' })
 
@@ -15,9 +15,11 @@
     })).filter(group => group.items.length > 0),
   )
 
-  function isActive(to: string): boolean {
-    if (to === '/create') return route.path === '/create'
-    return route.path === to || route.path.startsWith(`${to}/`)
+  function isActive(item: CreatorNavItem): boolean {
+    if (item.to === '/create') return route.path === '/create'
+    return [item.to, ...(item.also ?? [])].some(
+      prefix => route.path === prefix || route.path.startsWith(`${prefix}/`),
+    )
   }
 </script>
 
@@ -30,7 +32,7 @@
         :as="NuxtLink"
         :to="item.to"
         :label="item.label"
-        :active="isActive(item.to)"
+        :active="isActive(item)"
       >
         <template #icon><component :is="item.icon" /></template>
         {{ item.label }}
@@ -44,7 +46,7 @@
         :as="NuxtLink"
         :to="item.to"
         :label="item.label"
-        :active="isActive(item.to)"
+        :active="isActive(item)"
       >
         <template #icon><component :is="item.icon" /></template>
         {{ item.label }}

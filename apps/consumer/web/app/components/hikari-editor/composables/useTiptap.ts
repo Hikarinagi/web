@@ -107,6 +107,7 @@ export function useTiptap(options: UseTiptapOptions): UseTiptapReturn {
       editable: options.editable ?? true,
       editorProps: options.editorProps ?? {},
       onUpdate({ editor: ed }) {
+        if (!options.onUpdate) return
         const json = ed.getJSON()
         options.onUpdate?.({
           json,

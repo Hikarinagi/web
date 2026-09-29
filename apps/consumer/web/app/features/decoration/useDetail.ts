@@ -53,6 +53,7 @@ export function useDecorationDetail() {
     visible.value = false
     purchase.open({
       title: target.type === 'BADGE' ? '兑换徽章' : '兑换头像框',
+      confirmLabel: '兑换',
       name: target.name,
       description: target.description,
       image: target.image,

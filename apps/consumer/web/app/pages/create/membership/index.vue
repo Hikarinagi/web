@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { CreatorMembershipPageData } from '~~/server/api/pages/create/membership.get'
 
-  definePageMeta({ title: '申请加入审核组' })
+  definePageMeta({ title: '加入审核组' })
 
   const page = ref(1)
   const requestUrl = computed<`/api/pages/${string}`>(

@@ -23,14 +23,13 @@
           :lazy="false"
           :skeleton="false"
           :draggable="false"
+          :ratio="1"
           fit="contain"
           class="size-16 rounded-2xl"
         />
         <Stack gap="xs">
           <Text size="xl" weight="semibold">欢迎来到 <BrandMark inline /></Text>
-          <Text tone="muted">
-            登入或注册你的 <BrandMark mark="id" inline />，立刻解锁完整功能
-          </Text>
+          <Text tone="muted">登录或注册，立刻解锁完整功能</Text>
         </Stack>
         <Stack gap="sm" class="w-full">
           <Button size="lg" @click="go('login')">登录</Button>

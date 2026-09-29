@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Inline } from '@hina-ui/vue'
-  import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
+  import { NuxtLink } from '#components'
+  import { ArrowRight, BookUp, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { getLightNovelVolumeTitle } from '~/utils/media/light-novel'
   import { useLightNovelVolumeRate } from '~/features/light-novel-volume/useLightNovelVolumeRate'
@@ -27,17 +28,17 @@
 
 <template>
   <Inline gap="sm" justify="center" class="lg:justify-start">
-    <Button login-required v-if="volume.online_reading_available" size="lg" @click="read">
+    <Button v-if="volume.online_reading_available" login-required size="lg" @click="read">
       <template #icon>
         <Play aria-hidden="true" />
       </template>
       {{ resume ? '继续阅读' : '开始阅读' }}
     </Button>
-    <Button v-else size="lg" disabled>
+    <Button v-else :as="NuxtLink" :to="`/contribute?volume=${volume.id}`" size="lg">
       <template #icon>
-        <Play aria-hidden="true" />
+        <BookUp aria-hidden="true" />
       </template>
-      暂无在线阅读
+      投稿本卷
     </Button>
 
     <Button
@@ -56,8 +57,8 @@
       </template>
     </Button>
     <Button
-      login-required
       v-else
+      login-required
       size="lg"
       variant="outline"
       tone="neutral"
@@ -68,6 +69,11 @@
     </Button>
 
     <ShareButton :to="`/light-novel-volumes/${volume.id}`" tooltip="分享" size="lg" />
+    <LightNovelVolumeDownloadAction
+      v-if="volume.online_reading_available"
+      :id="volume.id"
+      :title="volumeTitle"
+    />
 
     <LightNovelVolumeEpubActions
       :volume-id="volume.id"

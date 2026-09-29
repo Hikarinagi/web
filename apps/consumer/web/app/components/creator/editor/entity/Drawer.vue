@@ -2,6 +2,7 @@
   import { Drawer, Skeleton, Stack, toast } from '@hina-ui/vue'
   import { useEntityDrawer } from '~/features/creator/composables/useEntityDrawer'
   import {
+    ENTITY_RESOURCE_TYPE,
     WORKSPACE_SESSION_KEY,
     type WorkspaceEntityTarget,
   } from '~/features/creator/composables/useWorkspaceSession'
@@ -37,7 +38,15 @@
     },
   })
 
-  const { loading, failed, data, mineCr, blocked } = useEntityDrawer(() => props.editing)
+  const { loading, failed, data, mineCr, blocked } = useEntityDrawer(() =>
+    props.editing
+      ? {
+          slug: props.editing.target,
+          resourceType: ENTITY_RESOURCE_TYPE[props.editing.target],
+          id: props.editing.id,
+        }
+      : null,
+  )
 
   const footerHost = useTemplateRef<{ $el: HTMLElement }>('footerHost')
   const footerEl = ref<HTMLElement | null>(null)

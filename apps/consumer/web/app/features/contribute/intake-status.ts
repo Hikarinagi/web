@@ -23,9 +23,9 @@ export const REVIEW_TAG_TONE: Record<
 export function reviewStatus(status: EpubReviewStatus): IntakeStatus {
   switch (status) {
     case 'PASSED':
-      return { ink: 'red', label: '已上架' }
+      return { ink: 'red', label: '已收录' }
     case 'NEEDS_HUMAN':
-      return { ink: 'blue', label: '人工复核', hint: '已转交人工复核，通过后自动上架。' }
+      return { ink: 'blue', label: '人工复核', hint: '已转交人工复核，通过后自动收录。' }
     case 'REJECTED':
       return { ink: 'ink', label: '未通过' }
     case 'FAILED':

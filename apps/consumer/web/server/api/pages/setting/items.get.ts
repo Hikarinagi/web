@@ -3,13 +3,15 @@ import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
 async function handler(event: H3Event) {
-  const [status, cards] = await Promise.all([
+  const [status, cards, download_card] = await Promise.all([
     fetchBackendData(event, '/api/v3/user/me/check-ins/status'),
     fetchBackendData(event, '/api/v3/user/me/check-ins/make-up-cards'),
+    fetchBackendData(event, '/api/v3/user/me/download/cards'),
   ])
 
   return {
     points: status.points,
+    download_card,
     make_up_card: {
       ...status.make_up.card,
       window_days: status.make_up.window_days,

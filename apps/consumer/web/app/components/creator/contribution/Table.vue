@@ -49,7 +49,7 @@
 <template>
   <CreatorDataTable
     v-model:page="page"
-    title="变更请求"
+    title="我的变更请求"
     :icon="GitPullRequest"
     :list="list"
     :columns="columns"

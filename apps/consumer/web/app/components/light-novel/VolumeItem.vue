@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { AspectRatio, Progress, Stack, Tag, Text, VisuallyHidden } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
+  import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import {
     getLightNovelVolumeCover,
     getLightNovelVolumeLabel,
@@ -17,6 +18,11 @@
   }>()
 
   const cover = computed(() => getLightNovelVolumeCover(props.volume))
+  const epubLabel = computed(() => {
+    const base = props.volume.online_reading_is_collection ? 'EPUB 合集' : 'EPUB'
+    const quality = props.volume.online_reading_translation
+    return quality ? `${base} · ${TRANSLATION_QUALITY_LABEL[quality]}` : base
+  })
   const title = computed(() => getLightNovelVolumeTitle(props.volume))
   const label = computed(() => getLightNovelVolumeLabel(props.volume))
   const publicationDate = computed(() =>
@@ -57,7 +63,7 @@
         size="sm"
         class="absolute top-1.5 left-1.5 backdrop-blur-sm"
       >
-        {{ volume.online_reading_is_collection ? 'EPUB 合集' : 'EPUB' }}
+        {{ epubLabel }}
       </Tag>
       <Progress
         v-if="done || pct > 0"

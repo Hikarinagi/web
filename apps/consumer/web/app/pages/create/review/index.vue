@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { CreatorReviewPageData } from '~~/server/api/pages/create/review.get'
 
-  definePageMeta({ title: '审核队列' })
+  definePageMeta({ title: '变更请求审核' })
 
   const page = ref(1)
   const requestUrl = computed<`/api/pages/${string}`>(

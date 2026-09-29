@@ -50,7 +50,7 @@ export interface EditorPlugin {
   description?: string
 }
 
-export type EditorProfile = 'community' | 'comment' | 'post' | 'private_message'
+export type EditorProfile = 'community' | 'comment' | 'post' | 'private_message' | 'novel_chapter'
 
 export const EDITOR_PLUGIN_CONTEXT_KEY: InjectionKey<EditorPluginContext> = Symbol(
   'hikari-editor-plugin-ctx',

@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 export interface PurchaseItem {
   name: string
   description?: string | null
+  details?: string[]
   image?: { src: string } | null
   price: number
 }
@@ -12,7 +13,9 @@ interface PurchaseRequest extends PurchaseItem {
   confirmLabel?: string
   note?: string
   balance: number
-  onConfirm: () => Promise<void>
+  quantity?: number
+  maxQuantity?: number
+  onConfirm: (quantity: number) => Promise<void>
 }
 
 interface PurchaseState {
@@ -23,45 +26,50 @@ interface PurchaseState {
   note: string
   item: PurchaseItem | null
   balance: number
-  handler: (() => Promise<void>) | null
+  quantity: number
+  maxQuantity: number
+  handler: ((quantity: number) => Promise<void>) | null
 }
 
 const state = reactive<PurchaseState>({
   open: false,
   submitting: false,
-  title: '兑换确认',
-  confirmLabel: '兑换',
+  title: '购买确认',
+  confirmLabel: '购买',
   note: '',
   item: null,
   balance: 0,
   handler: null,
+  quantity: 1,
+  maxQuantity: 1,
 })
 
 export function usePurchaseDialog() {
   function open(req: PurchaseRequest) {
-    state.title = req.title ?? '兑换确认'
-    state.confirmLabel = req.confirmLabel ?? '兑换'
+    state.title = req.title ?? `购买${req.name}`
+    state.confirmLabel = req.confirmLabel ?? '购买'
     state.note = req.note ?? ''
     state.item = {
       name: req.name,
       description: req.description ?? null,
+      details: req.details ?? [],
       image: req.image ?? null,
       price: req.price,
     }
     state.balance = req.balance
     state.handler = req.onConfirm
+    state.quantity = req.quantity ?? 1
+    state.maxQuantity = req.maxQuantity ?? 1
     state.submitting = false
     state.open = true
   }
 
-  async function confirm() {
-    if (!state.handler || state.submitting) return
+  async function confirm(quantity: number) {
+    if (!state.open || !state.handler || state.submitting) return
     state.submitting = true
     try {
-      await state.handler()
+      await state.handler(quantity)
       state.open = false
-    } catch {
-      /* empty */
     } finally {
       state.submitting = false
     }

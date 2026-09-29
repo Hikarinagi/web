@@ -103,6 +103,7 @@
           @change="emit('progressChange', $event)"
         />
         <LightNovelVolumeHeroCta :volume="volume" :progress="progress" :my-rate="myRate" />
+        <LightNovelVolumeHeroClaim :volume-id="volume.id" :provider="volume.epub_provider" />
       </Stack>
     </Flex>
   </Stack>

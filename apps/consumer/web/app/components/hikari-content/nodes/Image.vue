@@ -70,7 +70,8 @@
       :preload="preloadOption"
       :skeleton="!eager"
       class="block size-full"
-      image-class="size-full object-contain"
+      fit="contain"
+      image-class="size-full"
       :preview="preview"
       :preview-size="previewSize"
     />

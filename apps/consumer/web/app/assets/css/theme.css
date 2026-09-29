@@ -187,6 +187,8 @@
 /* Scene coordinates belong to the fixed archive composition, independent of UI spacing. */
 :root {
   --contribute-stage-min: 36rem;
+  --contribute-stage-height: calc(100svh - var(--spacing) * 16);
+  --contribute-column-min: 28rem;
   --contribute-art-ratio: 16 / 9;
   --contribute-art-width: max(100cqw, calc(100cqh * var(--contribute-art-ratio)));
   --contribute-mobile-anchor: 0.73;

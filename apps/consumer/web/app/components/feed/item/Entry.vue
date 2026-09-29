@@ -42,7 +42,7 @@
     gap="sm"
     :class="
       cn(
-        'relative -mx-2 min-w-0 px-2 py-4.5',
+        'relative -mr-2 -ml-15 min-w-0 py-4.5 pr-2 pl-15',
         detailTo && 'hn-state-layer hn-interactive hn-press-none',
       )
     "

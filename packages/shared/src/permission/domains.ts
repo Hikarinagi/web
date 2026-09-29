@@ -157,6 +157,11 @@ export const LLM_PERMISSIONS = {
   TEST_RUN: 'llm.test.run',
 } as const
 
+export const WORKBENCH_PERMISSIONS = {
+  REVIEW_NOVEL: 'workbench.review.novel',
+  REVIEW_MANGA: 'workbench.review.manga',
+} as const
+
 export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(GOVERNANCE_PERMISSIONS),
   ...Object.values(COMMUNITY_PERMISSIONS),
@@ -176,6 +181,7 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(CATALOG_PERMISSIONS),
   ...Object.values(LLM_PERMISSIONS),
   ...Object.values(GALGAME_DOWNLOAD_PERMISSIONS),
+  ...Object.values(WORKBENCH_PERMISSIONS),
 ]
 
 type ValueOf<T> = T[keyof T]
@@ -203,5 +209,6 @@ export type PermissionKey =
   | ValueOf<typeof CATALOG_PERMISSIONS>
   | ValueOf<typeof LLM_PERMISSIONS>
   | ValueOf<typeof GALGAME_DOWNLOAD_PERMISSIONS>
+  | ValueOf<typeof WORKBENCH_PERMISSIONS>
 
 export type PermissionCheck = PermissionKey | `${PermissionKey}.${string}`

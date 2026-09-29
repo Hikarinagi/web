@@ -27,5 +27,6 @@
       :points="data.points"
       :refresh="refresh"
     />
+    <SpaceSettingItemDownloadCard :card="data.download_card" :refresh="refresh" />
   </Stack>
 </template>

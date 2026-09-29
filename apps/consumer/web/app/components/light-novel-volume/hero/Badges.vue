@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Inline, Tag } from '@hina-ui/vue'
   import { getVolumeTypeLabel } from '#imports'
+  import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
 
   defineOptions({ name: 'LightNovelVolumeHeroBadges' })
@@ -16,6 +17,12 @@
       tone="warning"
     >
       合集
+    </Tag>
+    <Tag
+      v-if="volume.online_reading_available && volume.online_reading_translation"
+      :tone="volume.online_reading_translation === 'HUMAN' ? 'info' : 'warning'"
+    >
+      {{ TRANSLATION_QUALITY_LABEL[volume.online_reading_translation] }}
     </Tag>
   </Inline>
 </template>

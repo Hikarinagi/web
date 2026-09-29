@@ -32,7 +32,7 @@
 <template>
   <CreatorDataTable
     v-model:page="page"
-    title="审核队列"
+    title="待审核的变更请求"
     :icon="ClipboardCheck"
     :list="list"
     :columns="columns"

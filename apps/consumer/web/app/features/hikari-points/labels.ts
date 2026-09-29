@@ -8,6 +8,8 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   CHECK_IN_MAKE_UP_SUBTRACT: '补签',
   DECORATION_PURCHASE_SUBTRACT: '兑换装扮',
   MAKE_UP_CARD_PURCHASE_SUBTRACT: '购买补签卡',
+  DOWNLOAD_CARD_PURCHASE_SUBTRACT: '购买下载卡',
+  AI_QUOTA_PURCHASE_SUBTRACT: '兑换 AI 额度',
   SYSTEM_ADD: '系统发放',
   SYSTEM_SUBTRACT: '系统扣除',
   RATE_ADD: '评分',
@@ -17,6 +19,8 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   POST_ADD: '发帖',
   ARTICLE_ADD: '发文章',
   COMMENT_ADD: '评论',
+  TRANSLATION_ADD: '共建定稿',
+  EPUB_ADD: '上传 EPUB',
   FIRST_TIME_ADD: '首次奖励',
 }
 

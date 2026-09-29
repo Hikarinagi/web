@@ -6,7 +6,10 @@
   import { getMangaVolumeTitle } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaVolumeHero' })
-  const props = defineProps<{ volume: MangaVolumePageData['volume'] }>()
+  const props = defineProps<{
+    volume: MangaVolumePageData['volume']
+    chapters: MangaVolumePageData['chapters']
+  }>()
 
   const title = computed(() => getMangaVolumeTitle(props.volume))
   const seriesTitle = computed(() => props.volume.manga.name_cn || props.volume.manga.name)
@@ -71,7 +74,7 @@
           </Stack>
 
           <MangaVolumeHeroMeta :volume="volume" />
-          <MangaVolumeHeroCta :volume="volume" />
+          <MangaVolumeHeroCta :volume="volume" :chapters="chapters" />
         </Stack>
       </Flex>
     </Stack>

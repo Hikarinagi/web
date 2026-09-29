@@ -96,8 +96,8 @@
       </template>
     </Button>
     <Button
-      login-required
       v-else-if="rateMode === 'prompt'"
+      login-required
       size="lg"
       variant="outline"
       tone="neutral"
@@ -116,6 +116,7 @@
       :picker-title="pickerTitle"
     />
     <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" size="lg" />
+    <MangaDownloadAction :id="mangaId" :title="title" :chapters="chapters" />
     <WorkEditButton resource-type="manga" :resource-id="mangaId" size="lg" />
 
     <MangaRateDialog

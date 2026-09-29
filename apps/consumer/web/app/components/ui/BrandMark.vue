@@ -12,8 +12,8 @@
   const attrs = useAttrs()
 
   const MARKS = {
-    wordmark: { src: '/brand/hikarinagi-wordmark.svg', alt: 'Hikarinagi' },
-    id: { src: '/brand/hikarinagi-id-lockup.svg', alt: 'Hikarinagi ID' },
+    wordmark: { src: '/brand/hikarinagi-wordmark.svg', alt: 'Hikarinagi', ratio: 792 / 191 },
+    id: { src: '/brand/hikarinagi-id-lockup.svg', alt: 'Hikarinagi ID', ratio: 973 / 191 },
   } as const
 
   const source = computed(() => MARKS[props.mark])
@@ -23,6 +23,7 @@
   <Image
     :src="source.src"
     :alt="source.alt"
+    :ratio="source.ratio"
     eager
     :lazy="false"
     :skeleton="false"

@@ -112,6 +112,7 @@ export function useDecoration(
     if (item.price == null) return
     purchaseDialog.open({
       title: item.type === 'BADGE' ? '兑换徽章' : '兑换头像框',
+      confirmLabel: '兑换',
       name: item.name,
       description: item.description,
       image: item.image,

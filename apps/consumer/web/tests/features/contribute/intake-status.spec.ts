@@ -26,7 +26,7 @@ it('提交之后以校验状态为准，重复标记不参与判断', () => {
   expect(
     intakeStatus(item({ stage: 'submitted', review: { ...review, status: 'PENDING' } }), true),
   ).toMatchObject({ label: '校验中', busy: true })
-  expect(reviewStatus('PASSED')).toMatchObject({ ink: 'red', label: '已上架' })
+  expect(reviewStatus('PASSED')).toMatchObject({ ink: 'red', label: '已收录' })
   expect(reviewStatus('REJECTED')).toMatchObject({ ink: 'ink', label: '未通过' })
   expect(reviewStatus('NEEDS_HUMAN')).toMatchObject({ ink: 'blue', label: '人工复核' })
 })

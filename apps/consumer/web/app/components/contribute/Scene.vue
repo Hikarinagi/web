@@ -1,16 +1,12 @@
 <script setup lang="ts">
-  import { Button, Dialog, Heading, Stack, Text, TRANSITION } from '@hina-ui/vue'
+  import { Heading, Stack, TRANSITION } from '@hina-ui/vue'
   import { Motion } from 'motion-v'
+  import type { MangaTarget } from '~/features/contribute/manga-target'
   import { useMoments } from '~/features/contribute/useMoments'
   import UploadDesk from './upload/Desk.vue'
 
-  const HELP_IDENTIFY =
-    '系统读取文件中的书名、作者与 ISBN，识别对应的卷。本站暂缺的卷列为待提交；未能识别的文件需手动选择对应的卷；本站已收录的卷与多卷合集不予提交。'
-  const HELP_REVIEW = '提交后文件经自动校验，通过后上架。校验结果可在「我的投稿」中查看。'
+  defineProps<{ manga: MangaTarget | null }>()
 
-  const help = ref(false)
-  const history = ref(false)
-  const { requireLogin } = useAuthGate()
   const selected = ref(false)
   const scene = useTemplateRef<{ $el: HTMLElement }>('scene')
   const sceneElement = computed(() => scene.value?.$el)
@@ -38,25 +34,11 @@
           ref="desk"
           class="contribute-desk"
           :dragging="dragging"
+          :manga="manga"
           @selected="selected = $event"
-          @help="help = true"
-          @history="history = requireLogin()"
         />
       </Motion>
     </ClientOnly>
-
-    <Dialog v-model:open="help" title="投稿说明" size="sm">
-      <template #content>
-        <Stack gap="md">
-          <Text size="sm">小说投稿支持单卷 EPUB，可一次添加多个文件。</Text>
-          <Text size="sm" tone="muted">{{ HELP_IDENTIFY }}</Text>
-          <Text size="sm" tone="muted">{{ HELP_REVIEW }}</Text>
-        </Stack>
-      </template>
-      <template #footer><Button @click="help = false">知道了</Button></template>
-    </Dialog>
-
-    <ContributeHistoryDrawer v-model:open="history" />
   </Stack>
 </template>
 
@@ -65,7 +47,7 @@
     position: relative;
     isolation: isolate;
     min-height: var(--contribute-stage-min);
-    height: 100svh;
+    height: var(--contribute-stage-height);
     overflow: hidden;
     background: var(--color-contribute-shadow);
   }

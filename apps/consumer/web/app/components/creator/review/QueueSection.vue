@@ -1,30 +1,51 @@
 <script setup lang="ts">
-  import { Button, Inline, Panel, Stack, Tag } from '@hina-ui/vue'
+  import { Card, Panel, Ripple, SimpleGrid, Statistic } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
+  import { WIKI_PERMISSIONS, WORKBENCH_PERMISSIONS } from '@hikarinagi/shared'
   import { ClipboardCheck } from '@lucide/vue'
   import type { CreatorOverviewPageData } from '~~/server/api/pages/create/overview.get'
 
-  defineProps<{ entries?: CreatorOverviewPageData['review_entries'] }>()
+  const props = defineProps<{ counts: CreatorOverviewPageData['review_counts'] }>()
   const { canAny } = useCreatorPermissions()
+
+  const queues = computed(() =>
+    [
+      {
+        label: '变更请求',
+        to: '/create/review',
+        value: props.counts.change_requests,
+        permission: WIKI_PERMISSIONS.REVIEW,
+      },
+      {
+        label: '小说投稿',
+        to: '/create/project-review',
+        value: props.counts.novel_projects,
+        permission: WORKBENCH_PERMISSIONS.REVIEW_NOVEL,
+      },
+      {
+        label: '漫画投稿',
+        to: '/create/manga-review',
+        value: props.counts.manga_projects,
+        permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
+      },
+    ].filter(queue => canAny(queue.permission)),
+  )
 </script>
 
 <template>
-  <Panel v-if="canAny(WIKI_PERMISSIONS.REVIEW)" title="待你审核">
+  <Panel v-if="queues.length" title="待你审核">
     <template #icon><ClipboardCheck /></template>
-    <template #actions>
-      <Button :as="NuxtLink" to="/create/review" variant="ghost" tone="neutral" size="sm">
-        查看全部
-      </Button>
-    </template>
-    <Stack v-if="entries?.length" gap="sm">
-      <Inline v-for="entry in entries" :key="entry.id" gap="sm" align="center" :wrap="false">
-        <CreatorContributionItem :contribution="entry.primary" class="min-w-0 flex-1" />
-        <Tag v-if="entry.bundled.length" size="sm" tone="neutral" class="shrink-0">
-          捆绑 {{ entry.bundled.length }} 个新实体
-        </Tag>
-      </Inline>
-    </Stack>
-    <CreatorEmpty v-else text="没有待审核的变更请求" />
+    <SimpleGrid min="12rem" gap="md">
+      <Card
+        v-for="queue in queues"
+        :key="queue.to"
+        :as="NuxtLink"
+        :to="queue.to"
+        class="hn-state-layer hn-interactive hn-press-lg"
+      >
+        <Ripple />
+        <Statistic :label="queue.label" :value="queue.value" />
+      </Card>
+    </SimpleGrid>
   </Panel>
 </template>

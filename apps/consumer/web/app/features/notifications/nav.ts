@@ -32,6 +32,12 @@ export function notificationTarget(
 
   if (target.kind === 'decoration') return '/setting/decoration'
   if (target.kind === 'dm') return target.id == null ? null : `/messages?peer=${target.id}`
+  if (target.kind === 'novel_project') {
+    return target.id == null ? null : `/create/projects/${target.id}`
+  }
+  if (target.kind === 'manga_project') {
+    return target.id == null ? null : `/create/manga/${target.id}`
+  }
   if (target.kind === 'change_request') {
     return target.id == null ? null : `/create/contributions/${target.id}`
   }

@@ -47,7 +47,8 @@
 
   const loader = usePageLoader({
     pages: () => props.data.manifest.pages,
-    refreshUrls: () => props.refreshData(),
+    manga: () => manga.value.id,
+    chapter: () => chapter.value.id,
   })
 
   const settingsOpen = ref(false)

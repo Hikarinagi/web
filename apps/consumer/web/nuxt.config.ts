@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module'
 import tailwindcss from '@tailwindcss/vite'
+import { readerProtection } from './build/reader-protection'
 
 const requirePkg = createRequire(import.meta.url)
 const ritoVersion = {
@@ -135,12 +136,25 @@ export default defineNuxtConfig({
     },
   },
 
+  hooks: {
+    'vite:extendConfig'(config, { isClient }) {
+      if (isClient) config.plugins?.push(readerProtection())
+    },
+  },
+
   fonts: {
     families: [
       {
         name: 'Noto Sans SC',
         provider: 'google',
         weights: [400, 500, 600, 700],
+        styles: ['normal'],
+        global: true,
+      },
+      {
+        name: 'Noto Serif SC',
+        provider: 'google',
+        weights: [700],
         styles: ['normal'],
         global: true,
       },

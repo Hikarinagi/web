@@ -10,8 +10,8 @@ export function useVolumeSearch() {
 
   watch(search, value => {
     revision++
-    results.value = []
     loading.value = !!value.trim()
+    if (!loading.value) results.value = []
   })
   watchDebounced(
     search,

@@ -21,7 +21,7 @@
         <HikariImage
           :src="logoUrl"
           :alt="SITE_CONFIG.name"
-          class="aspect-792/191 h-4"
+          class="aspect-792/191 h-6 w-auto self-start"
           image-class="object-contain"
           :lazy="false"
           :skeleton="false"

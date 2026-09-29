@@ -1,22 +1,16 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Card,
-    FileUpload,
-    IconButton,
-    Inline,
-    ScrollArea,
-    SegmentedControl,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
-  import { CircleHelp, History, Trash2 } from '@lucide/vue'
+  import { Button, Card, Dialog, IconButton, Inline, SegmentedControl, Stack } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
+  import { CircleHelp, History } from '@lucide/vue'
+  import type { MangaTarget } from '~/features/contribute/manga-target'
+  import { useContributeKind } from '~/features/contribute/useContributeKind'
   import { useDeskSize } from '~/features/contribute/useDeskSize'
   import { useNovelIntake } from '~/features/contribute/useNovelIntake'
-  import Entry from './Entry.vue'
+  import MangaStartForm from '../manga/StartForm.vue'
+  import NovelUpload from './Novel.vue'
 
-  defineProps<{ dragging: boolean }>()
-  const emit = defineEmits<{ selected: [value: boolean]; help: []; history: [] }>()
+  defineProps<{ dragging: boolean; manga: MangaTarget | null }>()
+  const emit = defineEmits<{ selected: [value: boolean] }>()
 
   const PAPER = [
     'scheme-light max-h-(--contribute-queue-height) rounded-xs border-contribute-paper-edge bg-contribute-paper text-contribute-ink shadow-contribute-paper!',
@@ -32,27 +26,24 @@
     '[--hn-scroll-shadow:var(--color-contribute-scroll-shadow)]',
     '[--hn-state-hover-opacity:var(--contribute-paper-hover-opacity)] [--hn-state-press-opacity:var(--contribute-paper-press-opacity)] [--hn-state-selected-opacity:var(--contribute-paper-selected-opacity)]',
   ]
-  const kinds = [
+  const KINDS = [
     { value: 'novel', label: '小说' },
     { value: 'manga', label: '漫画' },
   ]
-  const kind = ref('novel')
-  const notice = ref('')
-  const intake = useNovelIntake()
-  const { items, plan, submitting } = intake
-  const { requireLogin } = useAuthGate()
-  const { large, control, body, caption } = useDeskSize()
-  const pending = computed(
-    () => items.value.filter(item => item.stage === 'ready' && item.verdict === 'unknown').length,
-  )
-  watchEffect(() => emit('selected', kind.value === 'novel' && items.value.length > 0))
 
-  function receive(value: File | File[] | null) {
-    const files = Array.isArray(value) ? value : value ? [value] : []
-    const epubs = files.filter(file => /\.epub$/i.test(file.name))
-    notice.value = epubs.length < files.length ? '仅支持 EPUB 文件。' : ''
+  const kind = useContributeKind()
+  const help = ref(false)
+  const intake = useNovelIntake()
+  const { large, control } = useDeskSize()
+  const novel = useTemplateRef<InstanceType<typeof NovelUpload>>('novel')
+  const form = useTemplateRef<InstanceType<typeof MangaStartForm>>('form')
+
+  watchEffect(() => emit('selected', kind.value === 'novel' && intake.items.value.length > 0))
+
+  async function receive(files: File[]) {
     kind.value = 'novel'
-    if (epubs.length && requireLogin()) intake.add(epubs)
+    const upload = await until(novel).toBeTruthy({ timeout: 2000 })
+    upload?.receive(files)
   }
 
   defineExpose({ receive })
@@ -65,125 +56,52 @@
   >
     <Stack gap="sm">
       <Inline align="center" justify="between" gap="sm" :wrap="false">
-        <SegmentedControl v-model="kind" :options="kinds" :size="control" aria-label="投稿类型" />
+        <SegmentedControl
+          :model-value="kind"
+          :options="KINDS"
+          :size="control"
+          aria-label="投稿类型"
+          @update:model-value="value => (kind = value === 'manga' ? 'manga' : 'novel')"
+        />
         <Inline align="center" gap="xs" :wrap="false">
           <IconButton
+            :as="NuxtLink"
+            to="/create/projects"
             label="我的投稿"
             :size="control"
             variant="ghost"
             tone="neutral"
-            @click="emit('history')"
           >
             <History />
           </IconButton>
           <IconButton
-            label="投稿说明"
+            label="投稿指南"
             :size="control"
             variant="ghost"
             tone="neutral"
-            @click="emit('help')"
+            @click="help = true"
           >
             <CircleHelp />
           </IconButton>
         </Inline>
       </Inline>
 
-      <Stack
-        v-if="kind === 'manga'"
-        align="center"
-        justify="center"
-        class="min-h-(--contribute-upload-height)"
-      >
-        <Text :size="body" tone="muted">漫画投稿暂未开放</Text>
+      <NovelUpload v-if="kind === 'novel'" ref="novel" :intake="intake" :dragging="dragging" />
+      <Stack v-else gap="md">
+        <MangaStartForm ref="form" :series="manga" />
+        <Button :loading="form?.submitting" :disabled="!form?.ready" @click="form?.submit()">
+          开始
+        </Button>
       </Stack>
-      <Stack
-        v-else-if="!items.length"
-        gap="sm"
-        align="center"
-        justify="center"
-        class="min-h-(--contribute-upload-height) text-center"
-      >
-        <Text :size="body" weight="medium">
-          {{ dragging ? '松开以添加文件' : '将 EPUB 文件拖入页面' }}
-        </Text>
-        <Text :size="caption" tone="muted">支持一次添加多个单卷 EPUB</Text>
-        <FileUpload
-          :model-value="[]"
-          multiple
-          :list="false"
-          variant="button"
-          class="w-auto"
-          accept=".epub,application/epub+zip"
-          aria-label="选择 EPUB 文件"
-          @update:model-value="receive"
-          @reject="notice = '仅支持 EPUB 文件。'"
-        >
-          选择文件
-        </FileUpload>
-      </Stack>
-      <template v-else>
-        <Inline align="center" justify="between" gap="sm" :wrap="false">
-          <Text :size="caption" tone="muted">
-            共 {{ items.length }} 个文件{{ pending ? `，${pending} 个待确认` : '' }}
-          </Text>
-          <IconButton
-            label="清空"
-            :size="control"
-            variant="ghost"
-            tone="neutral"
-            :disabled="submitting"
-            @click="intake.clear()"
-          >
-            <Trash2 />
-          </IconButton>
-        </Inline>
-        <ScrollArea
-          class="-mx-[calc(var(--hn-focus-ring-width)+var(--hn-focus-ring-offset))] max-h-(--contribute-queue-body)"
-        >
-          <Stack
-            gap="none"
-            class="px-[calc(var(--hn-focus-ring-width)+var(--hn-focus-ring-offset))]"
-          >
-            <Entry
-              v-for="item in items"
-              :key="item.key"
-              :item="item"
-              :duplicate="plan.duplicates.has(item.key)"
-              :locked="submitting"
-              @remove="intake.remove(item.key)"
-              @pick="intake.pick(item.key, $event)"
-              @release="intake.release(item.key)"
-              @retry="intake.retry(item.key)"
-            />
-          </Stack>
-        </ScrollArea>
-        <Inline
-          align="center"
-          justify="between"
-          gap="sm"
-          :wrap="false"
-          class="border-t border-line pt-3"
-        >
-          <FileUpload
-            :model-value="[]"
-            multiple
-            :list="false"
-            variant="button"
-            class="w-auto"
-            accept=".epub,application/epub+zip"
-            aria-label="添加 EPUB 文件"
-            :disabled="submitting"
-            @update:model-value="receive"
-            @reject="notice = '仅支持 EPUB 文件。'"
-          >
-            添加文件
-          </FileUpload>
-          <Button :loading="submitting" :disabled="!plan.queue.length" @click="intake.submit()">
-            提交 {{ plan.queue.length }} 卷
-          </Button>
-        </Inline>
-      </template>
-      <Text v-if="notice" :size="caption" tone="muted">{{ notice }}</Text>
     </Stack>
+    <Dialog
+      v-model:open="help"
+      :title="kind === 'manga' ? '漫画投稿指南' : '小说投稿指南'"
+      size="lg"
+    >
+      <template #content>
+        <ContributeGuide :kind="kind" />
+      </template>
+    </Dialog>
   </Card>
 </template>

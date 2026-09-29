@@ -30,6 +30,9 @@ import { clearSessionCookies, setSessionCookies, type SessionTokens } from './oi
 export type BackendRequestMethod = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT'
 
 interface BackendFetchOptions {
+  signal?: AbortSignal
+  responseType?: 'stream'
+  retry?: false
   body?: unknown
   headers: Headers
   ignoreResponseError: true
@@ -54,6 +57,8 @@ interface RefreshResult {
 }
 
 interface BackendRequestOptions {
+  signal?: AbortSignal
+  responseType?: 'stream'
   apiBase: string
   apiPath: string
   body?: unknown
@@ -103,6 +108,8 @@ const REQUEST_HEADER_ALLOW_LIST = [
 ]
 
 const RESPONSE_HEADER_ALLOW_LIST = [
+  'content-disposition',
+  'x-content-type-options',
   'cache-control',
   'content-type',
   'etag',
@@ -128,23 +135,38 @@ export async function requestBackendWithAuthRefresh<TData = unknown>(
     auth.headers,
     options.body,
     options.query,
+    options.responseType,
+    options.signal,
   )
 
   if (shouldRefresh(response, options.apiPath, auth.headers)) {
     const refreshed = await refreshBackendAuth(event, auth)
     if (refreshed) {
+      if (response._data instanceof ReadableStream) await response._data.cancel()
       response = await requestBackend<TData>(
         options.targetUrl,
         options.method,
         auth.headers,
         options.body,
         options.query,
+        options.responseType,
+        options.signal,
       )
     }
   }
 
   if (options.forwardResponseHeaders) {
     copyBackendResponseHeaders(event, response.headers)
+    const length = response.headers.get('content-length')
+    const encoding = response.headers.get('content-encoding')
+    if (
+      options.responseType === 'stream' &&
+      response._data instanceof ReadableStream &&
+      (!encoding || encoding === 'identity') &&
+      length &&
+      /^\d+$/.test(length)
+    )
+      setResponseHeader(event, 'content-length', Number(length))
   }
 
   return response
@@ -261,11 +283,17 @@ async function requestBackend<TData = unknown>(
   headers: Headers,
   body?: unknown,
   query?: Record<string, unknown>,
+  responseType?: 'stream',
+  signal?: AbortSignal,
 ) {
   const fetchRaw = $fetch.raw as BackendFetchRaw
+  const requestHeaders = new Headers(headers)
+  if (responseType === 'stream') requestHeaders.set('accept-encoding', 'identity')
   return fetchRaw<TData>(targetUrl, {
+    ...(responseType ? { responseType, retry: false as const } : {}),
+    ...(signal ? { signal } : {}),
     method,
-    headers,
+    headers: requestHeaders,
     body: REQUEST_BODY_METHODS.has(method) && body !== false ? body : undefined,
     query,
     ignoreResponseError: true,

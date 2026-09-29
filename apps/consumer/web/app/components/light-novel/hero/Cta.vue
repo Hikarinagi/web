@@ -101,7 +101,7 @@
       </template>
       继续阅读
     </Button>
-    <Button login-required v-else-if="canRead && startTarget" size="lg" @click="readStart">
+    <Button v-else-if="canRead && startTarget" login-required size="lg" @click="readStart">
       <template #icon>
         <Play aria-hidden="true" />
       </template>
@@ -142,8 +142,8 @@
       </template>
     </Button>
     <Button
-      login-required
       v-else-if="rateMode === 'prompt'"
+      login-required
       size="lg"
       variant="outline"
       tone="neutral"
@@ -162,6 +162,7 @@
       :picker-title="pickerTitle"
     />
     <ShareButton :to="`/light-novels/${lightNovelId}`" tooltip="分享" size="lg" />
+    <LightNovelVolumeDownloadAction v-if="canRead" :id="lightNovelId" :title="title" series />
     <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" size="lg" />
 
     <LightNovelRateDialog

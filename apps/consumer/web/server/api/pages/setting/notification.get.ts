@@ -3,8 +3,11 @@ import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
 async function handler(event: H3Event) {
-  const manga = await fetchBackendData(event, '/api/v3/reader/me/manga/notification')
-  return { manga }
+  const [manga, novel] = await Promise.all([
+    fetchBackendData(event, '/api/v3/reader/me/manga/notification'),
+    fetchBackendData(event, '/api/v3/reader/me/novel/notification'),
+  ])
+  return { manga, novel }
 }
 
 export type NotificationPageData = Awaited<ReturnType<typeof handler>>
