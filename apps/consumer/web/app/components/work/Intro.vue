@@ -5,9 +5,12 @@
     CollapsibleContent,
     CollapsibleTrigger,
     DisclosureIcon,
+    Empty,
     Stack,
     Text,
   } from '@hina-ui/vue'
+  import { SquarePen } from '@lucide/vue'
+  import { NuxtLink } from '#components'
 
   defineOptions({ name: 'WorkIntro' })
 
@@ -15,10 +18,10 @@
     defineProps<{
       text?: string | null
       original?: string | null
-      emptyText?: string
+      editTo: string
       size?: 'base' | 'sm'
     }>(),
-    { text: null, original: null, emptyText: undefined, size: 'base' },
+    { text: null, original: null, size: 'base' },
   )
 
   const open = ref(false)
@@ -29,7 +32,14 @@
     <Text v-if="text" :size="size" class="leading-relaxed wrap-anywhere whitespace-pre-line">
       {{ text }}
     </Text>
-    <Text v-else-if="emptyText" :size="size" tone="muted">{{ emptyText }}</Text>
+    <Empty v-else :size="size === 'sm' ? 'sm' : 'md'" title="暂无简介">
+      <template #actions>
+        <Button :as="NuxtLink" :to="editTo" target="_blank" size="sm">
+          <template #icon><SquarePen /></template>
+          我来补充
+        </Button>
+      </template>
+    </Empty>
 
     <Collapsible v-if="original" v-model:open="open">
       <CollapsibleTrigger as-child>

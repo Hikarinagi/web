@@ -2,6 +2,7 @@
   import { Stack } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { tagRoute } from '~/features/light-novel/explore'
+  import { getRevisionFieldPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'LightNovelAboutIntro' })
   const props = defineProps<{
@@ -28,7 +29,11 @@
 
 <template>
   <Stack gap="none" class="min-w-0 flex-1 gap-5">
-    <WorkIntro :text="primary" :original="jp" />
+    <WorkIntro
+      :text="primary"
+      :original="jp"
+      :edit-to="getRevisionFieldPath('light-novel', lightNovel.id, 'summary_cn')"
+    />
     <WorkTagLinks :tags="tagLinks" />
   </Stack>
 </template>

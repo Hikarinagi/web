@@ -49,3 +49,7 @@ export function getRevisionHistoryPath(type: RevisionResourceSlug, id: number) {
 export function getRevisionEditPath(type: RevisionResourceSlug, id: number) {
   return `/create/edit/${type}/${id}`
 }
+
+export function getRevisionFieldPath(type: RevisionResourceSlug, id: number, field: string) {
+  return `${getRevisionEditPath(type, id)}#editor-field-${field}`
+}

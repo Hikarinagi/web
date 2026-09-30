@@ -2,6 +2,7 @@
   import { Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { tagRoute } from '~/features/galgame/explore'
+  import { getRevisionFieldPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'GalgameAboutIntro' })
   const props = defineProps<{
@@ -28,7 +29,11 @@
 
 <template>
   <Stack gap="none" class="min-w-0 flex-1 gap-5">
-    <WorkIntro :text="primary" :original="jp" />
+    <WorkIntro
+      :text="primary"
+      :original="jp"
+      :edit-to="getRevisionFieldPath('galgame', galgame.id, 'trans_intro')"
+    />
     <WorkTagLinks :tags="tagLinks" />
   </Stack>
 </template>

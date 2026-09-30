@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Flex } from '@hina-ui/vue'
   import type { EntityContributors, EntityDetail, EntityKind } from '~/features/entity/entity'
+  import { getRevisionFieldPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'EntityAbout' })
   const props = withDefaults(
@@ -25,7 +26,11 @@
 <template>
   <EntitySection title="简介">
     <Flex direction="col" gap="none" class="gap-8 lg:flex-row lg:items-start">
-      <WorkIntro :text="intro" :original="origin" empty-text="暂无简介" />
+      <WorkIntro
+        :text="intro"
+        :original="origin"
+        :edit-to="getRevisionFieldPath(kind, entity.id, 'trans_intro')"
+      />
       <EntityLabelsPanel
         :kind="kind"
         :entity="entity"

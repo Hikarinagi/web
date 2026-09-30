@@ -2,7 +2,7 @@
   import { Button, Inline } from '@hina-ui/vue'
   import { Images, ImagePlus } from '@lucide/vue'
   import { NuxtLink } from '#components'
-  import { getRevisionEditPath, type WorkResourceSlug } from '~/features/revision/resources'
+  import { getRevisionFieldPath, type WorkResourceSlug } from '~/features/revision/resources'
   import {
     useCoverVote,
     useCoverVoteView,
@@ -34,8 +34,8 @@
     covers: props.covers.map(cover => ({ media_id: cover.media.id, votes: cover.votes })),
   }))
   const candidates = computed(() => toCoverCandidates(props.covers, state.value))
-  const editPath = computed(
-    () => `${getRevisionEditPath(REVISION_SLUG[props.work], props.workId)}#editor-field-covers`,
+  const editPath = computed(() =>
+    getRevisionFieldPath(REVISION_SLUG[props.work], props.workId, 'covers'),
   )
 </script>
 
