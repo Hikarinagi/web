@@ -10,6 +10,7 @@
     stats: { texts: number; images: number }
     canSplit: (block: number, asTitle: boolean) => boolean
     lang?: string
+    tagged?: boolean
   }>()
   const emit = defineEmits<{
     split: [block: number, asTitle: boolean]
@@ -83,6 +84,7 @@
           :titleable="canSplit(item, true)"
           :splittable="canSplit(item, false)"
           :lang="lang"
+          :tagged="tagged"
           @split="asTitle => emit('split', item, asTitle)"
         />
       </template>

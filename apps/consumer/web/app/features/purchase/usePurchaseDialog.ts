@@ -6,6 +6,7 @@ export interface PurchaseItem {
   details?: string[]
   image?: { src: string } | null
   price: number
+  unit?: { size: number; label: string } | null
 }
 
 interface PurchaseRequest extends PurchaseItem {
@@ -55,6 +56,7 @@ export function usePurchaseDialog() {
       details: req.details ?? [],
       image: req.image ?? null,
       price: req.price,
+      unit: req.unit ?? null,
     }
     state.balance = req.balance
     state.handler = req.onConfirm

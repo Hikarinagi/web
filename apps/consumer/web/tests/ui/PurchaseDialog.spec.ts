@@ -1,4 +1,4 @@
-import { Form, FormField, NumberInput } from '@hina-ui/vue'
+import { Form, FormField, NumberInput, Slider } from '@hina-ui/vue'
 import { HIKARI_BIZ_CODE } from '@hikarinagi/shared'
 import { flushPromises, mount } from '@vue/test-utils'
 import { defineComponent, h, nextTick } from 'vue'
@@ -128,6 +128,42 @@ describe('PurchaseDialog', () => {
     expect(wrapper.findComponent(NumberInput).exists()).toBe(false)
     await submit()
     expect(handler).toHaveBeenCalledExactlyOnceWith(1)
+  })
+
+  it('buys by amount on a slider when the item is sold in units', async () => {
+    purchase.cancel()
+    await nextTick()
+    purchase.open({
+      name: 'AI 积分',
+      price: 10,
+      balance: 60,
+      unit: { size: 100, label: '积分' },
+      maxQuantity: 6,
+      onConfirm: handler,
+    })
+    await nextTick()
+    expect(wrapper.findComponent(NumberInput).exists()).toBe(false)
+    expect(wrapper.getComponent(Slider).props()).toMatchObject({ min: 100, max: 600, step: 100 })
+    wrapper.getComponent(Slider).vm.$emit('update:modelValue', 300)
+    await nextTick()
+    await submit()
+    expect(handler).toHaveBeenCalledExactlyOnceWith(3)
+  })
+
+  it('disables the purchase when not even one unit is affordable', async () => {
+    purchase.cancel()
+    await nextTick()
+    purchase.open({
+      name: 'AI 积分',
+      price: 10,
+      balance: 5,
+      unit: { size: 100, label: '积分' },
+      maxQuantity: 0,
+      onConfirm: handler,
+    })
+    await nextTick()
+    const button = wrapper.findAll('button').find(item => item.text() === '购买')!
+    expect(button.attributes('disabled')).toBeDefined()
   })
 
   it('displays API field errors through FormField and permits correction', async () => {

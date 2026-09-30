@@ -30,7 +30,16 @@
       chaptersOpen.value = false
     },
   )
-  const project = computed(() => props.data.project)
+  const edited = ref(false)
+  watch(
+    () => props.data.project,
+    () => {
+      edited.value = false
+    },
+  )
+  const project = computed(() =>
+    edited.value ? { ...props.data.project, pending_changes: true } : props.data.project,
+  )
   const translation = computed(() => project.value.mode === 'TRANSLATION')
   const chapters = ref(props.data.chapters)
   watch(
@@ -86,7 +95,8 @@
     () => project.value.id,
     change => {
       editor.value?.applyChange(change)
-      if (change.kind === 'chapters') emit('refresh')
+      if (!['lock', 'unlock', 'terms'].includes(change.kind)) edited.value = true
+      if (change.kind === 'chapters' || change.kind === 'terms') emit('refresh')
       else if (change.kind !== 'lock' && change.kind !== 'unlock') void reloadChapters()
     },
   )
@@ -228,6 +238,9 @@
         :current="chapter?.id ?? null"
         @changed="emit('refresh')"
       />
+    </template>
+    <template #footer>
+      <WorkbenchNovelStatus :project="project" :chapters="chapters" :online="online" />
     </template>
   </Drawer>
   <WorkbenchNovelManage

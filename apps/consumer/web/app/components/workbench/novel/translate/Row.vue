@@ -25,6 +25,32 @@
     move: [target: 'next' | 'prev' | 'empty']
   }>()
 
+  const input = useTemplateRef<InstanceType<typeof Textarea>>('input')
+
+  function insertTag(open: string, close: string) {
+    const element = input.value?.input
+    if (!element) return
+    const { selectionStart: start, selectionEnd: end, value } = element
+    emit(
+      'update',
+      value.slice(0, start) + open + value.slice(start, end) + close + value.slice(end),
+    )
+    void nextTick(() => {
+      element.focus()
+      element.setSelectionRange(start + open.length, end + open.length)
+    })
+  }
+
+  function onClick(event: MouseEvent) {
+    if (props.readonly) return emit('focus')
+    if ((event.target as HTMLElement).closest('textarea, button, a, [role="button"]')) return
+    if (!window.getSelection()?.isCollapsed) return
+    const element = input.value?.input
+    if (!element) return
+    element.focus()
+    element.setSelectionRange(element.value.length, element.value.length)
+  }
+
   const dot = computed(() => {
     if (props.segment.state === 10) return 'fill-danger text-danger'
     if (props.machine) return 'fill-warning text-warning'
@@ -76,10 +102,10 @@
       cn(
         'border-b border-line px-5 py-3.5',
         active && 'bg-accent-soft/40',
-        readonly && 'hn-state-layer hn-interactive',
+        readonly ? 'hn-state-layer hn-interactive' : 'cursor-text',
       )
     "
-    @click="readonly && emit('focus')"
+    @click="onClick"
     @keydown.enter="readonly && emit('focus')"
   >
     <Stack gap="xs" align="center" class="w-6 shrink-0">
@@ -112,14 +138,17 @@
       <WorkbenchMarkupText
         :text="segment.text ?? ''"
         :terms="terms"
+        :tags="segment.tags"
+        tagged
         lang="ja"
         class="min-w-0 flex-1 max-lg:w-full max-lg:text-muted"
       />
       <Stack gap="xs" class="min-w-0 flex-1 max-lg:w-full">
-        <WorkbenchMarkupText v-if="readonly && text" :text="text" />
+        <WorkbenchMarkupText v-if="readonly && text" :text="text" :tags="segment.tags" tagged />
         <Text v-else-if="readonly" tone="faint" class="leading-loose">尚未翻译</Text>
         <Textarea
           v-else
+          ref="input"
           :model-value="text"
           variant="bare"
           :autosize="{ minRows: 1 }"
@@ -131,6 +160,12 @@
           @focus="emit('focus')"
           @blur="emit('blur')"
           @keydown="onKeydown"
+        />
+        <WorkbenchNovelTranslateTagBar
+          v-if="active && !readonly && segment.tags.length"
+          :source="segment.text ?? ''"
+          :tags="segment.tags"
+          @insert="insertTag"
         />
         <Inline
           v-if="machine || segment.state === 10 || save === 'error' || issues?.length"

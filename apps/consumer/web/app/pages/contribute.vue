@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Page, PageBody, Stack } from '@hina-ui/vue'
   import type { ContributePageData } from '~~/server/api/pages/contribute.get'
 
   definePageMeta({
@@ -25,15 +24,5 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
-    <ContributeScene :manga="data.manga" />
-    <Page size="xl">
-      <PageBody>
-        <Stack gap="xl" class="lg:flex-row lg:items-start">
-          <ContributeWanted :data="data" class="min-w-0 flex-1" />
-          <ContributeContributors :contributors="data.contributors" class="lg:w-88 lg:shrink-0" />
-        </Stack>
-      </PageBody>
-    </Page>
-  </Stack>
+  <ContributeScene v-if="data" :data="data" />
 </template>

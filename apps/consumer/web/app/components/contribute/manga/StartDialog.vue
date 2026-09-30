@@ -6,7 +6,6 @@
   defineProps<{
     series: MangaTarget
     chapter: { id: number; label: string } | null
-    mode: 'UPLOAD' | 'TRANSLATION'
   }>()
   const open = defineModel<boolean>('open', { required: true })
 
@@ -26,10 +25,9 @@
         <Text v-if="chapter" weight="medium">{{ series.title }}</Text>
         <StartForm
           ref="form"
-          :key="`${series.id}-${chapter?.id ?? 'new'}-${mode}`"
+          :key="`${series.id}-${chapter?.id ?? 'new'}`"
           :series="series"
           :chapter-id="chapter?.id ?? null"
-          :mode="mode"
           lock-series
         />
       </Stack>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, toast } from '@hina-ui/vue'
+  import { Button, Inline, Tag, toast } from '@hina-ui/vue'
 
   const props = defineProps<{
     kind: 'novel' | 'manga'
@@ -10,6 +10,7 @@
       viewer_role: string | null
       viewer_reviewer: boolean
       viewer_capabilities: readonly string[]
+      pending_changes?: boolean
     }
     blocker: string
   }>()
@@ -37,6 +38,9 @@
   const owner = computed(() => props.project.viewer_role === 'OWNER')
   const editable = computed(() => ['DRAFT', 'ACTIVE', 'PUBLISHED'].includes(props.project.status))
   const shelved = computed(() => ['STALE', 'ARCHIVED'].includes(props.project.status))
+  const published = computed(() => props.project.status === 'PUBLISHED')
+  const settled = computed(() => published.value && props.project.pending_changes === false)
+  const submitLabel = computed(() => (published.value ? '提交更新' : '提交审核'))
 
   async function run(action: 'submit' | 'withdraw' | 'approve' | 'restore', done: string) {
     if (busy.value) return
@@ -70,7 +74,7 @@
 
   function confirmSubmit() {
     confirm({
-      title: '提交审核',
+      title: submitLabel.value,
       description: copy.value[props.project.mode] ?? '',
       confirmText: '提交',
       cancelText: '取消',
@@ -116,9 +120,18 @@
     >
       恢复
     </Button>
+    <Tag
+      v-else-if="settled"
+      v-tooltip="'自上次发布以来没有任何更改。'"
+      size="sm"
+      tone="success"
+      variant="soft"
+    >
+      已发布
+    </Tag>
     <Inline v-else-if="manage && editable" v-tooltip="blocker || null" as="span">
       <Button size="sm" :loading="busy" :disabled="!!blocker" @click="confirmSubmit">
-        提交审核
+        {{ submitLabel }}
       </Button>
     </Inline>
     <WorkbenchProjectRejectDialog

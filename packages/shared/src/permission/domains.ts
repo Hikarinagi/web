@@ -151,6 +151,8 @@ export const LLM_PERMISSIONS = {
   CREDENTIALS_WRITE: 'llm.credentials.write',
   SCENES_READ: 'llm.scenes.read',
   SCENES_WRITE: 'llm.scenes.write',
+  MODELS_READ: 'llm.models.read',
+  MODELS_WRITE: 'llm.models.write',
   MONITORING_READ: 'llm.monitoring.read',
   TOOLS_READ: 'llm.tools.read',
   TOOLS_WRITE: 'llm.tools.write',

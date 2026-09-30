@@ -42,7 +42,7 @@ function textToInline(text: string): DocNode[] {
         })
       } else if (run.kind === 'emphasis') {
         nodes.push({ type: 'text', text: run.text, marks: [{ type: 'emphasis' }] })
-      } else if (run.text) {
+      } else if (run.kind === 'text' && run.text) {
         nodes.push({ type: 'text', text: run.text })
       }
     }

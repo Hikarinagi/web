@@ -16,9 +16,9 @@
       cn(
         'shrink-0 -rotate-3 rounded-xs border border-current px-1.5 py-0.5 tracking-wider whitespace-nowrap',
         {
-          'text-contribute-stamp-red': ink === 'red',
-          'text-contribute-stamp-blue': ink === 'blue',
-          'text-contribute-ink': ink === 'ink',
+          'text-danger-text': ink === 'red',
+          'text-info-text': ink === 'blue',
+          'text-fg': ink === 'ink',
         },
       )
     "

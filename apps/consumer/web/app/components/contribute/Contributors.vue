@@ -1,19 +1,17 @@
 <script setup lang="ts">
   import { Empty, Section, SimpleGrid, Stack } from '@hina-ui/vue'
   import type { ContributePageData } from '~~/server/api/pages/contribute.get'
-  import { useContributeKind } from '~/features/contribute/useContributeKind'
 
-  const props = defineProps<{ contributors: ContributePageData['contributors'] }>()
-
-  const kind = useContributeKind()
-  const items = computed(() => props.contributors[kind.value])
+  defineProps<{
+    contributors: ContributePageData['contributors'][keyof ContributePageData['contributors']]
+  }>()
 </script>
 
 <template>
   <Section title="贡献墙">
-    <SimpleGrid v-if="items.length" min="6rem" gap="lg">
+    <SimpleGrid v-if="contributors.length" min="6rem" gap="lg">
       <Stack
-        v-for="item in items"
+        v-for="item in contributors"
         :key="item.user.id"
         gap="xs"
         align="center"

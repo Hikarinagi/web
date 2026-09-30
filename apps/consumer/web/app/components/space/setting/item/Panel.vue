@@ -28,5 +28,6 @@
       :refresh="refresh"
     />
     <SpaceSettingItemDownloadCard :card="data.download_card" :refresh="refresh" />
+    <SpaceSettingItemAiCredits :credits="data.ai_credits" :refresh="refresh" />
   </Stack>
 </template>

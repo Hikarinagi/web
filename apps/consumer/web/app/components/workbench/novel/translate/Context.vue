@@ -33,7 +33,7 @@
 
   const auth = useAuthStore()
   const hits = computed(() => {
-    const source = stripNovelMarkup(props.segment?.text ?? '')
+    const source = stripNovelMarkup(props.segment?.text ?? '', { tags: true })
     return props.terms.filter(term => source.includes(term.source))
   })
   const draft = computed(
@@ -94,7 +94,12 @@
               恢复机翻
             </Button>
           </Inline>
-          <WorkbenchMarkupText :text="draft" class="text-sm text-muted" />
+          <WorkbenchMarkupText
+            :text="draft"
+            :tags="segment?.tags"
+            tagged
+            class="text-sm text-muted"
+          />
         </Stack>
         <Stack v-if="others.length" gap="sm">
           <Heading :level="3" size="sm">译文和校对</Heading>

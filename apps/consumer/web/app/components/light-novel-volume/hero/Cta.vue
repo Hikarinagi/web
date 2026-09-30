@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { Inline } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
   import { ArrowRight, BookUp, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { getLightNovelVolumeTitle } from '~/utils/media/light-novel'
@@ -20,6 +19,7 @@
 
   const rateCtl = useLightNovelVolumeRate(props.volume.id, props.myRate)
   const dialogOpen = ref(false)
+  const contributeOpen = ref(false)
 
   function read() {
     void router.push(`/light-novel-volumes/${props.volume.id}/read`)
@@ -34,11 +34,11 @@
       </template>
       {{ resume ? '继续阅读' : '开始阅读' }}
     </Button>
-    <Button v-else :as="NuxtLink" :to="`/contribute?volume=${volume.id}`" size="lg">
+    <Button v-else login-required size="lg" @click="contributeOpen = true">
       <template #icon>
         <BookUp aria-hidden="true" />
       </template>
-      投稿本卷
+      投稿
     </Button>
 
     <Button
@@ -83,6 +83,11 @@
 
     <WorkEditButton resource-type="light-novel-volume" :resource-id="volume.id" size="lg" />
 
+    <LightNovelVolumeContributeDialog
+      v-if="!volume.online_reading_available"
+      v-model:open="contributeOpen"
+      :volume-id="volume.id"
+    />
     <LightNovelVolumeRateDialog
       v-model:visible="dialogOpen"
       :rate="rateCtl.rate.value"

@@ -8,6 +8,7 @@
     FormField,
     Inline,
     NumberInput,
+    Slider,
     Stack,
     Text,
   } from '@hina-ui/vue'
@@ -28,6 +29,24 @@
     Number.isFinite(values.quantity) ? (state.item?.price ?? 0) * (values.quantity ?? 0) : 0,
   )
   const afterBalance = computed(() => state.balance - total.value)
+  const unit = computed(() => state.item?.unit ?? null)
+  const amount = computed({
+    get: () => (values.quantity ?? 0) * (unit.value?.size ?? 1),
+    set: (value: number | undefined) => {
+      if (value !== undefined) values.quantity = Math.round(value / (unit.value?.size ?? 1))
+    },
+  })
+  const marks = computed(() =>
+    unit.value
+      ? [
+          { value: unit.value.size, label: String(unit.value.size) },
+          {
+            value: state.maxQuantity * unit.value.size,
+            label: String(state.maxQuantity * unit.value.size),
+          },
+        ]
+      : [],
+  )
 
   watch(
     () => state.open,
@@ -88,6 +107,9 @@
               <Text as="span" size="sm" tone="muted">单价</Text>
               <HikariPoint class="size-4" aria-hidden="true" />
               <Text as="span" size="sm">{{ state.item.price }}</Text>
+              <Text v-if="unit" as="span" size="sm" tone="muted">
+                / {{ unit.size }} {{ unit.label }}
+              </Text>
             </Inline>
           </Stack>
         </Inline>
@@ -98,7 +120,21 @@
           </Text>
         </Inline>
 
-        <FormField name="quantity" label="数量" orientation="horizontal">
+        <FormField v-if="unit" name="quantity" label="数量">
+          <Slider
+            v-if="state.maxQuantity > 1"
+            v-model="amount"
+            :min="unit.size"
+            :max="state.maxQuantity * unit.size"
+            :step="unit.size"
+            :marks="marks"
+            label="always"
+            :format="value => `${value} ${unit?.label}`"
+            class="pt-8"
+          />
+          <Text v-else size="sm">{{ amount }} {{ unit.label }}</Text>
+        </FormField>
+        <FormField v-else name="quantity" label="数量" orientation="horizontal">
           <NumberInput
             v-if="state.maxQuantity > 1"
             v-model="values.quantity"
@@ -150,7 +186,7 @@
       <Button variant="ghost" tone="neutral" :disabled="state.submitting" @click="cancel">
         取消
       </Button>
-      <Button :loading="state.submitting" @click="form?.submit()">
+      <Button :loading="state.submitting" :disabled="state.maxQuantity < 1" @click="form?.submit()">
         {{ state.confirmLabel }}
       </Button>
     </template>

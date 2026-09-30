@@ -26,12 +26,16 @@ export function useTranslationEditor(
   const chosen = (segment: BackendNovelSegment) =>
     segment.translations.find(item => item.selected) ?? null
 
+  const pinned = ref<string | null>(null)
+  watch(activeId, id => (pinned.value = id))
+  watch(filter, () => (pinned.value = null))
+
   const texts = computed(() => segments.value.filter(segment => segment.kind === 'TEXT'))
   const numbers = computed(() => new Map(texts.value.map((segment, index) => [segment.id, index])))
   const visible = computed(() => {
     if (filter.value === 'all') return segments.value
     return texts.value.filter(segment => {
-      if (segment.id === activeId.value) return true
+      if (segment.id === pinned.value) return true
       if (filter.value === 'empty') return segment.state === 0 && !drafts.get(segment.id)
       if (filter.value === 'revise') return segment.state === 10
       return !!chosen(segment)?.machine
@@ -63,7 +67,9 @@ export function useTranslationEditor(
     const segment = segments.value.find(row => row.id === segmentId)
     const text = drafts.get(segmentId)
     if (!segment || text === undefined) return
-    if (!text.trim() || text === mine(segment)?.text) {
+    const own = mine(segment)
+    const blank = !text.trim()
+    if ((blank && !own) || text === own?.text) {
       drafts.delete(segmentId)
       states.delete(segmentId)
       return
@@ -73,23 +79,40 @@ export function useTranslationEditor(
       return
     }
     states.set(segmentId, 'saving')
+    const path = { segment_id: segmentId }
     try {
-      const result = await hikariRequest('/api/v3/novel-segments/{segment_id}/translations/me', {
-        method: 'put',
-        path: { segment_id: segmentId },
-        body: { text },
-        toast: false,
-      })
-      const current = segments.value.find(row => row.id === segmentId)
-      const others = (current?.translations ?? []).filter(item => item.id !== result.translation.id)
-      patch(segmentId, {
-        state: result.segment_state,
-        translations: [result.translation, ...others].sort(
-          (a, b) => Number(b.selected) - Number(a.selected),
-        ),
-      })
+      if (blank && own) {
+        const result = await hikariRequest('/api/v3/novel-segments/{segment_id}/translations/me', {
+          method: 'delete',
+          path,
+          toast: false,
+        })
+        const current = segments.value.find(row => row.id === segmentId)
+        patch(segmentId, {
+          state: result.state,
+          translations: (current?.translations ?? []).filter(item => item.id !== own.id),
+        })
+        issues.delete(segmentId)
+      } else {
+        const result = await hikariRequest('/api/v3/novel-segments/{segment_id}/translations/me', {
+          method: 'put',
+          path,
+          body: { text },
+          toast: false,
+        })
+        const current = segments.value.find(row => row.id === segmentId)
+        const others = (current?.translations ?? []).filter(
+          item => item.id !== result.translation.id,
+        )
+        patch(segmentId, {
+          state: result.segment_state,
+          translations: [result.translation, ...others].sort(
+            (a, b) => Number(b.selected) - Number(a.selected),
+          ),
+        })
+        issues.set(segmentId, result.issues)
+      }
       if (drafts.get(segmentId) === text) drafts.delete(segmentId)
-      issues.set(segmentId, result.issues)
       states.set(segmentId, 'saved')
     } catch {
       states.set(segmentId, 'error')

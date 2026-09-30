@@ -1,21 +1,29 @@
 <script setup lang="ts">
-  import { Button, Divider, Image, Inline, Panel, Stack, Text } from '@hina-ui/vue'
+  import { Button, Center, Divider, Image, Inline, Panel, Stack, Text } from '@hina-ui/vue'
+  import { SparklesIcon } from '@lucide/vue'
 
-  const props = defineProps<{
-    name: string
-    image: string
-    description: string
-    available: number
-    purchased: number
-    limit?: number
-    price: number
-    action: '购买' | '兑换'
-    validity: string
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      name: string
+      image?: string
+      description: string
+      available?: number
+      purchased?: number
+      limit?: number
+      price: number
+      action: '购买' | '兑换'
+      validity: string
+      unit?: string
+    }>(),
+    { image: undefined, available: undefined, purchased: undefined, limit: undefined, unit: '张' },
+  )
 
   defineEmits<{ purchase: [] }>()
 
-  const soldOut = computed(() => props.limit !== undefined && props.purchased >= props.limit)
+  const soldOut = computed(
+    () =>
+      props.limit !== undefined && props.purchased !== undefined && props.purchased >= props.limit,
+  )
 </script>
 
 <template>
@@ -37,6 +45,7 @@
 
     <Inline gap="lg" align="start" :wrap="false">
       <Image
+        v-if="image"
         :src="image"
         :alt="name"
         fit="contain"
@@ -46,6 +55,9 @@
         class="h-28 w-20 shrink-0"
         image-class="select-none"
       />
+      <Center v-else class="h-28 w-20 shrink-0 rounded-xl bg-accent-soft text-accent-text">
+        <SparklesIcon class="size-8" aria-hidden="true" />
+      </Center>
       <Stack gap="md" class="min-w-0 flex-1">
         <Stack gap="xs">
           <Inline gap="xs" align="center">
@@ -53,9 +65,12 @@
             <slot name="description-extra" />
           </Inline>
           <Inline gap="md" class="gap-y-1">
-            <Text as="span" size="xs" tone="muted">持有 {{ available }} 张</Text>
-            <Text as="span" size="xs" tone="muted">
-              本月已{{ action }} {{ purchased }}{{ limit !== undefined ? ` / ${limit}` : '' }} 张
+            <Text v-if="available !== undefined" as="span" size="xs" tone="muted">
+              持有 {{ available }} {{ unit }}
+            </Text>
+            <Text v-if="purchased !== undefined" as="span" size="xs" tone="muted">
+              本月已{{ action }} {{ purchased }}{{ limit !== undefined ? ` / ${limit}` : '' }}
+              {{ unit }}
             </Text>
             <Text as="span" size="xs" tone="muted">{{ validity }}</Text>
           </Inline>

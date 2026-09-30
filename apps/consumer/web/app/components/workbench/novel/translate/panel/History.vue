@@ -30,7 +30,7 @@
             {{ timeFormat(revision.created_at) }} · {{ revision.translation_id ? '译文' : '原文' }}
           </Text>
         </Inline>
-        <WorkbenchMarkupText :text="revision.text" />
+        <WorkbenchMarkupText :text="revision.text" tagged />
       </Stack>
     </Stack>
   </Stack>

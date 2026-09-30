@@ -29,6 +29,18 @@ export const MEMBER_ROLE_OPTIONS = [
   { value: 'REVIEWER', label: '审稿' },
 ]
 
+export const SOURCE_TAG_LABEL: Record<string, string> = {
+  emphasis: '着重号',
+  tcy: '纵中横',
+  link: '链接',
+  anchor: '锚点',
+  image: '图片',
+  ruby: '注音',
+  break: '换行',
+  style: '样式',
+  other: '其他标记',
+}
+
 export const SEGMENT_STATE_META: Record<number, { label: string; tone: Tone }> = {
   0: { label: '未译', tone: 'neutral' },
   10: { label: '需修改', tone: 'danger' },
@@ -47,7 +59,7 @@ export const PRETRANSLATION_STATUS_META: Record<string, { label: string; tone: T
   RUNNING: { label: '翻译中', tone: 'accent' },
   DONE: { label: '已完成', tone: 'success' },
   FAILED: { label: '失败', tone: 'danger' },
-  CANCELLED: { label: '已拆分', tone: 'neutral' },
+  CANCELLED: { label: '已取消', tone: 'neutral' },
 }
 
 export const MODERATION_STATUS_META: Record<string, { label: string; tone: Tone }> = {

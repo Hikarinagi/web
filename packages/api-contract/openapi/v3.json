@@ -3137,35 +3137,137 @@
         ],
         "type": "object"
       },
-      "AiQuotaDto": {
+      "AiCreditPolicyDto": {
         "properties": {
-          "chars_per_point": {
-            "description": "每 1 积分可兑换的字数",
+          "credits_per_usd": {
+            "description": "1 美元模型成本折合的 AI 积分",
+            "maximum": 10000000,
+            "minimum": 0.01,
             "type": "number"
           },
-          "credit_chars": {
-            "description": "兑换得到的额外额度余额（字）",
+          "daily_free": {
+            "description": "每人每天赠送的 AI 积分，当天用完即止，不累计",
+            "maximum": 10000000,
+            "minimum": 0,
             "type": "number"
           },
-          "daily_chars": {
-            "description": "每日免费额度（字）",
+          "markup": {
+            "description": "在成本之上的加价倍率，1 表示按成本扣",
+            "maximum": 100,
+            "minimum": 0,
             "type": "number"
           },
-          "remaining": {
-            "description": "今日还可使用（字）",
+          "pack_credits": {
+            "description": "每份 AI 积分的数量",
+            "maximum": 10000000,
+            "minimum": 1,
             "type": "number"
           },
-          "used_today": {
-            "description": "今日已用（字）",
+          "pack_price": {
+            "description": "每份 AI 积分的售价（光点）",
+            "maximum": 1000000,
+            "minimum": 1,
             "type": "number"
           }
         },
         "required": [
-          "daily_chars",
-          "used_today",
-          "credit_chars",
-          "remaining",
-          "chars_per_point"
+          "daily_free",
+          "credits_per_usd",
+          "markup",
+          "pack_credits",
+          "pack_price"
+        ],
+        "type": "object"
+      },
+      "AiCreditsDto": {
+        "properties": {
+          "available": {
+            "description": "当前可用的 AI 积分",
+            "type": "number"
+          },
+          "balance": {
+            "description": "兑换得到的 AI 积分余额",
+            "type": "number"
+          },
+          "daily_free": {
+            "description": "每日免费 AI 积分",
+            "type": "number"
+          },
+          "free_left": {
+            "description": "今日剩余的免费 AI 积分",
+            "type": "number"
+          },
+          "held": {
+            "description": "进行中的任务预扣的 AI 积分",
+            "type": "number"
+          },
+          "pack_credits": {
+            "description": "每份 AI 积分的数量",
+            "type": "number"
+          },
+          "pack_price": {
+            "description": "每份 AI 积分的售价（光点）",
+            "type": "number"
+          },
+          "points": {
+            "description": "当前光点余额",
+            "type": "number"
+          },
+          "purchased": {
+            "description": "本月购买的 AI 积分",
+            "type": "number"
+          }
+        },
+        "required": [
+          "daily_free",
+          "free_left",
+          "balance",
+          "held",
+          "available",
+          "purchased",
+          "pack_credits",
+          "pack_price",
+          "points"
+        ],
+        "type": "object"
+      },
+      "AiModelDto": {
+        "properties": {
+          "credits_per_kchar": {
+            "description": "翻译每千字原文大约消耗的 AI 积分",
+            "type": "number"
+          },
+          "credits_per_page": {
+            "description": "识别每页图片大约消耗的 AI 积分",
+            "type": "number"
+          },
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "is_default": {
+            "description": "是否为该用途的默认模型",
+            "type": "boolean"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "vision": {
+            "description": "能否识别图片",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "description",
+          "vision",
+          "is_default",
+          "credits_per_kchar",
+          "credits_per_page"
         ],
         "type": "object"
       },
@@ -3370,7 +3472,16 @@
           "ios": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/AppReleaseIosDto"
+                "$ref": "#/components/schemas/AppReleasePackageDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "ohos": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AppReleasePackageDto"
               }
             ],
             "nullable": true,
@@ -3388,7 +3499,7 @@
         ],
         "type": "object"
       },
-      "AppReleaseIosDto": {
+      "AppReleasePackageDto": {
         "properties": {
           "sha256": {
             "type": "string"
@@ -7810,13 +7921,25 @@
             "pattern": "^https?:\\/\\/.+",
             "type": "string"
           },
-          "is_default": {
+          "catalog_provider_id": {
+            "description": "对应的目录服务商，用于自动匹配模型与价格",
+            "maxLength": 100,
+            "nullable": true,
+            "type": "string"
+          },
+          "enabled": {
             "type": "boolean"
           },
           "name": {
             "maxLength": 80,
             "minLength": 1,
             "type": "string"
+          },
+          "price_multiplier": {
+            "description": "实际价格相对目录价的倍率，如中转站打八折填 0.8",
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "number"
           },
           "provider": {
             "description": "openai-compatible | anthropic | google | deepseek | typesafe",
@@ -7837,6 +7960,140 @@
           "name",
           "provider",
           "api_key"
+        ],
+        "type": "object"
+      },
+      "CreateLlmModelDto": {
+        "properties": {
+          "canonical_id": {
+            "description": "目录里跨服务商统一的模型 ID",
+            "maxLength": 200,
+            "nullable": true,
+            "type": "string"
+          },
+          "catalog_model_id": {
+            "description": "从目录创建：未填的字段取自这条目录记录，并为已关联目录服务商的渠道自动添加线路",
+            "type": "number"
+          },
+          "context_limit": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "description": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "input_modalities": {
+            "items": {
+              "enum": [
+                "text",
+                "image",
+                "audio",
+                "video",
+                "pdf"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "description": "业务方选择模型时使用的标识，如 claude-sonnet-4-5",
+            "pattern": "^[a-z0-9][a-z0-9._:/-]{0,99}$",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "output_limit": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "sort_order": {
+            "maximum": 10000,
+            "minimum": -10000,
+            "type": "number"
+          },
+          "structured_output": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "name"
+        ],
+        "type": "object"
+      },
+      "CreateLlmRouteDto": {
+        "properties": {
+          "cache_read_price": {
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "cache_write_price": {
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "catalog_model_id": {
+            "description": "对应的目录记录",
+            "nullable": true,
+            "type": "number"
+          },
+          "credential_id": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "input_price": {
+            "description": "美元 / 百万 token；MANUAL 时必填",
+            "minimum": 0,
+            "type": "number"
+          },
+          "output_price": {
+            "description": "美元 / 百万 token；MANUAL 时必填",
+            "minimum": 0,
+            "type": "number"
+          },
+          "price_source": {
+            "description": "CATALOG 跟随目录价格，MANUAL 使用下面的价格",
+            "enum": [
+              "CATALOG",
+              "MANUAL"
+            ],
+            "type": "string"
+          },
+          "priority": {
+            "description": "数字小的先用",
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "structured_output": {
+            "description": "是否使用 json_schema 结构化输出；为空时按模型与渠道的设置",
+            "nullable": true,
+            "type": "boolean"
+          },
+          "upstream_model": {
+            "description": "在这个渠道调用时使用的模型名",
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "credential_id",
+          "upstream_model",
+          "price_source"
         ],
         "type": "object"
       },
@@ -7898,6 +8155,11 @@
             "description": "仅对 DETECT 生效：完成后自动继续机翻与擦除原文",
             "type": "boolean"
           },
+          "follow_model": {
+            "description": "仅在 follow 时生效：后续机翻使用的模型",
+            "maxLength": 100,
+            "type": "string"
+          },
           "kind": {
             "description": "DETECT 标出文本框并识别原文、OCR 识别空白文本框、TRANSLATE 机翻、INPAINT 擦除原文",
             "enum": [
@@ -7906,6 +8168,11 @@
               "TRANSLATE",
               "INPAINT"
             ],
+            "type": "string"
+          },
+          "model": {
+            "description": "本任务使用的模型；不传则使用默认模型",
+            "maxLength": 100,
             "type": "string"
           },
           "page_ids": {
@@ -15132,6 +15399,19 @@
         ],
         "type": "object"
       },
+      "ImportNovelTermsDto": {
+        "properties": {
+          "from_project_id": {
+            "description": "从中导入术语的项目",
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "from_project_id"
+        ],
+        "type": "object"
+      },
       "InstantGroupDto": {
         "properties": {
           "items": {
@@ -17283,6 +17563,222 @@
         ],
         "type": "object"
       },
+      "LlmCatalogModelDto": {
+        "properties": {
+          "cache_read_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "cache_write_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "canonical_id": {
+            "description": "跨服务商统一的模型 ID",
+            "nullable": true,
+            "type": "string"
+          },
+          "context_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "family": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "input_modalities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "input_price": {
+            "description": "美元 / 百万 token",
+            "nullable": true,
+            "type": "number"
+          },
+          "model_key": {
+            "description": "在这家服务商处调用时使用的模型名",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "output_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "output_modalities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "output_price": {
+            "description": "美元 / 百万 token",
+            "nullable": true,
+            "type": "number"
+          },
+          "price_tiers": {
+            "items": {
+              "$ref": "#/components/schemas/LlmPriceTierDto"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "provider_id": {
+            "type": "string"
+          },
+          "reasoning": {
+            "type": "boolean"
+          },
+          "release_date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "removed_at": {
+            "description": "目录下架时间",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "structured_output": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "tool_call": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "provider_id",
+          "model_key",
+          "canonical_id",
+          "name",
+          "family",
+          "input_modalities",
+          "output_modalities",
+          "context_limit",
+          "output_limit",
+          "structured_output",
+          "tool_call",
+          "reasoning",
+          "input_price",
+          "output_price",
+          "cache_read_price",
+          "cache_write_price",
+          "price_tiers",
+          "release_date",
+          "removed_at"
+        ],
+        "type": "object"
+      },
+      "LlmCatalogProviderDto": {
+        "properties": {
+          "adapter": {
+            "description": "建议的接入协议，未知时为空",
+            "nullable": true,
+            "type": "string"
+          },
+          "api_url": {
+            "nullable": true,
+            "type": "string"
+          },
+          "doc_url": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "model_count": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "npm": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "npm",
+          "api_url",
+          "doc_url",
+          "adapter",
+          "model_count"
+        ],
+        "type": "object"
+      },
+      "LlmCatalogStatusDto": {
+        "properties": {
+          "models": {
+            "type": "number"
+          },
+          "providers": {
+            "type": "number"
+          },
+          "removed": {
+            "description": "目录里已下架的模型数",
+            "type": "number"
+          },
+          "running": {
+            "type": "boolean"
+          },
+          "synced_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "providers",
+          "models",
+          "removed",
+          "synced_at",
+          "running"
+        ],
+        "type": "object"
+      },
+      "LlmCatalogSyncResultDto": {
+        "properties": {
+          "added": {
+            "type": "number"
+          },
+          "models": {
+            "type": "number"
+          },
+          "providers": {
+            "type": "number"
+          },
+          "removed": {
+            "type": "number"
+          },
+          "repriced": {
+            "description": "跟随目录价格而改价的线路数",
+            "type": "number"
+          },
+          "updated": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "providers",
+          "models",
+          "added",
+          "updated",
+          "removed",
+          "repriced"
+        ],
+        "type": "object"
+      },
       "LlmCredentialDto": {
         "properties": {
           "api_key_hint": {
@@ -17296,21 +17792,32 @@
             "nullable": true,
             "type": "string"
           },
+          "catalog_provider_id": {
+            "nullable": true,
+            "type": "string"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
           },
+          "enabled": {
+            "type": "boolean"
+          },
           "id": {
             "type": "number"
-          },
-          "is_default": {
-            "type": "boolean"
           },
           "name": {
             "type": "string"
           },
+          "price_multiplier": {
+            "type": "number"
+          },
           "provider": {
             "type": "string"
+          },
+          "route_count": {
+            "description": "走这个渠道的线路数",
+            "type": "number"
           },
           "supports_structured_outputs": {
             "type": "boolean"
@@ -17328,7 +17835,10 @@
           "api_key_set",
           "api_key_hint",
           "supports_structured_outputs",
-          "is_default",
+          "enabled",
+          "price_multiplier",
+          "catalog_provider_id",
+          "route_count",
           "created_at",
           "updated_at"
         ],
@@ -17337,6 +17847,9 @@
       "LlmDailyUsageDto": {
         "properties": {
           "calls": {
+            "type": "number"
+          },
+          "cost_usd": {
             "type": "number"
           },
           "day": {
@@ -17354,7 +17867,8 @@
           "day",
           "calls",
           "errors",
-          "total_tokens"
+          "total_tokens",
+          "cost_usd"
         ],
         "type": "object"
       },
@@ -17427,15 +17941,375 @@
         ],
         "type": "object"
       },
-      "LlmSceneDto": {
+      "LlmModelDto": {
         "properties": {
+          "active_route_count": {
+            "description": "可用线路数：线路与渠道都已启用",
+            "type": "number"
+          },
+          "canonical_id": {
+            "nullable": true,
+            "type": "string"
+          },
+          "context_limit": {
+            "nullable": true,
+            "type": "number"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
           },
-          "credential_id": {
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "input_modalities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "output_limit": {
             "nullable": true,
             "type": "number"
+          },
+          "route_count": {
+            "description": "线路总数",
+            "type": "number"
+          },
+          "scene_keys": {
+            "description": "把它设为默认模型或可选模型的场景",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sort_order": {
+            "type": "number"
+          },
+          "structured_output": {
+            "type": "boolean"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "name",
+          "description",
+          "canonical_id",
+          "input_modalities",
+          "context_limit",
+          "output_limit",
+          "structured_output",
+          "enabled",
+          "sort_order",
+          "route_count",
+          "active_route_count",
+          "scene_keys",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "LlmPriceTierDto": {
+        "properties": {
+          "cache_read": {
+            "description": "美元 / 百万 token",
+            "nullable": true,
+            "type": "number"
+          },
+          "input": {
+            "description": "美元 / 百万 token",
+            "type": "number"
+          },
+          "output": {
+            "description": "美元 / 百万 token",
+            "type": "number"
+          },
+          "over": {
+            "description": "输入超过这个 token 数时按本档计价",
+            "type": "number"
+          }
+        },
+        "required": [
+          "over",
+          "input",
+          "output",
+          "cache_read"
+        ],
+        "type": "object"
+      },
+      "LlmRouteCandidateDto": {
+        "properties": {
+          "catalog_model_id": {
+            "type": "number"
+          },
+          "credential_id": {
+            "type": "number"
+          },
+          "credential_name": {
+            "type": "string"
+          },
+          "input_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "linked": {
+            "description": "这个渠道已有指向该目录记录的线路",
+            "type": "boolean"
+          },
+          "model_key": {
+            "type": "string"
+          },
+          "output_price": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "credential_id",
+          "credential_name",
+          "catalog_model_id",
+          "model_key",
+          "input_price",
+          "output_price",
+          "linked"
+        ],
+        "type": "object"
+      },
+      "LlmRouteCatalogModelDto": {
+        "properties": {
+          "cache_read_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "cache_write_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "input_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "model_key": {
+            "type": "string"
+          },
+          "output_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "provider_id": {
+            "type": "string"
+          },
+          "removed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "provider_id",
+          "model_key",
+          "input_price",
+          "output_price",
+          "cache_read_price",
+          "cache_write_price",
+          "removed_at"
+        ],
+        "type": "object"
+      },
+      "LlmRouteCredentialDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price_multiplier": {
+            "type": "number"
+          },
+          "provider": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "provider",
+          "enabled",
+          "price_multiplier"
+        ],
+        "type": "object"
+      },
+      "LlmRouteDto": {
+        "properties": {
+          "cache_read_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "cache_write_price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "catalog_model": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LlmRouteCatalogModelDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "credential": {
+            "$ref": "#/components/schemas/LlmRouteCredentialDto"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "health": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LlmRouteHealthDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "input_price": {
+            "description": "美元 / 百万 token，未乘渠道倍率",
+            "type": "number"
+          },
+          "model_id": {
+            "type": "number"
+          },
+          "output_price": {
+            "description": "美元 / 百万 token，未乘渠道倍率",
+            "type": "number"
+          },
+          "price_source": {
+            "enum": [
+              "CATALOG",
+              "MANUAL"
+            ],
+            "type": "string"
+          },
+          "price_tiers": {
+            "items": {
+              "$ref": "#/components/schemas/LlmPriceTierDto"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "structured_output": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "upstream_model": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "model_id",
+          "upstream_model",
+          "price_source",
+          "input_price",
+          "output_price",
+          "cache_read_price",
+          "cache_write_price",
+          "price_tiers",
+          "structured_output",
+          "priority",
+          "enabled",
+          "credential",
+          "catalog_model",
+          "health"
+        ],
+        "type": "object"
+      },
+      "LlmRouteHealthDto": {
+        "properties": {
+          "checked_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "latency_ms": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "OK",
+              "DEGRADED",
+              "DOWN"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "latency_ms",
+          "error_message",
+          "checked_at"
+        ],
+        "type": "object"
+      },
+      "LlmSceneDto": {
+        "properties": {
+          "billing": {
+            "enum": [
+              "PLATFORM",
+              "USER"
+            ],
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "default_model": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LlmSceneModelDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
           },
           "description": {
             "nullable": true,
@@ -17458,9 +18332,12 @@
             "nullable": true,
             "type": "number"
           },
-          "model": {
-            "nullable": true,
-            "type": "string"
+          "models": {
+            "description": "用户还可以选择的模型",
+            "items": {
+              "$ref": "#/components/schemas/LlmSceneModelDto"
+            },
+            "type": "array"
           },
           "scene_key": {
             "type": "string"
@@ -17484,8 +18361,9 @@
           "description",
           "is_system",
           "inherit",
-          "credential_id",
-          "model",
+          "billing",
+          "default_model",
+          "models",
           "temperature",
           "timeout_ms",
           "max_retries",
@@ -17495,12 +18373,39 @@
         ],
         "type": "object"
       },
+      "LlmSceneModelDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "name",
+          "enabled"
+        ],
+        "type": "object"
+      },
       "LlmSceneUsageDto": {
         "properties": {
           "avg_latency_ms": {
             "type": "number"
           },
           "calls": {
+            "type": "number"
+          },
+          "cost_usd": {
+            "description": "按线路价格与渠道倍率折算的美元成本",
             "type": "number"
           },
           "errors": {
@@ -17529,6 +18434,7 @@
           "input_tokens",
           "output_tokens",
           "total_tokens",
+          "cost_usd",
           "avg_latency_ms",
           "max_latency_ms"
         ],
@@ -22895,6 +23801,10 @@
             "description": "选定译文仍是未修改机翻的段落数",
             "type": "number"
           },
+          "queued_count": {
+            "description": "尚未完成、已在 AI 翻译队列中的正文段落数",
+            "type": "number"
+          },
           "segment_count": {
             "description": "正文段落数，不含插图与分隔",
             "type": "number"
@@ -22921,6 +23831,7 @@
           "source_title",
           "segment_count",
           "done_count",
+          "queued_count",
           "machine_count",
           "assisted_count",
           "updated_at"
@@ -23307,6 +24218,10 @@
           "images": {
             "type": "number"
           },
+          "kept": {
+            "description": "原文未变、沿用了原有译文的段落数",
+            "type": "number"
+          },
           "segments": {
             "type": "number"
           }
@@ -23314,7 +24229,8 @@
         "required": [
           "chapters",
           "segments",
-          "images"
+          "images",
+          "kept"
         ],
         "type": "object"
       },
@@ -23447,8 +24363,22 @@
             "nullable": true,
             "type": "string"
           },
+          "first_number": {
+            "description": "批次中第一段在本章正文里的段号，从 1 开始；段落都已删除时为空",
+            "nullable": true,
+            "type": "number"
+          },
           "id": {
             "type": "number"
+          },
+          "last_number": {
+            "description": "批次中最后一段在本章正文里的段号，从 1 开始；段落都已删除时为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "mine": {
+            "description": "是否由当前用户提交",
+            "type": "boolean"
           },
           "segment_count": {
             "type": "number"
@@ -23471,7 +24401,10 @@
         "required": [
           "id",
           "status",
+          "mine",
           "segment_count",
+          "first_number",
+          "last_number",
           "chars",
           "attempts",
           "error",
@@ -23505,6 +24438,16 @@
             "format": "date-time",
             "type": "string"
           },
+          "latest_release": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NovelReleaseRefDto"
+              }
+            ],
+            "description": "最近一次发布",
+            "nullable": true,
+            "type": "object"
+          },
           "machine_label_percent": {
             "description": "未修改机翻达到该百分比时，发布标注为机翻",
             "type": "number"
@@ -23518,6 +24461,10 @@
           },
           "owner": {
             "$ref": "#/components/schemas/UserRefDto"
+          },
+          "pending_changes": {
+            "description": "最近一次发布之后内容是否有改动",
+            "type": "boolean"
           },
           "source_lang": {
             "type": "string"
@@ -23592,6 +24539,8 @@
           "owner",
           "team",
           "machine_label_percent",
+          "latest_release",
+          "pending_changes",
           "credits",
           "based_on_sha",
           "viewer_role",
@@ -23776,6 +24725,7 @@
               "empty",
               "forbidden_term",
               "line_count",
+              "tag_mismatch",
               "term_missing",
               "halfwidth_punctuation",
               "inconsistent"
@@ -23881,6 +24831,22 @@
         ],
         "type": "object"
       },
+      "NovelReleaseRefDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "version",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "NovelSegmentDeleteDto": {
         "properties": {
           "base_version": {
@@ -23940,6 +24906,13 @@
             "description": "0 空、10 需修改、20 已译、30 已定稿",
             "type": "number"
           },
+          "tags": {
+            "description": "原文中 {n} 标记对应的原书格式",
+            "items": {
+              "$ref": "#/components/schemas/NovelSegmentTagDto"
+            },
+            "type": "array"
+          },
           "text": {
             "nullable": true,
             "type": "string"
@@ -23965,6 +24938,7 @@
           "text",
           "image",
           "caption",
+          "tags",
           "state",
           "version",
           "locked_by",
@@ -24037,6 +25011,32 @@
         "required": [
           "id",
           "state"
+        ],
+        "type": "object"
+      },
+      "NovelSegmentTagDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "emphasis",
+              "tcy",
+              "link",
+              "anchor",
+              "image",
+              "ruby",
+              "break",
+              "style",
+              "other"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind"
         ],
         "type": "object"
       },
@@ -24587,12 +25587,12 @@
           "id": {
             "type": "number"
           },
-          "light_novel_id": {
-            "type": "number"
-          },
           "note": {
             "nullable": true,
             "type": "string"
+          },
+          "project_id": {
+            "type": "number"
           },
           "source": {
             "type": "string"
@@ -24607,7 +25607,7 @@
         },
         "required": [
           "id",
-          "light_novel_id",
+          "project_id",
           "source",
           "target",
           "note",
@@ -24615,6 +25615,52 @@
           "forbidden",
           "creator",
           "updated_at"
+        ],
+        "type": "object"
+      },
+      "NovelTermImportDto": {
+        "properties": {
+          "added": {
+            "type": "number"
+          },
+          "skipped": {
+            "description": "原文已在本项目中而保持不变的条数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "added",
+          "skipped"
+        ],
+        "type": "object"
+      },
+      "NovelTermSourceDto": {
+        "properties": {
+          "id": {
+            "description": "可导入术语的项目",
+            "type": "number"
+          },
+          "new_count": {
+            "description": "导入后会新增的条数，原文已在本项目中的不计",
+            "type": "number"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "term_count": {
+            "description": "该项目的术语条数",
+            "type": "number"
+          },
+          "volume": {
+            "$ref": "#/components/schemas/LightNovelVolumeLabelDto"
+          }
+        },
+        "required": [
+          "id",
+          "owner",
+          "volume",
+          "term_count",
+          "new_count"
         ],
         "type": "object"
       },
@@ -27676,9 +28722,6 @@
       },
       "PlaygroundRunDto": {
         "properties": {
-          "credential_id": {
-            "type": "number"
-          },
           "max_output_tokens": {
             "maximum": 32000,
             "minimum": 1,
@@ -27692,7 +28735,8 @@
             "type": "string"
           },
           "model": {
-            "maxLength": 200,
+            "description": "模型标识",
+            "maxLength": 100,
             "minLength": 1,
             "type": "string"
           },
@@ -27700,6 +28744,10 @@
             "maxLength": 8000,
             "minLength": 1,
             "type": "string"
+          },
+          "route_id": {
+            "description": "只走这条线路；不传时按线路优先级依次尝试",
+            "type": "number"
           },
           "schema": {
             "description": "JSON schema 字符串，mode=object 时必填",
@@ -27717,7 +28765,6 @@
           }
         },
         "required": [
-          "credential_id",
           "model",
           "prompt",
           "mode"
@@ -29310,17 +30357,17 @@
         ],
         "type": "string"
       },
-      "PurchaseAiQuotaDto": {
+      "PurchaseAiCreditsDto": {
         "properties": {
-          "points": {
-            "description": "用于兑换的积分",
+          "quantity": {
+            "description": "购买份数",
             "maximum": 100000,
             "minimum": 1,
             "type": "number"
           }
         },
         "required": [
-          "points"
+          "quantity"
         ],
         "type": "object"
       },
@@ -30858,6 +31905,11 @@
       },
       "RequestNovelPretranslationDto": {
         "properties": {
+          "model": {
+            "description": "模型；不传则使用默认模型",
+            "maxLength": 100,
+            "type": "string"
+          },
           "segment_ids": {
             "description": "要翻译的段落；不传则翻译本章所有还没有译文的正文段落",
             "items": {
@@ -34788,13 +35840,23 @@
             "pattern": "^https?:\\/\\/.+",
             "type": "string"
           },
-          "is_default": {
+          "catalog_provider_id": {
+            "maxLength": 100,
+            "nullable": true,
+            "type": "string"
+          },
+          "enabled": {
             "type": "boolean"
           },
           "name": {
             "maxLength": 80,
             "minLength": 1,
             "type": "string"
+          },
+          "price_multiplier": {
+            "maximum": 100,
+            "minimum": 0.01,
+            "type": "number"
           },
           "provider": {
             "enum": [
@@ -34808,6 +35870,115 @@
           },
           "supports_structured_outputs": {
             "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateLlmModelDto": {
+        "properties": {
+          "canonical_id": {
+            "maxLength": 200,
+            "nullable": true,
+            "type": "string"
+          },
+          "context_limit": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "description": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "input_modalities": {
+            "items": {
+              "enum": [
+                "text",
+                "image",
+                "audio",
+                "video",
+                "pdf"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "key": {
+            "pattern": "^[a-z0-9][a-z0-9._:/-]{0,99}$",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "output_limit": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "sort_order": {
+            "maximum": 10000,
+            "minimum": -10000,
+            "type": "number"
+          },
+          "structured_output": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateLlmRouteDto": {
+        "properties": {
+          "cache_read_price": {
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "cache_write_price": {
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "catalog_model_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "input_price": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "output_price": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "price_source": {
+            "enum": [
+              "CATALOG",
+              "MANUAL"
+            ],
+            "type": "string"
+          },
+          "priority": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "structured_output": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "upstream_model": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
           }
         },
         "type": "object"
@@ -36601,7 +37772,16 @@
       },
       "UpsertLlmSceneDto": {
         "properties": {
-          "credential_id": {
+          "billing": {
+            "description": "PLATFORM 由平台承担费用，USER 按用量扣发起人的 AI 积分",
+            "enum": [
+              "PLATFORM",
+              "USER"
+            ],
+            "type": "string"
+          },
+          "default_model_id": {
+            "description": "不继承时必填",
             "nullable": true,
             "type": "number"
           },
@@ -36611,7 +37791,7 @@
             "type": "string"
           },
           "inherit": {
-            "description": "true 则完全继承 default 场景",
+            "description": "true 则默认模型与调用参数都沿用 default 场景",
             "type": "boolean"
           },
           "max_output_tokens": {
@@ -36626,10 +37806,13 @@
             "nullable": true,
             "type": "number"
           },
-          "model": {
-            "maxLength": 120,
-            "nullable": true,
-            "type": "string"
+          "model_ids": {
+            "description": "除默认模型外，用户还可以选择的模型",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 50,
+            "type": "array"
           },
           "temperature": {
             "maximum": 2,
@@ -37364,37 +38547,16 @@
             "minimum": 1,
             "type": "number"
           },
-          "chars_per_point": {
-            "description": "一光点兑换的字数",
-            "maximum": 100000,
-            "minimum": 1,
-            "type": "number"
-          },
           "context_segments": {
             "description": "提示词附带的前文段落数",
             "maximum": 50,
             "minimum": 0,
             "type": "number"
-          },
-          "daily_chars": {
-            "description": "每人每天免费的 AI 翻译字数",
-            "maximum": 10000000,
-            "minimum": 0,
-            "type": "number"
-          },
-          "vision_page_chars": {
-            "description": "多模态模型识别一页漫画折算的字数",
-            "maximum": 100000,
-            "minimum": 0,
-            "type": "number"
           }
         },
         "required": [
-          "daily_chars",
-          "chars_per_point",
           "batch_segments",
-          "context_segments",
-          "vision_page_chars"
+          "context_segments"
         ],
         "type": "object"
       },
@@ -40068,6 +41230,170 @@
         ]
       }
     },
+    "/api/v3/admin/llm/catalog": {
+      "get": {
+        "operationId": "AdminLlmCatalogController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmCatalogStatusDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/catalog/models": {
+      "get": {
+        "operationId": "AdminLlmCatalogController_getModels",
+        "parameters": [
+          {
+            "description": "按模型 ID、名称或统一 ID 搜索",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看这家服务商",
+            "in": "query",
+            "name": "provider_id",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "description": "只看支持图片输入的模型",
+            "in": "query",
+            "name": "vision",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/LlmCatalogModelDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/catalog/providers": {
+      "get": {
+        "operationId": "AdminLlmCatalogController_getProviders",
+        "parameters": [
+          {
+            "description": "按 ID 或名称搜索",
+            "in": "query",
+            "name": "keyword",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LlmCatalogProviderDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/catalog/sync": {
+      "post": {
+        "operationId": "AdminLlmCatalogController_sync",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmCatalogSyncResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
     "/api/v3/admin/llm/credentials": {
       "get": {
         "operationId": "AdminLlmCredentialsController_list",
@@ -40171,6 +41497,302 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LlmCredentialDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/credit-policy": {
+      "get": {
+        "operationId": "AdminLlmCreditPolicyController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiCreditPolicyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "put": {
+        "operationId": "AdminLlmCreditPolicyController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiCreditPolicyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiCreditPolicyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/models": {
+      "get": {
+        "operationId": "AdminLlmModelsController_getList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LlmModelDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "post": {
+        "operationId": "AdminLlmModelsController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLlmModelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmModelDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/models/{id}": {
+      "delete": {
+        "operationId": "AdminLlmModelsController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "get": {
+        "operationId": "AdminLlmModelsController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmModelDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminLlmModelsController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLlmModelDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmModelDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/models/{model_id}/routes": {
+      "get": {
+        "operationId": "AdminLlmModelRoutesController_getList",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LlmRouteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "post": {
+        "operationId": "AdminLlmModelRoutesController_create",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLlmRouteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmRouteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/models/{model_id}/routes/candidates": {
+      "get": {
+        "operationId": "AdminLlmModelRoutesController_getCandidates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LlmRouteCandidateDto"
+                  },
+                  "type": "array"
                 }
               }
             },
@@ -40289,6 +41911,97 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlaygroundResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/routes/{id}": {
+      "delete": {
+        "operationId": "AdminLlmRoutesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminLlmRoutesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLlmRouteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmRouteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/llm"
+        ]
+      }
+    },
+    "/api/v3/admin/llm/routes/{id}/test": {
+      "post": {
+        "operationId": "AdminLlmRoutesController_test",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LlmRouteHealthDto"
                 }
               }
             },
@@ -52365,6 +54078,50 @@
         ]
       }
     },
+    "/api/v3/ai/models": {
+      "get": {
+        "operationId": "AiModelController_getList",
+        "parameters": [
+          {
+            "description": "AI 用途，例如 novel_translate",
+            "in": "query",
+            "name": "scene",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-z][a-z0-9_]{0,63}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "只列出能识别图片的模型",
+            "in": "query",
+            "name": "vision",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AiModelDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "AiModel"
+        ]
+      }
+    },
     "/api/v3/appeals": {
       "post": {
         "operationId": "AppealController_submit",
@@ -61794,77 +63551,6 @@
         ]
       }
     },
-    "/api/v3/light-novels/{light_novel_id}/terms": {
-      "get": {
-        "operationId": "LightNovelTermController_getList",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "light_novel_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/NovelTermDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "LightNovelTerm"
-        ]
-      },
-      "post": {
-        "operationId": "LightNovelTermController_create",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "light_novel_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateNovelTermDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NovelTermDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "LightNovelTerm"
-        ]
-      }
-    },
     "/api/v3/manga-chapters/contributors": {
       "get": {
         "operationId": "MangaChapterController_getTopContributors",
@@ -64838,6 +66524,37 @@
       }
     },
     "/api/v3/novel-chapters/{chapter_id}/pretranslations": {
+      "delete": {
+        "operationId": "NovelPretranslationController_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chapter_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NovelPretranslationDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "NovelPretranslation"
+        ]
+      },
       "get": {
         "operationId": "NovelPretranslationController_getList",
         "parameters": [
@@ -65898,6 +67615,150 @@
         },
         "tags": [
           "NovelProject"
+        ]
+      }
+    },
+    "/api/v3/novel-projects/{project_id}/terms": {
+      "get": {
+        "operationId": "NovelProjectTermController_getList",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NovelTermDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "NovelProjectTerm"
+        ]
+      },
+      "post": {
+        "operationId": "NovelProjectTermController_create",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNovelTermDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelTermDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "NovelProjectTerm"
+        ]
+      }
+    },
+    "/api/v3/novel-projects/{project_id}/terms/import": {
+      "post": {
+        "operationId": "NovelProjectTermController_importFrom",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportNovelTermsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NovelTermImportDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "NovelProjectTerm"
+        ]
+      }
+    },
+    "/api/v3/novel-projects/{project_id}/terms/sources": {
+      "get": {
+        "operationId": "NovelProjectTermController_getSources",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/NovelTermSourceDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "NovelProjectTerm"
         ]
       }
     },
@@ -73418,16 +75279,16 @@
         ]
       }
     },
-    "/api/v3/user/me/ai-quota": {
+    "/api/v3/user/me/ai-credits": {
       "get": {
-        "operationId": "AiQuotaController_get",
+        "operationId": "AiCreditController_get",
         "parameters": [],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AiQuotaDto"
+                  "$ref": "#/components/schemas/AiCreditsDto"
                 }
               }
             },
@@ -73435,19 +75296,17 @@
           }
         },
         "tags": [
-          "AiQuota"
+          "AiCredit"
         ]
-      }
-    },
-    "/api/v3/user/me/ai-quota/purchase": {
+      },
       "post": {
-        "operationId": "AiQuotaController_purchase",
+        "operationId": "AiCreditController_purchase",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PurchaseAiQuotaDto"
+                "$ref": "#/components/schemas/PurchaseAiCreditsDto"
               }
             }
           },
@@ -73458,7 +75317,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AiQuotaDto"
+                  "$ref": "#/components/schemas/AiCreditsDto"
                 }
               }
             },
@@ -73466,7 +75325,7 @@
           }
         },
         "tags": [
-          "AiQuota"
+          "AiCredit"
         ]
       }
     },

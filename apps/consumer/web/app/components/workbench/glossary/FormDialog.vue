@@ -4,7 +4,7 @@
   import type { BackendNovelTerm } from '~/features/workbench/workbench'
   import { getFieldErrors } from '~/utils/api/error'
 
-  const props = defineProps<{ lightNovelId: number; term: BackendNovelTerm | null }>()
+  const props = defineProps<{ projectId: number; term: BackendNovelTerm | null }>()
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ saved: [] }>()
 
@@ -38,9 +38,9 @@
           body,
         })
       } else {
-        await hikariRequest('/api/v3/light-novels/{light_novel_id}/terms', {
+        await hikariRequest('/api/v3/novel-projects/{project_id}/terms', {
           method: 'POST',
-          path: { light_novel_id: props.lightNovelId },
+          path: { project_id: props.projectId },
           body,
         })
       }

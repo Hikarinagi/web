@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Heading, IconButton, Inline, Tag, Text } from '@hina-ui/vue'
+  import { Flex, Heading, IconButton, Inline, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { ChevronLeft } from '@lucide/vue'
 
@@ -9,21 +9,25 @@
 <template>
   <Inline
     as="header"
-    gap="md"
+    gap="sm"
     align="center"
     :wrap="false"
-    class="h-12 shrink-0 border-b border-line bg-surface pr-3 pl-2"
+    class="h-12 shrink-0 border-b border-line bg-surface pr-3 pl-2 lg:gap-3"
   >
     <IconButton :as="NuxtLink" :to="back" label="返回我的投稿" variant="ghost" tone="neutral">
       <ChevronLeft />
     </IconButton>
-    <Inline gap="sm" align="baseline" :wrap="false" class="min-w-0">
+    <Flex direction="col" class="min-w-0 flex-1 lg:flex-row lg:items-baseline lg:gap-2">
       <Heading :level="1" size="sm" class="min-w-0 truncate">{{ title }}</Heading>
-      <Text v-if="subtitle" size="sm" tone="muted" truncate class="min-w-0">{{ subtitle }}</Text>
+      <Text v-if="subtitle" size="sm" tone="muted" truncate class="min-w-0 max-lg:text-xs">
+        {{ subtitle }}
+      </Text>
       <Tag size="sm" variant="soft" tone="neutral" class="shrink-0 max-lg:hidden">{{ kind }}</Tag>
-    </Inline>
-    <Inline gap="md" align="center" justify="end" :wrap="false" class="min-w-0 flex-1">
-      <slot name="status" />
+    </Flex>
+    <Inline gap="md" align="center" :wrap="false" class="shrink-0 max-md:gap-1">
+      <Inline gap="md" align="center" :wrap="false" class="max-lg:hidden">
+        <slot name="status" />
+      </Inline>
       <slot />
     </Inline>
   </Inline>

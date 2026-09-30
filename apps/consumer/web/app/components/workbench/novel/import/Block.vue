@@ -9,6 +9,7 @@
     titleable: boolean
     splittable: boolean
     lang?: string
+    tagged?: boolean
   }>()
   const emit = defineEmits<{ split: [asTitle: boolean] }>()
 </script>
@@ -22,6 +23,7 @@
       v-if="block.kind === 'TEXT'"
       :text="block.text ?? ''"
       :lang="lang"
+      :tagged="tagged"
       class="min-w-0 flex-1"
     />
     <Inline v-else gap="xs" align="center" :wrap="false" class="min-h-7 min-w-0 flex-1 text-muted">

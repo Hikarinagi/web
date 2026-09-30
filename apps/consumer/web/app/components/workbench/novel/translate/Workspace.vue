@@ -2,10 +2,8 @@
   import {
     Button,
     Drawer,
-    IconButton,
     Inline,
     Kbd,
-    SegmentedControl,
     Splitter,
     SplitterHandle,
     SplitterPanel,
@@ -15,10 +13,14 @@
     VirtualList,
     type VirtualListExpose,
   } from '@hina-ui/vue'
-  import { BookOpenText, Check } from '@lucide/vue'
+  import { Check } from '@lucide/vue'
   import { useMediaQuery } from '@vueuse/core'
   import type { components } from '@hikarinagi/api-contract/v3'
-  import { useTranslationEditor } from '~/features/workbench/composables/useTranslationEditor'
+  import { useFilterPosition } from '~/features/workbench/composables/useFilterPosition'
+  import {
+    useTranslationEditor,
+    type SegmentFilter,
+  } from '~/features/workbench/composables/useTranslationEditor'
   import type {
     BackendNovelChapter,
     BackendNovelProject,
@@ -49,7 +51,7 @@
       !props.project.viewer_capabilities.includes('translate') ||
       !['DRAFT', 'ACTIVE', 'PUBLISHED'].includes(props.project.status),
   )
-  const filters = computed(() => {
+  const filters = computed<{ value: SegmentFilter; label: string }[]>(() => {
     const count = (test: (segment: BackendNovelSegment) => boolean) =>
       texts.value.filter(test).length
     return [
@@ -90,6 +92,8 @@
     if (next) focusSegment(next.id)
   }
 
+  useFilterPosition(editor, list, () => props.chapter.id)
+
   function retry() {
     for (const id of failed.value) void editor.save(id)
   }
@@ -115,29 +119,15 @@
   >
     <SplitterPanel :default-size="wide ? 72 : 100" :min-size="50">
       <Stack gap="none" class="h-full bg-surface">
-        <Inline
-          gap="md"
-          align="center"
-          class="min-h-11 shrink-0 gap-y-1.5 border-b border-line px-5 py-1.5"
-        >
-          <Text weight="semibold" truncate class="min-w-32 flex-1">{{ chapter.title }}</Text>
-          <Text size="xs" tone="muted" class="shrink-0 tabular-nums">
-            已翻译 {{ done }} / {{ texts.length }} 段
-          </Text>
-          <Inline gap="xs" align="center" :wrap="false" class="shrink-0">
-            <SegmentedControl v-model="filter" :options="filters" size="sm" aria-label="段落筛选" />
-            <IconButton
-              v-if="!wide"
-              label="参考资料"
-              size="sm"
-              variant="ghost"
-              tone="neutral"
-              @click="contextOpen = true"
-            >
-              <BookOpenText />
-            </IconButton>
-          </Inline>
-        </Inline>
+        <WorkbenchNovelTranslateToolbar
+          v-model:filter="filter"
+          :title="chapter.title"
+          :done="done"
+          :total="texts.length"
+          :filters="filters"
+          :reference="!wide"
+          @reference="contextOpen = true"
+        />
         <Inline
           gap="lg"
           :wrap="false"
@@ -159,6 +149,7 @@
         >
           <template #default="{ item }">
             <WorkbenchNovelTranslateRow
+              :data-segment-row="item.id"
               :segment="item"
               :number="(numbers.get(item.id) ?? -1) + 1"
               :text="editor.textOf(item)"

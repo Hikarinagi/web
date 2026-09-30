@@ -18,9 +18,9 @@ export type BackendNovelSegment = ApiData<
 
 export type BackendNovelTranslation = BackendNovelSegment['translations'][number]
 
-export type BackendNovelTerm = ApiData<'/api/v3/light-novels/{light_novel_id}/terms', 'get'>[number]
+export type BackendNovelTerm = ApiData<'/api/v3/novel-projects/{project_id}/terms', 'get'>[number]
 
-export type BackendAiQuota = ApiData<'/api/v3/user/me/ai-quota', 'get'>
+export type BackendAiModel = ApiData<'/api/v3/ai/models', 'get'>[number]
 
 export type BackendNovelImportPreview = ApiData<
   '/api/v3/novel-projects/{project_id}/import/preview',
@@ -37,7 +37,7 @@ export type NovelSegmentChange = {
   project_id: number
   chapter_id: number | null
   segment_ids: string[]
-  kind: 'chapters' | 'source' | 'lock' | 'unlock' | 'state' | 'translation' | 'machine'
+  kind: 'chapters' | 'source' | 'lock' | 'unlock' | 'state' | 'translation' | 'machine' | 'terms'
   actor_id: number
   locked_by?: number | null
   lock_expires_at?: string | null

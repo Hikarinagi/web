@@ -9,7 +9,7 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   DECORATION_PURCHASE_SUBTRACT: '兑换装扮',
   MAKE_UP_CARD_PURCHASE_SUBTRACT: '购买补签卡',
   DOWNLOAD_CARD_PURCHASE_SUBTRACT: '购买下载卡',
-  AI_QUOTA_PURCHASE_SUBTRACT: '兑换 AI 额度',
+  AI_QUOTA_PURCHASE_SUBTRACT: '购买 AI 积分',
   SYSTEM_ADD: '系统发放',
   SYSTEM_SUBTRACT: '系统扣除',
   RATE_ADD: '评分',

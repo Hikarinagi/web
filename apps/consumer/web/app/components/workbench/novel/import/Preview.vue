@@ -22,7 +22,11 @@
   const emit = defineEmits<{ cancel: []; imported: [] }>()
 
   const { confirm } = useHikariConfirm()
-  const outline = useImportOutline(props.draft.preview)
+  const layout =
+    props.project.mode === 'TRANSLATION' &&
+    !(props.draft.file?.name.toLowerCase().endsWith('.txt') ?? false)
+  const layoutNote = `未勾选的章节被排除在发布的电子书之外。${props.existing ? '导入替换当前章节。原文不变的段落保留其译文。' : ''}`
+  const outline = useImportOutline(props.draft.preview, layout)
   const { chapters, current, stats, total, payload } = outline
   const chapter = computed(() => chapters.value[current.value])
   const replace = ref(false)
@@ -52,8 +56,9 @@
           body: chosen,
         })
       }
+      const kept = result.kept ? `${result.kept} 个段落保留了译文。` : ''
       toast.success(
-        `导入了 ${result.chapters} 个章节、${result.segments} 个段落和 ${result.images} 幅插图。`,
+        `导入了 ${result.chapters} 个章节、${result.segments} 个段落和 ${result.images} 幅插图。${kept}`,
       )
       emit('imported')
     } finally {
@@ -63,6 +68,17 @@
 
   function submit() {
     if (submitting.value || !payload.value.length) return
+    if (layout && props.existing) {
+      confirm({
+        title: '重新导入原书',
+        description: `当前的 ${props.existing} 章将替换为 ${total.value.chapters} 个新章节。原文未更改的段落保留其译文、批注和修订历史。其他段落及其译文将被删除。此操作无法撤消。`,
+        confirmText: '重新导入',
+        cancelText: '取消',
+        tone: 'danger',
+        onConfirm: run,
+      })
+      return
+    }
     if (!replace.value) return void run()
     confirm({
       title: '替换现有章节',
@@ -88,9 +104,10 @@
         <Text size="xs" tone="muted" class="tabular-nums">
           将导入 {{ total.chapters }} 个章节、{{ total.texts }} 个段落和 {{ total.images }} 幅插图
         </Text>
+        <Text v-if="layout" size="xs" tone="muted">{{ layoutNote }}</Text>
       </Stack>
       <Inline gap="sm" align="center" justify="end" :wrap="false" class="flex-1">
-        <Checkbox v-if="existing" v-model="replace" size="sm" :disabled="submitting">
+        <Checkbox v-if="existing && !layout" v-model="replace" size="sm" :disabled="submitting">
           替换现有的 {{ existing }} 章
         </Checkbox>
         <Button
@@ -144,6 +161,7 @@
           :stats="stats[current] ?? { texts: 0, images: 0 }"
           :can-split="outline.canSplit"
           :lang="project.source_lang ?? undefined"
+          :tagged="project.mode === 'TRANSLATION'"
           @split="outline.split"
           @merge="outline.mergeUp(current)"
           @rename="title => outline.rename(current, title)"

@@ -773,6 +773,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/llm/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmCatalogController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/catalog/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmCatalogController_getModels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/catalog/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmCatalogController_getProviders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/catalog/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLlmCatalogController_sync"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/llm/credentials": {
         parameters: {
             query?: never;
@@ -803,6 +867,86 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["AdminLlmCredentialsController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/llm/credit-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmCreditPolicyController_get"];
+        put: operations["AdminLlmCreditPolicyController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmModelsController_getList"];
+        put?: never;
+        post: operations["AdminLlmModelsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/models/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmModelsController_getById"];
+        put?: never;
+        post?: never;
+        delete: operations["AdminLlmModelsController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminLlmModelsController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/llm/models/{model_id}/routes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmModelRoutesController_getList"];
+        put?: never;
+        post: operations["AdminLlmModelRoutesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/models/{model_id}/routes/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLlmModelRoutesController_getCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v3/admin/llm/monitoring/health": {
@@ -863,6 +1007,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminLlmPlaygroundController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/llm/routes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminLlmRoutesController_remove"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminLlmRoutesController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/llm/routes/{id}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLlmRoutesController_test"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5349,6 +5525,22 @@ export interface paths {
         patch: operations["AdminTagController_setStatus"];
         trace?: never;
     };
+    "/api/v3/ai/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AiModelController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/appeals": {
         parameters: {
             query?: never;
@@ -8245,22 +8437,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/light-novels/{light_novel_id}/terms": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["LightNovelTermController_getList"];
-        put?: never;
-        post: operations["LightNovelTermController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-chapters/contributors": {
         parameters: {
             query?: never;
@@ -9231,7 +9407,7 @@ export interface paths {
         get: operations["NovelPretranslationController_getList"];
         put?: never;
         post: operations["NovelPretranslationController_create"];
-        delete?: never;
+        delete: operations["NovelPretranslationController_cancel"];
         options?: never;
         head?: never;
         patch?: never;
@@ -9551,6 +9727,54 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["NovelProjectController_submit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/terms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectTermController_getList"];
+        put?: never;
+        post: operations["NovelProjectTermController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/terms/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NovelProjectTermController_importFrom"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/novel-projects/{project_id}/terms/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NovelProjectTermController_getSources"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -11888,32 +12112,16 @@ export interface paths {
         patch: operations["UserController_updateMe"];
         trace?: never;
     };
-    "/api/v3/user/me/ai-quota": {
+    "/api/v3/user/me/ai-credits": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AiQuotaController_get"];
+        get: operations["AiCreditController_get"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/ai-quota/purchase": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AiQuotaController_purchase"];
+        post: operations["AiCreditController_purchase"];
         delete?: never;
         options?: never;
         head?: never;
@@ -13978,17 +14186,50 @@ export interface components {
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
-        AiQuotaDto: {
-            /** @description 每 1 积分可兑换的字数 */
-            chars_per_point: number;
-            /** @description 兑换得到的额外额度余额（字） */
-            credit_chars: number;
-            /** @description 每日免费额度（字） */
-            daily_chars: number;
-            /** @description 今日还可使用（字） */
-            remaining: number;
-            /** @description 今日已用（字） */
-            used_today: number;
+        AiCreditPolicyDto: {
+            /** @description 1 美元模型成本折合的 AI 积分 */
+            credits_per_usd: number;
+            /** @description 每人每天赠送的 AI 积分，当天用完即止，不累计 */
+            daily_free: number;
+            /** @description 在成本之上的加价倍率，1 表示按成本扣 */
+            markup: number;
+            /** @description 每份 AI 积分的数量 */
+            pack_credits: number;
+            /** @description 每份 AI 积分的售价（光点） */
+            pack_price: number;
+        };
+        AiCreditsDto: {
+            /** @description 当前可用的 AI 积分 */
+            available: number;
+            /** @description 兑换得到的 AI 积分余额 */
+            balance: number;
+            /** @description 每日免费 AI 积分 */
+            daily_free: number;
+            /** @description 今日剩余的免费 AI 积分 */
+            free_left: number;
+            /** @description 进行中的任务预扣的 AI 积分 */
+            held: number;
+            /** @description 每份 AI 积分的数量 */
+            pack_credits: number;
+            /** @description 每份 AI 积分的售价（光点） */
+            pack_price: number;
+            /** @description 当前光点余额 */
+            points: number;
+            /** @description 本月购买的 AI 积分 */
+            purchased: number;
+        };
+        AiModelDto: {
+            /** @description 翻译每千字原文大约消耗的 AI 积分 */
+            credits_per_kchar: number;
+            /** @description 识别每页图片大约消耗的 AI 积分 */
+            credits_per_page: number;
+            description: string | null;
+            /** @description 是否为该用途的默认模型 */
+            is_default: boolean;
+            key: string;
+            name: string;
+            /** @description 能否识别图片 */
+            vision: boolean;
         };
         AnalyticsSettingsDto: {
             openpanel_api_url: string | null;
@@ -14039,11 +14280,12 @@ export interface components {
             build_number?: string;
             channel?: string;
             commit?: string;
-            ios?: components["schemas"]["AppReleaseIosDto"] | null;
+            ios?: components["schemas"]["AppReleasePackageDto"] | null;
+            ohos?: components["schemas"]["AppReleasePackageDto"] | null;
             released_at?: string;
             version?: string;
         };
-        AppReleaseIosDto: {
+        AppReleasePackageDto: {
             sha256: string;
             signed: boolean;
             size: number;
@@ -15089,14 +15331,57 @@ export interface components {
         CreateLlmCredentialDto: {
             api_key: string;
             base_url?: string | null;
-            is_default?: boolean;
+            /** @description 对应的目录服务商，用于自动匹配模型与价格 */
+            catalog_provider_id?: string | null;
+            enabled?: boolean;
             name: string;
+            /** @description 实际价格相对目录价的倍率，如中转站打八折填 0.8 */
+            price_multiplier?: number;
             /**
              * @description openai-compatible | anthropic | google | deepseek | typesafe
              * @enum {string}
              */
             provider: "openai-compatible" | "anthropic" | "google" | "deepseek" | "typesafe";
             supports_structured_outputs?: boolean;
+        };
+        CreateLlmModelDto: {
+            /** @description 目录里跨服务商统一的模型 ID */
+            canonical_id?: string | null;
+            /** @description 从目录创建：未填的字段取自这条目录记录，并为已关联目录服务商的渠道自动添加线路 */
+            catalog_model_id?: number;
+            context_limit?: number | null;
+            description?: string | null;
+            enabled?: boolean;
+            input_modalities?: ("text" | "image" | "audio" | "video" | "pdf")[];
+            /** @description 业务方选择模型时使用的标识，如 claude-sonnet-4-5 */
+            key: string;
+            name: string;
+            output_limit?: number | null;
+            sort_order?: number;
+            structured_output?: boolean;
+        };
+        CreateLlmRouteDto: {
+            cache_read_price?: number | null;
+            cache_write_price?: number | null;
+            /** @description 对应的目录记录 */
+            catalog_model_id?: number | null;
+            credential_id: number;
+            enabled?: boolean;
+            /** @description 美元 / 百万 token；MANUAL 时必填 */
+            input_price?: number;
+            /** @description 美元 / 百万 token；MANUAL 时必填 */
+            output_price?: number;
+            /**
+             * @description CATALOG 跟随目录价格，MANUAL 使用下面的价格
+             * @enum {string}
+             */
+            price_source: "CATALOG" | "MANUAL";
+            /** @description 数字小的先用 */
+            priority?: number;
+            /** @description 是否使用 json_schema 结构化输出；为空时按模型与渠道的设置 */
+            structured_output?: boolean | null;
+            /** @description 在这个渠道调用时使用的模型名 */
+            upstream_model: string;
         };
         CreateLlmToolDto: {
             description: string;
@@ -15119,11 +15404,15 @@ export interface components {
         CreateMangaPageTasksDto: {
             /** @description 仅对 DETECT 生效：完成后自动继续机翻与擦除原文 */
             follow?: boolean;
+            /** @description 仅在 follow 时生效：后续机翻使用的模型 */
+            follow_model?: string;
             /**
              * @description DETECT 标出文本框并识别原文、OCR 识别空白文本框、TRANSLATE 机翻、INPAINT 擦除原文
              * @enum {string}
              */
             kind: "DETECT" | "OCR" | "TRANSLATE" | "INPAINT";
+            /** @description 本任务使用的模型；不传则使用默认模型 */
+            model?: string;
             /** @description 只处理这些页；不传时处理全部页 */
             page_ids?: number[];
         };
@@ -16998,6 +17287,10 @@ export interface components {
             /** @description 预览段落列表中的结束位置（不包括） */
             to: number;
         };
+        ImportNovelTermsDto: {
+            /** @description 从中导入术语的项目 */
+            from_project_id: number;
+        };
         InstantGroupDto: {
             items: components["schemas"]["SearchHitDto"][];
             /** @enum {string} */
@@ -17549,23 +17842,86 @@ export interface components {
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
         };
+        LlmCatalogModelDto: {
+            cache_read_price: number | null;
+            cache_write_price: number | null;
+            /** @description 跨服务商统一的模型 ID */
+            canonical_id: string | null;
+            context_limit: number | null;
+            family: string | null;
+            id: number;
+            input_modalities: string[];
+            /** @description 美元 / 百万 token */
+            input_price: number | null;
+            /** @description 在这家服务商处调用时使用的模型名 */
+            model_key: string;
+            name: string;
+            output_limit: number | null;
+            output_modalities: string[];
+            /** @description 美元 / 百万 token */
+            output_price: number | null;
+            price_tiers: components["schemas"]["LlmPriceTierDto"][] | null;
+            provider_id: string;
+            reasoning: boolean;
+            release_date: string | null;
+            /**
+             * Format: date-time
+             * @description 目录下架时间
+             */
+            removed_at: string | null;
+            structured_output: boolean | null;
+            tool_call: boolean;
+        };
+        LlmCatalogProviderDto: {
+            /** @description 建议的接入协议，未知时为空 */
+            adapter: string | null;
+            api_url: string | null;
+            doc_url: string | null;
+            id: string;
+            model_count: number;
+            name: string;
+            npm: string | null;
+        };
+        LlmCatalogStatusDto: {
+            models: number;
+            providers: number;
+            /** @description 目录里已下架的模型数 */
+            removed: number;
+            running: boolean;
+            /** Format: date-time */
+            synced_at: string | null;
+        };
+        LlmCatalogSyncResultDto: {
+            added: number;
+            models: number;
+            providers: number;
+            removed: number;
+            /** @description 跟随目录价格而改价的线路数 */
+            repriced: number;
+            updated: number;
+        };
         LlmCredentialDto: {
             /** @description 脱敏提示，如 ····wxyz;不返回完整 key */
             api_key_hint: string;
             api_key_set: boolean;
             base_url: string | null;
+            catalog_provider_id: string | null;
             /** Format: date-time */
             created_at: string;
+            enabled: boolean;
             id: number;
-            is_default: boolean;
             name: string;
+            price_multiplier: number;
             provider: string;
+            /** @description 走这个渠道的线路数 */
+            route_count: number;
             supports_structured_outputs: boolean;
             /** Format: date-time */
             updated_at: string;
         };
         LlmDailyUsageDto: {
             calls: number;
+            cost_usd: number;
             /** @description UTC 日期 YYYY-MM-DD */
             day: string;
             errors: number;
@@ -17588,26 +17944,126 @@ export interface components {
             supports_structured: boolean | null;
             supports_tools: boolean | null;
         };
-        LlmSceneDto: {
+        LlmModelDto: {
+            /** @description 可用线路数：线路与渠道都已启用 */
+            active_route_count: number;
+            canonical_id: string | null;
+            context_limit: number | null;
             /** Format: date-time */
             created_at: string;
-            credential_id: number | null;
+            description: string | null;
+            enabled: boolean;
+            id: number;
+            input_modalities: string[];
+            key: string;
+            name: string;
+            output_limit: number | null;
+            /** @description 线路总数 */
+            route_count: number;
+            /** @description 把它设为默认模型或可选模型的场景 */
+            scene_keys: string[];
+            sort_order: number;
+            structured_output: boolean;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        LlmPriceTierDto: {
+            /** @description 美元 / 百万 token */
+            cache_read: number | null;
+            /** @description 美元 / 百万 token */
+            input: number;
+            /** @description 美元 / 百万 token */
+            output: number;
+            /** @description 输入超过这个 token 数时按本档计价 */
+            over: number;
+        };
+        LlmRouteCandidateDto: {
+            catalog_model_id: number;
+            credential_id: number;
+            credential_name: string;
+            input_price: number | null;
+            /** @description 这个渠道已有指向该目录记录的线路 */
+            linked: boolean;
+            model_key: string;
+            output_price: number | null;
+        };
+        LlmRouteCatalogModelDto: {
+            cache_read_price: number | null;
+            cache_write_price: number | null;
+            id: number;
+            input_price: number | null;
+            model_key: string;
+            output_price: number | null;
+            provider_id: string;
+            /** Format: date-time */
+            removed_at: string | null;
+        };
+        LlmRouteCredentialDto: {
+            enabled: boolean;
+            id: number;
+            name: string;
+            price_multiplier: number;
+            provider: string;
+        };
+        LlmRouteDto: {
+            cache_read_price: number | null;
+            cache_write_price: number | null;
+            catalog_model: components["schemas"]["LlmRouteCatalogModelDto"] | null;
+            credential: components["schemas"]["LlmRouteCredentialDto"];
+            enabled: boolean;
+            health: components["schemas"]["LlmRouteHealthDto"] | null;
+            id: number;
+            /** @description 美元 / 百万 token，未乘渠道倍率 */
+            input_price: number;
+            model_id: number;
+            /** @description 美元 / 百万 token，未乘渠道倍率 */
+            output_price: number;
+            /** @enum {string} */
+            price_source: "CATALOG" | "MANUAL";
+            price_tiers: components["schemas"]["LlmPriceTierDto"][] | null;
+            priority: number;
+            structured_output: boolean | null;
+            upstream_model: string;
+        };
+        LlmRouteHealthDto: {
+            /** Format: date-time */
+            checked_at: string | null;
+            error_message: string | null;
+            latency_ms: number | null;
+            /** @enum {string} */
+            status: "OK" | "DEGRADED" | "DOWN";
+        };
+        LlmSceneDto: {
+            /** @enum {string} */
+            billing: "PLATFORM" | "USER";
+            /** Format: date-time */
+            created_at: string;
+            default_model: components["schemas"]["LlmSceneModelDto"] | null;
             description: string | null;
             id: number;
             inherit: boolean;
             is_system: boolean;
             max_output_tokens: number | null;
             max_retries: number | null;
-            model: string | null;
+            /** @description 用户还可以选择的模型 */
+            models: components["schemas"]["LlmSceneModelDto"][];
             scene_key: string;
             temperature: number | null;
             timeout_ms: number | null;
             /** Format: date-time */
             updated_at: string;
         };
+        LlmSceneModelDto: {
+            enabled: boolean;
+            id: number;
+            key: string;
+            name: string;
+        };
         LlmSceneUsageDto: {
             avg_latency_ms: number;
             calls: number;
+            /** @description 按线路价格与渠道倍率折算的美元成本 */
+            cost_usd: number;
             errors: number;
             input_tokens: number;
             max_latency_ms: number;
@@ -18957,6 +19413,8 @@ export interface components {
             id: number;
             /** @description 选定译文仍是未修改机翻的段落数 */
             machine_count: number;
+            /** @description 尚未完成、已在 AI 翻译队列中的正文段落数 */
+            queued_count: number;
             /** @description 正文段落数，不含插图与分隔 */
             segment_count: number;
             sort_key: number;
@@ -19062,6 +19520,8 @@ export interface components {
         NovelImportResultDto: {
             chapters: number;
             images: number;
+            /** @description 原文未变、沿用了原有译文的段落数 */
+            kept: number;
             segments: number;
         };
         NovelMemoryMatchDto: {
@@ -19103,7 +19563,13 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             error: string | null;
+            /** @description 批次中第一段在本章正文里的段号，从 1 开始；段落都已删除时为空 */
+            first_number: number | null;
             id: number;
+            /** @description 批次中最后一段在本章正文里的段号，从 1 开始；段落都已删除时为空 */
+            last_number: number | null;
+            /** @description 是否由当前用户提交 */
+            mine: boolean;
             segment_count: number;
             /** @enum {string} */
             status: "PENDING" | "RUNNING" | "DONE" | "FAILED" | "CANCELLED";
@@ -19120,11 +19586,15 @@ export interface components {
             id: number;
             /** Format: date-time */
             last_activity_at: string;
+            /** @description 最近一次发布 */
+            latest_release: components["schemas"]["NovelReleaseRefDto"] | null;
             /** @description 未修改机翻达到该百分比时，发布标注为机翻 */
             machine_label_percent: number;
             /** @enum {string} */
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
+            /** @description 最近一次发布之后内容是否有改动 */
+            pending_changes: boolean;
             source_lang: string;
             /** @enum {string} */
             status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
@@ -19186,7 +19656,7 @@ export interface components {
         };
         NovelQaIssueDto: {
             /** @enum {string} */
-            code: "empty" | "forbidden_term" | "line_count" | "term_missing" | "halfwidth_punctuation" | "inconsistent";
+            code: "empty" | "forbidden_term" | "line_count" | "tag_mismatch" | "term_missing" | "halfwidth_punctuation" | "inconsistent";
             /** @enum {string} */
             level: "error" | "warning";
             message: string;
@@ -19212,6 +19682,11 @@ export interface components {
             quality: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
             version: number;
         };
+        NovelReleaseRefDto: {
+            /** Format: date-time */
+            created_at: string;
+            version: number;
+        };
         NovelSegmentDeleteDto: {
             base_version: number;
             /** Format: uuid */
@@ -19229,6 +19704,8 @@ export interface components {
             sort_key: number;
             /** @description 0 空、10 需修改、20 已译、30 已定稿 */
             state: number;
+            /** @description 原文中 {n} 标记对应的原书格式 */
+            tags: components["schemas"]["NovelSegmentTagDto"][];
             text: string | null;
             translations: components["schemas"]["NovelTranslationDto"][];
             /** Format: date-time */
@@ -19252,6 +19729,11 @@ export interface components {
         NovelSegmentStateDto: {
             id: string;
             state: number;
+        };
+        NovelSegmentTagDto: {
+            id: number;
+            /** @enum {string} */
+            kind: "emphasis" | "tcy" | "link" | "anchor" | "image" | "ruby" | "break" | "style" | "other";
         };
         NovelSegmentUpsertDto: {
             /** @description 修改已有段落时带上读取到的版本号，新段落不传 */
@@ -19399,12 +19881,27 @@ export interface components {
             creator: components["schemas"]["UserRefDto"];
             forbidden: boolean;
             id: number;
-            light_novel_id: number;
             note: string | null;
+            project_id: number;
             source: string;
             target: string;
             /** Format: date-time */
             updated_at: string;
+        };
+        NovelTermImportDto: {
+            added: number;
+            /** @description 原文已在本项目中而保持不变的条数 */
+            skipped: number;
+        };
+        NovelTermSourceDto: {
+            /** @description 可导入术语的项目 */
+            id: number;
+            /** @description 导入后会新增的条数，原文已在本项目中的不计 */
+            new_count: number;
+            owner: components["schemas"]["UserRefDto"];
+            /** @description 该项目的术语条数 */
+            term_count: number;
+            volume: components["schemas"]["LightNovelVolumeLabelDto"];
         };
         NovelTranslationDto: {
             /** @description 是否由机器翻译草稿修改而来 */
@@ -20340,12 +20837,14 @@ export interface components {
             total_tokens: number | null;
         };
         PlaygroundRunDto: {
-            credential_id: number;
             max_output_tokens?: number;
             /** @enum {string} */
             mode: "text" | "object";
+            /** @description 模型标识 */
             model: string;
             prompt: string;
+            /** @description 只走这条线路；不传时按线路优先级依次尝试 */
+            route_id?: number;
             /** @description JSON schema 字符串，mode=object 时必填 */
             schema?: string;
             system?: string;
@@ -20728,9 +21227,9 @@ export interface components {
         };
         /** @enum {string} */
         PublishStatus: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
-        PurchaseAiQuotaDto: {
-            /** @description 用于兑换的积分 */
-            points: number;
+        PurchaseAiCreditsDto: {
+            /** @description 购买份数 */
+            quantity: number;
         };
         PurchaseDecorationDto: {
             decoration_id: number;
@@ -21117,6 +21616,8 @@ export interface components {
         /** @enum {string} */
         ReportStatus: "PENDING" | "RESOLVED" | "REJECTED";
         RequestNovelPretranslationDto: {
+            /** @description 模型；不传则使用默认模型 */
+            model?: string;
             /** @description 要翻译的段落；不传则翻译本章所有还没有译文的正文段落 */
             segment_ids?: string[];
         };
@@ -22085,11 +22586,38 @@ export interface components {
             /** @description 仅在轮换时传入，省略则保持现值 */
             api_key?: string;
             base_url?: string | null;
-            is_default?: boolean;
+            catalog_provider_id?: string | null;
+            enabled?: boolean;
             name?: string;
+            price_multiplier?: number;
             /** @enum {string} */
             provider?: "openai-compatible" | "anthropic" | "google" | "deepseek" | "typesafe";
             supports_structured_outputs?: boolean;
+        };
+        UpdateLlmModelDto: {
+            canonical_id?: string | null;
+            context_limit?: number | null;
+            description?: string | null;
+            enabled?: boolean;
+            input_modalities?: ("text" | "image" | "audio" | "video" | "pdf")[];
+            key?: string;
+            name?: string;
+            output_limit?: number | null;
+            sort_order?: number;
+            structured_output?: boolean;
+        };
+        UpdateLlmRouteDto: {
+            cache_read_price?: number | null;
+            cache_write_price?: number | null;
+            catalog_model_id?: number | null;
+            enabled?: boolean;
+            input_price?: number;
+            output_price?: number;
+            /** @enum {string} */
+            price_source?: "CATALOG" | "MANUAL";
+            priority?: number;
+            structured_output?: boolean | null;
+            upstream_model?: string;
         };
         UpdateLlmToolDto: {
             description?: string;
@@ -22564,13 +23092,20 @@ export interface components {
             rate_content?: string;
         };
         UpsertLlmSceneDto: {
-            credential_id?: number | null;
+            /**
+             * @description PLATFORM 由平台承担费用，USER 按用量扣发起人的 AI 积分
+             * @enum {string}
+             */
+            billing?: "PLATFORM" | "USER";
+            /** @description 不继承时必填 */
+            default_model_id?: number | null;
             description?: string | null;
-            /** @description true 则完全继承 default 场景 */
+            /** @description true 则默认模型与调用参数都沿用 default 场景 */
             inherit: boolean;
             max_output_tokens?: number | null;
             max_retries?: number | null;
-            model?: string | null;
+            /** @description 除默认模型外，用户还可以选择的模型 */
+            model_ids?: number[];
             temperature?: number | null;
             timeout_ms?: number | null;
         };
@@ -22760,14 +23295,8 @@ export interface components {
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
             batch_segments: number;
-            /** @description 一光点兑换的字数 */
-            chars_per_point: number;
             /** @description 提示词附带的前文段落数 */
             context_segments: number;
-            /** @description 每人每天免费的 AI 翻译字数 */
-            daily_chars: number;
-            /** @description 多模态模型识别一页漫画折算的字数 */
-            vision_page_chars: number;
         };
         WorkbenchPolicyDto: {
             ai: components["schemas"]["WorkbenchAiPolicyInputDto"];
@@ -24382,6 +24911,97 @@ export interface operations {
             };
         };
     };
+    AdminLlmCatalogController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmCatalogStatusDto"];
+                };
+            };
+        };
+    };
+    AdminLlmCatalogController_getModels: {
+        parameters: {
+            query?: {
+                /** @description 按模型 ID、名称或统一 ID 搜索 */
+                keyword?: string;
+                /** @description 只看这家服务商 */
+                provider_id?: string;
+                /** @description 只看支持图片输入的模型 */
+                vision?: boolean;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LlmCatalogModelDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminLlmCatalogController_getProviders: {
+        parameters: {
+            query?: {
+                /** @description 按 ID 或名称搜索 */
+                keyword?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmCatalogProviderDto"][];
+                };
+            };
+        };
+    };
+    AdminLlmCatalogController_sync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmCatalogSyncResultDto"];
+                };
+            };
+        };
+    };
     AdminLlmCredentialsController_list: {
         parameters: {
             query?: never;
@@ -24468,6 +25088,222 @@ export interface operations {
             };
         };
     };
+    AdminLlmCreditPolicyController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminLlmCreditPolicyController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiCreditPolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminLlmModelsController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmModelDto"][];
+                };
+            };
+        };
+    };
+    AdminLlmModelsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLlmModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmModelDto"];
+                };
+            };
+        };
+    };
+    AdminLlmModelsController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmModelDto"];
+                };
+            };
+        };
+    };
+    AdminLlmModelsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLlmModelsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLlmModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmModelDto"];
+                };
+            };
+        };
+    };
+    AdminLlmModelRoutesController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmRouteDto"][];
+                };
+            };
+        };
+    };
+    AdminLlmModelRoutesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLlmRouteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmRouteDto"];
+                };
+            };
+        };
+    };
+    AdminLlmModelRoutesController_getCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmRouteCandidateDto"][];
+                };
+            };
+        };
+    };
     AdminLlmMonitoringController_health: {
         parameters: {
             query?: never;
@@ -24548,6 +25384,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlaygroundResultDto"];
+                };
+            };
+        };
+    };
+    AdminLlmRoutesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLlmRoutesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLlmRouteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmRouteDto"];
+                };
+            };
+        };
+    };
+    AdminLlmRoutesController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LlmRouteHealthDto"];
                 };
             };
         };
@@ -31742,6 +32643,30 @@ export interface operations {
             };
         };
     };
+    AiModelController_getList: {
+        parameters: {
+            query: {
+                /** @description AI 用途，例如 novel_translate */
+                scene: string;
+                /** @description 只列出能识别图片的模型 */
+                vision?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiModelDto"][];
+                };
+            };
+        };
+    };
     AppealController_submit: {
         parameters: {
             query?: never;
@@ -36879,52 +37804,6 @@ export interface operations {
             };
         };
     };
-    LightNovelTermController_getList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                light_novel_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelTermDto"][];
-                };
-            };
-        };
-    };
-    LightNovelTermController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                light_novel_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateNovelTermDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelTermDto"];
-                };
-            };
-        };
-    };
     MangaChapterController_getTopContributors: {
         parameters: {
             query?: never;
@@ -38691,6 +39570,27 @@ export interface operations {
             };
         };
     };
+    NovelPretranslationController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelPretranslationDto"][];
+                };
+            };
+        };
+    };
     NovelChapterController_getSegments: {
         parameters: {
             query?: never;
@@ -39292,6 +40192,98 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    NovelProjectTermController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermDto"][];
+                };
+            };
+        };
+    };
+    NovelProjectTermController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateNovelTermDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermDto"];
+                };
+            };
+        };
+    };
+    NovelProjectTermController_importFrom: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportNovelTermsDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermImportDto"];
+                };
+            };
+        };
+    };
+    NovelProjectTermController_getSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelTermSourceDto"][];
+                };
             };
         };
     };
@@ -43509,7 +44501,7 @@ export interface operations {
             };
         };
     };
-    AiQuotaController_get: {
+    AiCreditController_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -43523,12 +44515,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AiQuotaDto"];
+                    "application/json": components["schemas"]["AiCreditsDto"];
                 };
             };
         };
     };
-    AiQuotaController_purchase: {
+    AiCreditController_purchase: {
         parameters: {
             query?: never;
             header?: never;
@@ -43537,7 +44529,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PurchaseAiQuotaDto"];
+                "application/json": components["schemas"]["PurchaseAiCreditsDto"];
             };
         };
         responses: {
@@ -43546,7 +44538,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AiQuotaDto"];
+                    "application/json": components["schemas"]["AiCreditsDto"];
                 };
             };
         };

@@ -10,19 +10,14 @@ async function handler(event: H3Event) {
   const path = { project_id: id }
   const project = await fetchBackendData(event, '/api/v3/novel-projects/{project_id}', { path })
   const translation = project.mode === 'TRANSLATION'
-  const [chapters, review, terms, quota, volume] = await Promise.all([
+  const [chapters, review, terms, volume] = await Promise.all([
     fetchBackendData(event, '/api/v3/novel-projects/{project_id}/chapters', { path }),
     fetchBackendData(event, '/api/v3/novel-projects/{project_id}/review', { path }).catch(
       () => null,
     ),
     translation
-      ? fetchBackendData(event, '/api/v3/light-novels/{light_novel_id}/terms', {
-          path: { light_novel_id: project.volume.series.id },
-        })
+      ? fetchBackendData(event, '/api/v3/novel-projects/{project_id}/terms', { path })
       : Promise.resolve([]),
-    translation && project.viewer_role
-      ? fetchBackendData(event, '/api/v3/user/me/ai-quota')
-      : Promise.resolve(null),
     fetchBackendData(event, '/api/v3/light-novel-volumes/{id}', {
       path: { id: project.volume.id },
     }).catch(() => null),
@@ -52,7 +47,6 @@ async function handler(event: H3Event) {
     segments,
     terms,
     pretranslations,
-    quota,
     review,
     has_epub: volume?.online_reading_available ?? false,
   }

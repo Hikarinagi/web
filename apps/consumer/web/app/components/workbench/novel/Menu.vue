@@ -1,9 +1,23 @@
 <script setup lang="ts">
   import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, IconButton } from '@hina-ui/vue'
-  import { Archive, BookOpen, Ellipsis, FileUp, Pencil, ScrollText, Users } from '@lucide/vue'
+  import {
+    Archive,
+    BookOpen,
+    Ellipsis,
+    FileUp,
+    NotebookPen,
+    Pencil,
+    ScrollText,
+    Sparkles,
+    Users,
+  } from '@lucide/vue'
   import type { WorkbenchProjectPageData } from '~~/server/api/pages/create/projects/[id].get'
 
-  const props = defineProps<{ project: WorkbenchProjectPageData['project'] }>()
+  const props = defineProps<{
+    project: WorkbenchProjectPageData['project']
+    glossary?: boolean
+    ai?: boolean
+  }>()
   const emit = defineEmits<{ select: [action: string] }>()
 
   const editable = computed(() => ['DRAFT', 'ACTIVE', 'PUBLISHED'].includes(props.project.status))
@@ -17,6 +31,17 @@
       <Ellipsis />
     </IconButton>
     <template #content>
+      <template v-if="glossary || ai">
+        <DropdownMenuItem v-if="glossary" @select="emit('select', 'glossary')">
+          <template #icon><NotebookPen /></template>
+          术语表
+        </DropdownMenuItem>
+        <DropdownMenuItem v-if="ai" @select="emit('select', 'ai')">
+          <template #icon><Sparkles /></template>
+          AI 翻译
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+      </template>
       <DropdownMenuItem @select="emit('select', 'volume-info')">
         <template #icon><Pencil /></template>
         编辑分卷信息

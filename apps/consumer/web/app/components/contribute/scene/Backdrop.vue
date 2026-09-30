@@ -3,7 +3,7 @@
   import { SCENE_MOMENTS } from '~/features/contribute/moments'
   import Resident from './Resident.vue'
 
-  defineProps<{ moment: string; fade: number; lit?: boolean }>()
+  defineProps<{ moment: string; fade: number }>()
   defineEmits<{ ready: [id: string] }>()
 </script>
 
@@ -30,11 +30,11 @@
         :fade="fade"
         @ready="$emit('ready', 'desk-smile')"
       />
-      <Stack
-        gap="none"
-        class="scene-table transition-[filter] duration-(--hn-duration-base) ease-(--hn-ease-move) data-lit:brightness-(--contribute-table-lit)"
-        :data-lit="lit || undefined"
-      />
+    </Stack>
+  </Stack>
+  <Stack gap="none" class="scene-overlay" aria-hidden="true">
+    <Stack gap="none" class="scene-canvas scene-canvas--bare">
+      <ContributeSceneVisitor hands :visible="moment === 'desk'" :fade="fade" />
     </Stack>
   </Stack>
 </template>
@@ -54,9 +54,22 @@
     width: var(--contribute-art-width);
     aspect-ratio: var(--contribute-art-ratio);
     left: calc(50% - var(--contribute-art-width) / 2);
-    top: 50%;
-    transform: translateY(-50%);
+    bottom: calc(
+      var(--contribute-art-width) / (var(--contribute-art-ratio)) *
+        (var(--contribute-counter-line) - 1)
+    );
     background: var(--color-contribute-floor);
+  }
+  .scene-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow-x: clip;
+    container-type: size;
+    z-index: 1;
+  }
+  .scene-canvas--bare {
+    background: none;
   }
   .scene-shelves {
     position: absolute;
@@ -68,17 +81,6 @@
     background-size: auto 100%;
     background-position: center bottom;
     background-repeat: repeat-x;
-  }
-  .scene-table {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    clip-path: var(--contribute-table-crop);
-    background: linear-gradient(
-      120deg,
-      var(--color-contribute-table-light),
-      var(--color-contribute-table-shade)
-    );
   }
   @media (max-width: 48rem) {
     .scene-canvas {

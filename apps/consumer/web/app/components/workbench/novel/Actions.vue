@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Button, Inline } from '@hina-ui/vue'
   import { NotebookPen, Sparkles } from '@lucide/vue'
+  import { useMediaQuery } from '@vueuse/core'
   import { NOVEL_GUIDE } from '~/features/workbench/guide'
   import type { WorkbenchProjectPageData } from '~~/server/api/pages/create/projects/[id].get'
 
@@ -10,9 +11,12 @@
   }>()
   const emit = defineEmits<{ changed: []; glossary: []; ai: []; manage: [action: string] }>()
 
+  const roomy = useMediaQuery('(min-width: 768px)', { ssrWidth: 1440 })
   const translation = computed(() => props.project.mode === 'TRANSLATION')
-  const canTranslate = computed(
+  const aiReady = computed(
     () =>
+      translation.value &&
+      props.chapters.length > 0 &&
       props.project.viewer_capabilities.includes('translate') &&
       ['DRAFT', 'ACTIVE', 'PUBLISHED'].includes(props.project.status),
   )
@@ -38,23 +42,16 @@
       <WorkbenchGuide :sections="NOVEL_GUIDE[project.mode]" />
     </Question>
     <Button
-      v-if="translation"
+      v-if="translation && roomy"
       size="sm"
       variant="ghost"
       tone="neutral"
-      class="max-md:hidden"
       @click="emit('glossary')"
     >
       <template #icon><NotebookPen /></template>
       术语表
     </Button>
-    <Button
-      v-if="translation && canTranslate && chapters.length"
-      size="sm"
-      variant="soft"
-      class="max-md:hidden"
-      @click="emit('ai')"
-    >
+    <Button v-if="aiReady && roomy" size="sm" variant="soft" @click="emit('ai')">
       <template #icon><Sparkles /></template>
       AI 翻译
     </Button>
@@ -64,6 +61,11 @@
       :blocker="blocker"
       @changed="emit('changed')"
     />
-    <WorkbenchNovelMenu :project="project" @select="action => emit('manage', action)" />
+    <WorkbenchNovelMenu
+      :project="project"
+      :glossary="translation && !roomy"
+      :ai="aiReady && !roomy"
+      @select="action => emit('manage', action)"
+    />
   </Inline>
 </template>

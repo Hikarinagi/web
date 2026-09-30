@@ -60,12 +60,13 @@
     <Drawer
       v-model:open="glossaryOpen"
       title="术语表"
-      description="术语适用于本系列的每一卷。"
+      description="术语表仅适用于此项目。"
       size="lg"
+      class="w-240 max-w-full"
     >
       <template #content>
         <WorkbenchGlossaryTable
-          :light-novel-id="project.volume.series.id"
+          :project-id="project.id"
           :terms="data.terms"
           :editable="project.viewer_capabilities.includes('translate')"
           @changed="emit('refresh')"
@@ -76,7 +77,6 @@
       v-model:open="aiOpen"
       :chapters="chapters"
       :chapter="chapter"
-      :quota="data.quota"
       :batches="data.pretranslations"
       @changed="emit('progress')"
     />

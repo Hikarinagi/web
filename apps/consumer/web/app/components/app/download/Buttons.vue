@@ -1,23 +1,31 @@
 <script setup lang="ts">
-  import { Button, Inline } from '@hina-ui/vue'
+  import { Button, Inline, Stack } from '@hina-ui/vue'
   import type { AppPageData } from '~~/server/api/pages/app.get'
 
   defineOptions({ name: 'AppDownloadButtons' })
 
   const props = defineProps<{ release: AppPageData['release']; downloadable: boolean }>()
 
-  const platforms = computed(() => {
+  const groups = computed(() => {
     const android =
       props.release.android?.find(item => item.abi === 'arm64-v8a') ?? props.release.android?.[0]
 
     return [
-      { key: 'android', icon: 'simple-icons:android', name: 'Android 版', target: android },
-      {
-        key: 'ios',
-        icon: 'simple-icons:apple',
-        name: 'iOS 版',
-        target: props.release.ios ?? undefined,
-      },
+      [{ key: 'android', icon: 'simple-icons:android', name: 'Android 版', target: android }],
+      [
+        {
+          key: 'ios',
+          icon: 'simple-icons:apple',
+          name: 'iOS 版',
+          target: props.release.ios ?? undefined,
+        },
+        {
+          key: 'ohos',
+          icon: 'simple-icons:huawei',
+          name: 'HarmonyOS 版',
+          target: props.release.ohos ?? undefined,
+        },
+      ],
     ]
   })
 
@@ -27,34 +35,42 @@
 </script>
 
 <template>
-  <Inline justify="center" class="lg:justify-start">
-    <template v-for="platform in platforms" :key="platform.key">
-      <Button
-        v-if="platform.target && downloadable"
-        as="a"
-        :href="platform.target.url"
-        download
-        :variant="platform.key === 'ios' ? 'outline' : 'solid'"
-        :tone="platform.key === 'ios' ? 'neutral' : 'accent'"
-      >
-        <template #icon>
-          <Icon :name="platform.icon" />
-        </template>
-        {{ `${platform.name} ${sizeLabel(platform.target.size)}` }}
-      </Button>
-
-      <Inline v-else v-tooltip="'敬请期待'" as="span" gap="none" :wrap="false">
+  <Stack gap="sm" align="center" class="lg:items-start">
+    <Inline
+      v-for="group in groups"
+      :key="group[0]?.key"
+      gap="sm"
+      justify="center"
+      class="lg:justify-start"
+    >
+      <template v-for="platform in group" :key="platform.key">
         <Button
-          disabled
-          :variant="platform.key === 'ios' ? 'outline' : 'solid'"
-          :tone="platform.key === 'ios' ? 'neutral' : 'accent'"
+          v-if="platform.target && downloadable"
+          as="a"
+          :href="platform.target.url"
+          download
+          :variant="platform.key === 'android' ? 'solid' : 'outline'"
+          :tone="platform.key === 'android' ? 'accent' : 'neutral'"
         >
           <template #icon>
             <Icon :name="platform.icon" />
           </template>
-          {{ platform.name }}
+          {{ `${platform.name} ${sizeLabel(platform.target.size)}` }}
         </Button>
-      </Inline>
-    </template>
-  </Inline>
+
+        <Inline v-else v-tooltip="'敬请期待'" as="span" gap="none" :wrap="false">
+          <Button
+            disabled
+            :variant="platform.key === 'android' ? 'solid' : 'outline'"
+            :tone="platform.key === 'android' ? 'accent' : 'neutral'"
+          >
+            <template #icon>
+              <Icon :name="platform.icon" />
+            </template>
+            {{ platform.name }}
+          </Button>
+        </Inline>
+      </template>
+    </Inline>
+  </Stack>
 </template>

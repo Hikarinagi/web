@@ -222,6 +222,14 @@
         @upload="manage?.open('upload')"
       />
     </template>
+    <template #footer>
+      <WorkbenchMangaShellStatus
+        :project="project"
+        :pages="data.pages"
+        :regions="all"
+        :online="online"
+      />
+    </template>
   </Drawer>
   <WorkbenchMangaManage
     ref="manage"

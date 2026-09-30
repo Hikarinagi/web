@@ -9,6 +9,10 @@
   const busy = ref(false)
   const blankOpen = ref(false)
   const translation = computed(() => props.project.mode === 'TRANSLATION')
+  const intro = computed(
+    () =>
+      `${translation.value ? 'EPUB 文件按原书的目录分成章节。当项目发布时，译文被写回原书，并保留其所有格式。' : ''}TXT 文件按章节标题分为章节，并按换行符分为段落。选择文件后，会显示章节，以便你可以在导入之前查看它们。`,
+  )
   const manage = computed(
     () =>
       props.project.viewer_capabilities.includes('manage') &&
@@ -52,10 +56,7 @@
     <Stack v-if="manage" gap="lg" align="center" class="py-10">
       <Stack gap="xs" align="center" class="text-center">
         <Heading :level="3" size="md">{{ translation ? '导入原文' : '导入正文' }}</Heading>
-        <Text size="sm" tone="muted">
-          TXT
-          文件按章节标题分为章节，并按换行符分为段落。选择文件后，会显示章节，以便你可以在导入之前查看它们。
-        </Text>
+        <Text size="sm" tone="muted" class="max-w-2xl">{{ intro }}</Text>
       </Stack>
       <FileUpload
         :model-value="null"

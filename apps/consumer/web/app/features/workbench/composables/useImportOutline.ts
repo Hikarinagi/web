@@ -1,7 +1,7 @@
 import { stripNovelMarkup } from '@hikarinagi/shared'
 import type { BackendNovelImportPreview } from '~/features/workbench/workbench'
 
-export function useImportOutline(preview: BackendNovelImportPreview) {
+export function useImportOutline(preview: BackendNovelImportPreview, keepTitles = false) {
   const initial = () => preview.chapters.map(chapter => ({ ...chapter }))
   const chapters = ref(initial())
   const current = ref(
@@ -45,7 +45,9 @@ export function useImportOutline(preview: BackendNovelImportPreview) {
   function canSplit(block: number, asTitle: boolean) {
     const chapter = chapters.value.find(item => block >= item.from && block < item.to)
     if (!chapter) return false
-    if (asTitle) return preview.blocks[block]?.kind === 'TEXT' && block + 1 < chapter.to
+    if (asTitle) {
+      return preview.blocks[block]?.kind === 'TEXT' && (keepTitles || block + 1 < chapter.to)
+    }
     return block > chapter.from
   }
 
@@ -55,9 +57,9 @@ export function useImportOutline(preview: BackendNovelImportPreview) {
     const chapter = chapters.value[index]
     if (!chapter) return
     const title = asTitle
-      ? stripNovelMarkup(preview.blocks[block]?.text ?? '').slice(0, 200)
+      ? stripNovelMarkup(preview.blocks[block]?.text ?? '', { tags: true }).slice(0, 200)
       : `${chapter.title}（续）`.slice(0, 200)
-    const from = asTitle ? block + 1 : block
+    const from = asTitle && !keepTitles ? block + 1 : block
     if (block === chapter.from) {
       chapter.title = title
       chapter.from = from

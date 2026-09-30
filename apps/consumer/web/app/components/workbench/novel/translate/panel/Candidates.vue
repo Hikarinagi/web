@@ -61,10 +61,10 @@
             >机翻修改</Tag
           >
         </Inline>
-        <WorkbenchMarkupText :text="item.text" />
+        <WorkbenchMarkupText :text="item.text" :tags="segment.tags" tagged />
         <Stack v-if="item.proofread_text && proofreading !== item.id" gap="none">
           <Text size="xs" tone="muted">校对稿</Text>
-          <WorkbenchMarkupText :text="item.proofread_text" />
+          <WorkbenchMarkupText :text="item.proofread_text" :tags="segment.tags" tagged />
         </Stack>
         <Stack v-if="proofreading === item.id" gap="xs">
           <Textarea

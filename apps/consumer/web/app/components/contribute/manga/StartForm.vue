@@ -30,6 +30,7 @@
     { value: 'UPLOAD', label: '上传' },
     { value: 'TRANSLATION', label: '翻译' },
   ]
+  const CHINESE_OPTIONS = LANGUAGE_OPTIONS.filter(option => option.value.startsWith('zh'))
 
   const { requireLogin } = useAuthGate()
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
@@ -129,6 +130,9 @@
     @submit="onSubmit"
   >
     <FormLayout>
+      <FormField name="mode" label="类型" required>
+        <SegmentedControl v-model="values.mode" :options="MODE_OPTIONS" />
+      </FormField>
       <FormField v-if="!lockSeries" name="series" label="漫画" required>
         <Combobox
           v-model:search="search"
@@ -157,15 +161,15 @@
           <Input v-model="values.chapter_name" placeholder="可选" />
         </FormField>
       </FormLayout>
-      <FormField name="mode" label="类型" required>
-        <SegmentedControl v-model="values.mode" :options="MODE_OPTIONS" />
-      </FormField>
       <FormLayout :columns="translation ? 2 : 1">
         <FormField name="source_lang" :label="translation ? '原文语言' : '图源语言'" required>
-          <Select v-model="values.source_lang" :options="LANGUAGE_OPTIONS" />
+          <Select
+            v-model="values.source_lang"
+            :options="translation ? LANGUAGE_OPTIONS : CHINESE_OPTIONS"
+          />
         </FormField>
         <FormField v-if="translation" name="target_lang" label="译文语言" required>
-          <Select v-model="values.target_lang" :options="LANGUAGE_OPTIONS" />
+          <Select v-model="values.target_lang" :options="CHINESE_OPTIONS" />
         </FormField>
       </FormLayout>
     </FormLayout>

@@ -1,16 +1,5 @@
 import * as v from 'valibot'
 
-export const purchaseQuotaSchema = v.object({
-  points: v.pipe(
-    v.number('请输入兑换光点'),
-    v.integer('光点应为整数'),
-    v.minValue(1, '兑换至少 1 光点'),
-    v.maxValue(100000, '一次最多可兑换 100000 光点'),
-  ),
-})
-
-export type PurchaseQuotaValues = v.InferOutput<typeof purchaseQuotaSchema>
-
 export const createProjectSchema = v.pipe(
   v.object({
     mode: v.picklist(['ENTRY', 'TRANSLATION'], '请选择投稿类型'),

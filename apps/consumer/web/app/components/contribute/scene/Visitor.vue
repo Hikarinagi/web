@@ -2,13 +2,15 @@
   import { Image } from '@hina-ui/vue'
   import { motion } from 'motion-v'
 
-  defineProps<{ visible: boolean; fade: number; smile?: boolean }>()
+  const props = defineProps<{ visible: boolean; fade: number; smile?: boolean; hands?: boolean }>()
   defineEmits<{ ready: [] }>()
+
+  const layers = computed(() => (props.hands ? ['left-hand', 'right-hand'] : ['body']))
 </script>
 
 <template>
   <motion.div
-    v-for="layer in smile ? ['body'] : ['body', 'left-hand', 'right-hand']"
+    v-for="layer in layers"
     :key="layer"
     :class="cn('scene-visitor', `scene-visitor--${layer}`)"
     :initial="false"
@@ -38,14 +40,11 @@
     aspect-ratio: var(--contribute-visitor-ratio);
     z-index: 1;
   }
-  /* The same alpha artwork straddles the fixed table: torso behind, palms above. */
   .scene-visitor--left-hand {
-    z-index: 3;
     clip-path: var(--contribute-left-hand-crop);
     filter: drop-shadow(var(--contribute-hand-shadow));
   }
   .scene-visitor--right-hand {
-    z-index: 3;
     clip-path: var(--contribute-right-hand-crop);
     filter: drop-shadow(var(--contribute-hand-shadow));
   }

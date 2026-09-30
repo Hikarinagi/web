@@ -26,9 +26,16 @@
     pages?: BackendMangaPage[]
   }>()
   const emit = defineEmits<{ queued: [] }>()
+  defineOptions({ inheritAttrs: false })
 
   const busy = ref(false)
   const progress = ref<{ done: number; total: number } | null>(null)
+  const aiOpen = ref(false)
+  const aiTask = ref<{ kind: 'DETECT' | 'OCR' | 'TRANSLATE'; follow: boolean }>({
+    kind: 'DETECT',
+    follow: false,
+  })
+  const pageCount = computed(() => props.pageIds?.length ?? props.pages?.length ?? 0)
   const can = (capability: BackendMangaProject['viewer_capabilities'][number]) =>
     props.project.viewer_capabilities.includes(capability)
   const editable = computed(() => ['DRAFT', 'ACTIVE', 'PUBLISHED'].includes(props.project.status))
@@ -50,18 +57,20 @@
 
   async function run(kind: 'DETECT' | 'OCR' | 'TRANSLATE' | 'INPAINT', follow = false) {
     if (busy.value) return
+    const viaModel = follow || kind === 'TRANSLATE' || props.project.source_lang !== 'ja'
+    if (kind !== 'INPAINT' && viaModel) {
+      aiTask.value = { kind, follow }
+      aiOpen.value = true
+      return
+    }
     busy.value = true
     try {
       await hikariRequest('/api/v3/manga-projects/{project_id}/tasks', {
         method: 'post',
         path: { project_id: props.project.id },
-        body: { kind, page_ids: props.pageIds, follow },
+        body: { kind, page_ids: props.pageIds },
       })
-      toast.success(
-        follow
-          ? '任务已添加到处理队列：全部自动处理'
-          : `任务已添加到处理队列：${MANGA_TASK_LABEL[kind]}`,
-      )
+      toast.success(`任务已添加到处理队列：${MANGA_TASK_LABEL[kind]}`)
       emit('queued')
     } finally {
       busy.value = false
@@ -99,7 +108,7 @@
 </script>
 
 <template>
-  <DropdownMenu v-if="editable && items.length" label="自动处理" align="end">
+  <DropdownMenu v-if="editable && items.length" v-bind="$attrs" label="自动处理" align="end">
     <Button size="sm" variant="soft" :loading="busy">
       <template #icon><Wand2 /></template>
       {{
@@ -132,4 +141,13 @@
       </template>
     </template>
   </DropdownMenu>
+  <WorkbenchMangaPageAiDialog
+    v-model:open="aiOpen"
+    :project="project"
+    :page-ids="pageIds"
+    :page-count="pageCount"
+    :kind="aiTask.kind"
+    :follow="aiTask.follow"
+    @queued="emit('queued')"
+  />
 </template>

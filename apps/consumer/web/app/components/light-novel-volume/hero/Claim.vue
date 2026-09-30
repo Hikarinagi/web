@@ -43,7 +43,7 @@
     <Inline v-if="provider" gap="xs" align="center" :wrap="false">
       <BookCheck class="size-4 shrink-0 text-muted" aria-hidden="true" />
       <Text size="sm" tone="muted">
-        由 <UserName :user="provider" :handle="false" class="inline-flex" /> 上传。
+        由 <UserName :user="provider" :handle="false" class="inline-flex" /> 上传
       </Text>
     </Inline>
     <Inline v-for="claim in data?.items" :key="claim.id" gap="xs" align="center" :wrap="false">
