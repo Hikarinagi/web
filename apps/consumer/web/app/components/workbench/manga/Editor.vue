@@ -18,8 +18,7 @@
   import type { BackendMangaProject, MangaRegionChange } from '~/features/workbench/manga/manga'
   import { tally } from '~/features/workbench/manga/progress'
   import { typesetRegions } from '~/features/workbench/manga/render'
-  import { seriesTitle } from '~/features/workbench/manga/series'
-  import { getMangaEpisodeLabel } from '~/utils/media/manga'
+  import { projectEpisode, seriesTitle } from '~/features/workbench/manga/series'
   import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
 
   const props = defineProps<{ data: WorkbenchMangaProjectPageData }>()
@@ -68,17 +67,13 @@
   })
   const banner = computed(
     () =>
-      !!project.value.viewer_role &&
-      (project.value.status === 'REVIEW' || props.data.review?.status === 'REJECTED'),
+      (!!project.value.viewer_role &&
+        (project.value.status === 'REVIEW' || props.data.review?.status === 'REJECTED')) ||
+      !!props.data.pending_change,
   )
 
   const series = computed(() => seriesTitle(project.value.series))
-  const episode = computed(() =>
-    getMangaEpisodeLabel({
-      chapter_number: project.value.chapter_number,
-      name: project.value.chapter_name,
-    }),
-  )
+  const episode = computed(() => projectEpisode(project.value))
   const kind = computed(() => projectKind(project.value))
   useHead({ title: () => `${series.value} ${episode.value}` })
 
@@ -168,6 +163,7 @@
             :project="project"
             :review="data.review"
             :pages="data.pages"
+            :pending-change="data.pending_change"
             @jump="jump"
           />
         </Stack>
@@ -234,6 +230,7 @@
   <WorkbenchMangaManage
     ref="manage"
     :project="project"
+    :chapter="data.chapter"
     @refresh="emit('refresh')"
     @regions="store.refreshAll()"
   />

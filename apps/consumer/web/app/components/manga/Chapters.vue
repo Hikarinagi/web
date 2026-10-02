@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
+  import { volumeCards } from '~/features/manga/volumes'
 
   defineOptions({ name: 'MangaChapters' })
 
   const props = withDefaults(
     defineProps<{
       mangaId: number
+      mangaTitle: string
       chapters: MangaPageData['chapters']
       volumes?: MangaPageData['volumes']
       progress: MangaPageData['progress']
@@ -37,15 +39,18 @@
   const extras = computed(() =>
     props.chapters.filter(item => item.chapter_type === 'EXTRA').sort(bySortKey),
   )
-  const hasReadable = computed(
+  const cards = computed(() =>
+    props.showVolumes ? volumeCards(props.volumes, props.chapters) : [],
+  )
+  const hasEpisodes = computed(
     () => episodes.value.some(item => item.readable) || extras.value.some(item => item.readable),
   )
 </script>
 
 <template>
-  <Stack v-if="hasReadable || (showVolumes && volumes.length)" gap="none" class="gap-5">
+  <Stack v-if="hasEpisodes || cards.length" gap="none" class="gap-5">
     <MangaChaptersEpisodes
-      v-if="hasReadable"
+      v-if="hasEpisodes"
       :manga-id="mangaId"
       :episodes="episodes"
       :extras="extras"
@@ -53,6 +58,11 @@
       :latest-chapter-at="latestChapterAt"
       :volume-number="volumeNumber"
     />
-    <MangaChaptersVolumes v-if="showVolumes && volumes.length" :volumes="volumes" />
+    <MangaChaptersVolumes
+      v-if="cards.length"
+      :manga-id="mangaId"
+      :manga-title="mangaTitle"
+      :cards="cards"
+    />
   </Stack>
 </template>

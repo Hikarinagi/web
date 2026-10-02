@@ -394,3 +394,17 @@ html.dark {
   background-size: 22px 22px;
   color: color-mix(in oklab, var(--hn-fg-subtle) 22%, transparent);
 }
+
+@theme inline {
+  --color-kungal: var(--kungal-accent);
+  --color-kungal-text: var(--kungal-text);
+}
+
+:root {
+  --kungal-accent: oklch(0.57 0.2 257.9);
+  --kungal-text: oklch(0.44 0.1622 257.9);
+}
+
+html.dark {
+  --kungal-text: oklch(0.715 0.1495 257.9);
+}

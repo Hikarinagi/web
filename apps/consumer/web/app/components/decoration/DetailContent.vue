@@ -8,10 +8,11 @@
 
   const auth = useAuthStore()
   const isFrame = computed(() => props.decoration.type === 'AVATAR_FRAME')
-  const acquire = computed(
-    () =>
-      props.decoration.unlock_description || (props.decoration.price != null ? '购买获得' : null),
-  )
+  const acquire = computed(() => {
+    if (props.decoration.unlock_description) return props.decoration.unlock_description
+    if (props.decoration.price != null) return `商店购买，${props.decoration.price} 光点`
+    return null
+  })
   const previewUser = computed(() => ({
     id: auth.user?.id ?? 0,
     name: auth.user?.name ?? '',

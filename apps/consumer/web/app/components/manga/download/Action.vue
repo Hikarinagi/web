@@ -1,6 +1,7 @@
 <script setup lang="ts">
+  import { Inline, SegmentedControl, Text } from '@hina-ui/vue'
   import type { MangaDownloadChapter } from '~/features/manga/download'
-  import { useMangaDownload } from '~/features/manga/useMangaDownload'
+  import { useMangaDownload, type MangaPackageFormat } from '~/features/manga/useMangaDownload'
   import { useSelection } from '~/features/download/useSelection'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
@@ -10,6 +11,11 @@
       .filter(chapter => chapter.readable)
       .toSorted((a, b) => a.sort_key - b.sort_key || a.id - b.id),
   )
+  const FORMAT_OPTIONS = [
+    { value: 'cbz', label: 'CBZ' },
+    { value: 'epub', label: 'EPUB' },
+  ]
+  const format = ref<MangaPackageFormat>('cbz')
   const {
     open,
     loading,
@@ -23,10 +29,18 @@
     quoting,
     needsCard,
     prepare,
+    refreshQuote,
     download,
     stop,
     reselect,
-  } = useMangaDownload(() => props.id)
+  } = useMangaDownload(
+    () => props.id,
+    () => format.value,
+  )
+  watch(format, () => {
+    reselect()
+    void refreshQuote()
+  })
   const options = computed(() =>
     chapters.value.map(chapter => ({ id: chapter.id, label: getMangaEpisodeLabel(chapter) })),
   )
@@ -45,7 +59,7 @@
   <DownloadDialog
     v-model:open="open"
     :title="title"
-    format="CBZ"
+    :format="format === 'epub' ? 'EPUB' : 'CBZ'"
     :summary="`已选 ${selected.length} 章`"
     :status="status"
     :required="selected.length ? (quote?.required_cards ?? null) : 0"
@@ -67,5 +81,14 @@
       unit="章"
       :disabled="busy"
     />
+    <Inline align="center" gap="sm">
+      <Text size="sm" tone="muted">格式</Text>
+      <SegmentedControl
+        v-model="format"
+        :options="FORMAT_OPTIONS"
+        size="sm"
+        :disabled="busy || parts.length > 0"
+      />
+    </Inline>
   </DownloadDialog>
 </template>

@@ -2,17 +2,19 @@ import { useDownloadQueue } from '~/features/download/useDownloadQueue'
 import type { MangaDownloadPart } from './download'
 import { createFileKey, decryptFile } from '~/utils/media/file-crypto'
 
-export function useMangaDownload(id: () => number) {
+export type MangaPackageFormat = 'cbz' | 'epub'
+
+export function useMangaDownload(id: () => number, format: () => MangaPackageFormat = () => 'cbz') {
   return useDownloadQueue<MangaDownloadPart>({
     id,
-    mime: 'application/vnd.comicbook+zip',
+    mime: () => (format() === 'epub' ? 'application/epub+zip' : 'application/vnd.comicbook+zip'),
     load: target =>
       hikariRequest('/api/v3/user/me/manga/download/mangas/{id}', { path: { id: target } }),
     plan: (target, selected, signal) =>
       hikariRequest('/api/v3/user/me/manga/download/mangas/{id}/plan', {
         method: 'POST',
         path: { id: target },
-        body: { chapter_ids: selected },
+        body: { chapter_ids: selected, format: format() },
         signal,
       }),
     file: (target, part, signal) => {
@@ -25,6 +27,7 @@ export function useMangaDownload(id: () => number) {
           revision: part.revision,
           max_cards: part.required_cards,
           p: key,
+          format: format(),
         },
         responseType: 'arrayBuffer',
         decodeBinary: data => decryptFile(`manga:download:${target}:${part.revision}`, key, data),

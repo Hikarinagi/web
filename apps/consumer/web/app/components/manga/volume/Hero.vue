@@ -8,7 +8,9 @@
   defineOptions({ name: 'MangaVolumeHero' })
   const props = defineProps<{
     volume: MangaVolumePageData['volume']
+    volumes: MangaVolumePageData['volumes']
     chapters: MangaVolumePageData['chapters']
+    progress: MangaVolumePageData['progress']
   }>()
 
   const title = computed(() => getMangaVolumeTitle(props.volume))
@@ -74,7 +76,12 @@
           </Stack>
 
           <MangaVolumeHeroMeta :volume="volume" />
-          <MangaVolumeHeroCta :volume="volume" :chapters="chapters" />
+          <MangaVolumeHeroCta
+            :volume="volume"
+            :volumes="volumes"
+            :chapters="chapters"
+            :progress="progress"
+          />
         </Stack>
       </Flex>
     </Stack>

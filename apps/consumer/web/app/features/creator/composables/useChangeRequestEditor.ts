@@ -56,6 +56,8 @@ function postChangeRequest(resourceType: string, id: number, body: ChangeRequest
       return hikariRequest('/api/v3/mangas/{id}/change-requests', options)
     case 'manga-volume':
       return hikariRequest('/api/v3/manga-volumes/{id}/change-requests', options)
+    case 'manga-chapter':
+      return hikariRequest('/api/v3/manga-chapters/{id}/change-requests', options)
     case 'person':
       return hikariRequest('/api/v3/people/{id}/change-requests', options)
     case 'producer':

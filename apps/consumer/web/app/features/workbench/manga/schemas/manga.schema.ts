@@ -3,6 +3,7 @@ import * as v from 'valibot'
 export const createMangaProjectSchema = v.pipe(
   v.object({
     mode: v.picklist(['UPLOAD', 'TRANSLATION'], '请选择投稿类型'),
+    scope: v.picklist(['CHAPTER', 'VOLUME'], '请选择投稿范围'),
     chapter_id: v.nullish(v.number('话应为数字')),
     chapter_number: v.pipe(
       v.nullish(v.string('话数应为文本'), ''),
@@ -14,9 +15,33 @@ export const createMangaProjectSchema = v.pipe(
       v.trim(),
       v.maxLength(200, '标题不能超过 200 个字符'),
     ),
+    volume_id: v.nullish(v.number('单行本应为数字')),
+    volume_number: v.nullish(
+      v.pipe(v.number('卷号应为数字'), v.integer('卷号应为整数'), v.minValue(0, '卷号不能小于 0')),
+    ),
     source_lang: v.pipe(v.string('请选择原文语言'), v.nonEmpty('请选择原文语言')),
     target_lang: v.nullish(v.string('译文语言应为文本'), ''),
   }),
+  v.forward(
+    v.partialCheck(
+      [['scope'], ['chapter_id'], ['chapter_number'], ['chapter_name']],
+      input =>
+        input.scope !== 'CHAPTER' ||
+        input.chapter_id != null ||
+        !!input.chapter_number?.trim() ||
+        !!input.chapter_name?.trim(),
+      '请填写话数或标题',
+    ),
+    ['chapter_number'],
+  ),
+  v.forward(
+    v.partialCheck(
+      [['scope'], ['volume_id'], ['volume_number']],
+      input => input.scope !== 'VOLUME' || input.volume_id != null || input.volume_number != null,
+      '请选择单行本或填写卷号',
+    ),
+    ['volume_number'],
+  ),
   v.forward(
     v.partialCheck(
       [['mode'], ['target_lang']],
@@ -37,7 +62,7 @@ export const createMangaProjectSchema = v.pipe(
 
 export type CreateMangaProjectValues = v.InferOutput<typeof createMangaProjectSchema>
 
-export const mangaChapterInfoSchema = v.object({
+const chapterInfoFields = {
   chapter_number: v.pipe(
     v.nullish(v.string('话数应为文本'), ''),
     v.trim(),
@@ -50,6 +75,28 @@ export const mangaChapterInfoSchema = v.object({
   ),
   volume_number: v.nullish(
     v.pipe(v.number('卷数应为数字'), v.integer('卷数应为整数'), v.minValue(0, '卷号不能小于 0')),
+  ),
+  volume_id: v.nullish(v.number('单行本应为数字')),
+}
+
+export const mangaChapterInfoSchema = v.pipe(
+  v.object(chapterInfoFields),
+  v.forward(
+    v.partialCheck(
+      [['chapter_number'], ['chapter_name']],
+      input => !!input.chapter_number?.trim() || !!input.chapter_name?.trim(),
+      '请填写话数或标题',
+    ),
+    ['chapter_number'],
+  ),
+)
+
+export const mangaVolumeInfoSchema = v.object({
+  ...chapterInfoFields,
+  volume_number: v.pipe(
+    v.number('请填写卷号'),
+    v.integer('卷号应为整数'),
+    v.minValue(0, '卷号不能小于 0'),
   ),
 })
 

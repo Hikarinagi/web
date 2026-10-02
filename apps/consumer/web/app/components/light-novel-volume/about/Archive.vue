@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import { Inline, Stack } from '@hina-ui/vue'
   import { CalendarDays, Eye, FileText, Hash, Tag } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
 
@@ -17,6 +17,9 @@
       ? [props.volume.price_currency, props.volume.price_amount].filter(Boolean).join(' ')
       : '',
   )
+  const bangumiUrl = computed(() =>
+    props.volume.bangumi_book_id ? `https://bgm.tv/subject/${props.volume.bangumi_book_id}` : null,
+  )
 </script>
 
 <template>
@@ -32,6 +35,10 @@
         {{ volume.read_times }} 次阅读
       </ResourceArchiveRow>
     </Stack>
+
+    <Inline v-if="bangumiUrl" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip :href="bangumiUrl">Bangumi</ResourceArchiveExternalChip>
+    </Inline>
 
     <template #footer>
       <ResourceArchiveContributorFooter

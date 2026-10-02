@@ -1,3 +1,4 @@
+import { errorMonitor } from 'node:events'
 import { IncomingMessage } from 'node:http'
 
 import { context, propagation, trace, type Attributes, type Span } from '@opentelemetry/api'
@@ -44,6 +45,7 @@ export { captureError, errorParts, failSpan, log, nameRoute, track, type LogLeve
 export { tick } from './schedule'
 
 export const ATTR_REQUEST_ID = 'hikari.request_id'
+export const ATTR_OUTCOME = 'hikari.outcome'
 
 export interface NodeTelemetryOptions {
   service: string
@@ -82,6 +84,12 @@ const disabled: NodeTelemetry = {
 
 let active: NodeTelemetry = disabled
 const serverSpans = new WeakMap<IncomingMessage, Span>()
+const abortedSpanIds = new Set<string>()
+
+function markIfParentAborted(span: Span): void {
+  const parent = (span as { parentSpanContext?: { spanId: string } }).parentSpanContext?.spanId
+  if (parent && abortedSpanIds.has(parent)) span.setAttribute(ATTR_OUTCOME, 'aborted')
+}
 
 export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry {
   const endpoint = options.endpoint.replace(/\/$/, '')
@@ -115,7 +123,10 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
       new HttpInstrumentation({
         ignoreIncomingRequestHook: request => ignoredPath(request.url ?? ''),
         requestHook: (span, request) => {
-          if (!(request instanceof IncomingMessage)) return
+          if (!(request instanceof IncomingMessage)) {
+            request.prependListener(errorMonitor, () => markIfParentAborted(span))
+            return
+          }
           serverSpans.set(request, span)
           if (isDocumentRequest(request) && originOf(span) === ORIGIN_EXTERNAL) {
             span.setAttributes({
@@ -125,6 +136,9 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
           }
         },
         responseHook: (span, response) => {
+          if (response instanceof IncomingMessage) {
+            response.prependListener(errorMonitor, () => markIfParentAborted(span))
+          }
           const requestId = responseHeader(response, options.requestIdHeader)
           if (requestId) span.setAttribute(ATTR_REQUEST_ID, requestId)
         },
@@ -193,6 +207,18 @@ export function currentTraceparent(): string | undefined {
 
 export function setSpanAttributes(attributes: Attributes): void {
   trace.getActiveSpan()?.setAttributes(attributes)
+}
+
+export function currentSpan(): Span | undefined {
+  return trace.getActiveSpan()
+}
+
+export function markAborted(span: Span | undefined = trace.getActiveSpan()): void {
+  if (!span) return
+  span.setAttribute(ATTR_OUTCOME, 'aborted')
+  const id = span.spanContext().spanId
+  abortedSpanIds.add(id)
+  setTimeout(() => abortedSpanIds.delete(id), 30_000).unref()
 }
 
 export function spanOfRequest(request: IncomingMessage): Span | undefined {

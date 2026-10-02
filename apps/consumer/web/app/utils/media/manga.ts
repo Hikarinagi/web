@@ -13,10 +13,16 @@ export function getMangaCover(manga: MangaDetail): MangaCover | null {
 }
 
 export function getMangaEpisodeLabel(chapter: {
+  chapter_type?: string | null
   chapter_number?: string | null
+  volume_number?: number | null
   name?: string | null
   name_cn?: string | null
 }) {
+  if (chapter.chapter_type === 'VOLUME') {
+    if (chapter.volume_number != null) return `第 ${chapter.volume_number} 卷`
+    return chapter.name_cn || chapter.name || '单行本'
+  }
   if (chapter.chapter_number) return `第 ${chapter.chapter_number} 话`
   return chapter.name_cn || chapter.name || '未命名'
 }

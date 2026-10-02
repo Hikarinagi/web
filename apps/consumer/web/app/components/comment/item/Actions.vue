@@ -110,7 +110,7 @@
   <Inline gap="lg">
     <Button
       login-required
-      variant="ghost"
+      variant="link"
       :tone="myVote === 1 ? 'accent' : 'neutral'"
       size="sm"
       :loading="votingKind === 'like'"
@@ -123,10 +123,9 @@
     </Button>
     <Button
       login-required
-      variant="ghost"
+      variant="link"
       :tone="myVote === -1 ? 'accent' : 'neutral'"
       size="sm"
-      icon-only
       :loading="votingKind === 'dislike'"
       :disabled="isVoting"
       aria-label="踩"
@@ -136,7 +135,7 @@
     </Button>
     <Button
       login-required
-      variant="ghost"
+      variant="link"
       tone="neutral"
       size="sm"
       @click="thread.setReplyTarget(comment)"
@@ -146,7 +145,7 @@
     </Button>
 
     <DropdownMenu v-if="!isReply" label="评论操作" align="end">
-      <IconButton label="更多" :tooltip="false" size="sm" aria-haspopup="menu">
+      <IconButton label="更多" :tooltip="false" size="sm" aria-haspopup="menu" class="ms-auto">
         <Ellipsis />
       </IconButton>
 

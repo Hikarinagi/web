@@ -1,10 +1,8 @@
-import type { GalgameDownloadsPageData } from '~~/server/api/pages/galgames/[id]/downloads.get'
-
-export type GalgameDownloadResource = GalgameDownloadsPageData['resources'][number]
+import { sortByOrder } from '~/utils/order'
 
 const SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
 
-export function fileSizeLabel(bytes: string): string {
+export function fileSizeLabel(bytes: string | number): string {
   const value = Number(bytes)
   if (!Number.isFinite(value) || value <= 0) return '未知大小'
 
@@ -21,10 +19,61 @@ export function fileSizeLabel(bytes: string): string {
 const LANGUAGE_LABELS: Record<string, string> = {
   zh: '简体中文',
   'zh-hant': '繁体中文',
-  en: '英文',
   jp: '日文',
+  en: '英文',
 }
 
 export function languageLabel(code: string): string {
   return LANGUAGE_LABELS[code] ?? code
+}
+
+export function sortLanguages(codes: string[]): string[] {
+  return sortByOrder(codes, Object.keys(LANGUAGE_LABELS))
+}
+
+const STORE_LINKS = new Set([
+  'steam',
+  'gog',
+  'dlsite',
+  'dmm',
+  'getchu',
+  'getchudl',
+  'gyutto',
+  'digiket',
+  'melonjp',
+  'melon',
+  'toranoana',
+  'animateg',
+  'booth',
+  'denpa',
+  'mg',
+  'jlist',
+  'jastusa',
+  'johren',
+  'kagura',
+  'nutaku',
+  'fakku',
+  'itch',
+  'googplay',
+  'appstore',
+  'nintendo',
+  'nintendo_jp',
+  'nintendo_hk',
+  'playstation_jp',
+  'playstation_na',
+  'playstation_eu',
+  'playstation_hk',
+  'freem',
+  'freegame',
+  'novelgam',
+  'gamejolt',
+  'patreon',
+  'patreonp',
+])
+
+export function storeLinks<T extends { name: string }>(links: T[]): T[] {
+  return links.filter(
+    (link, index) =>
+      STORE_LINKS.has(link.name) && links.findIndex(other => other.name === link.name) === index,
+  )
 }

@@ -1,8 +1,12 @@
 <script setup lang="ts">
   import { toast } from '@hina-ui/vue'
+  import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
   import type { BackendMangaProject } from '~/features/workbench/manga/manga'
 
-  const props = defineProps<{ project: BackendMangaProject }>()
+  const props = defineProps<{
+    project: BackendMangaProject
+    chapter: WorkbenchMangaProjectPageData['chapter']
+  }>()
   const emit = defineEmits<{ refresh: []; regions: [] }>()
 
   const { confirm } = useHikariConfirm()
@@ -66,6 +70,7 @@
   <WorkbenchMangaProjectInfoDialog
     v-model:visible="infoOpen"
     :project="project"
+    :chapter="chapter"
     @saved="emit('refresh')"
   />
   <WorkbenchMangaLabelplusImportDialog

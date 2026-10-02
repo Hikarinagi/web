@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import { Inline, Stack } from '@hina-ui/vue'
   import { Barcode, BookOpen, Building2, CalendarDays, ListOrdered, Tag } from '@lucide/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
 
@@ -16,6 +16,11 @@
     props.volume.price_amount != null
       ? [props.volume.price_currency, props.volume.price_amount].filter(Boolean).join(' ')
       : '',
+  )
+  const bangumiUrl = computed(() =>
+    props.volume.bangumi_book_id
+      ? `https://bangumi.tv/subject/${props.volume.bangumi_book_id}`
+      : null,
   )
 </script>
 
@@ -36,6 +41,10 @@
       <ResourceArchiveRow v-if="volume.isbn" :icon="Barcode">{{ volume.isbn }}</ResourceArchiveRow>
       <MangaEditionList v-if="volume.editions?.length" :editions="volume.editions" />
     </Stack>
+
+    <Inline v-if="bangumiUrl" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip :href="bangumiUrl">Bangumi</ResourceArchiveExternalChip>
+    </Inline>
 
     <template #footer>
       <ResourceArchiveContributorFooter

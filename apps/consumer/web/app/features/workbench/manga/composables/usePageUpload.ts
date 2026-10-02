@@ -1,7 +1,8 @@
 import { unzipSync } from 'fflate'
+import { epubImageEntries } from '~/features/workbench/manga/epub-pages'
 
 const IMAGE_FILE = /\.(jpe?g|png|webp|avif|gif|bmp)$/i
-const ARCHIVE_FILE = /\.(zip|cbz)$/i
+const ARCHIVE_FILE = /\.(zip|cbz|epub)$/i
 
 export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
   const uploading = ref(false)
@@ -15,12 +16,15 @@ export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
     for (const file of files) {
       if (ARCHIVE_FILE.test(file.name)) {
         const entries = unzipSync(new Uint8Array(await file.arrayBuffer()), {
-          filter: entry => IMAGE_FILE.test(entry.name) && !entry.name.startsWith('__MACOSX/'),
+          filter: entry => !entry.name.startsWith('__MACOSX/'),
         })
-        for (const [path, data] of Object.entries(entries)) {
+        const ordered = /\.epub$/i.test(file.name) ? epubImageEntries(entries) : null
+        const paths = ordered ?? Object.keys(entries).filter(path => IMAGE_FILE.test(path))
+        paths.forEach((path, index) => {
           const name = path.split('/').pop() || path
-          images.push({ path: `${file.name}/${path}`, file: new File([data], name) })
-        }
+          const key = ordered ? String(index + 1).padStart(6, '0') : path
+          images.push({ path: `${file.name}/${key}`, file: new File([entries[path]!], name) })
+        })
       } else if (IMAGE_FILE.test(file.name)) {
         images.push({ path: file.name, file })
       }

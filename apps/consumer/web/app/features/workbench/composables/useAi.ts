@@ -1,6 +1,7 @@
+import type { ApiQuery } from '@hikarinagi/api-contract/v3'
 import type { BackendAiModel } from '~/features/workbench/workbench'
 
-export function useAiModels(scene: string, vision = false) {
+export function useAiModels(scene: ApiQuery<'/api/v3/ai/models', 'get'>['scene'], vision = false) {
   const models = ref<BackendAiModel[]>([])
   const model = ref<string | null>(null)
   const selected = computed(() => models.value.find(item => item.key === model.value) ?? null)

@@ -28,7 +28,7 @@
     <Panel title="正在征集">
       <SimpleGrid min="var(--contribute-column-min)" gap="xl" class="items-start">
         <ContributeNovelList title="小说" :volumes="data.volumes" :target="data.target" />
-        <ContributeMangaList title="漫画" :chapters="data.chapters" />
+        <ContributeMangaList title="漫画" :chapters="data.chapters" :volumes="data.manga_volumes" />
       </SimpleGrid>
     </Panel>
   </Stack>

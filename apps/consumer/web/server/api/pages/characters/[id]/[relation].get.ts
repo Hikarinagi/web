@@ -2,10 +2,10 @@ import { createError, getRouterParam, type H3Event } from 'h3'
 import { RELATION_LIST_PAGE_SIZE } from '~/features/entity/entity'
 import { fetchBackendData } from '../../../../utils/backend-api'
 import { definePageBffHandler } from '../../../../utils/page-bff'
-import { readPage } from '../../../../utils/page-query'
+import { readId, readPage } from '../../../../utils/page-query'
 
 async function handler(event: H3Event) {
-  const id = Number(getRouterParam(event, 'id'))
+  const id = readId(event)
   const relation = String(getRouterParam(event, 'relation'))
   const query = {
     page: readPage(event),

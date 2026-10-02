@@ -82,7 +82,12 @@
           :progress="progress"
           :favorited="favorited ?? false"
         />
-        <MangaHeroContribute :manga-id="manga.id" />
+        <MangaHeroContribute
+          :manga-id="manga.id"
+          :title="title"
+          :chapters="chapters"
+          :finished="manga.serial_status === 'FINISHED'"
+        />
       </Stack>
     </Flex>
   </Stack>

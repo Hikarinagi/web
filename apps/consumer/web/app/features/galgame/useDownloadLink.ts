@@ -1,42 +1,44 @@
-import { ref } from 'vue'
 import { toast } from '@hina-ui/vue'
 
 export function useDownloadLink(galgameId: number) {
-  const pendingFileId = ref<number | null>(null)
+  const pendingIds = ref<number[]>([])
+  const { copy } = useClipboard({ legacy: true })
 
-  async function requestLink(fileId: number) {
-    pendingFileId.value = fileId
+  async function requestLinks(fileIds: number[]) {
+    pendingIds.value = fileIds
     try {
-      return await hikariRequest<'/api/v3/galgames/{id}/downloads/files/{file_id}/link'>(
-        '/api/v3/galgames/{id}/downloads/files/{file_id}/link',
-        { method: 'get', path: { id: galgameId, file_id: fileId } },
+      return await Promise.all(
+        fileIds.map(fileId =>
+          hikariRequest<'/api/v3/galgames/{id}/downloads/files/{file_id}/link'>(
+            '/api/v3/galgames/{id}/downloads/files/{file_id}/link',
+            { method: 'get', path: { id: galgameId, file_id: fileId } },
+          ),
+        ),
       )
     } catch {
       return null
     } finally {
-      pendingFileId.value = null
+      pendingIds.value = []
     }
   }
 
   async function download(fileId: number) {
-    const link = await requestLink(fileId)
-    if (!link) return
-
-    window.location.href = link.file_url
+    const links = await requestLinks([fileId])
+    if (links) window.location.href = links[0]!.file_url
   }
 
-  async function copyLink(fileId: number) {
-    const link = await requestLink(fileId)
-    if (!link) return
+  async function copyLinks(fileIds: number[]) {
+    const links = await requestLinks(fileIds)
+    if (!links) return
 
-    const minutes = Math.round(link.expires_in / 60)
-    try {
-      await navigator.clipboard.writeText(link.file_url)
-      toast.success(`链接已复制，${minutes} 分钟内有效`)
-    } catch {
-      toast.danger('复制失败，请手动长按链接复制')
-    }
+    await copy(links.map(link => link.file_url).join('\n'))
+    const minutes = Math.round(Math.min(...links.map(link => link.expires_in)) / 60)
+    toast.success(
+      links.length > 1
+        ? `已复制 ${links.length} 个链接，${minutes} 分钟内有效`
+        : `链接已复制，${minutes} 分钟内有效`,
+    )
   }
 
-  return { pendingFileId, download, copyLink }
+  return { pendingIds, download, copyLinks }
 }

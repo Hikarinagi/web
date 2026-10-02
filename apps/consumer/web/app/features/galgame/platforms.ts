@@ -1,4 +1,5 @@
 import type { PlatformCode } from '@hikarinagi/shared'
+import { sortByOrder } from '~/utils/order'
 
 export type { PlatformCode }
 
@@ -78,4 +79,8 @@ export const PLATFORM_GROUPS: PlatformGroup[] = [
 
 export function platformLabel(code: string): string {
   return PLATFORM_LABELS[code as PlatformCode] ?? code
+}
+
+export function sortPlatforms(codes: string[]): string[] {
+  return sortByOrder(codes, Object.keys(PLATFORM_LABELS))
 }

@@ -55,15 +55,6 @@
     scope.value === 'chapter' ? (props.chapter ? [props.chapter] : []) : props.chapters,
   )
   const targets = computed(() => inScope.value.filter(chapter => pendingOf(chapter) > 0))
-  const untranslated = computed(() =>
-    inScope.value.reduce(
-      (sum, chapter) => sum + Math.max(0, chapter.segment_count - chapter.done_count),
-      0,
-    ),
-  )
-  const inQueue = computed(() =>
-    inScope.value.reduce((sum, chapter) => sum + chapter.queued_count, 0),
-  )
   const submittable = computed(() =>
     targets.value.reduce((sum, chapter) => sum + pendingOf(chapter), 0),
   )
@@ -150,12 +141,7 @@
           :models="models"
           unit="kchar"
         />
-        <Stack gap="xs">
-          <Statistic label="未翻译的段落" :value="untranslated" suffix="段" />
-          <Text v-if="inQueue" size="sm" tone="muted">
-            其中 {{ inQueue }} 段已在翻译队列中，不会重复提交
-          </Text>
-        </Stack>
+        <Statistic label="未翻译的段落" :value="submittable" suffix="段" />
         <Card v-if="credits && models.length" class="bg-subtle">
           <WorkbenchAiWallet :credits="credits" @purchase="purchase()" />
         </Card>

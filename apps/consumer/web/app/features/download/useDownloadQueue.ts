@@ -12,8 +12,9 @@ export function useDownloadQueue<Part extends DownloadPart>(options: {
     signal: AbortSignal,
   ) => Promise<DownloadPlan & { parts: Part[] }>
   file: (id: number, part: Part, signal: AbortSignal) => Promise<ArrayBuffer>
-  mime: string
+  mime: string | (() => string)
 }) {
+  const mime = () => (typeof options.mime === 'function' ? options.mime() : options.mime)
   const open = ref(false)
   const loading = ref(false)
   const busy = ref(false)
@@ -137,7 +138,7 @@ export function useDownloadQueue<Part extends DownloadPart>(options: {
         const part = parts.value[completed.value]!
         const data = await options.file(target, part, signal)
         signal.throwIfAborted()
-        saveFile(data, part.file_name, options.mime)
+        saveFile(data, part.file_name, mime())
         completed.value++
       }
       open.value = false
@@ -158,7 +159,7 @@ export function useDownloadQueue<Part extends DownloadPart>(options: {
     try {
       const data = await options.file(options.id(), part, signal)
       signal.throwIfAborted()
-      saveFile(data, part.file_name, options.mime)
+      saveFile(data, part.file_name, mime())
     } catch {
       return
     } finally {

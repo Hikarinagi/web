@@ -73,9 +73,15 @@
 
       <Heading :level="1" size="xl">{{ galgameName }} 资源下载</Heading>
 
-      <GalgameDownloadsList :galgame-id="galgameId" :resources="data.resources" />
+      <GalgameDownloadsDisclaimer :links="data.galgame.external_links" />
 
-      <PromotionBanner v-if="data.banners[0]" :banner="data.banners[0]" />
+      <GalgameDownloadsTabs
+        :galgame-id="galgameId"
+        :resources="data.resources"
+        :patches="data.patches"
+      />
+
+      <PromotionBanner v-for="banner in data.banners" :key="banner.id" :banner="banner" />
     </Stack>
   </Stack>
 </template>

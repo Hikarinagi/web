@@ -8,7 +8,7 @@
     BackendMangaProjectList,
     BackendMangaProjectListItem,
   } from '~/features/workbench/manga/manga'
-  import { projectTitle, seriesHead } from '~/features/workbench/manga/series'
+  import { projectEpisode, seriesHead } from '~/features/workbench/manga/series'
 
   const props = defineProps<{
     list?: BackendMangaProjectList | null
@@ -31,13 +31,28 @@
 
   const columns = computed<DataTableColumn<Row>[]>(() => [
     { key: 'series', label: '作品' },
+    { key: 'episode', label: '话／卷', accessor: projectEpisode, cellClass: 'tabular-nums' },
+    {
+      key: 'chapter_name',
+      label: '标题',
+      accessor: (row: Row) => row.chapter_name ?? '',
+      cellClass: 'text-muted',
+    },
     { key: 'mode', label: '类型', accessor: kindLabel, cellClass: 'text-muted' },
     ...(props.purpose === 'mine'
       ? [
           { key: 'progress', label: '进度' },
           { key: 'status', label: '状态' },
         ]
-      : [{ key: 'owner', label: '发起人' }]),
+      : [
+          {
+            key: 'pages',
+            label: '页数',
+            accessor: (row: Row) => String(row.progress.pages),
+            cellClass: 'tabular-nums',
+          },
+          { key: 'owner', label: '发起人' },
+        ]),
     {
       key: 'last_activity_at',
       label: props.purpose === 'mine' ? '最近更新' : '提交时间',
@@ -71,7 +86,7 @@
       <CreatorResourceHead
         :id="row.series.id"
         type="MANGA"
-        :resource="{ ...seriesHead(row.series), title: projectTitle(row) }"
+        :resource="seriesHead(row.series)"
         size="sm"
         class="py-2"
       />

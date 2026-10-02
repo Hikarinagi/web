@@ -1,4 +1,5 @@
 import { pathOf } from './redact.js'
+import { apiRoute } from './route.js'
 import type { Apm, Attributes, FetchOutcome, SpanEnd } from './types.js'
 
 export interface FetchInstrumentationOptions {
@@ -39,8 +40,9 @@ export function instrumentFetch(apm: Apm, options: FetchInstrumentationOptions):
       attributes['url.scheme'] = target.protocol.slice(0, -1)
       if (target.port) attributes['server.port'] = Number(target.port)
     }
+    const route = apiRoute(path)
     const span = apm.startSpan(
-      same || !target ? `${method} ${path}` : `${method} ${target.host}${path}`,
+      same || !target ? `${method} ${route}` : `${method} ${target.host}${route}`,
       { kind: 'client', attributes },
     )
     let request = init

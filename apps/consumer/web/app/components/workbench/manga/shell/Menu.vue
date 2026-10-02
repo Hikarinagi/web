@@ -34,7 +34,7 @@
       </DropdownMenuItem>
       <DropdownMenuItem v-if="editable && can('manage')" @select="emit('select', 'chapter-info')">
         <template #icon><Pencil /></template>
-        编辑话信息
+        {{ project.scope === 'VOLUME' ? '编辑卷信息' : '编辑话信息' }}
       </DropdownMenuItem>
       <DropdownMenuItem @select="emit('select', 'series-info')">
         <template #icon><Pencil /></template>

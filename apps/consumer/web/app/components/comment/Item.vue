@@ -49,7 +49,7 @@
     <Avatar :user="author" card class="shrink-0" :class="isReply ? 'size-8!' : 'size-10!'" />
 
     <Stack gap="none" class="min-w-0 flex-1">
-      <Stack gap="none" class="gap-1.5">
+      <Stack gap="none" class="gap-2">
         <CommentItemHeader :comment="comment" :author-id="authorId" />
         <CommentItemBody :comment="comment" :editing="editing" />
         <CommentItemActions

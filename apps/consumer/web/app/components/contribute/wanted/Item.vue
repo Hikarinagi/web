@@ -35,7 +35,9 @@
         preset="small"
         class="size-full"
         image-class="object-cover"
-      />
+      >
+        <template #empty />
+      </HikariImage>
     </AspectRatio>
     <Stack as="span" gap="none" class="min-w-0 p-2">
       <Text as="span" size="sm" weight="medium" truncate>{{ title }}</Text>

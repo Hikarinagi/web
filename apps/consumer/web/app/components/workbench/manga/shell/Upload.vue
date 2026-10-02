@@ -40,20 +40,21 @@
       <Stack gap="xs" align="center" class="text-center">
         <Heading :level="3" size="md">上传页面</Heading>
         <Text size="sm" tone="muted">
-          支持 JPG、PNG 和 WEBP 图片以及 ZIP 或 CBZ 压缩包。压缩包中的图片按文件名排序。
+          支持 JPG、PNG 和 WEBP 图片以及 ZIP、CBZ 或 EPUB 文件。压缩包中的图片按文件名排序；EPUB
+          中的页面按其阅读顺序。
         </Text>
       </Stack>
       <FileUpload
         :model-value="[]"
         multiple
         :list="false"
-        accept="image/*,.zip,.cbz"
+        accept="image/*,.zip,.cbz,.epub"
         :loading="uploading"
-        aria-label="选择图片或压缩包"
+        aria-label="选择图片、压缩包或 EPUB"
         class="w-full max-w-xl"
         @update:model-value="receive"
       >
-        将图片或压缩包拖至此处，或单击以选择文件
+        将图片、压缩包或 EPUB 拖至此处，或单击以选择文件
       </FileUpload>
       <Stack v-if="uploading" gap="xs" class="w-full max-w-xl">
         <Progress :value="done" :max="Math.max(total, 1)" size="sm" />

@@ -4,6 +4,7 @@ import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
 export type WantedVolume = ContributePageData['volumes'][number]
 export type WantedChapter = ContributePageData['chapters'][number]
+export type WantedMangaVolume = ContributePageData['manga_volumes'][number]
 
 export const PROJECT_COPY = {
   ENTRY: '正在录入',
@@ -21,4 +22,8 @@ export function volumeNote(volume: WantedVolume) {
 
 export function chapterNote(chapter: WantedChapter) {
   return `${chapter.readers} 位读者已读至${getMangaEpisodeLabel(chapter.previous)}`
+}
+
+export function mangaVolumeNote(volume: WantedMangaVolume) {
+  return `此作品已被 ${volume.readers} 位读者收藏`
 }

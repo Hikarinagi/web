@@ -146,17 +146,19 @@ export const GALGAME_DOWNLOAD_PERMISSIONS = {
   SYNC_RUN: 'galgame_download.sync.run',
 } as const
 
-export const LLM_PERMISSIONS = {
-  CREDENTIALS_READ: 'llm.credentials.read',
-  CREDENTIALS_WRITE: 'llm.credentials.write',
-  SCENES_READ: 'llm.scenes.read',
-  SCENES_WRITE: 'llm.scenes.write',
-  MODELS_READ: 'llm.models.read',
-  MODELS_WRITE: 'llm.models.write',
-  MONITORING_READ: 'llm.monitoring.read',
-  TOOLS_READ: 'llm.tools.read',
-  TOOLS_WRITE: 'llm.tools.write',
-  TEST_RUN: 'llm.test.run',
+export const AI_PERMISSIONS = {
+  PROVIDERS_READ: 'ai.providers.read',
+  PROVIDERS_WRITE: 'ai.providers.write',
+  MODELS_READ: 'ai.models.read',
+  MODELS_WRITE: 'ai.models.write',
+  SCENES_READ: 'ai.scenes.read',
+  SCENES_WRITE: 'ai.scenes.write',
+  REQUESTS_READ: 'ai.requests.read',
+  TOOLS_READ: 'ai.tools.read',
+  TOOLS_WRITE: 'ai.tools.write',
+  BILLING_READ: 'ai.billing.read',
+  BILLING_WRITE: 'ai.billing.write',
+  PLAYGROUND_RUN: 'ai.playground.run',
 } as const
 
 export const WORKBENCH_PERMISSIONS = {
@@ -181,7 +183,7 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(MANGA_PERMISSIONS),
   ...Object.values(NOVEL_SOURCE_PERMISSIONS),
   ...Object.values(CATALOG_PERMISSIONS),
-  ...Object.values(LLM_PERMISSIONS),
+  ...Object.values(AI_PERMISSIONS),
   ...Object.values(GALGAME_DOWNLOAD_PERMISSIONS),
   ...Object.values(WORKBENCH_PERMISSIONS),
 ]
@@ -209,7 +211,7 @@ export type PermissionKey =
   | ValueOf<typeof MANGA_PERMISSIONS>
   | ValueOf<typeof NOVEL_SOURCE_PERMISSIONS>
   | ValueOf<typeof CATALOG_PERMISSIONS>
-  | ValueOf<typeof LLM_PERMISSIONS>
+  | ValueOf<typeof AI_PERMISSIONS>
   | ValueOf<typeof GALGAME_DOWNLOAD_PERMISSIONS>
   | ValueOf<typeof WORKBENCH_PERMISSIONS>
 

@@ -31,9 +31,9 @@
         <FileUpload
           :model-value="files"
           multiple
-          accept="image/*,.zip,.cbz"
+          accept="image/*,.zip,.cbz,.epub"
           :disabled="uploading"
-          aria-label="选择图片或压缩文件"
+          aria-label="选择图片、压缩包或 EPUB"
           @update:model-value="
             value => (files = Array.isArray(value) ? value : value ? [value] : [])
           "

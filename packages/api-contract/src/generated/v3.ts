@@ -4,6 +4,566 @@
  */
 
 export interface paths {
+    "/api/v3/admin/ai/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCatalogController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/catalog/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCatalogController_models"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/catalog/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCatalogController_providers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/catalog/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiCatalogController_sync"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/accounts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCreditController_accounts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/accounts/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCreditController_account"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/accounts/{userId}/adjustments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiCreditController_adjust"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCreditController_policy"];
+        put: operations["AdminAiCreditController_savePolicy"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiCreditController_rates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/credits/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiCreditController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiModelController_getList"];
+        put?: never;
+        post: operations["AdminAiModelController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/models/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiModelController_getById"];
+        put?: never;
+        post?: never;
+        delete: operations["AdminAiModelController_deleteById"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminAiModelController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/admin/ai/models/{id}/routes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminAiModelController_reorder"];
+        post: operations["AdminAiModelController_addRoute"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiOverviewController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/overview/breakdown": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiOverviewController_breakdown"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/overview/series": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiOverviewController_series"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/playground/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiPlaygroundController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiProviderController_getList"];
+        put?: never;
+        post: operations["AdminAiProviderController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/providers/url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiProviderController_requestUrl"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/providers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiProviderController_getById"];
+        put?: never;
+        post?: never;
+        delete: operations["AdminAiProviderController_deleteById"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminAiProviderController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/admin/ai/providers/{id}/models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiProviderController_getModels"];
+        put?: never;
+        post: operations["AdminAiProviderController_add"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/providers/{id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiProviderController_resolve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiRequestController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/requests/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiRequestController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/requests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiRequestController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/routes/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiRouteController_batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/routes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiRouteController_getById"];
+        put?: never;
+        post?: never;
+        delete: operations["AdminAiRouteController_deleteById"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminAiRouteController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/admin/ai/routes/{id}/adjustments/{adjustmentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminAiRouteController_revert"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/routes/{id}/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiRouteController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/scenes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiSceneController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/scenes/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminAiSceneController_updateByKey"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiToolController_getList"];
+        put?: never;
+        post: operations["AdminAiToolController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminAiToolController_deleteById"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminAiToolController_updateById"];
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{id}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiToolController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiRequestController_users"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/backup": {
         parameters: {
             query?: never;
@@ -773,374 +1333,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/llm/catalog": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmCatalogController_status"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/catalog/models": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmCatalogController_getModels"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/catalog/providers": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmCatalogController_getProviders"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/catalog/sync": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminLlmCatalogController_sync"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/credentials": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmCredentialsController_list"];
-        put?: never;
-        post: operations["AdminLlmCredentialsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/credentials/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminLlmCredentialsController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminLlmCredentialsController_update"];
-        trace?: never;
-    };
-    "/api/v3/admin/llm/credit-policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmCreditPolicyController_get"];
-        put: operations["AdminLlmCreditPolicyController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/models": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmModelsController_getList"];
-        put?: never;
-        post: operations["AdminLlmModelsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/models/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmModelsController_getById"];
-        put?: never;
-        post?: never;
-        delete: operations["AdminLlmModelsController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminLlmModelsController_update"];
-        trace?: never;
-    };
-    "/api/v3/admin/llm/models/{model_id}/routes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmModelRoutesController_getList"];
-        put?: never;
-        post: operations["AdminLlmModelRoutesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/models/{model_id}/routes/candidates": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmModelRoutesController_getCandidates"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/monitoring/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmMonitoringController_health"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/monitoring/scenes/{key}/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminLlmMonitoringController_test"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/monitoring/usage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmMonitoringController_usage"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/playground": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminLlmPlaygroundController_run"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/routes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminLlmRoutesController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminLlmRoutesController_update"];
-        trace?: never;
-    };
-    "/api/v3/admin/llm/routes/{id}/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminLlmRoutesController_test"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/scenes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmScenesController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/scenes/{key}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminLlmScenesController_upsert"];
-        post?: never;
-        delete: operations["AdminLlmScenesController_remove"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/tools": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmToolsController_list"];
-        put?: never;
-        post: operations["AdminLlmToolsController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/tools/{key}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminLlmToolsController_remove"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminLlmToolsController_update"];
-        trace?: never;
-    };
-    "/api/v3/admin/llm/tools/{key}/calls": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminLlmToolsController_calls"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/llm/tools/{key}/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminLlmToolsController_test"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/manga/backfill": {
         parameters: {
             query?: never;
@@ -1231,6 +1423,54 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminMangaChapterSourceController_retry"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/chapters/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaChapterController_bulk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/chapters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaChapterController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/manga/chapters/{id}/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaChapterController_merge"];
         delete?: never;
         options?: never;
         head?: never;
@@ -7045,6 +7285,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/patches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgamePatchController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/posts": {
         parameters: {
             query?: never;
@@ -8469,6 +8725,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-chapters/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaChapterChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-page-tasks/{task_id}": {
         parameters: {
             query?: never;
@@ -8912,6 +9184,22 @@ export interface paths {
         put: operations["MangaRegionController_saveMine"];
         post?: never;
         delete: operations["MangaRegionController_removeMine"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-volumes/wanted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaVolumeController_getWanted"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -13420,6 +13708,20 @@ export interface components {
             status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
             summary: string;
         };
+        AddAiModelRouteDto: {
+            /** @description 每百万 token 美元 */
+            input_price?: number;
+            /** @description 每百万 token 美元 */
+            output_price?: number;
+            /** @description 关闭时跟随模型目录的价格 */
+            price_manual?: boolean;
+            protocol: components["schemas"]["AiProtocol"];
+            provider_id: number;
+            upstream_id: string;
+        };
+        AddAiRoutesDto: {
+            items: components["schemas"]["AiRouteItemDto"][];
+        };
         AddMangaProjectMemberDto: {
             /** @enum {string} */
             role: "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER";
@@ -13439,6 +13741,11 @@ export interface components {
             /** @description 要加入的用户 ID */
             user_id: number;
         };
+        AdjustAiCreditDto: {
+            /** @description 正数增加，负数扣减 */
+            amount: number;
+            reason: string;
+        };
         AdjustPointDto: {
             /** @enum {string} */
             action: "ADD" | "SUBTRACT";
@@ -13450,6 +13757,43 @@ export interface components {
             applied: number;
             balance: number;
             user_id: number;
+        };
+        AdminAiModelDto: {
+            canonical_id: string | null;
+            context_limit: number | null;
+            decision: boolean;
+            description: string | null;
+            enabled: boolean;
+            id: number;
+            is_default: boolean;
+            key: string;
+            name: string;
+            output_limit: number | null;
+            reasoning: boolean;
+            /** @description 按备用顺序 */
+            routes: components["schemas"]["AiRouteDto"][];
+            scenes: components["schemas"]["AiModelSceneDto"][];
+            /** @description 最近 24 小时场景调用的统计 */
+            stats: components["schemas"]["AiStatsDto"];
+            tool_call: boolean;
+            vision: boolean;
+        };
+        AdminAiToolDto: {
+            description: string;
+            enabled: boolean;
+            executor: components["schemas"]["AiToolExecutor"];
+            executor_config: {
+                [key: string]: unknown;
+            } | null;
+            id: number;
+            input_schema: {
+                [key: string]: unknown;
+            };
+            key: string;
+            /** @description 可以调用此工具的场景 */
+            scenes: string[];
+            /** @description 最近 24 小时 */
+            stats: components["schemas"]["AiToolStatsDto"];
         };
         AdminAuditEventDto: {
             action: string;
@@ -13652,14 +13996,21 @@ export interface components {
         AdminMangaWorkChapterDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
+            /** Format: date-time */
+            deleted_at: string | null;
             id: number;
             name: string | null;
             name_cn: string | null;
             page_count: number;
+            /** Format: date */
+            publication_date: string | null;
             sort_key: number;
             sources: components["schemas"]["AdminMangaWorkChapterSourceDto"][];
+            status: components["schemas"]["PublishStatus"];
             /** Format: date-time */
             updated_at: string;
+            volume_id: number | null;
+            volume_number: number | null;
         };
         AdminMangaWorkChapterSourceDto: {
             attempts: number;
@@ -14186,17 +14537,174 @@ export interface components {
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
-        AiCreditPolicyDto: {
-            /** @description 1 美元模型成本折合的 AI 积分 */
-            credits_per_usd: number;
-            /** @description 每人每天赠送的 AI 积分，当天用完即止，不累计 */
+        AiAddResultDto: {
+            /** @description 新建的线路 */
+            route_ids: number[];
+            /** @description 该渠道上已有线路的上游模型 ID */
+            skipped: string[];
+        };
+        AiAdjustmentDto: {
+            /** Format: date-time */
+            created_at: string;
+            error_kind: components["schemas"]["AiErrorKind"];
+            id: number;
+            kind: components["schemas"]["AiAdjustmentKind"];
+            /** @description 调整前的协议 */
+            previous: string | null;
+            /** @description 新的协议、不再发送的参数或 json */
+            value: string;
+        };
+        /** @enum {string} */
+        AiAdjustmentKind: "PROTOCOL" | "PARAM" | "JSON_MODE";
+        AiBatchResultDto: {
+            count: number;
+        };
+        AiBreakdownRowDto: {
+            cost_usd: number;
+            /** @description 总耗时的 P95 */
+            duration_ms: number | null;
+            failures: number;
+            first_token_ms: number | null;
+            input_tokens: number;
+            /** @description 模型、渠道或用户的 ID，场景为标识 */
+            key: string;
+            label: string;
+            output_tokens: number;
+            requests: number;
+            /** @description 按模型汇总时为备用顺序中的渠道名称 */
+            routes: string[];
+        };
+        AiCatalogModelDto: {
+            canonical_id: string;
+            context_limit: number | null;
+            decision: boolean;
+            input_price: number | null;
+            lab: string;
+            /** @description 已添加的站内模型 */
+            model_id: number | null;
+            name: string;
+            /** @description 提供此模型的渠道 */
+            offers: components["schemas"]["AiCatalogOfferDto"][];
+            output_price: number | null;
+            reasoning: boolean;
+            tool_call: boolean;
+            vision: boolean;
+        };
+        AiCatalogOfferDto: {
+            input_price: number | null;
+            output_price: number | null;
+            protocol: components["schemas"]["AiProtocol"];
+            protocols: components["schemas"]["AiProtocol"][];
+            provider: components["schemas"]["AiProviderRefDto"];
+            upstream_id: string;
+        };
+        AiCatalogProviderDto: {
+            base_url: string | null;
+            doc_url: string | null;
+            id: string;
+            kind: components["schemas"]["AiProviderKind"];
+            models: number;
+            name: string;
+        };
+        AiCatalogStatusDto: {
+            models: number;
+            providers: number;
+            /** Format: date-time */
+            synced_at: string | null;
+        };
+        AiCatalogSyncDto: {
+            added: number;
+            models: number;
+            providers: number;
+            removed: number;
+            repriced: number;
+            updated: number;
+        };
+        AiCheckResultDto: {
+            error: components["schemas"]["AiErrorDto"] | null;
+            ok: boolean;
+            route: components["schemas"]["AiRouteDto"];
+        };
+        AiCreditAccountDetailDto: {
+            adjustments: components["schemas"]["AiCreditAdjustmentDto"][];
+            balance: number;
             daily_free: number;
-            /** @description 在成本之上的加价倍率，1 表示按成本扣 */
+            /** @description 今天使用的免费积分 */
+            free_used: number;
+            held: number;
+            holds: components["schemas"]["AiCreditHoldDto"][];
+            /** Format: date-time */
+            last_used_at: string | null;
+            /** @description 累计购买的积分 */
+            purchased: number;
+            purchases: components["schemas"]["AiCreditPurchaseDto"][];
+            user: components["schemas"]["AiUserRefDto"];
+        };
+        AiCreditAccountDto: {
+            balance: number;
+            /** @description 今天使用的免费积分 */
+            free_used: number;
+            held: number;
+            /** Format: date-time */
+            last_used_at: string | null;
+            /** @description 累计购买的积分 */
+            purchased: number;
+            user: components["schemas"]["AiUserRefDto"];
+        };
+        AiCreditAdjustmentDto: {
+            actor: components["schemas"]["AiUserRefDto"] | null;
+            amount: number;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            reason: string;
+        };
+        AiCreditHoldDto: {
+            amount: number;
+            charged: number | null;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            scene: string;
+            scene_label: string;
+            /** Format: date-time */
+            settled_at: string | null;
+            status: components["schemas"]["AiCreditHoldStatus"];
+        };
+        /** @enum {string} */
+        AiCreditHoldStatus: "OPEN" | "SETTLED";
+        AiCreditPolicyDto: {
+            credits_per_usd: number;
+            daily_free: number;
             markup: number;
-            /** @description 每份 AI 积分的数量 */
             pack_credits: number;
-            /** @description 每份 AI 积分的售价（光点） */
             pack_price: number;
+        };
+        AiCreditPolicyInputDto: {
+            credits_per_usd: number;
+            daily_free: number;
+            markup: number;
+            pack_credits: number;
+            pack_price: number;
+        };
+        AiCreditPurchaseDto: {
+            /** Format: date-time */
+            created_at: string;
+            credits: number;
+            id: number;
+            points: number;
+        };
+        AiCreditSummaryDto: {
+            /** @description 全部用户的积分余额 */
+            balance: number;
+            /** @description 进行中的预扣 */
+            held: number;
+            /** @description 本月售出的积分 */
+            sold_month: number;
+            /** @description 本月售出积分收取的光点 */
+            sold_points_month: number;
+            /** @description 本月已结算的积分 */
+            spent_month: number;
         };
         AiCreditsDto: {
             /** @description 当前可用的 AI 积分 */
@@ -14218,6 +14726,67 @@ export interface components {
             /** @description 本月购买的 AI 积分 */
             purchased: number;
         };
+        AiDeletedDto: {
+            id: number;
+        };
+        AiDiscoveredModelDto: {
+            canonical_id: string | null;
+            context_limit: number | null;
+            decision: boolean;
+            input_price: number | null;
+            lab: string | null;
+            /** @description 已有的站内模型 */
+            model_id: number | null;
+            name: string;
+            output_price: number | null;
+            protocol: components["schemas"]["AiProtocol"];
+            protocols: components["schemas"]["AiProtocol"][];
+            reasoning: boolean;
+            /** @description 该渠道上已有的线路 */
+            route_id: number | null;
+            tool_call: boolean;
+            upstream_id: string;
+            vision: boolean;
+        };
+        AiDiscoveryDto: {
+            error: components["schemas"]["AiDiscoveryErrorDto"] | null;
+            models: components["schemas"]["AiDiscoveredModelDto"][];
+        };
+        AiDiscoveryErrorDto: {
+            detail: string;
+            kind: components["schemas"]["AiErrorKind"];
+            /** @description 上游返回的错误消息 */
+            message: string;
+        };
+        AiErrorDto: {
+            kind: components["schemas"]["AiErrorKind"];
+            /** @description 上游返回的错误消息 */
+            message: string;
+        };
+        /** @enum {string} */
+        AiErrorKind: "AUTH" | "QUOTA" | "NOT_FOUND" | "PROTOCOL" | "PARAM" | "STRUCTURED" | "RATE_LIMIT" | "UPSTREAM" | "NETWORK" | "TIMEOUT" | "MALFORMED" | "TRUNCATED" | "OTHER";
+        AiLastRequestDto: {
+            /** Format: date-time */
+            created_at: string;
+            error: components["schemas"]["AiErrorDto"] | null;
+            first_token_ms: number | null;
+            id: string;
+            ok: boolean;
+        };
+        AiMessageDto: {
+            content: string;
+            /** @enum {string} */
+            role: "user" | "assistant";
+        };
+        AiMetricsDto: {
+            cost_usd: number;
+            /** @description 期间内已结算的用户积分 */
+            credits_spent: number;
+            failures: number;
+            /** @description 成功请求首字耗时的中位数 */
+            first_token_ms: number | null;
+            requests: number;
+        };
         AiModelDto: {
             /** @description 翻译每千字原文大约消耗的 AI 积分 */
             credits_per_kchar: number;
@@ -14230,6 +14799,368 @@ export interface components {
             name: string;
             /** @description 能否识别图片 */
             vision: boolean;
+        };
+        AiModelRefDto: {
+            id: number;
+            key: string;
+            name: string;
+        };
+        AiModelRouteDto: {
+            protocol: components["schemas"]["AiProtocol"];
+            provider_id: number;
+            upstream_id: string;
+        };
+        AiModelSceneDto: {
+            key: string;
+            label: string;
+            /**
+             * @description 主模型、默认模型或用户可选
+             * @enum {string}
+             */
+            role: "primary" | "default" | "choice";
+        };
+        AiOverviewDto: {
+            current: components["schemas"]["AiMetricsDto"];
+            /** @description 紧邻的上一周期 */
+            previous: components["schemas"]["AiMetricsDto"];
+        };
+        AiPlaygroundDto: {
+            /** @description 与请求中的目标一一对应 */
+            results: components["schemas"]["AiPlaygroundResultDto"][];
+        };
+        AiPlaygroundMessageDto: {
+            content: string;
+            /** @enum {string} */
+            role: "user" | "assistant";
+        };
+        AiPlaygroundResultDto: {
+            /** @description 按时间先后的全部尝试 */
+            attempts: components["schemas"]["AiRequestDto"][];
+            error: components["schemas"]["AiErrorDto"] | null;
+            ok: boolean;
+            output: string | null;
+        };
+        AiPlaygroundTargetDto: {
+            /** @description 场景标识，或模型、线路的 ID */
+            id: string;
+            /** @enum {string} */
+            kind: "scene" | "model" | "route";
+        };
+        /**
+         * @description 该类型的渠道只能使用的协议
+         * @enum {string}
+         */
+        AiProtocol: "CHAT" | "RESPONSES" | "MESSAGES" | "GEMINI" | "DECISION";
+        AiProviderCatalogRefDto: {
+            id: string;
+            name: string;
+        };
+        AiProviderDetailDto: {
+            base_url: string | null;
+            catalog_provider: components["schemas"]["AiProviderCatalogRefDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            enabled: boolean;
+            /** @description 该类型的渠道只能使用的协议 */
+            fixed_protocol: components["schemas"]["AiProtocol"] | null;
+            id: number;
+            /** @description 密钥的首尾几位 */
+            key_hint: string;
+            kind: components["schemas"]["AiProviderKind"];
+            /** Format: date-time */
+            last_used_at: string | null;
+            name: string;
+            price_multiplier: number;
+            route_counts: components["schemas"]["AiRouteCountsDto"];
+            routes: components["schemas"]["AiRouteDto"][];
+            /** @description 最近 24 小时场景调用的统计 */
+            stats: components["schemas"]["AiStatsDto"];
+            suspended_kinds: components["schemas"]["AiErrorKind"][];
+            /** @description 该渠道上的上游模型 ID */
+            upstream_ids: string[];
+        };
+        AiProviderDto: {
+            base_url: string | null;
+            catalog_provider: components["schemas"]["AiProviderCatalogRefDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            enabled: boolean;
+            /** @description 该类型的渠道只能使用的协议 */
+            fixed_protocol: components["schemas"]["AiProtocol"] | null;
+            id: number;
+            /** @description 密钥的首尾几位 */
+            key_hint: string;
+            kind: components["schemas"]["AiProviderKind"];
+            /** Format: date-time */
+            last_used_at: string | null;
+            name: string;
+            price_multiplier: number;
+            route_counts: components["schemas"]["AiRouteCountsDto"];
+            /** @description 最近 24 小时场景调用的统计 */
+            stats: components["schemas"]["AiStatsDto"];
+            suspended_kinds: components["schemas"]["AiErrorKind"][];
+            /** @description 该渠道上的上游模型 ID */
+            upstream_ids: string[];
+        };
+        /** @enum {string} */
+        AiProviderKind: "COMPATIBLE" | "OPENAI" | "ANTHROPIC" | "GOOGLE" | "TYPESAFE";
+        AiProviderRefDto: {
+            id: number;
+            kind: components["schemas"]["AiProviderKind"];
+            name: string;
+        };
+        AiRateDto: {
+            credits: number;
+            model: components["schemas"]["AiModelRefDto"];
+            primary: boolean;
+            scene: string;
+            scene_label: string;
+            /**
+             * @description 每千字或每页
+             * @enum {string}
+             */
+            unit: "kchar" | "page";
+        };
+        AiRequestDetailDto: {
+            adaptation: string | null;
+            /** @description 同一次调用中的全部尝试 */
+            attempts: components["schemas"]["AiRequestDto"][];
+            cache_read_tokens: number;
+            cache_write_tokens: number;
+            call_id: string;
+            cost_usd: number;
+            /** Format: date-time */
+            created_at: string;
+            duration_ms: number;
+            error_detail: string | null;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            /** @description 上游返回的错误消息 */
+            error_message: string | null;
+            finish_reason: string | null;
+            first_token_ms: number | null;
+            id: string;
+            input_tokens: number;
+            model: components["schemas"]["AiModelRefDto"] | null;
+            ok: boolean;
+            output_tokens: number;
+            /** @description 超过保留期后为空 */
+            payload: components["schemas"]["AiRequestPayloadDto"] | null;
+            protocol: components["schemas"]["AiProtocol"];
+            provider: components["schemas"]["AiRequestProviderRefDto"] | null;
+            reasoning_tokens: number;
+            route_id: number | null;
+            scene: string | null;
+            scene_label: string | null;
+            source: components["schemas"]["AiRequestSource"];
+            tool_calls: components["schemas"]["AiToolCallDto"][];
+            upstream_id: string;
+            user: components["schemas"]["AiUserRefDto"] | null;
+        };
+        AiRequestDto: {
+            adaptation: string | null;
+            cache_read_tokens: number;
+            call_id: string;
+            cost_usd: number;
+            /** Format: date-time */
+            created_at: string;
+            duration_ms: number;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            /** @description 上游返回的错误消息 */
+            error_message: string | null;
+            first_token_ms: number | null;
+            id: string;
+            input_tokens: number;
+            model: components["schemas"]["AiModelRefDto"] | null;
+            ok: boolean;
+            output_tokens: number;
+            protocol: components["schemas"]["AiProtocol"];
+            provider: components["schemas"]["AiRequestProviderRefDto"] | null;
+            route_id: number | null;
+            scene: string | null;
+            scene_label: string | null;
+            source: components["schemas"]["AiRequestSource"];
+            upstream_id: string;
+            user: components["schemas"]["AiUserRefDto"] | null;
+        };
+        AiRequestPayloadDto: {
+            /** @description 决策请求的状态与问题 */
+            decision: {
+                [key: string]: unknown;
+            } | null;
+            /** @description 附带的图片数量 */
+            images: number;
+            messages: components["schemas"]["AiMessageDto"][];
+            output: string | null;
+            prompt: string | null;
+            system: string | null;
+        };
+        AiRequestProviderRefDto: {
+            id: number;
+            name: string;
+        };
+        /** @enum {string} */
+        AiRequestSource: "SCENE" | "CHECK" | "PLAYGROUND";
+        AiRequestSummaryDto: {
+            /** @description 分桶宽度（毫秒） */
+            bucket_ms: number;
+            buckets: components["schemas"]["AiSeriesBucketDto"][];
+            stats: components["schemas"]["AiStatsDto"];
+        };
+        AiRequestUrlDto: {
+            url: string | null;
+        };
+        AiResolvedModelDto: {
+            canonical_id: string | null;
+            /** @description 模型目录中的名称 */
+            catalog_name: string | null;
+            /** @description 对应的站内模型，null 表示新模型 */
+            model_id: number | null;
+            model_name: string | null;
+            upstream_id: string;
+        };
+        AiRouteBatchDto: {
+            /** @enum {string} */
+            action: "enable" | "disable" | "delete";
+            ids: number[];
+        };
+        AiRouteCountsDto: {
+            active: number;
+            disabled: number;
+            suspended: number;
+            total: number;
+        };
+        AiRouteDto: {
+            adjustments: components["schemas"]["AiAdjustmentDto"][];
+            cache_read_price: number | null;
+            cache_write_price: number | null;
+            dropped_params: string[];
+            id: number;
+            input_price: number;
+            json_mode: boolean;
+            /** @description 最近一次请求，含检测 */
+            last: components["schemas"]["AiLastRequestDto"] | null;
+            model: components["schemas"]["AiRouteModelDto"];
+            /** @description 渠道的上游模型清单中是否仍有此模型，尚未同步清单时为空 */
+            offered: boolean | null;
+            output_price: number;
+            price_manual: boolean;
+            priority: number;
+            protocol: components["schemas"]["AiProtocol"];
+            provider: components["schemas"]["AiProviderRefDto"];
+            /** @description 最近 24 小时场景调用的统计 */
+            stats: components["schemas"]["AiStatsDto"];
+            status: components["schemas"]["AiRouteStatus"];
+            /** Format: date-time */
+            status_at: string | null;
+            status_kind: components["schemas"]["AiErrorKind"] | null;
+            status_message: string | null;
+            upstream_id: string;
+        };
+        AiRouteItemDto: {
+            protocol: components["schemas"]["AiProtocol"];
+            upstream_id: string;
+        };
+        AiRouteModelDto: {
+            decision: boolean;
+            id: number;
+            key: string;
+            name: string;
+            reasoning: boolean;
+            tool_call: boolean;
+            vision: boolean;
+        };
+        AiRouteOrderDto: {
+            /** @description 此模型全部线路的 ID，按备用顺序 */
+            ids: number[];
+        };
+        /** @enum {string} */
+        AiRouteStatus: "ACTIVE" | "DISABLED" | "SUSPENDED";
+        AiSceneDto: {
+            /** @enum {string} */
+            billing: "user" | "platform";
+            choices: components["schemas"]["AiModelRefDto"][];
+            /** @description 实际生效的模型 */
+            effective: components["schemas"]["AiModelRefDto"] | null;
+            key: string;
+            label: string;
+            max_output_tokens: number | null;
+            /** @description 为场景单独设置的模型 */
+            model: components["schemas"]["AiModelRefDto"] | null;
+            /** @enum {string} */
+            output: "object" | "text" | "decision";
+            /** @description 实际生效的模型无法用于此场景的原因 */
+            problem: string | null;
+            /** @description 最近 24 小时的统计 */
+            stats: components["schemas"]["AiStatsDto"];
+            temperature: number | null;
+            timeout_ms: number | null;
+            tools: components["schemas"]["AiToolRefDto"][];
+            tools_supported: boolean;
+            vision: boolean;
+        };
+        AiSeriesBucketDto: {
+            /** Format: date-time */
+            at: string;
+            cost_usd: number;
+            failures: number;
+            first_token_ms: number | null;
+            requests: number;
+        };
+        AiSeriesDto: {
+            /** @description 分桶宽度（毫秒） */
+            bucket_ms: number;
+            buckets: components["schemas"]["AiSeriesBucketDto"][];
+            models: components["schemas"]["AiSeriesModelDto"][];
+        };
+        AiSeriesModelDto: {
+            /** @description 与分桶一一对应的费用 */
+            costs: number[];
+            label: string | null;
+            /** @description 费用最高的几个模型之外的合并为空 */
+            model_id: number | null;
+        };
+        AiStatsDto: {
+            cost_usd: number;
+            failures: number;
+            /** @description 成功请求首字耗时的中位数 */
+            first_token_ms: number | null;
+            requests: number;
+        };
+        AiToolCallDto: {
+            duration_ms: number;
+            error: string | null;
+            id: string;
+            input: {
+                [key: string]: unknown;
+            };
+            ok: boolean;
+            output: {
+                [key: string]: unknown;
+            } | null;
+            tool_key: string;
+        };
+        /** @enum {string} */
+        AiToolExecutor: "SITE_SEARCH" | "SITE_API";
+        AiToolRefDto: {
+            id: number;
+            key: string;
+        };
+        AiToolRunDto: {
+            duration_ms: number;
+            error: string | null;
+            ok: boolean;
+            output: {
+                [key: string]: unknown;
+            } | null;
+        };
+        AiToolStatsDto: {
+            calls: number;
+            failures: number;
+        };
+        AiUserRefDto: {
+            id: number;
+            name: string;
+            nickname: string | null;
         };
         AnalyticsSettingsDto: {
             openpanel_api_url: string | null;
@@ -14719,7 +15650,7 @@ export interface components {
             }[];
             resource_id: number;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         };
         ChangeRequestBatchReviewItemDto: {
             id: number;
@@ -14734,7 +15665,7 @@ export interface components {
             id: number;
             resource_id: number | null;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
         };
@@ -14760,7 +15691,7 @@ export interface components {
             resource: components["schemas"]["ResourceHeadDto"] | null;
             resource_id: number | null;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
             summary: string;
@@ -14795,7 +15726,7 @@ export interface components {
             resource: components["schemas"]["ResourceHeadDto"] | null;
             resource_id: number | null;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
             summary: string;
@@ -15141,7 +16072,7 @@ export interface components {
             id: number;
             resource: components["schemas"]["ResourceHeadDto"] | null;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED";
         };
@@ -15149,7 +16080,7 @@ export interface components {
          * @description 发生变更的资源类型
          * @enum {string}
          */
-        ContributionResourceType: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        ContributionResourceType: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         ContributionStatsDayDto: {
             count: number;
             /** @example 2026-05-21 */
@@ -15215,6 +16146,38 @@ export interface components {
         CoverVoteStateDto: {
             covers: components["schemas"]["CoverTallyDto"][];
             my_media_id: number | null;
+        };
+        CreateAiModelDto: {
+            /** @description 模型目录中的规范 ID */
+            canonical_id: string;
+            description?: string | null;
+            name: string;
+            /** @description 按备用顺序 */
+            routes: components["schemas"]["AiModelRouteDto"][];
+        };
+        CreateAiProviderDto: {
+            api_key: string;
+            /** Format: uri */
+            base_url?: string | null;
+            /** @description 模型目录中的服务商 */
+            catalog_provider_id?: string | null;
+            kind: components["schemas"]["AiProviderKind"];
+            name: string;
+            /** @default 1 */
+            price_multiplier: number;
+        };
+        CreateAiToolDto: {
+            description: string;
+            enabled?: boolean;
+            executor: components["schemas"]["AiToolExecutor"];
+            executor_config?: {
+                [key: string]: unknown;
+            } | null;
+            input_schema: {
+                [key: string]: unknown;
+            };
+            /** @description 小写字母开头，只含小写字母、数字与下划线 */
+            key: string;
         };
         CreateArticleDto: {
             /** @enum {string|null} */
@@ -15328,76 +16291,6 @@ export interface components {
             start_at?: string | null;
             title: string;
         };
-        CreateLlmCredentialDto: {
-            api_key: string;
-            base_url?: string | null;
-            /** @description 对应的目录服务商，用于自动匹配模型与价格 */
-            catalog_provider_id?: string | null;
-            enabled?: boolean;
-            name: string;
-            /** @description 实际价格相对目录价的倍率，如中转站打八折填 0.8 */
-            price_multiplier?: number;
-            /**
-             * @description openai-compatible | anthropic | google | deepseek | typesafe
-             * @enum {string}
-             */
-            provider: "openai-compatible" | "anthropic" | "google" | "deepseek" | "typesafe";
-            supports_structured_outputs?: boolean;
-        };
-        CreateLlmModelDto: {
-            /** @description 目录里跨服务商统一的模型 ID */
-            canonical_id?: string | null;
-            /** @description 从目录创建：未填的字段取自这条目录记录，并为已关联目录服务商的渠道自动添加线路 */
-            catalog_model_id?: number;
-            context_limit?: number | null;
-            description?: string | null;
-            enabled?: boolean;
-            input_modalities?: ("text" | "image" | "audio" | "video" | "pdf")[];
-            /** @description 业务方选择模型时使用的标识，如 claude-sonnet-4-5 */
-            key: string;
-            name: string;
-            output_limit?: number | null;
-            sort_order?: number;
-            structured_output?: boolean;
-        };
-        CreateLlmRouteDto: {
-            cache_read_price?: number | null;
-            cache_write_price?: number | null;
-            /** @description 对应的目录记录 */
-            catalog_model_id?: number | null;
-            credential_id: number;
-            enabled?: boolean;
-            /** @description 美元 / 百万 token；MANUAL 时必填 */
-            input_price?: number;
-            /** @description 美元 / 百万 token；MANUAL 时必填 */
-            output_price?: number;
-            /**
-             * @description CATALOG 跟随目录价格，MANUAL 使用下面的价格
-             * @enum {string}
-             */
-            price_source: "CATALOG" | "MANUAL";
-            /** @description 数字小的先用 */
-            priority?: number;
-            /** @description 是否使用 json_schema 结构化输出；为空时按模型与渠道的设置 */
-            structured_output?: boolean | null;
-            /** @description 在这个渠道调用时使用的模型名 */
-            upstream_model: string;
-        };
-        CreateLlmToolDto: {
-            description: string;
-            enabled?: boolean;
-            /** @enum {string} */
-            executor: "SITE_SEARCH" | "SITE_API";
-            executor_config?: {
-                [key: string]: unknown;
-            };
-            /** @description 参数 JSON Schema */
-            input_schema: {
-                [key: string]: unknown;
-            };
-            /** @description 小写字母开头，仅小写字母/数字/下划线(provider 函数名约束) */
-            tool_key: string;
-        };
         CreateMangaNoteDto: {
             content: string;
         };
@@ -15423,9 +16316,14 @@ export interface components {
             /** @description 话数，例如 12 或 12.5 */
             chapter_number?: string | null;
             /** @enum {string} */
-            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
+            /**
+             * @description 一话或整卷，缺省为一话
+             * @enum {string}
+             */
+            scope?: "CHAPTER" | "VOLUME";
             series_id: number;
             /**
              * @description 图源或原文的语言
@@ -15438,6 +16336,8 @@ export interface components {
              */
             target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
             team_id?: number | null;
+            /** @description 整卷投稿时选择的单行本条目 */
+            volume_id?: number | null;
             volume_number?: number | null;
         };
         CreateNovelChapterDto: {
@@ -15605,7 +16505,7 @@ export interface components {
                 [key: string]: unknown;
             }[];
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             summary: string;
         };
         CreateSigningKeyDto: {
@@ -15786,7 +16686,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "TAG";
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -15907,7 +16807,7 @@ export interface components {
         EditorSchemaDto: {
             fields: components["schemas"]["EditorFieldDto"][];
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         };
         EditorSnapshotDto: {
             /** @description Resolved entity summary for each FK ref scalar field declared in the registry. Key = field name. Value = { name, cover } when the snapshot has a non-null id pointing at an existing entity, null otherwise. */
@@ -15917,7 +16817,7 @@ export interface components {
             resource: components["schemas"]["ResourceHeadDto"];
             resource_id: number;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -16824,6 +17724,7 @@ export interface components {
             note: string | null;
             platform: string[];
             simulator: string | null;
+            updated: string;
         };
         GalgameDownloadStatusDto: {
             /** @description shionlib 对接是否已配置 */
@@ -16919,6 +17820,32 @@ export interface components {
             items: components["schemas"]["GalgameSummaryDto"][];
             month: number;
             year: number;
+        };
+        GalgamePatchListDto: {
+            other: components["schemas"]["GalgamePatchResourceDto"][];
+            translation: components["schemas"]["GalgamePatchResourceDto"][];
+            web_url: string | null;
+        };
+        GalgamePatchPublisherDto: {
+            avatar_url: string | null;
+            name: string;
+        };
+        GalgamePatchResourceDto: {
+            download_count: number;
+            id: string;
+            language: string[];
+            localization_group_name: string;
+            model_name: string;
+            name: string;
+            note: string;
+            platform: string[];
+            publisher: components["schemas"]["GalgamePatchPublisherDto"] | null;
+            size: string;
+            /** @enum {string} */
+            storage: "s3" | "user";
+            type: string[];
+            updated_at: string;
+            web_url: string;
         };
         GalgamePopularProducerDto: {
             galgame_count: number;
@@ -17842,279 +18769,6 @@ export interface components {
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
         };
-        LlmCatalogModelDto: {
-            cache_read_price: number | null;
-            cache_write_price: number | null;
-            /** @description 跨服务商统一的模型 ID */
-            canonical_id: string | null;
-            context_limit: number | null;
-            family: string | null;
-            id: number;
-            input_modalities: string[];
-            /** @description 美元 / 百万 token */
-            input_price: number | null;
-            /** @description 在这家服务商处调用时使用的模型名 */
-            model_key: string;
-            name: string;
-            output_limit: number | null;
-            output_modalities: string[];
-            /** @description 美元 / 百万 token */
-            output_price: number | null;
-            price_tiers: components["schemas"]["LlmPriceTierDto"][] | null;
-            provider_id: string;
-            reasoning: boolean;
-            release_date: string | null;
-            /**
-             * Format: date-time
-             * @description 目录下架时间
-             */
-            removed_at: string | null;
-            structured_output: boolean | null;
-            tool_call: boolean;
-        };
-        LlmCatalogProviderDto: {
-            /** @description 建议的接入协议，未知时为空 */
-            adapter: string | null;
-            api_url: string | null;
-            doc_url: string | null;
-            id: string;
-            model_count: number;
-            name: string;
-            npm: string | null;
-        };
-        LlmCatalogStatusDto: {
-            models: number;
-            providers: number;
-            /** @description 目录里已下架的模型数 */
-            removed: number;
-            running: boolean;
-            /** Format: date-time */
-            synced_at: string | null;
-        };
-        LlmCatalogSyncResultDto: {
-            added: number;
-            models: number;
-            providers: number;
-            removed: number;
-            /** @description 跟随目录价格而改价的线路数 */
-            repriced: number;
-            updated: number;
-        };
-        LlmCredentialDto: {
-            /** @description 脱敏提示，如 ····wxyz;不返回完整 key */
-            api_key_hint: string;
-            api_key_set: boolean;
-            base_url: string | null;
-            catalog_provider_id: string | null;
-            /** Format: date-time */
-            created_at: string;
-            enabled: boolean;
-            id: number;
-            name: string;
-            price_multiplier: number;
-            provider: string;
-            /** @description 走这个渠道的线路数 */
-            route_count: number;
-            supports_structured_outputs: boolean;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        LlmDailyUsageDto: {
-            calls: number;
-            cost_usd: number;
-            /** @description UTC 日期 YYYY-MM-DD */
-            day: string;
-            errors: number;
-            total_tokens: number;
-        };
-        LlmHealthCheckDto: {
-            /** Format: date-time */
-            capabilities_checked_at: string | null;
-            /** Format: date-time */
-            checked_at: string | null;
-            credential_id: number;
-            credential_name: string;
-            error_message: string | null;
-            id: number;
-            latency_ms: number | null;
-            model: string;
-            /** @enum {string} */
-            status: "OK" | "DEGRADED" | "DOWN";
-            supports_streaming: boolean | null;
-            supports_structured: boolean | null;
-            supports_tools: boolean | null;
-        };
-        LlmModelDto: {
-            /** @description 可用线路数：线路与渠道都已启用 */
-            active_route_count: number;
-            canonical_id: string | null;
-            context_limit: number | null;
-            /** Format: date-time */
-            created_at: string;
-            description: string | null;
-            enabled: boolean;
-            id: number;
-            input_modalities: string[];
-            key: string;
-            name: string;
-            output_limit: number | null;
-            /** @description 线路总数 */
-            route_count: number;
-            /** @description 把它设为默认模型或可选模型的场景 */
-            scene_keys: string[];
-            sort_order: number;
-            structured_output: boolean;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        LlmPriceTierDto: {
-            /** @description 美元 / 百万 token */
-            cache_read: number | null;
-            /** @description 美元 / 百万 token */
-            input: number;
-            /** @description 美元 / 百万 token */
-            output: number;
-            /** @description 输入超过这个 token 数时按本档计价 */
-            over: number;
-        };
-        LlmRouteCandidateDto: {
-            catalog_model_id: number;
-            credential_id: number;
-            credential_name: string;
-            input_price: number | null;
-            /** @description 这个渠道已有指向该目录记录的线路 */
-            linked: boolean;
-            model_key: string;
-            output_price: number | null;
-        };
-        LlmRouteCatalogModelDto: {
-            cache_read_price: number | null;
-            cache_write_price: number | null;
-            id: number;
-            input_price: number | null;
-            model_key: string;
-            output_price: number | null;
-            provider_id: string;
-            /** Format: date-time */
-            removed_at: string | null;
-        };
-        LlmRouteCredentialDto: {
-            enabled: boolean;
-            id: number;
-            name: string;
-            price_multiplier: number;
-            provider: string;
-        };
-        LlmRouteDto: {
-            cache_read_price: number | null;
-            cache_write_price: number | null;
-            catalog_model: components["schemas"]["LlmRouteCatalogModelDto"] | null;
-            credential: components["schemas"]["LlmRouteCredentialDto"];
-            enabled: boolean;
-            health: components["schemas"]["LlmRouteHealthDto"] | null;
-            id: number;
-            /** @description 美元 / 百万 token，未乘渠道倍率 */
-            input_price: number;
-            model_id: number;
-            /** @description 美元 / 百万 token，未乘渠道倍率 */
-            output_price: number;
-            /** @enum {string} */
-            price_source: "CATALOG" | "MANUAL";
-            price_tiers: components["schemas"]["LlmPriceTierDto"][] | null;
-            priority: number;
-            structured_output: boolean | null;
-            upstream_model: string;
-        };
-        LlmRouteHealthDto: {
-            /** Format: date-time */
-            checked_at: string | null;
-            error_message: string | null;
-            latency_ms: number | null;
-            /** @enum {string} */
-            status: "OK" | "DEGRADED" | "DOWN";
-        };
-        LlmSceneDto: {
-            /** @enum {string} */
-            billing: "PLATFORM" | "USER";
-            /** Format: date-time */
-            created_at: string;
-            default_model: components["schemas"]["LlmSceneModelDto"] | null;
-            description: string | null;
-            id: number;
-            inherit: boolean;
-            is_system: boolean;
-            max_output_tokens: number | null;
-            max_retries: number | null;
-            /** @description 用户还可以选择的模型 */
-            models: components["schemas"]["LlmSceneModelDto"][];
-            scene_key: string;
-            temperature: number | null;
-            timeout_ms: number | null;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        LlmSceneModelDto: {
-            enabled: boolean;
-            id: number;
-            key: string;
-            name: string;
-        };
-        LlmSceneUsageDto: {
-            avg_latency_ms: number;
-            calls: number;
-            /** @description 按线路价格与渠道倍率折算的美元成本 */
-            cost_usd: number;
-            errors: number;
-            input_tokens: number;
-            max_latency_ms: number;
-            output_tokens: number;
-            scene_key: string;
-            total_tokens: number;
-        };
-        LlmToolCallDto: {
-            /** Format: date-time */
-            created_at: string;
-            error: string | null;
-            id: number;
-            input: {
-                [key: string]: unknown;
-            };
-            latency_ms: number;
-            ok: boolean;
-            output: {
-                [key: string]: unknown;
-            } | null;
-            scene_key: string;
-            tool_key: string;
-        };
-        LlmToolDto: {
-            avg_latency_ms: number | null;
-            /** @description 近 7 天调用次数 */
-            calls_7d: number;
-            /** Format: date-time */
-            created_at: string;
-            description: string;
-            enabled: boolean;
-            /** @description 近 7 天失败次数 */
-            errors_7d: number;
-            /** @enum {string} */
-            executor: "SITE_SEARCH" | "SITE_API";
-            executor_config: {
-                [key: string]: unknown;
-            } | null;
-            id: number;
-            input_schema: {
-                [key: string]: unknown;
-            };
-            tool_key: string;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        LlmUsageReportDto: {
-            daily: components["schemas"]["LlmDailyUsageDto"][];
-            range_days: number;
-            scenes: components["schemas"]["LlmSceneUsageDto"][];
-        };
         LnDraftDto: {
             author: components["schemas"]["ResolvedEntityDto"] | null;
             characters: components["schemas"]["ResolvedEntityDto"][];
@@ -18215,12 +18869,28 @@ export interface components {
             publication_date: string | null;
             top_cover: components["schemas"]["RatedMediaAssetDto"] | null;
         };
+        MangaChapterBulkDto: {
+            /** @enum {string} */
+            action: "assign_volume" | "set_type" | "hide" | "show" | "delete" | "restore";
+            chapter_type?: components["schemas"]["MangaChapterType"];
+            ids: number[];
+            volume_id?: number | null;
+        };
+        MangaChapterBulkResultDto: {
+            failed_ids: number[];
+            succeeded: number;
+        };
         MangaChapterLabelDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
             name: string | null;
             name_cn: string | null;
+        };
+        MangaChapterMergeResultDto: {
+            chapter_id: number;
+            dropped_sources: number;
+            moved_sources: number;
         };
         MangaChapterRelationDto: {
             chapter_number: string | null;
@@ -18240,6 +18910,8 @@ export interface components {
              * @enum {string|null}
              */
             translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
+            /** @description 所属单行本条目 */
+            volume_id: number | null;
             volume_number: number | null;
         };
         MangaChapterStatusDto: {
@@ -18249,7 +18921,7 @@ export interface components {
             pending: number;
         };
         /** @enum {string} */
-        MangaChapterType: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+        MangaChapterType: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
         MangaChapterWantedDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
@@ -18349,6 +19021,8 @@ export interface components {
             views: number;
         };
         MangaDownloadFileDto: {
+            /** @enum {string} */
+            format?: "cbz" | "epub";
             max_cards: number;
             p: string;
             page_ids: number[];
@@ -18363,6 +19037,8 @@ export interface components {
         };
         MangaDownloadPlanDto: {
             chapter_ids: number[];
+            /** @enum {string} */
+            format?: "cbz" | "epub";
         };
         MangaDownloadPlanResultDto: {
             available: number;
@@ -18510,7 +19186,7 @@ export interface components {
             chapter_name: string | null;
             chapter_number: string | null;
             /** @enum {string} */
-            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** Format: date-time */
             created_at: string;
             id: number;
@@ -18524,6 +19200,11 @@ export interface components {
             page_count: number;
             /** Format: date-time */
             published_at: string | null;
+            /**
+             * @description 一话或整卷
+             * @enum {string}
+             */
+            scope: "CHAPTER" | "VOLUME";
             series: components["schemas"]["MangaSummaryDto"];
             source_lang: string;
             /** @enum {string} */
@@ -18534,6 +19215,9 @@ export interface components {
             viewer_reviewer: boolean;
             /** @enum {string|null} */
             viewer_role: "OWNER" | "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER" | null;
+            volume: components["schemas"]["MangaProjectVolumeRefDto"] | null;
+            /** @description 整卷投稿关联的单行本条目 */
+            volume_id: number | null;
             volume_number: number | null;
         };
         MangaProjectListEntryDto: {
@@ -18541,7 +19225,7 @@ export interface components {
             chapter_name: string | null;
             chapter_number: string | null;
             /** @enum {string} */
-            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** Format: date-time */
             created_at: string;
             id: number;
@@ -18551,12 +19235,20 @@ export interface components {
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
             progress: components["schemas"]["MangaProjectProgressDto"];
+            /**
+             * @description 一话或整卷
+             * @enum {string}
+             */
+            scope: "CHAPTER" | "VOLUME";
             series: components["schemas"]["MangaSummaryDto"];
             source_lang: string;
             /** @enum {string} */
             status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
             target_lang: string | null;
             team: components["schemas"]["TranslationTeamSummaryDto"] | null;
+            volume: components["schemas"]["MangaProjectVolumeRefDto"] | null;
+            /** @description 整卷投稿关联的单行本条目 */
+            volume_id: number | null;
             volume_number: number | null;
         };
         MangaProjectMemberDto: {
@@ -18605,6 +19297,12 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
             /** Format: date-time */
             updated_at: string;
+        };
+        MangaProjectVolumeRefDto: {
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            volume_number: number | null;
         };
         MangaQueueDepthDto: {
             active: number;
@@ -19047,6 +19745,18 @@ export interface components {
             sort_key: number;
             volume_number: number | null;
         };
+        MangaVolumeWantedDto: {
+            cover: components["schemas"]["MediaAssetDto"] | null;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            /** @description 进行中的整卷项目 */
+            projects: components["schemas"]["MangaChapterWantedProjectDto"][];
+            /** @description 收藏了这部作品的读者人数 */
+            readers: number;
+            series: components["schemas"]["MangaChapterWantedSeriesDto"];
+            volume_number: number | null;
+        };
         MangaWorkCancelResultDto: {
             cancelled: number;
         };
@@ -19238,6 +19948,9 @@ export interface components {
             } | null;
             /** @enum {string} */
             value_type: "string" | "string[]" | "int" | "float" | "boolean" | "date" | "media" | "object" | "object[]";
+        };
+        MergeMangaChapterDto: {
+            into: number;
         };
         MergePreviewDto: {
             fields: components["schemas"]["MergeFieldPlanDto"][];
@@ -20824,32 +21537,6 @@ export interface components {
             upload_max_epub_bytes: number;
             upload_max_image_bytes: number;
         };
-        PlaygroundResultDto: {
-            error: string | null;
-            input_tokens: number | null;
-            latency_ms: number;
-            object: {
-                [key: string]: unknown;
-            } | null;
-            ok: boolean;
-            output_tokens: number | null;
-            text: string | null;
-            total_tokens: number | null;
-        };
-        PlaygroundRunDto: {
-            max_output_tokens?: number;
-            /** @enum {string} */
-            mode: "text" | "object";
-            /** @description 模型标识 */
-            model: string;
-            prompt: string;
-            /** @description 只走这条线路；不传时按线路优先级依次尝试 */
-            route_id?: number;
-            /** @description JSON schema 字符串，mode=object 时必填 */
-            schema?: string;
-            system?: string;
-            temperature?: number;
-        };
         PointChannelDto: {
             amount: number;
             daily_cap: number;
@@ -21754,7 +22441,7 @@ export interface components {
             id: number;
             resource_id: number;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -21779,7 +22466,7 @@ export interface components {
             id: number;
             resource_id: number;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             source: "NATIVE" | "LEGACY" | "IMPORT";
             summary: string;
@@ -21794,8 +22481,18 @@ export interface components {
             /** @description The new monotonic version number of the resource. */
             version: number;
         };
-        RunLlmToolDto: {
-            /** @description 工具输入参数 */
+        RunAiPlaygroundDto: {
+            max_output_tokens?: number;
+            messages: components["schemas"]["AiPlaygroundMessageDto"][];
+            /** @description JSON Schema */
+            schema?: {
+                [key: string]: unknown;
+            };
+            system?: string;
+            targets: components["schemas"]["AiPlaygroundTargetDto"][];
+            temperature?: number;
+        };
+        RunAiToolDto: {
             input: {
                 [key: string]: unknown;
             };
@@ -22208,14 +22905,6 @@ export interface components {
             hourly_limit_per_user: number;
             max_attempts: number;
         };
-        ToolRunResultDto: {
-            error: string | null;
-            latency_ms: number;
-            ok: boolean;
-            output: {
-                [key: string]: unknown;
-            } | null;
-        };
         TopReporterDto: {
             count: number;
             user: components["schemas"]["UserRefDto"] | null;
@@ -22340,6 +23029,61 @@ export interface components {
             notification: number;
             system: number;
             total: number;
+        };
+        UpdateAiModelDto: {
+            /** @description 空值取消关联模型目录 */
+            canonical_id?: string | null;
+            description?: string | null;
+            enabled?: boolean;
+            /** @description 只能设为 true，原默认模型随之取消 */
+            is_default?: boolean;
+            name?: string;
+            vision?: boolean;
+        };
+        UpdateAiProviderDto: {
+            api_key?: string;
+            /** Format: uri */
+            base_url?: string | null;
+            /** @description 模型目录中的服务商 */
+            catalog_provider_id?: string | null;
+            enabled?: boolean;
+            kind?: components["schemas"]["AiProviderKind"];
+            name?: string;
+            /** @default 1 */
+            price_multiplier: number;
+        };
+        UpdateAiRouteDto: {
+            /** @description 每百万 token 美元 */
+            input_price?: number;
+            /** @description 每百万 token 美元 */
+            output_price?: number;
+            /** @description 关闭时跟随模型目录的价格 */
+            price_manual?: boolean;
+            protocol?: components["schemas"]["AiProtocol"];
+            /** @enum {string} */
+            status?: "ACTIVE" | "DISABLED";
+            upstream_id?: string;
+        };
+        UpdateAiSceneDto: {
+            /** @description 用户可选的模型 */
+            choices: number[];
+            max_output_tokens?: number | null;
+            /** @description 空值使用默认模型 */
+            model_id?: number | null;
+            temperature?: number | null;
+            timeout_ms?: number | null;
+            tools: number[];
+        };
+        UpdateAiToolDto: {
+            description?: string;
+            enabled?: boolean;
+            executor?: components["schemas"]["AiToolExecutor"];
+            executor_config?: {
+                [key: string]: unknown;
+            } | null;
+            input_schema?: {
+                [key: string]: unknown;
+            };
         };
         UpdateAnalyticsSettingsDto: {
             /** @description 自建实例 API 基址，如 https://op.example.com/api */
@@ -22582,54 +23326,15 @@ export interface components {
             verification_code_ttl_seconds?: number;
             verification_ticket_ttl_seconds?: number;
         };
-        UpdateLlmCredentialDto: {
-            /** @description 仅在轮换时传入，省略则保持现值 */
-            api_key?: string;
-            base_url?: string | null;
-            catalog_provider_id?: string | null;
-            enabled?: boolean;
-            name?: string;
-            price_multiplier?: number;
-            /** @enum {string} */
-            provider?: "openai-compatible" | "anthropic" | "google" | "deepseek" | "typesafe";
-            supports_structured_outputs?: boolean;
-        };
-        UpdateLlmModelDto: {
-            canonical_id?: string | null;
-            context_limit?: number | null;
-            description?: string | null;
-            enabled?: boolean;
-            input_modalities?: ("text" | "image" | "audio" | "video" | "pdf")[];
-            key?: string;
-            name?: string;
-            output_limit?: number | null;
-            sort_order?: number;
-            structured_output?: boolean;
-        };
-        UpdateLlmRouteDto: {
-            cache_read_price?: number | null;
-            cache_write_price?: number | null;
-            catalog_model_id?: number | null;
-            enabled?: boolean;
-            input_price?: number;
-            output_price?: number;
-            /** @enum {string} */
-            price_source?: "CATALOG" | "MANUAL";
-            priority?: number;
-            structured_output?: boolean | null;
-            upstream_model?: string;
-        };
-        UpdateLlmToolDto: {
-            description?: string;
-            enabled?: boolean;
-            /** @enum {string} */
-            executor?: "SITE_SEARCH" | "SITE_API";
-            executor_config?: {
-                [key: string]: unknown;
-            };
-            input_schema?: {
-                [key: string]: unknown;
-            };
+        UpdateMangaChapterDto: {
+            chapter_number?: string | null;
+            chapter_type?: components["schemas"]["MangaChapterType"];
+            name?: string | null;
+            name_cn?: string | null;
+            /** Format: date */
+            publication_date?: string | null;
+            sort_key?: number;
+            volume_id?: number | null;
         };
         UpdateMangaNotifyDto: {
             enabled?: boolean;
@@ -22652,7 +23357,12 @@ export interface components {
             chapter_name?: string | null;
             chapter_number?: string | null;
             /** @enum {string} */
-            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT";
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /**
+             * @description 只有尚未对应到章节的项目可以改
+             * @enum {string}
+             */
+            scope?: "CHAPTER" | "VOLUME";
             team_id?: number | null;
             volume_number?: number | null;
         };
@@ -23091,24 +23801,6 @@ export interface components {
             rate?: number | null;
             rate_content?: string;
         };
-        UpsertLlmSceneDto: {
-            /**
-             * @description PLATFORM 由平台承担费用，USER 按用量扣发起人的 AI 积分
-             * @enum {string}
-             */
-            billing?: "PLATFORM" | "USER";
-            /** @description 不继承时必填 */
-            default_model_id?: number | null;
-            description?: string | null;
-            /** @description true 则默认模型与调用参数都沿用 default 场景 */
-            inherit: boolean;
-            max_output_tokens?: number | null;
-            max_retries?: number | null;
-            /** @description 除默认模型外，用户还可以选择的模型 */
-            model_ids?: number[];
-            temperature?: number | null;
-            timeout_ms?: number | null;
-        };
         UpsertMangaRateDto: {
             /** @description 短评是否含剧透 */
             is_spoiler?: boolean;
@@ -23168,7 +23860,7 @@ export interface components {
             resource: components["schemas"]["ResourceHeadDto"] | null;
             resource_id: number;
             /** @enum {string} */
-            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
             source: "NATIVE" | "LEGACY" | "IMPORT";
             summary: string;
@@ -23319,6 +24011,1087 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AdminAiCatalogController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCatalogStatusDto"];
+                };
+            };
+        };
+    };
+    AdminAiCatalogController_models: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCatalogModelDto"][];
+                };
+            };
+        };
+    };
+    AdminAiCatalogController_providers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCatalogProviderDto"][];
+                };
+            };
+        };
+    };
+    AdminAiCatalogController_sync: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCatalogSyncDto"];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_accounts: {
+        parameters: {
+            query: {
+                /** @description 用户名、昵称或用户 ID */
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AiCreditAccountDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminAiCreditController_account: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditAccountDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_adjust: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdjustAiCreditDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditAccountDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_policy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_savePolicy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiCreditPolicyInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_rates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiCreditPolicyInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRateDto"][];
+                };
+            };
+        };
+    };
+    AdminAiCreditController_summary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCreditSummaryDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModelDto"][];
+                };
+            };
+        };
+    };
+    AdminAiModelController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAiModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModelDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModelDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_deleteById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiDeletedDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModelDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_reorder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiRouteOrderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiModelDto"];
+                };
+            };
+        };
+    };
+    AdminAiModelController_addRoute: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddAiModelRouteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRouteDto"];
+                };
+            };
+        };
+    };
+    AdminAiOverviewController_overview: {
+        parameters: {
+            query?: {
+                range?: "1h" | "24h" | "7d" | "30d";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiOverviewDto"];
+                };
+            };
+        };
+    };
+    AdminAiOverviewController_breakdown: {
+        parameters: {
+            query: {
+                range?: "1h" | "24h" | "7d" | "30d";
+                by: "model" | "provider" | "scene" | "user";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiBreakdownRowDto"][];
+                };
+            };
+        };
+    };
+    AdminAiOverviewController_series: {
+        parameters: {
+            query?: {
+                range?: "1h" | "24h" | "7d" | "30d";
+                provider_id?: number;
+                model_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSeriesDto"];
+                };
+            };
+        };
+    };
+    AdminAiPlaygroundController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunAiPlaygroundDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiPlaygroundDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiProviderDto"][];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAiProviderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiProviderDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_requestUrl: {
+        parameters: {
+            query: {
+                kind: components["schemas"]["AiProviderKind"];
+                base_url?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRequestUrlDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiProviderDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_deleteById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiDeletedDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiProviderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiProviderDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_getModels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiDiscoveryDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_add: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddAiRoutesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiAddResultDto"];
+                };
+            };
+        };
+    };
+    AdminAiProviderController_resolve: {
+        parameters: {
+            query: {
+                /** @description 逗号分隔的上游模型 ID */
+                ids: string[];
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiResolvedModelDto"][];
+                };
+            };
+        };
+    };
+    AdminAiRequestController_getList: {
+        parameters: {
+            query: {
+                range?: "1h" | "24h" | "7d" | "30d";
+                scene?: string;
+                model_id?: number;
+                provider_id?: number;
+                route_id?: number;
+                user_id?: number;
+                source?: components["schemas"]["AiRequestSource"];
+                ok?: boolean;
+                error_kind?: components["schemas"]["AiErrorKind"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AiRequestDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminAiRequestController_summary: {
+        parameters: {
+            query: {
+                range?: "1h" | "24h" | "7d" | "30d";
+                scene?: string;
+                model_id?: number;
+                provider_id?: number;
+                route_id?: number;
+                user_id?: number;
+                source?: components["schemas"]["AiRequestSource"];
+                ok?: boolean;
+                error_kind?: components["schemas"]["AiErrorKind"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRequestSummaryDto"];
+                };
+            };
+        };
+    };
+    AdminAiRequestController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRequestDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_batch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AiRouteBatchDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiBatchResultDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRouteDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_deleteById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiDeletedDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiRouteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRouteDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_revert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                adjustmentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiRouteDto"];
+                };
+            };
+        };
+    };
+    AdminAiRouteController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiCheckResultDto"];
+                };
+            };
+        };
+    };
+    AdminAiSceneController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSceneDto"][];
+                };
+            };
+        };
+    };
+    AdminAiSceneController_updateByKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiSceneDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSceneDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDto"][];
+                };
+            };
+        };
+    };
+    AdminAiToolController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAiToolDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_deleteById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiDeletedDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_updateById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiToolDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RunAiToolDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiToolRunDto"];
+                };
+            };
+        };
+    };
+    AdminAiRequestController_users: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiUserRefDto"][];
+                };
+            };
+        };
+    };
     AdminBackupController_trigger: {
         parameters: {
             query?: never;
@@ -24911,749 +26684,6 @@ export interface operations {
             };
         };
     };
-    AdminLlmCatalogController_status: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCatalogStatusDto"];
-                };
-            };
-        };
-    };
-    AdminLlmCatalogController_getModels: {
-        parameters: {
-            query?: {
-                /** @description 按模型 ID、名称或统一 ID 搜索 */
-                keyword?: string;
-                /** @description 只看这家服务商 */
-                provider_id?: string;
-                /** @description 只看支持图片输入的模型 */
-                vision?: boolean;
-                page?: number;
-                page_size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["LlmCatalogModelDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminLlmCatalogController_getProviders: {
-        parameters: {
-            query?: {
-                /** @description 按 ID 或名称搜索 */
-                keyword?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCatalogProviderDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmCatalogController_sync: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCatalogSyncResultDto"];
-                };
-            };
-        };
-    };
-    AdminLlmCredentialsController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCredentialDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmCredentialsController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLlmCredentialDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCredentialDto"];
-                };
-            };
-        };
-    };
-    AdminLlmCredentialsController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminLlmCredentialsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLlmCredentialDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmCredentialDto"];
-                };
-            };
-        };
-    };
-    AdminLlmCreditPolicyController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AiCreditPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminLlmCreditPolicyController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AiCreditPolicyDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AiCreditPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminLlmModelsController_getList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmModelDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmModelsController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLlmModelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmModelDto"];
-                };
-            };
-        };
-    };
-    AdminLlmModelsController_getById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmModelDto"];
-                };
-            };
-        };
-    };
-    AdminLlmModelsController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminLlmModelsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLlmModelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmModelDto"];
-                };
-            };
-        };
-    };
-    AdminLlmModelRoutesController_getList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                model_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmRouteDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmModelRoutesController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                model_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLlmRouteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmRouteDto"];
-                };
-            };
-        };
-    };
-    AdminLlmModelRoutesController_getCandidates: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                model_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmRouteCandidateDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmMonitoringController_health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmHealthCheckDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmMonitoringController_test: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmHealthCheckDto"];
-                };
-            };
-        };
-    };
-    AdminLlmMonitoringController_usage: {
-        parameters: {
-            query?: {
-                days?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmUsageReportDto"];
-                };
-            };
-        };
-    };
-    AdminLlmPlaygroundController_run: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PlaygroundRunDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PlaygroundResultDto"];
-                };
-            };
-        };
-    };
-    AdminLlmRoutesController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminLlmRoutesController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLlmRouteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmRouteDto"];
-                };
-            };
-        };
-    };
-    AdminLlmRoutesController_test: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmRouteHealthDto"];
-                };
-            };
-        };
-    };
-    AdminLlmScenesController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmSceneDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmScenesController_upsert: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpsertLlmSceneDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmSceneDto"];
-                };
-            };
-        };
-    };
-    AdminLlmScenesController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminLlmToolsController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmToolDto"][];
-                };
-            };
-        };
-    };
-    AdminLlmToolsController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLlmToolDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmToolDto"];
-                };
-            };
-        };
-    };
-    AdminLlmToolsController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminLlmToolsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLlmToolDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LlmToolDto"];
-                };
-            };
-        };
-    };
-    AdminLlmToolsController_calls: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["LlmToolCallDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminLlmToolsController_test: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RunLlmToolDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ToolRunResultDto"];
-                };
-            };
-        };
-    };
     AdminMangaBackfillController_trigger: {
         parameters: {
             query?: never;
@@ -25785,6 +26815,79 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminMangaChapterSourceItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaChapterController_bulk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MangaChapterBulkDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaChapterBulkResultDto"];
+                };
+            };
+        };
+    };
+    AdminMangaChapterController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMangaChapterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaWorkChapterDto"];
+                };
+            };
+        };
+    };
+    AdminMangaChapterController_merge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeMangaChapterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaChapterMergeResultDto"];
                 };
             };
         };
@@ -26253,6 +27356,9 @@ export interface operations {
                 keyword?: string;
                 filter?: "failed" | "no_active" | "cancelled";
                 source_key?: string;
+                chapter_type?: components["schemas"]["MangaChapterType"];
+                volume_id?: number;
+                state?: "hidden" | "deleted";
                 page: number;
                 page_size: number;
             };
@@ -32646,8 +33752,8 @@ export interface operations {
     AiModelController_getList: {
         parameters: {
             query: {
-                /** @description AI 用途，例如 novel_translate */
-                scene: string;
+                /** @description AI 用途 */
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -32965,7 +34071,7 @@ export interface operations {
     ChangeRequestController_list: {
         parameters: {
             query: {
-                resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+                resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
                 status?: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
                 /** @description 同一次导入的 CR 批次 id,用于捆绑审核分组 */
                 batch_id?: string;
@@ -35541,6 +36647,27 @@ export interface operations {
             };
         };
     };
+    GalgamePatchController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgamePatchListDto"];
+                };
+            };
+        };
+    };
     GalgameController_getPosts: {
         parameters: {
             query: {
@@ -37848,6 +38975,31 @@ export interface operations {
             };
         };
     };
+    MangaChapterChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     MangaPageTaskController_cancel: {
         parameters: {
             query?: never;
@@ -38755,6 +39907,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaRegionStateDto"];
+                };
+            };
+        };
+    };
+    MangaVolumeController_getWanted: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaVolumeWantedDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -43342,7 +44519,7 @@ export interface operations {
     RevisionController_list: {
         parameters: {
             query: {
-                resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+                resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
                 resource_id: number;
                 page: number;
                 page_size: number;
@@ -46641,7 +47818,7 @@ export interface operations {
     UserContributionController_getByUser: {
         parameters: {
             query: {
-                resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+                resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
                 page: number;
                 page_size: number;
             };

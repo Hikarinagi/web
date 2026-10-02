@@ -1,10 +1,11 @@
-import { getRouterParam, type H3Event } from 'h3'
+import type { H3Event } from 'h3'
 import { INLINE_RELATION_CAP } from '~/features/entity/entity'
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
+import { readId } from '../../../utils/page-query'
 
 async function handler(event: H3Event) {
-  const id = Number(getRouterParam(event, 'id'))
+  const id = readId(event)
   const query = { page: 1, page_size: INLINE_RELATION_CAP, sort: 'recent' } as const
 
   const [character, galgames, light_novels, mangas, contributors] = await Promise.all([

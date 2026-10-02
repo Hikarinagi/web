@@ -30,7 +30,7 @@
 <template>
   <Collapsible v-if="rows.length" v-model:open="open" class="flex flex-col gap-1.5">
     <CollapsibleTrigger as-child>
-      <Button variant="link" size="sm">
+      <Button variant="link" size="sm" class="self-start">
         <template #trailing><DisclosureIcon /></template>
         {{ open ? '收起' : `其他版本 ${rows.length}` }}
       </Button>

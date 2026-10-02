@@ -196,6 +196,18 @@ describe('instrumentFetch', () => {
     expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'fault' })
   })
 
+  it('names spans by endpoint while keeping the raw path on the span', async () => {
+    await fetch('/api/v3/reader/mangas/1337/progress', { method: 'PUT' })
+    await fetch('https://cdn.example/covers/42.webp')
+    await apm.flush()
+    const [progress, cover] = spansOf(sent)
+    expect(progress.name).toBe('PUT /api/v3/reader/mangas/:id/progress')
+    expect(attr(progress, 'url.path')).toEqual({
+      stringValue: '/api/v3/reader/mangas/1337/progress',
+    })
+    expect(cover.name).toBe('GET cdn.example/covers/42.webp')
+  })
+
   it('installs once and restores the original on uninstall', () => {
     const patched = globalThis.fetch
     const again = instrumentFetch(apm, { origin })

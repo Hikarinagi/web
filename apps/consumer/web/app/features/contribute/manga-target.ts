@@ -7,4 +7,6 @@ export interface MangaTarget {
 
 export type MangaTargetChapter = ApiData<'/api/v3/mangas/{id}/chapters', 'get'>[number]
 
+export type MangaTargetVolume = ApiData<'/api/v3/mangas/{id}/volumes', 'get'>[number]
+
 export type MangaTargetClaim = ApiData<'/api/v3/manga-projects', 'get'>['items'][number]

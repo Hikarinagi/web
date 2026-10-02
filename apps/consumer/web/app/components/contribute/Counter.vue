@@ -82,7 +82,7 @@
         </ContributeUploadDesk>
         <Stack gap="xl" class="min-w-0 flex-1">
           <Section title="正在征集">
-            <ContributeMangaList :chapters="data.chapters" />
+            <ContributeMangaList :chapters="data.chapters" :volumes="data.manga_volumes" />
           </Section>
           <ContributeContributors :contributors="data.contributors.manga" />
         </Stack>

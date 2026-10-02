@@ -42,6 +42,14 @@
   margin: 0.85em 0;
 }
 
+.hikari-content--comment > :first-child {
+  margin-top: 0;
+}
+
+.hikari-content--comment > :last-child {
+  margin-bottom: 0;
+}
+
 /* prose: 标题 / 列表 / 引用 / 代码 / hr / strong/em/s / link mark */
 .hikari-content :is(h2, h3, h4)[id] {
   scroll-margin-top: calc(var(--app-header-height) + 1.5rem);
