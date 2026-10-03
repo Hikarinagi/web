@@ -11982,13 +11982,13 @@
             "enum": [
               "MANGA",
               "LIGHT_NOVEL",
-              "CHARACTER",
-              "PRODUCER",
-              "PERSON",
               "GALGAME",
               "LIGHT_NOVEL_VOLUME",
               "MANGA_VOLUME",
               "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
               "TAG"
             ],
             "type": "string"
@@ -28097,6 +28097,78 @@
         ],
         "type": "object"
       },
+      "OpenCatalogChangesDto": {
+        "properties": {
+          "has_more": {
+            "description": "本页之后是否还有更多事件",
+            "type": "boolean"
+          },
+          "items": {
+            "description": "按序号升序排列的变更事件",
+            "items": {
+              "$ref": "#/components/schemas/OpenCatalogEventDto"
+            },
+            "type": "array"
+          },
+          "latest_id": {
+            "description": "当前最新事件序号；首次同步时可先记录该值再做全量",
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "latest_id",
+          "has_more"
+        ],
+        "type": "object"
+      },
+      "OpenCatalogEventDto": {
+        "properties": {
+          "created_at": {
+            "description": "事件发生时间",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "事件序号，单调递增，可作为增量游标",
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogEventKind"
+              }
+            ],
+            "description": "upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id"
+          },
+          "merged_to_id": {
+            "description": "merge 事件的目标资源 ID",
+            "nullable": true,
+            "type": "number"
+          },
+          "resource_id": {
+            "description": "发生变更的资源 ID",
+            "type": "number"
+          },
+          "resource_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ContributionResourceType"
+              }
+            ],
+            "description": "发生变更的资源类型"
+          }
+        },
+        "required": [
+          "id",
+          "resource_type",
+          "resource_id",
+          "kind",
+          "merged_to_id",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -28150,6 +28222,14 @@
             "description": "英文名或罗马字",
             "nullable": true,
             "type": "string"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "gender": {
             "description": "性别",
@@ -28345,6 +28425,25 @@
         ],
         "type": "object"
       },
+      "OpenExternalSourceDto": {
+        "properties": {
+          "bangumi": {
+            "description": "Bangumi 条目 ID，数字字符串",
+            "nullable": true,
+            "type": "string"
+          },
+          "vndb": {
+            "description": "VNDB ID，带类型前缀：作品 v123、厂商 p45、角色 c67",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "vndb",
+          "bangumi"
+        ],
+        "type": "object"
+      },
       "OpenFavoriteCollectionDto": {
         "properties": {
           "id": {
@@ -28537,6 +28636,14 @@
               "$ref": "#/components/schemas/OpenGalgameExternalLinkDto"
             },
             "type": "array"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "homepage": {
             "description": "官方网站",
@@ -29755,6 +29862,14 @@
             "description": "成立日期",
             "nullable": true,
             "type": "string"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "id": {
             "description": "厂商 ID",
@@ -37462,6 +37577,7 @@
                 "offline_access",
                 "catalog:read",
                 "catalog:full",
+                "catalog:sync",
                 "user:read",
                 "status:read",
                 "status:write",
@@ -71017,6 +71133,55 @@
         ]
       }
     },
+    "/api/v3/open/catalog/changes": {
+      "get": {
+        "operationId": "catalog.changes",
+        "parameters": [
+          {
+            "description": "事件游标，返回 id 大于该值的事件；默认 0",
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "description": "单次返回的最大事件数，取值 1-500",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenCatalogChangesDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "条目变更事件流",
+        "tags": [
+          "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:sync"
+        ]
+      }
+    },
     "/api/v3/open/characters/{id}": {
       "get": {
         "operationId": "character.get",
@@ -82633,7 +82798,7 @@
   "servers": [],
   "tags": [
     {
-      "description": "公开条目数据，需 catalog:read 或 catalog:full；令牌无需代表任何用户。",
+      "description": "公开条目数据，需 catalog:read 或 catalog:full；变更事件流与外部数据源 ID 需 catalog:sync；令牌无需代表任何用户。",
       "name": "open"
     },
     {

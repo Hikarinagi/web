@@ -10229,6 +10229,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 条目变更事件流 */
+        get: operations["catalog.changes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/characters/{id}": {
         parameters: {
             query?: never;
@@ -16686,7 +16703,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -20761,6 +20778,31 @@ export interface components {
             review: number;
             throttled: number;
         };
+        OpenCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["OpenCatalogEventDto"][];
+            /** @description 当前最新事件序号；首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        OpenCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号，单调递增，可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -20785,6 +20827,8 @@ export interface components {
             en_intro: string | null;
             /** @description 英文名或罗马字 */
             en_name: string | null;
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -20850,6 +20894,12 @@ export interface components {
             /** @description 译名 */
             trans_name: string | null;
         };
+        OpenExternalSourceDto: {
+            /** @description Bangumi 条目 ID，数字字符串 */
+            bangumi: string | null;
+            /** @description VNDB ID，带类型前缀：作品 v123、厂商 p45、角色 c67 */
+            vndb: string | null;
+        };
         OpenFavoriteCollectionDto: {
             /** @description 收藏夹 ID */
             id: number;
@@ -20912,6 +20962,8 @@ export interface components {
             engine: string | null;
             /** @description 官网、商店页等外部链接 */
             external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -21317,6 +21369,8 @@ export interface components {
             en_intro: string | null;
             /** @description 成立日期 */
             established: string | null;
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -23218,7 +23272,7 @@ export interface components {
             /** @description 回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type */
             redirect_uris?: string[];
             /** @description 应用可请求的 scope 集合 */
-            scopes?: ("openid" | "profile" | "email" | "offline_access" | "catalog:read" | "catalog:full" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
+            scopes?: ("openid" | "profile" | "email" | "offline_access" | "catalog:read" | "catalog:full" | "catalog:sync" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
             /**
              * @description 机密客户端的令牌端点认证方式，对 public 客户端无效
              * @enum {string}
@@ -41770,6 +41824,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NovelSegmentStateDto"];
+                };
+            };
+        };
+    };
+    "catalog.changes": {
+        parameters: {
+            query?: {
+                /** @description 事件游标，返回 id 大于该值的事件；默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数，取值 1-500 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenCatalogChangesDto"];
                 };
             };
         };
