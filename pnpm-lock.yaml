@@ -49,10 +49,10 @@ importers:
         version: link:../../../packages/shared
       '@hina-ui/vue':
         specifier: ^1.7.5
-        version: 1.7.5(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.43(typescript@6.0.3))
+        version: 1.7.6(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.43(typescript@6.0.3))
       '@lucide/vue':
         specifier: ^1.14.0
-        version: 1.51.0(vue@3.5.43(typescript@6.0.3))
+        version: 1.52.0(vue@3.5.43(typescript@6.0.3))
       '@nuxt/content':
         specifier: ^3.16.0
         version: 3.16.1(@oxc-project/types@0.152.0)(esbuild@0.27.7)(magic-string@1.4.2)(magicast@0.5.5)(oxc-parser@0.141.0)(rolldown@1.2.12)(rollup@4.64.0)(valibot@1.5.0(typescript@6.0.3))(vite@8.3.2(@types/node@26.6.4)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
@@ -1175,8 +1175,8 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  '@hina-ui/vue@1.7.5':
-    resolution: {integrity: sha512-wXYZLajB7/BlNB7dQ+2isQz0SVjL+djJaNmj5E09fVVzMCzzWrDcqfv8T0BmDFdfTzNUFhSfLTrDm7VDnn94sw==}
+  '@hina-ui/vue@1.7.6':
+    resolution: {integrity: sha512-oNiy9LO0JeE3n8uKYRoCK0i6YcrGLkwTuzn5+b5y/V2GSzm2KQ3gUiNYa/8o1mUr4Yr352Dm3zFaFbnK+oXymQ==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -1503,8 +1503,8 @@ packages:
   '@kwsites/promise-deferred@1.1.1':
     resolution: {integrity: sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==}
 
-  '@lucide/vue@1.51.0':
-    resolution: {integrity: sha512-zMkTAMP8OsPESz/GDedsZfr3VUF2IiHlj25mBZG6Pc8A8J8BdygkE8k1HhRFXEUNzytp5DqxiBQNm3RG/U2bVg==}
+  '@lucide/vue@1.52.0':
+    resolution: {integrity: sha512-Gwr6c14jhY6BscoFU+B9OKsr7lg8RTAKOLgW0e61kkFwkt9Q7CZmB9AyJcvhoqapEJgRg2bFoeAcO+cqpgKzEQ==}
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -2840,15 +2840,15 @@ packages:
   '@tanstack/store@0.11.2':
     resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
-  '@tanstack/table-core@9.2.4':
-    resolution: {integrity: sha512-GwdDyGGr6UXAtubF14yAwcXvdaogqfsQgIk89Suebjxob/Rjq2xvfmXsjDF1rQmKmhHsJm9TOY7myxv3i6geJw==}
+  '@tanstack/table-core@9.2.5':
+    resolution: {integrity: sha512-HCMUpaEBEBS9AkV44sdTDmNgFrAA6H4NAnUgwuoWN7IkPgwXWlf3bfZ0moyxLwZqQXdpNQZdEl7LMW4rqm9zQQ==}
     engines: {node: '>=20'}
 
   '@tanstack/virtual-core@3.17.11':
     resolution: {integrity: sha512-+ILjvtHup6Y2hzQ6YzwMgX1Q+oQpxEGOXCEsCNaPoIP0VxMbizIBTmYTDtkerkIQS8/CbP1BRuyt8V/8BCsy1g==}
 
-  '@tanstack/vue-table@9.2.4':
-    resolution: {integrity: sha512-GSD6ZkeQvADs6u9KUyhUuiD+qYgA+Lt6hTBDSEadCBIbC8q2SaoHzseLwgDKVUnRClTIMj9+NwCEF+Gp3P7ChQ==}
+  '@tanstack/vue-table@9.2.5':
+    resolution: {integrity: sha512-Pt8XbRkId6p2eJ7bkXMbYDCwHo8V+sXJMOZKoOE3/qR3lVbyTsxc3rudxI+oSXrwUrG57sWZ6zKJvk7jLsW+SA==}
     engines: {node: '>=20'}
     peerDependencies:
       vue: '>=3.2'
@@ -5483,8 +5483,8 @@ packages:
     resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==}
     engines: {node: '>=20'}
 
-  isomorphic-git@1.42.6:
-    resolution: {integrity: sha512-MJpYjxITU0k0CNzSE3hXmrsHEIyPO8puRf69cNg5Xim7uhRMU0wh+5VkxpJonhKdAqiy+KTDTQWxgAuTxySqeg==}
+  isomorphic-git@1.43.0:
+    resolution: {integrity: sha512-QhJ97lDzpcsV9++LLDs3GcSsY6JwbV7aWbB53gfxNXDDve30Uf3T9G1IzIL2TXfPCvx2rOcbrf5X31oSoPaX/w==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -6057,8 +6057,8 @@ packages:
   md5@2.3.0:
     resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
 
-  mdast-util-find-and-replace@3.0.2:
-    resolution: {integrity: sha512-Tmd1Vg/m3Xz43afeNxDIhWRtFZgM2VLyaf4vSTYwudTyeuTneoL3qtWMA5jeLyz/O1vDJmmV4QuScFCA2tBPwg==}
+  mdast-util-find-and-replace@3.0.3:
+    resolution: {integrity: sha512-xPgpDNl0/OXHsI7TlaIs22lWnH3KlpvZdXG1ET/m/YT2Hhdkx8lJV4kLphE6l9simyM4KPDFBwas08BgEob6Jw==}
 
   mdast-util-from-markdown@2.1.0:
     resolution: {integrity: sha512-KRLgmPaP2H1ul2bpoJkOS+9pAcDAAj9Nu1mqLnh8NLeJG5tlvj42TH80PIGBpROWlRXLk0lDrWNuZCFy/tsB4A==}
@@ -6087,8 +6087,8 @@ packages:
   mdast-util-to-hast@13.2.1:
     resolution: {integrity: sha512-cctsq2wp5vTsLIcaymblUriiTcZd0CwWtCbLvrOzYCDZoWyMNV8sZ7krj09FSnsiJi3WVsHLM4k6Dq/yaPyCXA==}
 
-  mdast-util-to-markdown@2.1.3:
-    resolution: {integrity: sha512-wgyJtgUkUcdU7zci7uuwc/tzoAhm0TswWhaXuvnWolqug+8jY7bgNkBBL0dYBnHgc/tHL7lCzRdPsdUxUKKBqw==}
+  mdast-util-to-markdown@2.2.0:
+    resolution: {integrity: sha512-2Jn/ADrHFFyyniBMi0bncTbJqU78K3/TEYvzvwrWWzD9MYPUa/Gm4r3nOeKFQg/PDM5BsbDYdc8ackW4NTY6NA==}
 
   mdast-util-to-string@4.0.0:
     resolution: {integrity: sha512-0H44vDimn51F0YwvxSJSm0eCDOJTRlmN0R1yBh4HLj9wiV1Dn0QoXGbvFAWj2hSItVTlCmBF1hqKlIyUBVFLPg==}
@@ -9308,11 +9308,12 @@ snapshots:
       protobufjs: 7.6.6
       yargs: 17.7.3
 
-  '@hina-ui/vue@1.7.5(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.43(typescript@6.0.3))':
+  '@hina-ui/vue@1.7.6(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       '@internationalized/date': 3.12.4
-      '@lucide/vue': 1.51.0(vue@3.5.43(typescript@6.0.3))
-      '@tanstack/vue-table': 9.2.4(vue@3.5.43(typescript@6.0.3))
+      '@internationalized/number': 3.6.8
+      '@lucide/vue': 1.52.0(vue@3.5.43(typescript@6.0.3))
+      '@tanstack/vue-table': 9.2.5(vue@3.5.43(typescript@6.0.3))
       '@tanstack/vue-virtual': 3.13.39(vue@3.5.43(typescript@6.0.3))
       '@vueuse/core': 12.8.2(typescript@6.0.3)
       clsx: 2.1.1
@@ -9735,7 +9736,7 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@lucide/vue@1.51.0(vue@3.5.43(typescript@6.0.3))':
+  '@lucide/vue@1.52.0(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       vue: 3.5.43(typescript@6.0.3)
 
@@ -9898,7 +9899,7 @@ snapshots:
       git-url-parse: 16.1.0
       h3: 1.15.11
       hookable: 5.5.3
-      isomorphic-git: 1.42.6
+      isomorphic-git: 1.43.0
       jiti: 2.7.0
       json-schema-to-typescript-lite: 15.0.0
       mdast-util-to-hast: 13.2.1
@@ -11755,16 +11756,16 @@ snapshots:
 
   '@tanstack/store@0.11.2': {}
 
-  '@tanstack/table-core@9.2.4':
+  '@tanstack/table-core@9.2.5':
     dependencies:
       '@tanstack/store': 0.11.2
 
   '@tanstack/virtual-core@3.17.11': {}
 
-  '@tanstack/vue-table@9.2.4(vue@3.5.43(typescript@6.0.3))':
+  '@tanstack/vue-table@9.2.5(vue@3.5.43(typescript@6.0.3))':
     dependencies:
       '@tanstack/store': 0.11.2
-      '@tanstack/table-core': 9.2.4
+      '@tanstack/table-core': 9.2.5
       vue: 3.5.43(typescript@6.0.3)
 
   '@tanstack/vue-virtual@3.13.39(vue@3.5.43(typescript@6.0.3))':
@@ -14827,7 +14828,7 @@ snapshots:
 
   isexe@4.0.0: {}
 
-  isomorphic-git@1.42.6:
+  isomorphic-git@1.43.0:
     dependencies:
       async-lock: 1.4.1
       clean-git-ref: 2.0.1
@@ -15604,7 +15605,7 @@ snapshots:
       crypt: 0.0.2
       is-buffer: 1.1.6
 
-  mdast-util-find-and-replace@3.0.2:
+  mdast-util-find-and-replace@3.0.3:
     dependencies:
       '@types/mdast': 4.0.4
       escape-string-regexp: 5.0.0
@@ -15633,7 +15634,7 @@ snapshots:
       '@types/mdast': 4.0.4
       ccount: 2.0.1
       devlop: 1.1.0
-      mdast-util-find-and-replace: 3.0.2
+      mdast-util-find-and-replace: 3.0.3
       micromark-util-character: 2.1.1
 
   mdast-util-gfm-footnote@2.1.0:
@@ -15641,7 +15642,7 @@ snapshots:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
       mdast-util-from-markdown: 2.1.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
       micromark-util-normalize-identifier: 2.0.1
     transitivePeerDependencies:
       - supports-color
@@ -15650,7 +15651,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       mdast-util-from-markdown: 2.1.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
     transitivePeerDependencies:
       - supports-color
 
@@ -15660,7 +15661,7 @@ snapshots:
       devlop: 1.1.0
       markdown-table: 3.0.4
       mdast-util-from-markdown: 2.1.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
     transitivePeerDependencies:
       - supports-color
 
@@ -15669,7 +15670,7 @@ snapshots:
       '@types/mdast': 4.0.4
       devlop: 1.1.0
       mdast-util-from-markdown: 2.1.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
     transitivePeerDependencies:
       - supports-color
 
@@ -15681,7 +15682,7 @@ snapshots:
       mdast-util-gfm-strikethrough: 2.0.1
       mdast-util-gfm-table: 2.0.0
       mdast-util-gfm-task-list-item: 2.0.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
     transitivePeerDependencies:
       - supports-color
 
@@ -15702,7 +15703,7 @@ snapshots:
       unist-util-visit: 5.1.0
       vfile: 6.0.3
 
-  mdast-util-to-markdown@2.1.3:
+  mdast-util-to-markdown@2.2.0:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
@@ -17507,7 +17508,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       emoticon: 4.1.0
-      mdast-util-find-and-replace: 3.0.2
+      mdast-util-find-and-replace: 3.0.3
       node-emoji: 2.2.0
       unified: 11.0.5
 
@@ -17528,7 +17529,7 @@ snapshots:
       '@types/unist': 3.0.3
       flat: 6.0.1
       mdast-util-from-markdown: 2.1.0
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
       micromark: 4.0.3
       micromark-core-commonmark: 2.0.4
       micromark-factory-space: 2.1.0
@@ -17565,7 +17566,7 @@ snapshots:
   remark-stringify@11.0.0:
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-to-markdown: 2.1.3
+      mdast-util-to-markdown: 2.2.0
       unified: 11.0.5
 
   require-directory@2.1.1: {}
