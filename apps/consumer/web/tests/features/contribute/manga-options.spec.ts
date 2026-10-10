@@ -50,6 +50,7 @@ function claim(overrides: Partial<MangaTargetClaim>): MangaTargetClaim {
     chapter: null,
     volume_id: null,
     volume_number: null,
+    owner: { id: 1, name: 'ichi', nickname: null },
     ...overrides,
   } as MangaTargetClaim
 }
@@ -110,10 +111,10 @@ describe('volumeOptions', () => {
     )
     expect(options).toEqual([
       { value: 11, label: '第 1 卷' },
-      { value: 12, label: '第 2 卷（进行中）', disabled: true },
-      { value: 13, label: '第 3 卷（进行中）', disabled: true },
+      { value: 12, label: '第 2 卷（ichi 正在上传）', disabled: true },
+      { value: 13, label: '第 3 卷（ichi 正在上传）', disabled: true },
       { value: 14, label: '第 4 卷' },
-      { value: NEW_TARGET, label: '添加一卷' },
+      { value: NEW_TARGET, label: '新建这一卷的条目…' },
     ])
   })
 })

@@ -1,5 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils'
-import { Combobox, SearchInput, SegmentedControl } from '@hina-ui/vue'
+import { Combobox, SearchInput } from '@hina-ui/vue'
 import { defineComponent, type PropType } from 'vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import NovelAction from '../../../app/components/light-novel-volume/download/Action.vue'
@@ -22,7 +22,7 @@ describe.each([
 ] as const)('%s download selection lifetime', (name, Action) => {
   afterEach(() => vi.unstubAllGlobals())
 
-  it('preserves range, search and custom choices when the dialog body unmounts', async () => {
+  it('preserves the range, the search keyword and manual picks when the dialog body unmounts', async () => {
     vi.stubGlobal(
       'hikariRequest',
       vi.fn(async () => ({
@@ -84,36 +84,33 @@ describe.each([
       },
     })
     const flow = () => wrapper.findComponent(Dialog).props('flow')
+    const selection = () => wrapper.findComponent(Selection)
+    const startBox = () => selection().findAllComponents(Combobox)[0]!
+    const search = () => selection().findComponent(SearchInput)
     try {
       await wrapper.findComponent(Trigger).trigger('click')
       await flushPromises()
-      wrapper.findComponent(SegmentedControl).vm.$emit('update:modelValue', 'range')
+      startBox().vm.$emit('update:modelValue', 2)
       await flushPromises()
-      wrapper.findAllComponents(Combobox)[0]!.vm.$emit('update:modelValue', 2)
-      await flushPromises()
-      expect(wrapper.findComponent(Selection).props('modelValue')).toEqual([2, 3])
+      expect(selection().props('modelValue')).toEqual([2, 3])
 
       flow().open.value = false
       await flushPromises()
-      expect(wrapper.findComponent(Selection).exists()).toBe(false)
+      expect(selection().exists()).toBe(false)
       await wrapper.findComponent(Trigger).trigger('click')
       await flushPromises()
-      expect(wrapper.findComponent(SegmentedControl).props('modelValue')).toBe('range')
-      expect(wrapper.findAllComponents(Combobox)[0]!.props('modelValue')).toBe(2)
-      expect(wrapper.findComponent(Selection).props('modelValue')).toEqual([2, 3])
+      expect(startBox().props('modelValue')).toBe(2)
+      expect(selection().props('modelValue')).toEqual([2, 3])
 
-      wrapper.findComponent(SegmentedControl).vm.$emit('update:modelValue', 'custom')
-      await flushPromises()
-      wrapper.findComponent(SearchInput).vm.$emit('update:modelValue', '2')
-      wrapper.findComponent(Selection).vm.$emit('update:modelValue', [2])
+      search().vm.$emit('update:modelValue', '2')
+      selection().vm.$emit('update:modelValue', [2])
       await flushPromises()
       flow().open.value = false
       await flushPromises()
       await wrapper.findComponent(Trigger).trigger('click')
       await flushPromises()
-      expect(wrapper.findComponent(SegmentedControl).props('modelValue')).toBe('custom')
-      expect(wrapper.findComponent(SearchInput).props('modelValue')).toBe('2')
-      expect(wrapper.findComponent(Selection).props('modelValue')).toEqual([2])
+      expect(search().props('modelValue')).toBe('2')
+      expect(selection().props('modelValue')).toEqual([2])
     } finally {
       wrapper.unmount()
     }
