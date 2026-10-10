@@ -29,7 +29,7 @@
   async function activate() {
     if (props.item.template_key === 'achievement.unlock') {
       void markRead()
-      await navigateTo('/setting/decoration')
+      await navigateTo('/me/decoration')
       return
     }
     if (props.item.template_key === 'interaction.dm' && props.item.actor) {

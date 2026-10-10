@@ -77,6 +77,8 @@ export const IMPORT_TYPES: ImportType[] = [
   'galgame',
   'light-novel',
   'light-novel-volume',
+  'manga',
+  'manga-volume',
   'person',
   'character',
   'producer',
@@ -87,7 +89,12 @@ export function canImport(type: string): type is ImportType {
 }
 
 export function hasVndb(type: ImportType): boolean {
-  return type !== 'light-novel' && type !== 'light-novel-volume'
+  return (
+    type !== 'light-novel' &&
+    type !== 'light-novel-volume' &&
+    type !== 'manga' &&
+    type !== 'manga-volume'
+  )
 }
 
 export function oneClickEndpoint(

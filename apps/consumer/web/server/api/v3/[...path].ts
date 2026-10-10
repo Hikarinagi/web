@@ -23,13 +23,13 @@ export default defineEventHandler(async (event): Promise<unknown> => {
   const search = getRequestURL(event).search
   const targetUrl = `${apiBase}/${apiPath}${search}`
   const binary =
-    (method === 'POST' && /^reader\/mangas\/\d+\/chapters\/\d+\/pages\/\d+\/content$/.test(apiPath)) ||
+    (method === 'POST' &&
+      /^reader\/mangas\/\d+\/chapters\/\d+\/pages\/\d+\/content$/.test(apiPath)) ||
     (method === 'GET' && /^reader\/sessions\/[^/]+\/content$/.test(apiPath)) ||
-    (method === 'POST' && /^user\/me\/novel\/download\/volumes\/\d+$/.test(apiPath)) ||
-    (method === 'POST' && /^user\/me\/manga\/download\/mangas\/\d+\/files$/.test(apiPath))
+    (method === 'POST' &&
+      /^user\/me\/downloads\/\d+\/files\/\d+\/chunks\/\d+\/content$/.test(apiPath))
   const plan =
-    method === 'POST' &&
-    /^user\/me\/(?:novel\/download\/series|manga\/download\/mangas)\/\d+\/plan$/.test(apiPath)
+    method === 'POST' && /^user\/me\/downloads(?:\/quotes|\/\d+\/manifest)?$/.test(apiPath)
   if (isPublicCachedRequest(method, apiPath, search)) {
     return cachedPublicBackendBody(apiBase, apiPath)
   }

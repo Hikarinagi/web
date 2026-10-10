@@ -76,9 +76,9 @@ describe('reader production protection', () => {
           input: [
             'app/components/hikari-reader/lib/session.ts',
             'app/components/manga/reader/composables/usePageLoader.ts',
-            'app/features/manga/useMangaDownload.ts',
-            'app/features/light-novel-volume/useNovelDownload.ts',
-            'app/features/download/useDownloadQueue.ts',
+            'app/features/download/engine/fetcher.ts',
+            'app/features/download/engine/runner.ts',
+            'app/features/download/engine/worker.ts',
             'app/utils/api/binary.ts',
           ].map(path => resolve(path)),
           external: id => !isAbsolute(id),

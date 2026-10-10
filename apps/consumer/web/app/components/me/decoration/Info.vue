@@ -1,0 +1,13 @@
+<script setup lang="ts">
+  import type { ShopDecoration } from '~/features/space/useDecoration'
+
+  defineOptions({ name: 'MeDecorationInfo' })
+
+  defineProps<{ decoration: ShopDecoration }>()
+</script>
+
+<template>
+  <Question :title="decoration.name" tooltip="说明" aria-label="装扮说明">
+    <DecorationDetailContent :decoration="decoration" />
+  </Question>
+</template>

@@ -73,7 +73,10 @@
 
       <Heading :level="1" size="xl">{{ galgameName }} 资源下载</Heading>
 
-      <GalgameDownloadsDisclaimer :links="data.galgame.external_links" />
+      <GalgameDownloadsDisclaimer
+        :links="data.galgame.external_links"
+        :steam-apps="data.galgame.steam_apps"
+      />
 
       <GalgameDownloadsTabs
         :galgame-id="galgameId"

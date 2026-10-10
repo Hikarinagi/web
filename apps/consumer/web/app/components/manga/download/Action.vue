@@ -1,94 +1,61 @@
 <script setup lang="ts">
-  import { Inline, SegmentedControl, Text } from '@hina-ui/vue'
-  import type { MangaDownloadChapter } from '~/features/manga/download'
-  import { useMangaDownload, type MangaPackageFormat } from '~/features/manga/useMangaDownload'
+  import { SegmentedControl } from '@hina-ui/vue'
+  import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
+  import type { DownloadFormat } from '~/features/download/types'
+  import { useDownloadDialog } from '~/features/download/useDownloadDialog'
   import { useSelection } from '~/features/download/useSelection'
   import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
-  const props = defineProps<{ id: number; title: string; chapters: MangaDownloadChapter[] }>()
+  defineOptions({ name: 'MangaDownloadAction' })
+
+  const props = defineProps<{ id: number; title: string; chapters: MangaPageData['chapters'] }>()
+  const FORMAT_OPTIONS = [
+    { value: 'CBZ', label: 'CBZ' },
+    { value: 'EPUB', label: 'EPUB' },
+  ]
+  const format = ref<DownloadFormat>('CBZ')
   const chapters = computed(() =>
     props.chapters
       .filter(chapter => chapter.readable)
       .toSorted((a, b) => a.sort_key - b.sort_key || a.id - b.id),
   )
-  const FORMAT_OPTIONS = [
-    { value: 'cbz', label: 'CBZ' },
-    { value: 'epub', label: 'EPUB' },
-  ]
-  const format = ref<MangaPackageFormat>('cbz')
-  const {
-    open,
-    loading,
-    busy,
-    selected,
-    parts,
-    completed,
-    finished,
-    status,
-    quote,
-    quoting,
-    needsCard,
-    prepare,
-    refreshQuote,
-    download,
-    stop,
-    reselect,
-  } = useMangaDownload(
-    () => props.id,
-    () => format.value,
-  )
-  watch(format, () => {
-    reselect()
-    void refreshQuote()
-  })
   const options = computed(() =>
     chapters.value.map(chapter => ({ id: chapter.id, label: getMangaEpisodeLabel(chapter) })),
   )
+  const flow = useDownloadDialog({ kind: 'MANGA', seriesId: () => props.id, format })
   watch(
     chapters,
     value => {
-      selected.value = value.map(chapter => chapter.id)
+      flow.selected.value = value.map(chapter => chapter.id)
     },
     { immediate: true },
   )
-  const selection = useSelection(() => options.value, selected)
+  const selection = useSelection(() => options.value, flow.selected)
+  const locked = computed(() => flow.creating.value || !!flow.run.value)
 </script>
 
 <template>
-  <DownloadTrigger v-if="chapters.length" :loading="loading || busy" @click="prepare" />
-  <DownloadDialog
-    v-model:open="open"
-    :title="title"
-    :format="format === 'epub' ? 'EPUB' : 'CBZ'"
-    :summary="`已选 ${selected.length} 章`"
-    :status="status"
-    :required="selected.length ? (quote?.required_cards ?? null) : 0"
-    :quoting="quoting"
-    :needs-card="needsCard"
-    :busy="busy"
-    :disabled="!selected.length || !quote || quoting"
-    :resume="!!parts.length"
-    :finished="finished"
-    @download="download"
-    @stop="stop"
-    @reselect="reselect"
-  >
-    <DownloadQueue v-if="parts.length" :parts="parts" :completed="completed" :busy="busy" />
+  <DownloadTrigger
+    v-if="chapters.length"
+    :loading="flow.creating.value"
+    @click="flow.open.value = true"
+  />
+  <DownloadDialog :flow="flow" :title="title" unit="话">
     <DownloadSelection
-      v-else
-      v-model="selected"
+      v-model="flow.selected.value"
       :selection="selection"
-      unit="章"
-      :disabled="busy"
-    />
-    <Inline align="center" gap="sm">
-      <Text size="sm" tone="muted">格式</Text>
-      <SegmentedControl
-        v-model="format"
-        :options="FORMAT_OPTIONS"
-        size="sm"
-        :disabled="busy || parts.length > 0"
-      />
-    </Inline>
+      unit="话"
+      :disabled="locked"
+    >
+      <template #toolbar>
+        <SegmentedControl
+          v-model="format"
+          :options="FORMAT_OPTIONS"
+          size="sm"
+          :disabled="locked"
+          aria-label="文件格式"
+        />
+      </template>
+    </DownloadSelection>
   </DownloadDialog>
 </template>

@@ -1,14 +1,17 @@
 import { unzipSync } from 'fflate'
 import { epubImageEntries } from '~/features/workbench/manga/epub-pages'
+import { isApiError } from '~/utils/api/error'
 
 const IMAGE_FILE = /\.(jpe?g|png|webp|avif|gif|bmp)$/i
 const ARCHIVE_FILE = /\.(zip|cbz|epub)$/i
+const FATAL_STATUS = new Set([403, 404, 409])
 
 export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
   const uploading = ref(false)
   const done = ref(0)
   const total = ref(0)
   const failed = ref<string[]>([])
+  const stopped = ref<string | null>(null)
 
   async function expand(files: File[]): Promise<File[]> {
     const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
@@ -36,11 +39,12 @@ export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
     if (uploading.value) return 0
     uploading.value = true
     failed.value = []
+    stopped.value = null
     done.value = 0
     try {
       const images = await expand(files)
       total.value = images.length
-      for (const image of images) {
+      for (const [index, image] of images.entries()) {
         const body = new FormData()
         body.append('file', image)
         try {
@@ -50,8 +54,13 @@ export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
             body,
             toast: false,
           })
-        } catch {
+        } catch (error) {
           failed.value.push(image.name)
+          if (isApiError(error) && FATAL_STATUS.has(error.status)) {
+            failed.value.push(...images.slice(index + 1).map(rest => rest.name))
+            stopped.value = error.message
+            break
+          }
         }
         done.value += 1
       }
@@ -61,5 +70,5 @@ export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
     }
   }
 
-  return { uploading, done, total, failed, upload }
+  return { uploading, done, total, failed, stopped, upload }
 }

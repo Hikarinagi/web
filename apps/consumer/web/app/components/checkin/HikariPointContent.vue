@@ -16,13 +16,13 @@
       </Text>
       <Text size="sm">
         你可以通过包括每日签到在内的各种方式（将在下方列出）获取光点！光点可以用来兑换装扮和购买道具，你随时可以在
-        <NuxtLink v-slot="{ href, navigate }" to="/setting/decoration" custom>
+        <NuxtLink v-slot="{ href, navigate }" to="/me/decoration" custom>
           <Link :href="href ?? undefined" class="mx-0.5 font-medium" @click="navigate">
             我的装扮
           </Link>
         </NuxtLink>
         和
-        <NuxtLink v-slot="{ href, navigate }" to="/setting/items" custom>
+        <NuxtLink v-slot="{ href, navigate }" to="/me/items" custom>
           <Link :href="href ?? undefined" class="mx-0.5 font-medium" @click="navigate">
             我的道具
           </Link>

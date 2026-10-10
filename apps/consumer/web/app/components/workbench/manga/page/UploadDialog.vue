@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import { Alert, Button, Dialog, FileUpload, Progress, Stack, Text, toast } from '@hina-ui/vue'
-  import { usePageUpload } from '~/features/workbench/manga/composables/usePageUpload'
+  import { useMangaEditor } from '~/features/workbench/manga/composables/editor-context'
 
-  const props = defineProps<{ projectId: number }>()
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ uploaded: [] }>()
 
   const files = ref<File[]>([])
-  const { uploading, done, total, failed, upload } = usePageUpload(() => props.projectId)
+  const { uploading, done, total, failed, stopped, upload } = useMangaEditor().upload
 
   watch(visible, next => {
     if (next && !uploading.value) files.value = []
@@ -42,7 +41,15 @@
           <Progress :value="total ? (done / total) * 100 : 0" />
           <Text size="xs" tone="muted">{{ done }} / {{ total }}</Text>
         </Stack>
-        <Alert :open="failed.length > 0" tone="danger" :closable="false" title="以下图片上传失败">
+        <Alert :open="!!stopped" tone="danger" :closable="false" title="上传已停止，已传的页面保留">
+          <Text size="sm">{{ stopped }}</Text>
+        </Alert>
+        <Alert
+          :open="failed.length > 0"
+          tone="danger"
+          :closable="false"
+          :title="stopped ? '以下图片没有上传' : '以下图片上传失败'"
+        >
           <Text size="sm">{{ failed.join('、') }}</Text>
         </Alert>
       </Stack>

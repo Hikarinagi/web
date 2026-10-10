@@ -1,56 +1,42 @@
 <script setup lang="ts">
-  import { useNovelDownload } from '~/features/light-novel-volume/useNovelDownload'
+  import type { DownloadFormat } from '~/features/download/types'
+  import { useDownloadDialog } from '~/features/download/useDownloadDialog'
   import { useSelection } from '~/features/download/useSelection'
 
-  const props = defineProps<{ id: number; title: string; series?: boolean }>()
-  const {
-    open,
-    loading,
-    preparing,
-    busy,
-    status,
-    quote,
-    quoting,
-    selected,
-    volumes,
-    parts,
-    completed,
-    finished,
-    needsCard,
-    prepare,
-    download,
-    stop,
-    reselect,
-  } = useNovelDownload(() => props.id, props.series)
-  const selection = useSelection(() => volumes.value, selected)
+  defineOptions({ name: 'LightNovelVolumeDownloadAction' })
+
+  const props = defineProps<{
+    seriesId: number
+    title: string
+    volumes: { id: number; label: string }[]
+  }>()
+  const format = ref<DownloadFormat>('EPUB')
+  const flow = useDownloadDialog({ kind: 'NOVEL', seriesId: () => props.seriesId, format })
+  watch(
+    () => props.volumes,
+    value => {
+      flow.selected.value = value.map(volume => volume.id)
+    },
+    { immediate: true },
+  )
+  const selection = useSelection(() => props.volumes, flow.selected)
+  const locked = computed(() => flow.creating.value || !!flow.run.value)
 </script>
 
 <template>
-  <DownloadTrigger :loading="loading || preparing || busy" @click="prepare" />
-  <DownloadDialog
-    v-model:open="open"
-    :title="title"
-    format="EPUB"
-    :summary="`已选 ${selected.length} 卷`"
-    :status="status"
-    :required="selected.length ? (quote?.required_cards ?? null) : 0"
-    :quoting="quoting"
-    :needs-card="needsCard"
-    :busy="busy"
-    :disabled="!selected.length || !quote || quoting"
-    :resume="!!parts.length"
-    :finished="finished"
-    @download="download"
-    @stop="stop"
-    @reselect="reselect"
-  >
-    <DownloadQueue v-if="parts.length" :parts="parts" :completed="completed" :busy="busy" />
-    <DownloadSelection
-      v-else
-      v-model="selected"
-      :selection="selection"
-      unit="卷"
-      :disabled="busy"
-    />
+  <DownloadTrigger
+    v-if="volumes.length"
+    :loading="flow.creating.value"
+    @click="flow.open.value = true"
+  />
+  <DownloadDialog :flow="flow" :title="title" unit="卷">
+    <template v-if="volumes.length > 1" #default>
+      <DownloadSelection
+        v-model="flow.selected.value"
+        :selection="selection"
+        unit="卷"
+        :disabled="locked"
+      />
+    </template>
   </DownloadDialog>
 </template>

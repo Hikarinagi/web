@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { Button, Center, Stack, Tag, Text } from '@hina-ui/vue'
+  import { Button, Center, IconButton, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
+  import { Pencil } from '@lucide/vue'
   import type { VolumeCard } from '~/features/manga/volumes'
 
   defineOptions({ name: 'MangaChaptersVolumeCard' })
@@ -9,7 +10,7 @@
     mangaId: number
     card: VolumeCard
   }>()
-  const emit = defineEmits<{ contribute: [card: VolumeCard] }>()
+  const emit = defineEmits<{ edit: [chapter: NonNullable<VolumeCard['whole']>] }>()
 
   const readable = computed(() => props.card.whole?.readable ?? false)
   const readerPath = computed(() =>
@@ -56,33 +57,27 @@
         >
           {{ card.title }}
         </Text>
-        <Text v-if="readable && card.year" size="xs" tone="muted" truncate>{{ card.year }}</Text>
-        <Text v-else-if="!readable" size="xs" tone="faint" truncate>没有内容</Text>
+        <Text v-if="card.year" size="xs" tone="muted" truncate>{{ card.year }}</Text>
       </Stack>
     </NuxtLink>
     <Center
-      v-if="card.entry"
+      v-if="card.entry && readable"
       class="pointer-events-none absolute inset-x-0 top-0 aspect-7/10 rounded-lg bg-neutral-1000/40 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
     >
-      <Button
-        v-if="readable"
-        :as="NuxtLink"
-        :to="readerPath!"
-        size="sm"
-        tone="neutral"
-        class="pointer-events-auto"
-      >
+      <Button :as="NuxtLink" :to="readerPath!" size="sm" tone="neutral" class="pointer-events-auto">
         阅读整卷
       </Button>
-      <Button
-        v-else
-        size="sm"
-        tone="neutral"
-        class="pointer-events-auto"
-        @click="emit('contribute', card)"
-      >
-        投稿本卷
-      </Button>
     </Center>
+    <IconButton
+      v-if="card.whole?.editable"
+      label="修改卷信息"
+      size="sm"
+      variant="soft"
+      tone="neutral"
+      class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100"
+      @click="emit('edit', card.whole!)"
+    >
+      <Pencil />
+    </IconButton>
   </Stack>
 </template>

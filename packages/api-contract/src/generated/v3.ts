@@ -2661,6 +2661,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/reader/download/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDownloadPolicyController_recent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/reader/novel/policy": {
         parameters: {
             query?: never;
@@ -6677,6 +6693,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/external-source/manga-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_mangaDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/manga-volume-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_mangaVolumeDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/external-source/{source}/search": {
         parameters: {
             query?: never;
@@ -8725,7 +8773,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-chapters/{id}/change-requests": {
+    "/api/v3/manga-chapters/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -8734,11 +8782,11 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["MangaChapterChangeRequestController_create"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["MangaChapterEditController_update"];
         trace?: never;
     };
     "/api/v3/manga-page-tasks/{task_id}": {
@@ -10223,6 +10271,23 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["NovelTranslationController_select"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 条目变更事件流 */
+        get: operations["catalog.changes"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -12674,6 +12739,102 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/downloads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DownloadController_list"];
+        put?: never;
+        post: operations["DownloadController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/downloads/limits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DownloadController_limits"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/downloads/quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DownloadController_quote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/downloads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DownloadController_detail"];
+        put?: never;
+        post?: never;
+        delete: operations["DownloadController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/downloads/{id}/files/{file}/chunks/{chunk}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DownloadController_chunk"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/downloads/{id}/manifest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DownloadController_manifest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/drafts": {
         parameters: {
             query?: never;
@@ -13058,54 +13219,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/user/me/manga/download/mangas/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaDownloadController_status"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/manga/download/mangas/{id}/files": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["MangaDownloadController_download"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/manga/download/mangas/{id}/plan": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["MangaDownloadController_plan"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/user/me/media": {
         parameters: {
             query?: never;
@@ -13133,54 +13246,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["UserMediaController_deleteOne"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/novel/download/series/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["NovelDownloadController_series"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/novel/download/series/{id}/plan": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["NovelDownloadController_plan"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/novel/download/volumes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["NovelDownloadController_status"];
-        put?: never;
-        post: operations["NovelDownloadController_download"];
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -14863,6 +14928,8 @@ export interface components {
             enabled: boolean;
             /** @description 该类型的渠道只能使用的协议 */
             fixed_protocol: components["schemas"]["AiProtocol"] | null;
+            /** @description 每次请求附带的请求头 */
+            headers: components["schemas"]["AiProviderHeaderDto"][];
             id: number;
             /** @description 密钥的首尾几位 */
             key_hint: string;
@@ -14887,6 +14954,8 @@ export interface components {
             enabled: boolean;
             /** @description 该类型的渠道只能使用的协议 */
             fixed_protocol: components["schemas"]["AiProtocol"] | null;
+            /** @description 每次请求附带的请求头 */
+            headers: components["schemas"]["AiProviderHeaderDto"][];
             id: number;
             /** @description 密钥的首尾几位 */
             key_hint: string;
@@ -14901,6 +14970,14 @@ export interface components {
             suspended_kinds: components["schemas"]["AiErrorKind"][];
             /** @description 该渠道上的上游模型 ID */
             upstream_ids: string[];
+        };
+        AiProviderHeaderDto: {
+            name: string;
+            value: string;
+        };
+        AiProviderHeaderItemDto: {
+            name: string;
+            value: string;
         };
         /** @enum {string} */
         AiProviderKind: "COMPATIBLE" | "OPENAI" | "ANTHROPIC" | "GOOGLE" | "TYPESAFE";
@@ -15090,6 +15167,8 @@ export interface components {
             output: "object" | "text" | "decision";
             /** @description 实际生效的模型无法用于此场景的原因 */
             problem: string | null;
+            /** @description 固定使用的线路 */
+            route: components["schemas"]["AiSceneRouteDto"] | null;
             /** @description 最近 24 小时的统计 */
             stats: components["schemas"]["AiStatsDto"];
             temperature: number | null;
@@ -15097,6 +15176,11 @@ export interface components {
             tools: components["schemas"]["AiToolRefDto"][];
             tools_supported: boolean;
             vision: boolean;
+        };
+        AiSceneRouteDto: {
+            id: number;
+            provider: components["schemas"]["AiProviderRefDto"];
+            upstream_id: string;
         };
         AiSeriesBucketDto: {
             /** Format: date-time */
@@ -15284,6 +15368,19 @@ export interface components {
         AppealTargetDto: {
             target_id: number;
             target_type: string;
+        };
+        ApproveMangaProjectDto: {
+            chapter_name?: string | null;
+            chapter_number?: string | null;
+            /** @enum {string} */
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /**
+             * @description 只有尚未对应到章节的项目可以改
+             * @enum {string}
+             */
+            scope?: "CHAPTER" | "VOLUME";
+            /** @description 单行本条目 */
+            volume_id?: number | null;
         };
         ArticleCardSummaryResDto: {
             cover: components["schemas"]["MediaAssetDto"] | null;
@@ -16161,6 +16258,8 @@ export interface components {
             base_url?: string | null;
             /** @description 模型目录中的服务商 */
             catalog_provider_id?: string | null;
+            /** @description 每次请求附带的请求头 */
+            headers?: components["schemas"]["AiProviderHeaderItemDto"][];
             kind: components["schemas"]["AiProviderKind"];
             name: string;
             /** @default 1 */
@@ -16262,6 +16361,21 @@ export interface components {
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
+        CreateDownloadTaskDto: {
+            /**
+             * @description 轻小说只能是 EPUB
+             * @enum {string}
+             */
+            format: "CBZ" | "EPUB";
+            /** @description 漫画的章节 ID 或轻小说的分卷 ID */
+            item_ids: number[];
+            /** @enum {string} */
+            kind: "MANGA" | "NOVEL";
+            /** @description 本次最多愿意使用的下载卡数 */
+            max_cards: number;
+            /** @description 漫画或轻小说的 ID */
+            series_id: number;
+        };
         CreateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
             description?: string;
@@ -16315,7 +16429,10 @@ export interface components {
             chapter_name?: string | null;
             /** @description 话数，例如 12 或 12.5 */
             chapter_number?: string | null;
-            /** @enum {string} */
+            /**
+             * @description 新的一话必选
+             * @enum {string}
+             */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
@@ -16336,9 +16453,10 @@ export interface components {
              */
             target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
             team_id?: number | null;
-            /** @description 整卷投稿时选择的单行本条目 */
+            /** @description 随投稿新建单行本条目的变更请求；条目与项目一起审核 */
+            volume_change_request_id?: number;
+            /** @description 单行本条目；整卷投稿必选，单话可选填所属单行本 */
             volume_id?: number | null;
-            volume_number?: number | null;
         };
         CreateNovelChapterDto: {
             /** @description 排序键，缺省时排在最后 */
@@ -16686,7 +16804,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -16702,17 +16820,140 @@ export interface components {
             price: number;
             purchased: number;
         };
+        DownloadFileDto: {
+            bytes: number;
+            index: number;
+            item_ids: number[];
+            name: string;
+        };
+        DownloadItemDto: {
+            bytes: number;
+            id: number;
+            label: string;
+            revision: string;
+        };
+        DownloadLimitsDto: {
+            daily_limit_bytes: number;
+            daily_used_bytes: number;
+            file_max_bytes: number;
+            memory_fallback_max_bytes: number;
+            parallel_connections: number;
+        };
+        DownloadManifestDto: {
+            /** Format: date-time */
+            expires_at: string;
+            files: components["schemas"]["DownloadManifestFileDto"][];
+            /** @enum {string} */
+            format: "CBZ" | "EPUB";
+            /** @enum {string} */
+            kind: "MANGA" | "NOVEL";
+            parallel_connections: number;
+            series_id: number;
+            task_id: number;
+        };
+        DownloadManifestEntryDto: {
+            bytes: number;
+            chapter_id?: number | null;
+            /** @description text 条目的 UTF-8 内容 */
+            data?: string | null;
+            /** @description chunk 条目在文件中的序号 */
+            index?: number | null;
+            /** @enum {string} */
+            kind: "page" | "text" | "chunk";
+            mime_type?: string | null;
+            /** @description 归档内的条目名；原样文件时为空字符串 */
+            name: string;
+            page_id?: number | null;
+        };
+        DownloadManifestFileDto: {
+            bytes: number;
+            /**
+             * @description zip 由浏览器按条目组装；raw 按块顺序写入
+             * @enum {string}
+             */
+            container: "zip" | "raw";
+            entries: components["schemas"]["DownloadManifestEntryDto"][];
+            index: number;
+            name: string;
+        };
+        DownloadManifestRequestDto: {
+            /**
+             * @description 内容更新后再次保存时最多愿意使用的下载卡数
+             * @default 0
+             */
+            max_cards: number;
+        };
         DownloadPolicyDto: {
             card_price: number;
+            daily_bytes_limit: number;
+            file_max_bytes: number;
             manga_band_size: number;
-            manga_concurrent_transfers: number;
-            manga_daily_bytes_limit: number;
-            manga_hourly_transfer_limit: number;
-            manga_image_concurrency: number;
-            manga_package_bytes: number;
-            manga_package_pages: number;
-            manga_transfer_timeout_seconds: number;
+            manifest_ttl_seconds: number;
+            memory_fallback_max_bytes: number;
             novel_band_size: number;
+            parallel_connections: number;
+        };
+        DownloadQuoteDto: {
+            /** @enum {string|null} */
+            blocked?: "DAILY_LIMIT" | "FILE_TOO_LARGE" | null;
+            cards: components["schemas"]["DownloadCardsDto"];
+            files: components["schemas"]["DownloadFileDto"][];
+            /** @enum {string} */
+            format: "CBZ" | "EPUB";
+            items: components["schemas"]["DownloadItemDto"][];
+            /** @enum {string} */
+            kind: "MANGA" | "NOVEL";
+            limits: components["schemas"]["DownloadLimitsDto"];
+            /** @description 尚未授权、会计入今日额度的字节数 */
+            new_bytes: number;
+            required_cards: number;
+            series_id: number;
+            title: string;
+            total_bytes: number;
+        };
+        DownloadRequestDto: {
+            /**
+             * @description 轻小说只能是 EPUB
+             * @enum {string}
+             */
+            format: "CBZ" | "EPUB";
+            /** @description 漫画的章节 ID 或轻小说的分卷 ID */
+            item_ids: number[];
+            /** @enum {string} */
+            kind: "MANGA" | "NOVEL";
+            /** @description 漫画或轻小说的 ID */
+            series_id: number;
+        };
+        DownloadStatsDto: {
+            /** @description 统计窗口的天数 */
+            days: number;
+            /** @description 窗口内新授权的内容字节数 */
+            granted_bytes: number;
+            /** @description 窗口内再次保存过的任务数 */
+            resaved: number;
+            /** @description 窗口内创建的下载任务数 */
+            tasks: number;
+        };
+        DownloadTaskDto: {
+            cards_charged: number;
+            /** Format: date-time */
+            created_at: string;
+            files: components["schemas"]["DownloadFileDto"][];
+            /** @enum {string} */
+            format: "CBZ" | "EPUB";
+            id: number;
+            items: components["schemas"]["DownloadItemDto"][];
+            /** @enum {string} */
+            kind: "MANGA" | "NOVEL";
+            /** Format: date-time */
+            last_used_at: string;
+            series_id: number;
+            title: string;
+            total_bytes: number;
+            /** @description 再次保存更新后的内容需要的下载卡数；内容没有更新时为空 */
+            update_required_cards?: number | null;
+            /** @description 任务创建后内容是否有更新 */
+            updated: boolean;
         };
         DraftListItemDto: {
             char_count: number;
@@ -16728,6 +16969,14 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             view_count: number;
+        };
+        EditMangaChapterDto: {
+            chapter_number?: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
+            name?: string | null;
+            /** Format: date */
+            publication_date?: string | null;
+            volume_id?: number | null;
         };
         EditorDocumentDto: {
             content?: components["schemas"]["EditorNodeDto"][];
@@ -18880,6 +19129,20 @@ export interface components {
             failed_ids: number[];
             succeeded: number;
         };
+        MangaChapterDto: {
+            chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            page_count: number;
+            /** Format: date-time */
+            publication_date: string | null;
+            series_id: number;
+            sort_key: number;
+            volume_id: number | null;
+            volume_number: number | null;
+        };
         MangaChapterLabelDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
@@ -18896,6 +19159,8 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /** @description 当前用户能否就地修改这一章的信息 */
+            editable: boolean;
             id: number;
             name: string | null;
             name_cn: string | null;
@@ -19019,39 +19284,6 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             views: number;
-        };
-        MangaDownloadFileDto: {
-            /** @enum {string} */
-            format?: "cbz" | "epub";
-            max_cards: number;
-            p: string;
-            page_ids: number[];
-            revision: string;
-        };
-        MangaDownloadPartDto: {
-            byte_size: number;
-            file_name: string;
-            page_ids: number[];
-            required_cards: number;
-            revision: string;
-        };
-        MangaDownloadPlanDto: {
-            chapter_ids: number[];
-            /** @enum {string} */
-            format?: "cbz" | "epub";
-        };
-        MangaDownloadPlanResultDto: {
-            available: number;
-            cards_used: number;
-            manga_band_size: number;
-            manga_count: number;
-            novel_band_size: number;
-            novel_count: number;
-            parts: components["schemas"]["MangaDownloadPartDto"][];
-            points: number;
-            price: number;
-            purchased: number;
-            required_cards: number;
         };
         MangaEditionDto: {
             fields: {
@@ -19178,10 +19410,16 @@ export interface components {
         };
         MangaProjectChapterRefDto: {
             chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
             name: string | null;
+            /** Format: date-time */
+            publication_date: string | null;
+            volume_id: number | null;
         };
         MangaProjectDto: {
+            /** @description 随投稿新建条目的审核批次 */
+            batch_id: string | null;
             chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
             chapter_name: string | null;
             chapter_number: string | null;
@@ -19209,6 +19447,8 @@ export interface components {
             source_lang: string;
             /** @enum {string} */
             status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            /** Format: date-time */
+            submitted_at: string | null;
             target_lang: string | null;
             team: components["schemas"]["TranslationTeamSummaryDto"] | null;
             viewer_capabilities: ("manage" | "label" | "translate" | "proofread" | "redraw" | "typeset" | "finalize")[];
@@ -19216,11 +19456,14 @@ export interface components {
             /** @enum {string|null} */
             viewer_role: "OWNER" | "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER" | null;
             volume: components["schemas"]["MangaProjectVolumeRefDto"] | null;
-            /** @description 整卷投稿关联的单行本条目 */
+            /** @description 单行本条目 */
             volume_id: number | null;
             volume_number: number | null;
+            withdrawn_count: number;
         };
         MangaProjectListEntryDto: {
+            /** @description 随投稿新建条目的审核批次 */
+            batch_id: string | null;
             chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
             chapter_name: string | null;
             chapter_number: string | null;
@@ -19234,6 +19477,10 @@ export interface components {
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
+            /** @description 归类是否完整，不完整时不能通过 */
+            placement_complete: boolean;
+            /** @description 前几页的图片地址 */
+            preview: string[];
             progress: components["schemas"]["MangaProjectProgressDto"];
             /**
              * @description 一话或整卷
@@ -19244,12 +19491,15 @@ export interface components {
             source_lang: string;
             /** @enum {string} */
             status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            /** Format: date-time */
+            submitted_at: string | null;
             target_lang: string | null;
             team: components["schemas"]["TranslationTeamSummaryDto"] | null;
             volume: components["schemas"]["MangaProjectVolumeRefDto"] | null;
-            /** @description 整卷投稿关联的单行本条目 */
+            /** @description 单行本条目 */
             volume_id: number | null;
             volume_number: number | null;
+            withdrawn_count: number;
         };
         MangaProjectMemberDto: {
             /** Format: date-time */
@@ -19996,6 +20246,7 @@ export interface components {
         ModerationPromptsDto: {
             article?: string;
             comment?: string;
+            image?: string;
             label?: string;
             post?: string;
             rate?: string;
@@ -20003,6 +20254,7 @@ export interface components {
         ModerationPromptsResDto: {
             article: string;
             comment: string;
+            image: string;
             label: string;
             post: string;
             rate: string;
@@ -20151,65 +20403,6 @@ export interface components {
         NovelCreditsDto: {
             /** @description 发布时写入电子书的完整署名，含自动生成与补充的部分 */
             lines: components["schemas"]["NovelCreditLineDto"][];
-        };
-        NovelDownloadFileDto: {
-            max_cards: number;
-            p: string;
-            revision?: string | null;
-        };
-        NovelDownloadPartDto: {
-            file_name: string;
-            id: number;
-            required_cards: number;
-            revision: string | null;
-        };
-        NovelDownloadPlanDto: {
-            volume_ids: number[];
-        };
-        NovelDownloadPlanResultDto: {
-            available: number;
-            cards_used: number;
-            manga_band_size: number;
-            manga_count: number;
-            novel_band_size: number;
-            novel_count: number;
-            parts: components["schemas"]["NovelDownloadPartDto"][];
-            points: number;
-            price: number;
-            purchased: number;
-            required_cards: number;
-        };
-        NovelDownloadSeriesDto: {
-            available: number;
-            cards_used: number;
-            manga_band_size: number;
-            manga_count: number;
-            novel_band_size: number;
-            novel_count: number;
-            points: number;
-            price: number;
-            purchased: number;
-            volumes: components["schemas"]["NovelDownloadVolumeDto"][];
-        };
-        NovelDownloadStatusDto: {
-            available: number;
-            cards_used: number;
-            file_name: string;
-            manga_band_size: number;
-            manga_count: number;
-            novel_band_size: number;
-            novel_count: number;
-            points: number;
-            price: number;
-            purchased: number;
-            required_cards: number;
-            revision: string | null;
-            series_id: number;
-            unlocked: boolean;
-        };
-        NovelDownloadVolumeDto: {
-            id: number;
-            label: string;
         };
         NovelImportBlockDto: {
             caption: string | null;
@@ -20376,7 +20569,6 @@ export interface components {
         };
         NovelReaderPolicyDto: {
             daily_bytes_limit: number;
-            daily_export_limit: number;
             daily_volume_limit: number;
             hourly_transfer_limit: number;
             hourly_volume_limit: number;
@@ -20761,6 +20953,31 @@ export interface components {
             review: number;
             throttled: number;
         };
+        OpenCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["OpenCatalogEventDto"][];
+            /** @description 当前最新事件序号；首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        OpenCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号，单调递增，可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
@@ -20785,6 +21002,8 @@ export interface components {
             en_intro: string | null;
             /** @description 英文名或罗马字 */
             en_name: string | null;
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -20850,6 +21069,12 @@ export interface components {
             /** @description 译名 */
             trans_name: string | null;
         };
+        OpenExternalSourceDto: {
+            /** @description Bangumi 条目 ID，数字字符串 */
+            bangumi: string | null;
+            /** @description VNDB ID，带类型前缀：作品 v123、厂商 p45、角色 c67 */
+            vndb: string | null;
+        };
         OpenFavoriteCollectionDto: {
             /** @description 收藏夹 ID */
             id: number;
@@ -20912,6 +21137,8 @@ export interface components {
             engine: string | null;
             /** @description 官网、商店页等外部链接 */
             external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -21317,6 +21544,8 @@ export interface components {
             en_intro: string | null;
             /** @description 成立日期 */
             established: string | null;
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -23047,6 +23276,8 @@ export interface components {
             /** @description 模型目录中的服务商 */
             catalog_provider_id?: string | null;
             enabled?: boolean;
+            /** @description 每次请求附带的请求头 */
+            headers?: components["schemas"]["AiProviderHeaderItemDto"][];
             kind?: components["schemas"]["AiProviderKind"];
             name?: string;
             /** @default 1 */
@@ -23070,6 +23301,8 @@ export interface components {
             max_output_tokens?: number | null;
             /** @description 空值使用默认模型 */
             model_id?: number | null;
+            /** @description 只走这条线路；空值在模型的线路间自动切换 */
+            route_id?: number | null;
             temperature?: number | null;
             timeout_ms?: number | null;
             tools: number[];
@@ -23218,7 +23451,7 @@ export interface components {
             /** @description 回调地址，最多 5 条。配置后即开通用户授权码流程；用户级 scope 要求至少 1 条。允许的形式取决于 application_type */
             redirect_uris?: string[];
             /** @description 应用可请求的 scope 集合 */
-            scopes?: ("openid" | "profile" | "email" | "offline_access" | "catalog:read" | "catalog:full" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
+            scopes?: ("openid" | "profile" | "email" | "offline_access" | "catalog:read" | "catalog:full" | "catalog:sync" | "user:read" | "status:read" | "status:write" | "collection:read" | "collection:write")[];
             /**
              * @description 机密客户端的令牌端点认证方式，对 public 客户端无效
              * @enum {string}
@@ -23227,15 +23460,13 @@ export interface components {
         };
         UpdateDownloadPolicyDto: {
             card_price: number;
+            daily_bytes_limit: number;
+            file_max_bytes: number;
             manga_band_size: number;
-            manga_concurrent_transfers: number;
-            manga_daily_bytes_limit: number;
-            manga_hourly_transfer_limit: number;
-            manga_image_concurrency: number;
-            manga_package_bytes: number;
-            manga_package_pages: number;
-            manga_transfer_timeout_seconds: number;
+            manifest_ttl_seconds: number;
+            memory_fallback_max_bytes: number;
             novel_band_size: number;
+            parallel_connections: number;
         };
         UpdateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
@@ -23364,7 +23595,8 @@ export interface components {
              */
             scope?: "CHAPTER" | "VOLUME";
             team_id?: number | null;
-            volume_number?: number | null;
+            /** @description 单行本条目 */
+            volume_id?: number | null;
         };
         UpdateMangaProjectMemberDto: {
             /** @enum {string} */
@@ -23441,7 +23673,6 @@ export interface components {
         };
         UpdateNovelReaderDto: {
             daily_bytes_limit: number;
-            daily_export_limit: number;
             daily_volume_limit: number;
             hourly_transfer_limit: number;
             hourly_volume_limit: number;
@@ -29048,6 +29279,25 @@ export interface operations {
             };
         };
     };
+    AdminDownloadPolicyController_recent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadStatsDto"];
+                };
+            };
+        };
+    };
     AdminNovelReaderController_get: {
         parameters: {
             query?: never;
@@ -33753,7 +34003,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -35303,10 +35553,52 @@ export interface operations {
             };
         };
     };
+    ExternalSourceController_mangaDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_mangaVolumeDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
     ExternalSourceController_search: {
         parameters: {
             query: {
-                type: "galgame" | "light-novel" | "light-novel-volume" | "person" | "character" | "producer";
+                type: "galgame" | "light-novel" | "light-novel-volume" | "manga" | "manga-volume" | "person" | "character" | "producer";
                 q: string;
             };
             header?: never;
@@ -38975,7 +39267,7 @@ export interface operations {
             };
         };
     };
-    MangaChapterChangeRequestController_create: {
+    MangaChapterEditController_update: {
         parameters: {
             query?: never;
             header?: never;
@@ -38986,16 +39278,16 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateChangeRequestDto"];
+                "application/json": components["schemas"]["EditMangaChapterDto"];
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                    "application/json": components["schemas"]["MangaChapterDto"];
                 };
             };
         };
@@ -39290,7 +39582,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApproveMangaProjectDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -41770,6 +42066,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NovelSegmentStateDto"];
+                };
+            };
+        };
+    };
+    "catalog.changes": {
+        parameters: {
+            query?: {
+                /** @description 事件游标，返回 id 大于该值的事件；默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数，取值 1-500 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenCatalogChangesDto"];
                 };
             };
         };
@@ -46222,6 +46542,188 @@ export interface operations {
             };
         };
     };
+    DownloadController_list: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["DownloadTaskDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    DownloadController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDownloadTaskDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadTaskDto"];
+                };
+            };
+        };
+    };
+    DownloadController_limits: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadLimitsDto"];
+                };
+            };
+        };
+    };
+    DownloadController_quote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DownloadRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadQuoteDto"];
+                };
+            };
+        };
+    };
+    DownloadController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadTaskDto"];
+                };
+            };
+        };
+    };
+    DownloadController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DownloadController_chunk: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                file: number;
+                chunk: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FileTransferDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    DownloadController_manifest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DownloadManifestRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadManifestDto"];
+                };
+            };
+        };
+    };
     UserContentController_getDrafts: {
         parameters: {
             query: {
@@ -47213,77 +47715,6 @@ export interface operations {
             };
         };
     };
-    MangaDownloadController_status: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DownloadCardsDto"];
-                };
-            };
-        };
-    };
-    MangaDownloadController_download: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MangaDownloadFileDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    MangaDownloadController_plan: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MangaDownloadPlanDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaDownloadPlanResultDto"];
-                };
-            };
-        };
-    };
     UserMediaController_getMine: {
         parameters: {
             query: {
@@ -47325,98 +47756,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    NovelDownloadController_series: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelDownloadSeriesDto"];
-                };
-            };
-        };
-    };
-    NovelDownloadController_plan: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["NovelDownloadPlanDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelDownloadPlanResultDto"];
-                };
-            };
-        };
-    };
-    NovelDownloadController_status: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelDownloadStatusDto"];
-                };
-            };
-        };
-    };
-    NovelDownloadController_download: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["NovelDownloadFileDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
             };
         };
     };

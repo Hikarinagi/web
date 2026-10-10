@@ -1,55 +1,65 @@
 <script setup lang="ts">
-  import { Button, Dialog, Inline, Spinner, Stack, Text } from '@hina-ui/vue'
-  import type { DownloadCards } from '~/features/download/types'
+  import { Button, Dialog, Stack } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
+  import type { useDownloadDialog } from '~/features/download/useDownloadDialog'
 
-  defineProps<{
+  defineOptions({ name: 'DownloadDialog' })
+
+  const props = defineProps<{
+    flow: ReturnType<typeof useDownloadDialog>
     title: string
-    format: 'EPUB' | 'CBZ'
-    summary: string
-    status: DownloadCards | null
-    required: number | null
-    quoting: boolean
-    needsCard: boolean
-    busy: boolean
-    disabled: boolean
-    resume?: boolean
-    finished?: boolean
+    unit: string
   }>()
-  const open = defineModel<boolean>('open', { required: true })
-  defineEmits<{ download: []; stop: []; reselect: [] }>()
+  const slots = useSlots()
+  const { open, quote, quoting, creating, purchasing, run, blocked, needsCard, canStart } =
+    props.flow
+
+  const busy = computed(() => creating.value || purchasing.value)
+  const saving = computed(() => run.value?.state === 'saving' || run.value?.state === 'preparing')
+  const primary = computed(() => {
+    if (needsCard.value) return '购买下载卡'
+    return props.flow.sink.value === 'fs' ? '保存到文件夹' : '保存到设备'
+  })
 </script>
 
 <template>
-  <Dialog v-model:open="open" title="下载" :description="title" size="lg" :locked="busy">
+  <Dialog
+    v-model:open="open"
+    title="下载"
+    :description="title"
+    :size="slots.default ? 'lg' : 'sm'"
+    :locked="busy"
+  >
     <template #content>
-      <Stack gap="lg">
+      <DownloadRun v-if="run" :run="run" />
+      <Stack v-else gap="lg">
         <slot />
-        <Inline justify="between">
-          <Text>{{ summary }}</Text>
-          <Text size="sm" tone="muted">{{ format }}</Text>
-        </Inline>
-        <Inline justify="between" gap="md" class="border-t border-line pt-4">
-          <Inline gap="xs" aria-live="polite" :aria-busy="quoting">
-            <Text v-if="required !== null" size="sm" weight="medium"
-              >本次使用 {{ required }} 张下载卡</Text
-            >
-            <Text v-else-if="quoting" size="sm" tone="muted">正在计算</Text>
-            <Spinner v-if="quoting" size="sm" />
-            <DownloadRules v-if="status" :status="status" />
-          </Inline>
-          <Text size="sm" tone="muted" class="shrink-0">持有 {{ status?.available ?? 0 }} 张</Text>
-        </Inline>
+        <DownloadQuote :quote="quote" :quoting="quoting" :blocked="blocked" :unit="unit" />
       </Stack>
     </template>
     <template #footer>
-      <Button v-if="busy" variant="ghost" tone="neutral" @click="$emit('stop')">停止下载</Button>
-      <Button v-else-if="resume" variant="ghost" tone="neutral" @click="$emit('reselect')"
-        >重新选择</Button
-      >
-      <Button v-else variant="ghost" tone="neutral" @click="open = false">取消</Button>
-      <Button :disabled="disabled" :loading="busy" @click="$emit('download')">
-        {{ needsCard ? '购买下载卡' : finished ? '再次下载' : resume ? '继续下载' : '下载' }}
-      </Button>
+      <template v-if="run">
+        <Button :as="NuxtLink" to="/me/downloads" variant="ghost" tone="neutral">
+          前往下载中心
+        </Button>
+        <Button v-if="saving" variant="ghost" tone="neutral" @click="flow.pause()">暂停</Button>
+        <Button v-else-if="run.state === 'paused' || run.state === 'error'" @click="flow.resume()">
+          继续
+        </Button>
+        <Button v-if="saving" @click="flow.background()">在后台继续</Button>
+        <Button v-else-if="run.state === 'done'" @click="flow.background()">完成</Button>
+      </template>
+      <template v-else>
+        <Button variant="ghost" tone="neutral" :disabled="busy" @click="open = false">取消</Button>
+        <Button
+          :disabled="!needsCard && !canStart"
+          :loading="busy"
+          class="min-w-30"
+          @click="flow.save()"
+        >
+          {{ primary }}
+        </Button>
+      </template>
     </template>
   </Dialog>
 </template>

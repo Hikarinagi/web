@@ -8,7 +8,6 @@
   const props = withDefaults(
     defineProps<{
       mangaId: number
-      mangaTitle: string
       chapters: MangaPageData['chapters']
       volumes?: MangaPageData['volumes']
       progress: MangaPageData['progress']
@@ -23,6 +22,14 @@
       showVolumes: true,
     },
   )
+  const emit = defineEmits<{ refresh: [] }>()
+  const editing = ref<MangaPageData['chapters'][number] | null>(null)
+  const editOpen = ref(false)
+
+  function edit(chapter: MangaPageData['chapters'][number]) {
+    editing.value = chapter
+    editOpen.value = true
+  }
 
   function bySortKey(
     left: MangaPageData['chapters'][number],
@@ -57,12 +64,14 @@
       :progress="progress"
       :latest-chapter-at="latestChapterAt"
       :volume-number="volumeNumber"
+      @edit="edit"
     />
-    <MangaChaptersVolumes
-      v-if="cards.length"
-      :manga-id="mangaId"
-      :manga-title="mangaTitle"
-      :cards="cards"
+    <MangaChaptersVolumes v-if="cards.length" :manga-id="mangaId" :cards="cards" @edit="edit" />
+    <MangaChapterEditDialog
+      v-model:visible="editOpen"
+      :series-id="mangaId"
+      :chapter="editing"
+      @saved="emit('refresh')"
     />
   </Stack>
 </template>

@@ -11,6 +11,7 @@
       viewer_reviewer: boolean
       viewer_capabilities: readonly string[]
       pending_changes?: boolean
+      withdrawn_count?: number
     }
     blocker: string
   }>()
@@ -41,6 +42,7 @@
   const published = computed(() => props.project.status === 'PUBLISHED')
   const settled = computed(() => published.value && props.project.pending_changes === false)
   const submitLabel = computed(() => (published.value ? '提交更新' : '提交审核'))
+  const withdrawn = computed(() => (props.project.withdrawn_count ?? 0) >= 1)
 
   async function run(action: 'submit' | 'withdraw' | 'approve' | 'restore', done: string) {
     if (busy.value) return
@@ -59,7 +61,7 @@
       } else if (action === 'approve') {
         await (novel
           ? hikariRequest('/api/v3/novel-projects/{project_id}/approve', request)
-          : hikariRequest('/api/v3/manga-projects/{project_id}/approve', request))
+          : hikariRequest('/api/v3/manga-projects/{project_id}/approve', { ...request, body: {} }))
       } else {
         await (novel
           ? hikariRequest('/api/v3/novel-projects/{project_id}/restore', request)
@@ -102,15 +104,17 @@
         </Button>
         <Button size="sm" :loading="busy" @click="confirmApprove">通过</Button>
       </template>
-      <Button
-        v-else-if="manage"
-        size="sm"
-        variant="soft"
-        :loading="busy"
-        @click="run('withdraw', '已撤回审核')"
-      >
-        撤回审核
-      </Button>
+      <Inline v-else-if="manage" v-tooltip="withdrawn ? '撤回只能做一次' : null" as="span">
+        <Button
+          size="sm"
+          variant="soft"
+          :loading="busy"
+          :disabled="withdrawn"
+          @click="run('withdraw', '已撤回审核')"
+        >
+          撤回审核
+        </Button>
+      </Inline>
     </template>
     <Button
       v-else-if="shelved && owner"

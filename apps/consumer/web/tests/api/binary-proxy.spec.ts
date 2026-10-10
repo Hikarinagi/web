@@ -74,7 +74,7 @@ describe('download Nitro proxy', () => {
         'content-length': String(bytes.length),
       }),
     })
-    const response = await send('/api/v3/user/me/novel/download/volumes/1', {
+    const response = await send('/api/v3/user/me/downloads/1/files/0/chunks/0/content', {
       method: 'POST',
       headers: { cookie: 'hikari_access_token=current' },
     })
@@ -84,7 +84,7 @@ describe('download Nitro proxy', () => {
     expect(response.headers.get('content-length')).toBe(String(bytes.length))
     expect(raw.mock.calls[0][1].headers.get('accept-encoding')).toBe('identity')
     expect(raw).toHaveBeenCalledWith(
-      'http://api.test/api/v3/user/me/novel/download/volumes/1',
+      'http://api.test/api/v3/user/me/downloads/1/files/0/chunks/0/content',
       expect.objectContaining({
         responseType: 'stream',
         retry: false,
@@ -95,7 +95,7 @@ describe('download Nitro proxy', () => {
 
   it.each([
     '/api/v3/reader/mangas/1/chapters/2/pages/3/content',
-    '/api/v3/user/me/manga/download/mangas/1/files',
+    '/api/v3/user/me/downloads/1/files/2/chunks/3/content',
   ])('preserves encrypted manga bytes and abort propagation: %s', async path => {
     const bytes = Uint8Array.from([0, 255, 200, 128, 1])
     raw.mockResolvedValue({
@@ -189,26 +189,26 @@ describe('download Nitro proxy', () => {
     expect(response.headers.get('content-length')).not.toBe('100')
   })
 
-  it.each([
-    '/api/v3/user/me/novel/download/series/1/plan',
-    '/api/v3/user/me/manga/download/mangas/1/plan',
-  ])('keeps plans as JSON while passing a cancellation signal: %s', async path => {
-    const body = { success: true, data: { required_cards: 1, parts: [] } }
-    raw.mockResolvedValue({
-      status: 200,
-      headers: new Headers({ 'content-type': 'application/json' }),
-      _data: body,
-    })
-    const response = await send(path, { method: 'POST' })
-    expect(await response.json()).toEqual(body)
-    expect(raw.mock.calls[0][1].signal).toBeInstanceOf(AbortSignal)
-    expect(raw.mock.calls[0][1].responseType).toBeUndefined()
-  })
+  it.each(['/api/v3/user/me/downloads/quotes', '/api/v3/user/me/downloads/1/manifest'])(
+    'keeps quotes and manifests as JSON while passing a cancellation signal: %s',
+    async path => {
+      const body = { success: true, data: { required_cards: 1, files: [] } }
+      raw.mockResolvedValue({
+        status: 200,
+        headers: new Headers({ 'content-type': 'application/json' }),
+        _data: body,
+      })
+      const response = await send(path, { method: 'POST' })
+      expect(await response.json()).toEqual(body)
+      expect(raw.mock.calls[0][1].signal).toBeInstanceOf(AbortSignal)
+      expect(raw.mock.calls[0][1].responseType).toBeUndefined()
+    },
+  )
 
   it.each([
-    '/api/v3/user/me/novel/download/series/1/plan',
-    '/api/v3/user/me/manga/download/mangas/1/plan',
-    '/api/v3/user/me/manga/download/mangas/1/files',
+    '/api/v3/user/me/downloads/quotes',
+    '/api/v3/user/me/downloads/1/manifest',
+    '/api/v3/user/me/downloads/1/files/0/chunks/0/content',
   ])('aborts the upstream request when the client disconnects: %s', async path => {
     const started = Promise.withResolvers<AbortSignal>()
     const canceled = Promise.withResolvers<undefined>()

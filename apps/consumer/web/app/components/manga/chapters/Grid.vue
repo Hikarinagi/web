@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Card, Grid, Inline, Tag, Text } from '@hina-ui/vue'
+  import { Card, Grid, IconButton, Inline, Stack, Tag, Text } from '@hina-ui/vue'
+  import { Pencil } from '@lucide/vue'
   import { cn } from '~/utils/cn'
   import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
@@ -18,6 +19,7 @@
     }>(),
     { volumeIds: () => new Set<number>() },
   )
+  const emit = defineEmits<{ edit: [chapter: MangaPageData['chapters'][number]] }>()
 
   function subtitle(chapter: MangaPageData['chapters'][number]) {
     return chapter.chapter_number ? chapter.name_cn || chapter.name || '' : ''
@@ -47,38 +49,55 @@
 
 <template>
   <Grid :cols="2" class="gap-2 sm:grid-cols-3 lg:grid-cols-4">
-    <Card
+    <Stack
       v-for="chapter in chapters"
       :key="chapter.id"
-      as="button"
-      :padded="false"
-      :class="cellClass(chapter)"
-      :disabled="!chapter.readable"
-      @click="open(chapter)"
+      as="span"
+      gap="none"
+      class="group relative"
     >
-      <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
-        <Text
-          as="span"
-          size="sm"
-          weight="semibold"
-          truncate
-          :class="chapter.id === currentChapterId ? 'text-accent-text' : undefined"
-        >
-          {{ getMangaEpisodeLabel(chapter) }}
-        </Text>
-        <Tag v-if="chapter.id === newChapterId" tone="accent" class="shrink-0">新</Tag>
-      </Inline>
-      <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
-        <Text v-if="subtitle(chapter)" as="span" size="xs" tone="muted" truncate class="min-w-0">
-          {{ subtitle(chapter) }}
-        </Text>
-        <Text v-if="chapter.page_count" as="span" size="xs" tone="muted" class="ms-auto shrink-0">
-          <template v-if="chapter.translation">
-            {{ TRANSLATION_QUALITY_LABEL[chapter.translation] }} ·
-          </template>
-          {{ chapter.page_count }} P
-        </Text>
-      </Inline>
-    </Card>
+      <Card
+        as="button"
+        :padded="false"
+        :class="cellClass(chapter)"
+        :disabled="!chapter.readable"
+        @click="open(chapter)"
+      >
+        <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
+          <Text
+            as="span"
+            size="sm"
+            weight="semibold"
+            truncate
+            :class="chapter.id === currentChapterId ? 'text-accent-text' : undefined"
+          >
+            {{ getMangaEpisodeLabel(chapter) }}
+          </Text>
+          <Tag v-if="chapter.id === newChapterId" tone="accent" class="shrink-0">新</Tag>
+        </Inline>
+        <Inline gap="none" :wrap="false" class="w-full min-w-0 gap-1.5">
+          <Text v-if="subtitle(chapter)" as="span" size="xs" tone="muted" truncate class="min-w-0">
+            {{ subtitle(chapter) }}
+          </Text>
+          <Text v-if="chapter.page_count" as="span" size="xs" tone="muted" class="ms-auto shrink-0">
+            <template v-if="chapter.translation">
+              {{ TRANSLATION_QUALITY_LABEL[chapter.translation] }} ·
+            </template>
+            {{ chapter.page_count }} P
+          </Text>
+        </Inline>
+      </Card>
+      <IconButton
+        v-if="chapter.editable"
+        label="修改章节信息"
+        size="sm"
+        variant="soft"
+        tone="neutral"
+        class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:opacity-100"
+        @click="emit('edit', chapter)"
+      >
+        <Pencil />
+      </IconButton>
+    </Stack>
   </Grid>
 </template>

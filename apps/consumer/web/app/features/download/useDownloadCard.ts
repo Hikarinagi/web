@@ -26,7 +26,7 @@ export function useDownloadCard(
     dialog.open({
       title: '购买下载卡',
       name: '下载卡',
-      description: '用于下载小说分卷和漫画',
+      description: '用于下载漫画与轻小说',
       details: [`持有 ${cards.available} 张`, `本月已购买 ${cards.purchased} 张`, '长期有效'],
       image: { src: downloadCardUrl },
       price: cards.price,

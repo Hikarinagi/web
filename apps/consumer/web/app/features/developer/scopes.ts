@@ -46,6 +46,13 @@ export const DEVELOPER_SCOPES = [
     requires_user: false,
   },
   {
+    scope: 'catalog:sync',
+    label: '同步条目数据',
+    description:
+      '读取条目变更事件流，并在 Galgame、厂商、角色详情中返回 VNDB 与 Bangumi ID；不含 catalog:read',
+    requires_user: false,
+  },
+  {
     scope: 'user:read',
     label: '读取用户公开资料',
     description: '授权用户的用户名、昵称、头像与简介',

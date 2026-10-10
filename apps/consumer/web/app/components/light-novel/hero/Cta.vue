@@ -31,6 +31,15 @@
     return [...pool].sort(compareVolumes)[0] ?? null
   })
   const canRead = computed(() => props.volumes.some(volume => volume.online_reading_available))
+  const downloadable = computed(() =>
+    [...props.volumes]
+      .filter(volume => volume.online_reading_available)
+      .sort(compareVolumes)
+      .map(volume => ({
+        id: volume.id,
+        label: getLightNovelVolumeLabel(volume) ?? getLightNovelVolumeTitle(volume),
+      })),
+  )
   const continueInfo = computed(() => {
     const cid = props.progress?.continue_volume_id
     if (!cid) return null
@@ -162,7 +171,12 @@
       :picker-title="pickerTitle"
     />
     <ShareButton :to="`/light-novels/${lightNovelId}`" tooltip="分享" size="lg" />
-    <LightNovelVolumeDownloadAction v-if="canRead" :id="lightNovelId" :title="title" series />
+    <LightNovelVolumeDownloadAction
+      v-if="canRead"
+      :series-id="lightNovelId"
+      :title="title"
+      :volumes="downloadable"
+    />
     <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" size="lg" />
 
     <LightNovelRateDialog

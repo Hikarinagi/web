@@ -13,9 +13,10 @@
   const requestUrl = computed<`/api/pages/${string}`>(
     () => `/api/pages/create/manga-review?page=${page.value}`,
   )
-  const { data, pending } = await useHikariApiData<WorkbenchMangaReviewPageData>(requestUrl, {
-    fatal: true,
-  })
+  const { data, pending, refresh } = await useHikariApiData<WorkbenchMangaReviewPageData>(
+    requestUrl,
+    { fatal: true },
+  )
 </script>
 
 <template>
@@ -28,5 +29,6 @@
     :list="data.projects"
     :loading="pending"
     empty-text="没有待审核的投稿"
+    @changed="refresh"
   />
 </template>

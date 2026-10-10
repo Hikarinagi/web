@@ -69,6 +69,20 @@ async function handler(event: H3Event) {
       prefill = result.draft
       prefill_cover = result.cover
       existing_id = result.existing_id
+    } else if (type === 'manga' && bangumiId) {
+      const result = await fetchBackendData(event, '/api/v3/external-source/manga-draft', {
+        query: { bangumi_id: bangumiId },
+      })
+      prefill = result.draft
+      prefill_cover = result.cover
+      existing_id = result.existing_id
+    } else if (type === 'manga-volume' && bangumiId) {
+      const result = await fetchBackendData(event, '/api/v3/external-source/manga-volume-draft', {
+        query: { bangumi_id: bangumiId },
+      })
+      prefill = result.draft
+      prefill_cover = result.cover
+      existing_id = result.existing_id
     }
   }
 

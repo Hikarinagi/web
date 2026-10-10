@@ -4637,6 +4637,13 @@
             "description": "该类型的渠道只能使用的协议",
             "nullable": true
           },
+          "headers": {
+            "description": "每次请求附带的请求头",
+            "items": {
+              "$ref": "#/components/schemas/AiProviderHeaderDto"
+            },
+            "type": "array"
+          },
           "id": {
             "type": "number"
           },
@@ -4699,6 +4706,7 @@
           "kind",
           "base_url",
           "key_hint",
+          "headers",
           "price_multiplier",
           "enabled",
           "catalog_provider",
@@ -4743,6 +4751,13 @@
             ],
             "description": "该类型的渠道只能使用的协议",
             "nullable": true
+          },
+          "headers": {
+            "description": "每次请求附带的请求头",
+            "items": {
+              "$ref": "#/components/schemas/AiProviderHeaderDto"
+            },
+            "type": "array"
           },
           "id": {
             "type": "number"
@@ -4800,6 +4815,7 @@
           "kind",
           "base_url",
           "key_hint",
+          "headers",
           "price_multiplier",
           "enabled",
           "catalog_provider",
@@ -4810,6 +4826,40 @@
           "stats",
           "last_used_at",
           "created_at"
+        ],
+        "type": "object"
+      },
+      "AiProviderHeaderDto": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object"
+      },
+      "AiProviderHeaderItemDto": {
+        "properties": {
+          "name": {
+            "maxLength": 100,
+            "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 2000,
+            "pattern": "^[^\\r\\n\\0]*$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
         ],
         "type": "object"
       },
@@ -5640,6 +5690,16 @@
             "nullable": true,
             "type": "string"
           },
+          "route": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiSceneRouteDto"
+              }
+            ],
+            "description": "固定使用的线路",
+            "nullable": true,
+            "type": "object"
+          },
           "stats": {
             "allOf": [
               {
@@ -5678,6 +5738,7 @@
           "tools_supported",
           "model",
           "effective",
+          "route",
           "choices",
           "tools",
           "temperature",
@@ -5685,6 +5746,25 @@
           "timeout_ms",
           "problem",
           "stats"
+        ],
+        "type": "object"
+      },
+      "AiSceneRouteDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/AiProviderRefDto"
+          },
+          "upstream_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "upstream_id",
+          "provider"
         ],
         "type": "object"
       },
@@ -6427,6 +6507,44 @@
           "target_type",
           "target_id"
         ],
+        "type": "object"
+      },
+      "ApproveMangaProjectDto": {
+        "properties": {
+          "chapter_name": {
+            "maxLength": 200,
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_number": {
+            "maxLength": 20,
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_type": {
+            "enum": [
+              "SERIALIZATION",
+              "EXTRA",
+              "ONESHOT",
+              "VOLUME"
+            ],
+            "type": "string"
+          },
+          "scope": {
+            "description": "只有尚未对应到章节的项目可以改",
+            "enum": [
+              "CHAPTER",
+              "VOLUME"
+            ],
+            "type": "string"
+          },
+          "volume_id": {
+            "description": "单行本条目",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
         "type": "object"
       },
       "ArticleCardSummaryResDto": {
@@ -10197,6 +10315,14 @@
             "nullable": true,
             "type": "string"
           },
+          "headers": {
+            "description": "每次请求附带的请求头",
+            "items": {
+              "$ref": "#/components/schemas/AiProviderHeaderItemDto"
+            },
+            "maxItems": 20,
+            "type": "array"
+          },
           "kind": {
             "allOf": [
               {
@@ -10564,6 +10690,55 @@
         ],
         "type": "object"
       },
+      "CreateDownloadTaskDto": {
+        "properties": {
+          "format": {
+            "description": "轻小说只能是 EPUB",
+            "enum": [
+              "CBZ",
+              "EPUB"
+            ],
+            "type": "string"
+          },
+          "item_ids": {
+            "description": "漫画的章节 ID 或轻小说的分卷 ID",
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 2000,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "kind": {
+            "enum": [
+              "MANGA",
+              "NOVEL"
+            ],
+            "type": "string"
+          },
+          "max_cards": {
+            "description": "本次最多愿意使用的下载卡数",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "number"
+          },
+          "series_id": {
+            "description": "漫画或轻小说的 ID",
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "series_id",
+          "format",
+          "item_ids",
+          "max_cards"
+        ],
+        "type": "object"
+      },
       "CreateFavoriteCollectionDto": {
         "properties": {
           "description": {
@@ -10745,6 +10920,7 @@
             "type": "string"
           },
           "chapter_type": {
+            "description": "新的一话必选",
             "enum": [
               "SERIALIZATION",
               "EXTRA",
@@ -10801,14 +10977,14 @@
             "nullable": true,
             "type": "number"
           },
-          "volume_id": {
-            "description": "整卷投稿时选择的单行本条目",
+          "volume_change_request_id": {
+            "description": "随投稿新建单行本条目的变更请求；条目与项目一起审核",
             "minimum": 1,
-            "nullable": true,
             "type": "number"
           },
-          "volume_number": {
-            "minimum": 0,
+          "volume_id": {
+            "description": "单行本条目；整卷投稿必选，单话可选填所属单行本",
+            "minimum": 1,
             "nullable": true,
             "type": "number"
           }
@@ -11982,13 +12158,13 @@
             "enum": [
               "MANGA",
               "LIGHT_NOVEL",
-              "CHARACTER",
-              "PRODUCER",
-              "PERSON",
               "GALGAME",
               "LIGHT_NOVEL_VOLUME",
               "MANGA_VOLUME",
               "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
               "TAG"
             ],
             "type": "string"
@@ -12048,6 +12224,223 @@
         ],
         "type": "object"
       },
+      "DownloadFileDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "index": {
+            "type": "number"
+          },
+          "item_ids": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "bytes",
+          "item_ids"
+        ],
+        "type": "object"
+      },
+      "DownloadItemDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "label",
+          "bytes"
+        ],
+        "type": "object"
+      },
+      "DownloadLimitsDto": {
+        "properties": {
+          "daily_limit_bytes": {
+            "type": "number"
+          },
+          "daily_used_bytes": {
+            "type": "number"
+          },
+          "file_max_bytes": {
+            "type": "number"
+          },
+          "memory_fallback_max_bytes": {
+            "type": "number"
+          },
+          "parallel_connections": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "parallel_connections",
+          "file_max_bytes",
+          "daily_limit_bytes",
+          "daily_used_bytes",
+          "memory_fallback_max_bytes"
+        ],
+        "type": "object"
+      },
+      "DownloadManifestDto": {
+        "properties": {
+          "expires_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadManifestFileDto"
+            },
+            "type": "array"
+          },
+          "format": {
+            "enum": [
+              "CBZ",
+              "EPUB"
+            ],
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "MANGA",
+              "NOVEL"
+            ],
+            "type": "string"
+          },
+          "parallel_connections": {
+            "type": "number"
+          },
+          "series_id": {
+            "type": "number"
+          },
+          "task_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "task_id",
+          "kind",
+          "series_id",
+          "format",
+          "expires_at",
+          "parallel_connections",
+          "files"
+        ],
+        "type": "object"
+      },
+      "DownloadManifestEntryDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "chapter_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "data": {
+            "description": "text 条目的 UTF-8 内容",
+            "nullable": true,
+            "type": "string"
+          },
+          "index": {
+            "description": "chunk 条目在文件中的序号",
+            "nullable": true,
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "page",
+              "text",
+              "chunk"
+            ],
+            "type": "string"
+          },
+          "mime_type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "归档内的条目名；原样文件时为空字符串",
+            "type": "string"
+          },
+          "page_id": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "bytes"
+        ],
+        "type": "object"
+      },
+      "DownloadManifestFileDto": {
+        "properties": {
+          "bytes": {
+            "type": "number"
+          },
+          "container": {
+            "description": "zip 由浏览器按条目组装；raw 按块顺序写入",
+            "enum": [
+              "zip",
+              "raw"
+            ],
+            "type": "string"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadManifestEntryDto"
+            },
+            "type": "array"
+          },
+          "index": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "bytes",
+          "container",
+          "entries"
+        ],
+        "type": "object"
+      },
+      "DownloadManifestRequestDto": {
+        "properties": {
+          "max_cards": {
+            "default": 0,
+            "description": "内容更新后再次保存时最多愿意使用的下载卡数",
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
       "DownloadPolicyDto": {
         "properties": {
           "card_price": {
@@ -12055,48 +12448,38 @@
             "minimum": 1,
             "type": "number"
           },
+          "daily_bytes_limit": {
+            "maximum": 1099511627776,
+            "minimum": 1048576,
+            "type": "number"
+          },
+          "file_max_bytes": {
+            "maximum": 17179869184,
+            "minimum": 67108864,
+            "type": "number"
+          },
           "manga_band_size": {
             "maximum": 10000,
             "minimum": 1,
             "type": "number"
           },
-          "manga_concurrent_transfers": {
-            "maximum": 4,
-            "minimum": 1,
+          "manifest_ttl_seconds": {
+            "maximum": 86400,
+            "minimum": 300,
             "type": "number"
           },
-          "manga_daily_bytes_limit": {
-            "maximum": 1099511627776,
-            "minimum": 1048576,
-            "type": "number"
-          },
-          "manga_hourly_transfer_limit": {
-            "maximum": 10000,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_image_concurrency": {
-            "maximum": 8,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_package_bytes": {
-            "maximum": 268435456,
-            "minimum": 1048576,
-            "type": "number"
-          },
-          "manga_package_pages": {
-            "maximum": 2000,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_transfer_timeout_seconds": {
-            "maximum": 600,
-            "minimum": 30,
+          "memory_fallback_max_bytes": {
+            "maximum": 4294967296,
+            "minimum": 16777216,
             "type": "number"
           },
           "novel_band_size": {
             "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "parallel_connections": {
+            "maximum": 16,
             "minimum": 1,
             "type": "number"
           }
@@ -12105,13 +12488,231 @@
           "card_price",
           "novel_band_size",
           "manga_band_size",
-          "manga_package_bytes",
-          "manga_package_pages",
-          "manga_image_concurrency",
-          "manga_transfer_timeout_seconds",
-          "manga_concurrent_transfers",
-          "manga_hourly_transfer_limit",
-          "manga_daily_bytes_limit"
+          "parallel_connections",
+          "file_max_bytes",
+          "manifest_ttl_seconds",
+          "daily_bytes_limit",
+          "memory_fallback_max_bytes"
+        ],
+        "type": "object"
+      },
+      "DownloadQuoteDto": {
+        "properties": {
+          "blocked": {
+            "enum": [
+              "DAILY_LIMIT",
+              "FILE_TOO_LARGE"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "cards": {
+            "$ref": "#/components/schemas/DownloadCardsDto"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadFileDto"
+            },
+            "type": "array"
+          },
+          "format": {
+            "enum": [
+              "CBZ",
+              "EPUB"
+            ],
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadItemDto"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "MANGA",
+              "NOVEL"
+            ],
+            "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/DownloadLimitsDto"
+          },
+          "new_bytes": {
+            "description": "尚未授权、会计入今日额度的字节数",
+            "type": "number"
+          },
+          "required_cards": {
+            "type": "number"
+          },
+          "series_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_bytes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "series_id",
+          "format",
+          "title",
+          "items",
+          "files",
+          "total_bytes",
+          "new_bytes",
+          "required_cards",
+          "cards",
+          "limits"
+        ],
+        "type": "object"
+      },
+      "DownloadRequestDto": {
+        "properties": {
+          "format": {
+            "description": "轻小说只能是 EPUB",
+            "enum": [
+              "CBZ",
+              "EPUB"
+            ],
+            "type": "string"
+          },
+          "item_ids": {
+            "description": "漫画的章节 ID 或轻小说的分卷 ID",
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 2000,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "kind": {
+            "enum": [
+              "MANGA",
+              "NOVEL"
+            ],
+            "type": "string"
+          },
+          "series_id": {
+            "description": "漫画或轻小说的 ID",
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "series_id",
+          "format",
+          "item_ids"
+        ],
+        "type": "object"
+      },
+      "DownloadStatsDto": {
+        "properties": {
+          "days": {
+            "description": "统计窗口的天数",
+            "type": "number"
+          },
+          "granted_bytes": {
+            "description": "窗口内新授权的内容字节数",
+            "type": "number"
+          },
+          "resaved": {
+            "description": "窗口内再次保存过的任务数",
+            "type": "number"
+          },
+          "tasks": {
+            "description": "窗口内创建的下载任务数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "days",
+          "tasks",
+          "granted_bytes",
+          "resaved"
+        ],
+        "type": "object"
+      },
+      "DownloadTaskDto": {
+        "properties": {
+          "cards_charged": {
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadFileDto"
+            },
+            "type": "array"
+          },
+          "format": {
+            "enum": [
+              "CBZ",
+              "EPUB"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadItemDto"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "MANGA",
+              "NOVEL"
+            ],
+            "type": "string"
+          },
+          "last_used_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "series_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_bytes": {
+            "type": "number"
+          },
+          "update_required_cards": {
+            "description": "再次保存更新后的内容需要的下载卡数；内容没有更新时为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "updated": {
+            "description": "任务创建后内容是否有更新",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "series_id",
+          "format",
+          "title",
+          "items",
+          "files",
+          "total_bytes",
+          "cards_charged",
+          "created_at",
+          "last_used_at",
+          "updated"
         ],
         "type": "object"
       },
@@ -12174,6 +12775,41 @@
           "like_count",
           "created_at",
           "updated_at"
+        ],
+        "type": "object"
+      },
+      "EditMangaChapterDto": {
+        "properties": {
+          "chapter_number": {
+            "maxLength": 20,
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterType"
+              }
+            ]
+          },
+          "name": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date",
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_id": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "chapter_type"
         ],
         "type": "object"
       },
@@ -20711,6 +21347,68 @@
         ],
         "type": "object"
       },
+      "MangaChapterDto": {
+        "properties": {
+          "chapter_number": {
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterType"
+              }
+            ]
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "page_count": {
+            "type": "number"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "series_id": {
+            "type": "number"
+          },
+          "sort_key": {
+            "type": "number"
+          },
+          "volume_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "series_id",
+          "chapter_type",
+          "chapter_number",
+          "volume_id",
+          "volume_number",
+          "sort_key",
+          "name",
+          "name_cn",
+          "publication_date",
+          "page_count"
+        ],
+        "type": "object"
+      },
       "MangaChapterLabelDto": {
         "properties": {
           "chapter_number": {
@@ -20786,6 +21484,10 @@
             "nullable": true,
             "type": "object"
           },
+          "editable": {
+            "description": "当前用户能否就地修改这一章的信息",
+            "type": "boolean"
+          },
           "id": {
             "type": "number"
           },
@@ -20848,7 +21550,8 @@
           "cover",
           "sources_count",
           "translation",
-          "readable"
+          "readable",
+          "editable"
         ],
         "type": "object"
       },
@@ -21332,156 +22035,6 @@
           "created_at",
           "updated_at",
           "revised_at"
-        ],
-        "type": "object"
-      },
-      "MangaDownloadFileDto": {
-        "properties": {
-          "format": {
-            "enum": [
-              "cbz",
-              "epub"
-            ],
-            "type": "string"
-          },
-          "max_cards": {
-            "maximum": 2147483647,
-            "minimum": 0,
-            "type": "number"
-          },
-          "p": {
-            "pattern": "^[A-Za-z0-9_-]{85}[AQgw]$",
-            "type": "string"
-          },
-          "page_ids": {
-            "items": {
-              "minimum": 1,
-              "type": "number"
-            },
-            "maxItems": 2000,
-            "minItems": 1,
-            "type": "array",
-            "uniqueItems": true
-          },
-          "revision": {
-            "pattern": "^[a-f0-9]{64}$",
-            "type": "string"
-          }
-        },
-        "required": [
-          "max_cards",
-          "p",
-          "page_ids",
-          "revision"
-        ],
-        "type": "object"
-      },
-      "MangaDownloadPartDto": {
-        "properties": {
-          "byte_size": {
-            "type": "number"
-          },
-          "file_name": {
-            "type": "string"
-          },
-          "page_ids": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "required_cards": {
-            "type": "number"
-          },
-          "revision": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "page_ids",
-          "revision",
-          "file_name",
-          "byte_size",
-          "required_cards"
-        ],
-        "type": "object"
-      },
-      "MangaDownloadPlanDto": {
-        "properties": {
-          "chapter_ids": {
-            "items": {
-              "minimum": 1,
-              "type": "number"
-            },
-            "maxItems": 10000,
-            "minItems": 1,
-            "type": "array",
-            "uniqueItems": true
-          },
-          "format": {
-            "enum": [
-              "cbz",
-              "epub"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "chapter_ids"
-        ],
-        "type": "object"
-      },
-      "MangaDownloadPlanResultDto": {
-        "properties": {
-          "available": {
-            "type": "number"
-          },
-          "cards_used": {
-            "type": "number"
-          },
-          "manga_band_size": {
-            "type": "number"
-          },
-          "manga_count": {
-            "type": "number"
-          },
-          "novel_band_size": {
-            "type": "number"
-          },
-          "novel_count": {
-            "type": "number"
-          },
-          "parts": {
-            "items": {
-              "$ref": "#/components/schemas/MangaDownloadPartDto"
-            },
-            "type": "array"
-          },
-          "points": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          },
-          "purchased": {
-            "type": "number"
-          },
-          "required_cards": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "available",
-          "purchased",
-          "price",
-          "points",
-          "novel_count",
-          "manga_count",
-          "cards_used",
-          "novel_band_size",
-          "manga_band_size",
-          "required_cards",
-          "parts"
         ],
         "type": "object"
       },
@@ -21971,23 +22524,47 @@
             "nullable": true,
             "type": "string"
           },
+          "chapter_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterType"
+              }
+            ]
+          },
           "id": {
             "type": "number"
           },
           "name": {
             "nullable": true,
             "type": "string"
+          },
+          "publication_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_id": {
+            "nullable": true,
+            "type": "number"
           }
         },
         "required": [
           "id",
+          "chapter_type",
           "chapter_number",
-          "name"
+          "name",
+          "volume_id",
+          "publication_date"
         ],
         "type": "object"
       },
       "MangaProjectDto": {
         "properties": {
+          "batch_id": {
+            "description": "随投稿新建条目的审核批次",
+            "nullable": true,
+            "type": "string"
+          },
           "chapter": {
             "allOf": [
               {
@@ -22072,6 +22649,11 @@
             ],
             "type": "string"
           },
+          "submitted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
           "target_lang": {
             "nullable": true,
             "type": "string"
@@ -22126,12 +22708,15 @@
             "type": "object"
           },
           "volume_id": {
-            "description": "整卷投稿关联的单行本条目",
+            "description": "单行本条目",
             "nullable": true,
             "type": "number"
           },
           "volume_number": {
             "nullable": true,
+            "type": "number"
+          },
+          "withdrawn_count": {
             "type": "number"
           }
         },
@@ -22147,6 +22732,9 @@
           "chapter_name",
           "volume_number",
           "volume_id",
+          "submitted_at",
+          "withdrawn_count",
+          "batch_id",
           "series",
           "chapter",
           "volume",
@@ -22165,6 +22753,11 @@
       },
       "MangaProjectListEntryDto": {
         "properties": {
+          "batch_id": {
+            "description": "随投稿新建条目的审核批次",
+            "nullable": true,
+            "type": "string"
+          },
           "chapter": {
             "allOf": [
               {
@@ -22212,6 +22805,17 @@
           "owner": {
             "$ref": "#/components/schemas/UserRefDto"
           },
+          "placement_complete": {
+            "description": "归类是否完整，不完整时不能通过",
+            "type": "boolean"
+          },
+          "preview": {
+            "description": "前几页的图片地址",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "progress": {
             "$ref": "#/components/schemas/MangaProjectProgressDto"
           },
@@ -22240,6 +22844,11 @@
             ],
             "type": "string"
           },
+          "submitted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
           "target_lang": {
             "nullable": true,
             "type": "string"
@@ -22263,12 +22872,15 @@
             "type": "object"
           },
           "volume_id": {
-            "description": "整卷投稿关联的单行本条目",
+            "description": "单行本条目",
             "nullable": true,
             "type": "number"
           },
           "volume_number": {
             "nullable": true,
+            "type": "number"
+          },
+          "withdrawn_count": {
             "type": "number"
           }
         },
@@ -22284,6 +22896,9 @@
           "chapter_name",
           "volume_number",
           "volume_id",
+          "submitted_at",
+          "withdrawn_count",
+          "batch_id",
           "series",
           "chapter",
           "volume",
@@ -22291,7 +22906,9 @@
           "team",
           "last_activity_at",
           "created_at",
-          "progress"
+          "progress",
+          "preview",
+          "placement_complete"
         ],
         "type": "object"
       },
@@ -25171,6 +25788,10 @@
             "maxLength": 4000,
             "type": "string"
           },
+          "image": {
+            "maxLength": 4000,
+            "type": "string"
+          },
           "label": {
             "maxLength": 4000,
             "type": "string"
@@ -25194,6 +25815,9 @@
           "comment": {
             "type": "string"
           },
+          "image": {
+            "type": "string"
+          },
           "label": {
             "type": "string"
           },
@@ -25209,7 +25833,8 @@
           "post",
           "article",
           "rate",
-          "label"
+          "label",
+          "image"
         ],
         "type": "object"
       },
@@ -25793,254 +26418,6 @@
         },
         "required": [
           "lines"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadFileDto": {
-        "properties": {
-          "max_cards": {
-            "maximum": 2147483647,
-            "minimum": 0,
-            "type": "number"
-          },
-          "p": {
-            "pattern": "^[A-Za-z0-9_-]{85}[AQgw]$",
-            "type": "string"
-          },
-          "revision": {
-            "nullable": true,
-            "pattern": "^[a-f0-9]{64}$",
-            "type": "string"
-          }
-        },
-        "required": [
-          "max_cards",
-          "p"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadPartDto": {
-        "properties": {
-          "file_name": {
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "required_cards": {
-            "type": "number"
-          },
-          "revision": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "file_name",
-          "revision",
-          "required_cards"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadPlanDto": {
-        "properties": {
-          "volume_ids": {
-            "items": {
-              "minimum": 1,
-              "type": "number"
-            },
-            "maxItems": 1000,
-            "minItems": 1,
-            "type": "array",
-            "uniqueItems": true
-          }
-        },
-        "required": [
-          "volume_ids"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadPlanResultDto": {
-        "properties": {
-          "available": {
-            "type": "number"
-          },
-          "cards_used": {
-            "type": "number"
-          },
-          "manga_band_size": {
-            "type": "number"
-          },
-          "manga_count": {
-            "type": "number"
-          },
-          "novel_band_size": {
-            "type": "number"
-          },
-          "novel_count": {
-            "type": "number"
-          },
-          "parts": {
-            "items": {
-              "$ref": "#/components/schemas/NovelDownloadPartDto"
-            },
-            "type": "array"
-          },
-          "points": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          },
-          "purchased": {
-            "type": "number"
-          },
-          "required_cards": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "available",
-          "purchased",
-          "price",
-          "points",
-          "novel_count",
-          "manga_count",
-          "cards_used",
-          "novel_band_size",
-          "manga_band_size",
-          "required_cards",
-          "parts"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadSeriesDto": {
-        "properties": {
-          "available": {
-            "type": "number"
-          },
-          "cards_used": {
-            "type": "number"
-          },
-          "manga_band_size": {
-            "type": "number"
-          },
-          "manga_count": {
-            "type": "number"
-          },
-          "novel_band_size": {
-            "type": "number"
-          },
-          "novel_count": {
-            "type": "number"
-          },
-          "points": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          },
-          "purchased": {
-            "type": "number"
-          },
-          "volumes": {
-            "items": {
-              "$ref": "#/components/schemas/NovelDownloadVolumeDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "available",
-          "purchased",
-          "price",
-          "points",
-          "novel_count",
-          "manga_count",
-          "cards_used",
-          "novel_band_size",
-          "manga_band_size",
-          "volumes"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadStatusDto": {
-        "properties": {
-          "available": {
-            "type": "number"
-          },
-          "cards_used": {
-            "type": "number"
-          },
-          "file_name": {
-            "type": "string"
-          },
-          "manga_band_size": {
-            "type": "number"
-          },
-          "manga_count": {
-            "type": "number"
-          },
-          "novel_band_size": {
-            "type": "number"
-          },
-          "novel_count": {
-            "type": "number"
-          },
-          "points": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          },
-          "purchased": {
-            "type": "number"
-          },
-          "required_cards": {
-            "type": "number"
-          },
-          "revision": {
-            "nullable": true,
-            "type": "string"
-          },
-          "series_id": {
-            "type": "number"
-          },
-          "unlocked": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "available",
-          "purchased",
-          "price",
-          "points",
-          "novel_count",
-          "manga_count",
-          "cards_used",
-          "novel_band_size",
-          "manga_band_size",
-          "required_cards",
-          "unlocked",
-          "file_name",
-          "series_id",
-          "revision"
-        ],
-        "type": "object"
-      },
-      "NovelDownloadVolumeDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "label": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "label"
         ],
         "type": "object"
       },
@@ -26662,9 +27039,6 @@
           "daily_bytes_limit": {
             "type": "number"
           },
-          "daily_export_limit": {
-            "type": "number"
-          },
           "daily_volume_limit": {
             "type": "number"
           },
@@ -26695,7 +27069,6 @@
           "hourly_transfer_limit",
           "hourly_volume_limit",
           "daily_volume_limit",
-          "daily_export_limit",
           "daily_bytes_limit"
         ],
         "type": "object"
@@ -28097,6 +28470,78 @@
         ],
         "type": "object"
       },
+      "OpenCatalogChangesDto": {
+        "properties": {
+          "has_more": {
+            "description": "本页之后是否还有更多事件",
+            "type": "boolean"
+          },
+          "items": {
+            "description": "按序号升序排列的变更事件",
+            "items": {
+              "$ref": "#/components/schemas/OpenCatalogEventDto"
+            },
+            "type": "array"
+          },
+          "latest_id": {
+            "description": "当前最新事件序号；首次同步时可先记录该值再做全量",
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "latest_id",
+          "has_more"
+        ],
+        "type": "object"
+      },
+      "OpenCatalogEventDto": {
+        "properties": {
+          "created_at": {
+            "description": "事件发生时间",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "事件序号，单调递增，可作为增量游标",
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogEventKind"
+              }
+            ],
+            "description": "upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id"
+          },
+          "merged_to_id": {
+            "description": "merge 事件的目标资源 ID",
+            "nullable": true,
+            "type": "number"
+          },
+          "resource_id": {
+            "description": "发生变更的资源 ID",
+            "type": "number"
+          },
+          "resource_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ContributionResourceType"
+              }
+            ],
+            "description": "发生变更的资源类型"
+          }
+        },
+        "required": [
+          "id",
+          "resource_type",
+          "resource_id",
+          "kind",
+          "merged_to_id",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -28150,6 +28595,14 @@
             "description": "英文名或罗马字",
             "nullable": true,
             "type": "string"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "gender": {
             "description": "性别",
@@ -28345,6 +28798,25 @@
         ],
         "type": "object"
       },
+      "OpenExternalSourceDto": {
+        "properties": {
+          "bangumi": {
+            "description": "Bangumi 条目 ID，数字字符串",
+            "nullable": true,
+            "type": "string"
+          },
+          "vndb": {
+            "description": "VNDB ID，带类型前缀：作品 v123、厂商 p45、角色 c67",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "vndb",
+          "bangumi"
+        ],
+        "type": "object"
+      },
       "OpenFavoriteCollectionDto": {
         "properties": {
           "id": {
@@ -28537,6 +29009,14 @@
               "$ref": "#/components/schemas/OpenGalgameExternalLinkDto"
             },
             "type": "array"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "homepage": {
             "description": "官方网站",
@@ -29755,6 +30235,14 @@
             "description": "成立日期",
             "nullable": true,
             "type": "string"
+          },
+          "external_source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenExternalSourceDto"
+              }
+            ],
+            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
           },
           "id": {
             "description": "厂商 ID",
@@ -36856,6 +37344,14 @@
           "enabled": {
             "type": "boolean"
           },
+          "headers": {
+            "description": "每次请求附带的请求头",
+            "items": {
+              "$ref": "#/components/schemas/AiProviderHeaderItemDto"
+            },
+            "maxItems": 20,
+            "type": "array"
+          },
           "kind": {
             "allOf": [
               {
@@ -36931,6 +37427,11 @@
           },
           "model_id": {
             "description": "空值使用默认模型",
+            "nullable": true,
+            "type": "number"
+          },
+          "route_id": {
+            "description": "只走这条线路；空值在模型的线路间自动切换",
             "nullable": true,
             "type": "number"
           },
@@ -37462,6 +37963,7 @@
                 "offline_access",
                 "catalog:read",
                 "catalog:full",
+                "catalog:sync",
                 "user:read",
                 "status:read",
                 "status:write",
@@ -37490,48 +37992,38 @@
             "minimum": 1,
             "type": "number"
           },
+          "daily_bytes_limit": {
+            "maximum": 1099511627776,
+            "minimum": 1048576,
+            "type": "number"
+          },
+          "file_max_bytes": {
+            "maximum": 17179869184,
+            "minimum": 67108864,
+            "type": "number"
+          },
           "manga_band_size": {
             "maximum": 10000,
             "minimum": 1,
             "type": "number"
           },
-          "manga_concurrent_transfers": {
-            "maximum": 4,
-            "minimum": 1,
+          "manifest_ttl_seconds": {
+            "maximum": 86400,
+            "minimum": 300,
             "type": "number"
           },
-          "manga_daily_bytes_limit": {
-            "maximum": 1099511627776,
-            "minimum": 1048576,
-            "type": "number"
-          },
-          "manga_hourly_transfer_limit": {
-            "maximum": 10000,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_image_concurrency": {
-            "maximum": 8,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_package_bytes": {
-            "maximum": 268435456,
-            "minimum": 1048576,
-            "type": "number"
-          },
-          "manga_package_pages": {
-            "maximum": 2000,
-            "minimum": 1,
-            "type": "number"
-          },
-          "manga_transfer_timeout_seconds": {
-            "maximum": 600,
-            "minimum": 30,
+          "memory_fallback_max_bytes": {
+            "maximum": 4294967296,
+            "minimum": 16777216,
             "type": "number"
           },
           "novel_band_size": {
             "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "parallel_connections": {
+            "maximum": 16,
             "minimum": 1,
             "type": "number"
           }
@@ -37540,13 +38032,11 @@
           "card_price",
           "novel_band_size",
           "manga_band_size",
-          "manga_package_bytes",
-          "manga_package_pages",
-          "manga_image_concurrency",
-          "manga_transfer_timeout_seconds",
-          "manga_concurrent_transfers",
-          "manga_hourly_transfer_limit",
-          "manga_daily_bytes_limit"
+          "parallel_connections",
+          "file_max_bytes",
+          "manifest_ttl_seconds",
+          "daily_bytes_limit",
+          "memory_fallback_max_bytes"
         ],
         "type": "object"
       },
@@ -37977,8 +38467,9 @@
             "nullable": true,
             "type": "number"
           },
-          "volume_number": {
-            "minimum": 0,
+          "volume_id": {
+            "description": "单行本条目",
+            "minimum": 1,
             "nullable": true,
             "type": "number"
           }
@@ -38267,11 +38758,6 @@
             "minimum": 1048576,
             "type": "number"
           },
-          "daily_export_limit": {
-            "maximum": 1000,
-            "minimum": 1,
-            "type": "number"
-          },
           "daily_volume_limit": {
             "maximum": 10000,
             "minimum": 1,
@@ -38316,7 +38802,6 @@
           "hourly_transfer_limit",
           "hourly_volume_limit",
           "daily_volume_limit",
-          "daily_export_limit",
           "daily_bytes_limit"
         ],
         "type": "object"
@@ -48711,6 +49196,27 @@
         ]
       }
     },
+    "/api/v3/admin/reader/download/stats": {
+      "get": {
+        "operationId": "AdminDownloadPolicyController_recent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadStatsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/reader"
+        ]
+      }
+    },
     "/api/v3/admin/reader/novel/policy": {
       "get": {
         "operationId": "AdminNovelReaderController_get",
@@ -56753,6 +57259,7 @@
                 "manga_translate",
                 "manga_vision",
                 "moderation",
+                "image_moderation",
                 "epub_judge",
                 "telegram_chat",
                 "novel_volume_align",
@@ -59467,6 +59974,68 @@
         ]
       }
     },
+    "/api/v3/external-source/manga-draft": {
+      "get": {
+        "operationId": "ExternalSourceController_mangaDraft",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "bangumi_id",
+            "required": true,
+            "schema": {
+              "maxLength": 32,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityDraftDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ExternalSource"
+        ]
+      }
+    },
+    "/api/v3/external-source/manga-volume-draft": {
+      "get": {
+        "operationId": "ExternalSourceController_mangaVolumeDraft",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "bangumi_id",
+            "required": true,
+            "schema": {
+              "maxLength": 32,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityDraftDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ExternalSource"
+        ]
+      }
+    },
     "/api/v3/external-source/{source}/search": {
       "get": {
         "operationId": "ExternalSourceController_search",
@@ -59488,6 +60057,8 @@
                 "galgame",
                 "light-novel",
                 "light-novel-volume",
+                "manga",
+                "manga-volume",
                 "person",
                 "character",
                 "producer"
@@ -66333,9 +66904,9 @@
         ]
       }
     },
-    "/api/v3/manga-chapters/{id}/change-requests": {
-      "post": {
-        "operationId": "MangaChapterChangeRequestController_create",
+    "/api/v3/manga-chapters/{id}": {
+      "patch": {
+        "operationId": "MangaChapterEditController_update",
         "parameters": [
           {
             "in": "path",
@@ -66350,18 +66921,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateChangeRequestDto"
+                "$ref": "#/components/schemas/EditMangaChapterDto"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "201": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChangeRequestDetailDto"
+                  "$ref": "#/components/schemas/MangaChapterDto"
                 }
               }
             },
@@ -66369,7 +66940,7 @@
           }
         },
         "tags": [
-          "MangaChapterChangeRequest"
+          "MangaChapterEdit"
         ]
       }
     },
@@ -66882,6 +67453,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveMangaProjectDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": ""
@@ -71014,6 +71595,55 @@
         },
         "tags": [
           "NovelTranslation"
+        ]
+      }
+    },
+    "/api/v3/open/catalog/changes": {
+      "get": {
+        "operationId": "catalog.changes",
+        "parameters": [
+          {
+            "description": "事件游标，返回 id 大于该值的事件；默认 0",
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "description": "单次返回的最大事件数，取值 1-500",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenCatalogChangesDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "条目变更事件流",
+        "tags": [
+          "open"
+        ],
+        "x-hikari-scopes": [
+          "catalog:sync"
         ]
       }
     },
@@ -78891,6 +79521,293 @@
         ]
       }
     },
+    "/api/v3/user/me/downloads": {
+      "get": {
+        "operationId": "DownloadController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/DownloadTaskDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      },
+      "post": {
+        "operationId": "DownloadController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDownloadTaskDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadTaskDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
+    "/api/v3/user/me/downloads/limits": {
+      "get": {
+        "operationId": "DownloadController_limits",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadLimitsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
+    "/api/v3/user/me/downloads/quotes": {
+      "post": {
+        "operationId": "DownloadController_quote",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadQuoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
+    "/api/v3/user/me/downloads/{id}": {
+      "delete": {
+        "operationId": "DownloadController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      },
+      "get": {
+        "operationId": "DownloadController_detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadTaskDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
+    "/api/v3/user/me/downloads/{id}/files/{file}/chunks/{chunk}/content": {
+      "post": {
+        "operationId": "DownloadController_chunk",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "file",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "chunk",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FileTransferDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
+    "/api/v3/user/me/downloads/{id}/manifest": {
+      "post": {
+        "operationId": "DownloadController_manifest",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadManifestRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadManifestDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Download"
+        ]
+      }
+    },
     "/api/v3/user/me/drafts": {
       "get": {
         "operationId": "UserContentController_getDrafts",
@@ -80521,117 +81438,6 @@
         ]
       }
     },
-    "/api/v3/user/me/manga/download/mangas/{id}": {
-      "get": {
-        "operationId": "MangaDownloadController_status",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DownloadCardsDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaDownload"
-        ]
-      }
-    },
-    "/api/v3/user/me/manga/download/mangas/{id}/files": {
-      "post": {
-        "operationId": "MangaDownloadController_download",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MangaDownloadFileDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaDownload"
-        ]
-      }
-    },
-    "/api/v3/user/me/manga/download/mangas/{id}/plan": {
-      "post": {
-        "operationId": "MangaDownloadController_plan",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MangaDownloadPlanDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaDownloadPlanResultDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaDownload"
-        ]
-      }
-    },
     "/api/v3/user/me/media": {
       "get": {
         "operationId": "UserMediaController_getMine",
@@ -80710,145 +81516,6 @@
         },
         "tags": [
           "UserMedia"
-        ]
-      }
-    },
-    "/api/v3/user/me/novel/download/series/{id}": {
-      "get": {
-        "operationId": "NovelDownloadController_series",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NovelDownloadSeriesDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "NovelDownload"
-        ]
-      }
-    },
-    "/api/v3/user/me/novel/download/series/{id}/plan": {
-      "post": {
-        "operationId": "NovelDownloadController_plan",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovelDownloadPlanDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NovelDownloadPlanResultDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "NovelDownload"
-        ]
-      }
-    },
-    "/api/v3/user/me/novel/download/volumes/{id}": {
-      "get": {
-        "operationId": "NovelDownloadController_status",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NovelDownloadStatusDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "NovelDownload"
-        ]
-      },
-      "post": {
-        "operationId": "NovelDownloadController_download",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovelDownloadFileDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "NovelDownload"
         ]
       }
     },
@@ -82633,7 +83300,7 @@
   "servers": [],
   "tags": [
     {
-      "description": "公开条目数据，需 catalog:read 或 catalog:full；令牌无需代表任何用户。",
+      "description": "公开条目数据，需 catalog:read 或 catalog:full；变更事件流与外部数据源 ID 需 catalog:sync；令牌无需代表任何用户。",
       "name": "open"
     },
     {

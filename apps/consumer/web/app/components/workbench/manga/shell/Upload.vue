@@ -10,13 +10,13 @@
     Text,
     toast,
   } from '@hina-ui/vue'
-  import { usePageUpload } from '~/features/workbench/manga/composables/usePageUpload'
+  import { useMangaEditor } from '~/features/workbench/manga/composables/editor-context'
   import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
 
   const props = defineProps<{ project: WorkbenchMangaProjectPageData['project'] }>()
   const emit = defineEmits<{ uploaded: [] }>()
 
-  const { uploading, done, total, failed, upload } = usePageUpload(() => props.project.id)
+  const { uploading, done, total, failed, stopped, upload } = useMangaEditor().upload
   const manage = computed(
     () =>
       props.project.viewer_capabilities.includes('manage') &&
@@ -58,15 +58,24 @@
       </FileUpload>
       <Stack v-if="uploading" gap="xs" class="w-full max-w-xl">
         <Progress :value="done" :max="Math.max(total, 1)" size="sm" />
-        <Text size="xs" tone="muted" class="tabular-nums"
-          >已上传 {{ done }} 页，共 {{ total }} 页</Text
-        >
+        <Text size="xs" tone="muted" class="tabular-nums">
+          已上传 {{ done }} 页，共 {{ total }} 页
+        </Text>
       </Stack>
+      <Alert
+        :open="!!stopped"
+        tone="danger"
+        :closable="false"
+        title="上传已停止，已传的页面保留"
+        class="w-full max-w-xl"
+      >
+        <Text size="sm">{{ stopped }}</Text>
+      </Alert>
       <Alert
         :open="failed.length > 0"
         tone="danger"
         :closable="false"
-        title="以下图片上传失败"
+        :title="stopped ? '以下图片没有上传' : '以下图片上传失败'"
         class="w-full max-w-xl"
       >
         <Text size="sm">{{ failed.join('、') }}</Text>

@@ -6,7 +6,13 @@
 
   type SearchItem = ApiData<'/api/v3/external-source/{source}/search', 'get'>[number]
 
-  const props = defineProps<{ source: 'bangumi' | 'vndb'; label: string; type: ImportType }>()
+  const props = defineProps<{
+    source: 'bangumi' | 'vndb'
+    label: string
+    type: ImportType
+    allowExisting?: boolean
+    placeholder?: string
+  }>()
   const picked = defineModel<SearchItem | null>({ default: null })
 
   const results = ref<SearchItem[]>([])
@@ -17,7 +23,7 @@
     results.value.map(item => ({
       value: item.external_id,
       label: item.title,
-      disabled: item.existing_id != null,
+      disabled: !props.allowExisting && item.existing_id != null,
       item,
     })),
   )
@@ -101,7 +107,7 @@
       :options="options"
       :loading="loading"
       ignore-filter
-      :placeholder="`搜索 ${label} 标题 / 条目 ID…`"
+      :placeholder="placeholder ?? `搜索 ${label} 标题 / 条目 ID…`"
       class="w-full"
       @update:model-value="pick"
     >
@@ -122,7 +128,7 @@
               <Text as="span" size="sm" weight="medium" truncate class="min-w-0">
                 {{ option.item.title }}
               </Text>
-              <Tag v-if="option.disabled" size="sm" tone="neutral">已收录</Tag>
+              <Tag v-if="option.item.existing_id != null" size="sm" tone="neutral">已收录</Tag>
             </Inline>
             <Text v-if="option.item.subtitle" as="span" size="xs" tone="muted" truncate>
               {{ option.item.subtitle }}

@@ -5,16 +5,13 @@
     Form,
     FormField,
     Input,
-    NumberInput,
     SegmentedControl,
     Select,
     Stack,
-    Text,
-    toast,
   } from '@hina-ui/vue'
-  import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
-  import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
-  import type { MangaTargetVolume } from '~/features/contribute/manga-target'
+  import { volumeOptions } from '~/features/contribute/manga-options'
+  import { useMangaTargets } from '~/features/contribute/useMangaTargets'
+  import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
   import type { BackendMangaProject } from '~/features/workbench/manga/manga'
   import {
     mangaChapterInfoSchema,
@@ -22,105 +19,85 @@
     type MangaChapterInfoValues,
   } from '~/features/workbench/manga/schemas/manga.schema'
   import { getFieldErrors } from '~/utils/api/error'
-  import { getMangaVolumeLabel } from '~/utils/media/manga'
 
-  const props = defineProps<{
-    project: BackendMangaProject
-    chapter: WorkbenchMangaProjectPageData['chapter']
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      project: Pick<
+        BackendMangaProject,
+        'id' | 'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_id'
+      > & { series: { id: number } }
+      purpose?: 'edit' | 'approve'
+    }>(),
+    { purpose: 'edit' },
+  )
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ saved: [] }>()
 
-  const NONE = 0
   const SCOPE_OPTIONS = [
-    { value: 'CHAPTER', label: '单话' },
+    { value: 'CHAPTER', label: '一话' },
     { value: 'VOLUME', label: '整卷' },
   ]
-  const { canAny } = useCreatorPermissions()
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
-  const volumes = shallowRef<MangaTargetVolume[]>([])
   const values = reactive<MangaChapterInfoValues & { scope: BackendMangaProject['scope'] }>({
     scope: 'CHAPTER',
+    chapter_type: 'SERIALIZATION',
     chapter_number: '',
     chapter_name: '',
-    volume_number: null,
     volume_id: null,
   })
-  const wholeVolume = computed(
-    () => (props.chapter ? props.project.scope : values.scope) === 'VOLUME',
+  const wholeVolume = computed(() => values.scope === 'VOLUME')
+  const { chapters, volumes, claims, loading } = useMangaTargets(() =>
+    visible.value ? props.project.series.id : null,
   )
-  const reviewed = computed(() => !!props.chapter && !canAny(WIKI_PERMISSIONS.REVIEW))
-  const volumeOptions = computed(() => [
-    { value: NONE, label: '未收录' },
-    ...volumes.value.map(volume => ({ value: volume.id, label: getMangaVolumeLabel(volume) })),
-  ])
-  const volume = computed({
-    get: () => values.volume_id ?? NONE,
-    set: value => {
-      values.volume_id = value === NONE ? null : Number(value)
-    },
-  })
+  const choices = computed(() =>
+    wholeVolume.value
+      ? volumeOptions(
+          volumes.value,
+          chapters.value,
+          claims.value.filter(claim => claim.id !== props.project.id),
+        ).filter(option => typeof option.value === 'number')
+      : volumes.value.map(volume => ({
+          value: volume.id,
+          label: volume.name_cn || volume.name || `第 ${volume.volume_number ?? '?'} 卷`,
+        })),
+  )
 
-  watch(visible, async next => {
+  watch(visible, next => {
     if (!next) return
     form.value?.reset()
     values.scope = props.project.scope
-    if (!props.chapter) {
-      values.chapter_number = props.project.chapter_number ?? ''
-      values.chapter_name = props.project.chapter_name ?? ''
-      values.volume_number = props.project.volume_number
-      return
-    }
-    values.chapter_number = props.chapter.chapter_number ?? ''
-    values.chapter_name = props.chapter.name ?? ''
-    values.volume_id = props.chapter.volume_id
-    if (!volumes.value.length) {
-      volumes.value = await hikariRequest('/api/v3/mangas/{id}/volumes', {
-        path: { id: props.project.series.id },
-        toast: false,
-      }).catch(() => [])
-    }
+    values.chapter_type =
+      props.project.chapter_type === 'VOLUME' ? 'SERIALIZATION' : props.project.chapter_type
+    values.chapter_number = props.project.chapter_number ?? ''
+    values.chapter_name = props.project.chapter_name ?? ''
+    values.volume_id = props.project.volume_id
   })
-
-  async function submitChange(chapter: NonNullable<WorkbenchMangaProjectPageData['chapter']>) {
-    const next = {
-      chapter_number: wholeVolume.value
-        ? chapter.chapter_number
-        : values.chapter_number?.trim() || null,
-      name: values.chapter_name?.trim() || null,
-      volume_id: values.volume_id ?? null,
-    }
-    const changeset = (Object.keys(next) as (keyof typeof next)[])
-      .filter(field => next[field] !== chapter[field])
-      .map(field => ({ kind: 'scalar', field, from: chapter[field], to: next[field] }))
-    if (!changeset.length) return
-    const change = await hikariRequest('/api/v3/manga-chapters/{id}/change-requests', {
-      method: 'post',
-      path: { id: chapter.id },
-      body: { summary: '更新章节信息', changeset },
-    })
-    toast.success(change.status === 'MERGED' ? '已保存' : '已提交。审核后生效。')
-  }
 
   async function onSubmit() {
     if (submitting.value) return
     submitting.value = true
     try {
-      if (props.chapter) {
-        await submitChange(props.chapter)
+      const body = wholeVolume.value
+        ? { scope: values.scope, volume_id: values.volume_id ?? null }
+        : {
+            scope: values.scope,
+            chapter_type: values.chapter_type,
+            chapter_number: values.chapter_number?.trim() || null,
+            chapter_name: values.chapter_name?.trim() || null,
+            volume_id: values.volume_id ?? null,
+          }
+      if (props.purpose === 'approve') {
+        await hikariRequest('/api/v3/manga-projects/{project_id}/approve', {
+          method: 'post',
+          path: { project_id: props.project.id },
+          body,
+        })
       } else {
         await hikariRequest('/api/v3/manga-projects/{project_id}', {
           method: 'patch',
           path: { project_id: props.project.id },
-          body: wholeVolume.value
-            ? { scope: values.scope, volume_number: values.volume_number ?? null }
-            : {
-                scope: values.scope,
-                chapter_number: values.chapter_number?.trim() || null,
-                chapter_name: values.chapter_name?.trim() || null,
-                volume_number: values.volume_number ?? null,
-              },
+          body,
         })
       }
       visible.value = false
@@ -136,7 +113,7 @@
 <template>
   <Dialog
     v-model:open="visible"
-    :title="project.scope === 'VOLUME' ? '编辑卷信息' : '编辑话信息'"
+    :title="purpose === 'approve' ? '修正归类' : wholeVolume ? '编辑卷信息' : '编辑话信息'"
     size="sm"
     :locked="submitting"
   >
@@ -149,29 +126,39 @@
         @submit="onSubmit"
       >
         <Stack gap="md">
-          <Text v-if="reviewed" size="sm" tone="muted">对已发布章节的更改在审核后生效。</Text>
-          <FormField v-if="!chapter" name="scope" label="范围">
+          <FormField name="scope" label="范围">
             <SegmentedControl v-model="values.scope" :options="SCOPE_OPTIONS" />
           </FormField>
-          <FormField v-if="!wholeVolume" name="chapter_number" label="话数">
-            <Input v-model="values.chapter_number" placeholder="12" />
-          </FormField>
-          <FormField v-if="!wholeVolume || chapter" name="chapter_name" label="标题">
-            <Input v-model="values.chapter_name" />
-          </FormField>
-          <FormField v-if="chapter" name="volume_id" :label="wholeVolume ? '对应单行本' : '所在卷'">
-            <Select v-model="volume" :options="volumeOptions" />
+          <FormField v-if="!wholeVolume" name="chapter_type" label="类型" required>
+            <SegmentedControl v-model="values.chapter_type" :options="MANGA_CHAPTER_TYPE_OPTIONS" />
           </FormField>
           <FormField
-            v-else
-            name="volume_number"
-            :label="wholeVolume ? '卷号' : '所在卷'"
+            v-if="!wholeVolume"
+            name="chapter_number"
+            label="话数"
+            :required="values.chapter_type === 'SERIALIZATION'"
+          >
+            <Input v-model="values.chapter_number" placeholder="12" />
+          </FormField>
+          <FormField
+            v-if="!wholeVolume"
+            name="chapter_name"
+            label="标题"
+            :required="values.chapter_type !== 'SERIALIZATION'"
+          >
+            <Input v-model="values.chapter_name" />
+          </FormField>
+          <FormField
+            name="volume_id"
+            :label="wholeVolume ? '单行本' : '所属单行本'"
             :required="wholeVolume"
           >
-            <NumberInput
-              v-model="values.volume_number"
-              :min="0"
-              :placeholder="wholeVolume ? '3' : '未收录'"
+            <Select
+              v-model="values.volume_id"
+              :options="choices"
+              :loading="loading"
+              :clearable="!wholeVolume"
+              :placeholder="wholeVolume ? '选择单行本' : '未归入'"
             />
           </FormField>
         </Stack>
@@ -182,7 +169,9 @@
       <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
         取消
       </Button>
-      <Button :loading="submitting" @click="form?.submit()">保存</Button>
+      <Button :loading="submitting" @click="form?.submit()">
+        {{ purpose === 'approve' ? '保存并通过' : '保存' }}
+      </Button>
     </template>
   </Dialog>
 </template>

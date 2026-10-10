@@ -5,12 +5,8 @@
 
   defineOptions({ name: 'MangaVolumeContribute' })
   const props = withDefaults(
-    defineProps<{
-      volume: MangaVolumePageData['volume']
-      size?: 'sm' | 'md' | 'lg'
-      variant?: 'solid' | 'soft'
-    }>(),
-    { size: 'md', variant: 'solid' },
+    defineProps<{ volume: MangaVolumePageData['volume']; size?: 'sm' | 'md' | 'lg' }>(),
+    { size: 'md' },
   )
 
   const open = ref(false)
@@ -22,7 +18,7 @@
 </script>
 
 <template>
-  <Button login-required :variant="variant" tone="neutral" :size="size" @click="open = true">
+  <Button login-required :size="size" @click="open = true">
     <template #icon><BookUp /></template>
     投稿本卷
   </Button>

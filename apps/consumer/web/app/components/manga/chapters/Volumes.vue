@@ -9,24 +9,15 @@
 
   const props = defineProps<{
     mangaId: number
-    mangaTitle: string
     cards: VolumeCard[]
   }>()
+  const emit = defineEmits<{ edit: [chapter: NonNullable<VolumeCard['whole']>] }>()
 
-  const { requireLogin } = useAuthGate()
   const expanded = ref(false)
   const visible = computed(() =>
     expanded.value ? props.cards : props.cards.slice(0, COLLAPSED_COUNT),
   )
   const hasMore = computed(() => props.cards.length > COLLAPSED_COUNT)
-  const starting = shallowRef<{ id: number; label: string } | null>(null)
-  const open = ref(false)
-
-  function contribute(card: VolumeCard) {
-    if (!card.entry || !requireLogin()) return
-    starting.value = { id: card.entry.id, label: card.title }
-    open.value = true
-  }
 </script>
 
 <template>
@@ -38,7 +29,7 @@
         :key="card.key"
         :manga-id="mangaId"
         :card="card"
-        @contribute="contribute"
+        @edit="emit('edit', $event)"
       />
     </Grid>
 
@@ -49,11 +40,4 @@
       </Button>
     </Center>
   </Panel>
-  <ContributeMangaStartDialog
-    v-if="starting"
-    v-model:open="open"
-    :series="{ id: mangaId, title: mangaTitle }"
-    :volume="starting"
-    scope="VOLUME"
-  />
 </template>

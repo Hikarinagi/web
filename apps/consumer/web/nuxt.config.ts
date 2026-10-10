@@ -71,6 +71,11 @@ export default defineNuxtConfig({
     disallow: ['/auth', '/health', '/login', '/register'],
   },
 
+  routeRules: {
+    '/setting/decoration': { redirect: { to: '/me/decoration', statusCode: 301 } },
+    '/setting/items': { redirect: { to: '/me/items', statusCode: 301 } },
+  },
+
   nitro: {
     prerender: {
       crawlLinks: false,

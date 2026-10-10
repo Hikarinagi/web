@@ -47,6 +47,9 @@
           <template v-else-if="item.key === 'theme'" #trailing>
             <Text as="span" size="xs" tone="muted">{{ item.modeLabel }}</Text>
           </template>
+          <template v-else-if="item.trailing" #trailing>
+            <Text as="span" size="xs" class="text-accent-text">{{ item.trailing }}</Text>
+          </template>
         </DropdownMenuItem>
       </template>
     </template>

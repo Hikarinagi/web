@@ -20,6 +20,11 @@
     (props.project.viewer_capabilities as readonly string[]).includes(capability)
   const owner = computed(() => props.project.viewer_role === 'OWNER')
   const translation = computed(() => props.project.mode === 'TRANSLATION')
+  const wholeVolume = computed(() =>
+    props.project.status === 'PUBLISHED'
+      ? props.project.chapter?.chapter_type === 'VOLUME'
+      : props.project.scope === 'VOLUME',
+  )
 </script>
 
 <template>
@@ -32,9 +37,12 @@
         <template #icon><ImageUp /></template>
         上传页面
       </DropdownMenuItem>
-      <DropdownMenuItem v-if="editable && can('manage')" @select="emit('select', 'chapter-info')">
+      <DropdownMenuItem
+        v-if="editable && can('manage') && (project.status !== 'PUBLISHED' || project.chapter)"
+        @select="emit('select', 'chapter-info')"
+      >
         <template #icon><Pencil /></template>
-        {{ project.scope === 'VOLUME' ? '编辑卷信息' : '编辑话信息' }}
+        {{ wholeVolume ? '编辑卷信息' : '编辑话信息' }}
       </DropdownMenuItem>
       <DropdownMenuItem @select="emit('select', 'series-info')">
         <template #icon><Pencil /></template>

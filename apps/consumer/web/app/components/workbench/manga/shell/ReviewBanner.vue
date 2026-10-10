@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Alert, Button, Checkbox, Inline, Link, ScrollArea, Stack, Text } from '@hina-ui/vue'
-  import { NuxtLink } from '#components'
+  import { Alert, Button, Checkbox, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
 
   type Note = NonNullable<WorkbenchMangaProjectPageData['review']>['notes'][number]
@@ -9,7 +8,6 @@
     project: WorkbenchMangaProjectPageData['project']
     review: WorkbenchMangaProjectPageData['review']
     pages: WorkbenchMangaProjectPageData['pages']
-    pendingChange: WorkbenchMangaProjectPageData['pending_change']
   }>()
   const emit = defineEmits<{ jump: [note: Note] }>()
 
@@ -39,19 +37,6 @@
 </script>
 
 <template>
-  <Alert :open="!!pendingChange" tone="info" :closable="false">
-    <Inline gap="sm" align="center">
-      <Text as="span" size="sm">对章节信息的更改正在等待审核。</Text>
-      <NuxtLink
-        v-if="pendingChange"
-        v-slot="{ href, navigate }"
-        :to="`/create/contributions/${pendingChange.id}`"
-        custom
-      >
-        <Link :href="href ?? undefined" @click="navigate">查看</Link>
-      </NuxtLink>
-    </Inline>
-  </Alert>
   <Alert :open="member && project.status === 'REVIEW'" tone="info" :closable="false">
     正在审核中。在审核完成之前你无法进行更改。
   </Alert>

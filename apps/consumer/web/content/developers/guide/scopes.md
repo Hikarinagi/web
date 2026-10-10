@@ -11,3 +11,5 @@ description: 全部 scope 的含义、取得方式与两组蕴含关系。
 ::
 
 存在两组蕴含关系：`catalog:full` 包含 `catalog:read`，`status:write` 包含 `status:read`。申请上位 scope 即可，无需重复勾选。
+
+`catalog:sync` 面向镜像与同步类应用：它开放条目变更事件流，并让 Galgame、厂商、角色详情多返回一个 `external_source` 字段（VNDB 与 Bangumi ID）；不持有该 scope 时详情中不出现此字段。它不包含 `catalog:read`，读取条目详情仍需同时申请 `catalog:read` 或 `catalog:full`。

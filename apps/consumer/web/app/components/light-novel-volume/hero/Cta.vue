@@ -71,8 +71,9 @@
     <ShareButton :to="`/light-novel-volumes/${volume.id}`" tooltip="分享" size="lg" />
     <LightNovelVolumeDownloadAction
       v-if="volume.online_reading_available"
-      :id="volume.id"
+      :series-id="volume.series_id"
       :title="volumeTitle"
+      :volumes="[{ id: volume.id, label: volumeTitle }]"
     />
 
     <LightNovelVolumeEpubActions

@@ -4,9 +4,21 @@
   import type { GalgameDownloadsPageData } from '~~/server/api/pages/galgames/[id]/downloads.get'
 
   defineOptions({ name: 'GalgameDownloadsDisclaimer' })
-  const props = defineProps<{ links: GalgameDownloadsPageData['galgame']['external_links'] }>()
+  const props = defineProps<{
+    links: GalgameDownloadsPageData['galgame']['external_links']
+    steamApps: GalgameDownloadsPageData['galgame']['steam_apps']
+  }>()
 
-  const stores = computed(() => storeLinks(props.links))
+  const stores = computed(() =>
+    storeLinks([
+      ...props.links,
+      ...props.steamApps.map(app => ({
+        name: 'steam',
+        label: 'Steam',
+        url: `https://store.steampowered.com/app/${app.app_id}/`,
+      })),
+    ]),
+  )
 </script>
 
 <template>

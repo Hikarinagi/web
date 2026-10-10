@@ -13,6 +13,7 @@
   import { MANGA_EDITOR } from '~/features/workbench/manga/composables/editor-context'
   import { useMangaRegions } from '~/features/workbench/manga/composables/useMangaRegions'
   import { useMangaTranslations } from '~/features/workbench/manga/composables/useMangaTranslations'
+  import { usePageUpload } from '~/features/workbench/manga/composables/usePageUpload'
   import { usePageNavigation } from '~/features/workbench/manga/composables/usePageNavigation'
   import { projectKind } from '~/features/workbench/manga/labels'
   import type { BackendMangaProject, MangaRegionChange } from '~/features/workbench/manga/manga'
@@ -28,8 +29,9 @@
   const translation = computed(() => project.value.mode === 'TRANSLATION')
   const store = useMangaRegions(() => props.data.project.id, props.data.regions)
   const translations = useMangaTranslations(store.find)
+  const upload = usePageUpload(() => props.data.project.id)
   const { regions: all, selectedId, stale, saving, dirty } = store
-  provide(MANGA_EDITOR, { store, translations })
+  provide(MANGA_EDITOR, { store, translations, upload })
   watch(
     () => props.data.regions,
     rows =>
@@ -67,9 +69,8 @@
   })
   const banner = computed(
     () =>
-      (!!project.value.viewer_role &&
-        (project.value.status === 'REVIEW' || props.data.review?.status === 'REJECTED')) ||
-      !!props.data.pending_change,
+      !!project.value.viewer_role &&
+      (project.value.status === 'REVIEW' || props.data.review?.status === 'REJECTED'),
   )
 
   const series = computed(() => seriesTitle(project.value.series))
@@ -99,6 +100,7 @@
 <template>
   <WorkbenchEditorTopBar back="/create/projects" :title="series" :subtitle="episode" :kind="kind">
     <template #status>
+      <WorkbenchMangaShellSteps :project="project" />
       <WorkbenchMangaShellStatus
         :project="project"
         :pages="data.pages"
@@ -119,6 +121,7 @@
     <WorkbenchMangaShellActions
       :project="project"
       :pages="data.pages"
+      :tasks="data.tasks"
       @changed="emit('refresh')"
       @manage="action => manage?.open(action)"
     />
@@ -163,7 +166,6 @@
             :project="project"
             :review="data.review"
             :pages="data.pages"
-            :pending-change="data.pending_change"
             @jump="jump"
           />
         </Stack>
@@ -230,7 +232,6 @@
   <WorkbenchMangaManage
     ref="manage"
     :project="project"
-    :chapter="data.chapter"
     @refresh="emit('refresh')"
     @regions="store.refreshAll()"
   />

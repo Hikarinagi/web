@@ -5,7 +5,6 @@
     FormField,
     FormLayout,
     Input,
-    NumberInput,
     SegmentedControl,
     Select,
   } from '@hina-ui/vue'
@@ -19,6 +18,7 @@
   import { useMangaSearch } from '~/features/contribute/useMangaSearch'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
   import { LANGUAGE_OPTIONS } from '~/features/galgame/labels'
+  import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
   import {
     createMangaProjectSchema,
     type CreateMangaProjectValues,
@@ -40,12 +40,19 @@
     { value: 'TRANSLATION', label: '翻译' },
   ]
   const SCOPE_OPTIONS = [
-    { value: 'CHAPTER', label: '单话' },
+    { value: 'CHAPTER', label: '一话' },
     { value: 'VOLUME', label: '整卷' },
   ]
   const CHINESE_OPTIONS = LANGUAGE_OPTIONS.filter(option => option.value.startsWith('zh'))
 
   const { requireLogin } = useAuthGate()
+  const createOpen = ref(false)
+  const created = ref<{
+    id: number
+    label: string
+    change_request_id: number
+    pending: boolean
+  } | null>(null)
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const target = shallowRef<MangaTarget | null>(props.series)
@@ -58,10 +65,10 @@
     mode: props.mode ?? 'UPLOAD',
     scope: props.volumeId != null ? 'VOLUME' : (props.scope ?? 'CHAPTER'),
     chapter_id: props.chapterId ?? null,
+    chapter_type: 'SERIALIZATION',
     chapter_number: props.newChapter ?? '',
     chapter_name: '',
     volume_id: props.volumeId ?? null,
-    volume_number: null,
     source_lang: 'zh-Hans',
     target_lang: 'zh-Hans',
   })
@@ -71,19 +78,46 @@
     results.value.map(item => ({ value: item.id, label: item.name_cn || item.name })),
   )
   const chapterChoices = computed(() => chapterOptions(chapters.value, claims.value))
-  const volumeChoices = computed(() => volumeOptions(volumes.value, chapters.value, claims.value))
+  const volumeChoices = computed(() => {
+    const options = volumeOptions(volumes.value, chapters.value, claims.value)
+    if (created.value && !options.some(option => option.value === created.value!.id)) {
+      options.splice(options.length - 1, 0, { value: created.value.id, label: created.value.label })
+    }
+    return options
+  })
+  const nextVolumeNumber = computed(() => {
+    const numbers = volumes.value
+      .map(volume => volume.volume_number)
+      .filter((value): value is number => value != null)
+    return numbers.length ? Math.max(...numbers) + 1 : 1
+  })
   const chapter = computed({
     get: () => values.chapter_id ?? NEW_TARGET,
     set: value => {
       values.chapter_id = value === NEW_TARGET ? null : Number(value)
     },
   })
-  const volume = computed({
-    get: () => values.volume_id ?? NEW_TARGET,
+  const volume = computed<number | string | null>({
+    get: () => values.volume_id ?? null,
     set: value => {
-      values.volume_id = value === NEW_TARGET ? null : Number(value)
+      if (value === NEW_TARGET) createOpen.value = true
+      else values.volume_id = value == null ? null : Number(value)
     },
   })
+
+  function onCreated(volume: {
+    id: number
+    label: string
+    change_request_id: number
+    pending: boolean
+  }) {
+    created.value = volume
+    values.volume_id = volume.id
+  }
+
+  function onPicked(volumeId: number) {
+    if (volumes.value.some(volume => volume.id === volumeId)) values.volume_id = volumeId
+  }
 
   watch(
     () => values.mode,
@@ -118,10 +152,14 @@
           ...(wholeVolume.value
             ? {
                 volume_id: values.volume_id ?? undefined,
-                volume_number: values.volume_id ? undefined : (values.volume_number ?? undefined),
+                volume_change_request_id:
+                  created.value?.pending && created.value.id === values.volume_id
+                    ? created.value.change_request_id
+                    : undefined,
               }
             : {
                 chapter_id: values.chapter_id ?? undefined,
+                chapter_type: values.chapter_id ? undefined : values.chapter_type,
                 chapter_number: values.chapter_id
                   ? undefined
                   : values.chapter_number?.trim() || null,
@@ -175,31 +213,42 @@
       </FormField>
       <template v-if="wholeVolume">
         <FormField v-if="!fixed && target" name="volume_id" label="单行本" required>
-          <Select v-model="volume" :options="volumeChoices" />
+          <Select v-model="volume" :options="volumeChoices" placeholder="选择单行本" />
         </FormField>
-        <FormField
-          v-if="!fixed && target && values.volume_id === null"
-          name="volume_number"
-          label="卷号"
-          required
-        >
-          <NumberInput v-model="values.volume_number" :min="0" placeholder="3" />
-        </FormField>
+        <ContributeMangaVolumeCreateDialog
+          v-if="target"
+          v-model:open="createOpen"
+          :series="target"
+          :volume-number="nextVolumeNumber"
+          @created="onCreated"
+          @picked="onPicked"
+        />
       </template>
       <template v-else>
         <FormField v-if="!fixed && target" name="chapter_id" label="章节" required>
           <Select v-model="chapter" :options="chapterChoices" />
         </FormField>
+        <FormField
+          v-if="!fixed && target && values.chapter_id === null"
+          name="chapter_type"
+          label="类型"
+          required
+        >
+          <SegmentedControl v-model="values.chapter_type" :options="MANGA_CHAPTER_TYPE_OPTIONS" />
+        </FormField>
         <FormLayout v-if="!fixed && target && values.chapter_id === null" :columns="2">
           <FormField
             name="chapter_number"
             label="话数"
-            description="话数与标题至少填写其一"
-            description-placement="control"
+            :required="values.chapter_type === 'SERIALIZATION'"
           >
             <Input v-model="values.chapter_number" placeholder="12" />
           </FormField>
-          <FormField name="chapter_name" label="标题">
+          <FormField
+            name="chapter_name"
+            label="标题"
+            :required="values.chapter_type !== 'SERIALIZATION'"
+          >
             <Input v-model="values.chapter_name" />
           </FormField>
         </FormLayout>

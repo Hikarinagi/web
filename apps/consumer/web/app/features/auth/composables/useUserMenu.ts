@@ -1,6 +1,7 @@
 import {
   Calendar,
   CalendarCheck,
+  Download,
   LayoutDashboard,
   LogOut,
   Package,
@@ -11,6 +12,7 @@ import {
   Shirt,
 } from '@lucide/vue'
 import HikariPoint from '~/components/ui/HikariPoint.vue'
+import { useDownloadEngine } from '~/features/download/useDownloadEngine'
 
 export interface UserMenuItem {
   key?: string
@@ -21,6 +23,7 @@ export interface UserMenuItem {
   separator?: boolean
   balance?: number
   modeLabel?: string
+  trailing?: string
 }
 
 export function useUserMenu() {
@@ -33,6 +36,13 @@ export function useUserMenu() {
   const user = computed(() => auth.user)
   const roleLabel = computed(() => getUserRoleLabel(user.value?.role))
   const checkedInToday = computed(() => checkin.status.value?.checked_in_today ?? false)
+  const engine = useDownloadEngine()
+  const downloading = computed(() => {
+    const total = engine.active.value.reduce((sum, run) => sum + run.total, 0)
+    if (!engine.active.value.length || !total) return undefined
+    const written = engine.active.value.reduce((sum, run) => sum + run.written, 0)
+    return `正在保存 ${Math.min(100, Math.round((written / total) * 100))}%`
+  })
 
   onMounted(() => {
     if (user.value) void checkin.ensureStatus()
@@ -70,13 +80,20 @@ export function useUserMenu() {
         key: 'decoration',
         label: '我的装扮',
         iconComponent: Shirt,
-        command: () => void navigateTo('/setting/decoration'),
+        command: () => void navigateTo('/me/decoration'),
       },
       {
         key: 'items',
         label: '我的道具',
         iconComponent: Package,
-        command: () => void navigateTo('/setting/items'),
+        command: () => void navigateTo('/me/items'),
+      },
+      {
+        key: 'downloads',
+        label: '下载中心',
+        iconComponent: Download,
+        trailing: downloading.value,
+        command: () => void navigateTo('/me/downloads'),
       },
       {
         key: 'site',

@@ -30,7 +30,7 @@ export function notificationTarget(
   const target = source?.target
   if (!target) return null
 
-  if (target.kind === 'decoration') return '/setting/decoration'
+  if (target.kind === 'decoration') return '/me/decoration'
   if (target.kind === 'dm') return target.id == null ? null : `/messages?peer=${target.id}`
   if (target.kind === 'novel_project') {
     return target.id == null ? null : `/create/projects/${target.id}`

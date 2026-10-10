@@ -11,7 +11,7 @@
   const rawId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   const mangaId = Number(rawId)
 
-  const { data } = await useHikariApiData(`/api/pages/mangas/${mangaId}`, {
+  const { data, refresh } = await useHikariApiData(`/api/pages/mangas/${mangaId}`, {
     fatal: true,
   })
   useNsfwDetailGate(() => data.value?.manga.nsfw)
@@ -44,11 +44,11 @@
     <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
       <MangaChapters
         :manga-id="data.manga.id"
-        :manga-title="data.manga.name_cn || data.manga.name"
         :chapters="data.chapters"
         :volumes="data.volumes"
         :progress="data.progress"
         :latest-chapter-at="data.manga.latest_chapter_at"
+        @refresh="refresh"
       />
 
       <MangaRatesSummary

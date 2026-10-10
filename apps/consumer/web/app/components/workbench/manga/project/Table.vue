@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Progress, Text, type DataTableColumn } from '@hina-ui/vue'
+  import { Button, Inline, Progress, Text, toast, type DataTableColumn } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import type { Component } from 'vue'
   import { LANGUAGE_LABELS } from '~/features/galgame/labels'
@@ -19,8 +19,49 @@
     purpose: 'mine' | 'review'
   }>()
   const page = defineModel<number>('page', { required: true })
+  const emit = defineEmits<{ changed: [] }>()
 
   type Row = BackendMangaProjectListItem
+
+  const { confirm } = useHikariConfirm()
+  const busy = ref<number | null>(null)
+  const correcting = ref<Row | null>(null)
+  const correctOpen = ref(false)
+  const rejecting = ref<Row | null>(null)
+  const rejectOpen = ref(false)
+
+  function correct(row: Row) {
+    correcting.value = row
+    correctOpen.value = true
+  }
+
+  function reject(row: Row) {
+    rejecting.value = row
+    rejectOpen.value = true
+  }
+
+  function approve(row: Row) {
+    confirm({
+      title: '通过并发布',
+      description: '批准后，立即将页面发布到本章，读者可以在线阅读。',
+      confirmText: '通过',
+      cancelText: '取消',
+      onConfirm: async () => {
+        busy.value = row.id
+        try {
+          await hikariRequest('/api/v3/manga-projects/{project_id}/approve', {
+            method: 'post',
+            path: { project_id: row.id },
+            body: {},
+          })
+          toast.success('已通过并发布')
+          emit('changed')
+        } finally {
+          busy.value = null
+        }
+      },
+    })
+  }
 
   const languageLabel = (code: string | null) =>
     code ? (LANGUAGE_LABELS[code as keyof typeof LANGUAGE_LABELS] ?? code) : ''
@@ -45,6 +86,7 @@
           { key: 'status', label: '状态' },
         ]
       : [
+          { key: 'preview', label: '预览' },
           {
             key: 'pages',
             label: '页数',
@@ -60,6 +102,7 @@
       format: value => timeFormat(value as string),
       cellClass: 'text-muted',
     },
+    ...(props.purpose === 'review' ? [{ key: 'actions', label: '', pin: 'end' as const }] : []),
   ])
 
   function open(row: Row) {
@@ -111,5 +154,51 @@
     <template #cell-owner="{ row }">
       <UserName :user="row.owner" :handle="false" class="py-2 text-sm" />
     </template>
+    <template #cell-preview="{ row }">
+      <Inline gap="xs" :wrap="false" class="py-1">
+        <HikariImage
+          v-for="(src, index) in row.preview"
+          :key="index"
+          :src="src"
+          :processing="false"
+          alt=""
+          class="h-12 w-9 shrink-0 rounded bg-subtle"
+          image-class="size-full object-cover object-top"
+        >
+          <template #empty />
+          <template #error />
+        </HikariImage>
+      </Inline>
+    </template>
+    <template #cell-actions="{ row }">
+      <Inline gap="xs" :wrap="false" justify="end" class="py-1" @click.stop>
+        <Button size="sm" variant="ghost" @click="correct(row)">修正</Button>
+        <Button size="sm" variant="ghost" tone="danger" @click="reject(row)">驳回</Button>
+        <Inline v-tooltip="row.placement_complete ? null : '归类不完整，请先修正'" as="span">
+          <Button
+            size="sm"
+            :disabled="!row.placement_complete"
+            :loading="busy === row.id"
+            @click="approve(row)"
+          >
+            通过
+          </Button>
+        </Inline>
+      </Inline>
+    </template>
   </CreatorDataTable>
+  <WorkbenchMangaProjectInfoDialog
+    v-if="correcting"
+    v-model:visible="correctOpen"
+    :project="correcting"
+    purpose="approve"
+    @saved="emit('changed')"
+  />
+  <WorkbenchProjectRejectDialog
+    v-if="rejecting"
+    v-model:visible="rejectOpen"
+    kind="manga"
+    :project-id="rejecting.id"
+    @rejected="emit('changed')"
+  />
 </template>

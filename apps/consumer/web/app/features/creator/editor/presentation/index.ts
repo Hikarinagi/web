@@ -3,7 +3,6 @@ import { galgamePresentation } from './galgame'
 import { lightNovelPresentation } from './light-novel'
 import { lightNovelVolumePresentation } from './light-novel-volume'
 import { mangaPresentation } from './manga'
-import { mangaChapterPresentation } from './manga-chapter'
 import { mangaVolumePresentation } from './manga-volume'
 import { personPresentation } from './person'
 import { producerPresentation } from './producer'
@@ -16,7 +15,6 @@ export const EDITOR_PRESENTATIONS: Record<string, EditorPresentation> = {
   'light-novel-volume': lightNovelVolumePresentation,
   manga: mangaPresentation,
   'manga-volume': mangaVolumePresentation,
-  'manga-chapter': mangaChapterPresentation,
   person: personPresentation,
   producer: producerPresentation,
   character: characterPresentation,

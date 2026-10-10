@@ -1,17 +1,14 @@
 <script setup lang="ts">
   import { toast } from '@hina-ui/vue'
-  import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
   import type { BackendMangaProject } from '~/features/workbench/manga/manga'
 
-  const props = defineProps<{
-    project: BackendMangaProject
-    chapter: WorkbenchMangaProjectPageData['chapter']
-  }>()
+  const props = defineProps<{ project: BackendMangaProject }>()
   const emit = defineEmits<{ refresh: []; regions: [] }>()
 
   const { confirm } = useHikariConfirm()
   const membersOpen = ref(false)
   const infoOpen = ref(false)
+  const chapterOpen = ref(false)
   const importOpen = ref(false)
   const uploadOpen = ref(false)
   const bookTarget = ref<{ slug: 'manga'; id: number } | null>(null)
@@ -42,8 +39,10 @@
 
   function open(action: string) {
     if (action === 'upload') uploadOpen.value = true
-    else if (action === 'chapter-info') infoOpen.value = true
-    else if (action === 'series-info')
+    else if (action === 'chapter-info') {
+      if (props.project.status === 'PUBLISHED') chapterOpen.value = true
+      else infoOpen.value = true
+    } else if (action === 'series-info')
       bookTarget.value = { slug: 'manga', id: props.project.series.id }
     else if (action === 'collaborators') membersOpen.value = true
     else if (action === 'labelplus-import') importOpen.value = true
@@ -53,7 +52,7 @@
     else if (action === 'archive') {
       confirm({
         title: '归档',
-        description: '归档会停止对此投稿的协作，并允许为同一章节开始新的投稿。你可以稍后恢复它。',
+        description: '归档会停止协作，并把这份投稿从列表中隐藏。页面与项目信息都会保留。',
         confirmText: '归档',
         cancelText: '取消',
         tone: 'danger',
@@ -70,7 +69,12 @@
   <WorkbenchMangaProjectInfoDialog
     v-model:visible="infoOpen"
     :project="project"
-    :chapter="chapter"
+    @saved="emit('refresh')"
+  />
+  <MangaChapterEditDialog
+    v-model:visible="chapterOpen"
+    :series-id="project.series.id"
+    :chapter="project.chapter"
     @saved="emit('refresh')"
   />
   <WorkbenchMangaLabelplusImportDialog
@@ -83,10 +87,6 @@
       }
     "
   />
-  <WorkbenchMangaPageUploadDialog
-    v-model:visible="uploadOpen"
-    :project-id="project.id"
-    @uploaded="emit('refresh')"
-  />
+  <WorkbenchMangaPageUploadDialog v-model:visible="uploadOpen" @uploaded="emit('refresh')" />
   <WorkbenchProjectBookInfoDrawer :target="bookTarget" @close="bookTarget = null" />
 </template>

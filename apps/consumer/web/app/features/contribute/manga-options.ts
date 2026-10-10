@@ -43,12 +43,14 @@ export function volumeOptions(
       if (filled.some(chapter => belongsTo(chapter, volume))) {
         return { value: volume.id, label: `${label}（已收录）`, disabled: true }
       }
-      if (claimed.some(claim => belongsTo(claim, volume))) {
-        return { value: volume.id, label: `${label}（进行中）`, disabled: true }
+      const claim = claimed.find(claim => belongsTo(claim, volume))
+      if (claim) {
+        const who = claim.owner.nickname || claim.owner.name
+        return { value: volume.id, label: `${label}（${who} 正在上传）`, disabled: true }
       }
       return { value: volume.id, label }
     }),
-    { value: NEW_TARGET, label: '添加一卷' },
+    { value: NEW_TARGET, label: '新建这一卷的条目…' },
   ]
 }
 

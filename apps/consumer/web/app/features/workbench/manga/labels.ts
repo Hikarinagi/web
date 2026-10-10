@@ -64,3 +64,33 @@ export const MANGA_POSITION_OPTIONS = [
   { value: 'INSIDE', label: '框内' },
   { value: 'OUTSIDE', label: '框外' },
 ]
+
+export const MANGA_PROJECT_STATUS_LABEL: Record<string, string> = {
+  DRAFT: '草稿',
+  ACTIVE: '进行中',
+  REVIEW: '待审核',
+  PUBLISHED: '已发布',
+  STALE: '已停滞',
+  ARCHIVED: '已归档',
+}
+
+export function projectStatusLabel(project: { status: string; mode: string }): string {
+  if (project.status === 'ACTIVE' && project.mode === 'UPLOAD') return '上传中'
+  return MANGA_PROJECT_STATUS_LABEL[project.status] ?? project.status
+}
+
+export function projectSteps(project: { status: string; mode: string }): {
+  labels: string[]
+  current: number
+} {
+  const labels = [project.mode === 'TRANSLATION' ? '翻译' : '上传', '提交审核', '发布']
+  const current =
+    project.status === 'PUBLISHED'
+      ? 2
+      : project.status === 'REVIEW'
+        ? 1
+        : project.status === 'ARCHIVED'
+          ? -1
+          : 0
+  return { labels, current }
+}

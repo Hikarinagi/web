@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Flex, Heading, Stack, Text } from '@hina-ui/vue'
-  import { SETTING_ME_KEY } from '~/features/space/setting-context'
+  import { ME_KEY } from '~/features/space/me-context'
 
   defineOptions({ name: 'PageSpaceSetting' })
   definePageMeta({ layout: 'default', middleware: 'auth' })
@@ -10,7 +10,7 @@
   const { data } = await useHikariApiData('/api/pages/setting', { fatal: true })
 
   const me = computed(() => data.value!.me)
-  provide(SETTING_ME_KEY, me)
+  provide(ME_KEY, me)
 
   watch(
     () => auth.user,

@@ -21,6 +21,7 @@
     }>(),
     { volumeNumber: null },
   )
+  const emit = defineEmits<{ edit: [chapter: MangaPageData['chapters'][number]] }>()
 
   const volumeIds = computed(() => {
     if (props.volumeNumber == null) return new Set<number>()
@@ -147,6 +148,7 @@
           :current-chapter-id="progress?.chapter.id ?? null"
           :read-ids="readIds"
           :volume-ids="volumeIds"
+          @edit="emit('edit', $event)"
         />
       </Stack>
     </Stack>
