@@ -183,6 +183,19 @@ describe('TaskRunner', () => {
     expect(progress).toMatchObject({ written: archive.byteLength })
   })
 
+  it('stops the other lanes as soon as one page fails', async () => {
+    const directory = fakeDirectory(new Map())
+    const events: WorkerEvent[] = []
+    failOn = 1
+    holdOn = 2
+    const running = new TaskRunner(command(directory), io(events)).run()
+    while (!fetched.includes(2)) await new Promise(resolve => setTimeout(resolve, 0))
+    release()
+    await running
+    expect(fetched.sort()).toEqual([1, 2])
+    expect(events.at(-1)).toMatchObject({ type: 'error', failure: { code: 'HTTP_500' } })
+  })
+
   it('pauses without losing written entries', async () => {
     const store = new Map<string, Uint8Array>()
     const directory = fakeDirectory(store)

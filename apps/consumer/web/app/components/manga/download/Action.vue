@@ -17,7 +17,7 @@
   const chapters = computed(() =>
     props.chapters
       .filter(chapter => chapter.readable)
-      .toSorted((a, b) => a.sort_key - b.sort_key || a.id - b.id),
+      .sort((a, b) => a.sort_key - b.sort_key || a.id - b.id),
   )
   const options = computed(() =>
     chapters.value.map(chapter => ({ id: chapter.id, label: getMangaEpisodeLabel(chapter) })),

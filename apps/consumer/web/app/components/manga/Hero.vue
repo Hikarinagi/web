@@ -83,10 +83,10 @@
           :favorited="favorited ?? false"
         />
         <MangaHeroContribute
+          v-if="manga.serial_status === 'SERIALIZING'"
           :manga-id="manga.id"
           :title="title"
           :chapters="chapters"
-          :finished="manga.serial_status === 'FINISHED'"
         />
       </Stack>
     </Flex>

@@ -7,7 +7,6 @@
     mangaId: number
     title: string
     chapters: MangaPageData['chapters']
-    finished: boolean
   }>()
 
   const open = ref(false)
@@ -30,12 +29,12 @@
     @click="open = true"
   >
     <template #icon><BookUp /></template>
-    {{ finished ? '投稿单行本' : '投稿章节' }}
+    投稿章节
   </Button>
   <ContributeMangaStartDialog
     v-model:open="open"
     :series="{ id: mangaId, title }"
-    :scope="finished ? 'VOLUME' : 'CHAPTER'"
-    :new-chapter="finished ? undefined : next"
+    scope="CHAPTER"
+    :new-chapter="next"
   />
 </template>

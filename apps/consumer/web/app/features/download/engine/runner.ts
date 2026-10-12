@@ -36,6 +36,7 @@ function safeName(name: string) {
 
 export class TaskRunner {
   private readonly abort = new AbortController()
+  private readonly gate = { until: 0 }
   private readonly files: FileProgress[]
   private readonly samples: { at: number; bytes: number }[] = []
   private record: RunRecord | null = null
@@ -197,37 +198,56 @@ export class TaskRunner {
     done: Set<number>,
   ) {
     const { manifest } = this.command
-    const signal = this.abort.signal
     const parallel = Math.max(1, manifest.parallel_connections)
     const pending = file.entries.map((_, index) => index).filter(index => !done.has(index))
-    if (sink.sequential) {
-      const results = new Map<number, Promise<Uint8Array>>()
-      let cursor = 0
-      const schedule = () => {
-        while (results.size < parallel && cursor < pending.length) {
-          const index = pending[cursor++]!
-          results.set(index, fetchEntry(manifest, file, file.entries[index]!, signal))
+    const local = new AbortController()
+    const stop = () => local.abort(this.abort.signal.reason)
+    if (this.abort.signal.aborted) stop()
+    this.abort.signal.addEventListener('abort', stop, { once: true })
+    const signal = local.signal
+    try {
+      if (sink.sequential) {
+        const results = new Map<number, Promise<Uint8Array>>()
+        let cursor = 0
+        const schedule = () => {
+          while (results.size < parallel && cursor < pending.length) {
+            const index = pending[cursor++]!
+            const task = fetchEntry(manifest, file, file.entries[index]!, signal, this.gate)
+            task.catch((error: unknown) => local.abort(error))
+            results.set(index, task)
+          }
         }
+        const drain = async () => {
+          schedule()
+          for (const index of pending) {
+            const data = await results.get(index)!
+            results.delete(index)
+            await this.commit(file, layout, slots, sink, state, index, data)
+            schedule()
+          }
+        }
+        await drain().catch((error: unknown) => local.abort(error))
+        await Promise.allSettled(results.values())
+      } else {
+        let cursor = 0
+        const lane = async () => {
+          while (cursor < pending.length) {
+            signal.throwIfAborted()
+            const index = pending[cursor++]!
+            const data = await fetchEntry(manifest, file, file.entries[index]!, signal, this.gate)
+            await this.commit(file, layout, slots, sink, state, index, data)
+          }
+        }
+        await Promise.all(
+          Array.from({ length: Math.min(parallel, pending.length) }, () =>
+            lane().catch((error: unknown) => local.abort(error)),
+          ),
+        )
       }
-      schedule()
-      for (const index of pending) {
-        const data = await results.get(index)!
-        results.delete(index)
-        await this.commit(file, layout, slots, sink, state, index, data)
-        schedule()
-      }
-      return
+      signal.throwIfAborted()
+    } finally {
+      this.abort.signal.removeEventListener('abort', stop)
     }
-    let cursor = 0
-    const lane = async () => {
-      while (cursor < pending.length) {
-        signal.throwIfAborted()
-        const index = pending[cursor++]!
-        const data = await fetchEntry(manifest, file, file.entries[index]!, signal)
-        await this.commit(file, layout, slots, sink, state, index, data)
-      }
-    }
-    await Promise.all(Array.from({ length: Math.min(parallel, pending.length) }, lane))
   }
 
   private async commit(

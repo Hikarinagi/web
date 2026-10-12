@@ -1653,23 +1653,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/manga/source-links/{id}/confirm": {
+    "/api/v3/admin/manga/source-links/{id}/candidates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["AdminMangaSourceReviewController_candidates"];
         put?: never;
-        post: operations["AdminMangaSourceLinkController_confirm"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/manga/source-links/{id}/override": {
+    "/api/v3/admin/manga/source-links/{id}/credits/reject": {
         parameters: {
             query?: never;
             header?: never;
@@ -1678,14 +1678,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminMangaSourceLinkController_override"];
+        post: operations["AdminMangaSourceReviewController_rejectCredit"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/manga/source-links/{id}/reject": {
+    "/api/v3/admin/manga/source-links/{id}/drop": {
         parameters: {
             query?: never;
             header?: never;
@@ -1694,7 +1694,151 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminMangaSourceLinkController_reject"];
+        post: operations["AdminMangaSourceReviewController_drop"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceLinkController_groups"];
+        put: operations["AdminMangaSourceLinkController_setGroups"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceReviewController_impact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/keep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaSourceReviewController_keep"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/neighbors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceReviewController_neighbors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceReviewController_series"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}/cover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceReviewController_cover"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}/pages/{page}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaSourceReviewController_page"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/split": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaSourceLinkController_split"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/manga/source-links/{id}/switch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaSourceReviewController_switch"];
         delete?: never;
         options?: never;
         head?: never;
@@ -11521,6 +11665,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/reader/me/manga/reading/{manga_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaShelfController_hide"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/reader/me/manga/stats": {
         parameters: {
             query?: never;
@@ -11564,6 +11724,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/reader/me/reading/{light_novel_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ReaderController_hideFromShelf"];
         options?: never;
         head?: never;
         patch?: never;
@@ -14016,33 +14192,140 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        AdminMangaReviewWorkDto: {
+            chapters: number;
+            cover: string | null;
+            from_source: number;
+            id: number;
+            name: string;
+            name_cn: string | null;
+            other_names: string[];
+            /** Format: date */
+            publication_date: string | null;
+            readers: number;
+            serial_status: components["schemas"]["MangaSerialStatus"];
+            staff: components["schemas"]["AdminMangaStaffMarkDto"][];
+            uploads: number;
+        };
+        AdminMangaSourceAuthorDto: {
+            credited: boolean;
+            name: string;
+        };
+        AdminMangaSourceCandidateDto: {
+            all_credited: boolean;
+            authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
+            confidence: number;
+            current: boolean;
+            entries: number;
+            has_cover: boolean;
+            series_id: string;
+            status: string | null;
+            title: string;
+            updated: string | null;
+        };
+        AdminMangaSourceEntriesDto: {
+            first: string[];
+            last: string[];
+            total: number;
+        };
+        AdminMangaSourceGroupDto: {
+            count: number;
+            included: boolean;
+            name: string;
+            role: components["schemas"]["MangaSourceGroupRole"] | null;
+        };
+        AdminMangaSourceGroupsDto: {
+            groups: components["schemas"]["AdminMangaSourceGroupDto"][];
+            scope: string[];
+            siblings: components["schemas"]["AdminMangaSourceSiblingDto"][];
+        };
+        AdminMangaSourceImpactDto: {
+            heir: components["schemas"]["AdminMangaSummaryDto"] | null;
+            kept: number;
+            readers: number;
+            released: components["schemas"]["AdminMangaSourceReleaseDto"][];
+            removed: number;
+            starts_fetching: boolean;
+            to_fetch: number | null;
+        };
         AdminMangaSourceLinkDetailDto: {
+            /** Format: date-time */
+            checked_at: string | null;
             confidence: number;
             /** Format: date-time */
             created_at: string;
+            groups: string[];
             id: number;
-            manga: components["schemas"]["AdminMangaSummaryDto"];
             manga_id: number;
             matched_by: components["schemas"]["MangaMatchMethod"];
+            reason: components["schemas"]["MangaSourceReviewReason"] | null;
+            /** Format: date-time */
+            reviewed_at: string | null;
+            source_authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
             source_key: string;
             source_series_id: string;
+            source_title: string | null;
             status: components["schemas"]["MangaSourceLinkStatus"];
             /** Format: date-time */
             updated_at: string;
-            url: string | null;
+            work: components["schemas"]["AdminMangaReviewWorkDto"];
         };
         AdminMangaSourceLinkItemDto: {
-            confidence: number;
+            chapters: number;
             /** Format: date-time */
-            created_at: string;
+            checked_at: string | null;
+            confidence: number;
             id: number;
             manga: components["schemas"]["AdminMangaSummaryDto"];
             manga_id: number;
             matched_by: components["schemas"]["MangaMatchMethod"];
+            readers: number;
+            reason: components["schemas"]["MangaSourceReviewReason"];
+            source_authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
             source_key: string;
             source_series_id: string;
+            source_title: string | null;
             status: components["schemas"]["MangaSourceLinkStatus"];
-            url: string | null;
+        };
+        AdminMangaSourceNeighborsDto: {
+            next_id: number | null;
+            position: number | null;
+            prev_id: number | null;
+            total: number;
+        };
+        AdminMangaSourceReleaseDto: {
+            manga_id: number;
+            name: string;
+            readers: number;
+            removed: number;
+        };
+        AdminMangaSourceSampleDto: {
+            pages: number;
+            title: string | null;
+        };
+        AdminMangaSourceSeriesDto: {
+            all_credited: boolean;
+            authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
+            entries: components["schemas"]["AdminMangaSourceEntriesDto"];
+            /** Format: date-time */
+            fetched_at: string;
+            groups: components["schemas"]["AdminMangaSourceGroupDto"][];
+            has_cover: boolean;
+            sample: components["schemas"]["AdminMangaSourceSampleDto"];
+            series_id: string;
+            staff: components["schemas"]["AdminMangaStaffMarkDto"][];
+            status: string | null;
+            tags: string[];
+            title: string | null;
+            updated: string | null;
+            works: components["schemas"]["AdminMangaSourceWorkDto"][];
+        };
+        AdminMangaSourceSiblingDto: {
+            groups: string[];
+            link_id: number;
+            manga_id: number;
+            name: string;
+            name_cn: string | null;
         };
         AdminMangaSourceThrottleDto: {
             reason: string;
@@ -14051,6 +14334,29 @@ export interface components {
             until: string;
             /** Format: date-time */
             updated_at: string;
+        };
+        AdminMangaSourceWorkDto: {
+            all_credited: boolean;
+            chapters: number;
+            cover: string | null;
+            groups: string[];
+            id: number;
+            link_id: number;
+            name: string;
+            name_cn: string | null;
+            /** Format: date */
+            publication_date: string | null;
+            readers: number;
+            serial_status: components["schemas"]["MangaSerialStatus"];
+            staff: components["schemas"]["AdminMangaStaffMarkDto"][];
+        };
+        AdminMangaStaffMarkDto: {
+            ai_names: string[];
+            art: boolean;
+            credited: boolean;
+            name: string;
+            person_id: number;
+            role: components["schemas"]["MangaStaffRole"];
         };
         AdminMangaSummaryDto: {
             cover: string | null;
@@ -14145,12 +14451,16 @@ export interface components {
             created_at: string;
             done: number;
             failed: number;
+            groups: string[];
             id: number;
             ingesting: number;
             matched_by: components["schemas"]["MangaMatchMethod"];
             pending: number;
+            reason: components["schemas"]["MangaSourceReviewReason"] | null;
+            source_authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
             source_key: string;
             source_series_id: string;
+            source_title: string | null;
             status: components["schemas"]["MangaSourceLinkStatus"];
             throttled: number;
             url: string | null;
@@ -19322,6 +19632,11 @@ export interface components {
             /** @description 稿中多出、项目里没有对应页面的页数 */
             skipped_pages: number;
         };
+        MangaLinkCheckSettingDto: {
+            batch_size: number;
+            cooldown_days: number;
+            enabled: boolean;
+        };
         /** @enum {string} */
         MangaListing: "AUTO" | "SHOWN" | "HIDDEN";
         MangaListingStateDto: {
@@ -19826,6 +20141,8 @@ export interface components {
             rejected: number;
             source_key: string;
         };
+        /** @enum {string} */
+        MangaSourceGroupRole: "main" | "volume" | "alternate" | "extra" | "separate";
         MangaSourceHealthDto: {
             done: number;
             failed: number;
@@ -19838,12 +20155,15 @@ export interface components {
         MangaSourceLinkStatus: "PENDING" | "LINKED" | "REJECTED";
         MangaSourcePolicyDto: {
             ingestion: components["schemas"]["MangaIngestionSettingDto"];
+            link_check: components["schemas"]["MangaLinkCheckSettingDto"];
             matching: components["schemas"]["MangaMatchingSettingDto"];
             rediscover: components["schemas"]["MangaRediscoverSettingDto"];
             sources: components["schemas"]["MangaSourceSettingDto"][];
             sweeper: components["schemas"]["MangaSweeperSettingDto"];
             update_notify: components["schemas"]["MangaUpdateNotifySettingDto"];
         };
+        /** @enum {string} */
+        MangaSourceReviewReason: "LOW_CONFIDENCE" | "AUTHOR_MISMATCH" | "SHARED_SOURCE" | "MIXED_SOURCE";
         MangaSourceSettingDto: {
             data_saver?: boolean;
             enabled: boolean;
@@ -22438,6 +22758,10 @@ export interface components {
         RejectReviewGroupApplicationDto: {
             rejection_reason: string;
         };
+        RejectSourceCreditDto: {
+            name: string;
+            person_id: number;
+        };
         ReleaseNoteDto: {
             /** Format: date-time */
             released_at: string;
@@ -22883,7 +23207,7 @@ export interface components {
         };
         SourceLinkBatchDto: {
             /** @enum {string} */
-            action: "confirm" | "reject";
+            action: "keep" | "drop";
             ids: number[];
         };
         SourceLinkBatchResultDto: {
@@ -22892,7 +23216,10 @@ export interface components {
         };
         SourceLinkDecisionDto: {
             notes?: string;
-            source_series_id?: string;
+        };
+        SplitSourceLinkDto: {
+            group: string;
+            manga_id: number;
         };
         SubmitChangeRequestBatchDto: {
             items: components["schemas"]["ChangeRequestBatchItemDto"][];
@@ -22917,6 +23244,10 @@ export interface components {
         };
         SuggestionItemDto: {
             keyword: string;
+        };
+        SwitchSourceLinkDto: {
+            notes?: string;
+            source_series_id: string;
         };
         SyncEmailDto: {
             /** Format: email */
@@ -23604,6 +23935,7 @@ export interface components {
         };
         UpdateMangaSourcePolicyDto: {
             ingestion: components["schemas"]["MangaIngestionSettingDto"];
+            link_check: components["schemas"]["MangaLinkCheckSettingDto"];
             matching: components["schemas"]["MangaMatchingSettingDto"];
             rediscover: components["schemas"]["MangaRediscoverSettingDto"];
             sources: components["schemas"]["MangaSourceSettingDto"][];
@@ -23921,6 +24253,9 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "RESOLVED" | "DISMISSED";
         };
+        UpdateSourceLinkGroupsDto: {
+            groups: string[];
+        };
         UpdateTelegramSettingsDto: {
             /** @description 仅在轮换时传入，省略则保持现值 */
             bot_token?: string;
@@ -24226,6 +24561,8 @@ export interface components {
             projects: components["schemas"]["WorkbenchProjectsPolicyInputDto"];
         };
         WorkbenchProjectsPolicyInputDto: {
+            /** @description 草稿多少天没有动作后自动归档 */
+            draft_days: number;
             /** @description 导入文件的大小上限（MB） */
             import_max_mb: number;
             /** @description 段落锁的有效秒数，客户端按心跳续期 */
@@ -27357,14 +27694,10 @@ export interface operations {
     AdminMangaSourceLinkController_list: {
         parameters: {
             query: {
+                reason?: components["schemas"]["MangaSourceReviewReason"];
                 status?: components["schemas"]["MangaSourceLinkStatus"];
                 source_key?: string;
-                manga_id?: number;
-                matched_by?: components["schemas"]["MangaMatchMethod"];
-                confidence_min?: number;
-                confidence_max?: number;
-                sort_by?: "created_at" | "confidence";
-                sort_order?: "asc" | "desc";
+                q?: string;
                 page: number;
                 page_size: number;
             };
@@ -27431,7 +27764,53 @@ export interface operations {
             };
         };
     };
-    AdminMangaSourceLinkController_confirm: {
+    AdminMangaSourceReviewController_candidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceCandidateDto"][];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_rejectCredit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectSourceCreditDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceLinkDetailDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_drop: {
         parameters: {
             query?: never;
             header?: never;
@@ -27456,7 +27835,77 @@ export interface operations {
             };
         };
     };
-    AdminMangaSourceLinkController_override: {
+    AdminMangaSourceLinkController_groups: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceGroupsDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceLinkController_setGroups: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSourceLinkGroupsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceGroupsDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_impact: {
+        parameters: {
+            query: {
+                decision: "keep" | "switch" | "drop";
+                series_id?: string;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceImpactDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_keep: {
         parameters: {
             query?: never;
             header?: never;
@@ -27481,7 +27930,102 @@ export interface operations {
             };
         };
     };
-    AdminMangaSourceLinkController_reject: {
+    AdminMangaSourceReviewController_neighbors: {
+        parameters: {
+            query: {
+                reason?: components["schemas"]["MangaSourceReviewReason"];
+                status?: components["schemas"]["MangaSourceLinkStatus"];
+                source_key?: string;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceNeighborsDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_series: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                series_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceSeriesDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_cover: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                series_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/*": string;
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_page: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                series_id: string;
+                page: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/*": string;
+                };
+            };
+        };
+    };
+    AdminMangaSourceLinkController_split: {
         parameters: {
             query?: never;
             header?: never;
@@ -27492,7 +28036,32 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SourceLinkDecisionDto"];
+                "application/json": components["schemas"]["SplitSourceLinkDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceGroupsDto"];
+                };
+            };
+        };
+    };
+    AdminMangaSourceReviewController_switch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SwitchSourceLinkDto"];
             };
         };
         responses: {
@@ -34003,7 +34572,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -44343,6 +44912,25 @@ export interface operations {
             };
         };
     };
+    MangaShelfController_hide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                manga_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     MangaShelfController_getStats: {
         parameters: {
             query?: never;
@@ -44428,6 +45016,25 @@ export interface operations {
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
+            };
+        };
+    };
+    ReaderController_hideFromShelf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                light_novel_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

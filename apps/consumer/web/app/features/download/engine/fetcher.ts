@@ -2,6 +2,7 @@ import { createFileKey, decryptFile } from '~/utils/media/file-crypto'
 import type { DownloadManifest, ManifestEntry, ManifestFile } from './types'
 
 const RETRY_DELAYS = [1000, 2000, 4000]
+const RATE_LIMIT_WAITS = 30
 const encoder = new TextEncoder()
 
 export class EntryError extends Error {
@@ -9,6 +10,7 @@ export class EntryError extends Error {
     readonly code: string,
     message: string,
     readonly retryable: boolean,
+    readonly retryAfter: number | null = null,
   ) {
     super(message)
     this.name = 'EntryError'
@@ -30,14 +32,28 @@ function endpoint(manifest: DownloadManifest, file: ManifestFile, entry: Manifes
 
 async function failure(response: Response): Promise<EntryError> {
   const retryable = response.status >= 500 || response.status === 429 || response.status === 408
+  const retryAfter =
+    response.status === 429
+      ? Number(response.headers.get('retry-after')) * 1000 || RETRY_DELAYS[0]!
+      : null
   if (response.headers.get('content-type')?.includes('application/json')) {
     const body = (await response.json().catch(() => null)) as {
       error?: { code?: string; message?: string }
     } | null
     const code = body?.error?.code ?? `HTTP_${response.status}`
-    return new EntryError(code, body?.error?.message ?? `请求失败（${response.status}）`, retryable)
+    return new EntryError(
+      code,
+      body?.error?.message ?? `请求失败（${response.status}）`,
+      retryable,
+      retryAfter,
+    )
   }
-  return new EntryError(`HTTP_${response.status}`, `请求失败（${response.status}）`, retryable)
+  return new EntryError(
+    `HTTP_${response.status}`,
+    `请求失败（${response.status}）`,
+    retryable,
+    retryAfter,
+  )
 }
 
 async function once(
@@ -68,6 +84,7 @@ export async function fetchEntry(
   file: ManifestFile,
   entry: ManifestEntry,
   signal: AbortSignal,
+  gate: { until: number },
 ): Promise<Uint8Array> {
   if (entry.kind === 'text') {
     const data = encoder.encode(entry.data ?? '')
@@ -77,16 +94,14 @@ export async function fetchEntry(
     return data
   }
   const { url, aad } = endpoint(manifest, file, entry)
-  for (let attempt = 0; ; attempt++) {
-    signal.throwIfAborted()
-    try {
-      return await once(url, aad, entry.bytes, signal)
-    } catch (error) {
-      if (signal.aborted) throw error
-      const retryable = !(error instanceof EntryError) || error.retryable
-      if (!retryable || attempt >= RETRY_DELAYS.length) throw error
+  let attempt = 0
+  let limited = 0
+  let delay = 0
+  for (;;) {
+    const pause = Math.max(delay, gate.until - Date.now())
+    if (pause > 0) {
       await new Promise<void>((resolve, reject) => {
-        const timer = setTimeout(resolve, RETRY_DELAYS[attempt])
+        const timer = setTimeout(resolve, pause)
         signal.addEventListener(
           'abort',
           () => {
@@ -96,6 +111,21 @@ export async function fetchEntry(
           { once: true },
         )
       })
+    }
+    signal.throwIfAborted()
+    try {
+      return await once(url, aad, entry.bytes, signal)
+    } catch (error) {
+      if (signal.aborted) throw error
+      if (error instanceof EntryError && error.retryAfter !== null && limited < RATE_LIMIT_WAITS) {
+        limited++
+        gate.until = Math.max(gate.until, Date.now() + error.retryAfter)
+        delay = 0
+        continue
+      }
+      const retryable = !(error instanceof EntryError) || error.retryable
+      if (!retryable || attempt >= RETRY_DELAYS.length) throw error
+      delay = RETRY_DELAYS[attempt++]!
     }
   }
 }

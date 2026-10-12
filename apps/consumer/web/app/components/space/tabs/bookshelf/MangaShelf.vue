@@ -30,11 +30,18 @@
     }),
   )
 
+  const stats = ref(props.bookshelf.stats)
   const statCells = computed(() => [
-    { value: String(props.bookshelf.stats.reading_count), unit: '部', label: '在读' },
-    { value: String(props.bookshelf.stats.chapters_read), unit: '话', label: '读过' },
-    { value: String(props.bookshelf.stats.finished_count), unit: '部', label: '读完' },
+    { value: String(stats.value.reading_count), unit: '部', label: '在读' },
+    { value: String(stats.value.chapters_read), unit: '话', label: '读过' },
+    { value: String(stats.value.finished_count), unit: '部', label: '读完' },
   ])
+
+  async function onRemoved() {
+    const { items, meta } = list.value
+    void loadPage(items.length > 1 ? meta.page : Math.max(1, meta.page - 1))
+    stats.value = await hikariRequest('/api/v3/reader/me/manga/stats')
+  }
 
   const hasQuery = computed(() => filter.value !== 'all' || search.value.trim().length > 0)
 
@@ -72,7 +79,12 @@
     </Inline>
 
     <Stack v-if="list.items.length" gap="none" class="relative">
-      <SpaceTabsBookshelfMangaCard v-for="item in list.items" :key="item.manga_id" :item="item" />
+      <SpaceTabsBookshelfMangaCard
+        v-for="item in list.items"
+        :key="item.manga_id"
+        :item="item"
+        @removed="onRemoved"
+      />
       <LoadingOverlay :visible="pending" />
     </Stack>
     <SpaceEmptyState

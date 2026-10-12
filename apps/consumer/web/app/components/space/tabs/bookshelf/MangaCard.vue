@@ -8,6 +8,7 @@
   defineOptions({ name: 'SpaceTabsBookshelfMangaCard' })
 
   const props = defineProps<{ item: SpaceMangaShelfItem }>()
+  const emit = defineEmits<{ removed: [] }>()
 
   const metaLine = computed(() => {
     const i = props.item
@@ -78,19 +79,25 @@
           </NuxtLink>
           <Text size="xs" tone="muted" truncate>{{ metaLine }}</Text>
         </Stack>
-        <Button
-          :as="NuxtLink"
-          :to="readTarget"
-          size="sm"
-          :variant="item.is_finished ? 'outline' : 'solid'"
-          :tone="item.is_finished ? 'neutral' : 'accent'"
-          class="shrink-0"
-        >
-          <template #icon>
-            <component :is="item.is_finished ? RotateCcw : Play" />
-          </template>
-          {{ ctaLabel }}
-        </Button>
+        <Inline gap="xs" :wrap="false" class="shrink-0">
+          <Button
+            :as="NuxtLink"
+            :to="readTarget"
+            size="sm"
+            :variant="item.is_finished ? 'outline' : 'solid'"
+            :tone="item.is_finished ? 'neutral' : 'accent'"
+          >
+            <template #icon>
+              <component :is="item.is_finished ? RotateCcw : Play" />
+            </template>
+            {{ ctaLabel }}
+          </Button>
+          <SpaceTabsBookshelfCardMenu
+            kind="manga"
+            :work-id="item.manga_id"
+            @removed="emit('removed')"
+          />
+        </Inline>
       </Inline>
 
       <Text size="sm" tone="muted" truncate>{{ statusLine }}</Text>

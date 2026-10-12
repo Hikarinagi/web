@@ -24,7 +24,7 @@ export function useMangaTargets(seriesId: () => number | null) {
           () => null,
         ),
         hikariRequest('/api/v3/manga-projects', {
-          query: { series_id: id, status: ['DRAFT', 'ACTIVE', 'REVIEW'], page: 1, page_size: 50 },
+          query: { series_id: id, status: ['ACTIVE', 'REVIEW'], page: 1, page_size: 50 },
           toast: false,
         }).catch(() => null),
       ])

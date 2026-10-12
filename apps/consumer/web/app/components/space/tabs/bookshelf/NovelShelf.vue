@@ -30,6 +30,14 @@
     }),
   )
 
+  const stats = ref(props.bookshelf.stats)
+
+  async function onRemoved() {
+    const { items, meta } = list.value
+    void loadPage(items.length > 1 ? meta.page : Math.max(1, meta.page - 1))
+    stats.value = await hikariRequest('/api/v3/reader/me/stats')
+  }
+
   const hasQuery = computed(() => filter.value !== 'all' || search.value.trim().length > 0)
 
   const FILTER_OPTIONS = BOOKSHELF_STATUS_FILTERS.map(f => ({ value: f.key, label: f.label }))
@@ -46,7 +54,7 @@
 
 <template>
   <Stack gap="lg">
-    <SpaceTabsBookshelfStatsBar :stats="bookshelf.stats" />
+    <SpaceTabsBookshelfStatsBar :stats="stats" />
 
     <Inline gap="sm" justify="between" class="sm:flex-nowrap">
       <SegmentedControl
@@ -70,6 +78,7 @@
         v-for="item in list.items"
         :key="item.light_novel_id"
         :item="item"
+        @removed="onRemoved"
       />
       <LoadingOverlay :visible="pending" />
     </Stack>

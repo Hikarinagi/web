@@ -8,6 +8,7 @@
   defineOptions({ name: 'SpaceTabsBookshelfBookCard' })
 
   const props = defineProps<{ item: SpaceBookshelfItem }>()
+  const emit = defineEmits<{ removed: [] }>()
 
   const metaLine = computed(() => {
     const total = `全 ${props.item.total_volumes} 卷`
@@ -59,19 +60,25 @@
           </NuxtLink>
           <Text size="xs" tone="muted" truncate>{{ metaLine }}</Text>
         </Stack>
-        <Button
-          :as="NuxtLink"
-          :to="`/light-novel-volumes/${item.current_volume_id}/read`"
-          size="sm"
-          :variant="item.is_finished ? 'outline' : 'solid'"
-          :tone="item.is_finished ? 'neutral' : 'accent'"
-          class="shrink-0"
-        >
-          <template #icon>
-            <component :is="item.is_finished ? RotateCcw : Play" />
-          </template>
-          {{ ctaLabel }}
-        </Button>
+        <Inline gap="xs" :wrap="false" class="shrink-0">
+          <Button
+            :as="NuxtLink"
+            :to="`/light-novel-volumes/${item.current_volume_id}/read`"
+            size="sm"
+            :variant="item.is_finished ? 'outline' : 'solid'"
+            :tone="item.is_finished ? 'neutral' : 'accent'"
+          >
+            <template #icon>
+              <component :is="item.is_finished ? RotateCcw : Play" />
+            </template>
+            {{ ctaLabel }}
+          </Button>
+          <SpaceTabsBookshelfCardMenu
+            kind="novel"
+            :work-id="item.light_novel_id"
+            @removed="emit('removed')"
+          />
+        </Inline>
       </Inline>
 
       <Text size="sm" tone="muted" truncate>{{ statusLine }}</Text>

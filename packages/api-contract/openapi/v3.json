@@ -954,8 +954,281 @@
         ],
         "type": "object"
       },
+      "AdminMangaReviewWorkDto": {
+        "properties": {
+          "chapters": {
+            "type": "number"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "from_source": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "other_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "publication_date": {
+            "format": "date",
+            "nullable": true,
+            "type": "string"
+          },
+          "readers": {
+            "type": "number"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
+          },
+          "staff": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaStaffMarkDto"
+            },
+            "type": "array"
+          },
+          "uploads": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "cover",
+          "other_names",
+          "publication_date",
+          "serial_status",
+          "readers",
+          "chapters",
+          "uploads",
+          "from_source",
+          "staff"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceAuthorDto": {
+        "properties": {
+          "credited": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "credited"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceCandidateDto": {
+        "properties": {
+          "all_credited": {
+            "type": "boolean"
+          },
+          "authors": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
+            },
+            "type": "array"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "entries": {
+            "type": "number"
+          },
+          "has_cover": {
+            "type": "boolean"
+          },
+          "series_id": {
+            "type": "string"
+          },
+          "status": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "series_id",
+          "title",
+          "has_cover",
+          "authors",
+          "status",
+          "updated",
+          "entries",
+          "confidence",
+          "current",
+          "all_credited"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceEntriesDto": {
+        "properties": {
+          "first": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "last": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "first",
+          "last"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceGroupDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "included": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSourceGroupRole"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "name",
+          "count",
+          "role",
+          "included"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceGroupsDto": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceGroupDto"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "siblings": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceSiblingDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "scope",
+          "groups",
+          "siblings"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceImpactDto": {
+        "properties": {
+          "heir": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdminMangaSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "kept": {
+            "type": "number"
+          },
+          "readers": {
+            "type": "number"
+          },
+          "released": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceReleaseDto"
+            },
+            "type": "array"
+          },
+          "removed": {
+            "type": "number"
+          },
+          "starts_fetching": {
+            "type": "boolean"
+          },
+          "to_fetch": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "removed",
+          "readers",
+          "kept",
+          "heir",
+          "to_fetch",
+          "starts_fetching",
+          "released"
+        ],
+        "type": "object"
+      },
       "AdminMangaSourceLinkDetailDto": {
         "properties": {
+          "checked_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
           "confidence": {
             "type": "number"
           },
@@ -963,11 +1236,14 @@
             "format": "date-time",
             "type": "string"
           },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "id": {
             "type": "number"
-          },
-          "manga": {
-            "$ref": "#/components/schemas/AdminMangaSummaryDto"
           },
           "manga_id": {
             "type": "number"
@@ -979,10 +1255,33 @@
               }
             ]
           },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSourceReviewReason"
+              }
+            ],
+            "nullable": true
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "source_authors": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
+            },
+            "type": "array"
+          },
           "source_key": {
             "type": "string"
           },
           "source_series_id": {
+            "type": "string"
+          },
+          "source_title": {
+            "nullable": true,
             "type": "string"
           },
           "status": {
@@ -996,9 +1295,8 @@
             "format": "date-time",
             "type": "string"
           },
-          "url": {
-            "nullable": true,
-            "type": "string"
+          "work": {
+            "$ref": "#/components/schemas/AdminMangaReviewWorkDto"
           }
         },
         "required": [
@@ -1006,24 +1304,33 @@
           "manga_id",
           "source_key",
           "source_series_id",
-          "url",
           "matched_by",
           "confidence",
           "status",
+          "reason",
+          "groups",
+          "source_title",
+          "source_authors",
+          "checked_at",
+          "reviewed_at",
           "created_at",
-          "manga",
-          "updated_at"
+          "updated_at",
+          "work"
         ],
         "type": "object"
       },
       "AdminMangaSourceLinkItemDto": {
         "properties": {
-          "confidence": {
+          "chapters": {
             "type": "number"
           },
-          "created_at": {
+          "checked_at": {
             "format": "date-time",
+            "nullable": true,
             "type": "string"
+          },
+          "confidence": {
+            "type": "number"
           },
           "id": {
             "type": "number"
@@ -1041,10 +1348,30 @@
               }
             ]
           },
+          "readers": {
+            "type": "number"
+          },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSourceReviewReason"
+              }
+            ]
+          },
+          "source_authors": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
+            },
+            "type": "array"
+          },
           "source_key": {
             "type": "string"
           },
           "source_series_id": {
+            "type": "string"
+          },
+          "source_title": {
+            "nullable": true,
             "type": "string"
           },
           "status": {
@@ -1053,10 +1380,6 @@
                 "$ref": "#/components/schemas/MangaSourceLinkStatus"
               }
             ]
-          },
-          "url": {
-            "nullable": true,
-            "type": "string"
           }
         },
         "required": [
@@ -1064,12 +1387,194 @@
           "manga_id",
           "source_key",
           "source_series_id",
-          "url",
           "matched_by",
           "confidence",
           "status",
-          "created_at",
+          "reason",
+          "source_title",
+          "source_authors",
+          "checked_at",
+          "readers",
+          "chapters",
           "manga"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceNeighborsDto": {
+        "properties": {
+          "next_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "position": {
+            "nullable": true,
+            "type": "number"
+          },
+          "prev_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "position",
+          "total",
+          "prev_id",
+          "next_id"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceReleaseDto": {
+        "properties": {
+          "manga_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "readers": {
+            "type": "number"
+          },
+          "removed": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "manga_id",
+          "name",
+          "removed",
+          "readers"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceSampleDto": {
+        "properties": {
+          "pages": {
+            "type": "number"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "pages"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceSeriesDto": {
+        "properties": {
+          "all_credited": {
+            "type": "boolean"
+          },
+          "authors": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
+            },
+            "type": "array"
+          },
+          "entries": {
+            "$ref": "#/components/schemas/AdminMangaSourceEntriesDto"
+          },
+          "fetched_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceGroupDto"
+            },
+            "type": "array"
+          },
+          "has_cover": {
+            "type": "boolean"
+          },
+          "sample": {
+            "$ref": "#/components/schemas/AdminMangaSourceSampleDto"
+          },
+          "series_id": {
+            "type": "string"
+          },
+          "staff": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaStaffMarkDto"
+            },
+            "type": "array"
+          },
+          "status": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated": {
+            "nullable": true,
+            "type": "string"
+          },
+          "works": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceWorkDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "series_id",
+          "title",
+          "has_cover",
+          "authors",
+          "status",
+          "updated",
+          "tags",
+          "groups",
+          "entries",
+          "sample",
+          "staff",
+          "all_credited",
+          "works",
+          "fetched_at"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceSiblingDto": {
+        "properties": {
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "link_id": {
+            "type": "number"
+          },
+          "manga_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "link_id",
+          "manga_id",
+          "name",
+          "name_cn",
+          "groups"
         ],
         "type": "object"
       },
@@ -1095,6 +1600,127 @@
           "until",
           "reason",
           "updated_at"
+        ],
+        "type": "object"
+      },
+      "AdminMangaSourceWorkDto": {
+        "properties": {
+          "all_credited": {
+            "type": "boolean"
+          },
+          "chapters": {
+            "type": "number"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "link_id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date": {
+            "format": "date",
+            "nullable": true,
+            "type": "string"
+          },
+          "readers": {
+            "type": "number"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ],
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
+          },
+          "staff": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaStaffMarkDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "cover",
+          "link_id",
+          "publication_date",
+          "serial_status",
+          "readers",
+          "chapters",
+          "groups",
+          "staff",
+          "all_credited"
+        ],
+        "type": "object"
+      },
+      "AdminMangaStaffMarkDto": {
+        "properties": {
+          "ai_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "art": {
+            "type": "boolean"
+          },
+          "credited": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "person_id": {
+            "type": "number"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaStaffRole"
+              }
+            ],
+            "x-enum-descriptions": {
+              "ART": "作画",
+              "AUTHOR": "作者",
+              "CHARACTER_DESIGN": "人物原案",
+              "ILLUSTRATION": "插图",
+              "ORIGINAL_CREATOR": "原作",
+              "SCRIPT": "脚本"
+            }
+          }
+        },
+        "required": [
+          "role",
+          "person_id",
+          "name",
+          "credited",
+          "art",
+          "ai_names"
         ],
         "type": "object"
       },
@@ -1498,6 +2124,12 @@
           "failed": {
             "type": "number"
           },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "id": {
             "type": "number"
           },
@@ -1514,10 +2146,28 @@
           "pending": {
             "type": "number"
           },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSourceReviewReason"
+              }
+            ],
+            "nullable": true
+          },
+          "source_authors": {
+            "items": {
+              "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
+            },
+            "type": "array"
+          },
           "source_key": {
             "type": "string"
           },
           "source_series_id": {
+            "type": "string"
+          },
+          "source_title": {
+            "nullable": true,
             "type": "string"
           },
           "status": {
@@ -1543,6 +2193,10 @@
           "matched_by",
           "source_series_id",
           "url",
+          "groups",
+          "source_title",
+          "source_authors",
+          "reason",
           "created_at",
           "done",
           "pending",
@@ -22173,6 +22827,29 @@
         ],
         "type": "object"
       },
+      "MangaLinkCheckSettingDto": {
+        "properties": {
+          "batch_size": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          },
+          "cooldown_days": {
+            "maximum": 365,
+            "minimum": 1,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "batch_size",
+          "cooldown_days"
+        ],
+        "type": "object"
+      },
       "MangaListing": {
         "enum": [
           "AUTO",
@@ -24154,6 +24831,16 @@
         ],
         "type": "object"
       },
+      "MangaSourceGroupRole": {
+        "enum": [
+          "main",
+          "volume",
+          "alternate",
+          "extra",
+          "separate"
+        ],
+        "type": "string"
+      },
       "MangaSourceHealthDto": {
         "properties": {
           "done": {
@@ -24196,6 +24883,9 @@
           "ingestion": {
             "$ref": "#/components/schemas/MangaIngestionSettingDto"
           },
+          "link_check": {
+            "$ref": "#/components/schemas/MangaLinkCheckSettingDto"
+          },
           "matching": {
             "$ref": "#/components/schemas/MangaMatchingSettingDto"
           },
@@ -24221,9 +24911,19 @@
           "ingestion",
           "sweeper",
           "rediscover",
-          "update_notify"
+          "update_notify",
+          "link_check"
         ],
         "type": "object"
+      },
+      "MangaSourceReviewReason": {
+        "enum": [
+          "LOW_CONFIDENCE",
+          "AUTHOR_MISMATCH",
+          "SHARED_SOURCE",
+          "MIXED_SOURCE"
+        ],
+        "type": "string"
       },
       "MangaSourceSettingDto": {
         "properties": {
@@ -33772,6 +34472,23 @@
         ],
         "type": "object"
       },
+      "RejectSourceCreditDto": {
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "person_id": {
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "person_id",
+          "name"
+        ],
+        "type": "object"
+      },
       "ReleaseNoteDto": {
         "properties": {
           "released_at": {
@@ -35633,8 +36350,8 @@
         "properties": {
           "action": {
             "enum": [
-              "confirm",
-              "reject"
+              "keep",
+              "drop"
             ],
             "type": "string"
           },
@@ -35676,12 +36393,25 @@
           "notes": {
             "maxLength": 500,
             "type": "string"
-          },
-          "source_series_id": {
-            "maxLength": 200,
-            "type": "string"
           }
         },
+        "type": "object"
+      },
+      "SplitSourceLinkDto": {
+        "properties": {
+          "group": {
+            "maxLength": 50,
+            "type": "string"
+          },
+          "manga_id": {
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "group",
+          "manga_id"
+        ],
         "type": "object"
       },
       "SubmitChangeRequestBatchDto": {
@@ -35795,6 +36525,22 @@
         },
         "required": [
           "keyword"
+        ],
+        "type": "object"
+      },
+      "SwitchSourceLinkDto": {
+        "properties": {
+          "notes": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "source_series_id": {
+            "maxLength": 200,
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_series_id"
         ],
         "type": "object"
       },
@@ -38500,6 +39246,9 @@
           "ingestion": {
             "$ref": "#/components/schemas/MangaIngestionSettingDto"
           },
+          "link_check": {
+            "$ref": "#/components/schemas/MangaLinkCheckSettingDto"
+          },
           "matching": {
             "$ref": "#/components/schemas/MangaMatchingSettingDto"
           },
@@ -38525,7 +39274,8 @@
           "ingestion",
           "sweeper",
           "rediscover",
-          "update_notify"
+          "update_notify",
+          "link_check"
         ],
         "type": "object"
       },
@@ -39764,6 +40514,22 @@
         ],
         "type": "object"
       },
+      "UpdateSourceLinkGroupsDto": {
+        "properties": {
+          "groups": {
+            "items": {
+              "maxLength": 50,
+              "type": "string"
+            },
+            "maxItems": 20,
+            "type": "array"
+          }
+        },
+        "required": [
+          "groups"
+        ],
+        "type": "object"
+      },
       "UpdateTelegramSettingsDto": {
         "properties": {
           "bot_token": {
@@ -40877,6 +41643,12 @@
       },
       "WorkbenchProjectsPolicyInputDto": {
         "properties": {
+          "draft_days": {
+            "description": "草稿多少天没有动作后自动归档",
+            "maximum": 365,
+            "minimum": 1,
+            "type": "number"
+          },
           "import_max_mb": {
             "description": "导入文件的大小上限（MB）",
             "maximum": 500,
@@ -40898,6 +41670,7 @@
         },
         "required": [
           "stale_days",
+          "draft_days",
           "lock_ttl_seconds",
           "import_max_mb"
         ],
@@ -45983,6 +46756,14 @@
         "parameters": [
           {
             "in": "query",
+            "name": "reason",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MangaSourceReviewReason"
+            }
+          },
+          {
+            "in": "query",
             "name": "status",
             "required": false,
             "schema": {
@@ -45994,68 +46775,16 @@
             "name": "source_key",
             "required": false,
             "schema": {
+              "maxLength": 64,
               "type": "string"
             }
           },
           {
             "in": "query",
-            "name": "manga_id",
+            "name": "q",
             "required": false,
             "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "matched_by",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/MangaMatchMethod"
-            }
-          },
-          {
-            "in": "query",
-            "name": "confidence_min",
-            "required": false,
-            "schema": {
-              "maximum": 100,
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "confidence_max",
-            "required": false,
-            "schema": {
-              "maximum": 100,
-              "minimum": 0,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort_by",
-            "required": false,
-            "schema": {
-              "default": "confidence",
-              "enum": [
-                "created_at",
-                "confidence"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort_order",
-            "required": false,
-            "schema": {
-              "default": "asc",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "maxLength": 200,
               "type": "string"
             }
           },
@@ -46174,9 +46903,82 @@
         ]
       }
     },
-    "/api/v3/admin/manga/source-links/{id}/confirm": {
+    "/api/v3/admin/manga/source-links/{id}/candidates": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_candidates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminMangaSourceCandidateDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/credits/reject": {
       "post": {
-        "operationId": "AdminMangaSourceLinkController_confirm",
+        "operationId": "AdminMangaSourceReviewController_rejectCredit",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectSourceCreditDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceLinkDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/drop": {
+      "post": {
+        "operationId": "AdminMangaSourceReviewController_drop",
         "parameters": [
           {
             "in": "path",
@@ -46214,9 +47016,129 @@
         ]
       }
     },
-    "/api/v3/admin/manga/source-links/{id}/override": {
+    "/api/v3/admin/manga/source-links/{id}/groups": {
+      "get": {
+        "operationId": "AdminMangaSourceLinkController_groups",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceGroupsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      },
+      "put": {
+        "operationId": "AdminMangaSourceLinkController_setGroups",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSourceLinkGroupsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceGroupsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/impact": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_impact",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "decision",
+            "required": true,
+            "schema": {
+              "enum": [
+                "keep",
+                "switch",
+                "drop"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "series_id",
+            "required": false,
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceImpactDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/keep": {
       "post": {
-        "operationId": "AdminMangaSourceLinkController_override",
+        "operationId": "AdminMangaSourceReviewController_keep",
         "parameters": [
           {
             "in": "path",
@@ -46254,9 +47176,218 @@
         ]
       }
     },
-    "/api/v3/admin/manga/source-links/{id}/reject": {
+    "/api/v3/admin/manga/source-links/{id}/neighbors": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_neighbors",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "reason",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MangaSourceReviewReason"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MangaSourceLinkStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "source_key",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceNeighborsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_series",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceSeriesDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}/cover": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_cover",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/series/{series_id}/pages/{page}": {
+      "get": {
+        "operationId": "AdminMangaSourceReviewController_page",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "series_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/*": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/split": {
       "post": {
-        "operationId": "AdminMangaSourceLinkController_reject",
+        "operationId": "AdminMangaSourceLinkController_split",
         "parameters": [
           {
             "in": "path",
@@ -46271,7 +47402,47 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SourceLinkDecisionDto"
+                "$ref": "#/components/schemas/SplitSourceLinkDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceGroupsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/switch": {
+      "post": {
+        "operationId": "AdminMangaSourceReviewController_switch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SwitchSourceLinkDto"
               }
             }
           },
@@ -57263,7 +58434,8 @@
                 "epub_judge",
                 "telegram_chat",
                 "novel_volume_align",
-                "novel_content_gate"
+                "novel_content_gate",
+                "manga_credit_check"
               ],
               "type": "string"
             }
@@ -75812,6 +76984,29 @@
         ]
       }
     },
+    "/api/v3/reader/me/manga/reading/{manga_id}": {
+      "delete": {
+        "operationId": "MangaShelfController_hide",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "manga_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "reader"
+        ]
+      }
+    },
     "/api/v3/reader/me/manga/stats": {
       "get": {
         "operationId": "MangaShelfController_getStats",
@@ -75955,6 +77150,29 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Reader"
+        ]
+      }
+    },
+    "/api/v3/reader/me/reading/{light_novel_id}": {
+      "delete": {
+        "operationId": "ReaderController_hideFromShelf",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "light_novel_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
             "description": ""
           }
         },
