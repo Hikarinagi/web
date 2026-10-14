@@ -54,9 +54,13 @@
     },
   })
 
-  watch(visible, next => {
-    if (next) void prepare()
-  })
+  watch(
+    visible,
+    next => {
+      if (next) void prepare()
+    },
+    { immediate: true },
+  )
 </script>
 
 <template>
