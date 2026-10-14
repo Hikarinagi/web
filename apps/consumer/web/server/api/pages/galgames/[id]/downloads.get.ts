@@ -20,7 +20,7 @@ function plainNotes<T extends { note: string }>(items: T[]) {
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
 
-  const [galgame, producers, my_rate, favorite, my_cover_vote, resources, patches, banners] =
+  const [galgame, producers, my_rate, favorite, my_cover_vote, downloads, patches, banners] =
     await Promise.all([
       fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
       fetchBackendData(event, '/api/v3/galgames/{id}/producers', { path: { id } }),
@@ -46,7 +46,7 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     my_cover_vote,
-    resources,
+    downloads,
     patches: patches && {
       web_url: patches.web_url,
       translation: plainNotes(patches.translation),

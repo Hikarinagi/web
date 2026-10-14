@@ -78,11 +78,7 @@
         :steam-apps="data.galgame.steam_apps"
       />
 
-      <GalgameDownloadsTabs
-        :galgame-id="galgameId"
-        :resources="data.resources"
-        :patches="data.patches"
-      />
+      <GalgameDownloadsTabs :downloads="data.downloads" :patches="data.patches" />
 
       <PromotionBanner v-for="banner in data.banners" :key="banner.id" :banner="banner" />
     </Stack>

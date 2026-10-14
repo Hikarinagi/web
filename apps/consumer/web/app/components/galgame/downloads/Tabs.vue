@@ -4,8 +4,7 @@
 
   defineOptions({ name: 'GalgameDownloadsTabs' })
   const props = defineProps<{
-    galgameId: number
-    resources: GalgameDownloadsPageData['resources']
+    downloads: GalgameDownloadsPageData['downloads']
     patches: GalgameDownloadsPageData['patches']
   }>()
 
@@ -19,8 +18,8 @@
     <TabsList label="下载选项">
       <TabsTrigger value="game">
         游戏本体
-        <Text v-if="resources" as="span" size="sm" tone="muted" class="tabular-nums">
-          {{ resources.length }}
+        <Text v-if="downloads" as="span" size="sm" tone="muted" class="tabular-nums">
+          {{ downloads.resources.length }}
         </Text>
       </TabsTrigger>
       <TabsTrigger value="patch">
@@ -32,7 +31,7 @@
     </TabsList>
 
     <TabsContent value="game" class="pt-6">
-      <GalgameDownloadsGameList :galgame-id="galgameId" :resources="resources" />
+      <GalgameDownloadsGameList :downloads="downloads" />
     </TabsContent>
     <TabsContent value="patch" class="pt-6">
       <GalgameDownloadsPatchList :patches="patches" />

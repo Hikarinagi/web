@@ -17344,8 +17344,8 @@
             "type": "string"
           },
           "file_size": {
-            "description": "字节数，超出 JS 安全整数范围故用字符串",
-            "type": "string"
+            "description": "字节数",
+            "type": "number"
           },
           "hash_algorithm": {
             "nullable": true,
@@ -17364,18 +17364,23 @@
         ],
         "type": "object"
       },
-      "GalgameDownloadLinkDto": {
+      "GalgameDownloadListDto": {
         "properties": {
-          "expires_in": {
-            "type": "number"
+          "resources": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameDownloadResourceDto"
+            },
+            "type": "array"
           },
-          "file_url": {
+          "web_url": {
+            "description": "shionlib 游戏页地址",
+            "nullable": true,
             "type": "string"
           }
         },
         "required": [
-          "file_url",
-          "expires_in"
+          "web_url",
+          "resources"
         ],
         "type": "object"
       },
@@ -17409,19 +17414,27 @@
             },
             "type": "array"
           },
-          "simulator": {
-            "nullable": true,
-            "type": "string"
+          "translators": {
+            "description": "本地化方署名，按署名顺序",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "updated": {
+            "type": "string"
+          },
+          "url": {
+            "description": "shionlib 资源页地址，下载在该页面进行",
             "type": "string"
           }
         },
         "required": [
           "id",
+          "url",
           "platform",
           "language",
-          "simulator",
+          "translators",
           "note",
           "downloads",
           "updated",
@@ -17445,16 +17458,16 @@
             "type": "string"
           },
           "reachable": {
-            "description": "shionlib partner 接口当前是否可达",
+            "description": "shionlib 开放接口当前是否可达",
             "type": "boolean"
-          },
-          "remote_works": {
-            "description": "对方快照里可用的作品数，与 works 的差值即未匹配上的部分",
-            "type": "number"
           },
           "resources": {
             "description": "这些作品的资源总数",
             "type": "number"
+          },
+          "syncing": {
+            "description": "是否有同步正在进行",
+            "type": "boolean"
           },
           "total_size": {
             "description": "文件总体积字节数",
@@ -17468,34 +17481,24 @@
         "required": [
           "configured",
           "reachable",
+          "syncing",
           "works",
           "resources",
           "files",
           "total_size",
-          "last_synced_at",
-          "remote_works"
+          "last_synced_at"
         ],
         "type": "object"
       },
       "GalgameDownloadSyncResultDto": {
         "properties": {
-          "matched": {
-            "description": "匹配并写入的作品数",
-            "type": "number"
-          },
-          "removed": {
-            "description": "资源已下架而被移除的作品数",
-            "type": "number"
-          },
-          "skipped": {
-            "description": "v_id 非法而跳过的条目数",
-            "type": "number"
+          "started": {
+            "description": "是否已开始同步；已有同步在进行时为 false",
+            "type": "boolean"
           }
         },
         "required": [
-          "matched",
-          "removed",
-          "skipped"
+          "started"
         ],
         "type": "object"
       },
@@ -63744,48 +63747,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/GalgameDownloadResourceDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "GalgameDownload"
-        ]
-      }
-    },
-    "/api/v3/galgames/{id}/downloads/files/{file_id}/link": {
-      "get": {
-        "operationId": "GalgameDownloadController_getLink",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "in": "path",
-            "name": "file_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameDownloadLinkDto"
+                  "$ref": "#/components/schemas/GalgameDownloadListDto"
                 }
               }
             },

@@ -11,26 +11,21 @@
     Time,
     type DataTableColumn,
   } from '@hina-ui/vue'
-  import { HardDriveDownload } from '@lucide/vue'
+  import { ExternalLink, HardDriveDownload } from '@lucide/vue'
   import { fileSizeLabel, languageLabel, sortLanguages } from '~/features/galgame/download'
   import { platformLabel, sortPlatforms } from '~/features/galgame/platforms'
-  import { useDownloadLink } from '~/features/galgame/useDownloadLink'
   import type { GalgameDownloadsPageData } from '~~/server/api/pages/galgames/[id]/downloads.get'
 
-  type Resource = NonNullable<GalgameDownloadsPageData['resources']>[number]
+  type Resource = NonNullable<GalgameDownloadsPageData['downloads']>['resources'][number]
   type FileRow = Resource['files'][number] & { resource: Resource }
 
   defineOptions({ name: 'GalgameDownloadsGameList' })
-  const props = defineProps<{
-    galgameId: number
-    resources: GalgameDownloadsPageData['resources']
-  }>()
+  const props = defineProps<{ downloads: GalgameDownloadsPageData['downloads'] }>()
 
-  const { pendingIds, download, copyLinks } = useDownloadLink(props.galgameId)
   const search = ref('')
 
   const rows = computed<FileRow[]>(() =>
-    (props.resources ?? []).flatMap(resource =>
+    (props.downloads?.resources ?? []).flatMap(resource =>
       resource.files.map(file => ({ ...file, resource })),
     ),
   )
@@ -54,16 +49,14 @@
   const resourceLanguages = (resource: Resource) =>
     sortLanguages(resource.language).map(languageLabel).join('、')
   const resourcePlatform = (resource: Resource) =>
-    [sortPlatforms(resource.platform).map(platformLabel).join('、'), resource.simulator]
-      .filter(Boolean)
-      .join(' · ')
+    sortPlatforms(resource.platform).map(platformLabel).join('、')
 
   const columns: DataTableColumn<FileRow>[] = [
     {
       key: 'file_name',
       label: '文件',
       filter: (row, query) =>
-        [row.file_name, row.resource.note ?? ''].some(text =>
+        [row.file_name, row.resource.note ?? '', ...row.resource.translators].some(text =>
           text.toLowerCase().includes(query.toLowerCase()),
         ),
     },
@@ -122,95 +115,116 @@
 </script>
 
 <template>
-  <Empty v-if="!resources" title="无法加载下载列表" description="请刷新页面，稍后再试" />
+  <Empty v-if="!downloads" title="无法加载下载列表" description="请刷新页面，稍后再试" />
 
-  <Empty v-else-if="!resources.length" title="暂无可下载资源" description="这部作品还没有资源上传">
+  <Empty
+    v-else-if="!downloads.resources.length"
+    title="暂无可下载资源"
+    description="这部作品还没有资源上传"
+  >
     <template #icon><HardDriveDownload /></template>
   </Empty>
 
-  <DataTable
-    v-else
-    v-model:filter="search"
-    :rows="rows"
-    :columns="columns"
-    row-key="id"
-    label="游戏文件"
-    empty-text="没有匹配的文件"
-  >
-    <template #toolbar="{ columnFilters, api }">
-      <GalgameDownloadsFilters
-        v-model:search="search"
-        placeholder="搜索文件名和备注"
-        :selects="selects"
-        :column-filters="columnFilters"
-        @filter="api.setFilter"
-      />
-    </template>
-
-    <template #cell-file_name="{ row }">
-      <Stack gap="xs" class="py-2">
-        <Inline gap="xs" align="start" :wrap="false">
-          <Text weight="medium" class="break-all">{{ row.file_name }}</Text>
-          <CopyButton
-            v-if="row.file_hash"
-            :text="row.file_hash"
-            :label="`复制 ${(row.hash_algorithm ?? 'hash').toUpperCase()} 校验和`"
-            tooltip
-          />
-        </Inline>
-        <Text
-          v-if="row.resource.note"
-          as="div"
-          size="sm"
-          tone="muted"
-          class="break-all whitespace-pre-line"
-        >
-          <GalgameDownloadsGameNote :source="row.resource.note" />
-        </Text>
-        <Text size="sm" tone="muted" class="md:hidden">
-          {{ resourceLanguages(row.resource) }} · {{ resourcePlatform(row.resource) }} ·
-          {{ fileSizeLabel(row.file_size) }}
-        </Text>
-        <GalgameDownloadsGameFileActions
-          class="md:hidden"
-          :loading="pendingIds.includes(row.id)"
-          @download="download(row.id)"
-          @copy="copyLinks([row.id])"
+  <Stack v-else>
+    <DataTable
+      v-model:filter="search"
+      :rows="rows"
+      :columns="columns"
+      row-key="id"
+      label="游戏文件"
+      empty-text="没有匹配的文件"
+    >
+      <template #toolbar="{ columnFilters, api }">
+        <GalgameDownloadsFilters
+          v-model:search="search"
+          placeholder="搜索文件名、署名和备注"
+          :selects="selects"
+          :column-filters="columnFilters"
+          @filter="api.setFilter"
         />
-      </Stack>
-    </template>
+      </template>
 
-    <template #cell-language="{ row }">
-      <Inline gap="xs" :wrap="false">
-        <Tag
-          v-for="code in sortLanguages(row.resource.language)"
-          :key="code"
-          :tone="code.startsWith('zh') ? 'accent' : 'neutral'"
+      <template #cell-file_name="{ row }">
+        <Stack gap="xs" class="py-2">
+          <Inline gap="xs" align="start" :wrap="false">
+            <Text weight="medium" class="break-all">{{ row.file_name }}</Text>
+            <CopyButton
+              v-if="row.file_hash"
+              :text="row.file_hash"
+              :label="`复制 ${(row.hash_algorithm ?? 'hash').toUpperCase()} 校验和`"
+              tooltip
+            />
+          </Inline>
+          <Text v-if="row.resource.translators.length" size="sm" tone="muted">
+            {{ row.resource.translators.join('、') }}
+          </Text>
+          <Text
+            v-if="row.resource.note"
+            as="div"
+            size="sm"
+            tone="muted"
+            class="break-all whitespace-pre-line"
+          >
+            <GalgameDownloadsGameNote :source="row.resource.note" />
+          </Text>
+          <Text size="sm" tone="muted" class="md:hidden">
+            {{ resourceLanguages(row.resource) }} · {{ resourcePlatform(row.resource) }} ·
+            {{ fileSizeLabel(row.file_size) }}
+          </Text>
+          <Button
+            as="a"
+            :href="row.resource.url"
+            target="_blank"
+            rel="noreferrer"
+            size="sm"
+            variant="soft"
+            class="w-fit md:hidden"
+          >
+            前往下载
+            <template #trailing><ExternalLink /></template>
+          </Button>
+        </Stack>
+      </template>
+
+      <template #cell-language="{ row }">
+        <Inline gap="xs" :wrap="false">
+          <Tag
+            v-for="code in sortLanguages(row.resource.language)"
+            :key="code"
+            :tone="code.startsWith('zh') ? 'accent' : 'neutral'"
+          >
+            {{ languageLabel(code) }}
+          </Tag>
+        </Inline>
+      </template>
+
+      <template #cell-platform="{ row }">{{ resourcePlatform(row.resource) }}</template>
+
+      <template #cell-file_size="{ row }">{{ fileSizeLabel(row.file_size) }}</template>
+
+      <template #cell-downloads="{ row }">
+        <NumberFormat :value="row.resource.downloads" />
+      </template>
+
+      <template #cell-updated="{ row }">
+        <Time :value="row.resource.updated" format="date" />
+      </template>
+
+      <template #cell-actions="{ row }">
+        <Button
+          as="a"
+          :href="row.resource.url"
+          target="_blank"
+          rel="noreferrer"
+          size="sm"
+          variant="soft"
         >
-          {{ languageLabel(code) }}
-        </Tag>
-      </Inline>
-    </template>
+          前往下载
+          <template #trailing><ExternalLink /></template>
+        </Button>
+      </template>
+    </DataTable>
 
-    <template #cell-platform="{ row }">{{ resourcePlatform(row.resource) }}</template>
-
-    <template #cell-file_size="{ row }">{{ fileSizeLabel(row.file_size) }}</template>
-
-    <template #cell-downloads="{ row }">
-      <NumberFormat :value="row.resource.downloads" />
-    </template>
-
-    <template #cell-updated="{ row }">
-      <Time :value="row.resource.updated" format="date" />
-    </template>
-
-    <template #cell-actions="{ row }">
-      <GalgameDownloadsGameFileActions
-        class="justify-end"
-        :loading="pendingIds.includes(row.id)"
-        @download="download(row.id)"
-        @copy="copyLinks([row.id])"
-      />
-    </template>
-  </DataTable>
+    <GalgameDownloadsGameSource :url="downloads.web_url" />
+  </Stack>
 </template>

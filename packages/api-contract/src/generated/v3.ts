@@ -7461,22 +7461,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/downloads/files/{file_id}/link": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameDownloadController_getLink"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}/patches": {
         parameters: {
             query?: never;
@@ -18266,14 +18250,15 @@ export interface components {
         GalgameDownloadFileDto: {
             file_hash: string | null;
             file_name: string;
-            /** @description 字节数，超出 JS 安全整数范围故用字符串 */
-            file_size: string;
+            /** @description 字节数 */
+            file_size: number;
             hash_algorithm: string | null;
             id: number;
         };
-        GalgameDownloadLinkDto: {
-            expires_in: number;
-            file_url: string;
+        GalgameDownloadListDto: {
+            resources: components["schemas"]["GalgameDownloadResourceDto"][];
+            /** @description shionlib 游戏页地址 */
+            web_url: string | null;
         };
         GalgameDownloadResourceDto: {
             downloads: number;
@@ -18282,8 +18267,11 @@ export interface components {
             language: string[];
             note: string | null;
             platform: string[];
-            simulator: string | null;
+            /** @description 本地化方署名，按署名顺序 */
+            translators: string[];
             updated: string;
+            /** @description shionlib 资源页地址，下载在该页面进行 */
+            url: string;
         };
         GalgameDownloadStatusDto: {
             /** @description shionlib 对接是否已配置 */
@@ -18292,24 +18280,20 @@ export interface components {
             files: number;
             /** Format: date-time */
             last_synced_at: string | null;
-            /** @description shionlib partner 接口当前是否可达 */
+            /** @description shionlib 开放接口当前是否可达 */
             reachable: boolean;
-            /** @description 对方快照里可用的作品数，与 works 的差值即未匹配上的部分 */
-            remote_works: number;
             /** @description 这些作品的资源总数 */
             resources: number;
+            /** @description 是否有同步正在进行 */
+            syncing: boolean;
             /** @description 文件总体积字节数 */
             total_size: string;
             /** @description 已同步到本站的作品数 */
             works: number;
         };
         GalgameDownloadSyncResultDto: {
-            /** @description 匹配并写入的作品数 */
-            matched: number;
-            /** @description 资源已下架而被移除的作品数 */
-            removed: number;
-            /** @description v_id 非法而跳过的条目数 */
-            skipped: number;
+            /** @description 是否已开始同步；已有同步在进行时为 false */
+            started: boolean;
         };
         GalgameDraftDto: {
             characters: components["schemas"]["ResolvedCharacterDto"][];
@@ -37481,29 +37465,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GalgameDownloadResourceDto"][];
-                };
-            };
-        };
-    };
-    GalgameDownloadController_getLink: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                file_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GalgameDownloadLinkDto"];
+                    "application/json": components["schemas"]["GalgameDownloadListDto"];
                 };
             };
         };
