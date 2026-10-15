@@ -18545,7 +18545,8 @@ export interface components {
             files: components["schemas"]["GalgameDownloadFileDto"][];
             id: number;
             language: string[];
-            note: string | null;
+            /** @description 上传者的说明：段落、换行，以及粗体、链接、剧透标记 */
+            note: components["schemas"]["EditorDocumentDto"] | null;
             platform: string[];
             /** @description 本地化方署名，按署名顺序 */
             translators: string[];

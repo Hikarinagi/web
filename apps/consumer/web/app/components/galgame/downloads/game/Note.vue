@@ -1,50 +1,42 @@
 <script setup lang="ts">
-  import { parse, type TagNode } from '@bbob/parser'
-  import { Blockquote, Link, Spoiler } from '@hina-ui/vue'
-
-  type NoteNode = string | TagNode
+  import type { components } from '@hikarinagi/api-contract/v3'
+  import { Link, Spoiler } from '@hina-ui/vue'
 
   defineOptions({ name: 'GalgameDownloadsGameNote' })
-  const props = defineProps<{ source?: string; nodes?: NoteNode[] }>()
+  defineProps<{ nodes: components['schemas']['EditorNodeDto'][] }>()
 
-  const items = computed(
-    () =>
-      props.nodes ??
-      (parse(props.source ?? '', {
-        onlyAllowTags: ['b', 'i', 'u', 's', 'url', 'quote', 'spoiler', 'mask'],
-      }) as NoteNode[]),
-  )
-
-  const children = (node: TagNode) => (node.content ?? []) as NoteNode[]
-  const href = (node: TagNode) => {
-    const url = (Object.keys(node.attrs)[0] ?? children(node).join('')).trim()
-    return /^https?:\/\//i.test(url) ? url : undefined
+  const inner = (node: components['schemas']['EditorNodeDto']) => [
+    { ...node, marks: node.marks?.slice(1) },
+  ]
+  const href = (node: components['schemas']['EditorNodeDto']) => {
+    const url = node.marks?.[0]?.attrs?.href
+    return typeof url === 'string' && /^(https?:|mailto:)/i.test(url) ? url : undefined
   }
 </script>
 
 <template>
-  <template v-for="(node, index) in items" :key="index">
-    <template v-if="typeof node === 'string'">{{ node }}</template>
+  <template v-for="(node, index) in nodes" :key="index">
+    <template v-if="node.type === 'paragraph'">
+      <template v-if="index">{{ '\n' }}</template>
+      <GalgameDownloadsGameNote :nodes="node.content ?? []" />
+    </template>
+    <template v-else-if="node.type === 'hard_break'">{{ '\n' }}</template>
     <Link
-      v-else-if="node.tag === 'url' && href(node)"
+      v-else-if="node.marks?.[0]?.type === 'link' && href(node)"
       :href="href(node)"
       target="_blank"
       rel="noreferrer"
       class="break-all"
     >
-      <GalgameDownloadsGameNote :nodes="children(node)" />
+      <GalgameDownloadsGameNote :nodes="inner(node)" />
     </Link>
-    <Spoiler v-else-if="node.tag === 'spoiler' || node.tag === 'mask'">
-      <GalgameDownloadsGameNote :nodes="children(node)" />
+    <Spoiler v-else-if="node.marks?.[0]?.type === 'spoiler'">
+      <GalgameDownloadsGameNote :nodes="inner(node)" />
     </Spoiler>
-    <Blockquote v-else-if="node.tag === 'quote'">
-      <GalgameDownloadsGameNote :nodes="children(node)" />
-    </Blockquote>
-    <strong v-else-if="node.tag === 'b'"
-      ><GalgameDownloadsGameNote :nodes="children(node)"
+    <strong v-else-if="node.marks?.[0]?.type === 'bold'"
+      ><GalgameDownloadsGameNote :nodes="inner(node)"
     /></strong>
-    <em v-else-if="node.tag === 'i'"><GalgameDownloadsGameNote :nodes="children(node)" /></em>
-    <u v-else-if="node.tag === 'u'"><GalgameDownloadsGameNote :nodes="children(node)" /></u>
-    <s v-else-if="node.tag === 's'"><GalgameDownloadsGameNote :nodes="children(node)" /></s>
+    <GalgameDownloadsGameNote v-else-if="node.marks?.length" :nodes="inner(node)" />
+    <template v-else>{{ node.text }}</template>
   </template>
 </template>

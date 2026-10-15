@@ -18223,8 +18223,14 @@
             "type": "array"
           },
           "note": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditorDocumentDto"
+              }
+            ],
+            "description": "上传者的说明：段落、换行，以及粗体、链接、剧透标记",
             "nullable": true,
-            "type": "string"
+            "type": "object"
           },
           "platform": {
             "items": {

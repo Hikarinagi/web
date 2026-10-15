@@ -12,7 +12,12 @@
     type DataTableColumn,
   } from '@hina-ui/vue'
   import { ExternalLink, HardDriveDownload } from '@lucide/vue'
-  import { fileSizeLabel, languageLabel, sortLanguages } from '~/features/galgame/download'
+  import {
+    fileSizeLabel,
+    languageLabel,
+    noteText,
+    sortLanguages,
+  } from '~/features/galgame/download'
   import { platformLabel, sortPlatforms } from '~/features/galgame/platforms'
   import type { GalgameDownloadsPageData } from '~~/server/api/pages/galgames/[id]/downloads.get'
 
@@ -56,9 +61,11 @@
       key: 'file_name',
       label: '文件',
       filter: (row, query) =>
-        [row.file_name, row.resource.note ?? '', ...row.resource.translators].some(text =>
-          text.toLowerCase().includes(query.toLowerCase()),
-        ),
+        [
+          row.file_name,
+          noteText(row.resource.note?.content ?? []),
+          ...row.resource.translators,
+        ].some(text => text.toLowerCase().includes(query.toLowerCase())),
     },
     {
       key: 'language',
@@ -165,7 +172,7 @@
             tone="muted"
             class="break-all whitespace-pre-line"
           >
-            <GalgameDownloadsGameNote :source="row.resource.note" />
+            <GalgameDownloadsGameNote :nodes="row.resource.note.content ?? []" />
           </Text>
           <Text size="sm" tone="muted" class="md:hidden">
             {{ resourceLanguages(row.resource) }} · {{ resourcePlatform(row.resource) }} ·

@@ -1,3 +1,4 @@
+import type { components } from '@hikarinagi/api-contract/v3'
 import { sortByOrder } from '~/utils/order'
 
 const SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB']
@@ -29,6 +30,10 @@ export function languageLabel(code: string): string {
 
 export function sortLanguages(codes: string[]): string[] {
   return sortByOrder(codes, Object.keys(LANGUAGE_LABELS))
+}
+
+export function noteText(nodes: components['schemas']['EditorNodeDto'][]): string {
+  return nodes.map(node => node.text ?? noteText(node.content ?? [])).join('')
 }
 
 const STORE_LINKS = new Set([
