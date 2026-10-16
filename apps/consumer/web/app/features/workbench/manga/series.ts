@@ -1,12 +1,12 @@
+import { mangaChapterHeading } from '@hikarinagi/shared'
 import { topVotedMedia } from '~/utils/media/image'
-import { getMangaEpisodeLabel } from '~/utils/media/manga'
 import type { BackendMangaProjectListItem } from './manga'
 
 type Series = BackendMangaProjectListItem['series']
 
 type Episode = Pick<
   BackendMangaProjectListItem,
-  'scope' | 'chapter_number' | 'chapter_name' | 'volume_number'
+  'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_number'
 >
 
 export function seriesTitle(series: Series): string {
@@ -18,11 +18,11 @@ export function seriesHead(series: Series): { title: string; cover: string | nul
 }
 
 export function projectEpisode(project: Episode): string {
-  return getMangaEpisodeLabel({
-    chapter_type: project.scope === 'VOLUME' ? 'VOLUME' : null,
+  return mangaChapterHeading({
+    chapter_type: project.scope === 'VOLUME' ? 'VOLUME' : project.chapter_type,
     chapter_number: project.chapter_number,
     volume_number: project.volume_number,
-    name: project.chapter_name,
+    title: project.chapter_name,
   })
 }
 

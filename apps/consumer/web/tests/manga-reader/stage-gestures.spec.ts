@@ -51,6 +51,7 @@ async function mountStage({ animate = true, zoomable = false } = {}) {
         viewport,
         canGoNext: () => true,
         canGoPrevious: () => true,
+        direction: () => 'rtl',
         animate: () => animate,
         zoomable: () => zoomable,
         zoom,

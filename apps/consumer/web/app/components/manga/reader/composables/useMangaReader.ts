@@ -1,5 +1,4 @@
 import type { MangaReadPageData } from '~~/server/api/pages/mangas/reader/[id]/[chapterId].get'
-import type { MangaReaderLayout } from '../lib/settings'
 
 export type ReaderPage = MangaReadPageData['manifest']['pages'][number]
 
@@ -10,7 +9,9 @@ export interface ReaderSpread {
 
 interface UseMangaReaderOptions {
   pages: () => ReaderPage[]
-  layout: () => MangaReaderLayout
+  layout: () => 'single' | 'double'
+  coverAlone: () => boolean
+  shift: () => boolean
   initialPage: number | null
   hasNext: () => boolean
   onEnterInterlude: () => void
@@ -37,9 +38,10 @@ export function useMangaReader(options: UseMangaReaderOptions) {
           buffer = []
         }
       }
+      const alone = options.coverAlone() !== options.shift()
       pages.forEach((page, index) => {
         const landscape = !!page.width && !!page.height && page.width > page.height
-        if (index === 0 || landscape) {
+        if ((index === 0 && alone) || landscape) {
           flush()
           groups.push([page])
           return

@@ -5,6 +5,7 @@ interface UseStageGesturesOptions {
   viewport: Ref<HTMLElement | null>
   canGoNext: () => boolean
   canGoPrevious: () => boolean
+  direction: () => 'rtl' | 'ltr'
   /** `false` turns the page on release without dragging or animating it. */
   animate: () => boolean
   /** `true` when the page is shown whole and pan/zoom owns the surface. */
@@ -78,17 +79,18 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     return Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y'
   }
 
-  function commitFor(dx: number): Commit {
+  function commitFor(rawDx: number): Commit {
     const width = viewportWidth()
+    const sign = options.direction() === 'rtl' ? 1 : -1
+    const dx = rawDx * sign
+    const speed = velocity * sign
     if (dx > 0) {
       const commit =
-        dx > width * DRAG_COMMIT_RATIO ||
-        (dx > DRAG_COMMIT_MIN_PX && velocity > DRAG_COMMIT_VELOCITY)
+        dx > width * DRAG_COMMIT_RATIO || (dx > DRAG_COMMIT_MIN_PX && speed > DRAG_COMMIT_VELOCITY)
       return commit && options.canGoNext() ? 'next' : null
     }
     const commit =
-      dx < -width * DRAG_COMMIT_RATIO ||
-      (dx < -DRAG_COMMIT_MIN_PX && velocity < -DRAG_COMMIT_VELOCITY)
+      dx < -width * DRAG_COMMIT_RATIO || (dx < -DRAG_COMMIT_MIN_PX && speed < -DRAG_COMMIT_VELOCITY)
     return commit && options.canGoPrevious() ? 'previous' : null
   }
 
@@ -99,7 +101,7 @@ export function useStageGestures(options: UseStageGesturesOptions) {
       else if (commit === 'previous') options.previous()
       return
     }
-    const width = viewportWidth()
+    const width = viewportWidth() * (options.direction() === 'rtl' ? 1 : -1)
     animating.value = true
     dragX.value = commit === 'next' ? width : commit === 'previous' ? -width : 0
     window.setTimeout(() => {
@@ -205,8 +207,9 @@ export function useStageGestures(options: UseStageGesturesOptions) {
 
     if (!options.animate()) return
     const pageDx = event.clientX - pageStartX
-    const blockedNext = pageDx > 0 && !options.canGoNext()
-    const blockedPrevious = pageDx < 0 && !options.canGoPrevious()
+    const forward = options.direction() === 'rtl' ? pageDx : -pageDx
+    const blockedNext = forward > 0 && !options.canGoNext()
+    const blockedPrevious = forward < 0 && !options.canGoPrevious()
     dragX.value = blockedNext || blockedPrevious ? pageDx * 0.25 : pageDx
   }
 

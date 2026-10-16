@@ -1,6 +1,6 @@
 import type { ContributePageData } from '~~/server/api/pages/contribute.get'
+import { mangaChapterLabel } from '@hikarinagi/shared'
 import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
-import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
 export type WantedVolume = ContributePageData['volumes'][number]
 export type WantedChapter = ContributePageData['chapters'][number]
@@ -21,7 +21,7 @@ export function volumeNote(volume: WantedVolume) {
 }
 
 export function chapterNote(chapter: WantedChapter) {
-  return `${chapter.readers} 位读者已读至${getMangaEpisodeLabel(chapter.previous)}`
+  return `${chapter.readers} 位读者已读至${mangaChapterLabel(chapter.previous)}`
 }
 
 export function mangaVolumeNote(volume: WantedMangaVolume) {

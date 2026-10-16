@@ -22,9 +22,9 @@
     seriesId: number
     chapter: {
       id: number
-      chapter_type: MangaChapterEditValues['chapter_type']
+      chapter_type: string
       chapter_number: string | null
-      name: string | null
+      title: string | null
       volume_id: number | null
       publication_date: string | null
     } | null
@@ -32,13 +32,13 @@
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ saved: [] }>()
 
-  const TYPE_OPTIONS = [...MANGA_CHAPTER_TYPE_OPTIONS, { value: 'VOLUME', label: '整卷' }]
+  const TYPE_OPTIONS = [...MANGA_CHAPTER_TYPE_OPTIONS, { value: 'VOLUME', label: '单行本' }]
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const values = reactive<MangaChapterEditValues>({
     chapter_type: 'SERIALIZATION',
     chapter_number: '',
-    name: '',
+    title: '',
     volume_id: null,
     publication_date: '',
   })
@@ -48,9 +48,12 @@
   watch(visible, next => {
     if (!next || !props.chapter) return
     form.value?.reset()
-    values.chapter_type = props.chapter.chapter_type
+    values.chapter_type =
+      props.chapter.chapter_type === 'VOLUME' || props.chapter.chapter_type === 'EXTRA'
+        ? props.chapter.chapter_type
+        : 'SERIALIZATION'
     values.chapter_number = props.chapter.chapter_number ?? ''
-    values.name = props.chapter.name ?? ''
+    values.title = props.chapter.title ?? ''
     values.volume_id = props.chapter.volume_id
     values.publication_date = props.chapter.publication_date?.slice(0, 10) ?? ''
   })
@@ -65,7 +68,7 @@
         body: {
           chapter_type: values.chapter_type,
           chapter_number: wholeVolume.value ? null : values.chapter_number?.trim() || null,
-          name: wholeVolume.value ? null : values.name?.trim() || null,
+          title: values.title?.trim() || null,
           volume_id: values.volume_id ?? null,
           publication_date: values.publication_date || null,
         },
@@ -108,12 +111,13 @@
             <Input v-model="values.chapter_number" placeholder="12" />
           </FormField>
           <FormField
-            v-if="!wholeVolume"
-            name="name"
+            name="title"
             label="标题"
-            :required="values.chapter_type !== 'SERIALIZATION'"
+            :required="values.chapter_type === 'EXTRA'"
+            :description="values.chapter_type === 'EXTRA' ? undefined : '没有正式标题就留空'"
+            description-placement="control"
           >
-            <Input v-model="values.name" />
+            <Input v-model="values.title" />
           </FormField>
           <FormField
             name="volume_id"

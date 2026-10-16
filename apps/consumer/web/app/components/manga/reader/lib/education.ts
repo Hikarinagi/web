@@ -1,42 +1,61 @@
-import { Keyboard, MoveLeft, MoveRight, ZoomIn } from '@lucide/vue'
+import { Keyboard, MousePointerClick, MoveLeft, MoveRight, MoveVertical, ZoomIn } from '@lucide/vue'
 import type { ReaderEducationHint } from '~/components/reader/EducationOverlay.vue'
+import type { MangaReaderDirection, MangaReaderMode } from './settings'
 
-// Bumped when the gesture set changes so returning readers see it again.
-export const MANGA_READER_EDUCATION_KEY = 'hikari-manga-reader-education-seen-v3'
+export const MANGA_READER_EDUCATION_KEY = 'hikari-manga-reader-education-seen-v4'
 
 export interface MangaEducationContext {
   coarsePointer: boolean
-  /** Only the whole-page layout can be panned and zoomed. */
   zoomable: boolean
+  mode: MangaReaderMode
+  direction: MangaReaderDirection
+  tapSides: boolean
 }
 
 export function mangaEducationHints(
   context: MangaEducationContext,
 ): readonly ReaderEducationHint[] {
-  const { coarsePointer, zoomable } = context
-
-  return [
-    {
-      key: 'next',
-      placement: 'left',
-      icon: MoveRight,
-      title: '右滑 下一页',
-      description: coarsePointer ? '从右往左读，顺着翻页方向拖' : '从右往左读，按住拖动',
-    },
-    coarsePointer
-      ? {
-          key: 'previous',
-          placement: 'right',
+  const { coarsePointer, zoomable, mode, direction, tapSides } = context
+  const sides = mode === 'paged' && tapSides
+  const chrome: ReaderEducationHint = {
+    key: 'chrome',
+    placement: 'center',
+    icon: MousePointerClick,
+    title: `${coarsePointer ? '轻触' : '单击'}${sides ? '中间' : '页面'} 呼出工具栏`,
+    description: '目录、跳页与阅读设置都在工具栏里',
+  }
+  if (mode === 'scroll') {
+    return [{ key: 'scroll', placement: 'top', icon: MoveVertical, title: '上下滑动 阅读' }, chrome]
+  }
+  const rtl = direction === 'rtl'
+  const turning: ReaderEducationHint[] = sides
+    ? [
+        {
+          key: 'left',
+          placement: 'left',
           icon: MoveLeft,
-          title: '左滑 上一页',
-        }
-      : {
-          key: 'previous',
-          placement: 'right',
-          icon: Keyboard,
-          title: '左滑 / ← → 上下一页',
-          description: '方向键随时可用',
+          title: rtl ? '点左侧 下一页' : '点左侧 上一页',
+          description: rtl ? '从右往左读，也可以向右拖动' : '也可以向右拖动',
         },
+        {
+          key: 'right',
+          placement: 'right',
+          icon: coarsePointer ? MoveRight : Keyboard,
+          title: rtl ? '点右侧 上一页' : '点右侧 下一页',
+          description: coarsePointer ? undefined : '← → 方向键随时可用',
+        },
+      ]
+    : [
+        {
+          key: 'drag',
+          placement: rtl ? 'left' : 'right',
+          icon: rtl ? MoveRight : MoveLeft,
+          title: rtl ? '向右拖动 下一页' : '向左拖动 下一页',
+          description: coarsePointer ? undefined : '← → 方向键随时可用',
+        },
+      ]
+  return [
+    ...turning,
     ...(zoomable
       ? [
           {
@@ -48,11 +67,6 @@ export function mangaEducationHints(
           },
         ]
       : []),
-    {
-      key: 'chrome',
-      placement: 'center',
-      title: coarsePointer ? '轻触 呼出工具栏' : '右键 呼出工具栏',
-      description: coarsePointer ? '调整设置、快速跳页' : '左键单击收起，可调整设置与快速跳页',
-    },
+    chrome,
   ]
 }

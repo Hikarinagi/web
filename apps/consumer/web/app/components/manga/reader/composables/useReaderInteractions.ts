@@ -1,7 +1,11 @@
 import type { Ref } from 'vue'
+import type { MangaReaderDirection } from '../lib/settings'
 
 interface UseReaderInteractionsOptions {
   educationVisible: Ref<boolean>
+  paged: () => boolean
+  tapSides: () => boolean
+  direction: () => MangaReaderDirection
   next: () => void
   previous: () => void
   showChrome: () => void
@@ -9,18 +13,27 @@ interface UseReaderInteractionsOptions {
   toggleChrome: () => void
 }
 
-export function useReaderInteractions(options: UseReaderInteractionsOptions) {
-  let lastPointerType = 'mouse'
+const SIDE_RATIO = 1 / 3
 
-  function onChromeIntent(event: PointerEvent) {
+export function useReaderInteractions(options: UseReaderInteractionsOptions) {
+  function turn(side: 'left' | 'right') {
+    const forward = options.direction() === 'rtl' ? 'left' : 'right'
+    if (side === forward) options.next()
+    else options.previous()
+  }
+
+  function onTap(event: MouseEvent) {
     if (options.educationVisible.value) return
-    if (event.pointerType === 'mouse') options.hideChrome()
-    else options.toggleChrome()
+    if (options.paged() && options.tapSides()) {
+      const ratio = event.clientX / window.innerWidth
+      if (ratio < SIDE_RATIO) return turn('left')
+      if (ratio > 1 - SIDE_RATIO) return turn('right')
+    }
+    options.toggleChrome()
   }
 
   function onContextMenu(event: Event) {
     event.preventDefault()
-    if (lastPointerType === 'touch') return
     if (options.educationVisible.value) return
     options.showChrome()
   }
@@ -33,18 +46,20 @@ export function useReaderInteractions(options: UseReaderInteractionsOptions) {
         return
     }
     if (options.educationVisible.value) return
-    if (event.key === 'ArrowLeft') options.next()
-    else if (event.key === 'ArrowRight') options.previous()
-    else if (event.key === 'Escape') options.hideChrome()
+    if (event.key === 'Escape') {
+      options.hideChrome()
+      return
+    }
+    if (!options.paged()) return
+    if (event.key === 'ArrowLeft') turn('left')
+    else if (event.key === 'ArrowRight') turn('right')
+    else if (event.key === 'PageDown' || event.key === ' ') options.next()
+    else if (event.key === 'PageUp') options.previous()
+    else return
+    event.preventDefault()
   }
 
   useEventListener(window, 'keydown', onKeydown)
-  useEventListener(
-    window,
-    'pointerdown',
-    (event: PointerEvent) => (lastPointerType = event.pointerType),
-    { capture: true },
-  )
 
-  return { onChromeIntent, onContextMenu }
+  return { onTap, onContextMenu }
 }

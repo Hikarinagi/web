@@ -4,8 +4,9 @@
   import type { MangaTarget } from '~/features/contribute/manga-target'
   import { useMangaSearch } from '~/features/contribute/useMangaSearch'
   import { chapterNote, mangaVolumeNote, PROJECT_COPY } from '~/features/contribute/wanted'
+  import { mangaChapterLabel } from '@hikarinagi/shared'
   import { topVotedMedia } from '~/utils/media/image'
-  import { getMangaEpisodeLabel, getMangaVolumeLabel } from '~/utils/media/manga'
+  import { getMangaVolumeLabel } from '~/utils/media/manga'
 
   const props = defineProps<{
     chapters: ContributePageData['chapters']
@@ -44,7 +45,7 @@
   const series = (item: Item) =>
     wanted(item) ? item.series.name_cn || item.series.name : item.name_cn || item.name
   const subtitle = (item: Item) =>
-    isChapter(item) ? getMangaEpisodeLabel(item) : isVolume(item) ? getMangaVolumeLabel(item) : null
+    isChapter(item) ? mangaChapterLabel(item) : isVolume(item) ? getMangaVolumeLabel(item) : null
   const note = (item: Item) =>
     isChapter(item) ? chapterNote(item) : isVolume(item) ? mangaVolumeNote(item) : null
   const cover = (item: Item) =>
@@ -57,7 +58,7 @@
     if (!requireLogin()) return
     starting.value = {
       series: { id: wanted(item) ? item.series.id : item.id, title: series(item) },
-      chapter: isChapter(item) ? { id: item.id, label: getMangaEpisodeLabel(item) } : null,
+      chapter: isChapter(item) ? { id: item.id, label: mangaChapterLabel(item) } : null,
       volume: isVolume(item) ? { id: item.id, label: getMangaVolumeLabel(item) } : null,
     }
     open.value = true
