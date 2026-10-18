@@ -70,7 +70,7 @@ export function useDuplicateCheck(params: {
     }
   }
 
-  watchDebounced(signature, run, { debounce: 800 })
+  watchDebounced(signature, run, { debounce: 800, immediate: import.meta.client })
 
   const matches = computed(() => candidates.value.filter(item => item.level !== 'author_work'))
   const authorWorks = computed(() => candidates.value.filter(item => item.level === 'author_work'))
