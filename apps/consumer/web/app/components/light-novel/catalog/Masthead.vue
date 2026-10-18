@@ -20,7 +20,7 @@
       <Inline gap="none" align="center" :wrap="false" class="mx-auto w-full max-w-app gap-5">
         <HikariImage
           v-if="masthead.image"
-          :src="masthead.image.src"
+          :src="masthead.image"
           :alt="masthead.name"
           class="size-16 shrink-0 border border-line bg-surface"
           :class="masthead.shape === 'circle' ? 'rounded-full' : 'rounded-xl'"

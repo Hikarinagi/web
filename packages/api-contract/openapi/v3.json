@@ -311,40 +311,51 @@
         ],
         "type": "object"
       },
-      "AdminAiToolDto": {
+      "AdminAiToolDetailDto": {
         "properties": {
-          "description": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "executor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AiToolExecutor"
-              }
-            ]
-          },
-          "executor_config": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
-          },
-          "id": {
+          "default_timeout_ms": {
             "type": "number"
           },
-          "input_schema": {
+          "description": {
+            "description": "提供给模型的描述",
+            "type": "string"
+          },
+          "group": {
+            "enum": [
+              "site",
+              "bangumi",
+              "vndb",
+              "openbd",
+              "web"
+            ],
+            "type": "string"
+          },
+          "input": {
             "additionalProperties": true,
+            "description": "由模型填写的参数",
             "type": "object"
           },
           "key": {
             "type": "string"
           },
+          "label": {
+            "type": "string"
+          },
+          "max_timeout_ms": {
+            "type": "number"
+          },
+          "min_timeout_ms": {
+            "type": "number"
+          },
           "scenes": {
-            "description": "可以调用此工具的场景",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/AiToolSceneDto"
+            },
+            "type": "array"
+          },
+          "settings": {
+            "items": {
+              "$ref": "#/components/schemas/AiToolSettingDto"
             },
             "type": "array"
           },
@@ -354,17 +365,87 @@
                 "$ref": "#/components/schemas/AiToolStatsDto"
               }
             ],
-            "description": "最近 24 小时"
+            "description": "最近 7 天的统计"
+          },
+          "status": {
+            "description": "工具的配置状态",
+            "enum": [
+              "ok",
+              "no_service",
+              "all_unavailable",
+              "bangumi_disconnected"
+            ],
+            "type": "string"
+          },
+          "timeout_ms": {
+            "type": "number"
           }
         },
         "required": [
-          "id",
           "key",
+          "label",
+          "group",
+          "status",
+          "scenes",
+          "stats",
           "description",
-          "input_schema",
-          "executor",
-          "executor_config",
-          "enabled",
+          "input",
+          "timeout_ms",
+          "default_timeout_ms",
+          "min_timeout_ms",
+          "max_timeout_ms",
+          "settings"
+        ],
+        "type": "object"
+      },
+      "AdminAiToolDto": {
+        "properties": {
+          "group": {
+            "enum": [
+              "site",
+              "bangumi",
+              "vndb",
+              "openbd",
+              "web"
+            ],
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "scenes": {
+            "items": {
+              "$ref": "#/components/schemas/AiToolSceneDto"
+            },
+            "type": "array"
+          },
+          "stats": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiToolStatsDto"
+              }
+            ],
+            "description": "最近 7 天的统计"
+          },
+          "status": {
+            "description": "工具的配置状态",
+            "enum": [
+              "ok",
+              "no_service",
+              "all_unavailable",
+              "bangumi_disconnected"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "group",
+          "status",
           "scenes",
           "stats"
         ],
@@ -7139,6 +7220,11 @@
             },
             "type": "array"
           },
+          "default_max_tool_calls": {
+            "description": "不能使用工具的场景为空",
+            "nullable": true,
+            "type": "number"
+          },
           "effective": {
             "allOf": [
               {
@@ -7156,6 +7242,11 @@
             "type": "string"
           },
           "max_output_tokens": {
+            "nullable": true,
+            "type": "number"
+          },
+          "max_tool_calls": {
+            "description": "为空时采用场景的默认值",
             "nullable": true,
             "type": "number"
           },
@@ -7209,13 +7300,11 @@
             "type": "number"
           },
           "tools": {
+            "description": "场景可以使用的工具；不能使用工具的场景为空",
             "items": {
-              "$ref": "#/components/schemas/AiToolRefDto"
+              "$ref": "#/components/schemas/AiSceneToolDto"
             },
             "type": "array"
-          },
-          "tools_supported": {
-            "type": "boolean"
           },
           "vision": {
             "type": "boolean"
@@ -7227,12 +7316,13 @@
           "billing",
           "output",
           "vision",
-          "tools_supported",
           "model",
           "effective",
           "route",
           "choices",
           "tools",
+          "max_tool_calls",
+          "default_max_tool_calls",
           "temperature",
           "max_output_tokens",
           "timeout_ms",
@@ -7257,6 +7347,325 @@
           "id",
           "upstream_id",
           "provider"
+        ],
+        "type": "object"
+      },
+      "AiSceneToolChoiceDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "key": {
+            "maxLength": 64,
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "AiSceneToolDto": {
+        "properties": {
+          "available": {
+            "description": "前提条件已满足，例如网页搜索有可用的搜索服务",
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "group": {
+            "enum": [
+              "site",
+              "bangumi",
+              "vndb",
+              "openbd",
+              "web"
+            ],
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "group",
+          "required",
+          "enabled",
+          "available"
+        ],
+        "type": "object"
+      },
+      "AiSearchCredentialFieldDto": {
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "secret"
+        ],
+        "type": "object"
+      },
+      "AiSearchHitDto": {
+        "properties": {
+          "snippet": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "url",
+          "snippet"
+        ],
+        "type": "object"
+      },
+      "AiSearchOptionFieldDto": {
+        "properties": {
+          "default": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "values",
+          "default"
+        ],
+        "type": "object"
+      },
+      "AiSearchProviderDto": {
+        "properties": {
+          "checked_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "cooldown_until": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "cost_30d": {
+            "description": "最近 30 天的费用",
+            "type": "number"
+          },
+          "credentials": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "非密钥凭据的值",
+            "type": "object"
+          },
+          "daily_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "error_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiErrorKind"
+              }
+            ],
+            "nullable": true
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "position": {
+            "type": "number"
+          },
+          "price_per_1k": {
+            "nullable": true,
+            "type": "number"
+          },
+          "secret_hints": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "密钥的前 3 位与后 4 位",
+            "type": "object"
+          },
+          "service": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiSearchService"
+              }
+            ]
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiSearchProviderStatus"
+              }
+            ]
+          },
+          "today_calls": {
+            "description": "今日计费的查询次数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "service",
+          "credentials",
+          "secret_hints",
+          "options",
+          "price_per_1k",
+          "daily_limit",
+          "position",
+          "enabled",
+          "status",
+          "error_kind",
+          "error_message",
+          "checked_at",
+          "cooldown_until",
+          "today_calls",
+          "cost_30d"
+        ],
+        "type": "object"
+      },
+      "AiSearchProviderStatus": {
+        "enum": [
+          "OK",
+          "UNAVAILABLE"
+        ],
+        "type": "string"
+      },
+      "AiSearchService": {
+        "enum": [
+          "EXA",
+          "BRAVE",
+          "TAVILY",
+          "LINKUP",
+          "CLOUDFLARE"
+        ],
+        "type": "string"
+      },
+      "AiSearchServiceDto": {
+        "properties": {
+          "credentials": {
+            "items": {
+              "$ref": "#/components/schemas/AiSearchCredentialFieldDto"
+            },
+            "type": "array"
+          },
+          "label": {
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/AiSearchOptionFieldDto"
+            },
+            "type": "array"
+          },
+          "service": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiSearchService"
+              }
+            ]
+          }
+        },
+        "required": [
+          "service",
+          "label",
+          "credentials",
+          "options"
+        ],
+        "type": "object"
+      },
+      "AiSearchTestDto": {
+        "properties": {
+          "duration_ms": {
+            "type": "number"
+          },
+          "error_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiErrorKind"
+              }
+            ],
+            "nullable": true
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/AiSearchHitDto"
+            },
+            "type": "array"
+          },
+          "token": {
+            "description": "测试通过时与所测取值绑定的测试令牌",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "token",
+          "error_kind",
+          "error_message",
+          "results",
+          "duration_ms"
         ],
         "type": "object"
       },
@@ -7366,12 +7775,87 @@
         ],
         "type": "object"
       },
-      "AiToolCallDto": {
+      "AiToolAttemptDto": {
         "properties": {
+          "billed": {
+            "type": "boolean"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
           "duration_ms": {
             "type": "number"
           },
-          "error": {
+          "error_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiErrorKind"
+              }
+            ],
+            "nullable": true
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "provider_id": {
+            "type": "number"
+          },
+          "skipped": {
+            "enum": [
+              "cooling",
+              "daily_limit"
+            ],
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider_id",
+          "name",
+          "ok",
+          "skipped",
+          "error_kind",
+          "error_message",
+          "duration_ms",
+          "billed",
+          "cost_usd"
+        ],
+        "type": "object"
+      },
+      "AiToolCallDto": {
+        "properties": {
+          "attempts": {
+            "items": {
+              "$ref": "#/components/schemas/AiToolAttemptDto"
+            },
+            "type": "array"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "duration_ms": {
+            "type": "number"
+          },
+          "error_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiErrorKind"
+              }
+            ],
+            "nullable": true
+          },
+          "error_message": {
             "nullable": true,
             "type": "string"
           },
@@ -7380,76 +7864,213 @@
           },
           "input": {
             "additionalProperties": true,
+            "nullable": true,
             "type": "object"
-          },
-          "ok": {
-            "type": "boolean"
           },
           "output": {
             "additionalProperties": true,
             "nullable": true,
             "type": "object"
           },
+          "output_truncated": {
+            "type": "boolean"
+          },
+          "provider": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiToolProviderRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "request_id": {
+            "nullable": true,
+            "type": "string"
+          },
+          "reused": {
+            "type": "boolean"
+          },
+          "scene": {
+            "nullable": true,
+            "type": "string"
+          },
+          "scene_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiToolCallSource"
+              }
+            ]
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/AiToolSourceRefDto"
+            },
+            "type": "array"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiToolCallStatus"
+              }
+            ]
+          },
           "tool_key": {
             "type": "string"
+          },
+          "tool_label": {
+            "type": "string"
+          },
+          "units": {
+            "type": "number"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiUserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
           "id",
+          "created_at",
+          "source",
+          "scene",
+          "scene_label",
+          "request_id",
           "tool_key",
+          "tool_label",
+          "user",
+          "provider",
+          "status",
+          "error_kind",
+          "error_message",
+          "reused",
           "input",
           "output",
-          "ok",
-          "error",
+          "output_truncated",
+          "sources",
+          "attempts",
+          "units",
+          "cost_usd",
           "duration_ms"
         ],
         "type": "object"
       },
-      "AiToolExecutor": {
+      "AiToolCallSource": {
         "enum": [
-          "SITE_SEARCH",
-          "SITE_API"
+          "SCENE",
+          "TEST"
         ],
         "type": "string"
       },
-      "AiToolRefDto": {
+      "AiToolCallStatus": {
+        "enum": [
+          "OK",
+          "FAILED",
+          "TIMED_OUT",
+          "REJECTED",
+          "OVER_BUDGET"
+        ],
+        "type": "string"
+      },
+      "AiToolProviderRefDto": {
         "properties": {
           "id": {
             "type": "number"
           },
-          "key": {
+          "name": {
             "type": "string"
           }
         },
         "required": [
           "id",
-          "key"
+          "name"
         ],
         "type": "object"
       },
-      "AiToolRunDto": {
+      "AiToolSceneDto": {
         "properties": {
-          "duration_ms": {
-            "type": "number"
-          },
-          "error": {
-            "nullable": true,
-            "type": "string"
-          },
-          "ok": {
+          "enabled": {
             "type": "boolean"
           },
-          "output": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "max_tool_calls": {
+            "type": "number"
+          },
+          "required": {
+            "type": "boolean"
           }
         },
         "required": [
-          "ok",
-          "output",
-          "error",
-          "duration_ms"
+          "key",
+          "label",
+          "required",
+          "enabled",
+          "max_tool_calls"
+        ],
+        "type": "object"
+      },
+      "AiToolSettingDto": {
+        "properties": {
+          "default": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "max": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "min",
+          "max",
+          "default",
+          "value"
+        ],
+        "type": "object"
+      },
+      "AiToolSourceRefDto": {
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "url",
+          "title"
         ],
         "type": "object"
       },
@@ -7458,13 +8079,22 @@
           "calls": {
             "type": "number"
           },
+          "cost_usd": {
+            "type": "number"
+          },
           "failures": {
+            "type": "number"
+          },
+          "p95_ms": {
+            "nullable": true,
             "type": "number"
           }
         },
         "required": [
           "calls",
-          "failures"
+          "failures",
+          "p95_ms",
+          "cost_usd"
         ],
         "type": "object"
       },
@@ -9285,7 +9915,9 @@
           "REJECTED_LABEL",
           "LISTED",
           "HIDDEN",
-          "FAILED"
+          "FAILED",
+          "SERIES_LINKED",
+          "HELD_DUPLICATE"
         ],
         "type": "string"
       },
@@ -9632,6 +10264,53 @@
         ],
         "type": "object"
       },
+      "ChangeRequestCheckDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "disputed": {
+            "type": "boolean"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "QUEUED",
+              "RUNNING",
+              "DONE",
+              "FAILED",
+              "TIMED_OUT"
+            ],
+            "type": "string"
+          },
+          "verification": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CheckVerificationDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "disputed",
+          "verification",
+          "finished_at",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "ChangeRequestDetailDto": {
         "properties": {
           "author": {
@@ -9645,9 +10324,33 @@
             "nullable": true,
             "type": "string"
           },
+          "check": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestCheckDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
+          },
+          "duplicate_check": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestDuplicateCheckDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "duplicates": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateCandidateDto"
+            },
+            "type": "array"
           },
           "events": {
             "items": {
@@ -9742,6 +10445,8 @@
           "summary",
           "base_revision_id",
           "batch_id",
+          "duplicate_check",
+          "check",
           "author",
           "merged_at",
           "created_at",
@@ -9749,7 +10454,74 @@
           "payload",
           "merged_by",
           "merged_revision",
-          "events"
+          "events",
+          "duplicates"
+        ],
+        "type": "object"
+      },
+      "ChangeRequestDuplicateCandidateRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "level": {
+            "enum": [
+              "on_site",
+              "likely",
+              "author_work",
+              "similar"
+            ],
+            "type": "string"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "id",
+          "level"
+        ],
+        "type": "object"
+      },
+      "ChangeRequestDuplicateCheckDto": {
+        "properties": {
+          "author_works_checked": {
+            "type": "boolean"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeRequestDuplicateCandidateRefDto"
+            },
+            "type": "array"
+          },
+          "checked_at": {
+            "type": "string"
+          },
+          "dismissed": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "checked_at",
+          "candidates",
+          "dismissed",
+          "author_works_checked"
         ],
         "type": "object"
       },
@@ -9791,7 +10563,9 @@
               "REJECTED",
               "APPROVED",
               "AUTO_MERGED",
-              "CLOSED"
+              "CLOSED",
+              "MERGED_INTO",
+              "AUTO_MERGE_FAILED"
             ],
             "type": "string"
           }
@@ -9834,9 +10608,27 @@
             "nullable": true,
             "type": "string"
           },
+          "check": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestCheckDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
+          },
+          "duplicate_check": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestDuplicateCheckDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "type": "number"
@@ -9900,6 +10692,8 @@
           "summary",
           "base_revision_id",
           "batch_id",
+          "duplicate_check",
+          "check",
           "author",
           "merged_at",
           "created_at",
@@ -10252,6 +11046,211 @@
           "SUPPORTING": "配角"
         }
       },
+      "CheckAiSearchProviderDto": {
+        "properties": {
+          "query": {
+            "maxLength": 300,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CheckEntityDto": {
+        "properties": {
+          "change_request_id": {
+            "type": "number"
+          },
+          "existing_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "existing_name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "change_request_id",
+          "resource_type",
+          "name",
+          "fields",
+          "existing_id",
+          "existing_name",
+          "reason",
+          "verified"
+        ],
+        "type": "object"
+      },
+      "CheckEvidenceDto": {
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "bangumi_id": {
+            "type": "number"
+          },
+          "date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "entry_id": {
+            "type": "number"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "author",
+              "entry",
+              "bangumi_detail",
+              "isbn"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kind",
+          "verified"
+        ],
+        "type": "object"
+      },
+      "CheckFieldDto": {
+        "properties": {
+          "display": {
+            "type": "string"
+          },
+          "field": {
+            "enum": [
+              "name",
+              "name_cn",
+              "bunko_id",
+              "publication_date",
+              "bangumi_book_id",
+              "isbn"
+            ],
+            "type": "string"
+          },
+          "source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CheckSourceDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "submitted": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "submitted_display": {
+            "nullable": true,
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "field",
+          "submitted",
+          "submitted_display",
+          "value",
+          "display",
+          "source",
+          "verified"
+        ],
+        "type": "object"
+      },
+      "CheckIdentityDto": {
+        "properties": {
+          "id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "site",
+              "pending",
+              "new",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "verified"
+        ],
+        "type": "object"
+      },
       "CheckInConfigDto": {
         "properties": {
           "daily_point_max": {
@@ -10475,6 +11474,86 @@
           "points",
           "make_up",
           "config"
+        ],
+        "type": "object"
+      },
+      "CheckSourceDto": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "bangumi",
+              "openbd",
+              "page",
+              "request"
+            ],
+            "type": "string"
+          },
+          "ref": {
+            "description": "Bangumi 编号或 ISBN",
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "url",
+          "ref",
+          "title"
+        ],
+        "type": "object"
+      },
+      "CheckVerificationDto": {
+        "properties": {
+          "entities": {
+            "items": {
+              "$ref": "#/components/schemas/CheckEntityDto"
+            },
+            "type": "array"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/CheckEvidenceDto"
+            },
+            "type": "array"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/CheckFieldDto"
+            },
+            "type": "array"
+          },
+          "identity": {
+            "$ref": "#/components/schemas/CheckIdentityDto"
+          },
+          "mismatches": {
+            "type": "number"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/CheckSourceDto"
+            },
+            "type": "array"
+          },
+          "summary": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "identity",
+          "summary",
+          "evidence",
+          "fields",
+          "entities",
+          "sources",
+          "mismatches"
         ],
         "type": "object"
       },
@@ -11469,7 +12548,9 @@
               "REJECTED",
               "APPROVED",
               "AUTO_MERGED",
-              "CLOSED"
+              "CLOSED",
+              "MERGED_INTO",
+              "AUTO_MERGE_FAILED"
             ],
             "type": "string"
           }
@@ -11653,6 +12734,23 @@
           "sent_at",
           "from_me"
         ],
+        "type": "object"
+      },
+      "CorrectChangeRequestDto": {
+        "properties": {
+          "entity_choices": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewEntityChoiceDto"
+            },
+            "type": "array"
+          },
+          "overrides": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewOverrideDto"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "CountByStatusDto": {
@@ -11840,42 +12938,55 @@
         ],
         "type": "object"
       },
-      "CreateAiToolDto": {
+      "CreateAiSearchProviderDto": {
         "properties": {
-          "description": {
-            "maxLength": 2000,
+          "credentials": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "daily_limit": {
+            "maximum": 1000000,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "name": {
+            "maxLength": 60,
             "type": "string"
           },
-          "enabled": {
-            "type": "boolean"
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
           },
-          "executor": {
+          "price_per_1k": {
+            "maximum": 1000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "service": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/AiToolExecutor"
+                "$ref": "#/components/schemas/AiSearchService"
               }
             ]
           },
-          "executor_config": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
-          },
-          "input_schema": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "key": {
-            "description": "小写字母开头，只含小写字母、数字与下划线",
-            "pattern": "^[a-z][a-z0-9_]{1,63}$",
+          "test_token": {
+            "description": "测试接口返回的测试令牌",
+            "maxLength": 100,
             "type": "string"
           }
         },
         "required": [
-          "key",
-          "description",
-          "input_schema",
-          "executor"
+          "name",
+          "service",
+          "credentials",
+          "options",
+          "test_token"
         ],
         "type": "object"
       },
@@ -13075,6 +14186,9 @@
       },
       "CreateResourceChangeRequestDto": {
         "properties": {
+          "author_works_checked": {
+            "type": "boolean"
+          },
           "changeset": {
             "items": {
               "additionalProperties": true,
@@ -13082,6 +14196,14 @@
             },
             "maxItems": 200,
             "minItems": 1,
+            "type": "array"
+          },
+          "duplicate_dismissals": {
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 100,
             "type": "array"
           },
           "resource_type": {
@@ -13650,13 +14772,13 @@
             "enum": [
               "MANGA",
               "LIGHT_NOVEL",
+              "CHARACTER",
+              "PRODUCER",
+              "PERSON",
               "GALGAME",
               "LIGHT_NOVEL_VOLUME",
               "MANGA_VOLUME",
               "MANGA_CHAPTER",
-              "PERSON",
-              "PRODUCER",
-              "CHARACTER",
               "TAG"
             ],
             "type": "string"
@@ -14267,6 +15389,398 @@
           "like_count",
           "created_at",
           "updated_at"
+        ],
+        "type": "object"
+      },
+      "DuplicateAuthorDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "DuplicateCandidateDto": {
+        "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "bangumi_id": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "on_site",
+              "likely",
+              "author_work",
+              "similar"
+            ],
+            "type": "string"
+          },
+          "reasons": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateReasonDto"
+            },
+            "type": "array"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "subtitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "volumes": {
+            "nullable": true,
+            "type": "number"
+          },
+          "year": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "id",
+          "title",
+          "subtitle",
+          "cover",
+          "year",
+          "author",
+          "label",
+          "volumes",
+          "bangumi_id",
+          "level",
+          "reasons"
+        ],
+        "type": "object"
+      },
+      "DuplicateCheckDto": {
+        "properties": {
+          "changeset": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "type": "array"
+          },
+          "exclude_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "changeset"
+        ],
+        "type": "object"
+      },
+      "DuplicateCheckResultDto": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateCandidateDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "candidates"
+        ],
+        "type": "object"
+      },
+      "DuplicateExternalItemDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "existing_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "bangumi",
+              "vndb"
+            ],
+            "type": "string"
+          },
+          "subtitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "year": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "external_id",
+          "title",
+          "subtitle",
+          "year",
+          "cover",
+          "existing_id",
+          "source"
+        ],
+        "type": "object"
+      },
+      "DuplicateLookupDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DuplicateAuthorDto"
+              }
+            ],
+            "description": "作者名唯一对应的站内人物（Galgame 为厂商）",
+            "nullable": true,
+            "type": "object"
+          },
+          "external": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateExternalItemDto"
+            },
+            "type": "array"
+          },
+          "site": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateCandidateDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "site",
+          "external",
+          "author"
+        ],
+        "type": "object"
+      },
+      "DuplicateReasonDto": {
+        "properties": {
+          "alias": {
+            "type": "boolean"
+          },
+          "bangumi_id": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "field": {
+            "type": "string"
+          },
+          "form_differs": {
+            "type": "boolean"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "external_id",
+              "name",
+              "similar_name",
+              "bangumi_name",
+              "author",
+              "cover",
+              "isbn",
+              "volume_number"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "person_id": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number"
+          },
+          "value": {
+            "type": "string"
+          },
+          "volume_number": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "type": "object"
+      },
+      "DuplicateSummaryDto": {
+        "properties": {
+          "author": {
+            "nullable": true,
+            "type": "string"
+          },
+          "bangumi_id": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "subtitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "volumes": {
+            "nullable": true,
+            "type": "number"
+          },
+          "year": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "id",
+          "title",
+          "subtitle",
+          "cover",
+          "year",
+          "author",
+          "label",
+          "volumes",
+          "bangumi_id"
+        ],
+        "type": "object"
+      },
+      "DuplicateVerdictDto": {
+        "properties": {
+          "a_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "b_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "a_id",
+          "b_id"
         ],
         "type": "object"
       },
@@ -15205,11 +16719,23 @@
             "nullable": true,
             "type": "string"
           },
+          "form_differs": {
+            "description": "只因名称键相同而命中，字形与搜索词不同",
+            "type": "boolean"
+          },
           "id": {
+            "type": "number"
+          },
+          "light_novel_count": {
+            "description": "以此厂商为文库的轻小说数，仅厂商搜索返回",
             "type": "number"
           },
           "name": {
             "type": "string"
+          },
+          "partial": {
+            "description": "只因名称键包含搜索词或按字序包含搜索词而命中",
+            "type": "boolean"
           },
           "status": {
             "enum": [
@@ -16360,6 +17886,18 @@
       },
       "ExternalSearchItemDto": {
         "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "cover": {
             "nullable": true,
             "type": "string"
@@ -22384,6 +23922,20 @@
         ],
         "type": "object"
       },
+      "LinkCatalogItemDto": {
+        "properties": {
+          "resource_id": {
+            "description": "认定为哪个站内条目；传 null 表示不是重复，下次同步照常创建",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "resource_id"
+        ],
+        "type": "object"
+      },
       "LnDraftDto": {
         "properties": {
           "author": {
@@ -26712,6 +28264,11 @@
             "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "width": {
             "description": "图片宽度，单位像素",
             "nullable": true,
@@ -26722,6 +28279,7 @@
           "id",
           "src",
           "width",
+          "thumb_hash",
           "height"
         ],
         "type": "object"
@@ -27276,6 +28834,14 @@
             ],
             "type": "string"
           },
+          "suggested_side": {
+            "description": "The side the dialog should pre-select when the default policy would be wrong.",
+            "enum": [
+              "canonical",
+              "loser"
+            ],
+            "type": "string"
+          },
           "value": {
             "additionalProperties": true,
             "description": "What the surviving resource ends up holding under the default policy.",
@@ -27306,6 +28872,39 @@
           "resolved",
           "value",
           "changed"
+        ],
+        "type": "object"
+      },
+      "MergeIntoDto": {
+        "properties": {
+          "body": {
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "entity_choices": {
+            "description": "Use existing records instead of people or labels created in the same batch.",
+            "items": {
+              "$ref": "#/components/schemas/ReviewEntityChoiceDto"
+            },
+            "type": "array"
+          },
+          "field_choices": {
+            "items": {
+              "$ref": "#/components/schemas/MergeFieldChoiceDto"
+            },
+            "type": "array"
+          },
+          "target_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "title_as_chinese": {
+            "description": "Use the submitted original title as the existing entry’s Chinese title.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "target_id"
         ],
         "type": "object"
       },
@@ -27423,12 +29022,12 @@
           },
           "status": {
             "enum": [
+              "FAILED",
+              "REJECTED",
               "PENDING",
               "RUNNING",
               "PASSED",
-              "REJECTED",
-              "NEEDS_HUMAN",
-              "FAILED"
+              "NEEDS_HUMAN"
             ],
             "type": "string"
           },
@@ -32221,6 +33820,21 @@
         ],
         "type": "object"
       },
+      "OrderAiSearchProvidersDto": {
+        "properties": {
+          "ids": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 50,
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids"
+        ],
+        "type": "object"
+      },
       "OwnedDecorationDto": {
         "properties": {
           "acquired_at": {
@@ -34743,6 +36357,11 @@
             "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "violence": {
             "description": "暴力内容分级，0 为安全",
             "type": "number"
@@ -34757,6 +36376,7 @@
           "id",
           "src",
           "width",
+          "thumb_hash",
           "height",
           "nsfw",
           "sexual",
@@ -36568,6 +38188,18 @@
               "APPROVE"
             ],
             "type": "string"
+          },
+          "entity_choices": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewEntityChoiceDto"
+            },
+            "type": "array"
+          },
+          "overrides": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewOverrideDto"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -36588,10 +38220,39 @@
               "APPROVE"
             ],
             "type": "string"
+          },
+          "entity_choices": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewEntityChoiceDto"
+            },
+            "type": "array"
+          },
+          "overrides": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewOverrideDto"
+            },
+            "type": "array"
           }
         },
         "required": [
           "decision"
+        ],
+        "type": "object"
+      },
+      "ReviewEntityChoiceDto": {
+        "properties": {
+          "change_request_id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "use_id": {
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "change_request_id",
+          "use_id"
         ],
         "type": "object"
       },
@@ -36719,6 +38380,36 @@
         "required": [
           "id",
           "name"
+        ],
+        "type": "object"
+      },
+      "ReviewOverrideDto": {
+        "properties": {
+          "field": {
+            "enum": [
+              "name",
+              "name_cn",
+              "bunko_id",
+              "publication_date",
+              "bangumi_book_id",
+              "isbn"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "value"
         ],
         "type": "object"
       },
@@ -37129,6 +38820,11 @@
             "description": "图片地址，开放接口返回可直接访问的完整 URL",
             "type": "string"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "violence": {
             "description": "暴力内容分级，0 为安全",
             "type": "number"
@@ -37146,6 +38842,7 @@
           "id",
           "src",
           "width",
+          "thumb_hash",
           "height",
           "nsfw",
           "sexual",
@@ -38335,14 +40032,6 @@
             "minimum": 50,
             "type": "number"
           },
-          "tools": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramChatToolsInputDto"
-              }
-            ],
-            "description": "省略则保持现值"
-          },
           "trigger_keywords": {
             "description": "bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关)",
             "items": {
@@ -38415,23 +40104,6 @@
           "style_anchor",
           "world_knowledge",
           "guardrails"
-        ],
-        "type": "object"
-      },
-      "TelegramChatToolsInputDto": {
-        "properties": {
-          "enabled": {
-            "type": "boolean"
-          },
-          "max_steps": {
-            "maximum": 8,
-            "minimum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "enabled",
-          "max_steps"
         ],
         "type": "object"
       },
@@ -38823,6 +40495,44 @@
           "cooldown_seconds",
           "hourly_limit_per_user",
           "max_attempts"
+        ],
+        "type": "object"
+      },
+      "TestAiSearchProviderDto": {
+        "properties": {
+          "credentials": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "provider_id": {
+            "description": "编辑已有服务时，未填写的密钥沿用该服务已存储的值",
+            "type": "number"
+          },
+          "query": {
+            "maxLength": 300,
+            "type": "string"
+          },
+          "service": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiSearchService"
+              }
+            ]
+          }
+        },
+        "required": [
+          "service",
+          "credentials",
+          "options",
+          "query"
         ],
         "type": "object"
       },
@@ -39459,6 +41169,13 @@
             "nullable": true,
             "type": "number"
           },
+          "max_tool_calls": {
+            "description": "每次运行最多调用工具的次数",
+            "maximum": 30,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
           "model_id": {
             "description": "空值使用默认模型",
             "nullable": true,
@@ -39482,45 +41199,79 @@
             "type": "number"
           },
           "tools": {
+            "description": "可选工具的开关",
             "items": {
-              "type": "number"
+              "$ref": "#/components/schemas/AiSceneToolChoiceDto"
             },
             "maxItems": 50,
             "type": "array"
           }
         },
         "required": [
-          "choices",
-          "tools"
+          "choices"
         ],
         "type": "object"
       },
-      "UpdateAiToolDto": {
+      "UpdateAiSearchProviderDto": {
         "properties": {
-          "description": {
-            "maxLength": 2000,
-            "type": "string"
+          "credentials": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "留空的密钥沿用已存储的值",
+            "type": "object"
+          },
+          "daily_limit": {
+            "maximum": 1000000,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
           },
           "enabled": {
             "type": "boolean"
           },
-          "executor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AiToolExecutor"
-              }
-            ]
+          "name": {
+            "maxLength": 60,
+            "type": "string"
           },
-          "executor_config": {
-            "additionalProperties": true,
+          "options": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "price_per_1k": {
+            "maximum": 1000,
+            "minimum": 0,
             "nullable": true,
-            "type": "object"
+            "type": "number"
           },
-          "input_schema": {
-            "additionalProperties": true,
-            "type": "object"
+          "test_token": {
+            "description": "凭据或选项改变时必填",
+            "maxLength": 100,
+            "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UpdateAiToolSettingsDto": {
+        "properties": {
+          "settings": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object"
+          },
+          "timeout_ms": {
+            "maximum": 120000,
+            "minimum": 1000,
+            "type": "number"
+          }
+        },
+        "required": [
+          "timeout_ms",
+          "settings"
+        ],
         "type": "object"
       },
       "UpdateAnalyticsSettingsDto": {
@@ -41916,8 +43667,8 @@
         "properties": {
           "status": {
             "enum": [
-              "PENDING",
               "REJECTED",
+              "PENDING",
               "PUBLISHED",
               "DRAFT"
             ],
@@ -42800,6 +44551,90 @@
           "EXTRA": "番外",
           "MAIN": "正篇"
         }
+      },
+      "WikiDuplicateCountDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "resource_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ContributionResourceType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "resource_type",
+          "count"
+        ],
+        "type": "object"
+      },
+      "WikiDuplicateDto": {
+        "properties": {
+          "found_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "high": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DuplicateSummaryDto"
+              }
+            ],
+            "description": "编号较大的条目"
+          },
+          "id": {
+            "type": "number"
+          },
+          "low": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DuplicateSummaryDto"
+              }
+            ],
+            "description": "编号较小的条目"
+          },
+          "reasons": {
+            "items": {
+              "$ref": "#/components/schemas/DuplicateReasonDto"
+            },
+            "type": "array"
+          },
+          "resource_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ContributionResourceType"
+              }
+            ]
+          },
+          "source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiDuplicateSource"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "resource_type",
+          "source",
+          "found_at",
+          "reasons",
+          "low",
+          "high"
+        ],
+        "type": "object"
+      },
+      "WikiDuplicateSource": {
+        "enum": [
+          "CONTRIBUTION",
+          "CATALOG",
+          "LIBRARY"
+        ],
+        "type": "string"
       },
       "WikiSnapshotDto": {
         "properties": {
@@ -44579,9 +46414,9 @@
         ]
       }
     },
-    "/api/v3/admin/ai/tools": {
+    "/api/v3/admin/ai/search-providers": {
       "get": {
-        "operationId": "AdminAiToolController_getList",
+        "operationId": "AdminAiSearchProviderController_getList",
         "parameters": [],
         "responses": {
           "200": {
@@ -44589,7 +46424,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/AdminAiToolDto"
+                    "$ref": "#/components/schemas/AiSearchProviderDto"
                   },
                   "type": "array"
                 }
@@ -44603,13 +46438,13 @@
         ]
       },
       "post": {
-        "operationId": "AdminAiToolController_create",
+        "operationId": "AdminAiSearchProviderController_create",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateAiToolDto"
+                "$ref": "#/components/schemas/CreateAiSearchProviderDto"
               }
             }
           },
@@ -44620,7 +46455,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AdminAiToolDto"
+                  "$ref": "#/components/schemas/AiSearchProviderDto"
                 }
               }
             },
@@ -44632,9 +46467,74 @@
         ]
       }
     },
-    "/api/v3/admin/ai/tools/{id}": {
+    "/api/v3/admin/ai/search-providers/order": {
+      "put": {
+        "operationId": "AdminAiSearchProviderController_reorder",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderAiSearchProvidersDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AiSearchProviderDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/search-providers/tests": {
+      "post": {
+        "operationId": "AdminAiSearchProviderController_test",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestAiSearchProviderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSearchTestDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/search-providers/{id}": {
       "delete": {
-        "operationId": "AdminAiToolController_deleteById",
+        "operationId": "AdminAiSearchProviderController_deleteById",
         "parameters": [
           {
             "in": "path",
@@ -44662,7 +46562,7 @@
         ]
       },
       "patch": {
-        "operationId": "AdminAiToolController_updateById",
+        "operationId": "AdminAiSearchProviderController_updateById",
         "parameters": [
           {
             "in": "path",
@@ -44677,7 +46577,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateAiToolDto"
+                "$ref": "#/components/schemas/UpdateAiSearchProviderDto"
               }
             }
           },
@@ -44688,7 +46588,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AdminAiToolDto"
+                  "$ref": "#/components/schemas/AiSearchProviderDto"
                 }
               }
             },
@@ -44700,9 +46600,9 @@
         ]
       }
     },
-    "/api/v3/admin/ai/tools/{id}/runs": {
+    "/api/v3/admin/ai/search-providers/{id}/checks": {
       "post": {
-        "operationId": "AdminAiToolController_run",
+        "operationId": "AdminAiSearchProviderController_check",
         "parameters": [
           {
             "in": "path",
@@ -44710,6 +46610,190 @@
             "required": true,
             "schema": {
               "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckAiSearchProviderDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSearchTestDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/search-services": {
+      "get": {
+        "operationId": "AdminAiSearchProviderController_services",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AiSearchServiceDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/tools": {
+      "get": {
+        "operationId": "AdminAiToolController_getList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminAiToolDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/tools/{key}": {
+      "get": {
+        "operationId": "AdminAiToolController_getByKey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiToolDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/tools/{key}/calls": {
+      "get": {
+        "operationId": "AdminAiToolController_getCalls",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AiToolCallDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/tools/{key}/runs": {
+      "post": {
+        "operationId": "AdminAiToolController_run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -44728,7 +46812,47 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AiToolRunDto"
+                  "$ref": "#/components/schemas/AiToolCallDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/ai"
+        ]
+      }
+    },
+    "/api/v3/admin/ai/tools/{key}/settings": {
+      "put": {
+        "operationId": "AdminAiToolController_updateSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAiToolSettingsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAiToolDetailDto"
                 }
               }
             },
@@ -44974,6 +47098,79 @@
         },
         "tags": [
           "admin/backup"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/items/{id}/candidates": {
+      "get": {
+        "operationId": "AdminCatalogController_candidates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DuplicateCandidateDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/items/{id}/link": {
+      "post": {
+        "operationId": "AdminCatalogController_link",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkCatalogItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
         ]
       }
     },
@@ -58219,6 +60416,133 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/duplicates": {
+      "get": {
+        "operationId": "AdminDuplicateController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "resource_type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "LIGHT_NOVEL",
+                "GALGAME",
+                "PERSON",
+                "PRODUCER"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/WikiDuplicateSource"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WikiDuplicateDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/duplicates/counts": {
+      "get": {
+        "operationId": "AdminDuplicateController_getCounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WikiDuplicateCountDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/duplicates/{id}/dismiss": {
+      "post": {
+        "operationId": "AdminDuplicateController_dismiss",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/galgames": {
       "get": {
         "operationId": "AdminGalgameController_list",
@@ -60199,7 +62523,8 @@
                 "novel_volume_align",
                 "novel_content_gate",
                 "manga_credit_check",
-                "manga_chapter_plan"
+                "manga_chapter_plan",
+                "entry_check"
               ],
               "type": "string"
             }
@@ -60753,6 +63078,19 @@
             }
           },
           {
+            "description": "disputed：核对结果与请求不一致（不传 status 时含近期已合并的）；running：核对排队或进行中",
+            "in": "query",
+            "name": "check",
+            "required": false,
+            "schema": {
+              "enum": [
+                "disputed",
+                "running"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "in": "query",
             "name": "resource_id",
             "required": false,
@@ -60992,6 +63330,36 @@
         ]
       }
     },
+    "/api/v3/change-requests/{id}/checks": {
+      "post": {
+        "operationId": "ChangeRequestCheckController_rerun",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ChangeRequestCheck"
+        ]
+      }
+    },
     "/api/v3/change-requests/{id}/close": {
       "post": {
         "operationId": "ChangeRequestController_close",
@@ -61019,6 +63387,163 @@
         },
         "tags": [
           "ChangeRequest"
+        ]
+      }
+    },
+    "/api/v3/change-requests/{id}/corrections": {
+      "post": {
+        "operationId": "ChangeRequestCheckController_correct",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorrectChangeRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ChangeRequestCheck"
+        ]
+      }
+    },
+    "/api/v3/change-requests/{id}/duplicates/{candidate_id}/dismiss": {
+      "post": {
+        "operationId": "ChangeRequestDuplicateController_dismiss",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "candidate_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ChangeRequestDuplicate"
+        ]
+      }
+    },
+    "/api/v3/change-requests/{id}/merge-into": {
+      "post": {
+        "operationId": "ChangeRequestDuplicateController_mergeInto",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeIntoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeRequestDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ChangeRequestDuplicate"
+        ]
+      }
+    },
+    "/api/v3/change-requests/{id}/merge-into/preview": {
+      "get": {
+        "operationId": "ChangeRequestDuplicateController_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "ChangeRequestDuplicate"
         ]
       }
     },
@@ -61940,6 +64465,85 @@
         },
         "tags": [
           "ContributionActivity"
+        ]
+      }
+    },
+    "/api/v3/contribution/duplicate-checks": {
+      "post": {
+        "operationId": "DuplicateController_check",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateCheckDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DuplicateCheckResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Duplicate"
+        ]
+      }
+    },
+    "/api/v3/contribution/lookups/{resource_type}": {
+      "get": {
+        "operationId": "DuplicateController_find",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "author",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DuplicateLookupDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Duplicate"
         ]
       }
     },
@@ -86212,6 +88816,30 @@
         },
         "tags": [
           "UserContent"
+        ]
+      }
+    },
+    "/api/v3/wiki/duplicate-verdicts": {
+      "post": {
+        "operationId": "DuplicateController_verdict",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DuplicateVerdictDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Duplicate"
         ]
       }
     },

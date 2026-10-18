@@ -239,6 +239,9 @@ importers:
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.3
+      thumbhash:
+        specifier: ^0.1.1
+        version: 0.1.1
       valibot:
         specifier: ^1.4.0
         version: 1.5.0(typescript@6.0.3)

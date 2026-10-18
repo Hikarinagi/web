@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Alert, Button, Dialog, Form, FormField, Heading, Stack, Textarea } from '@hina-ui/vue'
+  import type { DuplicateCheck } from '~/features/creator/composables/useDuplicateCheck'
   import type { Changeset } from '~/features/creator/editor/changeset'
   import { editorSubmitSchema } from '~/features/creator/schemas/editor-submit.schema'
 
@@ -9,6 +10,7 @@
     needsReview: boolean
     submitting: boolean
     isContinue?: boolean
+    duplicates?: DuplicateCheck
   }>()
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ confirm: [summary: string] }>()
@@ -38,6 +40,7 @@
   })
 
   function onSubmit() {
+    if (props.duplicates?.blocked.value) return
     emit('confirm', values.summary.trim())
   }
 </script>
@@ -46,6 +49,12 @@
   <Dialog v-model:open="visible" title="确认提交变更" size="xl" :locked="submitting">
     <template #content>
       <Stack gap="md">
+        <CreatorEditorDuplicatesConfirm
+          v-if="duplicates"
+          :check="duplicates"
+          :resource-type="resourceType"
+        />
+
         <Stack gap="sm">
           <Heading :level="3" size="sm">变更内容（{{ payload.length }}）</Heading>
           <CreatorChangesetView :payload="payload" :resource-type="resourceType" />
@@ -71,7 +80,9 @@
       <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
         取消
       </Button>
-      <Button :loading="submitting" @click="form?.submit()">确认提交</Button>
+      <Button :loading="submitting" :disabled="duplicates?.blocked.value" @click="form?.submit()">
+        确认提交
+      </Button>
     </template>
   </Dialog>
 </template>

@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <CreatorEditorLauncher />
+  <CreatorFind />
 </template>

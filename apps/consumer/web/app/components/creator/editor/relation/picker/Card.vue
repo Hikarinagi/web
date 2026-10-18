@@ -8,6 +8,7 @@
     item: BackendEntitySummary
     selected: boolean
     target: EntityTarget
+    works?: boolean
   }>()
 
   const imageClass = computed(() =>
@@ -44,7 +45,14 @@
         <template #error />
       </HikariImage>
       <Text as="span" size="sm" weight="medium" truncate>{{ item.name }}</Text>
-      <Text as="span" size="xs" tone="muted" class="font-mono">#{{ item.id }}</Text>
+      <Text as="span" size="xs" tone="muted">
+        <template v-if="works && item.light_novel_count != null">
+          {{ item.light_novel_count }} 部轻小说 ·
+        </template>
+        <Text as="span" size="xs" tone="muted" class="font-mono">#{{ item.id }}</Text>
+      </Text>
+      <Tag v-if="item.form_differs" size="sm" tone="info" class="self-start">字形不同</Tag>
+      <Tag v-else-if="item.partial" size="sm" tone="info" class="self-start">部分匹配</Tag>
     </Stack>
 
     <Tag

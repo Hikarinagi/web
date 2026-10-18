@@ -37,7 +37,7 @@
       </Center>
       <HikariImage
         v-else
-        :src="decoration.image.src"
+        :src="decoration.image"
         alt=""
         :preview="false"
         image-class="h-full w-auto object-contain"

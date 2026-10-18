@@ -56,7 +56,7 @@
     >
       <HikariImage
         v-if="model"
-        :src="model.src"
+        :src="model"
         alt=""
         class="size-full"
         image-class="size-full object-cover"

@@ -30,7 +30,7 @@
     "
   >
     <HikariImage
-      :src="media.src"
+      :src="media"
       alt=""
       preset="small"
       class="size-full"

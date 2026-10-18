@@ -40,7 +40,7 @@
     "
   >
     <HikariImage
-      :src="model.src"
+      :src="model"
       alt=""
       preset="small"
       class="size-full"

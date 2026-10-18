@@ -34,7 +34,7 @@
 <template>
   <Inline align="center" gap="lg" :wrap="false" class="border-b border-line py-3.5 last:border-b-0">
     <HikariImage
-      :src="item.cover?.src"
+      :src="item.cover"
       :alt="item.title"
       class="h-14 w-20 shrink-0 rounded-md bg-subtle"
       image-class="size-full object-cover"

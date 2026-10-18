@@ -32,6 +32,6 @@
 
     <CreatorEditorRelationMediaList v-if="isMedia" v-model="model" :field="field" />
     <CreatorEditorRelationTagChips v-else-if="isTag" v-model="model" />
-    <CreatorEditorRelationEntityList v-else v-model="model" :field="field" />
+    <CreatorEditorRelationEntityList v-else v-model="model" :field="field" :label="label" />
   </FormField>
 </template>

@@ -24,7 +24,7 @@
         <Inline gap="md" align="center" :wrap="false">
           <HikariImage
             v-if="a.cover"
-            :src="a.cover.src"
+            :src="a.cover"
             :alt="a.title"
             class="h-12 w-16 shrink-0 overflow-hidden rounded"
             image-class="size-full object-cover"

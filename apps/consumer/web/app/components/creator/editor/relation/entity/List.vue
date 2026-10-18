@@ -13,7 +13,7 @@
     type EditorRelationRow,
   } from '~/features/creator/editor/relation'
 
-  const props = defineProps<{ field: BackendEditorField }>()
+  const props = defineProps<{ field: BackendEditorField; label?: string }>()
   const model = defineModel<EditorRelationRow[]>({ default: () => [] })
 
   const rows = computed(() => toRelationRows(model.value))
@@ -113,7 +113,7 @@
       :target="target"
       :mode="rowIdentity ? 'single' : 'multi'"
       :selected-entities="selectedEntities"
-      :title="`添加 ${target}`"
+      :title="`选择${label ?? target}`"
       @select="onPick"
     />
   </Stack>

@@ -199,7 +199,7 @@ function mangaMap(raw: Schemas['MangaSummaryDto']): PickedFor<'manga'> {
 
 function personMap(raw: Schemas['EntitySummaryDto']): PickedFor<'person'> {
   const image: Schemas['MediaAssetDto'] | null = raw.cover
-    ? { id: 0, src: raw.cover, width: null, height: null }
+    ? { id: 0, src: raw.cover, width: null, height: null, thumb_hash: null }
     : null
   const summary: PersonCardSummary = { id: raw.id, name: raw.name, image }
   return {
@@ -212,7 +212,7 @@ function personMap(raw: Schemas['EntitySummaryDto']): PickedFor<'person'> {
 
 function producerMap(raw: Schemas['EntitySummaryDto']): PickedFor<'producer'> {
   const logo: Schemas['MediaAssetDto'] | null = raw.cover
-    ? { id: 0, src: raw.cover, width: null, height: null }
+    ? { id: 0, src: raw.cover, width: null, height: null, thumb_hash: null }
     : null
   const summary: ProducerCardSummary = { id: raw.id, name: raw.name, logo }
   return {
@@ -225,7 +225,7 @@ function producerMap(raw: Schemas['EntitySummaryDto']): PickedFor<'producer'> {
 
 function characterMap(raw: Schemas['EntitySummaryDto']): PickedFor<'character'> {
   const image: Schemas['MediaAssetDto'] | null = raw.cover
-    ? { id: 0, src: raw.cover, width: null, height: null }
+    ? { id: 0, src: raw.cover, width: null, height: null, thumb_hash: null }
     : null
   const summary: CharacterCardSummary = { id: raw.id, name: raw.name, image }
   return {

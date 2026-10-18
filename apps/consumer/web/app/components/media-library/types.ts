@@ -3,6 +3,7 @@ export interface MediaValue {
   src: string
   width?: number | null
   height?: number | null
+  thumb_hash?: string | null
 }
 
 export type MediaLibraryMode = 'single' | 'multiple'

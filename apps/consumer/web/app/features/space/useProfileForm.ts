@@ -5,7 +5,15 @@ import type { CurrentUser } from '~/types/auth'
 import { getFieldErrors } from '~/utils/api/error'
 
 const toMedia = (asset: CurrentUser['avatar']): MediaValue | null =>
-  asset ? { id: asset.id, src: asset.src, width: asset.width, height: asset.height } : null
+  asset
+    ? {
+        id: asset.id,
+        src: asset.src,
+        width: asset.width,
+        height: asset.height,
+        thumb_hash: asset.thumb_hash,
+      }
+    : null
 
 export function useProfileForm(user: CurrentUser) {
   const auth = useAuthStore()

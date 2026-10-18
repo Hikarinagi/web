@@ -1,13 +1,15 @@
 <script setup lang="ts">
-  import { Button, Card, Heading, Inline, Panel, Stack, Text } from '@hina-ui/vue'
+  import { Alert, Button, Card, Heading, Inline, Link, Panel, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { timeFormat } from '#imports'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
-  import { ClipboardCheck, FileDiff, History, Layers, Pencil, X } from '@lucide/vue'
+  import { ClipboardCheck, FileDiff, History, Pencil, X } from '@lucide/vue'
   import type {
     BackendChangeRequestDetail,
     BackendChangeRequestSummary,
   } from '~/features/creator/contribution'
+  import { onSite } from '~/features/creator/check'
+  import { PUBLIC_PATH } from '~/features/creator/duplicates'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
 
   const props = defineProps<{
@@ -32,11 +34,25 @@
       props.changeRequest.status === 'PENDING' && !isMine.value && canAny(WIKI_PERMISSIONS.REVIEW),
   )
   const canClose = computed(() => props.changeRequest.status === 'PENDING' && isMine.value)
+  const checkMode = computed(() => {
+    if (canReview.value) return 'review'
+    const reviewer = !isMine.value && canAny(WIKI_PERMISSIONS.REVIEW)
+    return props.changeRequest.status === 'MERGED' && reviewer ? 'correct' : 'view'
+  })
+  const choices = useCheckChoices(() => props.changeRequest)
+  const possible = computed(() => (canClose.value ? onSite(props.changeRequest.check) : null))
+  const possibleSlug = computed(() => RESOURCE_SLUG[props.changeRequest.resource_type])
   const continueLink = computed(() => {
     const cr = props.changeRequest
     if (cr.status !== 'PENDING' || !isMine.value || cr.resource_id == null) return null
     const slug = RESOURCE_SLUG[cr.resource_type]
     return slug ? `/create/edit/${slug}/${cr.resource_id}` : null
+  })
+
+  const mergedInto = computed(() => {
+    const event = props.changeRequest.events.find(item => item.type === 'MERGED_INTO')
+    const target = (event?.payload as unknown as { target_id?: unknown } | null)?.target_id
+    return typeof target === 'number' ? target : null
   })
 
   const closing = ref(false)
@@ -69,6 +85,38 @@
 
 <template>
   <Stack gap="md">
+    <Alert :open="!!possible" tone="warning" title="可能已收录">
+      <Text as="span">
+        核对发现「{{ changeRequest.resource?.title }}」可能已收录为
+        <Link
+          :as="NuxtLink"
+          :to="`${PUBLIC_PATH[changeRequest.resource_type] ?? '/'}${possible?.id}`"
+          target="_blank"
+        >
+          #{{ possible?.id }} {{ possible?.title }}</Link
+        >。如果这是同一本书，请撤回此请求并改为编辑 #{{ possible?.id }}。
+      </Text>
+      <template #actions>
+        <Button
+          v-if="possibleSlug"
+          :as="NuxtLink"
+          :to="`/create/edit/${possibleSlug}/${possible?.id}`"
+          size="sm"
+        >
+          编辑 #{{ possible?.id }}
+        </Button>
+        <Button
+          variant="outline"
+          tone="neutral"
+          size="sm"
+          :disabled="closing"
+          @click="confirmClose"
+        >
+          撤回请求
+        </Button>
+      </template>
+    </Alert>
+
     <Card>
       <Stack gap="sm">
         <Inline gap="sm" align="start" justify="between" :wrap="false">
@@ -114,49 +162,38 @@
           <Text as="span" size="sm" tone="muted">
             提交于 {{ timeFormat(changeRequest.created_at) }}
           </Text>
-          <Text v-if="changeRequest.merged_revision" as="span" size="sm" tone="muted">
+          <Text v-if="mergedInto" as="span" size="sm" tone="muted">已并入 #{{ mergedInto }}</Text>
+          <Text v-else-if="changeRequest.merged_revision" as="span" size="sm" tone="muted">
             已合并为修订版本 v{{ changeRequest.merged_revision.version }}
           </Text>
         </Inline>
       </Stack>
     </Card>
 
+    <CreatorReviewCheckPanel
+      v-model:fields="choices.fields.value"
+      v-model:entities="choices.entities.value"
+      :change-request="changeRequest"
+      :mode="checkMode"
+      :overrides="choices.overrides.value"
+      :entity-choices="choices.entityChoices.value"
+      @changed="emit('reviewed')"
+    />
+
+    <CreatorReviewDuplicatePanel
+      v-if="changeRequest.status === 'PENDING'"
+      :change-request="changeRequest"
+      :can-review="canReview"
+      :entity-choices="choices.entityChoices.value"
+      @reviewed="emit('reviewed')"
+    />
+
     <Panel title="变更内容" :count="payload.length">
       <template #icon><FileDiff /></template>
       <CreatorChangesetView :payload="payload" :resource-type="changeRequest.resource_type" />
     </Panel>
 
-    <Panel
-      v-if="batchMembers?.length"
-      title="同批提交"
-      :count="batchMembers.length"
-      description="同一次提交捆绑的变更请求，审核裁决会应用于整批。"
-    >
-      <template #icon><Layers /></template>
-      <Stack gap="none">
-        <NuxtLink
-          v-for="member in batchMembers"
-          :key="member.id"
-          :to="`/create/contributions/${member.id}`"
-          class="hn-state-layer hn-interactive rounded-lg px-2 py-2"
-        >
-          <Inline gap="sm" align="center" justify="between" :wrap="false">
-            <CreatorResourceHead
-              :id="member.resource_id"
-              size="sm"
-              :type="member.resource_type"
-              :resource="member.resource"
-            />
-            <Inline gap="sm" align="center" :wrap="false" class="shrink-0">
-              <Text as="span" size="sm" tone="muted" truncate class="max-w-72">
-                {{ member.summary }}
-              </Text>
-              <CreatorStatusBadge :status="member.status" />
-            </Inline>
-          </Inline>
-        </NuxtLink>
-      </Stack>
-    </Panel>
+    <CreatorContributionBatchPanel v-if="batchMembers?.length" :batch-members="batchMembers" />
 
     <Panel v-if="canReview" title="审核">
       <template #icon><ClipboardCheck /></template>
@@ -164,6 +201,8 @@
         :change-request-id="changeRequest.id"
         :batch-id="changeRequest.batch_id"
         :batch-pending-count="pendingBatchCount"
+        :overrides="choices.overrides.value"
+        :entity-choices="choices.entityChoices.value"
         @reviewed="emit('reviewed')"
       />
     </Panel>

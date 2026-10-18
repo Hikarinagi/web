@@ -17,6 +17,7 @@
       src: a.media.src,
       width: a.media.width,
       height: a.media.height,
+      thumb_hash: a.media.thumb_hash,
     })),
   )
 </script>

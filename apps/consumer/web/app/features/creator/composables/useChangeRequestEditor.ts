@@ -10,6 +10,7 @@ import { validateRelations as runRelationValidation } from '~/features/creator/e
 import type { EditorFieldPresentation } from '~/features/creator/editor/presentation'
 import { schemaToValibot } from '~/features/creator/editor/schemaToValibot'
 import { scrollToFirstError } from '~/features/creator/editor/scroll-to-error'
+import { getFieldErrors, isApiError, showApiErrorToast } from '~/utils/api/error'
 
 export const PICKED_REF_REGISTER_KEY: InjectionKey<
   (field: string, entity: BackendEditorRef) => void
@@ -36,10 +37,12 @@ interface ChangeRequestBody {
 function postCreate(
   resourceType: BackendEditorSchema['resource_type'],
   body: ChangeRequestBody,
+  extras: Record<string, unknown>,
 ): Promise<BackendChangeRequestDetail> {
   return hikariRequest('/api/v3/change-requests', {
     method: 'POST',
-    body: { resource_type: resourceType, ...body },
+    body: { resource_type: resourceType, ...body, ...extras },
+    toast: false,
   }) as Promise<BackendChangeRequestDetail>
 }
 
@@ -83,6 +86,7 @@ export function useChangeRequestEditor(params: {
   stagedChangeset?: Changeset | null
   onReview?: (changeset: Changeset, needsReview: boolean) => boolean
   fieldIdPrefix?: string
+  form?: Ref<{ setErrors: (errors: Record<string, string>) => void } | null>
 }) {
   const submitting = ref(false)
   const dialogOpen = ref(false)
@@ -209,6 +213,11 @@ export function useChangeRequestEditor(params: {
   }
 
   const liveChangeset = computed(() => buildChangeset())
+  const duplicates = useDuplicateCheck({
+    resourceType: params.schema.resource_type,
+    enabled: params.resourceId === null && !openCr,
+    changeset: liveChangeset,
+  })
   const changedCount = computed(() => liveChangeset.value.length)
   const changedFields = computed(
     () => new Set(liveChangeset.value.map(op => (op.kind === 'scalar' ? op.field : op.relation))),
@@ -249,15 +258,34 @@ export function useChangeRequestEditor(params: {
           })
         : params.resourceId !== null
           ? await postChangeRequest(params.resourceType, params.resourceId, body)
-          : await postCreate(params.schema.resource_type, body)
+          : await postCreate(params.schema.resource_type, body, {
+              duplicate_dismissals: duplicates.dismissed.value,
+              author_works_checked: duplicates.authorWorksChecked.value,
+            })
       if (params.onSubmitted) params.onSubmitted(result as BackendChangeRequestDetail)
       else await navigateTo(`/create/contributions/${result.id}`)
+    } catch (error) {
+      if (duplicates.absorb(error)) return
+      const fieldErrors = getFieldErrors(error)
+      if (Object.keys(fieldErrors).length && params.form?.value) {
+        dialogOpen.value = false
+        params.form.value.setErrors(fieldErrors)
+        document
+          .getElementById(
+            `${params.fieldIdPrefix ?? ''}editor-field-${Object.keys(fieldErrors)[0]}`,
+          )
+          ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+      if (isApiError(error) && params.resourceId === null && !openCr) showApiErrorToast(error)
+      throw error
     } finally {
       submitting.value = false
     }
   }
 
   return {
+    duplicates,
     rules,
     values,
     initialValues,

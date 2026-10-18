@@ -13,7 +13,7 @@
   <Flex class="relative h-40 w-full overflow-hidden bg-linear-120 from-inset to-accent/15 sm:h-52">
     <HikariImage
       v-if="cover"
-      :src="cover.src"
+      :src="cover"
       alt=""
       class="absolute inset-0 h-full w-full"
       image-class="object-cover"

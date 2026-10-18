@@ -30,6 +30,8 @@
     target: EntityTarget
     mode: 'single' | 'multi'
     title?: string
+    label?: string
+    field?: string
     selectedEntities?: BackendEntitySummary[]
   }>()
   const visible = defineModel<boolean>('visible', { default: false })
@@ -49,7 +51,15 @@
     if (!q || loading.value || !searched.value) return false
     return true
   })
-  const createLabel = computed(() => `新建「${query.value.trim()}」`)
+  const createKind = computed(() =>
+    props.field === 'bunko_id' && props.label ? props.label : (createConfig.value?.label ?? ''),
+  )
+  const createLabel = computed(() =>
+    props.field === 'bunko_id'
+      ? `新建${createKind.value}「${query.value.trim()}」`
+      : `新建「${query.value.trim()}」`,
+  )
+  const partials = computed(() => results.value.filter(item => item.partial))
   const creating = ref(false)
   const create = useTemplateRef<InstanceType<typeof CreatorEditorRelationPickerCreate>>('create')
 
@@ -147,6 +157,9 @@
               ref="create"
               :target="target"
               :preset-name="query"
+              :label="label"
+              :field="field"
+              :candidates="partials"
               @created="onCreated"
             />
 
@@ -164,6 +177,16 @@
             </Grid>
 
             <Grid v-else-if="visibleItems.length || showCreate" :cols="3" gap="sm">
+              <CreatorEditorRelationPickerCard
+                v-for="item in visibleItems"
+                :key="item.id"
+                :item="item"
+                :target="target"
+                :selected="selectedIds.has(item.id)"
+                :works="field === 'bunko_id'"
+                @click="toggle(item)"
+              />
+
               <Card
                 v-if="showCreate"
                 as="button"
@@ -178,18 +201,9 @@
                     <Plus class="size-6 text-muted" aria-hidden="true" />
                   </Center>
                   <Text as="span" size="sm" weight="medium" truncate>{{ createLabel }}</Text>
-                  <Text as="span" size="xs" tone="muted">{{ createConfig?.label }}</Text>
+                  <Text as="span" size="xs" tone="muted">{{ createKind }}</Text>
                 </Stack>
               </Card>
-
-              <CreatorEditorRelationPickerCard
-                v-for="item in visibleItems"
-                :key="item.id"
-                :item="item"
-                :target="target"
-                :selected="selectedIds.has(item.id)"
-                @click="toggle(item)"
-              />
             </Grid>
 
             <Empty v-else size="sm" :title="emptyText" />
@@ -206,7 +220,13 @@
             >
               返回
             </Button>
-            <Button :loading="create?.submitting" @click="create?.submit()">创建并选择</Button>
+            <Button
+              :loading="create?.submitting"
+              :disabled="create?.blocked"
+              @click="create?.submit()"
+            >
+              创建并选择
+            </Button>
           </template>
           <template v-else>
             <Text size="sm" tone="muted" class="min-w-0 flex-1 text-start">

@@ -90,6 +90,7 @@
     "sortablejs": "^1.15.7",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.0",
+    "thumbhash": "^0.1.1",
     "valibot": "^1.4.0",
     "vue": "^3.5.33",
     "vue-advanced-cropper": "^2.8.9",

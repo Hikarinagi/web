@@ -136,6 +136,7 @@
       v-if="field.value_type === 'ref'"
       v-model="asNumber"
       :field="field"
+      :label="label"
       :initial-entity="initialRefEntity"
       :disabled="disabled"
     />

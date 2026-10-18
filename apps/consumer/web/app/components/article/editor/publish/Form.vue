@@ -82,7 +82,7 @@
     <FormField label="封面">
       <Inline v-if="cover" gap="sm" align="center">
         <HikariImage
-          :src="cover.src"
+          :src="cover"
           alt=""
           class="aspect-8/5 h-12 w-auto shrink-0 overflow-hidden rounded-md border border-line"
           image-class="size-full object-cover"

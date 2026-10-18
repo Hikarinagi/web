@@ -117,7 +117,13 @@ export function useThread(
       content_json: contentJson as unknown as DmMessage['content_json'],
       attachments: attachments.map((m, i) => ({
         order: i,
-        media: { id: m.id, src: m.src, width: m.width ?? null, height: m.height ?? null },
+        media: {
+          id: m.id,
+          src: m.src,
+          width: m.width ?? null,
+          height: m.height ?? null,
+          thumb_hash: m.thumb_hash ?? null,
+        },
       })),
       sent_at: new Date().toISOString(),
       is_read: false,

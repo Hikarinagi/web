@@ -113,6 +113,27 @@ async function handler(event: H3Event) {
     }
   }
 
+  const refs: Record<string, BackendEditorRef> = {}
+  if (!bangumiId && !vndbId) {
+    const scalarFields = new Set(
+      schema.fields.filter(field => field.kind === 'scalar').map(field => field.field),
+    )
+    for (const field of ['name', 'name_cn', 'origin_title', 'trans_title', 'trans_name']) {
+      const value = query[field]
+      if (scalarFields.has(field) && typeof value === 'string' && value.trim()) {
+        prefill[field] = value.trim()
+      }
+    }
+    const authorId = Number(query.author_id)
+    if (scalarFields.has('author_id') && Number.isSafeInteger(authorId) && authorId > 0) {
+      prefill.author_id = authorId
+      refs.author_id = {
+        name: typeof query.author_name === 'string' ? query.author_name : `#${authorId}`,
+        cover: null,
+      }
+    }
+  }
+
   if (screenshots.length) {
     const rows = await Promise.all(
       screenshots.map(async shot => {
@@ -145,7 +166,7 @@ async function handler(event: H3Event) {
     prefill_relations,
     sources_match,
     existing_id,
-    refs: {} as Record<string, BackendEditorRef>,
+    refs,
     resource: null,
     open_change_request: null,
   }

@@ -69,6 +69,8 @@ export const CHANGE_REQUEST_EVENT_META: Record<
   APPROVED: { label: '通过并合并', tone: 'success' },
   AUTO_MERGED: { label: '自动合并', tone: 'success' },
   CLOSED: { label: '关闭', tone: 'muted' },
+  MERGED_INTO: { label: '已并入', tone: 'success' },
+  AUTO_MERGE_FAILED: { label: '自动合并失败', tone: 'danger' },
 }
 
 export const CHANGE_REQUEST_STATUS_META: Record<

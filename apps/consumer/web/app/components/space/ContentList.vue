@@ -43,7 +43,7 @@
       </Stack>
       <HikariImage
         v-if="item.cover"
-        :src="item.cover.src"
+        :src="item.cover"
         :alt="item.title"
         class="h-24 w-36 shrink-0 rounded-lg bg-inset"
         image-class="size-full object-cover"

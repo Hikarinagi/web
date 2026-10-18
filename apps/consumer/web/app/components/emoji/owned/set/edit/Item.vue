@@ -14,7 +14,7 @@
 <template>
   <Inline gap="sm" align="center" :wrap="false" class="group hn-state-layer rounded-md px-2 py-1.5">
     <HikariImage
-      :src="emoji.src?.src"
+      :src="emoji.src"
       :alt="emoji.name"
       :processing="false"
       class="size-8 shrink-0"

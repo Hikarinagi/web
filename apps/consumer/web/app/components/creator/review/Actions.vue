@@ -1,17 +1,24 @@
 <script setup lang="ts">
-  import { Button, Inline, Stack, Textarea } from '@hina-ui/vue'
+  import { Button, Inline, Stack, Text, Textarea } from '@hina-ui/vue'
   import { Check, MessageSquare, X } from '@lucide/vue'
+  import type { CheckEntityChoice, CheckOverride } from '~/features/creator/check'
 
   const props = defineProps<{
     changeRequestId: number
     batchId?: string | null
     batchPendingCount?: number
+    overrides?: CheckOverride[]
+    entityChoices?: CheckEntityChoice[]
   }>()
   const emit = defineEmits<{ reviewed: [] }>()
 
   const { confirm } = useHikariConfirm()
   const body = ref('')
   const submitting = ref(false)
+  const chosen = computed(() => (props.overrides?.length ?? 0) + (props.entityChoices?.length ?? 0))
+  const choices = computed(() =>
+    chosen.value > 0 ? { overrides: props.overrides, entity_choices: props.entityChoices } : {},
+  )
 
   async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT') {
     if (submitting.value) return
@@ -21,13 +28,21 @@
         await hikariRequest('/api/v3/change-requests/batches/{batch_id}/reviews', {
           method: 'POST',
           path: { batch_id: props.batchId },
-          body: { decision, body: body.value.trim() || undefined },
+          body: {
+            decision,
+            body: body.value.trim() || undefined,
+            ...(decision === 'APPROVE' ? choices.value : {}),
+          },
         })
       } else {
         await hikariRequest('/api/v3/change-requests/{id}/reviews', {
           method: 'POST',
           path: { id: props.changeRequestId },
-          body: { decision, body: body.value.trim() || undefined },
+          body: {
+            decision,
+            body: body.value.trim() || undefined,
+            ...(decision === 'APPROVE' ? choices.value : {}),
+          },
         })
       }
       body.value = ''
@@ -48,7 +63,7 @@
     const meta =
       decision === 'APPROVE'
         ? {
-            title: '通过并合并',
+            title: chosen.value > 0 ? '按所选通过' : '通过并合并',
             description: `确认通过此变更请求？合并后修改将立即生效。${batchNote}`,
             confirmText: '确认合并',
           }
@@ -73,7 +88,10 @@
       placeholder="审核意见（可选，驳回时建议填写理由）"
       class="w-full"
     />
-    <Inline gap="sm" justify="end">
+    <Inline gap="sm" justify="end" align="center">
+      <Text v-if="chosen > 0" as="span" size="sm" tone="muted" class="mr-auto">
+        将采用核对结果中的 {{ chosen }} 个值。
+      </Text>
       <Button
         tone="neutral"
         :disabled="submitting || !body.trim()"
@@ -88,7 +106,7 @@
       </Button>
       <Button :disabled="submitting" @click="confirmReview('APPROVE')">
         <template #icon><Check /></template>
-        通过并合并
+        {{ chosen > 0 ? '按所选通过' : '通过并合并' }}
       </Button>
     </Inline>
   </Stack>

@@ -2,7 +2,7 @@ import type { EditorPresentation } from './types'
 
 export const lightNovelPresentation: EditorPresentation = {
   fields: {
-    name: { label: '名称' },
+    name: { label: '原名' },
     name_cn: { label: '中文名' },
     other_names: { label: '别名' },
     cover_id: { label: '封面' },

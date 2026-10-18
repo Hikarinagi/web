@@ -48,7 +48,7 @@
 
       <HikariImage
         v-if="draft.cover"
-        :src="draft.cover.src"
+        :src="draft.cover"
         alt=""
         class="aspect-2/1 w-20 shrink-0 overflow-hidden rounded-md border border-line"
         image-class="size-full object-cover"

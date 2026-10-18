@@ -197,6 +197,7 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
           src: detail.cover.src,
           width: detail.cover.width,
           height: detail.cover.height,
+          thumb_hash: detail.cover.thumb_hash,
         }
       : null
     sectionId.value = detail.sections[0]?.section?.id ?? null

@@ -9,6 +9,7 @@ interface CreateEntityInput {
   name: string
   external?: { bangumi_id?: string; vndb_id?: string }
   country?: string
+  dismissals?: number[]
 }
 
 export async function createProvisionalEntity(
@@ -37,7 +38,9 @@ export async function createProvisionalEntity(
       resource_type: input.resource_type,
       summary: `新建${input.label}:${input.name}`,
       changeset,
+      duplicate_dismissals: input.dismissals,
     },
+    toast: false,
   })) as BackendChangeRequestDetail
   if (result.resource_id == null) return null
   return {

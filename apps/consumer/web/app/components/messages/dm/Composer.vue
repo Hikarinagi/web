@@ -91,7 +91,7 @@
           class="relative size-16 shrink-0 shadow-none"
         >
           <HikariImage
-            :src="m.src"
+            :src="m"
             alt=""
             preset="small"
             class="size-full"

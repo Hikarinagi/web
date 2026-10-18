@@ -500,23 +500,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/ai/tools": {
+    "/api/v3/admin/ai/search-providers": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminAiToolController_getList"];
+        get: operations["AdminAiSearchProviderController_getList"];
         put?: never;
-        post: operations["AdminAiToolController_create"];
+        post: operations["AdminAiSearchProviderController_create"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/ai/tools/{id}": {
+    "/api/v3/admin/ai/search-providers/order": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminAiSearchProviderController_reorder"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/search-providers/tests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiSearchProviderController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/search-providers/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -526,13 +558,93 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["AdminAiToolController_deleteById"];
+        delete: operations["AdminAiSearchProviderController_deleteById"];
         options?: never;
         head?: never;
-        patch: operations["AdminAiToolController_updateById"];
+        patch: operations["AdminAiSearchProviderController_updateById"];
         trace?: never;
     };
-    "/api/v3/admin/ai/tools/{id}/runs": {
+    "/api/v3/admin/ai/search-providers/{id}/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminAiSearchProviderController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/search-services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiSearchProviderController_services"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiToolController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiToolController_getByKey"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{key}/calls": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminAiToolController_getCalls"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{key}/runs": {
         parameters: {
             query?: never;
             header?: never;
@@ -542,6 +654,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminAiToolController_run"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/ai/tools/{key}/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminAiToolController_updateSettings"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -639,6 +767,38 @@ export interface paths {
         get: operations["AdminBackupController_getSettings"];
         put: operations["AdminBackupController_updateSettings"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/items/{id}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_candidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/items/{id}/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminCatalogController_link"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5317,6 +5477,54 @@ export interface paths {
         patch: operations["AdminCharacterController_setStatus"];
         trace?: never;
     };
+    "/api/v3/admin/wiki/duplicates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDuplicateController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/duplicates/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDuplicateController_getCounts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/duplicates/{id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminDuplicateController_dismiss"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/galgames": {
         parameters: {
             query?: never;
@@ -6277,6 +6485,22 @@ export interface paths {
         patch: operations["ChangeRequestController_update"];
         trace?: never;
     };
+    "/api/v3/change-requests/{id}/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestCheckController_rerun"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/change-requests/{id}/close": {
         parameters: {
             query?: never;
@@ -6287,6 +6511,70 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["ChangeRequestController_close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestCheckController_correct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/duplicates/{candidate_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestDuplicateController_dismiss"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/merge-into": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestDuplicateController_mergeInto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/merge-into/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ChangeRequestDuplicateController_preview"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -6541,6 +6829,38 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ContributionActivityController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/duplicate-checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DuplicateController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/lookups/{resource_type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DuplicateController_find"];
         put?: never;
         post?: never;
         delete?: never;
@@ -14019,6 +14339,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/wiki/duplicate-verdicts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DuplicateController_verdict"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -14115,22 +14451,44 @@ export interface components {
             tool_call: boolean;
             vision: boolean;
         };
-        AdminAiToolDto: {
+        AdminAiToolDetailDto: {
+            default_timeout_ms: number;
+            /** @description 提供给模型的描述 */
             description: string;
-            enabled: boolean;
-            executor: components["schemas"]["AiToolExecutor"];
-            executor_config: {
-                [key: string]: unknown;
-            } | null;
-            id: number;
-            input_schema: {
+            /** @enum {string} */
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            /** @description 由模型填写的参数 */
+            input: {
                 [key: string]: unknown;
             };
             key: string;
-            /** @description 可以调用此工具的场景 */
-            scenes: string[];
-            /** @description 最近 24 小时 */
+            label: string;
+            max_timeout_ms: number;
+            min_timeout_ms: number;
+            scenes: components["schemas"]["AiToolSceneDto"][];
+            settings: components["schemas"]["AiToolSettingDto"][];
+            /** @description 最近 7 天的统计 */
             stats: components["schemas"]["AiToolStatsDto"];
+            /**
+             * @description 工具的配置状态
+             * @enum {string}
+             */
+            status: "ok" | "no_service" | "all_unavailable" | "bangumi_disconnected";
+            timeout_ms: number;
+        };
+        AdminAiToolDto: {
+            /** @enum {string} */
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            key: string;
+            label: string;
+            scenes: components["schemas"]["AiToolSceneDto"][];
+            /** @description 最近 7 天的统计 */
+            stats: components["schemas"]["AiToolStatsDto"];
+            /**
+             * @description 工具的配置状态
+             * @enum {string}
+             */
+            status: "ok" | "no_service" | "all_unavailable" | "bangumi_disconnected";
         };
         AdminAuditEventDto: {
             action: string;
@@ -15735,11 +16093,15 @@ export interface components {
             /** @enum {string} */
             billing: "user" | "platform";
             choices: components["schemas"]["AiModelRefDto"][];
+            /** @description 不能使用工具的场景为空 */
+            default_max_tool_calls: number | null;
             /** @description 实际生效的模型 */
             effective: components["schemas"]["AiModelRefDto"] | null;
             key: string;
             label: string;
             max_output_tokens: number | null;
+            /** @description 为空时采用场景的默认值 */
+            max_tool_calls: number | null;
             /** @description 为场景单独设置的模型 */
             model: components["schemas"]["AiModelRefDto"] | null;
             /** @enum {string} */
@@ -15752,14 +16114,94 @@ export interface components {
             stats: components["schemas"]["AiStatsDto"];
             temperature: number | null;
             timeout_ms: number | null;
-            tools: components["schemas"]["AiToolRefDto"][];
-            tools_supported: boolean;
+            /** @description 场景可以使用的工具；不能使用工具的场景为空 */
+            tools: components["schemas"]["AiSceneToolDto"][];
             vision: boolean;
         };
         AiSceneRouteDto: {
             id: number;
             provider: components["schemas"]["AiProviderRefDto"];
             upstream_id: string;
+        };
+        AiSceneToolChoiceDto: {
+            enabled: boolean;
+            key: string;
+        };
+        AiSceneToolDto: {
+            /** @description 前提条件已满足，例如网页搜索有可用的搜索服务 */
+            available: boolean;
+            enabled: boolean;
+            /** @enum {string} */
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            key: string;
+            label: string;
+            required: boolean;
+        };
+        AiSearchCredentialFieldDto: {
+            key: string;
+            label: string;
+            secret: boolean;
+        };
+        AiSearchHitDto: {
+            snippet: string;
+            title: string;
+            url: string;
+        };
+        AiSearchOptionFieldDto: {
+            default: string;
+            key: string;
+            label: string;
+            values: string[];
+        };
+        AiSearchProviderDto: {
+            /** Format: date-time */
+            checked_at: string | null;
+            /** Format: date-time */
+            cooldown_until: string | null;
+            /** @description 最近 30 天的费用 */
+            cost_30d: number;
+            /** @description 非密钥凭据的值 */
+            credentials: {
+                [key: string]: string;
+            };
+            daily_limit: number | null;
+            enabled: boolean;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            error_message: string | null;
+            id: number;
+            name: string;
+            options: {
+                [key: string]: string;
+            };
+            position: number;
+            price_per_1k: number | null;
+            /** @description 密钥的前 3 位与后 4 位 */
+            secret_hints: {
+                [key: string]: string;
+            };
+            service: components["schemas"]["AiSearchService"];
+            status: components["schemas"]["AiSearchProviderStatus"];
+            /** @description 今日计费的查询次数 */
+            today_calls: number;
+        };
+        /** @enum {string} */
+        AiSearchProviderStatus: "OK" | "UNAVAILABLE";
+        /** @enum {string} */
+        AiSearchService: "EXA" | "BRAVE" | "TAVILY" | "LINKUP" | "CLOUDFLARE";
+        AiSearchServiceDto: {
+            credentials: components["schemas"]["AiSearchCredentialFieldDto"][];
+            label: string;
+            options: components["schemas"]["AiSearchOptionFieldDto"][];
+            service: components["schemas"]["AiSearchService"];
+        };
+        AiSearchTestDto: {
+            duration_ms: number;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            error_message: string | null;
+            ok: boolean;
+            results: components["schemas"]["AiSearchHitDto"][];
+            /** @description 测试通过时与所测取值绑定的测试令牌 */
+            token: string | null;
         };
         AiSeriesBucketDto: {
             /** Format: date-time */
@@ -15789,36 +16231,80 @@ export interface components {
             first_token_ms: number | null;
             requests: number;
         };
-        AiToolCallDto: {
+        AiToolAttemptDto: {
+            billed: boolean;
+            cost_usd: number;
             duration_ms: number;
-            error: string | null;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            error_message: string | null;
+            name: string;
+            ok: boolean;
+            provider_id: number;
+            /** @enum {string|null} */
+            skipped: "cooling" | "daily_limit" | null;
+        };
+        AiToolCallDto: {
+            attempts: components["schemas"]["AiToolAttemptDto"][];
+            cost_usd: number;
+            /** Format: date-time */
+            created_at: string;
+            duration_ms: number;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            error_message: string | null;
             id: string;
             input: {
                 [key: string]: unknown;
-            };
-            ok: boolean;
+            } | null;
             output: {
                 [key: string]: unknown;
             } | null;
+            output_truncated: boolean;
+            provider: components["schemas"]["AiToolProviderRefDto"] | null;
+            request_id: string | null;
+            reused: boolean;
+            scene: string | null;
+            scene_label: string | null;
+            source: components["schemas"]["AiToolCallSource"];
+            sources: components["schemas"]["AiToolSourceRefDto"][];
+            status: components["schemas"]["AiToolCallStatus"];
             tool_key: string;
+            tool_label: string;
+            units: number;
+            user: components["schemas"]["AiUserRefDto"] | null;
         };
         /** @enum {string} */
-        AiToolExecutor: "SITE_SEARCH" | "SITE_API";
-        AiToolRefDto: {
+        AiToolCallSource: "SCENE" | "TEST";
+        /** @enum {string} */
+        AiToolCallStatus: "OK" | "FAILED" | "TIMED_OUT" | "REJECTED" | "OVER_BUDGET";
+        AiToolProviderRefDto: {
             id: number;
-            key: string;
+            name: string;
         };
-        AiToolRunDto: {
-            duration_ms: number;
-            error: string | null;
-            ok: boolean;
-            output: {
-                [key: string]: unknown;
-            } | null;
+        AiToolSceneDto: {
+            enabled: boolean;
+            key: string;
+            label: string;
+            max_tool_calls: number;
+            required: boolean;
+        };
+        AiToolSettingDto: {
+            default: number;
+            key: string;
+            label: string;
+            max: number;
+            min: number;
+            value: number;
+        };
+        AiToolSourceRefDto: {
+            kind: string;
+            title: string | null;
+            url: string;
         };
         AiToolStatsDto: {
             calls: number;
+            cost_usd: number;
             failures: number;
+            p95_ms: number | null;
         };
         AiUserRefDto: {
             id: number;
@@ -16269,7 +16755,7 @@ export interface components {
             label: string;
         };
         /** @enum {string} */
-        CatalogSyncDecision: "CREATED" | "VOLUMES_ADDED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED";
+        CatalogSyncDecision: "CREATED" | "VOLUMES_ADDED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED" | "SERIES_LINKED" | "HELD_DUPLICATE";
         /** @enum {string} */
         CatalogSyncKind: "MANGA" | "LIGHT_NOVEL";
         /** @enum {string} */
@@ -16349,12 +16835,26 @@ export interface components {
             batch_id: string;
             items: components["schemas"]["ChangeRequestBatchSubmitItemDto"][];
         };
+        ChangeRequestCheckDto: {
+            /** Format: date-time */
+            created_at: string;
+            disputed: boolean;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            /** @enum {string} */
+            status: "QUEUED" | "RUNNING" | "DONE" | "FAILED" | "TIMED_OUT";
+            verification: components["schemas"]["CheckVerificationDto"] | null;
+        };
         ChangeRequestDetailDto: {
             author: components["schemas"]["UserRefDto"];
             base_revision_id: number | null;
             batch_id: string | null;
+            check: components["schemas"]["ChangeRequestCheckDto"] | null;
             /** Format: date-time */
             created_at: string;
+            duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
+            duplicates: components["schemas"]["DuplicateCandidateDto"][];
             events: components["schemas"]["ChangeRequestEventItemDto"][];
             id: number;
             /** Format: date-time */
@@ -16374,6 +16874,19 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        ChangeRequestDuplicateCandidateRefDto: {
+            id: number;
+            /** @enum {string} */
+            level: "on_site" | "likely" | "author_work" | "similar";
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        ChangeRequestDuplicateCheckDto: {
+            author_works_checked: boolean;
+            candidates: components["schemas"]["ChangeRequestDuplicateCandidateRefDto"][];
+            checked_at: string;
+            dismissed: number[];
+        };
         ChangeRequestEventItemDto: {
             actor: components["schemas"]["UserRefDto"] | null;
             body: string | null;
@@ -16384,7 +16897,7 @@ export interface components {
                 [key: string]: unknown;
             }[] | null;
             /** @enum {string} */
-            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED";
+            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED" | "MERGED_INTO" | "AUTO_MERGE_FAILED";
         };
         ChangeRequestMergedRevisionDto: {
             id: number;
@@ -16394,8 +16907,10 @@ export interface components {
             author: components["schemas"]["UserRefDto"];
             base_revision_id: number | null;
             batch_id: string | null;
+            check: components["schemas"]["ChangeRequestCheckDto"] | null;
             /** Format: date-time */
             created_at: string;
+            duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
             id: number;
             /** Format: date-time */
             merged_at: string | null;
@@ -16480,6 +16995,49 @@ export interface components {
         };
         /** @enum {string} */
         CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
+        CheckAiSearchProviderDto: {
+            query?: string;
+        };
+        CheckEntityDto: {
+            change_request_id: number;
+            existing_id: number | null;
+            existing_name: string | null;
+            fields: string[];
+            name: string;
+            reason: string;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            verified: boolean;
+        };
+        CheckEvidenceDto: {
+            author?: string;
+            bangumi_id?: number;
+            date?: string | null;
+            entry_id?: number;
+            isbn?: string;
+            /** @enum {string} */
+            kind: "author" | "entry" | "bangumi_detail" | "isbn";
+            label?: string | null;
+            title?: string;
+            verified: boolean;
+        };
+        CheckFieldDto: {
+            display: string;
+            /** @enum {string} */
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn";
+            source: components["schemas"]["CheckSourceDto"] | null;
+            submitted: (string | number) | null;
+            submitted_display: string | null;
+            value: string | number;
+            verified: boolean;
+        };
+        CheckIdentityDto: {
+            id: number | null;
+            /** @enum {string} */
+            kind: "site" | "pending" | "new" | "unknown";
+            title: string | null;
+            verified: boolean;
+        };
         CheckInConfigDto: {
             daily_point_max: number;
             daily_point_min: number;
@@ -16533,6 +17091,23 @@ export interface components {
             make_up: components["schemas"]["MakeUpStatusDto"];
             points: number;
             streak: number;
+        };
+        CheckSourceDto: {
+            /** @enum {string} */
+            kind: "bangumi" | "openbd" | "page" | "request";
+            /** @description Bangumi 编号或 ISBN */
+            ref: string | null;
+            title: string | null;
+            url: string | null;
+        };
+        CheckVerificationDto: {
+            entities: components["schemas"]["CheckEntityDto"][];
+            evidence: components["schemas"]["CheckEvidenceDto"][];
+            fields: components["schemas"]["CheckFieldDto"][];
+            identity: components["schemas"]["CheckIdentityDto"];
+            mismatches: number;
+            sources: components["schemas"]["CheckSourceDto"][];
+            summary: string;
         };
         CommentAttachmentInputDto: {
             media_asset_id: number;
@@ -16750,7 +17325,7 @@ export interface components {
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             /** @enum {string} */
-            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED";
+            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED" | "MERGED_INTO" | "AUTO_MERGE_FAILED";
         };
         /**
          * @description 发生变更的资源类型
@@ -16796,6 +17371,10 @@ export interface components {
             from_me: boolean;
             /** Format: date-time */
             sent_at: string;
+        };
+        CorrectChangeRequestDto: {
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
         CountByStatusDto: {
             count: number;
@@ -16844,18 +17423,19 @@ export interface components {
             /** @default 1 */
             price_multiplier: number;
         };
-        CreateAiToolDto: {
-            description: string;
-            enabled?: boolean;
-            executor: components["schemas"]["AiToolExecutor"];
-            executor_config?: {
-                [key: string]: unknown;
-            } | null;
-            input_schema: {
-                [key: string]: unknown;
+        CreateAiSearchProviderDto: {
+            credentials: {
+                [key: string]: string;
             };
-            /** @description 小写字母开头，只含小写字母、数字与下划线 */
-            key: string;
+            daily_limit?: number | null;
+            name: string;
+            options: {
+                [key: string]: string;
+            };
+            price_per_1k?: number | null;
+            service: components["schemas"]["AiSearchService"];
+            /** @description 测试接口返回的测试令牌 */
+            test_token: string;
         };
         CreateArticleDto: {
             /** @enum {string|null} */
@@ -17198,9 +17778,11 @@ export interface components {
             note?: string | null;
         };
         CreateResourceChangeRequestDto: {
+            author_works_checked?: boolean;
             changeset: {
                 [key: string]: unknown;
             }[];
+            duplicate_dismissals?: number[];
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             summary: string;
@@ -17383,7 +17965,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -17548,6 +18130,90 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             view_count: number;
+        };
+        DuplicateAuthorDto: {
+            id: number;
+            name: string;
+        };
+        DuplicateCandidateDto: {
+            author: string | null;
+            bangumi_id: string | null;
+            cover: string | null;
+            id: number;
+            label: string | null;
+            /** @enum {string} */
+            level: "on_site" | "likely" | "author_work" | "similar";
+            reasons: components["schemas"]["DuplicateReasonDto"][];
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            subtitle: string | null;
+            title: string;
+            volumes: number | null;
+            year: string | null;
+        };
+        DuplicateCheckDto: {
+            changeset: {
+                [key: string]: unknown;
+            }[];
+            exclude_id?: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        DuplicateCheckResultDto: {
+            candidates: components["schemas"]["DuplicateCandidateDto"][];
+        };
+        DuplicateExternalItemDto: {
+            aliases?: string[];
+            authors?: string[];
+            cover: string | null;
+            existing_id: number | null;
+            external_id: string;
+            /** @enum {string} */
+            source: "bangumi" | "vndb";
+            subtitle: string | null;
+            title: string;
+            year: string | null;
+        };
+        DuplicateLookupDto: {
+            /** @description 作者名唯一对应的站内人物（Galgame 为厂商） */
+            author: components["schemas"]["DuplicateAuthorDto"] | null;
+            external: components["schemas"]["DuplicateExternalItemDto"][];
+            site: components["schemas"]["DuplicateCandidateDto"][];
+        };
+        DuplicateReasonDto: {
+            alias?: boolean;
+            bangumi_id?: number;
+            distance?: number;
+            field?: string;
+            form_differs?: boolean;
+            isbn?: string;
+            /** @enum {string} */
+            kind: "external_id" | "name" | "similar_name" | "bangumi_name" | "author" | "cover" | "isbn" | "volume_number";
+            label?: string;
+            name?: string;
+            person_id?: number;
+            score?: number;
+            value?: string;
+            volume_number?: number;
+        };
+        DuplicateSummaryDto: {
+            author: string | null;
+            bangumi_id: string | null;
+            cover: string | null;
+            id: number;
+            label: string | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            subtitle: string | null;
+            title: string;
+            volumes: number | null;
+            year: string | null;
+        };
+        DuplicateVerdictDto: {
+            a_id: number;
+            b_id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
         };
         EditMangaChapterDto: {
             chapter_number?: string | null;
@@ -17782,8 +18448,14 @@ export interface components {
         };
         EntitySummaryDto: {
             cover: string | null;
+            /** @description 只因名称键相同而命中，字形与搜索词不同 */
+            form_differs?: boolean;
             id: number;
+            /** @description 以此厂商为文库的轻小说数，仅厂商搜索返回 */
+            light_novel_count?: number;
             name: string;
+            /** @description 只因名称键包含搜索词或按字序包含搜索词而命中 */
+            partial?: boolean;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
@@ -18081,6 +18753,8 @@ export interface components {
             scale: number;
         };
         ExternalSearchItemDto: {
+            aliases?: string[];
+            authors?: string[];
             cover: string | null;
             existing_id: number | null;
             external_id: string;
@@ -19599,6 +20273,10 @@ export interface components {
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
         };
+        LinkCatalogItemDto: {
+            /** @description 认定为哪个站内条目；传 null 表示不是重复，下次同步照常创建 */
+            resource_id: number | null;
+        };
         LnDraftDto: {
             author: components["schemas"]["ResolvedEntityDto"] | null;
             characters: components["schemas"]["ResolvedEntityDto"][];
@@ -20669,6 +21347,8 @@ export interface components {
             id: number;
             /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 图片宽度，单位像素 */
             width: number | null;
         };
@@ -20820,12 +21500,26 @@ export interface components {
              * @enum {string}
              */
             resolved: "canonical" | "loser" | "union";
+            /**
+             * @description The side the dialog should pre-select when the default policy would be wrong.
+             * @enum {string}
+             */
+            suggested_side?: "canonical" | "loser";
             /** @description What the surviving resource ends up holding under the default policy. */
             value: {
                 [key: string]: unknown;
             } | null;
             /** @enum {string} */
             value_type: "string" | "string[]" | "int" | "float" | "boolean" | "date" | "media" | "object" | "object[]";
+        };
+        MergeIntoDto: {
+            body?: string;
+            /** @description Use existing records instead of people or labels created in the same batch. */
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            field_choices?: components["schemas"]["MergeFieldChoiceDto"][];
+            target_id: number;
+            /** @description Use the submitted original title as the existing entry’s Chinese title. */
+            title_as_chinese?: boolean;
         };
         MergeMangaChapterDto: {
             into: number;
@@ -20859,7 +21553,7 @@ export interface components {
             created_before?: string;
             reasons?: string[];
             /** @enum {string} */
-            status?: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
+            status?: "FAILED" | "REJECTED" | "PENDING" | "RUNNING" | "PASSED" | "NEEDS_HUMAN";
             target_type?: string;
         };
         ModerationBulkDto: {
@@ -22263,6 +22957,9 @@ export interface components {
             /** @description 角色定位 */
             role: components["schemas"]["CharacterRole"];
         };
+        OrderAiSearchProvidersDto: {
+            ids: number[];
+        };
         OwnedDecorationDto: {
             /** Format: date-time */
             acquired_at: string;
@@ -22888,6 +23585,8 @@ export interface components {
             sexual: number;
             /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 暴力内容分级，0 为安全 */
             violence: number;
             /** @description 图片宽度，单位像素 */
@@ -23306,11 +24005,19 @@ export interface components {
             change_request_ids?: number[];
             /** @enum {string} */
             decision: "REJECT" | "APPROVE";
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
         ReviewChangeRequestDto: {
             body?: string;
             /** @enum {string} */
             decision: "COMMENT" | "REJECT" | "APPROVE";
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
+        };
+        ReviewEntityChoiceDto: {
+            change_request_id: number;
+            use_id: number;
         };
         ReviewGroupApplicationDto: {
             /** Format: date-time */
@@ -23343,6 +24050,11 @@ export interface components {
         ReviewGroupRefDto: {
             id: number;
             name: string;
+        };
+        ReviewOverrideDto: {
+            /** @enum {string} */
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn";
+            value: string | number;
         };
         RevisionDetailDto: {
             change_request_id: number | null;
@@ -23452,6 +24164,8 @@ export interface components {
             sexual: number;
             /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 暴力内容分级，0 为安全 */
             violence: number;
             votes: number;
@@ -23735,8 +24449,6 @@ export interface components {
             enabled: boolean;
             persona: components["schemas"]["TelegramChatPersonaInputDto"];
             reply_max_chars: number;
-            /** @description 省略则保持现值 */
-            tools?: components["schemas"]["TelegramChatToolsInputDto"];
             /** @description bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关) */
             trigger_keywords: string[];
             user_cooldown_seconds: number;
@@ -23751,10 +24463,6 @@ export interface components {
             role_core: string;
             style_anchor: string;
             world_knowledge: string;
-        };
-        TelegramChatToolsInputDto: {
-            enabled: boolean;
-            max_steps: number;
         };
         TelegramChatUsageDto: {
             /** @description 统计日期 (UTC, YYYY-MM-DD) */
@@ -23839,6 +24547,18 @@ export interface components {
             cooldown_seconds: number;
             hourly_limit_per_user: number;
             max_attempts: number;
+        };
+        TestAiSearchProviderDto: {
+            credentials: {
+                [key: string]: string;
+            };
+            options: {
+                [key: string]: string;
+            };
+            /** @description 编辑已有服务时，未填写的密钥沿用该服务已存储的值 */
+            provider_id?: number;
+            query: string;
+            service: components["schemas"]["AiSearchService"];
         };
         TopReporterDto: {
             count: number;
@@ -24005,24 +24725,37 @@ export interface components {
             /** @description 用户可选的模型 */
             choices: number[];
             max_output_tokens?: number | null;
+            /** @description 每次运行最多调用工具的次数 */
+            max_tool_calls?: number | null;
             /** @description 空值使用默认模型 */
             model_id?: number | null;
             /** @description 只走这条线路；空值在模型的线路间自动切换 */
             route_id?: number | null;
             temperature?: number | null;
             timeout_ms?: number | null;
-            tools: number[];
+            /** @description 可选工具的开关 */
+            tools?: components["schemas"]["AiSceneToolChoiceDto"][];
         };
-        UpdateAiToolDto: {
-            description?: string;
-            enabled?: boolean;
-            executor?: components["schemas"]["AiToolExecutor"];
-            executor_config?: {
-                [key: string]: unknown;
-            } | null;
-            input_schema?: {
-                [key: string]: unknown;
+        UpdateAiSearchProviderDto: {
+            /** @description 留空的密钥沿用已存储的值 */
+            credentials?: {
+                [key: string]: string;
             };
+            daily_limit?: number | null;
+            enabled?: boolean;
+            name?: string;
+            options?: {
+                [key: string]: string;
+            };
+            price_per_1k?: number | null;
+            /** @description 凭据或选项改变时必填 */
+            test_token?: string;
+        };
+        UpdateAiToolSettingsDto: {
+            settings: {
+                [key: string]: number;
+            };
+            timeout_ms: number;
         };
         UpdateAnalyticsSettingsDto: {
             /** @description 自建实例 API 基址，如 https://op.example.com/api */
@@ -24658,7 +25391,7 @@ export interface components {
         };
         UpdateWikiStatusDto: {
             /** @enum {string} */
-            status: "PENDING" | "REJECTED" | "PUBLISHED" | "DRAFT";
+            status: "REJECTED" | "PENDING" | "PUBLISHED" | "DRAFT";
         };
         UpdateWorkFlagsDto: {
             locked?: boolean;
@@ -24900,6 +25633,24 @@ export interface components {
          * @enum {string}
          */
         VolumeType: "MAIN" | "EXTRA";
+        WikiDuplicateCountDto: {
+            count: number;
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
+        WikiDuplicateDto: {
+            /** Format: date-time */
+            found_at: string;
+            /** @description 编号较大的条目 */
+            high: components["schemas"]["DuplicateSummaryDto"];
+            id: number;
+            /** @description 编号较小的条目 */
+            low: components["schemas"]["DuplicateSummaryDto"];
+            reasons: components["schemas"]["DuplicateReasonDto"][];
+            resource_type: components["schemas"]["ContributionResourceType"];
+            source: components["schemas"]["WikiDuplicateSource"];
+        };
+        /** @enum {string} */
+        WikiDuplicateSource: "CONTRIBUTION" | "CATALOG" | "LIBRARY";
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
             snapshot: {
@@ -25897,7 +26648,7 @@ export interface operations {
             };
         };
     };
-    AdminAiToolController_getList: {
+    AdminAiSearchProviderController_getList: {
         parameters: {
             query?: never;
             header?: never;
@@ -25911,12 +26662,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AdminAiToolDto"][];
+                    "application/json": components["schemas"]["AiSearchProviderDto"][];
                 };
             };
         };
     };
-    AdminAiToolController_create: {
+    AdminAiSearchProviderController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -25925,7 +26676,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateAiToolDto"];
+                "application/json": components["schemas"]["CreateAiSearchProviderDto"];
             };
         };
         responses: {
@@ -25934,12 +26685,58 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AdminAiToolDto"];
+                    "application/json": components["schemas"]["AiSearchProviderDto"];
                 };
             };
         };
     };
-    AdminAiToolController_deleteById: {
+    AdminAiSearchProviderController_reorder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OrderAiSearchProvidersDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSearchProviderDto"][];
+                };
+            };
+        };
+    };
+    AdminAiSearchProviderController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TestAiSearchProviderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSearchTestDto"];
+                };
+            };
+        };
+    };
+    AdminAiSearchProviderController_deleteById: {
         parameters: {
             query?: never;
             header?: never;
@@ -25960,7 +26757,7 @@ export interface operations {
             };
         };
     };
-    AdminAiToolController_updateById: {
+    AdminAiSearchProviderController_updateById: {
         parameters: {
             query?: never;
             header?: never;
@@ -25971,7 +26768,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateAiToolDto"];
+                "application/json": components["schemas"]["UpdateAiSearchProviderDto"];
             };
         };
         responses: {
@@ -25980,7 +26777,118 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AdminAiToolDto"];
+                    "application/json": components["schemas"]["AiSearchProviderDto"];
+                };
+            };
+        };
+    };
+    AdminAiSearchProviderController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckAiSearchProviderDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSearchTestDto"];
+                };
+            };
+        };
+    };
+    AdminAiSearchProviderController_services: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AiSearchServiceDto"][];
+                };
+            };
+        };
+    };
+    AdminAiToolController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDto"][];
+                };
+            };
+        };
+    };
+    AdminAiToolController_getByKey: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDetailDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_getCalls: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AiToolCallDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -25990,7 +26898,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: number;
+                key: string;
             };
             cookie?: never;
         };
@@ -26005,7 +26913,32 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AiToolRunDto"];
+                    "application/json": components["schemas"]["AiToolCallDto"];
+                };
+            };
+        };
+    };
+    AdminAiToolController_updateSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAiToolSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminAiToolDetailDto"];
                 };
             };
         };
@@ -26155,6 +27088,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BackupSettingsResDto"];
+                };
+            };
+        };
+    };
+    AdminCatalogController_candidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateCandidateDto"][];
+                };
+            };
+        };
+    };
+    AdminCatalogController_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkCatalogItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"];
                 };
             };
         };
@@ -34076,6 +35055,71 @@ export interface operations {
             };
         };
     };
+    AdminDuplicateController_getList: {
+        parameters: {
+            query: {
+                resource_type?: "LIGHT_NOVEL" | "GALGAME" | "PERSON" | "PRODUCER";
+                source?: components["schemas"]["WikiDuplicateSource"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["WikiDuplicateDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminDuplicateController_getCounts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiDuplicateCountDto"][];
+                };
+            };
+        };
+    };
+    AdminDuplicateController_dismiss: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AdminGalgameController_list: {
         parameters: {
             query: {
@@ -35148,7 +36192,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "entry_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -35470,6 +36514,8 @@ export interface operations {
                 status?: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
                 /** @description 同一次导入的 CR 批次 id,用于捆绑审核分组 */
                 batch_id?: string;
+                /** @description disputed：核对结果与请求不一致（不传 status 时含近期已合并的）；running：核对排队或进行中 */
+                check?: "disputed" | "running";
                 resource_id?: number;
                 author_id?: number;
                 page: number;
@@ -35611,6 +36657,27 @@ export interface operations {
             };
         };
     };
+    ChangeRequestCheckController_rerun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     ChangeRequestController_close: {
         parameters: {
             query?: never;
@@ -35628,6 +36695,101 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestCheckController_correct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectChangeRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_dismiss: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                candidate_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_mergeInto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeIntoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_preview: {
+        parameters: {
+            query: {
+                target_id: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
                 };
             };
         };
@@ -36084,6 +37246,53 @@ export interface operations {
                         items: components["schemas"]["ContributionActivityItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    DuplicateController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DuplicateCheckDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateCheckResultDto"];
+                };
+            };
+        };
+    };
+    DuplicateController_find: {
+        parameters: {
+            query: {
+                author?: string;
+                q: string;
+            };
+            header?: never;
+            path: {
+                resource_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateLookupDto"];
                 };
             };
         };
@@ -49729,6 +50938,27 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["UserStatisticsDto"];
                 };
+            };
+        };
+    };
+    DuplicateController_verdict: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DuplicateVerdictDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

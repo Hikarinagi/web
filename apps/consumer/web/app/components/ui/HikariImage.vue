@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { VNodeChild } from 'vue'
   import { Image } from '@hina-ui/vue'
+  import { thumbHashToDataURL } from 'thumbhash'
   import defaultFallbackImage from '~/assets/images/404/shion-image-404.webp'
   import type {
     HikariImagePresetName,
@@ -14,6 +15,7 @@
     imageSourceSafety,
     imageSourceSize,
     imageSourceSrc,
+    imageSourceThumbHash,
     resolveImageUrl,
   } from '~/utils/media/image'
 
@@ -92,6 +94,12 @@
   )
   const blockNsfw = computed(() => shouldBlockNsfw(isNsfw))
   const blurNsfw = computed(() => !blockNsfw.value && shouldBlurNsfw(isNsfw))
+  const thumbHash = computed(() => imageSourceThumbHash(props.src))
+  const hashSrc = computed(() =>
+    blurNsfw.value && thumbHash.value
+      ? thumbHashToDataURL(Uint8Array.from(atob(thumbHash.value), char => char.charCodeAt(0)))
+      : '',
+  )
   const mainProcessing = computed<HikariImageProcessing | undefined>(() => {
     if (!blurNsfw.value) return props.processing
 
@@ -122,7 +130,9 @@
         imageProcessorHost: config.public.imageProcessorHost,
       }),
   )
-  const mainSrc = computed(() => (blockNsfw.value || unsafeNsfwBlur.value ? '' : rawMainSrc.value))
+  const mainSrc = computed(
+    () => hashSrc.value || (blockNsfw.value || unsafeNsfwBlur.value ? '' : rawMainSrc.value),
+  )
   const fallbackSrc = computed(() =>
     resolveImageUrl(props.fallbackSrc || defaultFallbackImage, {
       cdnHost: config.public.cdnHost,
@@ -146,6 +156,9 @@
   const isFallbackImage = computed(
     () => Boolean(fallbackSrc.value) && resolvedSrc.value === fallbackSrc.value,
   )
+  const placeholder = computed(() =>
+    blockNsfw.value || blurNsfw.value || isFallbackImage.value ? undefined : thumbHash.value,
+  )
   const resolvedImageClass = computed(() =>
     isFallbackImage.value ? props.fallbackImageClass : props.imageClass,
   )
@@ -164,9 +177,10 @@
     const fetchpriority =
       typeof props.preload === 'object' ? props.preload.fetchPriority : undefined
     useHead(() => ({
-      link: resolvedSrc.value
-        ? [{ rel: 'preload', as: 'image', href: resolvedSrc.value, fetchpriority }]
-        : [],
+      link:
+        resolvedSrc.value && !hashSrc.value
+          ? [{ rel: 'preload', as: 'image', href: resolvedSrc.value, fetchpriority }]
+          : [],
     }))
   }
 
@@ -191,6 +205,7 @@
     :root-margin="rootMargin"
     :ratio="ratio"
     :skeleton="skeleton"
+    :thumbhash="placeholder"
     :eager="eager"
     :preview="previewSrc"
     :preview-size="previewSize"

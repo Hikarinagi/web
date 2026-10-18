@@ -21,6 +21,7 @@ export interface HikariImageMediaSource {
   src?: string | null
   width?: number | null
   height?: number | null
+  thumb_hash?: string | null
   nsfw?: boolean | null
   sexual?: number | null
   violence?: number | null
@@ -74,6 +75,13 @@ export function imageSourceSize(source: HikariImageSource): HikariImageSize | un
   const width = readSide(readField(target, 'width'))
   const height = readSide(readField(target, 'height'))
   return width && height ? { width, height } : undefined
+}
+
+export function imageSourceThumbHash(source: HikariImageSource): string | undefined {
+  if (typeof source === 'string' || source == null) return undefined
+
+  const hash = readField(readMedia(source) ?? source, 'thumb_hash')
+  return typeof hash === 'string' && hash ? hash : undefined
 }
 
 function readSide(value: unknown) {

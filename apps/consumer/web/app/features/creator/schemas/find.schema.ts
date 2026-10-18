@@ -12,25 +12,20 @@ export const EDITOR_RESOURCE_OPTIONS: { label: string; value: string }[] = [
   { label: '标签', value: 'tag' },
 ]
 
-export const editorLaunchSchema = v.object({
+export const findSchema = v.object({
   resource_type: v.picklist(
     EDITOR_RESOURCE_OPTIONS.map(option => option.value),
     '请选择条目类型',
   ),
-  resource_id: v.pipe(
-    v.number('请输入条目 ID'),
-    v.integer('条目 ID 必须是整数'),
-    v.minValue(1, '条目 ID 必须大于 0'),
-  ),
+  q: v.pipe(v.string('标题应为文本'), v.trim(), v.nonEmpty('请输入标题、链接或编号')),
+  author: v.pipe(v.nullish(v.string('作者应为文本'), ''), v.trim()),
 })
 
-export type EditorLaunchValues = v.InferOutput<typeof editorLaunchSchema>
+export type FindValues = v.InferOutput<typeof findSchema>
 
-export const editorNewSchema = v.object({
-  resource_type: v.picklist(
-    EDITOR_RESOURCE_OPTIONS.map(option => option.value),
-    '请选择条目类型',
-  ),
+export const newEntrySchema = v.object({
+  original: v.pipe(v.string('原名应为文本'), v.trim(), v.nonEmpty('请输入原名')),
+  chinese: v.pipe(v.nullish(v.string('中文名应为文本'), ''), v.trim()),
 })
 
-export type EditorNewValues = v.InferOutput<typeof editorNewSchema>
+export type NewEntryValues = v.InferOutput<typeof newEntrySchema>

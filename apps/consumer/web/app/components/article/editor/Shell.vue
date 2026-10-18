@@ -120,7 +120,7 @@
         class="group/cover relative overflow-hidden rounded-xl border border-line"
       >
         <HikariImage
-          :src="cover.src"
+          :src="cover"
           alt=""
           class="aspect-2/1 w-full"
           image-class="size-full object-cover"

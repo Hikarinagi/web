@@ -22,7 +22,7 @@
         <NuxtLink :to="`/producers/${r.target_producer.id}`">
           <Center class="size-12 shrink-0 overflow-hidden rounded-lg bg-subtle">
             <HikariImage
-              :src="r.target_producer.logo?.src"
+              :src="r.target_producer.logo"
               :alt="r.target_producer.name"
               class="size-full"
               image-class="object-contain"

@@ -45,7 +45,7 @@
           v-for="emoji in preview"
           :key="emoji.id"
           v-tooltip="`:${emoji.name}:`"
-          :src="emoji.src?.src"
+          :src="emoji.src"
           :alt="emoji.name"
           :processing="false"
           class="size-6"

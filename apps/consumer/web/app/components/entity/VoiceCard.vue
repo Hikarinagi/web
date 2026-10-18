@@ -17,7 +17,7 @@
     <Ripple />
 
     <HikariImage
-      :src="item.image?.src"
+      :src="item.image"
       :alt="item.name"
       class="size-14 shrink-0 rounded-full bg-subtle"
       image-class="object-cover object-top"

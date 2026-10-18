@@ -4,6 +4,7 @@
     AtSign,
     Bell,
     BookOpen,
+    CopyCheck,
     GitPullRequest,
     Heart,
     Languages,
@@ -48,6 +49,8 @@
       case 'contribution.rejected':
       case 'contribution.commented':
         return GitPullRequest
+      case 'contribution.possible_duplicate':
+        return CopyCheck
       case 'application.approved':
       case 'application.rejected':
         return UserCheck

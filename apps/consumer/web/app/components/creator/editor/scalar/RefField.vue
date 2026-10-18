@@ -15,6 +15,7 @@
 
   const props = defineProps<{
     field: BackendEditorField
+    label?: string
     initialEntity?: BackendEditorRef
     disabled?: boolean
   }>()
@@ -101,7 +102,9 @@
       :target="target"
       mode="single"
       :selected-entities="selectedEntities"
-      :title="`选择 ${field.ref_target ?? ''}`"
+      :title="`选择${label ?? field.ref_target ?? ''}`"
+      :label="label"
+      :field="field.field"
       @select="onPick"
     />
   </Stack>

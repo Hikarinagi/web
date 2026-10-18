@@ -67,7 +67,7 @@
     >
       <template #icon>
         <HikariImage
-          :src="emoji.src?.src"
+          :src="emoji.src"
           :alt="emoji.name"
           :processing="EMOJI_PICKER_IMAGE"
           :draggable="false"

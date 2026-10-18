@@ -65,7 +65,9 @@
   })
   provide(WORKSPACE_SESSION_KEY, session)
 
+  const editorForm = useTemplateRef<InstanceType<typeof Form>>('editorForm')
   const {
+    duplicates,
     rules,
     values,
     snapshotValues,
@@ -92,6 +94,7 @@
     openChangeRequest: mineCr,
     presentation: presentation.value,
     onReview: (nextChangeset, needsReviewNow) => session.review(nextChangeset, needsReviewNow),
+    form: editorForm,
   })
 
   const relationOps = useRelationOps(relations)
@@ -100,7 +103,6 @@
     updateRow: relationOps.update,
     removeRow: relationOps.remove,
   }
-  const onAddRelation = relationOps.add
 
   function onRoster(roster: SyncRoster) {
     syncRoster.value = roster
@@ -155,7 +157,13 @@
 
       <CreatorEditorImportRelatedBackfill :resource-type="resourceType" :current="relations" />
 
+      <CreatorEditorDuplicatesPanel
+        :check="duplicates"
+        :resource-type="pageData.schema.resource_type"
+      />
+
       <Form
+        ref="editorForm"
         :values="values"
         :rules="rules"
         :class="session.memberList.value.length ? 'pb-40' : 'pb-24'"
@@ -204,7 +212,7 @@
             session.submitting.value ||
             (changedCount === 0 && session.memberList.value.length === 0)
           "
-          @add="onAddRelation"
+          @add="relationOps.add"
           @roster="onRoster"
           @open-nav="navOpen = true"
         />
@@ -228,6 +236,7 @@
         :needs-review="needsReview"
         :submitting="submitting"
         :is-continue="isContinue"
+        :duplicates="duplicates"
         @confirm="confirm"
       />
 
