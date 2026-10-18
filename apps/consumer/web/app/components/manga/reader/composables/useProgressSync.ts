@@ -3,7 +3,6 @@ interface UseProgressSyncOptions {
   chapterId: number
   page: () => number
   authenticated: () => boolean
-  paused: () => boolean
 }
 
 const SYNC_DEBOUNCE_MS = 2000
@@ -45,7 +44,7 @@ export function useProgressSync(options: UseProgressSyncOptions) {
   }
 
   function queue(page: number) {
-    if (!options.authenticated() || options.paused()) return
+    if (!options.authenticated()) return
     pending = page
     if (timer !== null) return
     timer = window.setTimeout(() => {

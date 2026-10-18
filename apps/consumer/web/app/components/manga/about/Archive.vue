@@ -20,10 +20,9 @@
   const props = defineProps<{
     manga: MangaPageData['manga']
     producers: MangaPageData['producers']
-    volumes: MangaPageData['volumes']
+    volumeCount: number
     contributors: MangaPageData['contributors']
   }>()
-  const volumesOpen = ref(false)
 
   const magazines = computed(() =>
     props.producers.filter(item => item.role === 'MAGAZINE').map(item => item.producer),
@@ -106,12 +105,9 @@
         </Stack>
       </ResourceArchiveRow>
 
-      <ResourceArchiveRow v-if="volumes.length" :icon="Layers">
-        <Button variant="link" size="sm" class="px-0" @click="volumesOpen = true">
-          单行本 {{ volumes.length }} 卷
-        </Button>
-        <MangaAboutVolumeDrawer v-model:open="volumesOpen" :volumes="volumes" />
-      </ResourceArchiveRow>
+      <ResourceArchiveRow v-if="volumeCount" :icon="Layers"
+        >单行本 {{ volumeCount }} 卷</ResourceArchiveRow
+      >
       <ResourceArchiveRow v-if="bookFacts" :icon="BookOpen">{{ bookFacts }}</ResourceArchiveRow>
       <ResourceArchiveRow v-if="manga.isbn" :icon="Barcode" label="ISBN">{{
         manga.isbn

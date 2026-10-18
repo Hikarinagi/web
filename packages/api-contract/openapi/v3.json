@@ -810,35 +810,22 @@
             "nullable": true,
             "type": "string"
           },
-          "chapter_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterType"
-              }
-            ]
-          },
           "id": {
             "type": "number"
           },
-          "series_id": {
-            "type": "number"
-          },
-          "title": {
+          "name": {
             "nullable": true,
             "type": "string"
           },
-          "volume_number": {
-            "nullable": true,
+          "series_id": {
             "type": "number"
           }
         },
         "required": [
           "id",
           "series_id",
-          "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title"
+          "name"
         ],
         "type": "object"
       },
@@ -866,11 +853,6 @@
           "last_page": {
             "type": "number"
           },
-          "name": {
-            "description": "这一话在来源的标题",
-            "nullable": true,
-            "type": "string"
-          },
           "page_count": {
             "type": "number"
           },
@@ -897,7 +879,6 @@
           "chapter_id",
           "source_key",
           "source_chapter_id",
-          "name",
           "page_count",
           "last_page",
           "status",
@@ -2594,6 +2575,14 @@
           "id": {
             "type": "number"
           },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
           "page_count": {
             "type": "number"
           },
@@ -2618,10 +2607,6 @@
               }
             ]
           },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
@@ -2639,7 +2624,8 @@
           "id",
           "chapter_type",
           "chapter_number",
-          "title",
+          "name",
+          "name_cn",
           "volume_id",
           "volume_number",
           "publication_date",
@@ -2670,11 +2656,6 @@
           "last_page": {
             "type": "number"
           },
-          "name": {
-            "description": "这一话在来源的标题",
-            "nullable": true,
-            "type": "string"
-          },
           "page_count": {
             "type": "number"
           },
@@ -2696,7 +2677,6 @@
         "required": [
           "id",
           "source_key",
-          "name",
           "status",
           "is_active",
           "page_count",
@@ -14284,14 +14264,13 @@
               }
             ]
           },
-          "publication_date": {
-            "format": "date",
+          "name": {
+            "maxLength": 300,
             "nullable": true,
             "type": "string"
           },
-          "title": {
-            "description": "真实标题；番外必填，只重复编号的标题不保存",
-            "maxLength": 300,
+          "publication_date": {
+            "format": "date",
             "nullable": true,
             "type": "string"
           },
@@ -22865,6 +22844,14 @@
           "id": {
             "type": "number"
           },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
           "page_count": {
             "type": "number"
           },
@@ -22878,10 +22865,6 @@
           },
           "sort_key": {
             "type": "number"
-          },
-          "title": {
-            "nullable": true,
-            "type": "string"
           },
           "volume_id": {
             "nullable": true,
@@ -22900,7 +22883,8 @@
           "volume_id",
           "volume_number",
           "sort_key",
-          "title",
+          "name",
+          "name_cn",
           "publication_date",
           "page_count"
         ],
@@ -22922,21 +22906,21 @@
           "id": {
             "type": "number"
           },
-          "title": {
+          "name": {
             "nullable": true,
             "type": "string"
           },
-          "volume_number": {
+          "name_cn": {
             "nullable": true,
-            "type": "number"
+            "type": "string"
           }
         },
         "required": [
           "id",
           "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title"
+          "name",
+          "name_cn"
         ],
         "type": "object"
       },
@@ -22978,29 +22962,23 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
-            "description": "卷取单行本条目封面",
             "nullable": true,
             "type": "object"
-          },
-          "created_at": {
-            "description": "加入作品的时间",
-            "format": "date-time",
-            "type": "string"
           },
           "editable": {
             "description": "当前用户能否就地修改这一章的信息",
             "type": "boolean"
           },
-          "guest_readable": {
-            "description": "未登录读者也能阅读",
-            "type": "boolean"
-          },
           "id": {
             "type": "number"
           },
-          "ordinal": {
-            "description": "同一单位内同号或同名的第几项，从 1 开始",
-            "type": "number"
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
           },
           "page_count": {
             "type": "number"
@@ -23013,8 +22991,19 @@
           "readable": {
             "type": "boolean"
           },
-          "title": {
-            "description": "真实标题；番外必有，话与卷通常为空",
+          "sort_key": {
+            "type": "number"
+          },
+          "sources_count": {
+            "type": "number"
+          },
+          "translation": {
+            "description": "经共建工作台发布的译本标注；采集来的章节为空",
+            "enum": [
+              "HUMAN",
+              "MACHINE_EDITED",
+              "MACHINE"
+            ],
             "nullable": true,
             "type": "string"
           },
@@ -23034,14 +23023,15 @@
           "chapter_number",
           "volume_number",
           "volume_id",
-          "title",
-          "ordinal",
+          "sort_key",
+          "name",
+          "name_cn",
           "publication_date",
           "page_count",
-          "created_at",
           "cover",
+          "sources_count",
+          "translation",
           "readable",
-          "guest_readable",
           "editable"
         ],
         "type": "object"
@@ -23094,6 +23084,14 @@
           "id": {
             "type": "number"
           },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
           "previous": {
             "$ref": "#/components/schemas/MangaChapterLabelDto"
           },
@@ -23110,22 +23108,14 @@
           },
           "series": {
             "$ref": "#/components/schemas/MangaChapterWantedSeriesDto"
-          },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          },
-          "volume_number": {
-            "nullable": true,
-            "type": "number"
           }
         },
         "required": [
           "id",
           "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title",
+          "name",
+          "name_cn",
           "series",
           "previous",
           "readers",
@@ -24047,39 +24037,26 @@
             "nullable": true,
             "type": "string"
           },
-          "chapter_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterType"
-              }
-            ]
-          },
           "id": {
             "type": "number"
           },
-          "ordinal": {
-            "description": "同一单位内同号或同名的第几项，从 1 开始",
-            "type": "number"
-          },
-          "page_count": {
-            "type": "number"
-          },
-          "title": {
+          "name": {
             "nullable": true,
             "type": "string"
           },
-          "volume_number": {
+          "name_cn": {
             "nullable": true,
+            "type": "string"
+          },
+          "page_count": {
             "type": "number"
           }
         },
         "required": [
           "id",
-          "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title",
-          "ordinal",
+          "name",
+          "name_cn",
           "page_count"
         ],
         "type": "object"
@@ -24093,7 +24070,7 @@
             "type": "number"
           },
           "read_chapter_ids": {
-            "description": "当前用户在本作读到最后一页的章节 id",
+            "description": "当前用户在本作已读过的章节 id",
             "items": {
               "type": "number"
             },
@@ -24134,20 +24111,16 @@
           "id": {
             "type": "number"
           },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
           "publication_date": {
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          },
           "volume_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "volume_number": {
             "nullable": true,
             "type": "number"
           }
@@ -24156,8 +24129,7 @@
           "id",
           "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title",
+          "name",
           "volume_id",
           "publication_date"
         ],
@@ -25089,39 +25061,26 @@
             "nullable": true,
             "type": "string"
           },
-          "chapter_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterType"
-              }
-            ]
-          },
           "id": {
             "type": "number"
           },
-          "ordinal": {
-            "description": "同一单位内同号或同名的第几项，从 1 开始",
-            "type": "number"
-          },
-          "page_count": {
-            "type": "number"
-          },
-          "title": {
+          "name": {
             "nullable": true,
             "type": "string"
           },
-          "volume_number": {
+          "name_cn": {
             "nullable": true,
+            "type": "string"
+          },
+          "page_count": {
             "type": "number"
           }
         },
         "required": [
           "id",
-          "chapter_type",
           "chapter_number",
-          "volume_number",
-          "title",
-          "ordinal",
+          "name",
+          "name_cn",
           "page_count"
         ],
         "type": "object"
@@ -25214,11 +25173,6 @@
           "id": {
             "type": "number"
           },
-          "latest_chapter_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
           "name": {
             "type": "string"
           },
@@ -25240,19 +25194,6 @@
               "PAGED_RTL": "从右往左",
               "WEBTOON": "条漫（竖向滚动）"
             }
-          },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
           }
         },
         "required": [
@@ -25260,9 +25201,7 @@
           "name",
           "name_cn",
           "nsfw",
-          "reading_mode",
-          "serial_status",
-          "latest_chapter_at"
+          "reading_mode"
         ],
         "type": "object"
       },
@@ -25716,30 +25655,15 @@
             "type": "number"
           },
           "current_chapter_index": {
-            "description": "当前项在所在单位中的位置，从 1 开始",
             "type": "number"
           },
           "current_chapter_number": {
             "nullable": true,
             "type": "string"
           },
-          "current_chapter_ordinal": {
-            "type": "number"
-          },
           "current_chapter_title": {
             "nullable": true,
             "type": "string"
-          },
-          "current_chapter_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterType"
-              }
-            ]
-          },
-          "current_volume_number": {
-            "nullable": true,
-            "type": "number"
           },
           "first_chapter_id": {
             "nullable": true,
@@ -25775,7 +25699,6 @@
             "type": "string"
           },
           "total_chapters": {
-            "description": "当前项所在单位的项数",
             "type": "number"
           }
         },
@@ -25787,11 +25710,8 @@
           "serial_status",
           "total_chapters",
           "current_chapter_id",
-          "current_chapter_type",
           "current_chapter_number",
-          "current_volume_number",
           "current_chapter_title",
-          "current_chapter_ordinal",
           "current_chapter_index",
           "first_chapter_id",
           "is_latest",
@@ -40184,6 +40104,16 @@
               }
             ]
           },
+          "name": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
           "publication_date": {
             "format": "date",
             "nullable": true,
@@ -40191,11 +40121,6 @@
           },
           "sort_key": {
             "type": "number"
-          },
-          "title": {
-            "maxLength": 300,
-            "nullable": true,
-            "type": "string"
           },
           "volume_id": {
             "minimum": 1,

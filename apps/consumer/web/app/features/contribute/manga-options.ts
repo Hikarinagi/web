@@ -1,6 +1,5 @@
-import { mangaChapterLabel } from '@hikarinagi/shared'
 import { belongsTo } from '~/features/manga/volumes'
-import { getMangaVolumeLabel } from '~/utils/media/manga'
+import { getMangaEpisodeLabel, getMangaVolumeLabel } from '~/utils/media/manga'
 import type { MangaTargetChapter, MangaTargetClaim, MangaTargetVolume } from './manga-target'
 
 export const NEW_TARGET = 'new'
@@ -20,7 +19,7 @@ export function chapterOptions(
     ...chapters
       .filter(chapter => chapter.chapter_type !== 'VOLUME' && !chapter.page_count)
       .map(chapter => {
-        const label = mangaChapterLabel(chapter)
+        const label = getMangaEpisodeLabel(chapter)
         return taken.has(chapter.id)
           ? { value: chapter.id, label: `${label}（进行中）`, disabled: true }
           : { value: chapter.id, label }

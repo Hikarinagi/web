@@ -29,7 +29,7 @@ export function useMangaTargets(seriesId: () => number | null) {
         }).catch(() => null),
       ])
       if (seriesId() !== id) return
-      chapters.value = [...(list ?? [])].reverse()
+      chapters.value = [...(list ?? [])].sort((left, right) => right.sort_key - left.sort_key)
       volumes.value = entries ?? []
       claims.value = projects?.items ?? []
       loading.value = false

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
+  import { Panel, Stack } from '@hina-ui/vue'
   import { LibraryBig } from '@lucide/vue'
-  import { mangaChapterLabel } from '@hikarinagi/shared'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
-  import { useContents } from '~/features/manga/composables/useContents'
   import { chaptersInVolume } from '~/features/manga/volumes'
+  import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaVolumeChapters' })
 
@@ -15,36 +14,28 @@
     progress: MangaVolumePageData['progress']
   }>()
 
-  const scoped = computed(() =>
-    chaptersInVolume(props.chapters, props.volume, props.volumes).filter(item => item.readable),
-  )
-  const contents = useContents(() => ({
-    mangaId: props.volume.series_id,
-    chapters: scoped.value,
-    progress: props.progress,
-  }))
-  const { units, readIds, currentId, currentPage, signedIn, unit, range } = contents
+  const scoped = computed(() => chaptersInVolume(props.chapters, props.volume, props.volumes))
+  const readIds = computed(() => new Set(props.progress?.read_chapter_ids ?? []))
   const description = computed(() => {
     const first = scoped.value[0]
-    const last = scoped.value.at(-1)
+    const last = scoped.value[scoped.value.length - 1]
     if (!first || !last) return undefined
-    if (first.id === last.id) return mangaChapterLabel(first)
-    return `${mangaChapterLabel(first)} ～ ${mangaChapterLabel(last)}`
+    if (first.id === last.id) return getMangaEpisodeLabel(first)
+    return `${getMangaEpisodeLabel(first)} ～ ${getMangaEpisodeLabel(last)}`
   })
 </script>
 
 <template>
   <Panel v-if="scoped.length" title="本卷收录" :count="scoped.length" :description="description">
     <template #icon><LibraryBig /></template>
-    <MangaContentsBrowser
-      v-model:unit="unit"
-      v-model:range="range"
-      :units="units"
-      :current-id="currentId"
-      :current-page="currentPage"
-      :read-ids="readIds"
-      :signed-in="signedIn"
-      @select="contents.open"
-    />
+    <Stack gap="none">
+      <MangaChaptersGrid
+        :manga-id="volume.manga.id"
+        :chapters="scoped"
+        :new-chapter-id="null"
+        :current-chapter-id="progress?.chapter.id ?? null"
+        :read-ids="readIds"
+      />
+    </Stack>
   </Panel>
 </template>

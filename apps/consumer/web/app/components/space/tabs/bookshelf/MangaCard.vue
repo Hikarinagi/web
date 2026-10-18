@@ -2,7 +2,6 @@
   import { Button, Inline, Progress, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { Play, RotateCcw } from '@lucide/vue'
-  import { MANGA_READING_UNIT_NOUN, mangaChapterLabel, mangaReadingUnit } from '@hikarinagi/shared'
   import type { SpaceMangaShelfItem } from '~/features/space/space'
   import { timeFromNow } from '~/utils/time-format'
 
@@ -11,28 +10,20 @@
   const props = defineProps<{ item: SpaceMangaShelfItem }>()
   const emit = defineEmits<{ removed: [] }>()
 
-  const noun = computed(
-    () => MANGA_READING_UNIT_NOUN[mangaReadingUnit(props.item.current_chapter_type)],
-  )
-
   const metaLine = computed(() => {
     const i = props.item
     const serial =
       i.serial_status === 'FINISHED'
-        ? `已完结，全 ${i.total_chapters} ${noun.value}`
-        : `连载中，共 ${i.total_chapters} ${noun.value}`
+        ? `已完结，全 ${i.total_chapters} 话`
+        : `连载中，更新至第 ${i.total_chapters} 话`
     return i.author ? `${i.author} · ${serial}` : serial
   })
 
-  const chapterLabel = computed(() =>
-    mangaChapterLabel({
-      chapter_type: props.item.current_chapter_type,
-      chapter_number: props.item.current_chapter_number,
-      volume_number: props.item.current_volume_number,
-      title: props.item.current_chapter_title,
-      ordinal: props.item.current_chapter_ordinal,
-    }),
-  )
+  const chapterLabel = computed(() => {
+    const i = props.item
+    if (i.current_chapter_number) return `第 ${i.current_chapter_number} 话`
+    return i.current_chapter_title ?? `第 ${i.current_chapter_index} 话`
+  })
 
   const statusLine = computed(() => {
     const i = props.item
@@ -40,7 +31,7 @@
     if (i.is_finished) {
       segments.push('已读完')
     } else {
-      segments.push(`读到 ${chapterLabel.value}`)
+      segments.push(`读到${chapterLabel.value}`)
       if (i.is_latest) segments.push('已是最新')
     }
     segments.push(timeFromNow(i.last_read))

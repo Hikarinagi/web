@@ -11,7 +11,7 @@
     type MangaRateStatus,
   } from '~/features/manga/rate'
   import { MANGA_STATUS_ICON as STATUS_ICON } from '~/features/rate/status-icon'
-  import { contentsUnits, continueTarget } from '~/features/manga/contents'
+  import { getMangaEpisodeLabel } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaHeroCta' })
 
@@ -26,13 +26,10 @@
 
   const pickerTitle = computed(() => `将「${props.title}」添加到收藏夹`)
 
-  const target = computed(() =>
-    continueTarget(
-      contentsUnits(props.chapters),
-      props.progress,
-      new Set(props.progress?.read_chapter_ids ?? []),
-    ),
-  )
+  const startTarget = computed(() => {
+    const readable = props.chapters.filter(chapter => chapter.readable)
+    return [...readable].sort((left, right) => left.sort_key - right.sort_key)[0] ?? null
+  })
 
   const rateCtl = useMangaRate(props.mangaId, props.myRate)
 
@@ -58,16 +55,22 @@
 
 <template>
   <Inline justify="center" class="lg:justify-start">
-    <Button v-if="target" size="lg" @click="read(target.id)">
+    <Button v-if="progress" size="lg" @click="read(progress.chapter.id)">
       <template #icon>
         <Play aria-hidden="true" />
       </template>
-      {{ target.resume ? '继续阅读' : '开始阅读' }} {{ target.label }}
+      继续阅读 {{ getMangaEpisodeLabel(progress.chapter) }}
+    </Button>
+    <Button v-else-if="startTarget" size="lg" @click="read(startTarget.id)">
+      <template #icon>
+        <Play aria-hidden="true" />
+      </template>
+      开始阅读 {{ getMangaEpisodeLabel(startTarget) }}
     </Button>
 
     <WorkStatusMenu
       size="lg"
-      :tone="target ? 'neutral' : 'accent'"
+      :tone="progress || startTarget ? 'neutral' : 'accent'"
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
       :options="statusOptions"

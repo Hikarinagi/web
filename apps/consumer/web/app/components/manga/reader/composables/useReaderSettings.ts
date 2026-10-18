@@ -1,48 +1,29 @@
 import {
   MANGA_READER_DEFAULT_SETTINGS,
-  MANGA_READER_DIRECTIONS_KEY,
-  MANGA_READER_MODES_KEY,
+  MANGA_READER_FIT_OPTIONS,
   MANGA_READER_SETTINGS_KEY,
-  type MangaReaderDirection,
-  type MangaReaderMode,
   type MangaReaderSettings,
 } from '../lib/settings'
 
-interface UseReaderSettingsOptions {
-  mangaId: number
-  webtoon: boolean
-  ltr: boolean
-}
-
-export function useReaderSettings(options: UseReaderSettingsOptions) {
+export function useReaderSettings() {
   const settings = useLocalStorage<MangaReaderSettings>(
     MANGA_READER_SETTINGS_KEY,
     { ...MANGA_READER_DEFAULT_SETTINGS },
     { mergeDefaults: true },
   )
-  const modes = useLocalStorage<Record<string, MangaReaderMode>>(MANGA_READER_MODES_KEY, {})
-  const directions = useLocalStorage<Record<string, MangaReaderDirection>>(
-    MANGA_READER_DIRECTIONS_KEY,
-    {},
-  )
 
-  const mode = computed<MangaReaderMode>({
-    get: () => modes.value[options.mangaId] ?? (options.webtoon ? 'scroll' : 'paged'),
-    set: value => {
-      modes.value = { ...modes.value, [options.mangaId]: value }
-    },
-  })
-
-  const direction = computed<MangaReaderDirection>({
-    get: () => directions.value[options.mangaId] ?? (options.ltr ? 'ltr' : 'rtl'),
-    set: value => {
-      directions.value = { ...directions.value, [options.mangaId]: value }
-    },
-  })
-
-  function update(patch: Partial<MangaReaderSettings>) {
-    settings.value = { ...settings.value, ...patch }
+  function toggleLayout() {
+    settings.value = {
+      ...settings.value,
+      layout: settings.value.layout === 'single' ? 'double' : 'single',
+    }
   }
 
-  return { settings, mode, direction, update }
+  function cycleFit() {
+    const index = MANGA_READER_FIT_OPTIONS.findIndex(option => option.value === settings.value.fit)
+    const next = MANGA_READER_FIT_OPTIONS[(index + 1) % MANGA_READER_FIT_OPTIONS.length]
+    if (next) settings.value = { ...settings.value, fit: next.value }
+  }
+
+  return { settings, toggleLayout, cycleFit }
 }

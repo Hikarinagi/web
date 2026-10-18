@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Heading, Inline, Stack } from '@hina-ui/vue'
+  import { Heading, Inline, Stack, Text } from '@hina-ui/vue'
 
   defineOptions({ name: 'MangaReaderLoginGate' })
 
@@ -11,11 +11,21 @@
 </script>
 
 <template>
-  <Stack align="center" justify="center" gap="lg" class="dark h-dvh bg-neutral-950 px-6 text-fg">
-    <Heading :level="1" size="lg">登录后继续阅读</Heading>
+  <Stack align="center" justify="center" gap="lg" class="h-dvh bg-neutral-950 px-6">
+    <Stack align="center" gap="none" class="gap-1.5 text-center">
+      <Heading :level="1" size="lg" class="text-neutral-0">登录后继续阅读</Heading>
+      <Text size="sm" class="text-neutral-400"> 登录后继续阅读，并同步阅读进度 </Text>
+    </Stack>
     <Inline :wrap="false">
-      <Button login-required size="lg">登录</Button>
-      <Button variant="soft" tone="neutral" size="lg" @click="back">返回作品页</Button>
+      <Button login-required pill class="px-6">登录 / 注册</Button>
+      <Button
+        variant="ghost"
+        pill
+        class="bg-neutral-0/12 text-neutral-0 hover:bg-neutral-0/20"
+        @click="back"
+      >
+        返回详情页
+      </Button>
     </Inline>
   </Stack>
 </template>

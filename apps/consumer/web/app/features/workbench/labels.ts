@@ -72,6 +72,7 @@ export const MODERATION_STATUS_META: Record<string, { label: string; tone: Tone 
 }
 
 export const MANGA_CHAPTER_TYPE_OPTIONS = [
-  { value: 'SERIALIZATION', label: '单话' },
+  { value: 'SERIALIZATION', label: '连载' },
   { value: 'EXTRA', label: '番外' },
+  { value: 'ONESHOT', label: '单篇' },
 ]

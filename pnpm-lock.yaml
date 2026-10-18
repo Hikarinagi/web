@@ -48,8 +48,8 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/shared
       '@hina-ui/vue':
-        specifier: ^1.7.14
-        version: 1.7.14(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))
+        specifier: ^1.7.5
+        version: 1.7.15(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))
       '@lucide/vue':
         specifier: ^1.14.0
         version: 1.59.0(vue@3.5.44(typescript@6.0.3))
@@ -1189,8 +1189,8 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  '@hina-ui/vue@1.7.14':
-    resolution: {integrity: sha512-af97bV4mVp8qLhMNHJtUuCLgZchHBTndyoKXSya0NjbM5bgla802UIz0WB0NFYJ/MoRZRcPIDTXGb1i5WfNw5Q==}
+  '@hina-ui/vue@1.7.15':
+    resolution: {integrity: sha512-tjHllVtHPX7p2G9oSIqyVU8p3vPwrqcM3Jg5UxJ9SygPzN8z5CRtm3WdgHFjPcWqpdQyNhKJgXnRpo1fo6Jqqg==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -9296,7 +9296,7 @@ snapshots:
       protobufjs: 7.6.6
       yargs: 17.7.3
 
-  '@hina-ui/vue@1.7.14(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))':
+  '@hina-ui/vue@1.7.15(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))':
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@floating-ui/vue': 1.1.11(vue@3.5.44(typescript@6.0.3))

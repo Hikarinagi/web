@@ -4,7 +4,7 @@
 
   defineOptions({ name: 'MangaAbout' })
 
-  defineProps<{
+  const props = defineProps<{
     manga: MangaPageData['manga']
     tags: MangaPageData['tags']
     people: MangaPageData['people']
@@ -12,6 +12,8 @@
     volumes: MangaPageData['volumes']
     contributors: MangaPageData['contributors']
   }>()
+
+  const volumeCount = computed(() => props.volumes.length)
 </script>
 
 <template>
@@ -21,7 +23,7 @@
       <MangaAboutArchive
         :manga="manga"
         :producers="producers"
-        :volumes="volumes"
+        :volume-count="volumeCount"
         :contributors="contributors"
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />

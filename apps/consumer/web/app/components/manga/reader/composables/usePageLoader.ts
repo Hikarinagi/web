@@ -20,7 +20,6 @@ export function usePageLoader(options: UsePageLoaderOptions) {
       statusOf: (): PageLoadStatus => 'loading',
       imageOf: () => null,
       ensureAround: () => {},
-      peek: () => {},
       retry: () => Promise.resolve(),
     }
   }
@@ -154,9 +153,5 @@ export function usePageLoader(options: UsePageLoaderOptions) {
     clear()
   })
 
-  function peek(pageNumbers: number[]) {
-    for (const pageNumber of pageNumbers) void load(pageNumber)
-  }
-
-  return { statusOf, imageOf, ensureAround, peek, retry }
+  return { statusOf, imageOf, ensureAround, retry }
 }

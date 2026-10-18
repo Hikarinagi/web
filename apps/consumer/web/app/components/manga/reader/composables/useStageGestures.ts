@@ -5,7 +5,6 @@ interface UseStageGesturesOptions {
   viewport: Ref<HTMLElement | null>
   canGoNext: () => boolean
   canGoPrevious: () => boolean
-  direction: () => 'rtl' | 'ltr'
   /** `false` turns the page on release without dragging or animating it. */
   animate: () => boolean
   /** `true` when the page is shown whole and pan/zoom owns the surface. */
@@ -56,7 +55,6 @@ export function useStageGestures(options: UseStageGesturesOptions) {
   let lastTapX = 0
   let lastTapY = 0
   let tapTimer: number | null = null
-  let settleTimer: number | null = null
 
   const trackStyle = computed(() => ({
     transform: `translate3d(${dragX.value}px, 0, 0)`,
@@ -80,18 +78,17 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     return Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y'
   }
 
-  function commitFor(rawDx: number): Commit {
+  function commitFor(dx: number): Commit {
     const width = viewportWidth()
-    const sign = options.direction() === 'rtl' ? 1 : -1
-    const dx = rawDx * sign
-    const speed = velocity * sign
     if (dx > 0) {
       const commit =
-        dx > width * DRAG_COMMIT_RATIO || (dx > DRAG_COMMIT_MIN_PX && speed > DRAG_COMMIT_VELOCITY)
+        dx > width * DRAG_COMMIT_RATIO ||
+        (dx > DRAG_COMMIT_MIN_PX && velocity > DRAG_COMMIT_VELOCITY)
       return commit && options.canGoNext() ? 'next' : null
     }
     const commit =
-      dx < -width * DRAG_COMMIT_RATIO || (dx < -DRAG_COMMIT_MIN_PX && speed < -DRAG_COMMIT_VELOCITY)
+      dx < -width * DRAG_COMMIT_RATIO ||
+      (dx < -DRAG_COMMIT_MIN_PX && velocity < -DRAG_COMMIT_VELOCITY)
     return commit && options.canGoPrevious() ? 'previous' : null
   }
 
@@ -102,27 +99,15 @@ export function useStageGestures(options: UseStageGesturesOptions) {
       else if (commit === 'previous') options.previous()
       return
     }
-    const width = viewportWidth() * (options.direction() === 'rtl' ? 1 : -1)
+    const width = viewportWidth()
     animating.value = true
     dragX.value = commit === 'next' ? width : commit === 'previous' ? -width : 0
-    settleTimer = window.setTimeout(() => {
-      settleTimer = null
+    window.setTimeout(() => {
       if (commit === 'next') options.next()
       else if (commit === 'previous') options.previous()
       animating.value = false
       dragX.value = 0
     }, TRANSITION_MS)
-  }
-
-  function pull(dx: number) {
-    if (options.animate()) dragX.value = dx
-  }
-
-  function cancel() {
-    if (settleTimer !== null) window.clearTimeout(settleTimer)
-    settleTimer = null
-    animating.value = false
-    dragX.value = 0
   }
 
   function twoPointers() {
@@ -220,9 +205,8 @@ export function useStageGestures(options: UseStageGesturesOptions) {
 
     if (!options.animate()) return
     const pageDx = event.clientX - pageStartX
-    const forward = options.direction() === 'rtl' ? pageDx : -pageDx
-    const blockedNext = forward > 0 && !options.canGoNext()
-    const blockedPrevious = forward < 0 && !options.canGoPrevious()
+    const blockedNext = pageDx > 0 && !options.canGoNext()
+    const blockedPrevious = pageDx < 0 && !options.canGoPrevious()
     dragX.value = blockedNext || blockedPrevious ? pageDx * 0.25 : pageDx
   }
 
@@ -333,9 +317,6 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     dragX,
     animating,
     trackStyle,
-    pull,
-    settle,
-    cancel,
     onPointerDown,
     onPointerMove,
     onPointerUp,

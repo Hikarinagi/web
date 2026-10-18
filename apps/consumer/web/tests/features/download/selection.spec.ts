@@ -70,10 +70,9 @@ describe.each([
               chapters: [1, 2, 3].map(id => ({
                 id,
                 readable: true,
-                chapter_type: 'SERIALIZATION',
-                chapter_number: String(id),
-                volume_number: null,
-                title: null,
+                sort_key: id,
+                chapter_number: id,
+                title: `第 ${id} 话`,
               })),
             },
       global: {

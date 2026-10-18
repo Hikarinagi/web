@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { ReaderEducationHint } from '~/components/reader/EducationOverlay.vue'
 import { readerEducationHints } from '~/components/hikari-reader/lib/education'
+import { mangaEducationHints } from '~/components/manga/reader/lib/education'
 
 function text(hints: readonly ReaderEducationHint[]) {
   return hints.map(hint => `${hint.title} ${hint.description ?? ''}`).join('\n')
@@ -61,5 +62,30 @@ describe('readerEducationHints', () => {
     expect(text(readerEducationHints({ coarsePointer: false, tapZones: false }))).toMatch(
       /拖动鼠标可以选中文字/,
     )
+  })
+})
+
+const MANGA_CASES = [
+  { coarsePointer: true, zoomable: true },
+  { coarsePointer: true, zoomable: false },
+  { coarsePointer: false, zoomable: true },
+  { coarsePointer: false, zoomable: false },
+]
+
+describe('mangaEducationHints', () => {
+  it.each(MANGA_CASES)('lays out cleanly for %o', context => {
+    expectLayoutIsSane(mangaEducationHints(context))
+  })
+
+  it('drops the zoom card for the layouts that cannot zoom', () => {
+    const hints = mangaEducationHints({ coarsePointer: true, zoomable: false })
+    expect(hints.some(hint => hint.key === 'zoom')).toBe(false)
+  })
+
+  it('only offers pinch to touch', () => {
+    expect(text(mangaEducationHints({ coarsePointer: true, zoomable: true }))).toMatch(/捏合/)
+    const mouse = text(mangaEducationHints({ coarsePointer: false, zoomable: true }))
+    expect(mouse).not.toMatch(/捏合/)
+    expect(mouse).toMatch(/双击/)
   })
 })
