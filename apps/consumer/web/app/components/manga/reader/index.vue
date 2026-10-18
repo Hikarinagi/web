@@ -1,18 +1,19 @@
 <script setup lang="ts">
   import { Center, Flex, Spinner, Stack, Text } from '@hina-ui/vue'
-  import { useMediaQuery } from '@vueuse/core'
-  import { AnimatePresence, motion } from 'motion-v'
   import type { MangaReadPageData } from '~~/server/api/pages/mangas/reader/[id]/[chapterId].get'
-  import { useReaderEducation } from '~/components/reader/composables/useReaderEducation'
   import { useReaderExit } from '~/components/reader/composables/useReaderExit'
+  import type ReaderBottom from './bar/Bottom.vue'
+  import type ReaderTop from './bar/Top.vue'
+  import type ReaderScrollStage from './ScrollStage.vue'
+  import type ReaderStage from './Stage.vue'
   import { useProgressSync } from './composables/useProgressSync'
   import { useReaderChrome } from './composables/useReaderChrome'
   import { useReaderEnd } from './composables/useReaderEnd'
   import { useReaderInteractions } from './composables/useReaderInteractions'
   import { useReaderItems } from './composables/useReaderItems'
   import { useReaderTools } from './composables/useReaderTools'
+  import { useReaderTour } from './composables/useReaderTour'
   import { useReaderView } from './composables/useReaderView'
-  import { MANGA_READER_EDUCATION_KEY, mangaEducationHints } from './lib/education'
 
   defineOptions({ name: 'MangaReader' })
 
@@ -44,24 +45,14 @@
     chrome.hide()
   }
 
-  const education = useReaderEducation(MANGA_READER_EDUCATION_KEY)
-  const coarsePointer = useMediaQuery('(pointer: coarse)')
-  const hints = computed(() =>
-    mangaEducationHints({
-      coarsePointer: coarsePointer.value,
-      zoomable: view.fit.value === 'screen',
-      mode: mode.value,
-      direction: view.direction.value,
-      tapSides: settings.value.tap_sides,
-    }),
-  )
-  function dismissEducation() {
-    education.dismiss()
-    chrome.show()
-  }
+  const stage = useTemplateRef<InstanceType<typeof ReaderStage>>('stage')
+  const scrollStage = useTemplateRef<InstanceType<typeof ReaderScrollStage>>('scrollStage')
+  const top = useTemplateRef<InstanceType<typeof ReaderTop>>('top')
+  const bottom = useTemplateRef<InstanceType<typeof ReaderBottom>>('bottom')
+  const tour = useReaderTour({ view, chrome, tools, stage, scrollStage, top, bottom })
 
   const interactions = useReaderInteractions({
-    educationVisible: education.visible,
+    blocked: tour.open,
     paged: () => paged.value,
     tapSides: () => settings.value.tap_sides,
     direction: () => view.direction.value,
@@ -78,6 +69,7 @@
     chapterId: items.chapter.value.id,
     page: () => view.visiblePage.value,
     authenticated: () => auth.isAuthenticated,
+    paused: () => tour.open.value,
   })
   whenever(
     () => auth.isAuthenticated,
@@ -98,7 +90,6 @@
       reader.totalPages.value > 0,
   )
 
-  const scrollStage = useTemplateRef<{ goToPage: (page: number) => void }>('scrollStage')
   function jump(page: number) {
     if (paged.value) reader.goToPage(page)
     else scrollStage.value?.goToPage(page)
@@ -115,6 +106,7 @@
   >
     <MangaReaderStage
       v-if="paged"
+      ref="stage"
       :spreads="reader.spreads.value"
       :current="reader.currentIndex.value"
       :fit="view.fit.value"
@@ -153,6 +145,7 @@
     <MangaReaderChrome :visible="chrome.visible.value">
       <template #top>
         <MangaReaderBarTop
+          ref="top"
           :title="title"
           :heading="items.heading.value"
           :narrow="narrow"
@@ -171,7 +164,9 @@
       </template>
       <template #bottom>
         <MangaReaderBarBottom
+          ref="bottom"
           :narrow="narrow"
+          :dark="!light"
           :noun="items.noun.value"
           :has-previous="!!data.manifest.prev_chapter"
           :has-next="!!data.manifest.next_chapter"
@@ -210,7 +205,7 @@
       :narrow="narrow"
       :dark="!light"
       :anchor="settingsAnchor"
-      @guide="education.replay()"
+      @guide="tour.replay()"
     />
     <MangaReaderDirectory
       v-model:open="items.directoryOpen.value"
@@ -234,17 +229,16 @@
       </Stack>
     </Center>
 
-    <AnimatePresence>
-      <motion.div
-        v-if="education.visible.value"
-        key="manga-reader-education"
-        class="absolute inset-0 z-50"
-        :initial="{ opacity: 0 }"
-        :animate="{ opacity: 1 }"
-        :exit="{ opacity: 0 }"
-      >
-        <ReaderEducationOverlay :hints="hints" @dismiss="dismissEducation" />
-      </motion.div>
-    </AnimatePresence>
+    <MangaReaderTour
+      :open="tour.open.value"
+      :mode="mode"
+      :direction="view.direction.value"
+      :tap-sides="settings.tap_sides"
+      :zoomable="view.fit.value === 'screen'"
+      :narrow="narrow"
+      :dark="!light"
+      :demo="tour.demo"
+      @close="tour.dismiss"
+    />
   </Flex>
 </template>

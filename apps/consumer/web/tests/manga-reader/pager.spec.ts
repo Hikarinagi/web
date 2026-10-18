@@ -36,6 +36,7 @@ function mountPager(props: Partial<{ shown: number[]; direction: 'rtl' | 'ltr' }
       spreadOf: (page: number) => [page],
       statusOf: () => 'idle' as const,
       imageOf: () => null,
+      dark: true,
       ...props,
     },
     global: { stubs: { MangaReaderThumb: true } },

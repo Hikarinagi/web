@@ -116,6 +116,8 @@
         翻页动画
       </Switch>
     </Stack>
-    <Button variant="link" size="sm" class="self-start" @click="emit('guide')">操作说明</Button>
+    <Button data-tour="guide" variant="link" size="sm" class="self-start" @click="emit('guide')">
+      操作说明
+    </Button>
   </Stack>
 </template>

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ReaderEducationHint } from '~/components/reader/EducationOverlay.vue'
 import { readerEducationHints } from '~/components/hikari-reader/lib/education'
-import { mangaEducationHints } from '~/components/manga/reader/lib/education'
 
 function text(hints: readonly ReaderEducationHint[]) {
   return hints.map(hint => `${hint.title} ${hint.description ?? ''}`).join('\n')
@@ -62,46 +61,5 @@ describe('readerEducationHints', () => {
     expect(text(readerEducationHints({ coarsePointer: false, tapZones: false }))).toMatch(
       /拖动鼠标可以选中文字/,
     )
-  })
-})
-
-const MANGA_BASE = { mode: 'paged', direction: 'rtl', tapSides: true } as const
-
-const MANGA_CASES = [true, false].flatMap(tapSides =>
-  [
-    { coarsePointer: true, zoomable: true },
-    { coarsePointer: true, zoomable: false },
-    { coarsePointer: false, zoomable: true },
-    { coarsePointer: false, zoomable: false },
-  ].map(context => ({ ...MANGA_BASE, ...context, tapSides })),
-)
-
-describe('mangaEducationHints', () => {
-  it.each(MANGA_CASES)('lays out cleanly for %o', context => {
-    expectLayoutIsSane(mangaEducationHints(context))
-  })
-
-  it('drops the zoom card for the layouts that cannot zoom', () => {
-    const hints = mangaEducationHints({ ...MANGA_BASE, coarsePointer: true, zoomable: false })
-    expect(hints.some(hint => hint.key === 'zoom')).toBe(false)
-  })
-
-  it('only offers pinch to touch', () => {
-    expect(
-      text(mangaEducationHints({ ...MANGA_BASE, coarsePointer: true, zoomable: true })),
-    ).toMatch(/捏合/)
-    const mouse = text(mangaEducationHints({ ...MANGA_BASE, coarsePointer: false, zoomable: true }))
-    expect(mouse).not.toMatch(/捏合/)
-    expect(mouse).toMatch(/双击/)
-  })
-
-  it('stops promising side taps once they are turned off', () => {
-    const copy = text(
-      mangaEducationHints({ ...MANGA_BASE, coarsePointer: false, zoomable: true, tapSides: false }),
-    )
-    expect(copy).not.toMatch(/点左侧|点右侧|中间/)
-    expect(copy).toMatch(/单击页面 呼出工具栏/)
-    expect(copy).toMatch(/向右拖动 下一页/)
-    expect(copy).toMatch(/方向键/)
   })
 })

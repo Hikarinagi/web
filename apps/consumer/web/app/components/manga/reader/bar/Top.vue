@@ -35,10 +35,19 @@
 
   const titleElement = useTemplateRef<InstanceType<typeof Heading>>('titleElement')
   const titleClipped = useOverflowing(titleElement)
+  const bar = useTemplateRef<InstanceType<typeof Flex>>('bar')
+
+  defineExpose({
+    settingsButton: () =>
+      (bar.value?.$el as HTMLElement | undefined)?.querySelector<HTMLElement>(
+        '[data-tour="settings"]',
+      ) ?? null,
+  })
 </script>
 
 <template>
   <Flex
+    ref="bar"
     align="center"
     gap="xs"
     :wrap="false"
@@ -97,6 +106,7 @@
       </IconButton>
       <IconButton
         label="阅读设置"
+        data-tour="settings"
         variant="ghost"
         tone="neutral"
         @click="(event: MouseEvent) => emit('settings', event)"

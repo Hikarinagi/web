@@ -13,6 +13,7 @@
     spreadOf: (page: number) => number[]
     statusOf: (page: number) => PageLoadStatus
     imageOf: (page: number) => HTMLImageElement | null
+    dark: boolean
   }>()
   const emit = defineEmits<{ jump: [page: number]; peek: [pages: number[]] }>()
 
@@ -54,12 +55,44 @@
     emit('jump', Math.min(total.value, Math.max(1, Math.round(typed.value))))
     jumpOpen.value = false
   }
+
+  const root = useTemplateRef<InstanceType<typeof Inline>>('root')
+  const slider = useTemplateRef<InstanceType<typeof Slider>>('slider')
+
+  function track() {
+    const element = slider.value?.$el as HTMLElement | undefined
+    return element?.getBoundingClientRect() ?? null
+  }
+
+  function pointAt(page: number) {
+    const box = track()
+    if (!box) return null
+    const ratio = total.value > 1 ? (page - 1) / (total.value - 1) : 0
+    const offset = (props.direction === 'rtl' ? 1 - ratio : ratio) * box.width
+    return { x: box.left + offset, y: box.top + box.height / 2 }
+  }
+
+  function pageAt(x: number) {
+    const box = track()
+    if (!box || !box.width) return null
+    const ratio = Math.min(1, Math.max(0, (x - box.left) / box.width))
+    return Math.round((props.direction === 'rtl' ? 1 - ratio : ratio) * (total.value - 1)) + 1
+  }
+
+  defineExpose({
+    jumpOpen,
+    box: () => (root.value?.$el as HTMLElement | undefined)?.getBoundingClientRect() ?? null,
+    pointAt,
+    pageAt,
+    preview: (page: number | null) => drag(page ?? undefined),
+  })
 </script>
 
 <template>
-  <Inline gap="sm" :wrap="false" class="min-w-0 flex-1">
-    <Popover v-model:open="jumpOpen" side="top" :modal="false">
+  <Inline ref="root" gap="sm" :wrap="false" class="min-w-0 flex-1">
+    <Popover v-model:open="jumpOpen" side="top" :modal="false" :class="dark ? 'dark' : undefined">
       <Button
+        data-tour="page-number"
         variant="ghost"
         tone="neutral"
         size="sm"
@@ -69,7 +102,7 @@
         {{ span(shown) }} / {{ total }}
       </Button>
       <template #content>
-        <Stack gap="sm" class="w-56">
+        <Stack data-tour="jump" gap="sm" class="w-56">
           <Text size="sm" weight="medium">跳至页码</Text>
           <Inline gap="sm" :wrap="false">
             <NumberInput
@@ -112,6 +145,7 @@
         </Stack>
       </Card>
       <Slider
+        ref="slider"
         :dir="direction"
         :model-value="value"
         :min="1"

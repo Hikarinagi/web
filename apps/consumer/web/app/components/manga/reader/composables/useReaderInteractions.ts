@@ -2,7 +2,7 @@ import type { Ref } from 'vue'
 import type { MangaReaderDirection } from '../lib/settings'
 
 interface UseReaderInteractionsOptions {
-  educationVisible: Ref<boolean>
+  blocked: Ref<boolean>
   paged: () => boolean
   tapSides: () => boolean
   direction: () => MangaReaderDirection
@@ -23,7 +23,7 @@ export function useReaderInteractions(options: UseReaderInteractionsOptions) {
   }
 
   function onTap(event: MouseEvent) {
-    if (options.educationVisible.value) return
+    if (options.blocked.value) return
     if (options.paged() && options.tapSides()) {
       const ratio = event.clientX / window.innerWidth
       if (ratio < SIDE_RATIO) return turn('left')
@@ -34,7 +34,7 @@ export function useReaderInteractions(options: UseReaderInteractionsOptions) {
 
   function onContextMenu(event: Event) {
     event.preventDefault()
-    if (options.educationVisible.value) return
+    if (options.blocked.value) return
     options.showChrome()
   }
 
@@ -45,7 +45,7 @@ export function useReaderInteractions(options: UseReaderInteractionsOptions) {
       if (target.isContentEditable || tag === 'input' || tag === 'textarea' || tag === 'select')
         return
     }
-    if (options.educationVisible.value) return
+    if (options.blocked.value) return
     if (event.key === 'Escape') {
       options.hideChrome()
       return

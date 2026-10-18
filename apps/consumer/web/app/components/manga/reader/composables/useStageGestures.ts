@@ -56,6 +56,7 @@ export function useStageGestures(options: UseStageGesturesOptions) {
   let lastTapX = 0
   let lastTapY = 0
   let tapTimer: number | null = null
+  let settleTimer: number | null = null
 
   const trackStyle = computed(() => ({
     transform: `translate3d(${dragX.value}px, 0, 0)`,
@@ -104,12 +105,24 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     const width = viewportWidth() * (options.direction() === 'rtl' ? 1 : -1)
     animating.value = true
     dragX.value = commit === 'next' ? width : commit === 'previous' ? -width : 0
-    window.setTimeout(() => {
+    settleTimer = window.setTimeout(() => {
+      settleTimer = null
       if (commit === 'next') options.next()
       else if (commit === 'previous') options.previous()
       animating.value = false
       dragX.value = 0
     }, TRANSITION_MS)
+  }
+
+  function pull(dx: number) {
+    if (options.animate()) dragX.value = dx
+  }
+
+  function cancel() {
+    if (settleTimer !== null) window.clearTimeout(settleTimer)
+    settleTimer = null
+    animating.value = false
+    dragX.value = 0
   }
 
   function twoPointers() {
@@ -320,6 +333,9 @@ export function useStageGestures(options: UseStageGesturesOptions) {
     dragX,
     animating,
     trackStyle,
+    pull,
+    settle,
+    cancel,
     onPointerDown,
     onPointerMove,
     onPointerUp,

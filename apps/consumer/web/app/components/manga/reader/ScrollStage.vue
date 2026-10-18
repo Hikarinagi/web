@@ -21,6 +21,7 @@
 
   const viewport = ref<HTMLElement | null>(null)
   const ending = ref<HTMLElement | null>(null)
+  const column = useTemplateRef<InstanceType<typeof Stack>>('column')
   const { y } = useScroll(viewport, { throttle: 100 })
 
   function measure() {
@@ -49,7 +50,11 @@
     measure()
   })
 
-  defineExpose({ goToPage })
+  defineExpose({
+    goToPage,
+    viewport: () => viewport.value,
+    column: () => (column.value?.$el as HTMLElement | undefined) ?? null,
+  })
 </script>
 
 <template>
@@ -58,7 +63,7 @@
     class="absolute inset-0 overflow-y-auto overscroll-contain"
     @click="emit('tap', $event)"
   >
-    <Stack gap="none" align="center" class="mx-auto w-full max-w-3xl">
+    <Stack ref="column" gap="none" align="center" class="mx-auto w-full max-w-3xl">
       <MangaReaderPageCanvas
         v-for="page in pages"
         :key="page.page_number"

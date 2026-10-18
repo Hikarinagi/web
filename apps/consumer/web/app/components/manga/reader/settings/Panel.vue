@@ -25,6 +25,7 @@
         v-model:settings="settings"
         v-model:mode="mode"
         v-model:direction="direction"
+        data-tour="settings-panel"
         :narrow="true"
         @guide="guide"
       />
@@ -40,7 +41,7 @@
     aria-label="阅读设置"
   >
     <template #content>
-      <Stack gap="md">
+      <Stack data-tour="settings-panel" gap="md">
         <Heading :level="2" size="sm">阅读设置</Heading>
         <MangaReaderSettingsForm
           v-model:settings="settings"

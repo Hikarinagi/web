@@ -145,6 +145,16 @@
     const offset = props.direction === 'rtl' ? props.current - index : index - props.current
     return { transform: `translateX(${offset * 100}%)` }
   }
+
+  defineExpose({
+    content: () => contents.get(props.current) ?? null,
+    pull: gestures.pull,
+    settle: gestures.settle,
+    cancel: gestures.cancel,
+    zoomAt: zoom.toggleAt,
+    panBy: zoom.panBy,
+    resetZoom: zoom.reset,
+  })
 </script>
 
 <template>

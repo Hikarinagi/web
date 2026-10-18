@@ -4,11 +4,13 @@
   import type { ReaderPage } from '../composables/useMangaReader'
   import type { PageLoadStatus } from '../composables/usePageLoader'
   import type { MangaReaderDirection, MangaReaderMode } from '../lib/settings'
+  import type PagerBar from './Pager.vue'
 
   defineOptions({ name: 'MangaReaderBarBottom' })
 
   const props = defineProps<{
     narrow: boolean
+    dark: boolean
     noun: string
     hasPrevious: boolean
     hasNext: boolean
@@ -56,6 +58,9 @@
       run: (event: Event) => emit('settings', event),
     },
   ])
+
+  const pager = useTemplateRef<InstanceType<typeof PagerBar>>('pager')
+  defineExpose({ pager })
 </script>
 
 <template>
@@ -90,12 +95,14 @@
         </Button>
       </template>
       <MangaReaderBarPager
+        ref="pager"
         :pages="pages"
         :shown="shown"
         :direction="direction"
         :spread-of="spreadOf"
         :status-of="statusOf"
         :image-of="imageOf"
+        :dark="dark"
         @jump="emit('jump', $event)"
         @peek="emit('peek', $event)"
       />
@@ -106,6 +113,7 @@
         :key="tool.key"
         as="button"
         type="button"
+        :data-tour="tool.key"
         align="center"
         gap="none"
         class="hn-state-layer flex-1 hn-interactive gap-0.5 rounded-md py-1.5"
