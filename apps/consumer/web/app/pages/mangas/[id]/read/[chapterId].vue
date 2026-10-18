@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { mangaChapterLabel } from '@hikarinagi/shared'
   import { isAuthError, normalizeApiError, throwPageError } from '~/utils/api/error'
 
   definePageMeta({
@@ -40,10 +41,7 @@
       const pageData = data.value
       if (!pageData) return '在线阅读'
       const mangaTitle = pageData.manifest.manga.name_cn || pageData.manifest.manga.name
-      const chapterNumber = pageData.manifest.chapter.chapter_number
-      const chapterPart = chapterNumber
-        ? `第 ${chapterNumber} 话`
-        : pageData.manifest.chapter.name_cn || pageData.manifest.chapter.name || ''
+      const chapterPart = mangaChapterLabel(pageData.manifest.chapter)
       return [`${mangaTitle} ${chapterPart} 在线阅读`, `${mangaTitle} 在线阅读`]
     },
     noindex: true,

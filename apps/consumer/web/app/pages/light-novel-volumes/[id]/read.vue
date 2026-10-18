@@ -1,42 +1,54 @@
 <script setup lang="ts">
+  import { accountTheme } from '~/features/light-novel-reader/settings'
+  import { shellStyle } from '~/features/light-novel-reader/themes'
   import { getLightNovelTitle, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
   definePageMeta({
     layout: 'reader',
     floatingToolbar: false,
+    key: 'light-novel-reader',
   })
-
-  useHead({ htmlAttrs: { class: 'overflow-hidden overscroll-none' } })
 
   const route = useRoute()
-  const rawId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  const volumeId = Number(rawId)
+  const volumeId = computed(() =>
+    Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id),
+  )
 
-  const { data } = await useHikariApiData(`/api/pages/light-novel-volumes/${volumeId}/reader`, {
-    fatal: true,
-  })
+  const { data, refresh } = await useHikariApiData(
+    () => `/api/pages/light-novel-volumes/${volumeId.value}/reader` as const,
+    { fatal: true },
+  )
   useNsfwDetailGate(() => data.value?.light_novel.nsfw)
 
+  const auth = useAuthStore()
+  watch(
+    () => auth.isAuthenticated,
+    authenticated => {
+      if (authenticated && !data.value?.reader) void refresh()
+    },
+  )
+
+  useHead({
+    htmlAttrs: { class: 'overflow-hidden overscroll-none reader-touch' },
+    style: [
+      {
+        key: 'light-novel-reader-theme',
+        textContent: computed(() =>
+          shellStyle(accountTheme(data.value?.reader?.settings.theme_index)),
+        ),
+      },
+    ],
+  })
+
   useHikariSeoMeta({
-    title: () => {
-      const pageData = data.value
-      if (!pageData) return '在线阅读'
-
-      return [
-        `${getLightNovelVolumeTitle(pageData.volume)} 在线阅读`,
-        `${getLightNovelTitle(pageData.light_novel)} 在线阅读`,
-      ]
-    },
-    description: () => {
-      const pageData = data.value
-      if (!pageData) return undefined
-
-      return [pageData.volume.summary_cn, pageData.volume.summary]
-    },
+    title: () =>
+      data.value
+        ? `${getLightNovelTitle(data.value.light_novel)} ${getLightNovelVolumeTitle(data.value.volume)}`
+        : undefined,
     noindex: true,
   })
 </script>
 
 <template>
-  <HikariReader v-if="data" :data="data" />
+  <LightNovelReaderRoot v-if="data" :data="data" />
 </template>

@@ -48,7 +48,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/shared
       '@hina-ui/vue':
-        specifier: ^1.7.5
+        specifier: ^1.7.15
         version: 1.7.15(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))
       '@lucide/vue':
         specifier: ^1.14.0
@@ -84,11 +84,11 @@ importers:
         specifier: 0.11.3
         version: 0.11.3(@nuxt/schema@4.6.2)(confbox@0.3.1)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))(rolldown@1.2.14)(unplugin@3.4.0(esbuild@0.27.7)(rolldown@1.2.14)(rollup@4.64.9)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)))
       '@ritojs/core':
-        specifier: ^2.0.0
-        version: 2.1.0
+        specifier: ^3.2.1
+        version: 3.2.1
       '@ritojs/kit':
-        specifier: ^2.0.0
-        version: 2.1.0
+        specifier: ^3.2.1
+        version: 3.2.1
       '@rybbit/js':
         specifier: ^0.6.2
         version: 0.6.3
@@ -182,9 +182,15 @@ importers:
       '@vueuse/nuxt':
         specifier: ^14.3.0
         version: 14.4.0(e297253a7af2cab3c7a271d3fe92bb03)
+      canvas-confetti:
+        specifier: ^1.9.4
+        version: 1.9.4
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      dompurify:
+        specifier: ^3.4.17
+        version: 3.4.17
       embla-carousel-vue:
         specifier: ^8.6.0
         version: 8.6.0(vue@3.5.44(typescript@6.0.3))
@@ -249,6 +255,9 @@ importers:
       '@iconify-json/simple-icons':
         specifier: ^1.2.82
         version: 1.2.100
+      '@types/canvas-confetti':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@types/markdown-it':
         specifier: ^14.2.0
         version: 14.2.0
@@ -2411,11 +2420,11 @@ packages:
     resolution: {integrity: sha512-yXMiBFYJbP5JOaxPzx2tJhK+v8h2Wu2uhad1Ro6GzVT8E3F4GcQ7sbLPJ9w4zvGjfxroD0bIh5B0pDtnLV/qUA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@ritojs/core@2.1.0':
-    resolution: {integrity: sha512-INtlNOF63oODQ4+yFuO7dS/BSNbt31hxs3l1gAENOkZkT/Jj+4fCStMZHd9lGvw4sLg8tzIIhZqDXmMXtkHe8g==}
+  '@ritojs/core@3.2.1':
+    resolution: {integrity: sha512-bLvUdhZ55tEBS3Fn/aOIQWRq/zrXfr9flQRi7w3Kns8n4w9jsVvpKvhQDo5DuDewpPo8dPAheGIxb+TCrMVoww==}
 
-  '@ritojs/kit@2.1.0':
-    resolution: {integrity: sha512-ic8dM1DtrFq93A40WfqAdS0Gg0JOpRBywrw5aW/yIgeip+IbvJLE3VowEZbQ8HlTEYVcz8t6PL2TV5WSZoWlag==}
+  '@ritojs/kit@3.2.1':
+    resolution: {integrity: sha512-ZalHAe7NpIWprUZhto4xLx7NNGbVuUQpgQaG0/IurLmd4tEXhh5d+dOr2W8b+GSoUdTzN2bv682C/Atuoiv5aA==}
 
   '@rolldown/binding-android-arm-eabi@1.2.14':
     resolution: {integrity: sha512-aWR+XKH9+rW7m5fWq/5360J3mHycrx/o6xZM2DQFdJnTMdyP7/WzxPjhtLbVWdKo2y612/4U1bWqb3HQhiF7vg==}
@@ -3196,6 +3205,9 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
+  '@types/canvas-confetti@1.9.0':
+    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -3277,6 +3289,9 @@ packages:
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
+
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -4105,6 +4120,9 @@ packages:
   caniuse-lite@1.0.30001816:
     resolution: {integrity: sha512-+8Yx7BXCoqk6IF8yTicjfUR6D/ldJzdlsodlEOiOSPmhK844WIgk67/zIQaGAOxNkZyyvBlrRFnLvqKIoqbAFw==}
 
+  canvas-confetti@1.9.4:
+    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
+
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
@@ -4544,6 +4562,9 @@ packages:
   domhandler@5.0.3:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
+
+  dompurify@3.4.17:
+    resolution: {integrity: sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -7302,8 +7323,8 @@ packages:
     resolution: {integrity: sha512-GL2BWwVa6JydKO6l/ljVgjAZF4QJ3S7dWDWi53s5GZT8PJzD2fNxi67HANQGKAqPrwEpL5ba7gUBGi0Ls/sEoQ==}
     engines: {node: '>=20.0.0'}
 
-  seroval@1.6.10:
-    resolution: {integrity: sha512-GKZbsOHLV6GToR1rNQc9CZ+s8HZTS5X5N9D++z/xUh4SV9UwepLzqc60pKJTEEfEHzGdtWTXHpp+GhLoGLT1UA==}
+  seroval@1.6.11:
+    resolution: {integrity: sha512-hpb6XnMCGN/A+79Uf8V7/iTGkyyyazNn5X0CoCAp7Uy9vT3RT8jZ9GLcnxGoVjg3P8AArbe4ZVHq6C8oT2a0kA==}
     engines: {node: '>=10'}
 
   serve-placeholder@2.0.2:
@@ -7562,8 +7583,8 @@ packages:
   strnum@2.5.1:
     resolution: {integrity: sha512-UM4nTLWzQiDBseVxUGxN0wJzIk0UU89Qi7pKXz9qISo+lhviJikTuikBsK/oFRlpvYHvSdz0TVoLyQ+sEpYwxA==}
 
-  strtok3@10.6.1:
-    resolution: {integrity: sha512-p8ynRS8lXnvA3tsdcUYFjbzwh2MsdBZgxrFT2G+Yb7vNvUfPF+GgHCt/0jkayfsRXA1TwtZstf+JA0V+iQXdHA==}
+  strtok3@10.6.2:
+    resolution: {integrity: sha512-BkdixFFUt7r7LsX6aGNPVyYMLjW+M1USLlKPNbZsrZEmLFh5tGqhdfckKo6xgsZIJqdDD0CZGkeCJJwNWQIKQA==}
     engines: {node: '>=18'}
 
   structured-clone-es@2.0.1:
@@ -10713,7 +10734,7 @@ snapshots:
       pkg-types: 2.3.3
       postcss: 8.5.30
       rolldown-string: 0.3.1(rolldown@1.2.14)
-      seroval: 1.6.10
+      seroval: 1.6.11
       std-env: 4.3.0
       ufo: 1.6.4
       unenv: 2.0.0-rc.24
@@ -10780,7 +10801,7 @@ snapshots:
       pkg-types: 2.3.3
       postcss: 8.5.30
       rolldown-string: 0.3.1(rolldown@1.2.14)
-      seroval: 1.6.10
+      seroval: 1.6.11
       std-env: 4.3.0
       ufo: 1.6.4
       unenv: 2.0.0-rc.24
@@ -11564,11 +11585,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ritojs/core@2.1.0': {}
+  '@ritojs/core@3.2.1': {}
 
-  '@ritojs/kit@2.1.0':
+  '@ritojs/kit@3.2.1':
     dependencies:
-      '@ritojs/core': 2.1.0
+      '@ritojs/core': 3.2.1
 
   '@rolldown/binding-android-arm-eabi@1.2.14':
     optional: true
@@ -12242,6 +12263,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.29.8
 
+  '@types/canvas-confetti@1.9.0': {}
+
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -12324,6 +12347,9 @@ snapshots:
   '@types/stack-utils@2.0.3': {}
 
   '@types/tough-cookie@4.0.5': {}
+
+  '@types/trusted-types@2.0.7':
+    optional: true
 
   '@types/unist@2.0.11': {}
 
@@ -13349,6 +13375,8 @@ snapshots:
 
   caniuse-lite@1.0.30001816: {}
 
+  canvas-confetti@1.9.4: {}
+
   ccount@2.0.1: {}
 
   chai@6.3.0: {}
@@ -13704,6 +13732,10 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
     optional: true
+
+  dompurify@3.4.17:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   domutils@3.2.2:
     dependencies:
@@ -14236,7 +14268,7 @@ snapshots:
   file-type@22.1.1:
     dependencies:
       '@tokenizer/inflate': 0.4.1
-      strtok3: 10.6.1
+      strtok3: 10.6.2
       token-types: 6.1.2
       uint8array-extras: 1.6.0
     transitivePeerDependencies:
@@ -17856,7 +17888,7 @@ snapshots:
 
   serialize-javascript@7.1.2: {}
 
-  seroval@1.6.10: {}
+  seroval@1.6.11: {}
 
   serve-placeholder@2.0.2:
     dependencies:
@@ -18152,7 +18184,7 @@ snapshots:
     dependencies:
       anynum: 1.0.1
 
-  strtok3@10.6.1:
+  strtok3@10.6.2:
     dependencies:
       '@tokenizer/token': 0.3.0
 

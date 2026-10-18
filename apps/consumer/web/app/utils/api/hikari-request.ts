@@ -26,6 +26,7 @@ interface HikariFetchOptions {
   body?: unknown
   credentials?: RequestCredentials
   headers?: HeadersInit
+  keepalive?: boolean
   method?: HikariRequestMethod
   query?: Record<string, unknown>
   signal?: AbortSignal

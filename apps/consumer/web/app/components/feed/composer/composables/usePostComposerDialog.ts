@@ -1,3 +1,5 @@
+import type { ComposerWork } from './useComposer'
+
 const QUERY_KEY = 'compose'
 const QUERY_VALUE = 'post'
 const EDIT_KEY = 'edit'
@@ -15,6 +17,7 @@ export function usePostComposerDialog() {
   })
   const submitting = useState('feed:post-composer-dialog:submitting', () => false)
   const pushed = useState('feed:post-composer-dialog:pushed', () => false)
+  const work = useState<ComposerWork | null>('feed:post-composer-dialog:work', () => null)
 
   function show(editPostId?: number) {
     if (open.value) return
@@ -26,6 +29,12 @@ export function usePostComposerDialog() {
         ...(editPostId != null ? { [EDIT_KEY]: String(editPostId) } : {}),
       },
     })
+  }
+
+  function discuss(target: ComposerWork) {
+    if (open.value) return
+    work.value = target
+    show()
   }
 
   function close() {
@@ -41,5 +50,5 @@ export function usePostComposerDialog() {
     router.replace({ query })
   }
 
-  return { open, editId, submitting, show, close }
+  return { open, editId, work, submitting, show, discuss, close }
 }

@@ -17,7 +17,7 @@
 
   function confirm() {
     visible.value = false
-    navigateTo(`/light-novel-volumes/${props.volumeId}/read`)
+    void navigateTo(`/light-novel-volumes/${props.volumeId}/read`, { open: { target: '_blank' } })
   }
 </script>
 

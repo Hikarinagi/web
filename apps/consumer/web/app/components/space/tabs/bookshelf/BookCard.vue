@@ -64,6 +64,7 @@
           <Button
             :as="NuxtLink"
             :to="`/light-novel-volumes/${item.current_volume_id}/read`"
+            target="_blank"
             size="sm"
             :variant="item.is_finished ? 'outline' : 'solid'"
             :tone="item.is_finished ? 'neutral' : 'accent'"

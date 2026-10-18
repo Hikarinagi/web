@@ -41,13 +41,22 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
-      <MangaChapters
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-5 py-8 sm:px-6 md:py-12">
+      <MangaContentsStrip
         :manga-id="data.manga.id"
         :chapters="data.chapters"
-        :volumes="data.volumes"
         :progress="data.progress"
+        :finished="data.manga.serial_status === 'FINISHED'"
         :latest-chapter-at="data.manga.latest_chapter_at"
+        class="md:hidden"
+      />
+      <MangaContentsPanel
+        :manga-id="data.manga.id"
+        :chapters="data.chapters"
+        :progress="data.progress"
+        :finished="data.manga.serial_status === 'FINISHED'"
+        :latest-chapter-at="data.manga.latest_chapter_at"
+        class="max-md:hidden"
         @refresh="refresh"
       />
 

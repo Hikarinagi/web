@@ -74,7 +74,7 @@ describe('reader production protection', () => {
         write: false,
         rolldownOptions: {
           input: [
-            'app/components/hikari-reader/lib/session.ts',
+            'app/features/light-novel-reader/publication.ts',
             'app/components/manga/reader/composables/usePageLoader.ts',
             'app/features/download/engine/fetcher.ts',
             'app/features/download/engine/runner.ts',

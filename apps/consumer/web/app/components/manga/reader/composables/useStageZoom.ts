@@ -120,10 +120,10 @@ export function useStageZoom(options: UseStageZoomOptions) {
     ty.value = 0
   }
 
-  function toggleAt(point: ZoomPoint) {
+  function toggleAt(point: ZoomPoint, animated = true) {
     if (!options.enabled()) return
     const focus = toCentreOffset(point)
-    animate(() => {
+    const run = () => {
       if (zoomed.value) {
         scale.value = 1
         tx.value = 0
@@ -132,7 +132,13 @@ export function useStageZoom(options: UseStageZoomOptions) {
       }
       scaleAround(DOUBLE_TAP_SCALE, focus)
       clampTranslate()
-    })
+    }
+    if (animated) {
+      animate(run)
+      return
+    }
+    stopAnimation()
+    run()
   }
 
   function zoomBy(factor: number, point: ZoomPoint) {

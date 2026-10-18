@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Reader Preview Original';
+  src: url('../fonts/reader-preview/original.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Reader Preview Song';
+  src: url('../fonts/reader-preview/song.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Reader Preview Kai';
+  src: url('../fonts/reader-preview/kai.ttf') format('truetype');
+  font-display: swap;
+}

@@ -2,7 +2,7 @@ import type { Plugin } from 'vite'
 
 export function readerProtection(): Plugin {
   const protectedPaths = [
-    '/app/components/hikari-reader/lib/',
+    '/app/features/light-novel-reader/publication.ts',
     '/app/components/manga/reader/composables/',
     '/app/features/download/',
     '/app/features/light-novel-volume/useNovelDownload.ts',

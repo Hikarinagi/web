@@ -55,7 +55,6 @@
   })
   const continueOpen = ref(false)
   const pickerTitle = computed(() => `将「${props.title}」加入收藏夹`)
-  const router = useRouter()
 
   const rateCtl = useLightNovelRate(props.lightNovelId, props.myRate)
 
@@ -98,7 +97,9 @@
 
   function readStart() {
     if (!startTarget.value) return
-    void router.push(`/light-novel-volumes/${startTarget.value.id}/read`)
+    void navigateTo(`/light-novel-volumes/${startTarget.value.id}/read`, {
+      open: { target: '_blank' },
+    })
   }
 </script>
 

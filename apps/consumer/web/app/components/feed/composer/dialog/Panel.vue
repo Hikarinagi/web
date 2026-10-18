@@ -7,8 +7,9 @@
 
   const route = useRoute()
   const auth = useAuthStore()
-  const { editId, submitting: dialogSubmitting, close } = usePostComposerDialog()
-  const host = useComposer({ editId: editId.value ?? undefined })
+  const { editId, work, submitting: dialogSubmitting, close } = usePostComposerDialog()
+  const host = useComposer({ editId: editId.value ?? undefined, work: work.value ?? undefined })
+  work.value = null
   const {
     editor,
     plugins,

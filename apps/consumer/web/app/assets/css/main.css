@@ -3,6 +3,7 @@
 @import './theme.css';
 @import './hikari-content.css';
 @import './scrollbar.css';
+@import './reader-fonts.css';
 
 @source '../../**/*.{vue,ts}';
 
@@ -29,6 +30,10 @@ html {
 
 html.dark {
   color-scheme: dark;
+}
+
+:where(html.reader-touch, html.reader-touch *) {
+  touch-action: pan-y;
 }
 
 body {

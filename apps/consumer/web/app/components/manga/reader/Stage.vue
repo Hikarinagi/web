@@ -2,7 +2,7 @@
   import { cn } from '~/utils/cn'
   import type { PageLoadStatus } from './composables/usePageLoader'
   import type { ReaderSpread } from './composables/useMangaReader'
-  import type { MangaReaderFit } from './lib/settings'
+  import type { MangaReaderDirection, MangaReaderFit } from './lib/settings'
   import { useStageGestures } from './composables/useStageGestures'
   import { useStageZoom } from './composables/useStageZoom'
 
@@ -15,6 +15,7 @@
     canGoNext: boolean
     canGoPrevious: boolean
     animate: boolean
+    direction: MangaReaderDirection
     statusOf: (page: number) => PageLoadStatus
     imageOf: (page: number) => HTMLImageElement | null
   }>()
@@ -53,6 +54,7 @@
     viewport,
     canGoNext: () => props.canGoNext,
     canGoPrevious: () => props.canGoPrevious,
+    direction: () => props.direction,
     animate: () => props.animate,
     zoomable: () => zoomable.value,
     zoom,
@@ -92,14 +94,15 @@
   })
 
   const innerClass = computed(() => {
+    const flow = props.direction === 'rtl' ? 'flex-row-reverse' : 'flex-row'
     switch (props.fit) {
       case 'width':
-        return 'm-auto flex w-full flex-row-reverse items-center'
+        return `m-auto flex w-full items-center ${flow}`
       case 'height':
       case 'original':
-        return 'm-auto flex flex-row-reverse items-center'
+        return `m-auto flex items-center ${flow}`
       default:
-        return 'm-auto flex max-w-full flex-row-reverse items-center justify-center'
+        return `m-auto flex max-w-full items-center justify-center ${flow}`
     }
   })
 
@@ -107,7 +110,8 @@
     const scroller = scrollers.get(props.current)
     if (!scroller) return
     scroller.scrollTop = 0
-    scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth
+    scroller.scrollLeft =
+      props.direction === 'rtl' ? scroller.scrollWidth - scroller.clientWidth : 0
   }
 
   watch(
@@ -138,8 +142,19 @@
   watch(zoomable, () => zoom.reset())
 
   function slotStyle(index: number) {
-    return { transform: `translateX(${(props.current - index) * 100}%)` }
+    const offset = props.direction === 'rtl' ? props.current - index : index - props.current
+    return { transform: `translateX(${offset * 100}%)` }
   }
+
+  defineExpose({
+    content: () => contents.get(props.current) ?? null,
+    pull: gestures.pull,
+    settle: gestures.settle,
+    cancel: gestures.cancel,
+    zoomAt: zoom.toggleAt,
+    panBy: zoom.panBy,
+    resetZoom: zoom.reset,
+  })
 </script>
 
 <template>

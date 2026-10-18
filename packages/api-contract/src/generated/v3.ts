@@ -11873,22 +11873,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/reader/sessions/{id}/content": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ReaderSessionController_read"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/reader/settings": {
         parameters: {
             query?: never;
@@ -11993,6 +11977,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ReaderController_getState"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/reader/volumes/{volume_id}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReaderController_getVolumeStats"];
         put?: never;
         post?: never;
         delete?: never;
@@ -14251,9 +14251,11 @@ export interface components {
         };
         AdminMangaChapterRefDto: {
             chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
             series_id: number;
+            title: string | null;
+            volume_number: number | null;
         };
         AdminMangaChapterSourceItemDto: {
             attempts: number;
@@ -14263,6 +14265,8 @@ export interface components {
             id: number;
             is_active: boolean;
             last_page: number;
+            /** @description 这一话在来源的标题 */
+            name: string | null;
             page_count: number;
             source_chapter_id: string;
             source_key: string;
@@ -14632,14 +14636,13 @@ export interface components {
             /** Format: date-time */
             deleted_at: string | null;
             id: number;
-            name: string | null;
-            name_cn: string | null;
             page_count: number;
             /** Format: date */
             publication_date: string | null;
             sort_key: number;
             sources: components["schemas"]["AdminMangaWorkChapterSourceDto"][];
             status: components["schemas"]["PublishStatus"];
+            title: string | null;
             /** Format: date-time */
             updated_at: string;
             volume_id: number | null;
@@ -14651,6 +14654,8 @@ export interface components {
             id: number;
             is_active: boolean;
             last_page: number;
+            /** @description 这一话在来源的标题 */
+            name: string | null;
             page_count: number;
             source_key: string;
             status: components["schemas"]["MangaIngestStatus"];
@@ -17547,9 +17552,10 @@ export interface components {
         EditMangaChapterDto: {
             chapter_number?: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
-            name?: string | null;
             /** Format: date */
             publication_date?: string | null;
+            /** @description 真实标题；番外必填，只重复编号的标题不保存 */
+            title?: string | null;
             volume_id?: number | null;
         };
         EditorDocumentDto: {
@@ -19708,13 +19714,12 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
-            name_cn: string | null;
             page_count: number;
             /** Format: date-time */
             publication_date: string | null;
             series_id: number;
             sort_key: number;
+            title: string | null;
             volume_id: number | null;
             volume_number: number | null;
         };
@@ -19722,8 +19727,8 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
-            name_cn: string | null;
+            title: string | null;
+            volume_number: number | null;
         };
         MangaChapterMergeResultDto: {
             chapter_id: number;
@@ -19733,23 +19738,26 @@ export interface components {
         MangaChapterRelationDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
+            /** @description 卷取单行本条目封面 */
             cover: components["schemas"]["MediaAssetDto"] | null;
+            /**
+             * Format: date-time
+             * @description 加入作品的时间
+             */
+            created_at: string;
             /** @description 当前用户能否就地修改这一章的信息 */
             editable: boolean;
+            /** @description 未登录读者也能阅读 */
+            guest_readable: boolean;
             id: number;
-            name: string | null;
-            name_cn: string | null;
+            /** @description 同一单位内同号或同名的第几项，从 1 开始 */
+            ordinal: number;
             page_count: number;
             /** Format: date-time */
             publication_date: string | null;
             readable: boolean;
-            sort_key: number;
-            sources_count: number;
-            /**
-             * @description 经共建工作台发布的译本标注；采集来的章节为空
-             * @enum {string|null}
-             */
-            translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
+            /** @description 真实标题；番外必有，话与卷通常为空 */
+            title: string | null;
             /** @description 所属单行本条目 */
             volume_id: number | null;
             volume_number: number | null;
@@ -19766,14 +19774,14 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
-            name_cn: string | null;
             previous: components["schemas"]["MangaChapterLabelDto"];
             /** @description 进行中的项目 */
             projects: components["schemas"]["MangaChapterWantedProjectDto"][];
             /** @description 阅读进度停在上一话的读者人数 */
             readers: number;
             series: components["schemas"]["MangaChapterWantedSeriesDto"];
+            title: string | null;
+            volume_number: number | null;
         };
         MangaChapterWantedProjectDto: {
             /** @enum {string} */
@@ -19988,15 +19996,18 @@ export interface components {
         MangaProducerRole: "PUBLISHER" | "MAGAZINE" | "LABEL";
         MangaProgressChapterDto: {
             chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
-            name_cn: string | null;
+            /** @description 同一单位内同号或同名的第几项，从 1 开始 */
+            ordinal: number;
             page_count: number;
+            title: string | null;
+            volume_number: number | null;
         };
         MangaProgressDto: {
             chapter: components["schemas"]["MangaProgressChapterDto"];
             page: number;
-            /** @description 当前用户在本作已读过的章节 id */
+            /** @description 当前用户在本作读到最后一页的章节 id */
             read_chapter_ids: number[];
             /** @description 进度章节首页短时签名缩略图地址 */
             thumbnail: string | null;
@@ -20007,10 +20018,11 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            title: string | null;
             volume_id: number | null;
+            volume_number: number | null;
         };
         MangaProjectDto: {
             /** @description 随投稿新建条目的审核批次 */
@@ -20254,10 +20266,13 @@ export interface components {
         };
         MangaReaderChapterDto: {
             chapter_number: string | null;
+            chapter_type: components["schemas"]["MangaChapterType"];
             id: number;
-            name: string | null;
-            name_cn: string | null;
+            /** @description 同一单位内同号或同名的第几项，从 1 开始 */
+            ordinal: number;
             page_count: number;
+            title: string | null;
+            volume_number: number | null;
         };
         MangaReaderDto: {
             chapter: components["schemas"]["MangaReaderChapterDto"];
@@ -20279,10 +20294,13 @@ export interface components {
         };
         MangaReaderSeriesDto: {
             id: number;
+            /** Format: date-time */
+            latest_chapter_at: string | null;
             name: string;
             name_cn: string | null;
             nsfw: boolean;
             reading_mode: components["schemas"]["MangaReadingMode"];
+            serial_status: components["schemas"]["MangaSerialStatus"];
         };
         /**
          * @description 阅读方向
@@ -20404,9 +20422,13 @@ export interface components {
             author: string | null;
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             current_chapter_id: number;
+            /** @description 当前项在所在单位中的位置，从 1 开始 */
             current_chapter_index: number;
             current_chapter_number: string | null;
+            current_chapter_ordinal: number;
             current_chapter_title: string | null;
+            current_chapter_type: components["schemas"]["MangaChapterType"];
+            current_volume_number: number | null;
             first_chapter_id: number | null;
             is_finished: boolean;
             is_latest: boolean;
@@ -20415,6 +20437,7 @@ export interface components {
             manga_id: number;
             serial_status: components["schemas"]["MangaSerialStatus"];
             title: string;
+            /** @description 当前项所在单位的项数 */
             total_chapters: number;
         };
         MangaSourceCoverageDto: {
@@ -22882,13 +22905,20 @@ export interface components {
             sha256: string;
             url: string;
         };
+        ReaderPublicationDto: {
+            book_id: string;
+            bytes: number;
+            format: number;
+            shards: components["schemas"]["ReaderShardDto"][];
+            skeleton: components["schemas"]["ReaderShardDto"];
+        };
         ReaderSessionDto: {
-            epub_sha: string | null;
+            epub_sha: string;
             /** Format: date-time */
             expires_at: string;
             /** Format: uuid */
             id: string;
-            p: string;
+            publication: components["schemas"]["ReaderPublicationDto"];
         };
         ReaderSettingsDto: {
             background_color: string;
@@ -22904,10 +22934,23 @@ export interface components {
             text_color: string;
             theme_index: number;
         };
+        ReaderShardDto: {
+            bytes: number;
+            id: number;
+            key: string;
+            url: string;
+        };
         ReaderVolumeStateDto: {
             annotations: components["schemas"]["ReadingAnnotationDto"][];
             bookmarks: components["schemas"]["ReadingBookmarkDto"][];
             progress: components["schemas"]["ReadingProgressDto"] | null;
+        };
+        ReaderVolumeStatsDto: {
+            finished: boolean;
+            /** @description 本卷累计阅读时长，毫秒 */
+            read_time: number;
+            /** Format: date-time */
+            started_at: string | null;
         };
         ReadingAnnotationDto: {
             client_id: string;
@@ -22924,6 +22967,24 @@ export interface components {
                 [key: string]: unknown;
             };
             text: string | null;
+        };
+        ReadingAnnotationOffsetsDto: {
+            chapterLength: number;
+            end: number;
+            start: number;
+        };
+        ReadingAnnotationQuoteDto: {
+            exact: string;
+            prefix: string;
+            suffix: string;
+        };
+        ReadingAnnotationTargetDto: {
+            href: string;
+            position: components["schemas"]["ReadingAnnotationOffsetsDto"];
+            quote: components["schemas"]["ReadingAnnotationQuoteDto"];
+            sourceRange: components["schemas"]["ReadingSourceRangeDto"];
+            /** @enum {number} */
+            version: 1;
         };
         ReadingBookmarkDto: {
             chapter_href: string | null;
@@ -22949,6 +23010,7 @@ export interface components {
             locator?: components["schemas"]["ReadingLocatorDto"];
             progress: number;
             projection: components["schemas"]["ReadingPositionProjectionDto"];
+            sourceLocator?: components["schemas"]["ReadingSourceLocatorDto"];
             timestamp: number;
         };
         ReadingPositionProjectionDto: {
@@ -22984,9 +23046,20 @@ export interface components {
             title: string;
             total_volumes: number;
         };
+        ReadingSourceLocatorDto: {
+            anchorId?: string;
+            href: string;
+            progression?: number;
+            sourcePoint?: components["schemas"]["ReadingSourcePointDto"];
+            sourceRange?: components["schemas"]["ReadingSourceRangeDto"];
+        };
         ReadingSourcePointDto: {
             nodePath: number[];
             textOffset: number;
+        };
+        ReadingSourceRangeDto: {
+            end: components["schemas"]["ReadingSourcePointDto"];
+            start: components["schemas"]["ReadingSourcePointDto"];
         };
         ReadingStatsDto: {
             finished_count: number;
@@ -24193,11 +24266,10 @@ export interface components {
         UpdateMangaChapterDto: {
             chapter_number?: string | null;
             chapter_type?: components["schemas"]["MangaChapterType"];
-            name?: string | null;
-            name_cn?: string | null;
             /** Format: date */
             publication_date?: string | null;
             sort_key?: number;
+            title?: string | null;
             volume_id?: number | null;
         };
         UpdateMangaNotifyDto: {
@@ -24524,9 +24596,7 @@ export interface components {
         UpdateReadingAnnotationDto: {
             highlight_color?: string;
             note?: string | null;
-            target?: {
-                [key: string]: unknown;
-            };
+            target?: components["schemas"]["ReadingAnnotationTargetDto"];
             text?: string;
         };
         UpdateReadingBookmarkDto: {
@@ -24692,9 +24762,7 @@ export interface components {
             kind: "HIGHLIGHT" | "UNDERLINE";
             note?: string;
             position: components["schemas"]["ReadingPositionDto"];
-            target: {
-                [key: string]: unknown;
-            };
+            target: components["schemas"]["ReadingAnnotationTargetDto"];
             text?: string;
         };
         UpsertReadingBookmarkDto: {
@@ -45566,27 +45634,6 @@ export interface operations {
             };
         };
     };
-    ReaderSessionController_read: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
     ReaderController_getSettings: {
         parameters: {
             query?: never;
@@ -45832,6 +45879,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReaderVolumeStateDto"];
+                };
+            };
+        };
+    };
+    ReaderController_getVolumeStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                volume_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReaderVolumeStatsDto"];
                 };
             };
         };

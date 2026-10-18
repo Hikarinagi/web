@@ -15,14 +15,13 @@
 
   const resume = computed(() => (props.progress?.percentage ?? 0) > 0)
   const volumeTitle = computed(() => getLightNovelVolumeTitle(props.volume))
-  const router = useRouter()
 
   const rateCtl = useLightNovelVolumeRate(props.volume.id, props.myRate)
   const dialogOpen = ref(false)
   const contributeOpen = ref(false)
 
   function read() {
-    void router.push(`/light-novel-volumes/${props.volume.id}/read`)
+    void navigateTo(`/light-novel-volumes/${props.volume.id}/read`, { open: { target: '_blank' } })
   }
 </script>
 

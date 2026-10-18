@@ -73,7 +73,7 @@ function pollNodeJson(def: PollNodeAttrs) {
 }
 
 export function useComposer(
-  options: { topic?: ComposerTopic; sectionId?: number; editId?: number } = {},
+  options: { topic?: ComposerTopic; sectionId?: number; editId?: number; work?: ComposerWork } = {},
 ) {
   const isEdit = computed(() => options.editId != null)
   const summariesRef = ref(emptyEditorSummaries())
@@ -259,6 +259,7 @@ export function useComposer(
     restoreDraft()
     // 进入话题/板块页时预填该话题 tag(板块无 chip UI,仅在提交时带上 section_id)。
     if (options.topic) addTopic(options.topic)
+    if (options.work) addWork(options.work)
   })
   watch([title, covers, topics, relatedWorks], () => saveDraftDebounced(), { deep: true })
 

@@ -4,14 +4,14 @@ const CHAPTER_NUMBER = /^\d+(\.\d+)?$/
 
 export const mangaChapterEditSchema = v.pipe(
   v.object({
-    chapter_type: v.picklist(['SERIALIZATION', 'EXTRA', 'ONESHOT', 'VOLUME'], '请选择类型'),
+    chapter_type: v.picklist(['SERIALIZATION', 'EXTRA', 'VOLUME'], '请选择类型'),
     chapter_number: v.pipe(
       v.nullish(v.string('话数应为文本'), ''),
       v.trim(),
       v.maxLength(20, '话数不能超过 20 个字符'),
       v.check(value => !value || CHAPTER_NUMBER.test(value), '话数只填数字，例如 12 或 12.5'),
     ),
-    name: v.pipe(
+    title: v.pipe(
       v.nullish(v.string('标题应为文本'), ''),
       v.trim(),
       v.maxLength(300, '标题不能超过 300 个字符'),
@@ -29,14 +29,11 @@ export const mangaChapterEditSchema = v.pipe(
   ),
   v.forward(
     v.partialCheck(
-      [['chapter_type'], ['name']],
-      input =>
-        input.chapter_type === 'SERIALIZATION' ||
-        input.chapter_type === 'VOLUME' ||
-        !!input.name?.trim(),
+      [['chapter_type'], ['title']],
+      input => input.chapter_type !== 'EXTRA' || !!input.title?.trim(),
       '请填写标题',
     ),
-    ['name'],
+    ['title'],
   ),
   v.forward(
     v.partialCheck(

@@ -147,7 +147,7 @@
 
               <Inline align="center" gap="sm" class="mt-4 md:mt-5">
                 <Button login-required v-if="startVolume" as-child>
-                  <NuxtLink :to="`/light-novel-volumes/${startVolume.id}/read`">
+                  <NuxtLink :to="`/light-novel-volumes/${startVolume.id}/read`" target="_blank">
                     <BookOpen aria-hidden="true" />
                     开始阅读
                   </NuxtLink>

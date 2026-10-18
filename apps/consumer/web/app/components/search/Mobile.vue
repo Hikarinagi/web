@@ -43,12 +43,7 @@
         :exit="{ opacity: 0, y: 12 }"
         :transition="TRANSITION_FAST"
       >
-        <Inline
-          gap="xs"
-          align="center"
-          :wrap="false"
-          class="shrink-0 border-b border-line px-2 pt-[max(0.5rem,env(safe-area-inset-top))] pb-2"
-        >
+        <Inline gap="xs" align="center" :wrap="false" class="shrink-0 border-b border-line p-2">
           <IconButton label="返回" pill :tooltip="false" class="shrink-0" @click="emit('close')">
             <ArrowLeft />
           </IconButton>
