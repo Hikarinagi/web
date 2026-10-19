@@ -1,8 +1,10 @@
 import type { InjectionKey } from 'vue'
 import type { TocRow } from './toc'
+import type { ReaderAnalytics } from './useReaderAnalytics'
 import type { ReaderBookmarks } from './useReaderBookmarks'
 import type { ReaderEnd } from './useReaderEnd'
 import type { ReaderEngine } from './useReaderEngine'
+import type { ReaderErrors } from './useReaderErrors'
 import type { ReaderEvents } from './useReaderEvents'
 import type { ReaderFonts } from './useReaderFonts'
 import type { ReaderHighlights } from './useReaderHighlights'
@@ -32,6 +34,8 @@ export interface ReaderContext {
   resume: ReaderResume
   end: ReaderEnd
   tour: ReaderTour
+  errors: ReaderErrors
+  analytics: ReaderAnalytics
   goTo: (row: TocRow) => void
   turn: (forward: boolean) => void
 }

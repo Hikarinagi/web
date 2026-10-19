@@ -31,6 +31,7 @@ export function useReaderEngine(options: {
   const { device, palette } = options.settings
   const phase = ref<ReaderPhase>('prepare')
   const failure = ref<ReaderFailure | null>(null)
+  const fault = ref<string | null>(null)
   const received = ref({ loaded: 0, total: 0, font: false })
   const stack = shallowRef<Awaited<ReturnType<typeof createStack>> | null>(null)
   const font = shallowRef<ReaderFont | null>(null)
@@ -52,6 +53,7 @@ export function useReaderEngine(options: {
     await release()
     phase.value = 'prepare'
     failure.value = null
+    fault.value = null
     try {
       const volumeId = options.volumeId()
       const [session, catalogue] = await Promise.all([
@@ -135,6 +137,7 @@ export function useReaderEngine(options: {
       if (id !== generation) return
       const known = isApiError(error) ? FAILURES[error.code] : undefined
       failure.value = known ?? (phase.value === 'layout' ? 'engine' : 'network')
+      fault.value = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
       phase.value = 'failed'
     }
   }
@@ -182,7 +185,7 @@ export function useReaderEngine(options: {
     void release()
   })
 
-  return { phase, failure, received, stack, font, open, swapFont, release }
+  return { phase, failure, fault, received, stack, font, open, swapFont, release }
 }
 
 export type ReaderEngine = ReturnType<typeof useReaderEngine>

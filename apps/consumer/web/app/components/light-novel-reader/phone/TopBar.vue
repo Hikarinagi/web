@@ -46,6 +46,7 @@
       >
         <CircleQuestionMark aria-hidden="true" />
       </IconButton>
+      <LightNovelReaderMore />
     </template>
   </Inline>
 </template>

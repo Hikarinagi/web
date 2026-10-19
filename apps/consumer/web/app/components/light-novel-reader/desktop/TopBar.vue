@@ -1,6 +1,14 @@
 <script setup lang="ts">
   import { Divider, Heading, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
-  import { ArrowLeft, CircleQuestionMark, PanelLeft, Type } from '@lucide/vue'
+  import {
+    ArrowLeft,
+    CircleQuestionMark,
+    Focus,
+    Maximize,
+    Minimize,
+    PanelLeft,
+    Type,
+  } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
   import { useReader } from '~/features/light-novel-reader/context'
@@ -11,7 +19,7 @@
   const props = defineProps<{ data: LightNovelVolumeReaderPageData }>()
 
   const { shell, settings, tour } = useReader()
-  const { medium, wide, stored, drawer } = shell
+  const { medium, wide, stored, drawer, fullscreen } = shell
 
   const series = computed(() => getLightNovelTitle(props.data.light_novel))
   const leftOpen = computed(() => (medium.value ? stored.value.left : drawer.value === 'left'))
@@ -67,6 +75,19 @@
         >
           <Type aria-hidden="true" />
         </IconButton>
+        <IconButton label="专注模式" variant="ghost" @click="shell.toggleFocus()">
+          <Focus aria-hidden="true" />
+        </IconButton>
+        <IconButton
+          v-if="fullscreen.isSupported.value"
+          :label="fullscreen.isFullscreen.value ? '退出全屏' : '全屏'"
+          :variant="fullscreen.isFullscreen.value ? 'soft' : 'ghost'"
+          :aria-pressed="fullscreen.isFullscreen.value"
+          @click="fullscreen.toggle()"
+        >
+          <Minimize v-if="fullscreen.isFullscreen.value" aria-hidden="true" />
+          <Maximize v-else aria-hidden="true" />
+        </IconButton>
         <IconButton
           v-if="settings.device.value.showGuide"
           label="操作指引"
@@ -76,6 +97,7 @@
         >
           <CircleQuestionMark aria-hidden="true" />
         </IconButton>
+        <LightNovelReaderMore />
       </template>
     </Inline>
   </Inline>

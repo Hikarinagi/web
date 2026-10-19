@@ -11,6 +11,7 @@ import {
   type ReaderAnnotation,
 } from './highlights'
 import { positionOf, targetOf } from './payload'
+import type { ReaderAnalytics } from './useReaderAnalytics'
 
 const FLASH = { alpha: 0.75, half: 0.15, hold: 1000, ease: [0.4, 0, 0.2, 1] } as const
 
@@ -42,6 +43,7 @@ export function useReaderHighlights(options: {
   volumeId: () => number
   position: () => ReadingPosition | null
   controller: () => ReaderController | undefined
+  track: ReaderAnalytics['track']
 }) {
   const entries = ref<HighlightEntry[]>([])
   const preview = shallowRef<HighlightEntry | null>(null)
@@ -125,10 +127,15 @@ export function useReaderHighlights(options: {
       synced,
       records.filter(record => !record.id.startsWith('tour-')),
     )
-    created.forEach(create)
+    for (const record of created) {
+      create(record)
+      options.track('highlight', { color: record.color ?? HIGHLIGHT_COLORS[0].value })
+      if (record.note) options.track('note')
+    }
     for (const { record, color, note } of changed) {
       const entry = placed.find(item => item.id === record.id)!
       const recolor = color !== undefined && !flashing.has(record.id)
+      if (note && !entry.note) options.track('note')
       if (recolor) entry.color = color
       if (note !== undefined) entry.note = note
       if (recolor || note !== undefined)

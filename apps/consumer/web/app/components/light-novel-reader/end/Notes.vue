@@ -19,7 +19,7 @@
 
   defineOptions({ name: 'LightNovelReaderEndNotes' })
 
-  const { title, end, highlights, engine, location, jumps, shell } = useReader()
+  const { title, end, highlights, engine, location, jumps, shell, analytics } = useReader()
   const { copy } = useClipboard({ legacy: true })
 
   function chapters(items: readonly HighlightEntry[]) {
@@ -47,6 +47,7 @@
 
   async function exportNotes() {
     await copy(toMarkdown(title.value, chapters(highlights.entries.value)))
+    analytics.track('export', { from: 'end' })
     toast.success('已复制为 Markdown')
   }
 </script>

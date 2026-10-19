@@ -7,7 +7,7 @@
 
   defineOptions({ name: 'LightNovelReaderHighlightFooter' })
 
-  const { title, highlights, engine, location } = useReader()
+  const { title, highlights, engine, location, analytics } = useReader()
   const { copy } = useClipboard({ legacy: true })
 
   async function exportNotes() {
@@ -19,6 +19,7 @@
       location.rows.value.map(row => ({ label: row.label, href: row.entry.href })),
     )
     await copy(toMarkdown(title.value, groups))
+    analytics.track('export', { from: 'highlights' })
     toast.success('已复制为 Markdown')
   }
 </script>

@@ -1,3 +1,4 @@
+import type { ReaderTurn } from './useReaderAnalytics'
 import type { ReaderEngine } from './useReaderEngine'
 
 export function useReaderInput(options: {
@@ -6,6 +7,7 @@ export function useReaderInput(options: {
   tapTurn: () => boolean
   paused: () => boolean
   edge: (forward: boolean) => boolean
+  turned: (method: ReaderTurn) => void
   onMiddle: () => void
   keys: Record<string, () => void>
 }) {
@@ -19,9 +21,10 @@ export function useReaderInput(options: {
   }
   let lastNotch = 0
 
-  function turn(forward: boolean) {
+  function turn(forward: boolean, method: ReaderTurn = 'button') {
     const current = controller()
     if (!current || options.edge(forward)) return
+    options.turned(method)
     current.clearSelection()
     if (forward) current.nextSpread()
     else current.prevSpread()
@@ -51,8 +54,8 @@ export function useReaderInput(options: {
     }
     const rect = host.getBoundingClientRect()
     const ratio = (event.clientX - rect.left) / rect.width
-    if (options.tapTurn() && ratio < 1 / 3) turn(false)
-    else if (options.tapTurn() && ratio > 2 / 3) turn(true)
+    if (options.tapTurn() && ratio < 1 / 3) turn(false, 'tap')
+    else if (options.tapTurn() && ratio > 2 / 3) turn(true, 'tap')
     else options.onMiddle()
   })
 
@@ -67,7 +70,7 @@ export function useReaderInput(options: {
       if (notch) {
         if (event.timeStamp - lastNotch < 120) return
         lastNotch = event.timeStamp
-        turn(delta > 0)
+        turn(delta > 0, 'wheel')
         return
       }
       clearTimeout(wheel.timer)
@@ -87,7 +90,7 @@ export function useReaderInput(options: {
       wheel.total += delta
       if (Math.abs(wheel.total) < 30) return
       wheel.locked = true
-      turn(wheel.total > 0)
+      turn(wheel.total > 0, 'wheel')
     },
     { passive: false },
   )
@@ -106,7 +109,7 @@ export function useReaderInput(options: {
       const turns = { ArrowRight: true, PageDown: true, ' ': true, ArrowLeft: false, PageUp: false }
       const offs = [
         ...Object.entries(turns).map(([key, forward]) =>
-          stack.controller.keyboard.register(key, () => turn(forward)),
+          stack.controller.keyboard.register(key, () => turn(forward, 'key')),
         ),
         ...Object.entries(options.keys).map(([key, action]) =>
           stack.controller.keyboard.register(key, action),

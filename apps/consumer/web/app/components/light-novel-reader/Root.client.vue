@@ -4,9 +4,11 @@
   import { usePostComposerDialog } from '~/components/feed/composer/composables/usePostComposerDialog'
   import { provideReader } from '~/features/light-novel-reader/context'
   import type { TocRow } from '~/features/light-novel-reader/toc'
+  import { useReaderAnalytics } from '~/features/light-novel-reader/useReaderAnalytics'
   import { useReaderBookmarks } from '~/features/light-novel-reader/useReaderBookmarks'
   import { useReaderEnd } from '~/features/light-novel-reader/useReaderEnd'
   import { useReaderEngine } from '~/features/light-novel-reader/useReaderEngine'
+  import { useReaderErrors } from '~/features/light-novel-reader/useReaderErrors'
   import { useReaderEvents } from '~/features/light-novel-reader/useReaderEvents'
   import { useReaderFonts } from '~/features/light-novel-reader/useReaderFonts'
   import { useReaderHighlights } from '~/features/light-novel-reader/useReaderHighlights'
@@ -32,7 +34,7 @@
   let fresh = false
   const settings = useReaderSettings(props.data.reader?.settings ?? null)
   const shell = useReaderShell()
-  const { phone, medium, wide, leftDocked, drawer, sheet, chrome } = shell
+  const { phone, medium, wide, leftDocked, drawer, sheet, chrome, focused } = shell
   const host = ref<HTMLElement | null>(null)
   const measured = useElementSize(host)
   const size = ref({ width: 0, height: 0 })
@@ -47,6 +49,7 @@
     volumeId: () => props.data.volume.id,
     position: () => location.position.value,
     controller: () => engine.stack.value?.controller,
+    track: (name, attributes) => analytics.track(name, attributes),
   })
   const engine = useReaderEngine({
     volumeId: () => props.data.volume.id,
@@ -78,29 +81,55 @@
     shell,
     flush: sync.flush,
   })
+  const analytics = useReaderAnalytics({
+    volumeId: () => props.data.volume.id,
+    engine,
+    shell,
+    end,
+  })
 
   const input = useReaderInput({
     engine,
     host,
     tapTurn: () => settings.device.value.tapTurn,
-    paused: () => Boolean(drawer.value || sheet.value || tour.open.value || composer.open.value),
+    turned: analytics.turned,
+    paused: () =>
+      Boolean(
+        drawer.value ||
+        sheet.value ||
+        tour.open.value ||
+        composer.open.value ||
+        shell.shortcuts.value ||
+        shell.report.value,
+      ),
     edge: forward => end.edge(forward),
     onMiddle: () => {
       if (phone.value) chrome.value = !chrome.value
     },
     keys: {
       t: () => (phone.value ? (sheet.value = 'toc') : shell.toggleLeft()),
+      n: () => {
+        shell.tab.value = 'highlights'
+        if (phone.value) sheet.value = 'toc'
+        else if (!leftDocked.value) shell.toggleLeft()
+      },
       s: () => (phone.value ? (sheet.value = 'settings') : shell.togglePanel('settings')),
+      f: () => !phone.value && shell.toggleFocus(),
+      F: () => !phone.value && shell.toggleFocus(),
+      '?': () => (shell.shortcuts.value = true),
+      'shift+?': () => (shell.shortcuts.value = true),
+      'alt+ArrowLeft': () => jumps.back(),
       'ctrl+d': () => void bookmarks.toggle(),
       'meta+d': () => void bookmarks.toggle(),
       Enter: () => search.step(true),
       'shift+Enter': () => search.step(false),
-      Escape: () => search.close(),
+      Escape: () =>
+        search.query.value || !shell.focused.value ? search.close() : shell.toggleFocus(),
     },
   })
 
   const jumps = useReaderJumps(engine, location)
-  const search = useReaderSearch({ engine, location, jumps, shell })
+  const search = useReaderSearch({ engine, location, jumps, shell, analytics })
 
   function goTo(row: TocRow) {
     jumps.remember()
@@ -111,6 +140,7 @@
   const resume = useReaderResume({ volumeId: () => props.data.volume.id, engine, location })
   const selection = useReaderSelection(engine, host)
   const events = useReaderEvents({ engine, host, shell, jumps, highlights })
+  const errors = useReaderErrors(engine)
 
   provideReader({
     title: computed(
@@ -132,6 +162,8 @@
     resume,
     end,
     tour,
+    errors,
+    analytics,
     goTo,
     turn: input.turn,
   })
@@ -171,7 +203,7 @@
     class="relative h-dvh w-full overflow-hidden bg-canvas text-fg"
     :style="{ '--reader-dock': `${shell.dock.value}px` }"
   >
-    <LightNovelReaderDesktopTopBar v-if="!phone" :data="data" />
+    <LightNovelReaderDesktopTopBar v-if="!phone && !focused" :data="data" />
     <Flex class="min-h-0 flex-1">
       <LightNovelReaderDesktopColumn
         v-if="medium && data.reader"
@@ -183,7 +215,8 @@
       </LightNovelReaderDesktopColumn>
       <Stack gap="none" class="relative min-w-0 flex-1">
         <LightNovelReaderStage :data="data" />
-        <LightNovelReaderDesktopStatusBar v-if="!phone && data.reader" />
+        <LightNovelReaderDesktopStatusBar v-if="!phone && !focused && data.reader" />
+        <LightNovelReaderDesktopFocus v-if="focused && data.reader" :data="data" />
       </Stack>
       <LightNovelReaderDesktopRightColumn v-if="wide && data.reader" />
     </Flex>
@@ -193,6 +226,8 @@
       <LightNovelReaderSelectionToolbar />
       <LightNovelReaderHighlightInspector />
       <LightNovelReaderTour />
+      <LightNovelReaderShortcuts />
+      <LightNovelReaderReport :data="data" />
     </template>
   </Stack>
 </template>

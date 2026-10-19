@@ -5,14 +5,14 @@
   defineOptions({ name: 'LightNovelReaderDesktopDrawers' })
 
   const { shell } = useReader()
-  const { medium, wide, drawer } = shell
+  const { dockLeft, dockRight, drawer } = shell
 
   const toc = computed({
-    get: () => !medium.value && drawer.value === 'left',
+    get: () => !dockLeft.value && drawer.value === 'left',
     set: open => (drawer.value = open ? 'left' : null),
   })
   const settings = computed({
-    get: () => !wide.value && drawer.value === 'settings',
+    get: () => !dockRight.value && drawer.value === 'settings',
     set: open => (drawer.value = open ? 'settings' : null),
   })
 </script>

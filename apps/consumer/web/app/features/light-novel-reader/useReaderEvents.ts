@@ -20,7 +20,6 @@ export function useReaderEvents(options: {
     y: 0,
   })
   const picture = shallowRef<{ src: string; alt: string; bounds: Rect } | null>(null)
-  const errors = shallowRef<{ source: string; message: string; at: number }[]>([])
   const { confirm } = useHikariConfirm()
   let point = { x: 0, y: 0 }
 
@@ -81,8 +80,7 @@ export function useReaderEvents(options: {
         controller.on('imageClick', ({ blobUrl, alt, screenBounds }) => {
           picture.value = { src: blobUrl, alt, bounds: screenBounds }
         }),
-        controller.on('error', ({ source, message }) => {
-          errors.value = [...errors.value.slice(-19), { source, message, at: Date.now() }]
+        controller.on('error', ({ source }) => {
           if (source === 'annotation-target') toast.danger('这段文字无法高亮')
         }),
       ]
@@ -91,7 +89,7 @@ export function useReaderEvents(options: {
     { immediate: true },
   )
 
-  return { footnote, picture, errors }
+  return { footnote, picture }
 }
 
 export type ReaderEvents = ReturnType<typeof useReaderEvents>

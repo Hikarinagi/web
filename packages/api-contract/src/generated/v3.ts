@@ -21896,6 +21896,7 @@ export interface components {
             hourly_volume_limit: number;
             max_active_sessions: number;
             max_concurrent_transfers: number;
+            publication_grace_hours: number;
             session_ttl_seconds: number;
             transfer_timeout_seconds: number;
         };
@@ -25118,6 +25119,7 @@ export interface components {
             hourly_volume_limit: number;
             max_active_sessions: number;
             max_concurrent_transfers: number;
+            publication_grace_hours: number;
             session_ttl_seconds: number;
             transfer_timeout_seconds: number;
         };

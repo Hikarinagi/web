@@ -11,6 +11,7 @@ afterEach(() => mounted.splice(0).forEach(wrapper => wrapper.unmount()))
 
 async function mountReader(edge: (forward: boolean) => boolean = () => false) {
   const turns: string[] = []
+  const methods: string[] = []
   const cleared: number[] = []
   const middles: number[] = []
   const bindings = new Map<string, () => void>()
@@ -33,15 +34,17 @@ async function mountReader(edge: (forward: boolean) => boolean = () => false) {
   }
   const engine = { stack: shallowRef({ controller }) } as unknown as ReaderEngine
   const host = ref<HTMLElement | null>(null)
+  let input!: ReturnType<typeof useReaderInput>
   const wrapper = mount(
     defineComponent({
       setup() {
-        useReaderInput({
+        input = useReaderInput({
           engine,
           host,
           tapTurn: () => true,
           paused: () => false,
           edge,
+          turned: method => methods.push(method),
           onMiddle: () => middles.push(1),
           keys: {},
         })
@@ -79,7 +82,20 @@ async function mountReader(edge: (forward: boolean) => boolean = () => false) {
     Object.defineProperty(up, 'timeStamp', { value: now })
     element.dispatchEvent(up)
   }
-  return { element, turns, cleared, middles, bindings, controller, wheel, swipe, wait, click }
+  return {
+    element,
+    turns,
+    methods,
+    cleared,
+    middles,
+    bindings,
+    controller,
+    input,
+    wheel,
+    swipe,
+    wait,
+    click,
+  }
 }
 
 describe('点击', () => {
@@ -163,7 +179,7 @@ describe('卷末边界', () => {
 
   it('结束页接管翻页时，按键、点击与滚轮都不再翻动书页', async () => {
     const asked: boolean[] = []
-    const { turns, bindings, click, wheel } = await mountReader(forward => {
+    const { turns, methods, bindings, click, wheel } = await mountReader(forward => {
       asked.push(forward)
       return true
     })
@@ -172,7 +188,27 @@ describe('卷末边界', () => {
     click(1, 250)
     wheel(100)
     expect(turns).toEqual([])
+    expect(methods).toEqual([])
     expect(asked).toEqual([true, false, true, true])
+  })
+})
+
+describe('翻页方式', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => {
+    document.body.innerHTML = ''
+    vi.useRealTimers()
+  })
+
+  it('点按两侧、滚轮、按键与翻页按钮各自记下翻页方式', async () => {
+    const { methods, bindings, click, wheel, wait, input } = await mountReader()
+    click(1, 280)
+    click(1, 20)
+    wait(300)
+    wheel(100)
+    bindings.get('ArrowRight')!()
+    input.turn(true)
+    expect(methods).toEqual(['tap', 'tap', 'wheel', 'key', 'button'])
   })
 })
 

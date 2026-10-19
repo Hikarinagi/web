@@ -1,7 +1,7 @@
 import type { ReadingPosition } from '@ritojs/kit'
 import { positionOf } from './payload'
 
-const IDLE_MS = 5 * 60 * 1000
+export const IDLE_MS = 5 * 60 * 1000
 
 interface StagedProgress {
   volumeId: number

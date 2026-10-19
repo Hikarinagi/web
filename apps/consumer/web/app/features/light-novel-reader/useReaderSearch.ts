@@ -1,4 +1,5 @@
 import type { SearchResult } from '@ritojs/kit'
+import type { ReaderAnalytics } from './useReaderAnalytics'
 import type { ReaderEngine } from './useReaderEngine'
 import type { ReaderJumps } from './useReaderJumps'
 import type { ReaderLocation } from './useReaderLocation'
@@ -9,8 +10,9 @@ export function useReaderSearch(options: {
   location: ReaderLocation
   jumps: ReaderJumps
   shell: ReaderShell
+  analytics: ReaderAnalytics
 }) {
-  const { engine, location, jumps, shell } = options
+  const { engine, location, jumps, shell, analytics } = options
   const query = ref('')
   const term = refDebounced(
     computed(() => query.value.trim()),
@@ -39,6 +41,8 @@ export function useReaderSearch(options: {
       if (!stack) return
       const offs = [
         stack.controller.on('searchResults', ({ results: found, activeIndex }) => {
+          if (asked && answered.value !== asked)
+            analytics.track('search', { results: found.length })
           results.value = found
           active.value = activeIndex
           visited.value = false

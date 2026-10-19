@@ -15,6 +15,8 @@ export function useReaderShell() {
       right: null as ReaderPanel | null,
       leftWidth: WIDTH.left,
       rightWidth: WIDTH.right,
+      focus: false,
+      fullscreen: false,
     },
     { mergeDefaults: true },
   )
@@ -24,22 +26,43 @@ export function useReaderShell() {
   const dock = ref(0)
   const tab = ref('toc')
   const volumes = ref(false)
+  const shortcuts = ref(false)
+  const report = ref(false)
+  const screen = useFullscreen(undefined, { autoExit: true })
 
-  const leftDocked = computed(() => medium.value && stored.value.left)
-  const rightDocked = computed(() => (wide.value ? stored.value.right : null))
+  const focused = computed(() => !phone.value && stored.value.focus)
+  const dockLeft = computed(() => medium.value && !focused.value)
+  const dockRight = computed(() => wide.value && !focused.value)
+  const leftDocked = computed(() => dockLeft.value && stored.value.left)
+  const rightDocked = computed(() => (dockRight.value ? stored.value.right : null))
 
-  watch([medium, wide, phone], () => {
+  watch([medium, wide, phone, focused], () => {
     drawer.value = null
     sheet.value = null
   })
 
+  watch(screen.isFullscreen, full => (stored.value = { ...stored.value, fullscreen: full }))
+  const restore = useEventListener(
+    window,
+    ['pointerup', 'keydown'],
+    () => {
+      if (!stored.value.fullscreen || screen.isFullscreen.value) return restore()
+      screen.enter().then(restore, () => undefined)
+    },
+    { capture: true },
+  )
+
+  function toggleFocus() {
+    stored.value = { ...stored.value, focus: !stored.value.focus }
+  }
+
   function toggleLeft() {
-    if (medium.value) stored.value = { ...stored.value, left: !stored.value.left }
+    if (dockLeft.value) stored.value = { ...stored.value, left: !stored.value.left }
     else drawer.value = drawer.value === 'left' ? null : 'left'
   }
 
   function togglePanel(panel: ReaderPanel) {
-    if (wide.value) {
+    if (dockRight.value) {
       const shown = rightDocked.value === panel
       stored.value = { ...stored.value, right: shown ? null : panel }
     } else {
@@ -69,8 +92,15 @@ export function useReaderShell() {
     dock,
     tab,
     volumes,
+    shortcuts,
+    report,
     leftDocked,
     rightDocked,
+    dockLeft,
+    dockRight,
+    focused,
+    fullscreen: screen,
+    toggleFocus,
     toggleLeft,
     togglePanel,
     settle,

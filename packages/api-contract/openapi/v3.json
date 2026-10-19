@@ -30360,6 +30360,9 @@
           "max_concurrent_transfers": {
             "type": "number"
           },
+          "publication_grace_hours": {
+            "type": "number"
+          },
           "session_ttl_seconds": {
             "type": "number"
           },
@@ -30375,7 +30378,8 @@
           "hourly_transfer_limit",
           "hourly_volume_limit",
           "daily_volume_limit",
-          "daily_bytes_limit"
+          "daily_bytes_limit",
+          "publication_grace_hours"
         ],
         "type": "object"
       },
@@ -42571,6 +42575,11 @@
             "minimum": 1,
             "type": "number"
           },
+          "publication_grace_hours": {
+            "maximum": 720,
+            "minimum": 1,
+            "type": "number"
+          },
           "session_ttl_seconds": {
             "maximum": 3600,
             "minimum": 300,
@@ -42590,7 +42599,8 @@
           "hourly_transfer_limit",
           "hourly_volume_limit",
           "daily_volume_limit",
-          "daily_bytes_limit"
+          "daily_bytes_limit",
+          "publication_grace_hours"
         ],
         "type": "object"
       },
