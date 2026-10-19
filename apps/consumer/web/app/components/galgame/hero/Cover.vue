@@ -27,7 +27,6 @@
         :alt="title"
         class="rounded-md bg-inset"
         :ratio="layout.ratio"
-        image-class="object-contain"
         :processing="layout.processing"
         :preload="{ fetchPriority: 'high' }"
         preview

@@ -14,11 +14,6 @@
   const typeLabel = computed(() => workTypeLabel(props.workRef.work_type))
   const { shouldBlockNsfw } = useNsfwPolicy()
   const blocked = computed(() => shouldBlockNsfw(props.workRef.nsfw))
-
-  // 「Galgame · ゆずソフト · 2016」/「轻小说 · 渡航」
-  const meta = computed(() =>
-    [typeLabel.value, props.workRef.producer, props.workRef.year].filter(Boolean).join(' · '),
-  )
 </script>
 
 <template>
@@ -32,7 +27,7 @@
       :as="NuxtLink"
       :to="to"
       :padded="false"
-      class="hn-state-layer z-1 flex hn-interactive items-start gap-3 rounded-xl p-3 shadow-xs hn-press-lg"
+      class="hn-state-layer z-1 flex hn-interactive items-stretch gap-3 rounded-xl p-3 shadow-xs hn-press-lg"
     >
       <Ripple />
 
@@ -41,17 +36,27 @@
         :alt="workRef.title"
         class="h-17 w-12 shrink-0 rounded"
         image-class="size-full object-cover"
-        :processing="{ q: 90 }"
+        preset="small"
       />
 
-      <Stack gap="none" class="min-w-0 flex-1 gap-1">
+      <Stack gap="none" justify="between" class="min-w-0 flex-1">
         <Text as="p" size="sm" weight="semibold" truncate class="font-bold">
           {{ workRef.title }}
         </Text>
-        <Text as="p" size="xs" tone="muted" truncate>{{ meta }}</Text>
-        <Inline v-if="score != null" gap="none" align="center" wrap class="gap-x-1.5 gap-y-0.5">
-          <Rating :model-value="score" :max="10" :stars="5" readonly size="sm" />
-          <Text as="span" size="sm" weight="medium">{{ score.toFixed(1) }}</Text>
+        <Inline v-if="workRef.producer || workRef.year" gap="sm" align="center" :wrap="false">
+          <Text v-if="workRef.producer" as="span" size="xs" tone="muted" truncate class="min-w-0">
+            {{ workRef.producer }}
+          </Text>
+          <Text v-if="workRef.year" as="span" size="xs" tone="faint" class="shrink-0 tabular-nums">
+            {{ workRef.year }} 年
+          </Text>
+        </Inline>
+        <Inline gap="sm" align="center" :wrap="false">
+          <Text as="span" size="xs" tone="muted" class="shrink-0">{{ typeLabel }}</Text>
+          <Inline v-if="score != null" gap="none" align="center" :wrap="false" class="gap-1.5">
+            <Rating :model-value="score" :max="10" :stars="5" readonly size="sm" />
+            <Text as="span" size="sm" weight="medium">{{ score.toFixed(1) }}</Text>
+          </Inline>
         </Inline>
       </Stack>
     </Card>

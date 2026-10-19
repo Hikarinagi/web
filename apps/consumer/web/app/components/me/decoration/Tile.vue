@@ -31,7 +31,7 @@
     <Avatar v-if="isFrame" :user="previewUser" class="size-16!" />
     <Center v-else class="h-16 w-full">
       <HikariImage
-        :src="decoration?.image"
+        :src="decoration?.image.src"
         alt=""
         :preview="false"
         image-class="h-full w-full object-contain"

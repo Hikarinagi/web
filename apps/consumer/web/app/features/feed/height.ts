@@ -1,5 +1,5 @@
-import type { BackendFeedItem, FeedCluster, FeedRow } from './feed'
-import { finishHours, statusVerb } from './feed'
+import type { BackendFeedItem, FeedCluster, FeedRow, FeedWorkRef } from './feed'
+import { finishHours, splitWorkChips, statusVerb } from './feed'
 
 interface HeightContext {
   rowWidth: number
@@ -20,6 +20,11 @@ const HEADER_MOBILE_COMPACT = 20
 const ACTION_BAR = 32
 const HOT_COMMENT = 32
 const WORK_REF_CARD = 94
+const WORK_CHIP_HEIGHT = 38
+const WORK_CHIP_GAP = 2 * SPACING
+const WORK_CHIP_CHROME = 54
+const WORK_CHIP_MAX_WIDTH = 180
+const WORK_CHIP_MORE_CHROME = 26
 const GROUP_COVER_HEIGHT = 64
 const POST_SINGLE_COVER = 72 * SPACING
 const POST_MULTI_COVER = 40 * SPACING
@@ -39,6 +44,7 @@ const BODY_TEXT = { font: font(15), lineHeight: 24.375 }
 const BODY_TEXT_NORMAL = { font: font(15), lineHeight: 22.5 }
 const TITLE_TEXT = { font: font(16, 600), lineHeight: 22 }
 const TOPIC_TEXT = { font: font(14), lineHeight: 20 }
+const WORK_CHIP_TEXT = { font: font(13, 500), lineHeight: 20 }
 
 export function feedKey(item: BackendFeedItem) {
   return `${item.type}:${item.id}`
@@ -123,6 +129,9 @@ function postHeight(
   return stack([
     item.excerpt ? textHeight(item.excerpt, width, BODY_TEXT, false, browserMeasure) : 0,
     coversHeight(item.covers, width),
+    item.work_refs.length === 1
+      ? WORK_REF_CARD
+      : workChipsHeight(item.work_refs, width, browserMeasure),
   ])
 }
 
@@ -131,11 +140,14 @@ function articleHeight(
   width: number,
   browserMeasure: boolean,
 ) {
-  const workCount = item.is_review && item.review_work ? 1 : item.work_refs.length
+  const works =
+    (item.is_review && item.review_work) || item.work_refs.length === 1
+      ? WORK_REF_CARD
+      : workChipsHeight(item.work_refs, width, browserMeasure)
 
   return stack([
     textHeight(item.title, width, TITLE_TEXT, false, browserMeasure),
-    workCount * WORK_REF_CARD + Math.max(0, workCount - 1) * STACK_GAP,
+    works,
     item.excerpt ? textHeight(item.excerpt, width, BODY_TEXT, false, browserMeasure, 3) : 0,
     item.is_review && item.topics.length ? topicsHeight(item.topics, width, browserMeasure) : 0,
   ])
@@ -196,6 +208,33 @@ function coverWidth(
 ) {
   const ratio = cover.width && cover.height ? cover.width / cover.height : 3 / 4
   return Math.min(containerWidth, POST_MULTI_MAX_WIDTH, POST_MULTI_COVER * ratio)
+}
+
+function workChipsHeight(works: FeedWorkRef[], containerWidth: number, browserMeasure: boolean) {
+  if (!works.length) return 0
+
+  const { shown, rest } = splitWorkChips(works)
+  const widths = shown.map(work =>
+    Math.min(
+      WORK_CHIP_MAX_WIDTH,
+      WORK_CHIP_CHROME + measure(work.title, WORK_CHIP_TEXT.font, browserMeasure),
+    ),
+  )
+  if (rest)
+    widths.push(WORK_CHIP_MORE_CHROME + measure(`+${rest}`, WORK_CHIP_TEXT.font, browserMeasure))
+
+  let rows = 1
+  let used = 0
+  for (const width of widths) {
+    if (used > 0 && used + WORK_CHIP_GAP + width > containerWidth) {
+      rows += 1
+      used = width
+    } else {
+      used += (used > 0 ? WORK_CHIP_GAP : 0) + width
+    }
+  }
+
+  return rows * WORK_CHIP_HEIGHT + (rows - 1) * WORK_CHIP_GAP
 }
 
 function topicsHeight(

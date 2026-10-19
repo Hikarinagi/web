@@ -46,7 +46,7 @@
           <template #icon>
             <HikariImage
               v-if="set.emojis[0]?.src"
-              :src="set.emojis[0].src"
+              :src="set.emojis[0].src.src"
               :alt="set.name"
               :processing="EMOJI_PICKER_IMAGE"
               class="size-5"

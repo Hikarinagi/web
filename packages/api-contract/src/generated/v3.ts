@@ -22967,6 +22967,11 @@ export interface components {
         OrderAiSearchProvidersDto: {
             ids: number[];
         };
+        OrderedWorkRefDto: {
+            id: number;
+            /** @enum {string} */
+            type: "galgame" | "light_novel" | "manga";
+        };
         OwnedDecorationDto: {
             /** Format: date-time */
             acquired_at: string;
@@ -23798,6 +23803,7 @@ export interface components {
             manga_rate_ids?: number[];
             media_asset_ids?: number[];
             mention_user_ids?: number[];
+            ordered_works?: components["schemas"]["OrderedWorkRefDto"][];
             person_ids?: number[];
             poll_keys?: string[];
             post_ids?: number[];

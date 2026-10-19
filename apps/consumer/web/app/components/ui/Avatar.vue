@@ -114,7 +114,7 @@
         :style="{ transform: `scale(${frameScale})` }"
       >
         <HikariImage
-          :src="frame.image"
+          :src="frame.image.src"
           alt=""
           :lazy="lazy"
           :root-margin="rootMargin"

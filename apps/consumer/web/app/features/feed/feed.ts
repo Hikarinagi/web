@@ -71,6 +71,11 @@ export function feedItemPath(item: BackendFeedItem): string | null {
   }
 }
 
+export function splitWorkChips<T>(works: readonly T[]) {
+  if (works.length <= 5) return { shown: works, rest: 0 }
+  return { shown: works.slice(0, 4), rest: works.length - 4 }
+}
+
 export function feedItemBlocksNsfw(item: BackendFeedItem): boolean {
   switch (item.type) {
     case 'galgame_rate':

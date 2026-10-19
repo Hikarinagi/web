@@ -30,9 +30,7 @@
       :work-ref="item.review_work"
       :score="item.review_rate"
     />
-    <template v-else>
-      <FeedWorkRefCard v-for="workRef in item.work_refs" :key="workRef.id" :work-ref="workRef" />
-    </template>
+    <FeedWorkRefList v-else :works="item.work_refs" :to="`/articles/${item.id}`" />
 
     <Text v-if="item.excerpt" as="p" tone="muted" class="line-clamp-3 leading-relaxed">
       {{ item.excerpt }}

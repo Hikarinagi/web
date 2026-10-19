@@ -49,7 +49,7 @@
       @click="open(badge.id)"
     >
       <HikariImage
-        :src="badge.image"
+        :src="badge.image.src"
         :alt="badge.name"
         :preview="false"
         :image-class="

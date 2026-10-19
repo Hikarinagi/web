@@ -91,7 +91,7 @@
           <Center class="size-20 shrink-0 overflow-hidden rounded-2xl border border-line bg-inset">
             <HikariImage
               v-if="state.item.image"
-              :src="state.item.image"
+              :src="state.item.image.src"
               alt=""
               :preview="false"
               image-class="object-contain"

@@ -33857,6 +33857,26 @@
         ],
         "type": "object"
       },
+      "OrderedWorkRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id"
+        ],
+        "type": "object"
+      },
       "OwnedDecorationDto": {
         "properties": {
           "acquired_at": {
@@ -37218,6 +37238,12 @@
           "mention_user_ids": {
             "items": {
               "type": "number"
+            },
+            "type": "array"
+          },
+          "ordered_works": {
+            "items": {
+              "$ref": "#/components/schemas/OrderedWorkRefDto"
             },
             "type": "array"
           },
