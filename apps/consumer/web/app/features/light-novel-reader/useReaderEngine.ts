@@ -1,5 +1,6 @@
 import { HIKARI_BIZ_CODE } from '@hikarinagi/shared'
 import { preloadReaderRuntime } from '@ritojs/core'
+import { canDrawWithWebGl2, WebGlUnavailableError } from '@ritojs/kit'
 import { isApiError } from '~/utils/api/error'
 import { createStack, effectOf, locatorOf, spreadOf } from './engine'
 import { cachedFont, fontCatalogue, fontFace, loadFont, type ReaderFont } from './fonts'
@@ -9,7 +10,15 @@ import type { ReaderSettings } from './useReaderSettings'
 
 export type ReaderPhase = 'prepare' | 'download' | 'layout' | 'ready' | 'failed'
 export type ReaderFailure =
-  'sessions' | 'quota' | 'changed' | 'missing' | 'withdrawn' | 'unavailable' | 'network' | 'engine'
+  | 'sessions'
+  | 'quota'
+  | 'changed'
+  | 'missing'
+  | 'withdrawn'
+  | 'unavailable'
+  | 'network'
+  | 'engine'
+  | 'webgl'
 
 const FAILURES: Partial<Record<string, ReaderFailure>> = {
   [HIKARI_BIZ_CODE.READER_SESSION_LIMITED]: 'sessions',
@@ -54,6 +63,11 @@ export function useReaderEngine(options: {
     phase.value = 'prepare'
     failure.value = null
     fault.value = null
+    if (!canDrawWithWebGl2()) {
+      failure.value = 'webgl'
+      phase.value = 'failed'
+      return
+    }
     try {
       const volumeId = options.volumeId()
       const [session, catalogue] = await Promise.all([
@@ -135,7 +149,12 @@ export function useReaderEngine(options: {
       phase.value = 'ready'
     } catch (error) {
       if (id !== generation) return
-      const known = isApiError(error) ? FAILURES[error.code] : undefined
+      const known =
+        error instanceof WebGlUnavailableError
+          ? 'webgl'
+          : isApiError(error)
+            ? FAILURES[error.code]
+            : undefined
       failure.value = known ?? (phase.value === 'layout' ? 'engine' : 'network')
       fault.value = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
       phase.value = 'failed'

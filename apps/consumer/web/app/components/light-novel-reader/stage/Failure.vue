@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Button, Center, Empty } from '@hina-ui/vue'
-  import { AlertCircle, FileX, RefreshCw, Timer, WifiOff } from '@lucide/vue'
+  import { AlertCircle, FileX, MonitorX, RefreshCw, Timer, WifiOff } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
   import { useReader } from '~/features/light-novel-reader/context'
@@ -14,7 +14,7 @@
 
   const COPY: Record<
     ReaderFailure,
-    { title: string; description: string; retry?: string; back?: string }
+    { title: string; description: string; retry?: string; app?: string; back?: string }
   > = {
     sessions: {
       title: '同时打开的书籍过多',
@@ -60,6 +60,13 @@
       retry: '重试',
       back: '返回分卷详情',
     },
+    webgl: {
+      title: '浏览器无法显示阅读器',
+      description:
+        '当前浏览器无法使用硬件加速。请下载 App 阅读，或在浏览器设置中开启硬件加速后重新打开本页。',
+      app: '下载 App',
+      back: '返回分卷详情',
+    },
   }
 
   const ICONS = {
@@ -71,6 +78,7 @@
     unavailable: AlertCircle,
     network: WifiOff,
     engine: AlertCircle,
+    webgl: MonitorX,
   } satisfies Record<ReaderFailure, unknown>
 
   const copy = computed(() => COPY[engine.failure.value ?? 'network'])
@@ -83,11 +91,12 @@
       <template #icon><component :is="icon" aria-hidden="true" /></template>
       <template #actions>
         <Button v-if="copy.retry" size="sm" @click="engine.open()">{{ copy.retry }}</Button>
+        <Button v-if="copy.app" size="sm" :as="NuxtLink" to="/app">{{ copy.app }}</Button>
         <Button
           v-if="copy.back"
           size="sm"
-          :variant="copy.retry ? 'ghost' : 'solid'"
-          :tone="copy.retry ? 'neutral' : 'accent'"
+          :variant="copy.retry || copy.app ? 'ghost' : 'solid'"
+          :tone="copy.retry || copy.app ? 'neutral' : 'accent'"
           :as="NuxtLink"
           :to="`/light-novel-volumes/${props.data.volume.id}`"
         >

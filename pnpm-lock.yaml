@@ -84,11 +84,11 @@ importers:
         specifier: 0.11.3
         version: 0.11.3(@nuxt/schema@4.6.2)(confbox@0.3.1)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))(rolldown@1.2.14)(unplugin@3.4.0(esbuild@0.27.7)(rolldown@1.2.14)(rollup@4.64.10)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)))
       '@ritojs/core':
-        specifier: ^3.2.1
-        version: 3.2.1
+        specifier: ^4.0.0
+        version: 4.0.0
       '@ritojs/kit':
-        specifier: ^3.2.1
-        version: 3.2.1
+        specifier: ^4.0.0
+        version: 4.0.0
       '@rybbit/js':
         specifier: ^0.6.2
         version: 0.6.3
@@ -330,7 +330,7 @@ importers:
     dependencies:
       '@fastify/otel':
         specifier: '*'
-        version: 0.21.2(@opentelemetry/api@1.9.1)
+        version: 0.21.3(@opentelemetry/api@1.9.1)
       '@hikarinagi/shared':
         specifier: workspace:*
         version: link:../shared
@@ -1167,8 +1167,8 @@ packages:
   '@fastify/accept-negotiator@2.1.1':
     resolution: {integrity: sha512-gO48sJ/4+P9hYE24tEoWQF4fZvCfRmStf6NFhuT5hwXkH+3JXGdemoE/7ympeQZglieeLJx256rbg8e58IrCyA==}
 
-  '@fastify/otel@0.21.2':
-    resolution: {integrity: sha512-JWkxmIroQtJaVKGIzFTvAEI+J4elMmjgWGcQkRhvrcHYCf5xD3Q0sgQusQ2tMcCVewg7haoWSWIvub+KixKU3w==}
+  '@fastify/otel@0.21.3':
+    resolution: {integrity: sha512-qyEqVSEGdT1xu/BmaSDdOgivR3EC7mJcea2YpaAxg6D03qc9RfmuDBZAL5uWIE0Um7K8fBzAmUfbyA1CHrDo/Q==}
     peerDependencies:
       '@opentelemetry/api': ^1.9.0
 
@@ -2426,11 +2426,11 @@ packages:
     resolution: {integrity: sha512-yXMiBFYJbP5JOaxPzx2tJhK+v8h2Wu2uhad1Ro6GzVT8E3F4GcQ7sbLPJ9w4zvGjfxroD0bIh5B0pDtnLV/qUA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@ritojs/core@3.2.1':
-    resolution: {integrity: sha512-bLvUdhZ55tEBS3Fn/aOIQWRq/zrXfr9flQRi7w3Kns8n4w9jsVvpKvhQDo5DuDewpPo8dPAheGIxb+TCrMVoww==}
+  '@ritojs/core@4.0.0':
+    resolution: {integrity: sha512-kLfKW5KG8xAXaFaaGe7UeDLzo69aPkuktpuvqXpvzEGtUssU4Wfa4M3txZDZyD3pEGwtEZ8L7tvrv4oti8Hmgw==}
 
-  '@ritojs/kit@3.2.1':
-    resolution: {integrity: sha512-ZalHAe7NpIWprUZhto4xLx7NNGbVuUQpgQaG0/IurLmd4tEXhh5d+dOr2W8b+GSoUdTzN2bv682C/Atuoiv5aA==}
+  '@ritojs/kit@4.0.0':
+    resolution: {integrity: sha512-/JcUxEJzTLl5kSNr7TpNAM0UqHzDi4LVrJwxJ3pTd1a8bWiEo5sjL6SYsu6dFvjIzp/J/X70RgPBRFoctQq8bA==}
 
   '@rolldown/binding-android-arm-eabi@1.2.14':
     resolution: {integrity: sha512-aWR+XKH9+rW7m5fWq/5360J3mHycrx/o6xZM2DQFdJnTMdyP7/WzxPjhtLbVWdKo2y612/4U1bWqb3HQhiF7vg==}
@@ -9271,11 +9271,11 @@ snapshots:
   '@fastify/accept-negotiator@2.1.1':
     optional: true
 
-  '@fastify/otel@0.21.2(@opentelemetry/api@1.9.1)':
+  '@fastify/otel@0.21.3(@opentelemetry/api@1.9.1)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.12.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.222.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/instrumentation': 0.223.0(@opentelemetry/api@1.9.1)
       '@opentelemetry/semantic-conventions': 1.43.0
       minimatch: 10.2.6
     transitivePeerDependencies:
@@ -11594,11 +11594,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ritojs/core@3.2.1': {}
+  '@ritojs/core@4.0.0': {}
 
-  '@ritojs/kit@3.2.1':
+  '@ritojs/kit@4.0.0':
     dependencies:
-      '@ritojs/core': 3.2.1
+      '@ritojs/core': 4.0.0
 
   '@rolldown/binding-android-arm-eabi@1.2.14':
     optional: true
