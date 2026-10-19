@@ -19,6 +19,7 @@ export const findSchema = v.object({
   ),
   q: v.pipe(v.string('标题应为文本'), v.trim(), v.nonEmpty('请输入标题、链接或编号')),
   author: v.pipe(v.nullish(v.string('作者应为文本'), ''), v.trim()),
+  work: v.pipe(v.nullish(v.string('所属作品应为文本'), ''), v.trim()),
 })
 
 export type FindValues = v.InferOutput<typeof findSchema>

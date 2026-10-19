@@ -40,4 +40,6 @@ async function handler(event: H3Event) {
 }
 
 export type LightNovelVolumePageData = Awaited<ReturnType<typeof handler>>
-export default definePageBffHandler(handler)
+export default definePageBffHandler(handler, {
+  mergedRedirect: id => `/light-novel-volumes/${id}`,
+})

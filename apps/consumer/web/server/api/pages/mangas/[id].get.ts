@@ -63,4 +63,6 @@ async function handler(event: H3Event) {
 }
 
 export type MangaPageData = Awaited<ReturnType<typeof handler>>
-export default definePageBffHandler(handler)
+export default definePageBffHandler(handler, {
+  mergedRedirect: id => `/mangas/${id}`,
+})

@@ -4957,6 +4957,26 @@
         ],
         "type": "object"
       },
+      "AdoptBangumiMoveDto": {
+        "properties": {
+          "id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "resource_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ContributionResourceType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "resource_type",
+          "id"
+        ],
+        "type": "object"
+      },
       "AiAddResultDto": {
         "properties": {
           "route_ids": {
@@ -10311,6 +10331,21 @@
         ],
         "type": "object"
       },
+      "ChangeRequestCheckRootDto": {
+        "properties": {
+          "change_request_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "change_request_id",
+          "title"
+        ],
+        "type": "object"
+      },
       "ChangeRequestDetailDto": {
         "properties": {
           "author": {
@@ -10330,6 +10365,16 @@
                 "$ref": "#/components/schemas/ChangeRequestCheckDto"
               }
             ],
+            "nullable": true,
+            "type": "object"
+          },
+          "check_root": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestCheckRootDto"
+              }
+            ],
+            "description": "与同批作品一并核对时，作品的变更请求",
             "nullable": true,
             "type": "object"
           },
@@ -10447,6 +10492,7 @@
           "batch_id",
           "duplicate_check",
           "check",
+          "check_root",
           "author",
           "merged_at",
           "created_at",
@@ -10617,6 +10663,16 @@
             "nullable": true,
             "type": "object"
           },
+          "check_root": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ChangeRequestCheckRootDto"
+              }
+            ],
+            "description": "与同批作品一并核对时，作品的变更请求",
+            "nullable": true,
+            "type": "object"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
@@ -10694,6 +10750,7 @@
           "batch_id",
           "duplicate_check",
           "check",
+          "check_root",
           "author",
           "merged_at",
           "created_at",
@@ -11060,6 +11117,12 @@
           "change_request_id": {
             "type": "number"
           },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/CheckEvidenceDto"
+            },
+            "type": "array"
+          },
           "existing_id": {
             "nullable": true,
             "type": "number"
@@ -11080,6 +11143,14 @@
           "reason": {
             "type": "string"
           },
+          "resolved_by": {
+            "description": "program 表示按外部编号直接认定，未经模型",
+            "enum": [
+              "program",
+              "model"
+            ],
+            "type": "string"
+          },
           "resource_type": {
             "enum": [
               "GALGAME",
@@ -11094,6 +11165,13 @@
               "TAG"
             ],
             "type": "string"
+          },
+          "values": {
+            "description": "保留新建时，核对给出的原名与外部编号",
+            "items": {
+              "$ref": "#/components/schemas/CheckFieldDto"
+            },
+            "type": "array"
           },
           "verified": {
             "type": "boolean"
@@ -11126,6 +11204,10 @@
           "entry_id": {
             "type": "number"
           },
+          "existing": {
+            "description": "名称键相同的站内条目名称",
+            "type": "string"
+          },
           "isbn": {
             "type": "string"
           },
@@ -11134,7 +11216,13 @@
               "author",
               "entry",
               "bangumi_detail",
-              "isbn"
+              "isbn",
+              "vndb_title",
+              "external_owned",
+              "credited",
+              "name_key",
+              "release",
+              "external_record"
             ],
             "type": "string"
           },
@@ -11142,11 +11230,48 @@
             "nullable": true,
             "type": "string"
           },
+          "name": {
+            "type": "string"
+          },
+          "ref": {
+            "description": "外部编号",
+            "type": "string"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "bangumi",
+              "vndb",
+              "openbd"
+            ],
+            "type": "string"
+          },
           "title": {
             "type": "string"
           },
           "verified": {
             "type": "boolean"
+          },
+          "vndb_id": {
+            "type": "string"
+          },
+          "work": {
+            "description": "署名所在的作品",
+            "type": "string"
           }
         },
         "required": [
@@ -11161,13 +11286,24 @@
             "type": "string"
           },
           "field": {
+            "description": "条目编辑器中的字段名",
             "enum": [
               "name",
               "name_cn",
               "bunko_id",
               "publication_date",
               "bangumi_book_id",
-              "isbn"
+              "isbn",
+              "origin_title",
+              "trans_title",
+              "producers",
+              "release_date",
+              "bangumi_game_id",
+              "vndb_id",
+              "bangumi_subject_id",
+              "volume_number",
+              "trans_name",
+              "bangumi_id"
             ],
             "type": "string"
           },
@@ -11483,13 +11619,14 @@
             "enum": [
               "bangumi",
               "openbd",
+              "vndb",
               "page",
               "request"
             ],
             "type": "string"
           },
           "ref": {
-            "description": "Bangumi 编号或 ISBN",
+            "description": "Bangumi 编号、VNDB 编号或 ISBN",
             "nullable": true,
             "type": "string"
           },
@@ -14224,6 +14361,14 @@
           "summary": {
             "maxLength": 500,
             "type": "string"
+          },
+          "works": {
+            "description": "新建角色所在的作品",
+            "items": {
+              "$ref": "#/components/schemas/DuplicateWorkRefDto"
+            },
+            "maxItems": 10,
+            "type": "array"
           }
         },
         "required": [
@@ -15417,7 +15562,16 @@
             "nullable": true,
             "type": "string"
           },
+          "chapters": {
+            "description": "漫画、单行本为单话数；单话为页数",
+            "nullable": true,
+            "type": "number"
+          },
           "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
             "nullable": true,
             "type": "string"
           },
@@ -15458,6 +15612,11 @@
             ],
             "type": "string"
           },
+          "series_id": {
+            "description": "卷、单行本与单话所属的作品",
+            "nullable": true,
+            "type": "number"
+          },
           "subtitle": {
             "nullable": true,
             "type": "string"
@@ -15465,9 +15624,20 @@
           "title": {
             "type": "string"
           },
+          "vndb_id": {
+            "nullable": true,
+            "type": "string"
+          },
           "volumes": {
             "nullable": true,
             "type": "number"
+          },
+          "works": {
+            "description": "角色登场的作品",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "year": {
             "nullable": true,
@@ -15484,7 +15654,12 @@
           "author",
           "label",
           "volumes",
+          "chapters",
+          "series_id",
           "bangumi_id",
+          "vndb_id",
+          "works",
+          "created_at",
           "level",
           "reasons"
         ],
@@ -15519,6 +15694,14 @@
               "TAG"
             ],
             "type": "string"
+          },
+          "works": {
+            "description": "新建角色所在的作品",
+            "items": {
+              "$ref": "#/components/schemas/DuplicateWorkRefDto"
+            },
+            "maxItems": 10,
+            "type": "array"
           }
         },
         "required": [
@@ -15636,6 +15819,9 @@
           "bangumi_id": {
             "type": "number"
           },
+          "chapter_type": {
+            "type": "string"
+          },
           "distance": {
             "type": "number"
           },
@@ -15644,6 +15830,13 @@
           },
           "form_differs": {
             "type": "boolean"
+          },
+          "from_id": {
+            "description": "Bangumi 上已被合并的编号",
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
           },
           "isbn": {
             "type": "string"
@@ -15654,10 +15847,13 @@
               "name",
               "similar_name",
               "bangumi_name",
+              "bangumi_merged",
               "author",
               "cover",
               "isbn",
-              "volume_number"
+              "volume_number",
+              "same_work",
+              "chapter_key"
             ],
             "type": "string"
           },
@@ -15667,10 +15863,32 @@
           "name": {
             "type": "string"
           },
+          "number": {
+            "type": "string"
+          },
           "person_id": {
             "type": "number"
           },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "LIGHT_NOVEL_VOLUME",
+              "MANGA",
+              "MANGA_VOLUME",
+              "MANGA_CHAPTER",
+              "PERSON",
+              "PRODUCER",
+              "CHARACTER",
+              "TAG"
+            ],
+            "type": "string"
+          },
           "score": {
+            "type": "number"
+          },
+          "to_id": {
+            "description": "Bangumi 合并后的编号",
             "type": "number"
           },
           "value": {
@@ -15695,7 +15913,16 @@
             "nullable": true,
             "type": "string"
           },
+          "chapters": {
+            "description": "漫画、单行本为单话数；单话为页数",
+            "nullable": true,
+            "type": "number"
+          },
           "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
             "nullable": true,
             "type": "string"
           },
@@ -15721,6 +15948,11 @@
             ],
             "type": "string"
           },
+          "series_id": {
+            "description": "卷、单行本与单话所属的作品",
+            "nullable": true,
+            "type": "number"
+          },
           "subtitle": {
             "nullable": true,
             "type": "string"
@@ -15728,9 +15960,20 @@
           "title": {
             "type": "string"
           },
+          "vndb_id": {
+            "nullable": true,
+            "type": "string"
+          },
           "volumes": {
             "nullable": true,
             "type": "number"
+          },
+          "works": {
+            "description": "角色登场的作品",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "year": {
             "nullable": true,
@@ -15747,7 +15990,12 @@
           "author",
           "label",
           "volumes",
-          "bangumi_id"
+          "chapters",
+          "series_id",
+          "bangumi_id",
+          "vndb_id",
+          "works",
+          "created_at"
         ],
         "type": "object"
       },
@@ -15781,6 +16029,27 @@
           "resource_type",
           "a_id",
           "b_id"
+        ],
+        "type": "object"
+      },
+      "DuplicateWorkRefDto": {
+        "properties": {
+          "id": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "resource_type": {
+            "enum": [
+              "GALGAME",
+              "LIGHT_NOVEL",
+              "MANGA"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_type",
+          "id"
         ],
         "type": "object"
       },
@@ -24268,6 +24537,68 @@
         ],
         "type": "object"
       },
+      "MangaAdminItemDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deleted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "otome": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "status",
+          "locked",
+          "otome",
+          "nsfw",
+          "deleted_at",
+          "views",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
       "MangaAudience": {
         "description": "受众分类",
         "enum": [
@@ -27891,6 +28222,62 @@
         ],
         "type": "object"
       },
+      "MangaVolumeAdminItemDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deleted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "PUBLISHED",
+              "REJECTED",
+              "DRAFT"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "type": "number"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "volume_number",
+          "status",
+          "deleted_at",
+          "views",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
       "MangaVolumeDetailDto": {
         "properties": {
           "bangumi_book_id": {
@@ -28920,6 +29307,40 @@
         ],
         "type": "object"
       },
+      "MergeMoveDto": {
+        "properties": {
+          "count": {
+            "description": "重复项上该类内容的数量",
+            "type": "number"
+          },
+          "key": {
+            "description": "将移到保留条目的内容类别",
+            "enum": [
+              "covers",
+              "images",
+              "volumes",
+              "chapters",
+              "characters",
+              "staff",
+              "producers",
+              "works",
+              "voices",
+              "tagged",
+              "rates",
+              "favorites",
+              "progress",
+              "sources",
+              "projects"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "count"
+        ],
+        "type": "object"
+      },
       "MergePreviewDto": {
         "properties": {
           "fields": {
@@ -28927,10 +29348,17 @@
               "$ref": "#/components/schemas/MergeFieldPlanDto"
             },
             "type": "array"
+          },
+          "moves": {
+            "items": {
+              "$ref": "#/components/schemas/MergeMoveDto"
+            },
+            "type": "array"
           }
         },
         "required": [
-          "fields"
+          "fields",
+          "moves"
         ],
         "type": "object"
       },
@@ -38440,7 +38868,17 @@
               "bunko_id",
               "publication_date",
               "bangumi_book_id",
-              "isbn"
+              "isbn",
+              "origin_title",
+              "trans_title",
+              "producers",
+              "release_date",
+              "bangumi_game_id",
+              "vndb_id",
+              "bangumi_subject_id",
+              "volume_number",
+              "trans_name",
+              "bangumi_id"
             ],
             "type": "string"
           },
@@ -44606,6 +45044,27 @@
           "MAIN": "正篇"
         }
       },
+      "WikiBangumiMoveDto": {
+        "properties": {
+          "entry": {
+            "$ref": "#/components/schemas/DuplicateSummaryDto"
+          },
+          "from_id": {
+            "description": "Bangumi 上已被合并的编号，条目当前持有",
+            "type": "number"
+          },
+          "to_id": {
+            "description": "Bangumi 合并后的编号，站内没有条目持有",
+            "type": "number"
+          }
+        },
+        "required": [
+          "entry",
+          "from_id",
+          "to_id"
+        ],
+        "type": "object"
+      },
       "WikiDuplicateCountDto": {
         "properties": {
           "count": {
@@ -44686,6 +45145,8 @@
         "enum": [
           "CONTRIBUTION",
           "CATALOG",
+          "IMPORT",
+          "INGEST",
           "LIBRARY"
         ],
         "type": "string"
@@ -60479,13 +60940,7 @@
             "name": "resource_type",
             "required": false,
             "schema": {
-              "enum": [
-                "LIGHT_NOVEL",
-                "GALGAME",
-                "PERSON",
-                "PRODUCER"
-              ],
-              "type": "string"
+              "$ref": "#/components/schemas/ContributionResourceType"
             }
           },
           {
@@ -60542,6 +60997,61 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/duplicates/bangumi-moves": {
+      "get": {
+        "operationId": "AdminDuplicateController_bangumiMoves",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "resource_type",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ContributionResourceType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WikiBangumiMoveDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      },
+      "post": {
+        "operationId": "AdminDuplicateController_adoptBangumiMove",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdoptBangumiMoveDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
             "description": ""
           }
         },
@@ -61047,6 +61557,77 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/light-novel-volumes/merge": {
+      "post": {
+        "operationId": "AdminMergeController_mergeLightNovelVolume",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/light-novel-volumes/merge/preview": {
+      "get": {
+        "operationId": "AdminMergeController_previewLightNovelVolume",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "canonical_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "loser_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/light-novel-volumes/{id}": {
       "delete": {
         "operationId": "AdminLightNovelVolumeController_softDelete",
@@ -61541,6 +62122,650 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LightNovelAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes": {
+      "get": {
+        "operationId": "AdminMangaVolumeController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PublishStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "deleted",
+            "required": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "locked",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "otome",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "nsfw",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/MangaVolumeAdminItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/merge": {
+      "post": {
+        "operationId": "AdminMergeController_mergeMangaVolume",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/merge/preview": {
+      "get": {
+        "operationId": "AdminMergeController_previewMangaVolume",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "canonical_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "loser_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/{id}": {
+      "delete": {
+        "operationId": "AdminMangaVolumeController_softDelete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaVolumeAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/{id}/hard": {
+      "delete": {
+        "operationId": "AdminMangaVolumeController_hardDelete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/{id}/restore": {
+      "post": {
+        "operationId": "AdminMangaVolumeController_restore",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaVolumeAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/manga-volumes/{id}/status": {
+      "patch": {
+        "operationId": "AdminMangaVolumeController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWikiStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaVolumeAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas": {
+      "get": {
+        "operationId": "AdminMangaController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PublishStatus"
+            }
+          },
+          {
+            "in": "query",
+            "name": "deleted",
+            "required": true,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "locked",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "otome",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "nsfw",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/MangaAdminItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/merge": {
+      "post": {
+        "operationId": "AdminMergeController_mergeManga",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/merge/preview": {
+      "get": {
+        "operationId": "AdminMergeController_previewManga",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "canonical_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "loser_id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/{id}": {
+      "delete": {
+        "operationId": "AdminMangaController_softDelete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/{id}/flags": {
+      "patch": {
+        "operationId": "AdminMangaController_setFlags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWorkFlagsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/{id}/hard": {
+      "delete": {
+        "operationId": "AdminMangaController_hardDelete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/{id}/restore": {
+      "post": {
+        "operationId": "AdminMangaController_restore",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaAdminItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/mangas/{id}/status": {
+      "patch": {
+        "operationId": "AdminMangaController_setStatus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWikiStatusDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaAdminItemDto"
                 }
               }
             },
@@ -64571,6 +65796,16 @@
             "required": false,
             "schema": {
               "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "description": "角色所属作品的名称",
+            "in": "query",
+            "name": "work",
+            "required": false,
+            "schema": {
+              "maxLength": 200,
               "type": "string"
             }
           },

@@ -20,6 +20,7 @@
     entityCreateSchema,
     producerCreateSchema,
   } from '~/features/creator/schemas/entity-create.schema'
+  import { WORKSPACE_SESSION_KEY } from '~/features/creator/composables/useWorkspaceSession'
   import { isApiError, showApiErrorToast } from '~/utils/api/error'
 
   const props = defineProps<{
@@ -39,7 +40,17 @@
     if (bunko.value) return { title: '已存在同名厂商', other: '都不是，这是另一个文库' }
     if (props.target === 'producer') return { title: '已存在同名厂商', other: '这是另一个厂商' }
     if (props.target === 'tag') return { title: '已存在同名标签', other: '这是另一个标签' }
+    if (props.target === 'character') return { title: '存在同名角色', other: '这是另一个角色' }
     return { title: '存在同名人物', other: '这是另一个人' }
+  })
+  const session = inject(WORKSPACE_SESSION_KEY, null)
+  const works = computed(() => {
+    const work = session?.work
+    if (props.target !== 'character' || !work || work.resourceId == null) return undefined
+    const type = work.resourceType
+    return type === 'GALGAME' || type === 'LIGHT_NOVEL' || type === 'MANGA'
+      ? [{ resource_type: type, id: work.resourceId }]
+      : undefined
   })
 
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
@@ -93,6 +104,7 @@
           body: {
             resource_type: cfg.resource_type,
             changeset: [{ kind: 'scalar', field: 'name', from: null, to: values.name }],
+            works: works.value,
           },
           toast: false,
         }).catch(() => ({ candidates: [] }))
@@ -106,6 +118,7 @@
         name: values.name,
         country: needsCountry.value ? values.country : undefined,
         dismissals: different.value ? namesakes.value.map(item => item.id) : undefined,
+        works: works.value,
       })
       if (entity) emit('created', entity)
     } catch (error) {

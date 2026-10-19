@@ -10,6 +10,7 @@ interface CreateEntityInput {
   external?: { bangumi_id?: string; vndb_id?: string }
   country?: string
   dismissals?: number[]
+  works?: { resource_type: 'GALGAME' | 'LIGHT_NOVEL' | 'MANGA'; id: number }[]
 }
 
 export async function createProvisionalEntity(
@@ -39,6 +40,7 @@ export async function createProvisionalEntity(
       summary: `新建${input.label}:${input.name}`,
       changeset,
       duplicate_dismissals: input.dismissals,
+      works: input.works,
     },
     toast: false,
   })) as BackendChangeRequestDetail

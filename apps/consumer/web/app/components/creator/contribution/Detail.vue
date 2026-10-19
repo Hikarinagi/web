@@ -8,7 +8,7 @@
     BackendChangeRequestDetail,
     BackendChangeRequestSummary,
   } from '~/features/creator/contribution'
-  import { onSite } from '~/features/creator/check'
+  import { onSite, sameEntryText } from '~/features/creator/check'
   import { PUBLIC_PATH } from '~/features/creator/duplicates'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
 
@@ -94,7 +94,9 @@
           target="_blank"
         >
           #{{ possible?.id }} {{ possible?.title }}</Link
-        >。如果这是同一本书，请撤回此请求并改为编辑 #{{ possible?.id }}。
+        >。如果这是{{ sameEntryText(changeRequest.resource_type) }}，请撤回此请求并改为编辑 #{{
+          possible?.id
+        }}。
       </Text>
       <template #actions>
         <Button

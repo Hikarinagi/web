@@ -16,6 +16,7 @@
         : 'light-novel',
       q: String(route.query.q ?? ''),
       author: String(route.query.author ?? ''),
+      work: String(route.query.work ?? ''),
     }
   }
 
@@ -32,7 +33,7 @@
     try {
       const data = await hikariRequest('/api/v3/contribution/lookups/{resource_type}', {
         path: { resource_type: values.resource_type },
-        query: { q: values.q, author: values.author || undefined },
+        query: { q: values.q, author: values.author || undefined, work: values.work || undefined },
       })
       if (current !== seq) return
       result.value = data
@@ -45,7 +46,12 @@
   function onSearch(values: FindValues) {
     initial.value = values
     void router.replace({
-      query: { type: values.resource_type, q: values.q, author: values.author || undefined },
+      query: {
+        type: values.resource_type,
+        q: values.q,
+        author: values.author || undefined,
+        work: values.work || undefined,
+      },
     })
     void run(values)
   }
@@ -67,7 +73,7 @@
     <CreatorFindSearch :initial="initial" :loading="loading" @search="onSearch" />
 
     <template v-if="searched && result">
-      <CreatorFindSiteList :candidates="result.site" />
+      <CreatorFindSiteList :candidates="result.site" :query="searched.q" />
       <CreatorFindExternalList v-if="externalType" :type="externalType" :items="result.external" />
 
       <Card>

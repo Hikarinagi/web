@@ -26,11 +26,13 @@ export function useCheckChoices(changeRequest: () => BackendChangeRequestDetail)
     { immediate: true },
   )
 
-  const overrides = computed(() =>
-    (verification.value?.fields ?? [])
+  const overrides = computed(() => {
+    const identity = verification.value?.identity
+    if (identity?.verified && (identity.kind === 'site' || identity.kind === 'pending')) return []
+    return (verification.value?.fields ?? [])
       .filter(field => field.verified && fields.value[field.field] === 'original')
-      .map(field => ({ field: field.field, value: field.value })),
-  )
+      .map(field => ({ field: field.field, value: field.value }))
+  })
   const entityChoices = computed(() =>
     (verification.value?.entities ?? [])
       .filter(

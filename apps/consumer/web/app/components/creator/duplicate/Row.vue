@@ -6,7 +6,7 @@
     type BackendDuplicateCandidate,
   } from '~/features/creator/duplicates'
 
-  const props = defineProps<{ candidate: BackendDuplicateCandidate }>()
+  const props = defineProps<{ candidate: BackendDuplicateCandidate; query?: string }>()
 
   const meta = computed(() => {
     const item = props.candidate
@@ -16,12 +16,21 @@
       item.year,
       item.volumes ? `${item.volumes} 卷` : null,
       item.bangumi_id ? `Bangumi ${item.bangumi_id}` : null,
+      item.vndb_id ? `VNDB ${item.vndb_id}` : null,
     ]
       .filter(Boolean)
       .join(' · ')
   })
+  const appearsIn = computed(() => {
+    const works = props.candidate.works ?? []
+    if (!works.length) return ''
+    const names = works.map(name => `《${name}》`).join('')
+    return props.candidate.resource_type === 'CHARACTER' ? `登场于${names}` : `站内作品：${names}`
+  })
   const reasons = computed(() =>
-    props.candidate.reasons.map(reason => reasonText(reason, props.candidate.resource_type)),
+    props.candidate.reasons.map(reason =>
+      reasonText(reason, props.candidate.resource_type, props.query),
+    ),
   )
   const levelTone = computed(() =>
     props.candidate.level === 'on_site' || props.candidate.level === 'likely'
@@ -56,6 +65,7 @@
           {{ candidate.subtitle }}
         </Text>
         <Text v-if="meta" size="xs" tone="muted" truncate>{{ meta }}</Text>
+        <Text v-if="appearsIn" size="xs" tone="muted" truncate>{{ appearsIn }}</Text>
         <Inline gap="xs">
           <Tag v-for="text in reasons" :key="text" size="sm" tone="info">{{ text }}</Tag>
         </Inline>

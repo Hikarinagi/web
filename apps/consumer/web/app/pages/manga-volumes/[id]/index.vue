@@ -14,6 +14,7 @@
   const { data } = await useHikariApiData(`/api/pages/manga-volumes/${volumeId}`, {
     fatal: true,
   })
+  await redirectIfMerged(data)
   useNsfwDetailGate(() => data.value?.volume.manga.nsfw)
   useViewPing('manga_volume', volumeId)
 

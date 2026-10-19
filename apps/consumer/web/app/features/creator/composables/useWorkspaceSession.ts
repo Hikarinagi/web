@@ -186,6 +186,7 @@ export function useWorkspaceSession(params: {
 
   return {
     enabled,
+    work: params.work,
     workAdopted,
     members,
     memberList,

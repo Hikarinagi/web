@@ -5493,6 +5493,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/duplicates/bangumi-moves": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDuplicateController_bangumiMoves"];
+        put?: never;
+        post: operations["AdminDuplicateController_adoptBangumiMove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/duplicates/counts": {
         parameters: {
             query?: never;
@@ -5661,6 +5677,38 @@ export interface paths {
             cookie?: never;
         };
         get: operations["AdminLightNovelVolumeController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeLightNovelVolume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewLightNovelVolume"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5875,6 +5923,246 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["AdminLightNovelController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaVolumeController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeMangaVolume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewMangaVolume"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaVolumeController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaVolumeController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaVolumeController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaVolumeController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeManga"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewManga"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaController_setFlags"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaController_setStatus"];
         trace?: never;
     };
     "/api/v3/admin/wiki/people": {
@@ -15539,6 +15827,10 @@ export interface components {
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
+        AdoptBangumiMoveDto: {
+            id: number;
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
         AiAddResultDto: {
             /** @description 新建的线路 */
             route_ids: number[];
@@ -16846,11 +17138,17 @@ export interface components {
             status: "QUEUED" | "RUNNING" | "DONE" | "FAILED" | "TIMED_OUT";
             verification: components["schemas"]["CheckVerificationDto"] | null;
         };
+        ChangeRequestCheckRootDto: {
+            change_request_id: number;
+            title: string;
+        };
         ChangeRequestDetailDto: {
             author: components["schemas"]["UserRefDto"];
             base_revision_id: number | null;
             batch_id: string | null;
             check: components["schemas"]["ChangeRequestCheckDto"] | null;
+            /** @description 与同批作品一并核对时，作品的变更请求 */
+            check_root: components["schemas"]["ChangeRequestCheckRootDto"] | null;
             /** Format: date-time */
             created_at: string;
             duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
@@ -16908,6 +17206,8 @@ export interface components {
             base_revision_id: number | null;
             batch_id: string | null;
             check: components["schemas"]["ChangeRequestCheckDto"] | null;
+            /** @description 与同批作品一并核对时，作品的变更请求 */
+            check_root: components["schemas"]["ChangeRequestCheckRootDto"] | null;
             /** Format: date-time */
             created_at: string;
             duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
@@ -17000,13 +17300,21 @@ export interface components {
         };
         CheckEntityDto: {
             change_request_id: number;
+            evidence?: components["schemas"]["CheckEvidenceDto"][];
             existing_id: number | null;
             existing_name: string | null;
             fields: string[];
             name: string;
             reason: string;
+            /**
+             * @description program 表示按外部编号直接认定，未经模型
+             * @enum {string}
+             */
+            resolved_by?: "program" | "model";
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 保留新建时，核对给出的原名与外部编号 */
+            values?: components["schemas"]["CheckFieldDto"][];
             verified: boolean;
         };
         CheckEvidenceDto: {
@@ -17014,17 +17322,32 @@ export interface components {
             bangumi_id?: number;
             date?: string | null;
             entry_id?: number;
+            /** @description 名称键相同的站内条目名称 */
+            existing?: string;
             isbn?: string;
             /** @enum {string} */
-            kind: "author" | "entry" | "bangumi_detail" | "isbn";
+            kind: "author" | "entry" | "bangumi_detail" | "isbn" | "vndb_title" | "external_owned" | "credited" | "name_key" | "release" | "external_record";
             label?: string | null;
+            name?: string;
+            /** @description 外部编号 */
+            ref?: string;
+            /** @enum {string} */
+            resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            source?: "bangumi" | "vndb" | "openbd";
             title?: string;
             verified: boolean;
+            vndb_id?: string;
+            /** @description 署名所在的作品 */
+            work?: string;
         };
         CheckFieldDto: {
             display: string;
-            /** @enum {string} */
-            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn";
+            /**
+             * @description 条目编辑器中的字段名
+             * @enum {string}
+             */
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn" | "origin_title" | "trans_title" | "producers" | "release_date" | "bangumi_game_id" | "vndb_id" | "bangumi_subject_id" | "volume_number" | "trans_name" | "bangumi_id";
             source: components["schemas"]["CheckSourceDto"] | null;
             submitted: (string | number) | null;
             submitted_display: string | null;
@@ -17094,8 +17417,8 @@ export interface components {
         };
         CheckSourceDto: {
             /** @enum {string} */
-            kind: "bangumi" | "openbd" | "page" | "request";
-            /** @description Bangumi 编号或 ISBN */
+            kind: "bangumi" | "openbd" | "vndb" | "page" | "request";
+            /** @description Bangumi 编号、VNDB 编号或 ISBN */
             ref: string | null;
             title: string | null;
             url: string | null;
@@ -17786,6 +18109,8 @@ export interface components {
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             summary: string;
+            /** @description 新建角色所在的作品 */
+            works?: components["schemas"]["DuplicateWorkRefDto"][];
         };
         CreateSigningKeyDto: {
             /**
@@ -18138,7 +18463,10 @@ export interface components {
         DuplicateCandidateDto: {
             author: string | null;
             bangumi_id: string | null;
+            /** @description 漫画、单行本为单话数；单话为页数 */
+            chapters: number | null;
             cover: string | null;
+            created_at: string | null;
             id: number;
             label: string | null;
             /** @enum {string} */
@@ -18146,9 +18474,14 @@ export interface components {
             reasons: components["schemas"]["DuplicateReasonDto"][];
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 卷、单行本与单话所属的作品 */
+            series_id: number | null;
             subtitle: string | null;
             title: string;
+            vndb_id: string | null;
             volumes: number | null;
+            /** @description 角色登场的作品 */
+            works: string[];
             year: string | null;
         };
         DuplicateCheckDto: {
@@ -18158,6 +18491,8 @@ export interface components {
             exclude_id?: number;
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 新建角色所在的作品 */
+            works?: components["schemas"]["DuplicateWorkRefDto"][];
         };
         DuplicateCheckResultDto: {
             candidates: components["schemas"]["DuplicateCandidateDto"][];
@@ -18183,30 +18518,47 @@ export interface components {
         DuplicateReasonDto: {
             alias?: boolean;
             bangumi_id?: number;
+            chapter_type?: string;
             distance?: number;
             field?: string;
             form_differs?: boolean;
+            /** @description Bangumi 上已被合并的编号 */
+            from_id?: number;
+            id?: number;
             isbn?: string;
             /** @enum {string} */
-            kind: "external_id" | "name" | "similar_name" | "bangumi_name" | "author" | "cover" | "isbn" | "volume_number";
+            kind: "external_id" | "name" | "similar_name" | "bangumi_name" | "bangumi_merged" | "author" | "cover" | "isbn" | "volume_number" | "same_work" | "chapter_key";
             label?: string;
             name?: string;
+            number?: string;
             person_id?: number;
+            /** @enum {string} */
+            resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
             score?: number;
+            /** @description Bangumi 合并后的编号 */
+            to_id?: number;
             value?: string;
             volume_number?: number;
         };
         DuplicateSummaryDto: {
             author: string | null;
             bangumi_id: string | null;
+            /** @description 漫画、单行本为单话数；单话为页数 */
+            chapters: number | null;
             cover: string | null;
+            created_at: string | null;
             id: number;
             label: string | null;
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 卷、单行本与单话所属的作品 */
+            series_id: number | null;
             subtitle: string | null;
             title: string;
+            vndb_id: string | null;
             volumes: number | null;
+            /** @description 角色登场的作品 */
+            works: string[];
             year: string | null;
         };
         DuplicateVerdictDto: {
@@ -18214,6 +18566,11 @@ export interface components {
             b_id: number;
             /** @enum {string} */
             resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        DuplicateWorkRefDto: {
+            id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
         EditMangaChapterDto: {
             chapter_number?: string | null;
@@ -20359,6 +20716,23 @@ export interface components {
             updated_at: string;
             view_count: number;
         };
+        MangaAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            locked: boolean;
+            name: string;
+            name_cn: string | null;
+            nsfw: boolean;
+            otome: boolean;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
+        };
         /**
          * @description 受众分类
          * @enum {string}
@@ -21256,6 +21630,21 @@ export interface components {
             batch_size: number;
             enabled: boolean;
         };
+        MangaVolumeAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
+            volume_number: number | null;
+        };
         MangaVolumeDetailDto: {
             bangumi_book_id: number | null;
             chapter_count: number | null;
@@ -21524,8 +21913,18 @@ export interface components {
         MergeMangaChapterDto: {
             into: number;
         };
+        MergeMoveDto: {
+            /** @description 重复项上该类内容的数量 */
+            count: number;
+            /**
+             * @description 将移到保留条目的内容类别
+             * @enum {string}
+             */
+            key: "covers" | "images" | "volumes" | "chapters" | "characters" | "staff" | "producers" | "works" | "voices" | "tagged" | "rates" | "favorites" | "progress" | "sources" | "projects";
+        };
         MergePreviewDto: {
             fields: components["schemas"]["MergeFieldPlanDto"][];
+            moves: components["schemas"]["MergeMoveDto"][];
         };
         MergeResultDto: {
             /** @description The surviving canonical resource id. */
@@ -24066,7 +24465,7 @@ export interface components {
         };
         ReviewOverrideDto: {
             /** @enum {string} */
-            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn";
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn" | "origin_title" | "trans_title" | "producers" | "release_date" | "bangumi_game_id" | "vndb_id" | "bangumi_subject_id" | "volume_number" | "trans_name" | "bangumi_id";
             value: string | number;
         };
         RevisionDetailDto: {
@@ -25647,6 +26046,13 @@ export interface components {
          * @enum {string}
          */
         VolumeType: "MAIN" | "EXTRA";
+        WikiBangumiMoveDto: {
+            entry: components["schemas"]["DuplicateSummaryDto"];
+            /** @description Bangumi 上已被合并的编号，条目当前持有 */
+            from_id: number;
+            /** @description Bangumi 合并后的编号，站内没有条目持有 */
+            to_id: number;
+        };
         WikiDuplicateCountDto: {
             count: number;
             resource_type: components["schemas"]["ContributionResourceType"];
@@ -25664,7 +26070,7 @@ export interface components {
             source: components["schemas"]["WikiDuplicateSource"];
         };
         /** @enum {string} */
-        WikiDuplicateSource: "CONTRIBUTION" | "CATALOG" | "LIBRARY";
+        WikiDuplicateSource: "CONTRIBUTION" | "CATALOG" | "IMPORT" | "INGEST" | "LIBRARY";
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
             snapshot: {
@@ -35072,7 +35478,7 @@ export interface operations {
     AdminDuplicateController_getList: {
         parameters: {
             query: {
-                resource_type?: "LIGHT_NOVEL" | "GALGAME" | "PERSON" | "PRODUCER";
+                resource_type?: components["schemas"]["ContributionResourceType"];
                 source?: components["schemas"]["WikiDuplicateSource"];
                 page: number;
                 page_size: number;
@@ -35093,6 +35499,48 @@ export interface operations {
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
+            };
+        };
+    };
+    AdminDuplicateController_bangumiMoves: {
+        parameters: {
+            query: {
+                resource_type: components["schemas"]["ContributionResourceType"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiBangumiMoveDto"][];
+                };
+            };
+        };
+    };
+    AdminDuplicateController_adoptBangumiMove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdoptBangumiMoveDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -35348,6 +35796,51 @@ export interface operations {
                         items: components["schemas"]["VolumeAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeLightNovelVolume: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewLightNovelVolume: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
                 };
             };
         };
@@ -35646,6 +36139,355 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaVolumeAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeMangaVolume: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewMangaVolume: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminMangaVolumeController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewManga: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_setFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminMangaController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
                 };
             };
         };
@@ -37291,6 +38133,8 @@ export interface operations {
         parameters: {
             query: {
                 author?: string;
+                /** @description 角色所属作品的名称 */
+                work?: string;
                 q: string;
             };
             header?: never;

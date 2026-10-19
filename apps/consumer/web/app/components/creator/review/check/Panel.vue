@@ -75,7 +75,11 @@
     v-if="check"
     title="核对"
     :description="
-      check.finished_at && verification ? `完成于 ${timeBrief(check.finished_at)}` : undefined
+      changeRequest.check_root
+        ? `与同批的 #${changeRequest.check_root.change_request_id}《${changeRequest.check_root.title}》一并核对`
+        : check.finished_at && verification
+          ? `完成于 ${timeBrief(check.finished_at)}`
+          : undefined
     "
   >
     <template #icon><ScanSearch /></template>

@@ -2,7 +2,7 @@
   import { Card, Heading, Inline, Link, SegmentedControl, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { Layers } from '@lucide/vue'
-  import { entityKind, type BackendCheckEntity } from '~/features/creator/check'
+  import { checkFieldLabel, entityKind, type BackendCheckEntity } from '~/features/creator/check'
 
   const props = defineProps<{ entities: BackendCheckEntity[]; selectable: boolean }>()
   const choices = defineModel<Record<number, 'existing' | 'new'>>('choices', { required: true })
@@ -13,6 +13,11 @@
   ]
   const choosable = (entity: BackendCheckEntity) =>
     props.selectable && entity.verified && entity.existing_id != null
+  const found = (entity: BackendCheckEntity) =>
+    (entity.values ?? [])
+      .filter(field => field.verified)
+      .map(field => `${checkFieldLabel(field.field, entity.resource_type)} ${field.display}`)
+      .join(' · ')
 
   function choose(entity: BackendCheckEntity, value: string | number | undefined) {
     if (value === 'existing' || value === 'new') {
@@ -36,6 +41,12 @@
               </Link>
             </Text>
             <Text v-if="entity.reason" size="sm" tone="muted">{{ entity.reason }}</Text>
+            <Text v-else-if="entity.resolved_by === 'program'" size="sm" tone="muted">
+              已通过外部编号匹配
+            </Text>
+            <Text v-if="found(entity)" size="sm" tone="muted">
+              核对找到的原名与编号：{{ found(entity) }}
+            </Text>
           </Stack>
         </Inline>
         <SegmentedControl

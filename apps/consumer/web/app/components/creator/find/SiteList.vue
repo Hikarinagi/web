@@ -5,7 +5,7 @@
   import { PUBLIC_PATH, type BackendDuplicateCandidate } from '~/features/creator/duplicates'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
 
-  const props = defineProps<{ candidates: BackendDuplicateCandidate[] }>()
+  const props = defineProps<{ candidates: BackendDuplicateCandidate[]; query?: string }>()
 
   const matches = computed(() => props.candidates.filter(item => item.level !== 'author_work'))
   const works = computed(() => props.candidates.filter(item => item.level === 'author_work'))
@@ -20,7 +20,7 @@
     <template #icon><Library /></template>
     <Empty v-if="candidates.length === 0" size="sm" title="本站没有匹配的条目" />
     <Stack v-else gap="sm">
-      <CreatorDuplicateRow v-for="item in matches" :key="item.id" :candidate="item">
+      <CreatorDuplicateRow v-for="item in matches" :key="item.id" :candidate="item" :query="query">
         <Button
           v-if="PUBLIC_PATH[item.resource_type]"
           :as="NuxtLink"

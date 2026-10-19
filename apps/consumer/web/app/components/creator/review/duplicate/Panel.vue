@@ -6,12 +6,18 @@
   import {
     PUBLIC_PATH,
     isBlocking,
+    isEntityType,
     levelText,
     reasonText,
     submittedFacts,
     type BackendDuplicateCandidate,
   } from '~/features/creator/duplicates'
-  import { onSite, type CheckEntityChoice } from '~/features/creator/check'
+  import {
+    entityKind,
+    onSite,
+    sameEntryText,
+    type CheckEntityChoice,
+  } from '~/features/creator/check'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
 
   const props = defineProps<{
@@ -34,6 +40,18 @@
       const entity = entities.find(item => item.change_request_id === choice.change_request_id)
       return entity ? [{ name: entity.name, use_id: choice.use_id }] : []
     })
+  })
+  const verifiedText = computed(() =>
+    isEntityType(props.changeRequest.resource_type)
+      ? '核对已核实'
+      : `核对已核实：${sameEntryText(props.changeRequest.resource_type)}`,
+  )
+  const rootNote = computed(() => {
+    const root = props.changeRequest.check_root
+    const id = verifiedId.value
+    if (!root || id === null) return ''
+    const kind = entityKind({ resource_type: props.changeRequest.resource_type, fields: [] })
+    return `并入 #${id} 后，#${root.change_request_id} 将改用 #${id}，不会新建${kind}。`
   })
   const dismissed = computed(() => props.changeRequest.duplicate_check?.dismissed ?? [])
   const cols = computed(() => (candidates.value.length + 2) as 3 | 4 | 5)
@@ -93,7 +111,7 @@
               #{{ item.id }}
             </Link>
             <Tag size="sm" tone="warning">{{ levelText(item.level, item.resource_type) }}</Tag>
-            <Tag v-if="item.id === verifiedId" size="sm" tone="success">核对已核实：同一本书</Tag>
+            <Tag v-if="item.id === verifiedId" size="sm" tone="success">{{ verifiedText }}</Tag>
           </Inline>
           <Inline gap="xs">
             <Tag v-for="reason in reasonsOf(item)" :key="reason.kind" size="sm" tone="info">
@@ -113,6 +131,9 @@
           >
             并入 #{{ item.id }} 后将改用 #{{ entity.use_id }}，而不会新建「{{ entity.name }}」。
           </Text>
+          <Text v-if="item.id === verifiedId && rootNote" size="xs" tone="muted">{{
+            rootNote
+          }}</Text>
           <Inline v-if="canReview" gap="xs">
             <Button size="sm" @click="openMerge(item)">并入 #{{ item.id }}</Button>
             <Button

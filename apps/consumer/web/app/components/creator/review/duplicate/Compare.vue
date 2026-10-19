@@ -9,22 +9,30 @@
 
   const rows = computed(() => {
     const entity = isEntityType(props.resourceType)
+    const galgame = props.resourceType === 'GALGAME'
     const all: { key: keyof Facts; label: string }[] = [
       { key: 'title', label: entity ? '名称' : '原名' },
       { key: 'subtitle', label: entity ? '译名' : '中文名' },
-      { key: 'author', label: props.resourceType === 'GALGAME' ? '品牌' : '作者' },
+      { key: 'author', label: galgame ? '品牌' : '作者' },
       { key: 'label', label: '文库' },
-      { key: 'year', label: '首次出版' },
+      { key: 'year', label: galgame ? '发售年份' : '首次出版' },
+      { key: 'vndb_id', label: 'VNDB 编号' },
       { key: 'bangumi_id', label: 'Bangumi 编号' },
       { key: 'volumes', label: '卷数' },
+      { key: 'works', label: '站内作品' },
     ]
-    return all.filter(row => props.columns.some(column => column[row.key] != null))
+    return all.filter(row => props.columns.some(column => text(column[row.key]) !== null))
   })
+
+  function text(value: Facts[keyof Facts]): string | null {
+    if (Array.isArray(value)) return value.length ? value.map(name => `《${name}》`).join('') : null
+    return value == null || value === '' ? null : String(value)
+  }
 </script>
 
 <template>
   <Grid :cols="cols" gap="sm" class="items-start">
-    <Text size="sm" tone="muted">封面</Text>
+    <Text size="sm" tone="muted">{{ isEntityType(resourceType) ? '图片' : '封面' }}</Text>
     <HikariImage
       v-for="(column, index) in columns"
       :key="`cover-${index}`"
@@ -46,7 +54,7 @@
         size="sm"
         class="break-all"
       >
-        {{ column[row.key] ?? '—' }}
+        {{ text(column[row.key]) ?? '—' }}
       </Text>
     </template>
   </Grid>

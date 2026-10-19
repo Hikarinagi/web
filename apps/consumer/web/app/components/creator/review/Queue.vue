@@ -94,7 +94,12 @@
     </template>
     <template #cell-check="{ row }">
       <Inline gap="xs" class="py-2">
-        <Tag v-for="tag in checkTags(row.primary.check)" :key="tag.text" size="sm" :tone="tag.tone">
+        <Tag
+          v-for="tag in checkTags(row.primary.check, row.primary.resource_type)"
+          :key="tag.text"
+          size="sm"
+          :tone="tag.tone"
+        >
           {{ tag.text }}
         </Tag>
       </Inline>

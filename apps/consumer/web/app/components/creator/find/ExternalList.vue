@@ -127,7 +127,14 @@
       <Button size="sm" :disabled="!hasPick || importing" @click="openEditor">以此新建</Button>
     </template>
 
-    <Empty v-if="items.length === 0" size="sm" title="Bangumi 上没有匹配的条目" />
+    <Empty
+      v-if="items.length === 0"
+      size="sm"
+      :title="
+        type === 'character' ? 'Bangumi 和 VNDB 上没有其他匹配的角色' : 'Bangumi 上没有匹配的条目'
+      "
+      :description="type === 'character' ? '已关联到本站的角色会显示在「本站条目」下。' : undefined"
+    />
     <Stack v-else gap="sm">
       <Inline
         v-for="item in items"
