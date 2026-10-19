@@ -45,6 +45,7 @@ describe('HikariImage', () => {
     const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: 2 })
     expect(props.src).toMatch(/^data:image\/png;base64,/)
     expect(props.thumbhash).toBeUndefined()
+    expect(props.lazy).toBe(false)
   })
 
   it('shows the thumb hash for a blurred outside link the processor cannot blur', () => {
@@ -59,6 +60,7 @@ describe('HikariImage', () => {
     expect(props.src).toContain('img.example.com')
     expect(props.src).toContain('blur')
     expect(props.thumbhash).toBeUndefined()
+    expect(props.lazy).toBe(true)
   })
 
   it('never shows the thumb hash of a blocked image', () => {

@@ -201,7 +201,7 @@
     :src="resolvedSrc"
     :alt="alt"
     :image-class="resolvedImageClass"
-    :lazy="lazy"
+    :lazy="lazy && !hashSrc"
     :root-margin="rootMargin"
     :ratio="ratio"
     :skeleton="skeleton"
