@@ -16,7 +16,7 @@
     as="section"
     gap="none"
     justify="center"
-    class="relative isolate min-h-[calc(100dvh-var(--app-bottombar-height)-env(safe-area-inset-bottom))] overflow-hidden md:min-h-[100dvh]"
+    class="relative isolate min-h-[calc(100dvh-var(--app-bottombar-height)-env(safe-area-inset-bottom))] overflow-hidden pt-(--app-header-height) md:min-h-[100dvh]"
   >
     <HikariImage
       :src="kvLandscape"
