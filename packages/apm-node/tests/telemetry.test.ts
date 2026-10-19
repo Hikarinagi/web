@@ -109,6 +109,11 @@ describe('node telemetry', () => {
     await context.with(fromPage, async () => {
       await (await fetch(`http://127.0.0.1:${upstreamPort}/api/v3/galgames`)).text()
     })
+    await (
+      await fetch(`http://127.0.0.1:${upstreamPort}/api/v3/forwarded`, {
+        headers: { 'cf-connecting-ip': '203.0.113.7', 'x-forwarded-for': '192.168.10.254' },
+      })
+    ).text()
     await tick('Sweeper.run', async () => {
       await (await fetch(`http://127.0.0.1:${upstreamPort}/api/v3/sweep`)).text()
       track('sweep.done')
@@ -149,6 +154,8 @@ describe('node telemetry', () => {
     expect(attr(server, 'hikari.caller')).toBe('hikari-web')
     expect(attr(server, 'user.id')).toBe('42')
     expect(attr(serverOf('/api/v3/galgames'), 'user.id')).toBeUndefined()
+    expect(attr(server, 'client.address')).toBe('127.0.0.1')
+    expect(attr(serverOf('/api/v3/forwarded'), 'client.address')).toBe('203.0.113.7')
     const rootClient = spans.find(
       (s: any) => s.kind === 3 && attr(s, 'url.path') === '/api/v3/user/me',
     )

@@ -1571,6 +1571,11 @@
             "description": "色情内容分级，0 为安全",
             "type": "number"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "url": {
             "description": "完整图片 URL",
             "type": "string"
@@ -1593,6 +1598,7 @@
           "url",
           "width",
           "height",
+          "thumb_hash",
           "sexual",
           "violence",
           "votes"
@@ -1765,6 +1771,11 @@
             "description": "色情内容分级，0 为安全",
             "type": "number"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "url": {
             "description": "完整图片 URL",
             "type": "string"
@@ -1787,6 +1798,7 @@
           "url",
           "width",
           "height",
+          "thumb_hash",
           "sexual",
           "violence",
           "votes",
@@ -2934,6 +2946,11 @@
             "description": "色情内容分级，0 为安全",
             "type": "number"
           },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
           "url": {
             "description": "完整图片 URL",
             "type": "string"
@@ -2952,6 +2969,7 @@
           "url",
           "width",
           "height",
+          "thumb_hash",
           "sexual",
           "violence"
         ],

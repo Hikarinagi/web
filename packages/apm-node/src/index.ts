@@ -1,6 +1,7 @@
 import { errorMonitor } from 'node:events'
 import { IncomingMessage } from 'node:http'
 
+import { resolveClientIp } from '@hikarinagi/shared'
 import { context, propagation, trace, type Attributes, type Span } from '@opentelemetry/api'
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
@@ -11,7 +12,11 @@ import { resourceFromAttributes } from '@opentelemetry/resources'
 import { BatchLogRecordProcessor } from '@opentelemetry/sdk-logs'
 import { NodeSDK } from '@opentelemetry/sdk-node'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions'
+import {
+  ATTR_CLIENT_ADDRESS,
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from '@opentelemetry/semantic-conventions'
 import type { Telemetry as BullTelemetry } from 'bullmq'
 
 import { captureError, failSpan, log, track, type LogLevel } from './api'
@@ -128,6 +133,11 @@ export function startNodeTelemetry(options: NodeTelemetryOptions): NodeTelemetry
             return
           }
           serverSpans.set(request, span)
+          const client = resolveClientIp({
+            headers: request.headers,
+            ip: request.socket.remoteAddress,
+          })
+          if (client) span.setAttribute(ATTR_CLIENT_ADDRESS, client)
           if (isDocumentRequest(request) && originOf(span) === ORIGIN_EXTERNAL) {
             span.setAttributes({
               [ATTR_ORIGIN]: 'browser',

@@ -22367,6 +22367,8 @@ export interface components {
             height: number | null;
             /** @description 色情内容分级，0 为安全 */
             sexual: number;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 完整图片 URL */
             url: string;
             /** @description 暴力内容分级，0 为安全 */
@@ -22427,6 +22429,8 @@ export interface components {
             language: string | null;
             /** @description 色情内容分级，0 为安全 */
             sexual: number;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 完整图片 URL */
             url: string;
             /** @description 暴力内容分级，0 为安全 */
@@ -22805,6 +22809,8 @@ export interface components {
             height: number | null;
             /** @description 色情内容分级，0 为安全 */
             sexual: number;
+            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
+            thumb_hash: string | null;
             /** @description 完整图片 URL */
             url: string;
             /** @description 暴力内容分级，0 为安全 */
