@@ -7,7 +7,7 @@
   defineOptions({ name: 'LightNovelReaderPhoneBottomBar' })
 
   const { location, shell, search } = useReader()
-  const { chapter, laid, position } = location
+  const { chapter, book, laid, position } = location
   const root = useTemplateRef<ComponentPublicInstance>('root')
   const { height } = useElementSize(() => root.value?.$el as HTMLElement | undefined, undefined, {
     box: 'border-box',
@@ -52,7 +52,7 @@
         class="flex-1"
       />
       <Text size="xs" tone="muted" class="min-w-16 shrink-0 text-end tabular-nums">
-        {{ percent == null ? '' : `全书 ${percent}%` }}
+        {{ book ? `${book.to} / ${book.total} 页` : '' }}
       </Text>
     </Inline>
     <Grid as="nav" :cols="4" gap="xs" aria-label="阅读器功能">

@@ -6,7 +6,7 @@
   defineOptions({ name: 'LightNovelReaderDesktopStatusBar' })
 
   const { location, settings } = useReader()
-  const { title, current, chapter, laid, position, minutesLeft } = location
+  const { title, current, chapter, book, laid, position, minutesLeft } = location
 
   const now = useNow({ interval: 30_000 })
   const clock = computed(() =>
@@ -22,6 +22,12 @@
   const percent = computed(() =>
     laid.value && position.value ? Math.floor(position.value.progress * 100) : null,
   )
+  const bookPages = computed(() => {
+    const span = book.value
+    if (!span) return ''
+    const shown = span.from === span.to ? `${span.from}` : `${span.from}–${span.to}`
+    return `${shown} / ${span.total} 页`
+  })
 </script>
 
 <template>
@@ -45,7 +51,7 @@
       class="max-w-64 min-w-16 flex-1"
     />
     <Text size="xs" tone="muted" class="min-w-16 shrink-0 tabular-nums">
-      {{ percent == null ? '' : `全书 ${percent}%` }}
+      {{ bookPages }}
     </Text>
     <Text v-if="minutesLeft" size="xs" tone="muted" class="ml-auto shrink-0 tabular-nums">
       本章剩余约 {{ minutesLeft }} 分钟

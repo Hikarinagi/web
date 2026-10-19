@@ -66,6 +66,13 @@ export function useReaderLocation(engine: ReaderEngine) {
     }
   })
 
+  const book = computed(() => {
+    const shown = pages.value
+    const total = engine.stack.value?.reader.pageCount
+    if (!shown || !total) return null
+    return { from: shown[0]! + 1, to: shown[shown.length - 1]! + 1, total }
+  })
+
   const minutesLeft = computed(() => {
     const span = chapter.value
     const times = turns.value
@@ -85,7 +92,7 @@ export function useReaderLocation(engine: ReaderEngine) {
     return stack ? spineIndexOf(stack.reader, position.value?.sourceLocator?.href) : undefined
   })
 
-  return { rows, laid, position, title, current, chapter, minutesLeft, spine }
+  return { rows, laid, position, title, current, chapter, book, minutesLeft, spine }
 }
 
 export type ReaderLocation = ReturnType<typeof useReaderLocation>
