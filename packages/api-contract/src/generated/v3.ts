@@ -25804,9 +25804,13 @@ export interface components {
             world_knowledge: string;
         };
         TelegramPersonaTestDto: {
+            /** @description 群聊试聊时消息是否 @ 或回复了书音；为 false 时按只提到触发词处理，默认 true */
+            addressed?: boolean;
+            /** @description 群聊试聊所在的群组；省略时使用通用群名 */
+            chat_id?: number;
             messages: components["schemas"]["TelegramTestMessageDto"][];
             persona: components["schemas"]["TelegramPersonaInputDto"];
-            /** @description 以该站内账号的身份试聊；省略则作为群组成员 */
+            /** @description 以该站内账号的身份私聊；省略则在群聊中试聊 */
             user_id?: number;
         };
         TelegramPollDto: {
