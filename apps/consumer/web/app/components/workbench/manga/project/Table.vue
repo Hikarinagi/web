@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Progress, Text, toast, type DataTableColumn } from '@hina-ui/vue'
+  import { Button, Inline, Progress, Tag, Text, toast, type DataTableColumn } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import type { Component } from 'vue'
   import { LANGUAGE_LABELS } from '~/features/galgame/labels'
@@ -72,13 +72,17 @@
 
   const columns = computed<DataTableColumn<Row>[]>(() => [
     { key: 'series', label: '作品' },
-    { key: 'episode', label: '话／卷', accessor: projectEpisode, cellClass: 'tabular-nums' },
-    {
-      key: 'chapter_name',
-      label: '标题',
-      accessor: (row: Row) => row.chapter_name ?? '',
-      cellClass: 'text-muted',
-    },
+    { key: 'episode', label: '话／卷' },
+    ...(props.purpose === 'mine'
+      ? [
+          {
+            key: 'chapter_name',
+            label: '标题',
+            accessor: (row: Row) => row.chapter_name ?? '',
+            cellClass: 'text-muted',
+          },
+        ]
+      : []),
     { key: 'mode', label: '类型', accessor: kindLabel, cellClass: 'text-muted' },
     ...(props.purpose === 'mine'
       ? [
@@ -86,13 +90,13 @@
           { key: 'status', label: '状态' },
         ]
       : [
-          { key: 'preview', label: '预览' },
           {
             key: 'pages',
             label: '页数',
             accessor: (row: Row) => String(row.progress.pages),
             cellClass: 'tabular-nums',
           },
+          { key: 'check', label: '检查' },
           { key: 'owner', label: '发起人' },
         ]),
     {
@@ -106,7 +110,11 @@
   ])
 
   function open(row: Row) {
-    void navigateTo(`/create/manga/${row.id}`)
+    void navigateTo(
+      props.purpose === 'review' && row.mode === 'UPLOAD'
+        ? `/create/manga-review/${row.id}`
+        : `/create/manga/${row.id}`,
+    )
   }
 </script>
 
@@ -134,6 +142,17 @@
         class="py-2"
       />
     </template>
+    <template #cell-episode="{ row }">
+      <Inline gap="xs" align="center" :wrap="false" class="py-2">
+        <Text size="sm" class="tabular-nums">{{ projectEpisode(row) }}</Text>
+        <Tag v-if="purpose === 'review' && row.replaces" size="sm" variant="soft" tone="info">
+          替换
+        </Tag>
+      </Inline>
+    </template>
+    <template #cell-check="{ row }">
+      <WorkbenchMangaReviewCheckState :check="row.check" class="py-2" />
+    </template>
     <template #cell-progress="{ row }">
       <Inline v-if="row.mode === 'TRANSLATION'" gap="sm" align="center" :wrap="false">
         <Progress
@@ -154,24 +173,15 @@
     <template #cell-owner="{ row }">
       <UserName :user="row.owner" :handle="false" class="py-2 text-sm" />
     </template>
-    <template #cell-preview="{ row }">
-      <Inline gap="xs" :wrap="false" class="py-1">
-        <HikariImage
-          v-for="(src, index) in row.preview"
-          :key="index"
-          :src="src"
-          :processing="false"
-          alt=""
-          class="h-12 w-9 shrink-0 rounded bg-subtle"
-          image-class="size-full object-cover object-top"
-        >
-          <template #empty />
-          <template #error />
-        </HikariImage>
-      </Inline>
-    </template>
     <template #cell-actions="{ row }">
-      <Inline gap="xs" :wrap="false" justify="end" class="py-1" @click.stop>
+      <Inline
+        v-if="row.mode === 'TRANSLATION'"
+        gap="xs"
+        :wrap="false"
+        justify="end"
+        class="py-1"
+        @click.stop
+      >
         <Button size="sm" variant="ghost" @click="correct(row)">修正</Button>
         <Button size="sm" variant="ghost" tone="danger" @click="reject(row)">驳回</Button>
         <Inline v-tooltip="row.placement_complete ? null : '归类不完整，请先修正'" as="span">

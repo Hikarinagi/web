@@ -3253,6 +3253,214 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/telegram/conversations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramConversationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/conversations/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramConversationsController_detail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramGroupsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/groups/{chat_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminTelegramGroupsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/groups/{chat_id}/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminTelegramGroupsController_leave"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSchedulesController_notifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSettingsController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/persona": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSettingsController_persona"];
+        put: operations["AdminTelegramSettingsController_savePersona"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/persona/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminTelegramSettingsController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/schedules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSchedulesController_list"];
+        put?: never;
+        post: operations["AdminTelegramSchedulesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/schedules/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSchedulesController_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/schedules/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminTelegramSchedulesController_update"];
+        post?: never;
+        delete: operations["AdminTelegramSchedulesController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/schedules/{id}/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminTelegramSchedulesController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/telegram/settings": {
         parameters: {
             query?: never;
@@ -3262,22 +3470,6 @@ export interface paths {
         };
         get: operations["AdminTelegramSettingsController_get"];
         put: operations["AdminTelegramSettingsController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSettingsController_getStatus"];
-        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -8053,6 +8245,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/steam/sales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameSteamPriceController_sales"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}": {
         parameters: {
             query?: never;
@@ -8373,6 +8581,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/steam/prices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameSteamPriceController_prices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/tags": {
         parameters: {
             query?: never;
@@ -8677,6 +8901,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/telegram/accounts/{telegram_id}/unlink": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramInternalController_unlink"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/actions/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramContentController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/telegram/chat": {
         parameters: {
             query?: never;
@@ -8686,7 +8942,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["TelegramInternalController_reply"];
+        post: operations["TelegramChatController_reply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/chat/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramChatController_stream"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8703,6 +8975,166 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_checkIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/groups/left": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramInternalController_left"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/groups/seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramInternalController_seen"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/inline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_inline"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/me/{telegram_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/notifications/{telegram_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_notifications"];
+        put: operations["TelegramContentController_updateNotifications"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/outbox/claim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramContentController_claim"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/outbox/{id}/result": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TelegramContentController_result"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_releases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/sales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_sales"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_search"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -8735,6 +9167,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_reportStatus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/telegram/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramContentController_today"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -9717,6 +10165,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-project-pages/{page_id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaPageController_createNote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-project-pages/{page_id}/regions": {
         parameters: {
             query?: never;
@@ -9797,6 +10261,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-projects/{project_id}/baseline-pages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectController_getBaselinePages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaProjectController_getCheck"];
+        put?: never;
+        post: operations["MangaProjectController_rerunCheck"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-projects/{project_id}/labelplus": {
         parameters: {
             query?: never;
@@ -9870,6 +10366,22 @@ export interface paths {
         };
         get?: never;
         put: operations["MangaProjectPageController_reorder"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-projects/{project_id}/placement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaProjectController_correct"];
         post?: never;
         delete?: never;
         options?: never;
@@ -13137,6 +13649,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/telegram/covers/{type}/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TelegramCoverController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/topics": {
         parameters: {
             query?: never;
@@ -14744,7 +15272,7 @@ export interface components {
             /** @description 提供给模型的描述 */
             description: string;
             /** @enum {string} */
-            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web";
             /** @description 由模型填写的参数 */
             input: {
                 [key: string]: unknown;
@@ -14766,7 +15294,7 @@ export interface components {
         };
         AdminAiToolDto: {
             /** @enum {string} */
-            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             scenes: components["schemas"]["AiToolSceneDto"][];
@@ -15770,6 +16298,26 @@ export interface components {
             status: "ACTIVE" | "NEXT" | "RETIRED";
             use: string;
         };
+        AdminTelegramGroupDto: {
+            /** Format: date-time */
+            added_at: string;
+            chat_enabled: boolean;
+            chat_id: number;
+            context_messages: number;
+            daily_budget_usd: number | null;
+            daily_reply_limit: number | null;
+            images_enabled: boolean;
+            join_gate: boolean;
+            member_cooldown_seconds: number;
+            member_daily_limit: number | null;
+            replies_today: number;
+            spend_today: number;
+            status: components["schemas"]["TelegramGroupStatus"];
+            title: string;
+            trigger_keywords: string[];
+            welcome_enabled: boolean;
+            welcome_text: string;
+        };
         AdminUploadResultDto: {
             /** @description 对应 MediaAsset id；持久化为媒体 FK 时使用（不入个人媒体库） */
             id: number;
@@ -16258,6 +16806,10 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
+            /** @description Telegram 会话 ID */
+            telegram_chat_id: number | null;
+            /** @description Telegram 用户 ID */
+            telegram_user_id: number | null;
             tool_calls: components["schemas"]["AiToolCallDto"][];
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
@@ -16285,6 +16837,10 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
+            /** @description Telegram 会话 ID */
+            telegram_chat_id: number | null;
+            /** @description Telegram 用户 ID */
+            telegram_user_id: number | null;
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
         };
@@ -16424,7 +16980,7 @@ export interface components {
             available: boolean;
             enabled: boolean;
             /** @enum {string} */
-            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             required: boolean;
@@ -17890,6 +18446,11 @@ export interface components {
         CreateMangaNoteDto: {
             content: string;
         };
+        CreateMangaPageNoteDto: {
+            content: string;
+            /** @description 圈出的区域，按页面宽高归一化；省略时批注整页 */
+            rect?: components["schemas"]["MangaNoteRectInputDto"];
+        };
         CreateMangaPageTasksDto: {
             /** @description 仅对 DETECT 生效：完成后自动继续机翻与擦除原文 */
             follow?: boolean;
@@ -18118,6 +18679,15 @@ export interface components {
              * @enum {string}
              */
             alg: "RS256";
+        };
+        CreateTelegramScheduleDto: {
+            chat_id: number;
+            enabled: boolean;
+            kind: components["schemas"]["TelegramScheduleKind"];
+            /** @description 北京时间 HH:mm */
+            time: string;
+            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
+            weekdays: number[];
         };
         CreateTopicDto: {
             name: string;
@@ -20742,6 +21312,15 @@ export interface components {
             failed_chapters: number;
             pending_links: number;
         };
+        MangaBaselinePageDto: {
+            byte_size: number | null;
+            height: number | null;
+            id: number;
+            page_number: number;
+            /** @description 图片的限时访问地址 */
+            url: string;
+            width: number | null;
+        };
         MangaCardSummaryResDto: {
             author_name: string | null;
             id: number;
@@ -20850,6 +21429,48 @@ export interface components {
         MangaCharacterRelationDto: {
             character: components["schemas"]["CharacterPreviewDto"];
             role: components["schemas"]["CharacterRole"];
+        };
+        MangaCheckBaselinePageDto: {
+            byte_size: number | null;
+            height: number | null;
+            page_id: number;
+            width: number | null;
+        };
+        MangaCheckPageDto: {
+            byte_size: number | null;
+            /** @description 疑似与之重复的页面 */
+            duplicate_of: number[];
+            /** @description 疑似重复、可能空白、尺寸异常 */
+            flags: ("duplicate" | "blank" | "size")[];
+            height: number;
+            /** @description 对应的现有版本页面在 baseline 中的序号，从 0 开始；没有对应时为 null */
+            match: number | null;
+            page_id: number;
+            width: number;
+        };
+        MangaCheckResultDto: {
+            /** @description 现有版本的页面；不是替换投稿时为 null */
+            baseline: components["schemas"]["MangaCheckBaselinePageDto"][] | null;
+            /** @description 按页序排列 */
+            pages: components["schemas"]["MangaCheckPageDto"][];
+            summary: components["schemas"]["MangaCheckSummaryDto"];
+        };
+        MangaCheckSummaryDto: {
+            /** @description 每页的平均字节数 */
+            average_bytes: number | null;
+            baseline_average_bytes: number | null;
+            baseline_height: number | null;
+            baseline_page_count: number | null;
+            baseline_width: number | null;
+            /** @description 带有标记或在现有版本中没有对应页的页数 */
+            flagged: number;
+            /** @description 页面高度的中位数 */
+            height: number;
+            /** @description 与现有版本一一对应的页数 */
+            matched: number | null;
+            page_count: number;
+            /** @description 页面宽度的中位数 */
+            width: number;
         };
         MangaContributorsDto: {
             contributors: components["schemas"]["UserRefDto"][];
@@ -20998,8 +21619,11 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             id: number;
-            region: components["schemas"]["MangaNoteRegionDto"];
-            region_id: string;
+            page_id: number;
+            /** @description 批注圈出的区域 */
+            rect: components["schemas"]["MangaNoteRectDto"] | null;
+            /** @description 批注所在的文本框 */
+            region_id: string | null;
             /**
              * Format: date-time
              * @description 批注标记为已处理的时间
@@ -21007,8 +21631,21 @@ export interface components {
             resolved_at: string | null;
             user: components["schemas"]["UserRefDto"];
         };
-        MangaNoteRegionDto: {
-            page_id: number;
+        MangaNoteRectDto: {
+            /** @description 高度，按页面高度归一化 */
+            h: number;
+            /** @description 宽度，按页面宽度归一化 */
+            w: number;
+            /** @description 左边缘，按页面宽度归一化到 0 至 1 */
+            x: number;
+            /** @description 上边缘，按页面高度归一化到 0 至 1 */
+            y: number;
+        };
+        MangaNoteRectInputDto: {
+            h: number;
+            w: number;
+            x: number;
+            y: number;
         };
         MangaNotifySettingDto: {
             enabled: boolean;
@@ -21076,6 +21713,25 @@ export interface components {
             volume_id: number | null;
             volume_number: number | null;
         };
+        MangaProjectCheckDto: {
+            error: string | null;
+            result: components["schemas"]["MangaCheckResultDto"] | null;
+            status: components["schemas"]["MangaProjectCheckStatus"];
+            /**
+             * Format: date-time
+             * @description 检查对应的投稿轮次
+             */
+            submitted_at: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        /** @enum {string} */
+        MangaProjectCheckStatus: "PENDING" | "READY" | "FAILED";
+        MangaProjectCheckSummaryDto: {
+            /** @description 带有标记的页数，检查完成前为 null */
+            flagged: number | null;
+            status: components["schemas"]["MangaProjectCheckStatus"];
+        };
         MangaProjectDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -21097,6 +21753,8 @@ export interface components {
             page_count: number;
             /** Format: date-time */
             published_at: string | null;
+            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
+            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -21120,6 +21778,19 @@ export interface components {
             volume_number: number | null;
             withdrawn_count: number;
         };
+        MangaProjectInfoDto: {
+            chapter_name?: string | null;
+            chapter_number?: string | null;
+            /** @enum {string} */
+            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /**
+             * @description 只有尚未对应到章节的项目可以改
+             * @enum {string}
+             */
+            scope?: "CHAPTER" | "VOLUME";
+            /** @description 单行本条目 */
+            volume_id?: number | null;
+        };
         MangaProjectListEntryDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -21128,6 +21799,8 @@ export interface components {
             chapter_number: string | null;
             /** @enum {string} */
             chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /** @description 最新一轮投稿的检查 */
+            check: components["schemas"]["MangaProjectCheckSummaryDto"] | null;
             /** Format: date-time */
             created_at: string;
             id: number;
@@ -21141,6 +21814,8 @@ export interface components {
             /** @description 前几页的图片地址 */
             preview: string[];
             progress: components["schemas"]["MangaProjectProgressDto"];
+            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
+            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -21170,6 +21845,8 @@ export interface components {
         MangaProjectPageDto: {
             /** @description 选定译文由机翻修改而来的文本框数 */
             assisted_count: number;
+            /** @description 发布时使用的图片的字节数 */
+            byte_size: number | null;
             cleaned_image: components["schemas"]["MediaAssetDto"] | null;
             /** @description 清理图的限时访问地址 */
             cleaned_url: string | null;
@@ -21195,6 +21872,10 @@ export interface components {
             pages: number;
             /** @description 已有成品图的页数 */
             rendered: number;
+        };
+        MangaProjectReplacesDto: {
+            /** @description 现有版本的页数 */
+            page_count: number;
         };
         MangaProjectReviewDto: {
             confidence: number | null;
@@ -23827,6 +24508,7 @@ export interface components {
         ProvisionUserDto: {
             /** Format: email */
             email: string;
+            is_bot?: boolean;
             nickname?: string;
             sub: number;
             username: string;
@@ -24722,6 +25404,34 @@ export interface components {
             group: string;
             manga_id: number;
         };
+        SteamPriceDto: {
+            app_id: number;
+            /** @description 中国区价格的币种 */
+            currency: string | null;
+            /** Format: date-time */
+            discount_ends_at: string | null;
+            discount_percent: number;
+            /** Format: date-time */
+            discount_started_at: string | null;
+            /** Format: date-time */
+            fetched_at: string | null;
+            /** @description 现价（分） */
+            final_cents: number | null;
+            /** @description 原价（分） */
+            initial_cents: number | null;
+            /** @description 在中国区可购买 */
+            purchasable: boolean;
+        };
+        SteamSaleDto: {
+            galgame: components["schemas"]["SteamSaleGalgameDto"];
+            price: components["schemas"]["SteamPriceDto"];
+        };
+        SteamSaleGalgameDto: {
+            id: number;
+            nsfw: boolean;
+            origin_title: string;
+            trans_title: string | null;
+        };
         SubmitChangeRequestBatchDto: {
             items: components["schemas"]["ChangeRequestBatchItemDto"][];
             summary: string;
@@ -24835,10 +25545,11 @@ export interface components {
             telegram_username: string | null;
             user: components["schemas"]["UserRefDto"];
         };
+        TelegramActionConfirmDto: {
+            telegram_id: number;
+        };
         TelegramBotStatusDto: {
             bot_username: string | null;
-            chat_usage: components["schemas"]["TelegramChatUsageDto"];
-            group_id: string | null;
             /** Format: date-time */
             last_seen_at: string | null;
             online: boolean;
@@ -24847,41 +25558,58 @@ export interface components {
             started_at: string | null;
             /** @enum {string|null} */
             state: "running" | "idle" | null;
+            version: string | null;
+        };
+        TelegramCardButtonDto: {
+            text: string;
+            url: string;
+        };
+        TelegramCardDto: {
+            buttons: components["schemas"]["TelegramCardButtonDto"][];
+            /** @description Telegram HTML */
+            caption: string;
+            cover: string | null;
+            id: number;
+            /** @description 富消息 HTML */
+            rich: string;
+            title: string;
+            /** @enum {string} */
+            type: "galgame" | "light_novel" | "manga";
         };
         TelegramChatDto: {
-            chat_id: string;
-            is_private: boolean;
+            addressed: boolean;
+            chat_id: number;
+            chat_title?: string;
+            fresh?: boolean;
+            images?: components["schemas"]["TelegramChatImageDto"][];
+            /** @enum {string} */
+            kind: "group" | "private" | "guest";
             messages: components["schemas"]["TelegramChatMessageDto"][];
             telegram_id: number;
+            telegram_name: string;
+        };
+        TelegramChatImageDto: {
+            /** Format: base64 */
+            data: string;
+            /** @enum {string} */
+            source: "message" | "reply";
         };
         TelegramChatInputDto: {
-            context_window: number;
-            daily_message_budget: number;
-            daily_token_budget: number;
             enabled: boolean;
-            persona: components["schemas"]["TelegramChatPersonaInputDto"];
+            guest_mode: boolean;
+            private: components["schemas"]["TelegramPrivateChatInputDto"];
             reply_max_chars: number;
-            /** @description bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关) */
-            trigger_keywords: string[];
-            user_cooldown_seconds: number;
         };
+        /** @enum {string} */
+        TelegramChatKind: "GROUP" | "PRIVATE" | "GUEST";
         TelegramChatMessageDto: {
+            from_id: number;
+            image?: boolean;
+            message_id: number;
             name: string;
+            reply_to?: components["schemas"]["TelegramQuotedMessageDto"];
             self: boolean;
             text: string;
-        };
-        TelegramChatPersonaInputDto: {
-            guardrails: string;
-            role_core: string;
-            style_anchor: string;
-            world_knowledge: string;
-        };
-        TelegramChatUsageDto: {
-            /** @description 统计日期 (UTC, YYYY-MM-DD) */
-            date: string;
-            messages: number;
-            tokens: number;
-            tool_calls: number;
         };
         TelegramCheckInDto: {
             telegram_id: number;
@@ -24891,22 +25619,96 @@ export interface components {
             telegram_id: number;
             telegram_username?: string;
         };
+        TelegramContextMessageDto: {
+            content: string;
+            /** @enum {string} */
+            role: "user" | "assistant";
+        };
+        TelegramConversationDetailDto: {
+            chat_id: number;
+            chat_kind: components["schemas"]["TelegramChatKind"];
+            chat_title: string | null;
+            cost_usd: number;
+            id: number;
+            /** Format: date-time */
+            last_at: string;
+            last_status: components["schemas"]["TelegramTurnStatus"];
+            /** Format: date-time */
+            started_at: string;
+            telegram_name: string;
+            telegram_user_id: number;
+            tool_calls: number;
+            turn_list: components["schemas"]["TelegramTurnDto"][];
+            turns: number;
+            user: components["schemas"]["UserRefDto"] | null;
+        };
+        TelegramConversationDto: {
+            chat_id: number;
+            chat_kind: components["schemas"]["TelegramChatKind"];
+            chat_title: string | null;
+            cost_usd: number;
+            id: number;
+            /** Format: date-time */
+            last_at: string;
+            last_status: components["schemas"]["TelegramTurnStatus"];
+            /** Format: date-time */
+            started_at: string;
+            telegram_name: string;
+            telegram_user_id: number;
+            tool_calls: number;
+            turns: number;
+            user: components["schemas"]["UserRefDto"] | null;
+        };
+        TelegramDeletedDto: {
+            deleted: boolean;
+        };
+        TelegramGroupDto: {
+            /** Format: date-time */
+            added_at: string;
+            chat_enabled: boolean;
+            chat_id: number;
+            context_messages: number;
+            daily_budget_usd: number | null;
+            daily_reply_limit: number | null;
+            images_enabled: boolean;
+            join_gate: boolean;
+            member_cooldown_seconds: number;
+            member_daily_limit: number | null;
+            status: components["schemas"]["TelegramGroupStatus"];
+            title: string;
+            trigger_keywords: string[];
+            welcome_enabled: boolean;
+            welcome_text: string;
+        };
+        TelegramGroupLeftDto: {
+            chat_id: number;
+        };
+        TelegramGroupSeenDto: {
+            chat_id: number;
+            title: string;
+        };
+        /** @enum {string} */
+        TelegramGroupStatus: "PENDING" | "ENABLED" | "LEFT";
         TelegramIssueCodeDto: {
             telegram_id: number;
             telegram_username?: string;
             user: string;
         };
         TelegramJoinGateInputDto: {
-            enabled: boolean;
             pending_ttl_hours: number;
             require_avatar: boolean;
             require_binding: boolean;
             require_username: boolean;
         };
+        TelegramLeftDto: {
+            left: boolean;
+        };
         TelegramMessagesInputDto: {
+            ai_unavailable: string;
             already_linked: string;
             bind_success: string;
             bind_success_joined: string;
+            budget_exhausted: string;
             cancel_reset: string;
             checkin_already: string;
             checkin_milestone: string;
@@ -24919,7 +25721,9 @@ export interface components {
             code_sent: string;
             dm_fallback: string;
             generic_error: string;
+            guest_link_required: string;
             identifier_prompt: string;
+            image_declined: string;
             join_guide: string;
             join_profile_incomplete: string;
             join_service_unavailable: string;
@@ -24930,16 +25734,152 @@ export interface components {
             too_frequent: string;
             user_not_found: string;
         };
+        TelegramNotificationUpdateDto: {
+            galgame_plans?: boolean;
+            interactions?: boolean;
+            system?: boolean;
+            updates?: boolean;
+        };
+        TelegramNotificationsInputDto: {
+            galgame_plans: boolean;
+            interactions: boolean;
+            merge_minutes: number;
+            merge_threshold: number;
+            system: boolean;
+            updates: boolean;
+        };
+        /** @enum {string} */
+        TelegramNotifyCategory: "UPDATES" | "GALGAME_PLANS" | "INTERACTIONS" | "SYSTEM";
+        TelegramNotifyCategoryStatsDto: {
+            allowed: boolean;
+            category: components["schemas"]["TelegramNotifyCategory"];
+            failed_today: number;
+            sent_today: number;
+            subscribed: number;
+        };
+        TelegramNotifyStatsDto: {
+            categories: components["schemas"]["TelegramNotifyCategoryStatsDto"][];
+            merge_minutes: number;
+            merge_threshold: number;
+        };
+        TelegramOutboxClaimDto: {
+            limit: number;
+        };
+        TelegramOutboxResultDto: {
+            blocked?: boolean;
+            error?: string;
+            ok: boolean;
+        };
+        TelegramOverviewChannelDto: {
+            daily_budget_usd: number | null;
+            enabled: boolean;
+            kind: components["schemas"]["TelegramChatKind"];
+            replies_today: number;
+            spend_today: number;
+        };
+        TelegramOverviewDto: {
+            channels: components["schemas"]["TelegramOverviewChannelDto"][];
+            groups: components["schemas"]["TelegramOverviewGroupDto"][];
+            status: components["schemas"]["TelegramBotStatusDto"];
+            today: components["schemas"]["TelegramUsageDto"];
+            trend: components["schemas"]["TelegramTrendDto"][];
+        };
+        TelegramOverviewGroupDto: {
+            chat_id: number;
+            daily_budget_usd: number | null;
+            replies_today: number;
+            schedules: number;
+            spend_today: number;
+            status: components["schemas"]["TelegramGroupStatus"];
+            title: string;
+        };
+        TelegramPersonaDto: {
+            defaults: components["schemas"]["TelegramPersonaInputDto"];
+            persona: components["schemas"]["TelegramPersonaInputDto"];
+        };
+        TelegramPersonaInputDto: {
+            guardrails: string;
+            role_core: string;
+            style_anchor: string;
+            world_knowledge: string;
+        };
+        TelegramPersonaTestDto: {
+            messages: components["schemas"]["TelegramTestMessageDto"][];
+            persona: components["schemas"]["TelegramPersonaInputDto"];
+            /** @description 以该站内账号的身份试聊；省略则作为群组成员 */
+            user_id?: number;
+        };
+        TelegramPollDto: {
+            correct: number;
+            explanation: string;
+            options: string[];
+            question: string;
+        };
+        TelegramPostDto: {
+            buttons?: {
+                data?: string;
+                text: string;
+                url?: string;
+            }[][];
+            /** @description Telegram HTML */
+            parts: string[];
+            photo?: string | null;
+            poll?: components["schemas"]["TelegramPollDto"];
+        };
+        TelegramPrivateChatInputDto: {
+            context_messages: number;
+            daily_budget_usd: number | null;
+            enabled: boolean;
+            images_enabled: boolean;
+            member_cooldown_seconds: number;
+            member_daily_limit: number | null;
+        };
+        TelegramQueuedDto: {
+            queued: boolean;
+        };
+        TelegramQuotedMessageDto: {
+            from_id: number;
+            image?: boolean;
+            name: string;
+            self: boolean;
+            text: string;
+        };
+        TelegramScheduleDto: {
+            chat_id: number;
+            enabled: boolean;
+            id: number;
+            kind: components["schemas"]["TelegramScheduleKind"];
+            last_error: string | null;
+            /** Format: date-time */
+            last_sent_at: string | null;
+            time: string;
+            weekdays: number[];
+        };
+        /** @enum {string} */
+        TelegramScheduleKind: "TODAY_UPDATES" | "WEEK_RELEASES" | "STEAM_SALES" | "DAILY_QUIZ";
+        TelegramScheduleListItemDto: {
+            chat_id: number;
+            enabled: boolean;
+            group_status: components["schemas"]["TelegramGroupStatus"];
+            group_title: string;
+            id: number;
+            kind: components["schemas"]["TelegramScheduleKind"];
+            last_error: string | null;
+            /** Format: date-time */
+            last_sent_at: string | null;
+            time: string;
+            weekdays: number[];
+        };
         TelegramSettingsDto: {
             bot_token_hint: string;
             bot_token_set: boolean;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
-            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             message_defaults: components["schemas"]["TelegramMessagesInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
+            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -24950,9 +25890,84 @@ export interface components {
             started_at: string;
             /** @enum {string} */
             state: "running" | "idle";
+            version?: string;
+        };
+        TelegramTestMessageDto: {
+            self: boolean;
+            text: string;
+        };
+        TelegramTestReplyDto: {
+            cards: components["schemas"]["TelegramCardDto"][];
+            input_tokens: number;
+            model: string | null;
+            output_tokens: number;
+            /** @description Telegram HTML，按 4096 字符分段 */
+            parts: string[];
+            reply: string;
+            status: components["schemas"]["TelegramTurnStatus"];
+            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
+        };
+        TelegramToolCountDto: {
+            count: number;
+            label: string;
+            tool_key: string;
+        };
+        TelegramTrendDto: {
+            /** @description 北京时间日期 YYYY-MM-DD */
+            date: string;
+            replies: number;
+            spend_usd: number;
+        };
+        TelegramTurnCardDto: {
+            cover: string | null;
+            id: number;
+            title: string | null;
+            /** @enum {string} */
+            type: "galgame" | "light_novel" | "manga";
+        };
+        TelegramTurnDto: {
+            cards: components["schemas"]["TelegramTurnCardDto"][];
+            context: components["schemas"]["TelegramContextMessageDto"][] | null;
+            cost_usd: number;
+            /** Format: date-time */
+            created_at: string;
+            duration_ms: number;
+            id: number;
+            images: number;
+            images_declined: number;
+            input_tokens: number;
+            message: string | null;
+            model: string | null;
+            output_tokens: number;
+            reply: string | null;
+            /** @description AI 请求记录 ID */
+            request_id: string | null;
+            status: components["schemas"]["TelegramTurnStatus"];
+            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
+        };
+        /** @enum {string} */
+        TelegramTurnStatus: "REPLIED" | "SKIPPED" | "FAILED" | "BUDGET" | "LIMITED" | "IMAGE_DECLINED" | "STOPPED";
+        TelegramTurnToolDto: {
+            duration_ms: number;
+            input: {
+                [key: string]: unknown;
+            } | null;
+            label: string;
+            output: {
+                [key: string]: unknown;
+            } | null;
+            status: components["schemas"]["AiToolCallStatus"];
+            tool_key: string;
         };
         TelegramUnlinkResultDto: {
             unlinked: boolean;
+        };
+        TelegramUsageDto: {
+            failures: number;
+            replies: number;
+            spend_usd: number;
+            tool_calls: number;
+            tools: components["schemas"]["TelegramToolCountDto"][];
         };
         TelegramVerificationInputDto: {
             code_ttl_seconds: number;
@@ -25775,15 +26790,37 @@ export interface components {
         UpdateSourceLinkGroupsDto: {
             groups: string[];
         };
+        UpdateTelegramGroupDto: {
+            chat_enabled: boolean;
+            context_messages: number;
+            daily_budget_usd: number | null;
+            daily_reply_limit: number | null;
+            images_enabled: boolean;
+            join_gate: boolean;
+            member_cooldown_seconds: number;
+            member_daily_limit: number | null;
+            /** @enum {string} */
+            status: "PENDING" | "ENABLED";
+            trigger_keywords: string[];
+            welcome_enabled: boolean;
+            welcome_text: string;
+        };
+        UpdateTelegramScheduleDto: {
+            enabled: boolean;
+            /** @description 北京时间 HH:mm */
+            time: string;
+            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
+            weekdays: number[];
+        };
         UpdateTelegramSettingsDto: {
             /** @description 仅在轮换时传入，省略则保持现值 */
             bot_token?: string;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
-            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
+            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -32133,6 +33170,358 @@ export interface operations {
             };
         };
     };
+    AdminTelegramConversationsController_list: {
+        parameters: {
+            query: {
+                kind?: components["schemas"]["TelegramChatKind"];
+                chat_id?: number;
+                /** @description Telegram 名称、站内账号名或 Telegram ID */
+                search?: string;
+                /** @description 最近多少天，默认 7 */
+                days?: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TelegramConversationDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminTelegramConversationsController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramConversationDetailDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramGroupsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminTelegramGroupDto"][];
+                };
+            };
+        };
+    };
+    AdminTelegramGroupsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chat_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTelegramGroupDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramGroupDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramGroupsController_leave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chat_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramLeftDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_notifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramNotifyStatsDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramOverviewDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_persona: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramPersonaDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_savePersona: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramPersonaInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramPersonaDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramPersonaTestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramTestReplyDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_list: {
+        parameters: {
+            query?: {
+                chat_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramScheduleListItemDto"][];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTelegramScheduleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramScheduleDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_preview: {
+        parameters: {
+            query: {
+                kind: components["schemas"]["TelegramScheduleKind"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramPostDto"] | null;
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTelegramScheduleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramScheduleDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramDeletedDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSchedulesController_send: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramQueuedDto"];
+                };
+            };
+        };
+    };
     AdminTelegramSettingsController_get: {
         parameters: {
             query?: never;
@@ -32171,25 +33560,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TelegramSettingsDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_getStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramBotStatusDto"];
                 };
             };
         };
@@ -37048,7 +38418,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "entry_check";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "entry_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -39903,6 +41273,33 @@ export interface operations {
             };
         };
     };
+    GalgameSteamPriceController_sales: {
+        parameters: {
+            query: {
+                /** @description 最低折扣（百分比） */
+                min_discount?: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["SteamSaleDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     GalgameController_getById: {
         parameters: {
             query?: never;
@@ -40455,6 +41852,27 @@ export interface operations {
             };
         };
     };
+    GalgameSteamPriceController_prices: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SteamPriceDto"][];
+                };
+            };
+        };
+    };
     GalgameController_getTags: {
         parameters: {
             query?: never;
@@ -40900,7 +42318,49 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_reply: {
+    TelegramInternalController_unlink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                telegram_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramActionConfirmDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramChatController_reply: {
         parameters: {
             query?: never;
             header?: never;
@@ -40914,6 +42374,29 @@ export interface operations {
         };
         responses: {
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    TelegramChatController_stream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramChatDto"];
+            };
+        };
+        responses: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -40942,7 +42425,198 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_getSettings: {
+    TelegramInternalController_left: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramGroupLeftDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramInternalController_seen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramGroupSeenDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramGroupDto"];
+                };
+            };
+        };
+    };
+    TelegramContentController_inline: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>[];
+                };
+            };
+        };
+    };
+    TelegramContentController_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                telegram_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_notifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                telegram_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_updateNotifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                telegram_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramNotificationUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_claim: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramOutboxClaimDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_result: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TelegramOutboxResultDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramContentController_releases: {
+        parameters: {
+            query?: {
+                period?: "week" | "month" | "next_month" | "tba";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    TelegramContentController_sales: {
         parameters: {
             query?: never;
             header?: never;
@@ -40958,6 +42632,42 @@ export interface operations {
                 content: {
                     "application/json": Record<string, never>;
                 };
+            };
+        };
+    };
+    TelegramContentController_search: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TelegramInternalController_getSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -40979,6 +42689,25 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    TelegramContentController_today: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -42615,6 +44344,31 @@ export interface operations {
             };
         };
     };
+    MangaPageController_createNote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                page_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMangaPageNoteDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaNoteDto"];
+                };
+            };
+        };
+    };
     MangaPageController_getRegions: {
         parameters: {
             query?: never;
@@ -42803,6 +44557,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_getBaselinePages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaBaselinePageDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectController_getCheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectCheckDto"];
+                };
+            };
+        };
+    };
+    MangaProjectController_rerunCheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectCheckDto"];
                 };
             };
         };
@@ -43018,6 +44835,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectPageDto"][];
+                };
+            };
+        };
+    };
+    MangaProjectController_correct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MangaProjectInfoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaProjectDto"];
                 };
             };
         };
@@ -48731,6 +50573,28 @@ export interface operations {
                         items: components["schemas"]["TagLightNovelRelationDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    TelegramCoverController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: "galgame" | "light_novel" | "manga";
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/jpeg": string;
                 };
             };
         };

@@ -9,14 +9,10 @@
     Select,
   } from '@hina-ui/vue'
   import type { MangaTarget } from '~/features/contribute/manga-target'
-  import {
-    chapterOptions,
-    firstFree,
-    NEW_TARGET,
-    volumeOptions,
-  } from '~/features/contribute/manga-options'
+  import { chapterOptions, firstFree, NEW_TARGET } from '~/features/contribute/manga-options'
   import { useMangaSearch } from '~/features/contribute/useMangaSearch'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
+  import { useVolumeTarget } from '~/features/contribute/useVolumeTarget'
   import { LANGUAGE_OPTIONS } from '~/features/galgame/labels'
   import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
   import {
@@ -46,19 +42,12 @@
   const CHINESE_OPTIONS = LANGUAGE_OPTIONS.filter(option => option.value.startsWith('zh'))
 
   const { requireLogin } = useAuthGate()
-  const createOpen = ref(false)
-  const created = ref<{
-    id: number
-    label: string
-    change_request_id: number
-    pending: boolean
-  } | null>(null)
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const target = shallowRef<MangaTarget | null>(props.series)
   const fixed = computed(() => props.chapterId != null || props.volumeId != null)
   const { search, results, loading: searching } = useMangaSearch()
-  const { chapters, volumes, claims } = useMangaTargets(() =>
+  const { chapters, volumes, claims, published } = useMangaTargets(() =>
     fixed.value ? null : (target.value?.id ?? null),
   )
   const values = reactive<CreateMangaProjectValues>({
@@ -78,46 +67,29 @@
     results.value.map(item => ({ value: item.id, label: item.name_cn || item.name })),
   )
   const chapterChoices = computed(() => chapterOptions(chapters.value, claims.value))
-  const volumeChoices = computed(() => {
-    const options = volumeOptions(volumes.value, chapters.value, claims.value)
-    if (created.value && !options.some(option => option.value === created.value!.id)) {
-      options.splice(options.length - 1, 0, { value: created.value.id, label: created.value.label })
-    }
-    return options
-  })
-  const nextVolumeNumber = computed(() => {
-    const numbers = volumes.value
-      .map(volume => volume.volume_number)
-      .filter((value): value is number => value != null)
-    return numbers.length ? Math.max(...numbers) + 1 : 1
-  })
   const chapter = computed({
     get: () => values.chapter_id ?? NEW_TARGET,
     set: value => {
       values.chapter_id = value === NEW_TARGET ? null : Number(value)
     },
   })
-  const volume = computed<number | string | null>({
-    get: () => values.volume_id ?? null,
-    set: value => {
-      if (value === NEW_TARGET) createOpen.value = true
-      else values.volume_id = value == null ? null : Number(value)
-    },
+  const {
+    createOpen,
+    created,
+    choices: volumeChoices,
+    nextNumber,
+    model: volume,
+    replaced,
+    onCreated,
+    onPicked,
+  } = useVolumeTarget({
+    volumes,
+    chapters,
+    claims,
+    published,
+    values,
+    fixed: () => fixed.value,
   })
-
-  function onCreated(volume: {
-    id: number
-    label: string
-    change_request_id: number
-    pending: boolean
-  }) {
-    created.value = volume
-    values.volume_id = volume.id
-  }
-
-  function onPicked(volumeId: number) {
-    if (volumes.value.some(volume => volume.id === volumeId)) values.volume_id = volumeId
-  }
 
   watch(
     () => values.mode,
@@ -128,9 +100,6 @@
   )
   watch(chapterChoices, options => {
     if (!fixed.value && props.newChapter == null) values.chapter_id = firstFree(options)
-  })
-  watch(volumeChoices, options => {
-    if (!fixed.value) values.volume_id = firstFree(options)
   })
 
   function pick(value: string | number | null | undefined) {
@@ -212,14 +181,24 @@
         <SegmentedControl v-model="values.scope" :options="SCOPE_OPTIONS" />
       </FormField>
       <template v-if="wholeVolume">
-        <FormField v-if="!fixed && target" name="volume_id" label="单行本" required>
+        <FormField
+          v-if="!fixed && target"
+          name="volume_id"
+          label="单行本"
+          required
+          :description="
+            replaced === null
+              ? undefined
+              : `已收录：${replaced} 页。审核通过后，你上传的版本将替换现有版本。`
+          "
+        >
           <Select v-model="volume" :options="volumeChoices" placeholder="选择单行本" />
         </FormField>
         <ContributeMangaVolumeCreateDialog
           v-if="target"
           v-model:open="createOpen"
           :series="target"
-          :volume-number="nextVolumeNumber"
+          :volume-number="nextNumber"
           @created="onCreated"
           @picked="onPicked"
         />

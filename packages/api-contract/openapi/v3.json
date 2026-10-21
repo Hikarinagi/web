@@ -323,6 +323,7 @@
           "group": {
             "enum": [
               "site",
+              "member",
               "bangumi",
               "vndb",
               "openbd",
@@ -403,6 +404,7 @@
           "group": {
             "enum": [
               "site",
+              "member",
               "bangumi",
               "vndb",
               "openbd",
@@ -4760,6 +4762,92 @@
         ],
         "type": "object"
       },
+      "AdminTelegramGroupDto": {
+        "properties": {
+          "added_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "chat_enabled": {
+            "type": "boolean"
+          },
+          "chat_id": {
+            "type": "number"
+          },
+          "context_messages": {
+            "type": "number"
+          },
+          "daily_budget_usd": {
+            "nullable": true,
+            "type": "number"
+          },
+          "daily_reply_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "images_enabled": {
+            "type": "boolean"
+          },
+          "join_gate": {
+            "type": "boolean"
+          },
+          "member_cooldown_seconds": {
+            "type": "number"
+          },
+          "member_daily_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "replies_today": {
+            "type": "number"
+          },
+          "spend_today": {
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramGroupStatus"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "trigger_keywords": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "welcome_enabled": {
+            "type": "boolean"
+          },
+          "welcome_text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chat_id",
+          "title",
+          "status",
+          "join_gate",
+          "chat_enabled",
+          "trigger_keywords",
+          "context_messages",
+          "images_enabled",
+          "daily_budget_usd",
+          "daily_reply_limit",
+          "member_daily_limit",
+          "member_cooldown_seconds",
+          "welcome_enabled",
+          "welcome_text",
+          "added_at",
+          "replies_today",
+          "spend_today"
+        ],
+        "type": "object"
+      },
       "AdminUploadResultDto": {
         "properties": {
           "id": {
@@ -6651,6 +6739,16 @@
               }
             ]
           },
+          "telegram_chat_id": {
+            "description": "Telegram 会话 ID",
+            "nullable": true,
+            "type": "number"
+          },
+          "telegram_user_id": {
+            "description": "Telegram 用户 ID",
+            "nullable": true,
+            "type": "number"
+          },
           "tool_calls": {
             "items": {
               "$ref": "#/components/schemas/AiToolCallDto"
@@ -6692,6 +6790,8 @@
           "output_tokens",
           "cache_read_tokens",
           "cost_usd",
+          "telegram_chat_id",
+          "telegram_user_id",
           "user",
           "error_detail",
           "finish_reason",
@@ -6798,6 +6898,16 @@
               }
             ]
           },
+          "telegram_chat_id": {
+            "description": "Telegram 会话 ID",
+            "nullable": true,
+            "type": "number"
+          },
+          "telegram_user_id": {
+            "description": "Telegram 用户 ID",
+            "nullable": true,
+            "type": "number"
+          },
           "upstream_id": {
             "type": "string"
           },
@@ -6833,6 +6943,8 @@
           "output_tokens",
           "cache_read_tokens",
           "cost_usd",
+          "telegram_chat_id",
+          "telegram_user_id",
           "user"
         ],
         "type": "object"
@@ -7398,6 +7510,7 @@
           "group": {
             "enum": [
               "site",
+              "member",
               "bangumi",
               "vndb",
               "openbd",
@@ -13600,6 +13713,26 @@
         ],
         "type": "object"
       },
+      "CreateMangaPageNoteDto": {
+        "properties": {
+          "content": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "rect": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaNoteRectInputDto"
+              }
+            ],
+            "description": "圈出的区域，按页面宽高归一化；省略时批注整页"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      },
       "CreateMangaPageTasksDto": {
         "properties": {
           "follow": {
@@ -14388,6 +14521,47 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "CreateTelegramScheduleDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramScheduleKind"
+              }
+            ]
+          },
+          "time": {
+            "description": "北京时间 HH:mm",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+            "type": "string"
+          },
+          "weekdays": {
+            "description": "1 为星期一，7 为星期日；空数组表示每天",
+            "items": {
+              "maximum": 7,
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 7,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "enabled",
+          "time",
+          "weekdays",
+          "chat_id",
+          "kind"
+        ],
         "type": "object"
       },
       "CreateTopicDto": {
@@ -24630,6 +24804,41 @@
         ],
         "type": "object"
       },
+      "MangaBaselinePageDto": {
+        "properties": {
+          "byte_size": {
+            "nullable": true,
+            "type": "number"
+          },
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "page_number": {
+            "type": "number"
+          },
+          "url": {
+            "description": "图片的限时访问地址",
+            "type": "string"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "page_number",
+          "width",
+          "height",
+          "byte_size",
+          "url"
+        ],
+        "type": "object"
+      },
       "MangaCardSummaryResDto": {
         "properties": {
           "author_name": {
@@ -25088,6 +25297,169 @@
         "required": [
           "role",
           "character"
+        ],
+        "type": "object"
+      },
+      "MangaCheckBaselinePageDto": {
+        "properties": {
+          "byte_size": {
+            "nullable": true,
+            "type": "number"
+          },
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "page_id": {
+            "type": "number"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "page_id",
+          "width",
+          "height",
+          "byte_size"
+        ],
+        "type": "object"
+      },
+      "MangaCheckPageDto": {
+        "properties": {
+          "byte_size": {
+            "nullable": true,
+            "type": "number"
+          },
+          "duplicate_of": {
+            "description": "疑似与之重复的页面",
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "flags": {
+            "description": "疑似重复、可能空白、尺寸异常",
+            "items": {
+              "enum": [
+                "duplicate",
+                "blank",
+                "size"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "height": {
+            "type": "number"
+          },
+          "match": {
+            "description": "对应的现有版本页面在 baseline 中的序号，从 0 开始；没有对应时为 null",
+            "nullable": true,
+            "type": "number"
+          },
+          "page_id": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "page_id",
+          "width",
+          "height",
+          "byte_size",
+          "flags",
+          "duplicate_of",
+          "match"
+        ],
+        "type": "object"
+      },
+      "MangaCheckResultDto": {
+        "properties": {
+          "baseline": {
+            "description": "现有版本的页面；不是替换投稿时为 null",
+            "items": {
+              "$ref": "#/components/schemas/MangaCheckBaselinePageDto"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "pages": {
+            "description": "按页序排列",
+            "items": {
+              "$ref": "#/components/schemas/MangaCheckPageDto"
+            },
+            "type": "array"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/MangaCheckSummaryDto"
+          }
+        },
+        "required": [
+          "pages",
+          "baseline",
+          "summary"
+        ],
+        "type": "object"
+      },
+      "MangaCheckSummaryDto": {
+        "properties": {
+          "average_bytes": {
+            "description": "每页的平均字节数",
+            "nullable": true,
+            "type": "number"
+          },
+          "baseline_average_bytes": {
+            "nullable": true,
+            "type": "number"
+          },
+          "baseline_height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "baseline_page_count": {
+            "nullable": true,
+            "type": "number"
+          },
+          "baseline_width": {
+            "nullable": true,
+            "type": "number"
+          },
+          "flagged": {
+            "description": "带有标记或在现有版本中没有对应页的页数",
+            "type": "number"
+          },
+          "height": {
+            "description": "页面高度的中位数",
+            "type": "number"
+          },
+          "matched": {
+            "description": "与现有版本一一对应的页数",
+            "nullable": true,
+            "type": "number"
+          },
+          "page_count": {
+            "type": "number"
+          },
+          "width": {
+            "description": "页面宽度的中位数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "page_count",
+          "width",
+          "height",
+          "average_bytes",
+          "flagged",
+          "baseline_page_count",
+          "baseline_width",
+          "baseline_height",
+          "baseline_average_bytes",
+          "matched"
         ],
         "type": "object"
       },
@@ -25723,10 +26095,22 @@
           "id": {
             "type": "number"
           },
-          "region": {
-            "$ref": "#/components/schemas/MangaNoteRegionDto"
+          "page_id": {
+            "type": "number"
+          },
+          "rect": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaNoteRectDto"
+              }
+            ],
+            "description": "批注圈出的区域",
+            "nullable": true,
+            "type": "object"
           },
           "region_id": {
+            "description": "批注所在的文本框",
+            "nullable": true,
             "type": "string"
           },
           "resolved_at": {
@@ -25741,8 +26125,9 @@
         },
         "required": [
           "id",
+          "page_id",
           "region_id",
-          "region",
+          "rect",
           "content",
           "resolved_at",
           "created_at",
@@ -25750,14 +26135,61 @@
         ],
         "type": "object"
       },
-      "MangaNoteRegionDto": {
+      "MangaNoteRectDto": {
         "properties": {
-          "page_id": {
+          "h": {
+            "description": "高度，按页面高度归一化",
+            "type": "number"
+          },
+          "w": {
+            "description": "宽度，按页面宽度归一化",
+            "type": "number"
+          },
+          "x": {
+            "description": "左边缘，按页面宽度归一化到 0 至 1",
+            "type": "number"
+          },
+          "y": {
+            "description": "上边缘，按页面高度归一化到 0 至 1",
             "type": "number"
           }
         },
         "required": [
-          "page_id"
+          "x",
+          "y",
+          "w",
+          "h"
+        ],
+        "type": "object"
+      },
+      "MangaNoteRectInputDto": {
+        "properties": {
+          "h": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "w": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "x": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          },
+          "y": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "w",
+          "h"
         ],
         "type": "object"
       },
@@ -26046,6 +26478,76 @@
         ],
         "type": "object"
       },
+      "MangaProjectCheckDto": {
+        "properties": {
+          "error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "result": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaCheckResultDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectCheckStatus"
+              }
+            ]
+          },
+          "submitted_at": {
+            "description": "检查对应的投稿轮次",
+            "format": "date-time",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "submitted_at",
+          "error",
+          "result",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "MangaProjectCheckStatus": {
+        "enum": [
+          "PENDING",
+          "READY",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "MangaProjectCheckSummaryDto": {
+        "properties": {
+          "flagged": {
+            "description": "带有标记的页数，检查完成前为 null",
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectCheckStatus"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "flagged"
+        ],
+        "type": "object"
+      },
       "MangaProjectDto": {
         "properties": {
           "batch_id": {
@@ -26111,6 +26613,16 @@
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "replaces": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectReplacesDto"
+              }
+            ],
+            "description": "目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换",
+            "nullable": true,
+            "type": "object"
           },
           "scope": {
             "description": "一话或整卷",
@@ -26230,6 +26742,7 @@
           "team",
           "last_activity_at",
           "created_at",
+          "replaces",
           "machine_label_percent",
           "published_at",
           "page_count",
@@ -26237,6 +26750,44 @@
           "viewer_reviewer",
           "viewer_capabilities"
         ],
+        "type": "object"
+      },
+      "MangaProjectInfoDto": {
+        "properties": {
+          "chapter_name": {
+            "maxLength": 200,
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_number": {
+            "maxLength": 20,
+            "nullable": true,
+            "type": "string"
+          },
+          "chapter_type": {
+            "enum": [
+              "SERIALIZATION",
+              "EXTRA",
+              "ONESHOT",
+              "VOLUME"
+            ],
+            "type": "string"
+          },
+          "scope": {
+            "description": "只有尚未对应到章节的项目可以改",
+            "enum": [
+              "CHAPTER",
+              "VOLUME"
+            ],
+            "type": "string"
+          },
+          "volume_id": {
+            "description": "单行本条目",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
         "type": "object"
       },
       "MangaProjectListEntryDto": {
@@ -26272,6 +26823,16 @@
             ],
             "type": "string"
           },
+          "check": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectCheckSummaryDto"
+              }
+            ],
+            "description": "最新一轮投稿的检查",
+            "nullable": true,
+            "type": "object"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
@@ -26306,6 +26867,16 @@
           },
           "progress": {
             "$ref": "#/components/schemas/MangaProjectProgressDto"
+          },
+          "replaces": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectReplacesDto"
+              }
+            ],
+            "description": "目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换",
+            "nullable": true,
+            "type": "object"
           },
           "scope": {
             "description": "一话或整卷",
@@ -26396,7 +26967,9 @@
           "created_at",
           "progress",
           "preview",
-          "placement_complete"
+          "placement_complete",
+          "replaces",
+          "check"
         ],
         "type": "object"
       },
@@ -26432,6 +27005,11 @@
         "properties": {
           "assisted_count": {
             "description": "选定译文由机翻修改而来的文本框数",
+            "type": "number"
+          },
+          "byte_size": {
+            "description": "发布时使用的图片的字节数",
+            "nullable": true,
             "type": "number"
           },
           "cleaned_image": {
@@ -26505,6 +27083,7 @@
           "original_image",
           "cleaned_image",
           "rendered_image",
+          "byte_size",
           "original_url",
           "cleaned_url",
           "rendered_url",
@@ -26529,6 +27108,18 @@
         "required": [
           "pages",
           "rendered"
+        ],
+        "type": "object"
+      },
+      "MangaProjectReplacesDto": {
+        "properties": {
+          "page_count": {
+            "description": "现有版本的页数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "page_count"
         ],
         "type": "object"
       },
@@ -36251,6 +36842,9 @@
             "format": "email",
             "type": "string"
           },
+          "is_bot": {
+            "type": "boolean"
+          },
           "nickname": {
             "type": "string"
           },
@@ -39885,6 +40479,101 @@
         ],
         "type": "object"
       },
+      "SteamPriceDto": {
+        "properties": {
+          "app_id": {
+            "type": "number"
+          },
+          "currency": {
+            "description": "中国区价格的币种",
+            "nullable": true,
+            "type": "string"
+          },
+          "discount_ends_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "discount_percent": {
+            "type": "number"
+          },
+          "discount_started_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "fetched_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "final_cents": {
+            "description": "现价（分）",
+            "nullable": true,
+            "type": "number"
+          },
+          "initial_cents": {
+            "description": "原价（分）",
+            "nullable": true,
+            "type": "number"
+          },
+          "purchasable": {
+            "description": "在中国区可购买",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "app_id",
+          "currency",
+          "initial_cents",
+          "final_cents",
+          "discount_percent",
+          "discount_ends_at",
+          "discount_started_at",
+          "purchasable",
+          "fetched_at"
+        ],
+        "type": "object"
+      },
+      "SteamSaleDto": {
+        "properties": {
+          "galgame": {
+            "$ref": "#/components/schemas/SteamSaleGalgameDto"
+          },
+          "price": {
+            "$ref": "#/components/schemas/SteamPriceDto"
+          }
+        },
+        "required": [
+          "galgame",
+          "price"
+        ],
+        "type": "object"
+      },
+      "SteamSaleGalgameDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "origin_title": {
+            "type": "string"
+          },
+          "trans_title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "nsfw"
+        ],
+        "type": "object"
+      },
       "SubmitChangeRequestBatchDto": {
         "properties": {
           "items": {
@@ -40411,16 +41100,20 @@
         ],
         "type": "object"
       },
+      "TelegramActionConfirmDto": {
+        "properties": {
+          "telegram_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "telegram_id"
+        ],
+        "type": "object"
+      },
       "TelegramBotStatusDto": {
         "properties": {
           "bot_username": {
-            "nullable": true,
-            "type": "string"
-          },
-          "chat_usage": {
-            "$ref": "#/components/schemas/TelegramChatUsageDto"
-          },
-          "group_id": {
             "nullable": true,
             "type": "string"
           },
@@ -40448,172 +41141,225 @@
             ],
             "nullable": true,
             "type": "string"
+          },
+          "version": {
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "online",
           "state",
           "bot_username",
-          "group_id",
+          "version",
           "pending_joins",
           "started_at",
-          "last_seen_at",
-          "chat_usage"
+          "last_seen_at"
+        ],
+        "type": "object"
+      },
+      "TelegramCardButtonDto": {
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "url"
+        ],
+        "type": "object"
+      },
+      "TelegramCardDto": {
+        "properties": {
+          "buttons": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramCardButtonDto"
+            },
+            "type": "array"
+          },
+          "caption": {
+            "description": "Telegram HTML",
+            "type": "string"
+          },
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "rich": {
+            "description": "富消息 HTML",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "title",
+          "cover",
+          "caption",
+          "rich",
+          "buttons"
         ],
         "type": "object"
       },
       "TelegramChatDto": {
         "properties": {
+          "addressed": {
+            "type": "boolean"
+          },
           "chat_id": {
-            "pattern": "^-?\\d{1,20}$",
+            "type": "number"
+          },
+          "chat_title": {
+            "maxLength": 255,
             "type": "string"
           },
-          "is_private": {
+          "fresh": {
             "type": "boolean"
+          },
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramChatImageDto"
+            },
+            "maxItems": 4,
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "group",
+              "private",
+              "guest"
+            ],
+            "type": "string"
           },
           "messages": {
             "items": {
               "$ref": "#/components/schemas/TelegramChatMessageDto"
             },
-            "maxItems": 50,
+            "maxItems": 60,
             "type": "array"
           },
           "telegram_id": {
             "type": "number"
+          },
+          "telegram_name": {
+            "maxLength": 200,
+            "type": "string"
           }
         },
         "required": [
+          "kind",
           "chat_id",
           "telegram_id",
-          "is_private",
+          "telegram_name",
+          "addressed",
           "messages"
+        ],
+        "type": "object"
+      },
+      "TelegramChatImageDto": {
+        "properties": {
+          "data": {
+            "format": "base64",
+            "maxLength": 4000000,
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "message",
+              "reply"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "source"
         ],
         "type": "object"
       },
       "TelegramChatInputDto": {
         "properties": {
-          "context_window": {
-            "maximum": 50,
-            "minimum": 1,
-            "type": "number"
-          },
-          "daily_message_budget": {
-            "maximum": 100000,
-            "minimum": 0,
-            "type": "number"
-          },
-          "daily_token_budget": {
-            "maximum": 100000000,
-            "minimum": 0,
-            "type": "number"
-          },
           "enabled": {
             "type": "boolean"
           },
-          "persona": {
-            "$ref": "#/components/schemas/TelegramChatPersonaInputDto"
+          "guest_mode": {
+            "type": "boolean"
+          },
+          "private": {
+            "$ref": "#/components/schemas/TelegramPrivateChatInputDto"
           },
           "reply_max_chars": {
             "maximum": 2000,
             "minimum": 50,
             "type": "number"
-          },
-          "trigger_keywords": {
-            "description": "bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关)",
-            "items": {
-              "maxLength": 50,
-              "type": "string"
-            },
-            "maxItems": 50,
-            "type": "array"
-          },
-          "user_cooldown_seconds": {
-            "maximum": 3600,
-            "minimum": 0,
-            "type": "number"
           }
         },
         "required": [
           "enabled",
-          "persona",
-          "trigger_keywords",
-          "context_window",
           "reply_max_chars",
-          "user_cooldown_seconds",
-          "daily_message_budget",
-          "daily_token_budget"
+          "private",
+          "guest_mode"
         ],
         "type": "object"
       },
+      "TelegramChatKind": {
+        "enum": [
+          "GROUP",
+          "PRIVATE",
+          "GUEST"
+        ],
+        "type": "string"
+      },
       "TelegramChatMessageDto": {
         "properties": {
+          "from_id": {
+            "type": "number"
+          },
+          "image": {
+            "type": "boolean"
+          },
+          "message_id": {
+            "type": "number"
+          },
           "name": {
-            "maxLength": 4000,
+            "maxLength": 200,
             "type": "string"
+          },
+          "reply_to": {
+            "$ref": "#/components/schemas/TelegramQuotedMessageDto"
           },
           "self": {
             "type": "boolean"
           },
           "text": {
-            "maxLength": 4000,
+            "maxLength": 4096,
             "type": "string"
           }
         },
         "required": [
+          "message_id",
+          "from_id",
           "name",
-          "text",
-          "self"
-        ],
-        "type": "object"
-      },
-      "TelegramChatPersonaInputDto": {
-        "properties": {
-          "guardrails": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "role_core": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "style_anchor": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "world_knowledge": {
-            "maxLength": 4000,
-            "type": "string"
-          }
-        },
-        "required": [
-          "role_core",
-          "style_anchor",
-          "world_knowledge",
-          "guardrails"
-        ],
-        "type": "object"
-      },
-      "TelegramChatUsageDto": {
-        "properties": {
-          "date": {
-            "description": "统计日期 (UTC, YYYY-MM-DD)",
-            "type": "string"
-          },
-          "messages": {
-            "type": "number"
-          },
-          "tokens": {
-            "type": "number"
-          },
-          "tool_calls": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "date",
-          "messages",
-          "tokens",
-          "tool_calls"
+          "self",
+          "text"
         ],
         "type": "object"
       },
@@ -40650,6 +41396,308 @@
         ],
         "type": "object"
       },
+      "TelegramContextMessageDto": {
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "content"
+        ],
+        "type": "object"
+      },
+      "TelegramConversationDetailDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "chat_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramChatKind"
+              }
+            ]
+          },
+          "chat_title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "last_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramTurnStatus"
+              }
+            ]
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "telegram_name": {
+            "type": "string"
+          },
+          "telegram_user_id": {
+            "type": "number"
+          },
+          "tool_calls": {
+            "type": "number"
+          },
+          "turn_list": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTurnDto"
+            },
+            "type": "array"
+          },
+          "turns": {
+            "type": "number"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "chat_kind",
+          "chat_id",
+          "chat_title",
+          "telegram_user_id",
+          "telegram_name",
+          "user",
+          "started_at",
+          "last_at",
+          "turns",
+          "tool_calls",
+          "cost_usd",
+          "last_status",
+          "turn_list"
+        ],
+        "type": "object"
+      },
+      "TelegramConversationDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "chat_kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramChatKind"
+              }
+            ]
+          },
+          "chat_title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "last_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramTurnStatus"
+              }
+            ]
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "telegram_name": {
+            "type": "string"
+          },
+          "telegram_user_id": {
+            "type": "number"
+          },
+          "tool_calls": {
+            "type": "number"
+          },
+          "turns": {
+            "type": "number"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "chat_kind",
+          "chat_id",
+          "chat_title",
+          "telegram_user_id",
+          "telegram_name",
+          "user",
+          "started_at",
+          "last_at",
+          "turns",
+          "tool_calls",
+          "cost_usd",
+          "last_status"
+        ],
+        "type": "object"
+      },
+      "TelegramDeletedDto": {
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "deleted"
+        ],
+        "type": "object"
+      },
+      "TelegramGroupDto": {
+        "properties": {
+          "added_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "chat_enabled": {
+            "type": "boolean"
+          },
+          "chat_id": {
+            "type": "number"
+          },
+          "context_messages": {
+            "type": "number"
+          },
+          "daily_budget_usd": {
+            "nullable": true,
+            "type": "number"
+          },
+          "daily_reply_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "images_enabled": {
+            "type": "boolean"
+          },
+          "join_gate": {
+            "type": "boolean"
+          },
+          "member_cooldown_seconds": {
+            "type": "number"
+          },
+          "member_daily_limit": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramGroupStatus"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "trigger_keywords": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "welcome_enabled": {
+            "type": "boolean"
+          },
+          "welcome_text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chat_id",
+          "title",
+          "status",
+          "join_gate",
+          "chat_enabled",
+          "trigger_keywords",
+          "context_messages",
+          "images_enabled",
+          "daily_budget_usd",
+          "daily_reply_limit",
+          "member_daily_limit",
+          "member_cooldown_seconds",
+          "welcome_enabled",
+          "welcome_text",
+          "added_at"
+        ],
+        "type": "object"
+      },
+      "TelegramGroupLeftDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "chat_id"
+        ],
+        "type": "object"
+      },
+      "TelegramGroupSeenDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "title": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "chat_id",
+          "title"
+        ],
+        "type": "object"
+      },
+      "TelegramGroupStatus": {
+        "enum": [
+          "PENDING",
+          "ENABLED",
+          "LEFT"
+        ],
+        "type": "string"
+      },
       "TelegramIssueCodeDto": {
         "properties": {
           "telegram_id": {
@@ -40674,9 +41722,6 @@
       },
       "TelegramJoinGateInputDto": {
         "properties": {
-          "enabled": {
-            "type": "boolean"
-          },
           "pending_ttl_hours": {
             "maximum": 720,
             "minimum": 1,
@@ -40693,7 +41738,6 @@
           }
         },
         "required": [
-          "enabled",
           "require_username",
           "require_avatar",
           "require_binding",
@@ -40701,8 +41745,24 @@
         ],
         "type": "object"
       },
+      "TelegramLeftDto": {
+        "properties": {
+          "left": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "left"
+        ],
+        "type": "object"
+      },
       "TelegramMessagesInputDto": {
         "properties": {
+          "ai_unavailable": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
           "already_linked": {
             "maxLength": 1000,
             "minLength": 1,
@@ -40714,6 +41774,11 @@
             "type": "string"
           },
           "bind_success_joined": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "budget_exhausted": {
             "maxLength": 1000,
             "minLength": 1,
             "type": "string"
@@ -40778,7 +41843,17 @@
             "minLength": 1,
             "type": "string"
           },
+          "guest_link_required": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
           "identifier_prompt": {
+            "maxLength": 1000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "image_declined": {
             "maxLength": 1000,
             "minLength": 1,
             "type": "string"
@@ -40854,7 +41929,601 @@
           "checkin_not_linked",
           "checkin_unavailable",
           "pending_expired",
-          "dm_fallback"
+          "dm_fallback",
+          "budget_exhausted",
+          "ai_unavailable",
+          "image_declined",
+          "guest_link_required"
+        ],
+        "type": "object"
+      },
+      "TelegramNotificationUpdateDto": {
+        "properties": {
+          "galgame_plans": {
+            "type": "boolean"
+          },
+          "interactions": {
+            "type": "boolean"
+          },
+          "system": {
+            "type": "boolean"
+          },
+          "updates": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "TelegramNotificationsInputDto": {
+        "properties": {
+          "galgame_plans": {
+            "type": "boolean"
+          },
+          "interactions": {
+            "type": "boolean"
+          },
+          "merge_minutes": {
+            "maximum": 120,
+            "minimum": 1,
+            "type": "number"
+          },
+          "merge_threshold": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          },
+          "system": {
+            "type": "boolean"
+          },
+          "updates": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "updates",
+          "galgame_plans",
+          "interactions",
+          "system",
+          "merge_minutes",
+          "merge_threshold"
+        ],
+        "type": "object"
+      },
+      "TelegramNotifyCategory": {
+        "enum": [
+          "UPDATES",
+          "GALGAME_PLANS",
+          "INTERACTIONS",
+          "SYSTEM"
+        ],
+        "type": "string"
+      },
+      "TelegramNotifyCategoryStatsDto": {
+        "properties": {
+          "allowed": {
+            "type": "boolean"
+          },
+          "category": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramNotifyCategory"
+              }
+            ]
+          },
+          "failed_today": {
+            "type": "number"
+          },
+          "sent_today": {
+            "type": "number"
+          },
+          "subscribed": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "category",
+          "allowed",
+          "subscribed",
+          "sent_today",
+          "failed_today"
+        ],
+        "type": "object"
+      },
+      "TelegramNotifyStatsDto": {
+        "properties": {
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramNotifyCategoryStatsDto"
+            },
+            "type": "array"
+          },
+          "merge_minutes": {
+            "type": "number"
+          },
+          "merge_threshold": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "categories",
+          "merge_minutes",
+          "merge_threshold"
+        ],
+        "type": "object"
+      },
+      "TelegramOutboxClaimDto": {
+        "properties": {
+          "limit": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "limit"
+        ],
+        "type": "object"
+      },
+      "TelegramOutboxResultDto": {
+        "properties": {
+          "blocked": {
+            "type": "boolean"
+          },
+          "error": {
+            "maxLength": 2000,
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "type": "object"
+      },
+      "TelegramOverviewChannelDto": {
+        "properties": {
+          "daily_budget_usd": {
+            "nullable": true,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramChatKind"
+              }
+            ]
+          },
+          "replies_today": {
+            "type": "number"
+          },
+          "spend_today": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "enabled",
+          "daily_budget_usd",
+          "replies_today",
+          "spend_today"
+        ],
+        "type": "object"
+      },
+      "TelegramOverviewDto": {
+        "properties": {
+          "channels": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramOverviewChannelDto"
+            },
+            "type": "array"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramOverviewGroupDto"
+            },
+            "type": "array"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TelegramBotStatusDto"
+          },
+          "today": {
+            "$ref": "#/components/schemas/TelegramUsageDto"
+          },
+          "trend": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTrendDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "today",
+          "trend",
+          "groups",
+          "channels"
+        ],
+        "type": "object"
+      },
+      "TelegramOverviewGroupDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "daily_budget_usd": {
+            "nullable": true,
+            "type": "number"
+          },
+          "replies_today": {
+            "type": "number"
+          },
+          "schedules": {
+            "type": "number"
+          },
+          "spend_today": {
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramGroupStatus"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chat_id",
+          "title",
+          "status",
+          "replies_today",
+          "spend_today",
+          "daily_budget_usd",
+          "schedules"
+        ],
+        "type": "object"
+      },
+      "TelegramPersonaDto": {
+        "properties": {
+          "defaults": {
+            "$ref": "#/components/schemas/TelegramPersonaInputDto"
+          },
+          "persona": {
+            "$ref": "#/components/schemas/TelegramPersonaInputDto"
+          }
+        },
+        "required": [
+          "persona",
+          "defaults"
+        ],
+        "type": "object"
+      },
+      "TelegramPersonaInputDto": {
+        "properties": {
+          "guardrails": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "role_core": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "style_anchor": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "world_knowledge": {
+            "maxLength": 4000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "role_core",
+          "style_anchor",
+          "world_knowledge",
+          "guardrails"
+        ],
+        "type": "object"
+      },
+      "TelegramPersonaTestDto": {
+        "properties": {
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTestMessageDto"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "type": "array"
+          },
+          "persona": {
+            "$ref": "#/components/schemas/TelegramPersonaInputDto"
+          },
+          "user_id": {
+            "description": "以该站内账号的身份试聊；省略则作为群组成员",
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "persona",
+          "messages"
+        ],
+        "type": "object"
+      },
+      "TelegramPollDto": {
+        "properties": {
+          "correct": {
+            "type": "number"
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "question": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "question",
+          "options",
+          "correct",
+          "explanation"
+        ],
+        "type": "object"
+      },
+      "TelegramPostDto": {
+        "properties": {
+          "buttons": {
+            "items": {
+              "items": {
+                "properties": {
+                  "data": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "parts": {
+            "description": "Telegram HTML",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "photo": {
+            "nullable": true,
+            "type": "string"
+          },
+          "poll": {
+            "$ref": "#/components/schemas/TelegramPollDto"
+          }
+        },
+        "required": [
+          "parts"
+        ],
+        "type": "object"
+      },
+      "TelegramPrivateChatInputDto": {
+        "properties": {
+          "context_messages": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "number"
+          },
+          "daily_budget_usd": {
+            "maximum": 1000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "images_enabled": {
+            "type": "boolean"
+          },
+          "member_cooldown_seconds": {
+            "maximum": 3600,
+            "minimum": 0,
+            "type": "number"
+          },
+          "member_daily_limit": {
+            "maximum": 10000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "context_messages",
+          "images_enabled",
+          "daily_budget_usd",
+          "member_daily_limit",
+          "member_cooldown_seconds"
+        ],
+        "type": "object"
+      },
+      "TelegramQueuedDto": {
+        "properties": {
+          "queued": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "queued"
+        ],
+        "type": "object"
+      },
+      "TelegramQuotedMessageDto": {
+        "properties": {
+          "from_id": {
+            "type": "number"
+          },
+          "image": {
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "self": {
+            "type": "boolean"
+          },
+          "text": {
+            "maxLength": 4096,
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_id",
+          "name",
+          "self",
+          "text"
+        ],
+        "type": "object"
+      },
+      "TelegramScheduleDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramScheduleKind"
+              }
+            ]
+          },
+          "last_error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "last_sent_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "weekdays": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "chat_id",
+          "kind",
+          "enabled",
+          "time",
+          "weekdays",
+          "last_sent_at",
+          "last_error"
+        ],
+        "type": "object"
+      },
+      "TelegramScheduleKind": {
+        "enum": [
+          "TODAY_UPDATES",
+          "WEEK_RELEASES",
+          "STEAM_SALES",
+          "DAILY_QUIZ"
+        ],
+        "type": "string"
+      },
+      "TelegramScheduleListItemDto": {
+        "properties": {
+          "chat_id": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "group_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramGroupStatus"
+              }
+            ]
+          },
+          "group_title": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramScheduleKind"
+              }
+            ]
+          },
+          "last_error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "last_sent_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "weekdays": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "chat_id",
+          "kind",
+          "enabled",
+          "time",
+          "weekdays",
+          "last_sent_at",
+          "last_error",
+          "group_title",
+          "group_status"
         ],
         "type": "object"
       },
@@ -40875,10 +42544,6 @@
           "enabled": {
             "type": "boolean"
           },
-          "group_id": {
-            "nullable": true,
-            "type": "string"
-          },
           "join_gate": {
             "$ref": "#/components/schemas/TelegramJoinGateInputDto"
           },
@@ -40887,6 +42552,9 @@
           },
           "messages": {
             "$ref": "#/components/schemas/TelegramMessagesInputDto"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/TelegramNotificationsInputDto"
           },
           "settings_poll_seconds": {
             "type": "number"
@@ -40899,14 +42567,14 @@
           "enabled",
           "bot_token_set",
           "bot_token_hint",
-          "group_id",
           "settings_poll_seconds",
           "join_gate",
           "check_in_enabled",
           "verification",
           "messages",
           "message_defaults",
-          "chat"
+          "chat",
+          "notifications"
         ],
         "type": "object"
       },
@@ -40933,12 +42601,298 @@
               "idle"
             ],
             "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "type": "string"
           }
         },
         "required": [
           "state",
           "pending_joins",
           "started_at"
+        ],
+        "type": "object"
+      },
+      "TelegramTestMessageDto": {
+        "properties": {
+          "self": {
+            "type": "boolean"
+          },
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "self"
+        ],
+        "type": "object"
+      },
+      "TelegramTestReplyDto": {
+        "properties": {
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramCardDto"
+            },
+            "type": "array"
+          },
+          "input_tokens": {
+            "type": "number"
+          },
+          "model": {
+            "nullable": true,
+            "type": "string"
+          },
+          "output_tokens": {
+            "type": "number"
+          },
+          "parts": {
+            "description": "Telegram HTML，按 4096 字符分段",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "reply": {
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramTurnStatus"
+              }
+            ]
+          },
+          "tool_calls": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTurnToolDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "reply",
+          "parts",
+          "cards",
+          "tool_calls",
+          "model",
+          "input_tokens",
+          "output_tokens"
+        ],
+        "type": "object"
+      },
+      "TelegramToolCountDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          },
+          "tool_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tool_key",
+          "label",
+          "count"
+        ],
+        "type": "object"
+      },
+      "TelegramTrendDto": {
+        "properties": {
+          "date": {
+            "description": "北京时间日期 YYYY-MM-DD",
+            "type": "string"
+          },
+          "replies": {
+            "type": "number"
+          },
+          "spend_usd": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "replies",
+          "spend_usd"
+        ],
+        "type": "object"
+      },
+      "TelegramTurnCardDto": {
+        "properties": {
+          "cover": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "title",
+          "cover"
+        ],
+        "type": "object"
+      },
+      "TelegramTurnDto": {
+        "properties": {
+          "cards": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTurnCardDto"
+            },
+            "type": "array"
+          },
+          "context": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramContextMessageDto"
+            },
+            "nullable": true,
+            "type": "array"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "duration_ms": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "images": {
+            "type": "number"
+          },
+          "images_declined": {
+            "type": "number"
+          },
+          "input_tokens": {
+            "type": "number"
+          },
+          "message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "model": {
+            "nullable": true,
+            "type": "string"
+          },
+          "output_tokens": {
+            "type": "number"
+          },
+          "reply": {
+            "nullable": true,
+            "type": "string"
+          },
+          "request_id": {
+            "description": "AI 请求记录 ID",
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TelegramTurnStatus"
+              }
+            ]
+          },
+          "tool_calls": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramTurnToolDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "status",
+          "message",
+          "context",
+          "reply",
+          "cards",
+          "images",
+          "images_declined",
+          "model",
+          "input_tokens",
+          "output_tokens",
+          "cost_usd",
+          "duration_ms",
+          "request_id",
+          "tool_calls"
+        ],
+        "type": "object"
+      },
+      "TelegramTurnStatus": {
+        "enum": [
+          "REPLIED",
+          "SKIPPED",
+          "FAILED",
+          "BUDGET",
+          "LIMITED",
+          "IMAGE_DECLINED",
+          "STOPPED"
+        ],
+        "type": "string"
+      },
+      "TelegramTurnToolDto": {
+        "properties": {
+          "duration_ms": {
+            "type": "number"
+          },
+          "input": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "label": {
+            "type": "string"
+          },
+          "output": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiToolCallStatus"
+              }
+            ]
+          },
+          "tool_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tool_key",
+          "label",
+          "status",
+          "input",
+          "output",
+          "duration_ms"
         ],
         "type": "object"
       },
@@ -40950,6 +42904,36 @@
         },
         "required": [
           "unlinked"
+        ],
+        "type": "object"
+      },
+      "TelegramUsageDto": {
+        "properties": {
+          "failures": {
+            "type": "number"
+          },
+          "replies": {
+            "type": "number"
+          },
+          "spend_usd": {
+            "type": "number"
+          },
+          "tool_calls": {
+            "type": "number"
+          },
+          "tools": {
+            "items": {
+              "$ref": "#/components/schemas/TelegramToolCountDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "replies",
+          "tool_calls",
+          "tools",
+          "spend_usd",
+          "failures"
         ],
         "type": "object"
       },
@@ -44058,6 +46042,113 @@
         ],
         "type": "object"
       },
+      "UpdateTelegramGroupDto": {
+        "properties": {
+          "chat_enabled": {
+            "type": "boolean"
+          },
+          "context_messages": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "number"
+          },
+          "daily_budget_usd": {
+            "maximum": 1000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "daily_reply_limit": {
+            "maximum": 100000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "images_enabled": {
+            "type": "boolean"
+          },
+          "join_gate": {
+            "type": "boolean"
+          },
+          "member_cooldown_seconds": {
+            "maximum": 3600,
+            "minimum": 0,
+            "type": "number"
+          },
+          "member_daily_limit": {
+            "maximum": 10000,
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "ENABLED"
+            ],
+            "type": "string"
+          },
+          "trigger_keywords": {
+            "items": {
+              "maxLength": 50,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "type": "array"
+          },
+          "welcome_enabled": {
+            "type": "boolean"
+          },
+          "welcome_text": {
+            "maxLength": 2000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "join_gate",
+          "chat_enabled",
+          "trigger_keywords",
+          "context_messages",
+          "images_enabled",
+          "daily_budget_usd",
+          "daily_reply_limit",
+          "member_daily_limit",
+          "member_cooldown_seconds",
+          "welcome_enabled",
+          "welcome_text"
+        ],
+        "type": "object"
+      },
+      "UpdateTelegramScheduleDto": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "time": {
+            "description": "北京时间 HH:mm",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+            "type": "string"
+          },
+          "weekdays": {
+            "description": "1 为星期一，7 为星期日；空数组表示每天",
+            "items": {
+              "maximum": 7,
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 7,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "enabled",
+          "time",
+          "weekdays"
+        ],
+        "type": "object"
+      },
       "UpdateTelegramSettingsDto": {
         "properties": {
           "bot_token": {
@@ -44075,16 +46166,14 @@
           "enabled": {
             "type": "boolean"
           },
-          "group_id": {
-            "nullable": true,
-            "pattern": "^-?\\d{1,20}$",
-            "type": "string"
-          },
           "join_gate": {
             "$ref": "#/components/schemas/TelegramJoinGateInputDto"
           },
           "messages": {
             "$ref": "#/components/schemas/TelegramMessagesInputDto"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/TelegramNotificationsInputDto"
           },
           "settings_poll_seconds": {
             "maximum": 3600,
@@ -44097,13 +46186,13 @@
         },
         "required": [
           "enabled",
-          "group_id",
           "settings_poll_seconds",
           "join_gate",
           "check_in_enabled",
           "verification",
           "messages",
-          "chat"
+          "chat",
+          "notifications"
         ],
         "type": "object"
       },
@@ -55325,6 +57414,545 @@
         ]
       }
     },
+    "/api/v3/admin/telegram/conversations": {
+      "get": {
+        "operationId": "AdminTelegramConversationsController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TelegramChatKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "chat_id",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Telegram 名称、站内账号名或 Telegram ID",
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "description": "最近多少天，默认 7",
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "maximum": 30,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TelegramConversationDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/conversations/{id}": {
+      "get": {
+        "operationId": "AdminTelegramConversationsController_detail",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramConversationDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/groups": {
+      "get": {
+        "operationId": "AdminTelegramGroupsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminTelegramGroupDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/groups/{chat_id}": {
+      "put": {
+        "operationId": "AdminTelegramGroupsController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chat_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTelegramGroupDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramGroupDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/groups/{chat_id}/leave": {
+      "post": {
+        "operationId": "AdminTelegramGroupsController_leave",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "chat_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramLeftDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/notifications": {
+      "get": {
+        "operationId": "AdminTelegramSchedulesController_notifications",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramNotifyStatsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/overview": {
+      "get": {
+        "operationId": "AdminTelegramSettingsController_overview",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramOverviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/persona": {
+      "get": {
+        "operationId": "AdminTelegramSettingsController_persona",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramPersonaDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      },
+      "put": {
+        "operationId": "AdminTelegramSettingsController_savePersona",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramPersonaInputDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramPersonaDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/persona/test": {
+      "post": {
+        "operationId": "AdminTelegramSettingsController_test",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramPersonaTestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramTestReplyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/schedules": {
+      "get": {
+        "operationId": "AdminTelegramSchedulesController_list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "chat_id",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TelegramScheduleListItemDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      },
+      "post": {
+        "operationId": "AdminTelegramSchedulesController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTelegramScheduleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramScheduleDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/schedules/preview": {
+      "get": {
+        "operationId": "AdminTelegramSchedulesController_preview",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TelegramScheduleKind"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TelegramPostDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/schedules/{id}": {
+      "delete": {
+        "operationId": "AdminTelegramSchedulesController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramDeletedDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      },
+      "put": {
+        "operationId": "AdminTelegramSchedulesController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTelegramScheduleDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramScheduleDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/schedules/{id}/send": {
+      "post": {
+        "operationId": "AdminTelegramSchedulesController_send",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramQueuedDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
     "/api/v3/admin/telegram/settings": {
       "get": {
         "operationId": "AdminTelegramSettingsController_get",
@@ -55364,27 +57992,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TelegramSettingsDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/status": {
-      "get": {
-        "operationId": "AdminTelegramSettingsController_getStatus",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramBotStatusDto"
                 }
               }
             },
@@ -63799,6 +66406,7 @@
                 "image_moderation",
                 "epub_judge",
                 "telegram_chat",
+                "telegram_private",
                 "novel_volume_align",
                 "novel_content_gate",
                 "manga_credit_check",
@@ -69050,6 +71658,76 @@
         ]
       }
     },
+    "/api/v3/galgames/steam/sales": {
+      "get": {
+        "operationId": "GalgameSteamPriceController_sales",
+        "parameters": [
+          {
+            "description": "最低折扣（百分比）",
+            "in": "query",
+            "name": "min_discount",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SteamSaleDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "galgames"
+        ]
+      }
+    },
     "/api/v3/galgames/{id}": {
       "get": {
         "operationId": "GalgameController_getById",
@@ -70022,6 +72700,39 @@
         },
         "tags": [
           "Galgame"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/steam/prices": {
+      "get": {
+        "operationId": "GalgameSteamPriceController_prices",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SteamPriceDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "galgames"
         ]
       }
     },
@@ -71003,9 +73714,65 @@
         ]
       }
     },
+    "/api/v3/internal/telegram/accounts/{telegram_id}/unlink": {
+      "post": {
+        "operationId": "TelegramInternalController_unlink",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "telegram_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramInternal"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/actions/{id}/confirm": {
+      "post": {
+        "operationId": "TelegramContentController_confirm",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramActionConfirmDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
     "/api/v3/internal/telegram/chat": {
       "post": {
-        "operationId": "TelegramInternalController_reply",
+        "operationId": "TelegramChatController_reply",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -71019,11 +73786,42 @@
         },
         "responses": {
           "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
             "description": ""
           }
         },
         "tags": [
-          "TelegramInternal"
+          "TelegramChat"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/chat/stream": {
+      "post": {
+        "operationId": "TelegramChatController_stream",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramChatDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramChat"
         ]
       }
     },
@@ -71051,9 +73849,268 @@
         ]
       }
     },
-    "/api/v3/internal/telegram/settings": {
+    "/api/v3/internal/telegram/groups/left": {
+      "post": {
+        "operationId": "TelegramInternalController_left",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramGroupLeftDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramInternal"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/groups/seen": {
+      "post": {
+        "operationId": "TelegramInternalController_seen",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramGroupSeenDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramGroupDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramInternal"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/inline": {
       "get": {
-        "operationId": "TelegramInternalController_getSettings",
+        "operationId": "TelegramContentController_inline",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/me/{telegram_id}": {
+      "get": {
+        "operationId": "TelegramContentController_me",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "telegram_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/notifications/{telegram_id}": {
+      "get": {
+        "operationId": "TelegramContentController_notifications",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "telegram_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      },
+      "put": {
+        "operationId": "TelegramContentController_updateNotifications",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "telegram_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramNotificationUpdateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/outbox/claim": {
+      "post": {
+        "operationId": "TelegramContentController_claim",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramOutboxClaimDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/outbox/{id}/result": {
+      "post": {
+        "operationId": "TelegramContentController_result",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramOutboxResultDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/releases": {
+      "get": {
+        "operationId": "TelegramContentController_releases",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "enum": [
+                "week",
+                "month",
+                "next_month",
+                "tba"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/sales": {
+      "get": {
+        "operationId": "TelegramContentController_sales",
         "parameters": [],
         "responses": {
           "200": {
@@ -71064,6 +74121,44 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/search": {
+      "get": {
+        "operationId": "TelegramContentController_search",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/settings": {
+      "get": {
+        "operationId": "TelegramInternalController_getSettings",
+        "parameters": [],
+        "responses": {
+          "200": {
             "description": ""
           }
         },
@@ -71093,6 +74188,27 @@
         },
         "tags": [
           "TelegramInternal"
+        ]
+      }
+    },
+    "/api/v3/internal/telegram/today": {
+      "get": {
+        "operationId": "TelegramContentController_today",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "TelegramContent"
         ]
       }
     },
@@ -73942,6 +77058,46 @@
         ]
       }
     },
+    "/api/v3/manga-project-pages/{page_id}/notes": {
+      "post": {
+        "operationId": "MangaPageController_createNote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "page_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMangaPageNoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaNoteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaPage"
+        ]
+      }
+    },
     "/api/v3/manga-project-pages/{page_id}/regions": {
       "get": {
         "operationId": "MangaPageController_getRegions",
@@ -74280,6 +77436,97 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MangaProjectDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaProject"
+        ]
+      }
+    },
+    "/api/v3/manga-projects/{project_id}/baseline-pages": {
+      "get": {
+        "operationId": "MangaProjectController_getBaselinePages",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MangaBaselinePageDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaProject"
+        ]
+      }
+    },
+    "/api/v3/manga-projects/{project_id}/check": {
+      "get": {
+        "operationId": "MangaProjectController_getCheck",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaProjectCheckDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaProject"
+        ]
+      },
+      "post": {
+        "operationId": "MangaProjectController_rerunCheck",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaProjectCheckDto"
                 }
               }
             },
@@ -74640,6 +77887,46 @@
         },
         "tags": [
           "MangaProjectPage"
+        ]
+      }
+    },
+    "/api/v3/manga-projects/{project_id}/placement": {
+      "put": {
+        "operationId": "MangaProjectController_correct",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MangaProjectInfoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaProjectDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaProject"
         ]
       }
     },
@@ -84676,6 +87963,51 @@
         },
         "tags": [
           "Tag"
+        ]
+      }
+    },
+    "/api/v3/telegram/covers/{type}/{id}": {
+      "get": {
+        "operationId": "TelegramCoverController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light_novel",
+                "manga"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "telegram"
         ]
       }
     },

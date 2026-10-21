@@ -2,6 +2,7 @@
   import { Inline } from '@hina-ui/vue'
   import { useMangaEditor } from '~/features/workbench/manga/composables/editor-context'
   import { MANGA_GUIDE } from '~/features/workbench/manga/guide'
+  import { projectEpisode } from '~/features/workbench/manga/series'
   import type {
     BackendMangaPage,
     BackendMangaProject,
@@ -35,6 +36,11 @@
     const missing = props.pages.filter(page => !page.rendered_url).length
     return translation.value && missing > 0 ? `${missing} 页仍然没有成品图` : ''
   })
+  const submitHint = computed(() =>
+    props.project.replaces
+      ? `审核通过后，上传的图片将替换${projectEpisode(props.project)}现有的 ${props.project.replaces.page_count} 页。`
+      : undefined,
+  )
 </script>
 
 <template>
@@ -53,6 +59,8 @@
       kind="manga"
       :project="project"
       :blocker="blocker"
+      :review-to="translation ? undefined : `/create/manga-review/${project.id}`"
+      :submit-hint="submitHint"
       @changed="emit('changed')"
     />
     <WorkbenchMangaShellMenu :project="project" @select="emit('manage', $event)" />
