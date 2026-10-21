@@ -42316,6 +42316,10 @@
             },
             "type": "array"
           },
+          "empty": {
+            "description": "内容为空，到点时跳过定时发送",
+            "type": "boolean"
+          },
           "parts": {
             "description": "Telegram HTML",
             "items": {

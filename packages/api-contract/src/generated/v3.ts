@@ -25825,6 +25825,8 @@ export interface components {
                 text: string;
                 url?: string;
             }[][];
+            /** @description 内容为空，到点时跳过定时发送 */
+            empty?: boolean;
             /** @description Telegram HTML */
             parts: string[];
             photo?: string | null;
