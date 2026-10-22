@@ -9,6 +9,7 @@ export const SOURCE_NAME: Record<string, string> = {
   VNDB: 'VNDB 数据转储',
   BANGUMI: 'Bangumi 数据转储',
   OPENBD: 'openBD',
+  NDL: 'NDL 书目（NDL Search）',
 }
 
 export const SOURCE_FIELD_LABEL: Record<string, string> = {

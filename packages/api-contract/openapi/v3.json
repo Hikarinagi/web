@@ -15536,6 +15536,16 @@
       },
       "DiscoverySourceDto": {
         "properties": {
+          "anchor_enabled": {
+            "type": "boolean"
+          },
+          "anchor_shadow": {
+            "type": "boolean"
+          },
+          "anchorable": {
+            "description": "该来源可锚定站内存量条目",
+            "type": "boolean"
+          },
           "configured": {
             "description": "所需的密钥已配置",
             "type": "boolean"
@@ -15635,6 +15645,9 @@
           "shadow",
           "shadow_reason",
           "shadow_at",
+          "anchorable",
+          "anchor_enabled",
+          "anchor_shadow",
           "schedule",
           "look_back_days",
           "needs_permission",
@@ -15659,14 +15672,16 @@
           "PUBLISHER",
           "VNDB",
           "BANGUMI",
-          "OPENBD"
+          "OPENBD",
+          "NDL"
         ],
         "type": "string"
       },
       "DiscoveryTrigger": {
         "enum": [
           "CRON",
-          "MANUAL"
+          "MANUAL",
+          "ANCHOR"
         ],
         "type": "string"
       },
@@ -45102,6 +45117,14 @@
       },
       "UpdateDiscoverySourceDto": {
         "properties": {
+          "anchor_enabled": {
+            "description": "按确定键锚定站内存量条目",
+            "type": "boolean"
+          },
+          "anchor_shadow": {
+            "description": "锚定只记录打算写入的内容",
+            "type": "boolean"
+          },
           "enabled": {
             "type": "boolean"
           },
@@ -51438,6 +51461,7 @@
                 "MOEPEDIA",
                 "STEAM",
                 "DLSITE",
+                "NDL",
                 "OFFICIAL_PAGE",
                 "BRAND_LIST",
                 "OPENBD"
@@ -51490,6 +51514,7 @@
                 "MOEPEDIA",
                 "STEAM",
                 "DLSITE",
+                "NDL",
                 "OFFICIAL_PAGE",
                 "BRAND_LIST",
                 "OPENBD"
@@ -67602,7 +67627,8 @@
                 "entry_check",
                 "book_identity",
                 "galgame_identity",
-                "wiki_credit_align"
+                "wiki_credit_align",
+                "book_key_check"
               ],
               "type": "string"
             }

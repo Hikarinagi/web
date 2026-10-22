@@ -19112,6 +19112,10 @@ export interface components {
             upcoming_30d: number;
         };
         DiscoverySourceDto: {
+            anchor_enabled: boolean;
+            anchor_shadow: boolean;
+            /** @description 该来源可锚定站内存量条目 */
+            anchorable: boolean;
             /** @description 所需的密钥已配置 */
             configured: boolean;
             enabled: boolean;
@@ -19140,9 +19144,9 @@ export interface components {
             shadow_reason: string | null;
         };
         /** @enum {string} */
-        DiscoverySourceKey: "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "STEAM" | "DLSITE" | "JPRO" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD";
+        DiscoverySourceKey: "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "STEAM" | "DLSITE" | "JPRO" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
         /** @enum {string} */
-        DiscoveryTrigger: "CRON" | "MANUAL";
+        DiscoveryTrigger: "CRON" | "MANUAL" | "ANCHOR";
         DiscoveryTriggerResultDto: {
             run_id: number;
             /** @description 为 false 时同一来源已有进行中的运行 */
@@ -26675,6 +26679,10 @@ export interface components {
             steam_languages?: string[];
         };
         UpdateDiscoverySourceDto: {
+            /** @description 按确定键锚定站内存量条目 */
+            anchor_enabled?: boolean;
+            /** @description 锚定只记录打算写入的内容 */
+            anchor_shadow?: boolean;
             enabled?: boolean;
             /** @description 首次运行的回溯天数 */
             look_back_days?: number;
@@ -29385,7 +29393,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
+                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
             };
             cookie?: never;
         };
@@ -29410,7 +29418,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
+                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
             };
             cookie?: never;
         };
@@ -38946,7 +38954,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_official" | "wiki_image_read" | "entry_check" | "book_identity" | "galgame_identity" | "wiki_credit_align";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_official" | "wiki_image_read" | "entry_check" | "book_identity" | "galgame_identity" | "wiki_credit_align" | "book_key_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
