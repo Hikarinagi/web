@@ -67601,7 +67601,8 @@
                 "wiki_image_read",
                 "entry_check",
                 "book_identity",
-                "galgame_identity"
+                "galgame_identity",
+                "wiki_credit_align"
               ],
               "type": "string"
             }
