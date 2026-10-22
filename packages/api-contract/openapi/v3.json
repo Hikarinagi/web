@@ -67628,7 +67628,8 @@
                 "book_identity",
                 "galgame_identity",
                 "wiki_credit_align",
-                "book_key_check"
+                "book_key_check",
+                "wiki_series_check"
               ],
               "type": "string"
             }
