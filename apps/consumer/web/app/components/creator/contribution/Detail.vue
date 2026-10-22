@@ -11,10 +11,12 @@
   import { onSite, sameEntryText } from '~/features/creator/check'
   import { PUBLIC_PATH } from '~/features/creator/duplicates'
   import { RESOURCE_SLUG } from '~/features/creator/labels'
+  import type { CreatorContributionPageData } from '~~/server/api/pages/create/contributions/[id].get'
 
   const props = defineProps<{
     changeRequest: BackendChangeRequestDetail
     batchMembers?: BackendChangeRequestSummary[]
+    sources?: CreatorContributionPageData['sources']
   }>()
   const emit = defineEmits<{ reviewed: []; closed: [] }>()
 
@@ -172,6 +174,8 @@
       </Stack>
     </Card>
 
+    <CreatorContributionSources v-if="sources?.length" :sources="sources" />
+
     <CreatorReviewCheckPanel
       v-model:fields="choices.fields.value"
       v-model:entities="choices.entities.value"
@@ -205,6 +209,7 @@
         :batch-pending-count="pendingBatchCount"
         :overrides="choices.overrides.value"
         :entity-choices="choices.entityChoices.value"
+        :discovered="!!sources?.length"
         @reviewed="emit('reviewed')"
       />
     </Panel>

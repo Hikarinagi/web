@@ -22,43 +22,56 @@ function fieldSchema(field: BackendEditorField, valueType: string): v.GenericSch
       enum_values: field.enum_values,
     },
   )
-  if (field.field === 'prices' && valueType === 'object[]') {
+  if ((field.field === 'editions' || field.field === 'variants') && valueType === 'object[]') {
+    const editions = field.field === 'editions'
+    const rows = (value: unknown) =>
+      (Array.isArray(value) ? value : []).filter(
+        (row): row is Record<string, unknown> => !!row && typeof row === 'object',
+      )
+    const priceKey = editions ? 'price' : 'price_amount'
+    const currencyKey = editions ? 'currency' : 'price_currency'
     return v.pipe(
       base,
+      v.check(
+        value =>
+          rows(value).every(row =>
+            editions
+              ? !!(typeof row.title === 'string' && row.title.trim()) ||
+                !!row.kind ||
+                row.price != null ||
+                row.jan != null
+              : typeof row.title === 'string' && row.title.trim() !== '',
+          ),
+        editions ? '每个版本都需要名称或类型。' : '每个特装版都需要填写名称。',
+      ),
       v.check(value => {
-        if (!Array.isArray(value)) return true
-        for (const row of value) {
-          if (!row || typeof row !== 'object') return false
-          const r = row as { amount?: unknown; currency?: unknown }
-          if (typeof r.amount !== 'number' || !Number.isFinite(r.amount)) return false
-          if (typeof r.currency !== 'string' || r.currency.trim() === '') return false
-        }
-        return true
-      }, '每行的金额、币种均为必填'),
-      v.check(value => {
-        if (!Array.isArray(value)) return true
-        const seen = new Set<string>()
-        for (const row of value) {
-          if (!row || typeof row !== 'object') continue
-          const key =
-            typeof (row as { version?: unknown }).version === 'string'
-              ? (row as { version: string }).version.trim()
-              : ''
-          if (!key) continue
-          if (seen.has(key)) return false
-          seen.add(key)
-        }
-        return true
-      }, '版本名称不能重复'),
-      v.check(value => {
-        if (!Array.isArray(value)) return true
-        for (const row of value) {
-          if (!row || typeof row !== 'object') continue
-          const amount = (row as { amount?: unknown }).amount
-          if (typeof amount === 'number' && amount < 0) return false
-        }
-        return true
-      }, '金额不能为负数'),
+        const titles = rows(value)
+          .map(row => (typeof row.title === 'string' ? row.title.trim() : ''))
+          .filter(Boolean)
+        return !editions || new Set(titles).size === titles.length
+      }, '版本名称不能重复。'),
+      v.check(
+        value => rows(value).every(row => typeof row[priceKey] !== 'number' || row[priceKey] >= 0),
+        '价格不能为负数。',
+      ),
+      v.check(
+        value =>
+          rows(value).every(
+            row =>
+              row[priceKey] == null ||
+              (typeof row[currencyKey] === 'string' && row[currencyKey].trim() !== ''),
+          ),
+        '请为每个价格选择币种。',
+      ),
+      v.check(
+        value =>
+          rows(value).every(row =>
+            editions
+              ? row.jan == null || /^(\d{8}|\d{13})$/.test(String(row.jan))
+              : row.isbn == null || /^(\d{9}[\dX]|\d{13})$/.test(String(row.isbn)),
+          ),
+        editions ? 'JAN 码为 8 位或 13 位数字。' : 'ISBN 为 10 位或 13 位数字。',
+      ),
     )
   }
   if (field.field === 'labels' && valueType === 'object[]') {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Heading, Inline, Link, SegmentedControl, Stack, Text } from '@hina-ui/vue'
+  import { Card, Heading, Inline, Link, SegmentedControl, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { Layers } from '@lucide/vue'
   import { checkFieldLabel, entityKind, type BackendCheckEntity } from '~/features/creator/check'
@@ -12,7 +12,7 @@
     { label: '保留新建', value: 'new' },
   ]
   const choosable = (entity: BackendCheckEntity) =>
-    props.selectable && entity.verified && entity.existing_id != null
+    props.selectable && entity.verified && entity.existing_id != null && !entity.applied
   const found = (entity: BackendCheckEntity) =>
     (entity.values ?? [])
       .filter(field => field.verified)
@@ -49,8 +49,9 @@
             </Text>
           </Stack>
         </Inline>
+        <Tag v-if="entity.applied" size="sm" class="self-start md:self-center">已采用</Tag>
         <SegmentedControl
-          v-if="choosable(entity)"
+          v-else-if="choosable(entity)"
           size="sm"
           :options="options(entity)"
           :model-value="choices[entity.change_request_id] ?? 'new'"

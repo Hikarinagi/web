@@ -14,12 +14,12 @@ export function useCheckChoices(changeRequest: () => BackendChangeRequestDetail)
       const current = verification.value
       fields.value = Object.fromEntries(
         (current?.fields ?? [])
-          .filter(field => field.verified)
+          .filter(field => field.verified && !field.applied)
           .map(field => [field.field, 'original' as const]),
       )
       entities.value = Object.fromEntries(
         (current?.entities ?? [])
-          .filter(entity => entity.verified && entity.existing_id != null)
+          .filter(entity => entity.verified && entity.existing_id != null && !entity.applied)
           .map(entity => [entity.change_request_id, 'existing' as const]),
       )
     },
@@ -30,7 +30,7 @@ export function useCheckChoices(changeRequest: () => BackendChangeRequestDetail)
     const identity = verification.value?.identity
     if (identity?.verified && (identity.kind === 'site' || identity.kind === 'pending')) return []
     return (verification.value?.fields ?? [])
-      .filter(field => field.verified && fields.value[field.field] === 'original')
+      .filter(field => field.verified && !field.applied && fields.value[field.field] === 'original')
       .map(field => ({ field: field.field, value: field.value }))
   })
   const entityChoices = computed(() =>
@@ -39,6 +39,7 @@ export function useCheckChoices(changeRequest: () => BackendChangeRequestDetail)
         entity =>
           entity.verified &&
           entity.existing_id != null &&
+          !entity.applied &&
           entities.value[entity.change_request_id] === 'existing',
       )
       .map(entity => ({

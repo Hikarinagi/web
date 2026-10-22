@@ -4,10 +4,10 @@
   definePageMeta({ title: '变更请求审核' })
 
   const page = ref(1)
-  const check = ref<'all' | 'disputed' | 'running'>('all')
+  const view = ref<'all' | 'disputed' | 'running' | 'bot'>('all')
   const requestUrl = computed<`/api/pages/${string}`>(() => {
     const query = new URLSearchParams({ page: String(page.value) })
-    if (check.value !== 'all') query.set('check', check.value)
+    if (view.value !== 'all') query.set('view', view.value)
     return `/api/pages/create/review?${query.toString()}`
   })
   const { data, pending } = await useHikariApiData<CreatorReviewPageData>(requestUrl, {
@@ -18,7 +18,7 @@
 <template>
   <CreatorReviewQueue
     v-model:page="page"
-    v-model:check="check"
+    v-model:view="view"
     :list="data?.pending"
     :counts="data?.counts"
     :loading="pending"

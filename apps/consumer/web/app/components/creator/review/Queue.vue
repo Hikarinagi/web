@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline, SegmentedControl, Tag, Text, type DataTableColumn } from '@hina-ui/vue'
+  import { Inline, SegmentedControl, Stack, Tag, Text, type DataTableColumn } from '@hina-ui/vue'
   import { timeFormat } from '#imports'
   import { ClipboardCheck } from '@lucide/vue'
   import { checkTags } from '~/features/creator/check'
@@ -14,17 +14,18 @@
   type Row = CreatorReviewPageData['pending']['items'][number]
 
   const page = defineModel<number>('page', { required: true })
-  const check = defineModel<'all' | 'disputed' | 'running'>('check', { required: true })
+  const view = defineModel<'all' | 'disputed' | 'running' | 'bot'>('view', { required: true })
 
   const filters = computed(() => [
     { label: `全部 ${props.counts?.all ?? ''}`.trim(), value: 'all' },
     { label: `核对有异议 ${props.counts?.disputed ?? ''}`.trim(), value: 'disputed' },
     { label: `核对中 ${props.counts?.running ?? ''}`.trim(), value: 'running' },
+    { label: `由书音提交 ${props.counts?.bot ?? ''}`.trim(), value: 'bot' },
   ])
 
   function filter(value: string | number | undefined) {
-    if (value !== 'all' && value !== 'disputed' && value !== 'running') return
-    check.value = value
+    if (value !== 'all' && value !== 'disputed' && value !== 'running' && value !== 'bot') return
+    view.value = value
     page.value = 1
   }
 
@@ -49,6 +50,10 @@
     )
   }
 
+  function heldText(row: Row) {
+    return (row.primary.held_reasons ?? []).map(reason => reason.text).join('；')
+  }
+
   function openDetail(row: Row) {
     void navigateTo(`/create/contributions/${row.id}`)
   }
@@ -59,6 +64,9 @@
     v-model:page="page"
     title="待审核的变更请求"
     :icon="ClipboardCheck"
+    :description="
+      view === 'bot' ? '书音直接发布的请求不会在此列出；请查看各条目的修订历史。' : undefined
+    "
     :list="list"
     :columns="columns"
     :loading="loading"
@@ -69,7 +77,7 @@
       <SegmentedControl
         size="sm"
         :options="filters"
-        :model-value="check"
+        :model-value="view"
         aria-label="筛选"
         @update:model-value="filter"
       />
@@ -84,13 +92,18 @@
       />
     </template>
     <template #cell-summary="{ row }">
-      <Inline gap="sm" align="center" :wrap="false">
-        <Text as="span" size="sm" truncate class="min-w-0">{{ row.primary.summary }}</Text>
-        <Tag v-if="row.bundled.length" size="sm" tone="neutral" class="shrink-0">
-          捆绑 {{ row.bundled.length }} 个新实体
-        </Tag>
-        <Tag v-if="suspected(row)" size="sm" tone="warning" class="shrink-0">疑似重复</Tag>
-      </Inline>
+      <Stack gap="none" class="min-w-0 py-2">
+        <Inline gap="sm" align="center" :wrap="false">
+          <Text as="span" size="sm" truncate class="min-w-0">{{ row.primary.summary }}</Text>
+          <Tag v-if="row.bundled.length" size="sm" tone="neutral" class="shrink-0">
+            捆绑 {{ row.bundled.length }} 个新实体
+          </Tag>
+          <Tag v-if="suspected(row)" size="sm" tone="warning" class="shrink-0">疑似重复</Tag>
+        </Inline>
+        <Text v-if="heldText(row)" as="span" size="xs" tone="muted" truncate>
+          {{ heldText(row) }}
+        </Text>
+      </Stack>
     </template>
     <template #cell-check="{ row }">
       <Inline gap="xs" class="py-2">
