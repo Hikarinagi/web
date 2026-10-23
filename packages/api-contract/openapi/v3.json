@@ -51462,9 +51462,9 @@
                 "STEAM",
                 "DLSITE",
                 "NDL",
+                "OPENBD",
                 "OFFICIAL_PAGE",
-                "BRAND_LIST",
-                "OPENBD"
+                "BRAND_LIST"
               ],
               "type": "string"
             }
@@ -51515,9 +51515,9 @@
                 "STEAM",
                 "DLSITE",
                 "NDL",
+                "OPENBD",
                 "OFFICIAL_PAGE",
-                "BRAND_LIST",
-                "OPENBD"
+                "BRAND_LIST"
               ],
               "type": "string"
             }

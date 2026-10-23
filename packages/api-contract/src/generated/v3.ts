@@ -29393,7 +29393,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
+                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OPENBD" | "OFFICIAL_PAGE" | "BRAND_LIST";
             };
             cookie?: never;
         };
@@ -29418,7 +29418,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OFFICIAL_PAGE" | "BRAND_LIST" | "OPENBD";
+                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OPENBD" | "OFFICIAL_PAGE" | "BRAND_LIST";
             };
             cookie?: never;
         };
