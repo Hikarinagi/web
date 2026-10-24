@@ -30788,6 +30788,29 @@
           "loser_id": {
             "description": "The merged-away (deleted) resource id.",
             "type": "number"
+          },
+          "undo_id": {
+            "description": "The record that undoes this merge, when this kind of merge can be undone.",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "canonical_id",
+          "loser_id",
+          "undo_id"
+        ],
+        "type": "object"
+      },
+      "MergeUndoResultDto": {
+        "properties": {
+          "canonical_id": {
+            "description": "The resource that kept the merged data.",
+            "type": "number"
+          },
+          "loser_id": {
+            "description": "The restored resource id.",
+            "type": "number"
           }
         },
         "required": [
@@ -65104,6 +65127,36 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/galgames/merges/{id}/undo": {
+      "post": {
+        "operationId": "AdminMergeController_undoGalgameMerge",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergeUndoResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/galgames/{id}": {
       "delete": {
         "operationId": "AdminGalgameController_softDelete",
@@ -67626,7 +67679,11 @@
                 "wiki_image_read",
                 "entry_check",
                 "book_identity",
+                "book_investigate",
                 "galgame_identity",
+                "galgame_investigate",
+                "galgame_duplicate",
+                "galgame_duplicate_investigate",
                 "wiki_credit_align",
                 "book_key_check",
                 "wiki_series_check"

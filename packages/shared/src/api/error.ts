@@ -99,6 +99,9 @@ export const HIKARI_BIZ_CODE = {
   CHARACTER_NOT_FOUND: 'CHARACTER_NOT_FOUND',
   /** The requested id was merged into another entry; `details.merged_into` carries the survivor. */
   WIKI_RESOURCE_MERGED: 'WIKI_RESOURCE_MERGED',
+  WIKI_MERGE_UNDO_NOT_FOUND: 'WIKI_MERGE_UNDO_NOT_FOUND',
+  /** Already undone, or a later merge into the same survivor has to be undone first. */
+  WIKI_MERGE_UNDO_UNAVAILABLE: 'WIKI_MERGE_UNDO_UNAVAILABLE',
   ARTICLE_NOT_FOUND: 'ARTICLE_NOT_FOUND',
   POST_NOT_FOUND: 'POST_NOT_FOUND',
   POLL_NOT_FOUND: 'POLL_NOT_FOUND',

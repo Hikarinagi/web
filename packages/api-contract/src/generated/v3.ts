@@ -5909,6 +5909,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/galgames/merges/{id}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_undoGalgameMerge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/galgames/{id}": {
         parameters: {
             query?: never;
@@ -22951,6 +22967,14 @@ export interface components {
             canonical_id: number;
             /** @description The merged-away (deleted) resource id. */
             loser_id: number;
+            /** @description The record that undoes this merge, when this kind of merge can be undone. */
+            undo_id: number | null;
+        };
+        MergeUndoResultDto: {
+            /** @description The resource that kept the merged data. */
+            canonical_id: number;
+            /** @description The restored resource id. */
+            loser_id: number;
         };
         MessageHistoryDto: {
             /** @description 渲染本页 emoji 所需的集合 */
@@ -37564,6 +37588,27 @@ export interface operations {
             };
         };
     };
+    AdminMergeController_undoGalgameMerge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeUndoResultDto"];
+                };
+            };
+        };
+    };
     AdminGalgameController_softDelete: {
         parameters: {
             query?: never;
@@ -38954,7 +38999,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_official" | "wiki_image_read" | "entry_check" | "book_identity" | "galgame_identity" | "wiki_credit_align" | "book_key_check" | "wiki_series_check";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_official" | "wiki_image_read" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_credit_align" | "book_key_check" | "wiki_series_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
