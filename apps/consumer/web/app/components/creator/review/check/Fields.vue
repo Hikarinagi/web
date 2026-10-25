@@ -28,9 +28,7 @@
 
   const label = (field: BackendCheckField) => checkFieldLabel(field.field, props.resourceType)
   const replaced = (field: BackendCheckField) =>
-    (field.applied || (props.selectable && choices.value[field.field] === 'original')) &&
-    field.submitted_display != null
-  const adoptable = computed(() => props.selectable || props.fields.some(field => field.applied))
+    props.selectable && choices.value[field.field] === 'original' && field.submitted_display != null
 
   function choose(field: BackendCheckField, value: string | number | undefined) {
     if (value === 'request' || value === 'original') {
@@ -47,7 +45,7 @@
         <TableHead>请求</TableHead>
         <TableHead>原版</TableHead>
         <TableHead>来源</TableHead>
-        <TableHead v-if="adoptable">采用</TableHead>
+        <TableHead v-if="selectable">采用</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -74,10 +72,8 @@
             <Tag size="sm" tone="success">已核实</Tag>
           </Inline>
         </TableCell>
-        <TableCell v-if="adoptable">
-          <Tag v-if="field.applied" size="sm">已采用</Tag>
+        <TableCell v-if="selectable">
           <SegmentedControl
-            v-else-if="selectable"
             size="sm"
             :options="OPTIONS"
             :model-value="choices[field.field] ?? 'request'"
@@ -105,10 +101,9 @@
       <Inline gap="xs" align="center">
         <CreatorReviewCheckSource v-if="field.source" :source="field.source" />
         <Tag size="sm" tone="success">已核实</Tag>
-        <Tag v-if="field.applied" size="sm">已采用</Tag>
       </Inline>
       <SegmentedControl
-        v-if="selectable && !field.applied"
+        v-if="selectable"
         block
         :options="OPTIONS"
         :model-value="choices[field.field] ?? 'request'"

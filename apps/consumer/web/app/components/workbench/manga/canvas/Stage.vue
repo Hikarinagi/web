@@ -2,11 +2,7 @@
   import { toast } from '@hina-ui/vue'
   import { useStagePointer } from '~/features/workbench/manga/composables/useStagePointer'
   import type { Point } from '~/features/workbench/manga/geometry'
-  import type {
-    BackendMangaPage,
-    BackendMangaRegion,
-    MangaNoteRect,
-  } from '~/features/workbench/manga/manga'
+  import type { BackendMangaPage, BackendMangaRegion } from '~/features/workbench/manga/manga'
   import { loadImage, renderTypeset, type TypesetRegion } from '~/features/workbench/manga/render'
   import { cn } from '~/utils/cn'
 
@@ -19,7 +15,6 @@
     zoom: number
     editable: boolean
     typeset: TypesetRegion[]
-    mark?: MangaNoteRect | null
   }>()
   const emit = defineEmits<{
     select: [id: string | null]
@@ -31,16 +26,6 @@
   const viewport = useTemplateRef<HTMLDivElement>('viewport')
   const surface = useTemplateRef<SVGSVGElement>('surface')
   const canvas = useTemplateRef<HTMLCanvasElement>('canvas')
-  const marker = useTemplateRef<SVGElement>('marker')
-
-  watch(
-    () => props.mark,
-    async mark => {
-      if (!mark) return
-      await nextTick()
-      marker.value?.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' })
-    },
-  )
 
   watch(
     () => props.selectedId,
@@ -163,22 +148,6 @@
           stroke-width="2"
           stroke-dasharray="6 4"
           class="pointer-events-none fill-accent/10 stroke-accent"
-        />
-        <rect
-          v-if="mark"
-          ref="marker"
-          :x="mark.x * page.width"
-          :y="mark.y * page.height"
-          :width="Math.max(mark.w * page.width, 1)"
-          :height="Math.max(mark.h * page.height, 1)"
-          vector-effect="non-scaling-stroke"
-          stroke-width="3"
-          :class="
-            cn(
-              'pointer-events-none fill-warning/15 stroke-warning',
-              !mark.w && !mark.h && 'fill-warning',
-            )
-          "
         />
       </svg>
     </div>

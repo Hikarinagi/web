@@ -4,7 +4,6 @@ export function useMangaTargets(seriesId: () => number | null) {
   const chapters = shallowRef<MangaTargetChapter[]>([])
   const volumes = shallowRef<MangaTargetVolume[]>([])
   const claims = shallowRef<MangaTargetClaim[]>([])
-  const published = shallowRef<MangaTargetClaim[]>([])
   const loading = ref(false)
 
   watch(
@@ -13,10 +12,9 @@ export function useMangaTargets(seriesId: () => number | null) {
       chapters.value = []
       volumes.value = []
       claims.value = []
-      published.value = []
       if (!id) return
       loading.value = true
-      const [list, entries, projects, uploads] = await Promise.all([
+      const [list, entries, projects] = await Promise.all([
         hikariRequest('/api/v3/mangas/{id}/chapters', {
           path: { id },
           query: { wanted: true },
@@ -29,20 +27,15 @@ export function useMangaTargets(seriesId: () => number | null) {
           query: { series_id: id, status: ['ACTIVE', 'REVIEW'], page: 1, page_size: 50 },
           toast: false,
         }).catch(() => null),
-        hikariRequest('/api/v3/manga-projects', {
-          query: { series_id: id, status: ['PUBLISHED'], page: 1, page_size: 100 },
-          toast: false,
-        }).catch(() => null),
       ])
       if (seriesId() !== id) return
       chapters.value = [...(list ?? [])].reverse()
       volumes.value = entries ?? []
       claims.value = projects?.items ?? []
-      published.value = uploads?.items ?? []
       loading.value = false
     },
     { immediate: true },
   )
 
-  return { chapters, volumes, claims, published, loading }
+  return { chapters, volumes, claims, loading }
 }

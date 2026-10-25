@@ -323,13 +323,10 @@
           "group": {
             "enum": [
               "site",
-              "member",
               "bangumi",
               "vndb",
               "openbd",
-              "web",
-              "wiki",
-              "wiki_game"
+              "web"
             ],
             "type": "string"
           },
@@ -406,13 +403,10 @@
           "group": {
             "enum": [
               "site",
-              "member",
               "bangumi",
               "vndb",
               "openbd",
-              "web",
-              "wiki",
-              "wiki_game"
+              "web"
             ],
             "type": "string"
           },
@@ -4766,92 +4760,6 @@
         ],
         "type": "object"
       },
-      "AdminTelegramGroupDto": {
-        "properties": {
-          "added_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "chat_enabled": {
-            "type": "boolean"
-          },
-          "chat_id": {
-            "type": "number"
-          },
-          "context_messages": {
-            "type": "number"
-          },
-          "daily_budget_usd": {
-            "nullable": true,
-            "type": "number"
-          },
-          "daily_reply_limit": {
-            "nullable": true,
-            "type": "number"
-          },
-          "images_enabled": {
-            "type": "boolean"
-          },
-          "join_gate": {
-            "type": "boolean"
-          },
-          "member_cooldown_seconds": {
-            "type": "number"
-          },
-          "member_daily_limit": {
-            "nullable": true,
-            "type": "number"
-          },
-          "replies_today": {
-            "type": "number"
-          },
-          "spend_today": {
-            "type": "number"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramGroupStatus"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "trigger_keywords": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "welcome_enabled": {
-            "type": "boolean"
-          },
-          "welcome_text": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "chat_id",
-          "title",
-          "status",
-          "join_gate",
-          "chat_enabled",
-          "trigger_keywords",
-          "context_messages",
-          "images_enabled",
-          "daily_budget_usd",
-          "daily_reply_limit",
-          "member_daily_limit",
-          "member_cooldown_seconds",
-          "welcome_enabled",
-          "welcome_text",
-          "added_at",
-          "replies_today",
-          "spend_today"
-        ],
-        "type": "object"
-      },
       "AdminUploadResultDto": {
         "properties": {
           "id": {
@@ -6743,16 +6651,6 @@
               }
             ]
           },
-          "telegram_chat_id": {
-            "description": "Telegram 会话 ID",
-            "nullable": true,
-            "type": "number"
-          },
-          "telegram_user_id": {
-            "description": "Telegram 用户 ID",
-            "nullable": true,
-            "type": "number"
-          },
           "tool_calls": {
             "items": {
               "$ref": "#/components/schemas/AiToolCallDto"
@@ -6794,8 +6692,6 @@
           "output_tokens",
           "cache_read_tokens",
           "cost_usd",
-          "telegram_chat_id",
-          "telegram_user_id",
           "user",
           "error_detail",
           "finish_reason",
@@ -6902,16 +6798,6 @@
               }
             ]
           },
-          "telegram_chat_id": {
-            "description": "Telegram 会话 ID",
-            "nullable": true,
-            "type": "number"
-          },
-          "telegram_user_id": {
-            "description": "Telegram 用户 ID",
-            "nullable": true,
-            "type": "number"
-          },
           "upstream_id": {
             "type": "string"
           },
@@ -6947,8 +6833,6 @@
           "output_tokens",
           "cache_read_tokens",
           "cost_usd",
-          "telegram_chat_id",
-          "telegram_user_id",
           "user"
         ],
         "type": "object"
@@ -7514,13 +7398,10 @@
           "group": {
             "enum": [
               "site",
-              "member",
               "bangumi",
               "vndb",
               "openbd",
-              "web",
-              "wiki",
-              "wiki_game"
+              "web"
             ],
             "type": "string"
           },
@@ -9396,44 +9277,6 @@
         ],
         "type": "object"
       },
-      "BookVariantRowDto": {
-        "properties": {
-          "isbn": {
-            "nullable": true,
-            "type": "string"
-          },
-          "kind": {
-            "enum": [
-              "SPECIAL",
-              "LIMITED",
-              "BUNDLE",
-              "DIGITAL",
-              "OTHER"
-            ],
-            "type": "string"
-          },
-          "price_amount": {
-            "nullable": true,
-            "type": "number"
-          },
-          "price_currency": {
-            "nullable": true,
-            "type": "string"
-          },
-          "publication_date": {
-            "description": "YYYY-MM-DD",
-            "nullable": true,
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "title"
-        ],
-        "type": "object"
-      },
       "BulkAdjustPointDto": {
         "properties": {
           "action": {
@@ -9546,6 +9389,98 @@
         ],
         "type": "string"
       },
+      "CatalogItemDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "external_id": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "resource_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reviewer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "run_id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_id",
+          "kind",
+          "operation",
+          "external_id",
+          "title",
+          "decision",
+          "evidence",
+          "note",
+          "resource_id",
+          "review",
+          "reviewer",
+          "reviewed_at",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "CatalogListingPolicyDto": {
         "properties": {
           "origins": {
@@ -9606,6 +9541,87 @@
         ],
         "type": "object"
       },
+      "CatalogOverviewDto": {
+        "properties": {
+          "light_novel": {
+            "$ref": "#/components/schemas/CatalogOverviewNovelDto"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/CatalogOverviewMangaDto"
+          },
+          "pending_review": {
+            "type": "number"
+          },
+          "recent_runs": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogRunItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "pending_review",
+          "manga",
+          "light_novel",
+          "recent_runs"
+        ],
+        "type": "object"
+      },
+      "CatalogOverviewMangaDto": {
+        "properties": {
+          "hidden": {
+            "type": "number"
+          },
+          "listed": {
+            "type": "number"
+          },
+          "origin_unknown": {
+            "type": "number"
+          },
+          "override_hidden": {
+            "type": "number"
+          },
+          "override_shown": {
+            "type": "number"
+          },
+          "readable": {
+            "description": "已发布、已上架且有章节的作品数",
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "listed",
+          "hidden",
+          "origin_unknown",
+          "override_shown",
+          "override_hidden",
+          "readable"
+        ],
+        "type": "object"
+      },
+      "CatalogOverviewNovelDto": {
+        "properties": {
+          "pending": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "volumes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "pending",
+          "volumes"
+        ],
+        "type": "object"
+      },
       "CatalogRecomputeResultDto": {
         "properties": {
           "changed": {
@@ -9641,6 +9657,258 @@
         ],
         "type": "object"
       },
+      "CatalogReviewResultDto": {
+        "properties": {
+          "published": {
+            "description": "因通过复核而发布的条目数",
+            "type": "number"
+          },
+          "updated": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "updated",
+          "published"
+        ],
+        "type": "object"
+      },
+      "CatalogRunDecisionCountDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          }
+        },
+        "required": [
+          "decision",
+          "count"
+        ],
+        "type": "object"
+      },
+      "CatalogRunDetailDto": {
+        "properties": {
+          "actor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "candidates": {
+            "type": "number"
+          },
+          "changed": {
+            "type": "number"
+          },
+          "config": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "created": {
+            "type": "number"
+          },
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogRunDecisionCountDto"
+            },
+            "type": "array"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "rejected": {
+            "type": "number"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncStatus"
+              }
+            ]
+          },
+          "trigger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncTrigger"
+              }
+            ]
+          },
+          "volumes_created": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "operation",
+          "status",
+          "trigger",
+          "dry_run",
+          "dump_version",
+          "candidates",
+          "changed",
+          "created",
+          "volumes_created",
+          "rejected",
+          "failed",
+          "started_at",
+          "finished_at",
+          "error_message",
+          "actor",
+          "config",
+          "decisions"
+        ],
+        "type": "object"
+      },
+      "CatalogRunItemDto": {
+        "properties": {
+          "actor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "candidates": {
+            "type": "number"
+          },
+          "changed": {
+            "type": "number"
+          },
+          "created": {
+            "type": "number"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "error_message": {
+            "nullable": true,
+            "type": "string"
+          },
+          "failed": {
+            "type": "number"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "rejected": {
+            "type": "number"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncStatus"
+              }
+            ]
+          },
+          "trigger": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncTrigger"
+              }
+            ]
+          },
+          "volumes_created": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "operation",
+          "status",
+          "trigger",
+          "dry_run",
+          "dump_version",
+          "candidates",
+          "changed",
+          "created",
+          "volumes_created",
+          "rejected",
+          "failed",
+          "started_at",
+          "finished_at",
+          "error_message",
+          "actor"
+        ],
+        "type": "object"
+      },
       "CatalogScalarDto": {
         "properties": {
           "field": {
@@ -9673,6 +9941,78 @@
         ],
         "type": "string"
       },
+      "CatalogSyncKind": {
+        "enum": [
+          "MANGA",
+          "LIGHT_NOVEL"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncOperation": {
+        "enum": [
+          "IMPORT",
+          "LISTING"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncReview": {
+        "enum": [
+          "PENDING",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "type": "string"
+      },
+      "CatalogSyncSettingsDto": {
+        "properties": {
+          "auto_publish": {
+            "type": "boolean"
+          },
+          "batch_limit": {
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "item_keep_days": {
+            "type": "number"
+          },
+          "kinds": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            },
+            "type": "array"
+          },
+          "listing": {
+            "$ref": "#/components/schemas/CatalogListingPolicyDto"
+          },
+          "ln_label_count": {
+            "type": "number"
+          },
+          "ln_label_min": {
+            "type": "number"
+          },
+          "schedule": {
+            "type": "string"
+          },
+          "since_months": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "schedule",
+          "kinds",
+          "since_months",
+          "batch_limit",
+          "auto_publish",
+          "ln_label_min",
+          "ln_label_count",
+          "item_keep_days",
+          "listing"
+        ],
+        "type": "object"
+      },
       "CatalogSyncStatus": {
         "enum": [
           "RUNNING",
@@ -9687,6 +10027,123 @@
           "MANUAL"
         ],
         "type": "string"
+      },
+      "CatalogTraceEntryDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "nullable": true,
+            "type": "object"
+          },
+          "external_id": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "operation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncOperation"
+              }
+            ]
+          },
+          "resource_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reviewer": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "run_dump_version": {
+            "nullable": true,
+            "type": "string"
+          },
+          "run_id": {
+            "type": "number"
+          },
+          "run_started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "run_id",
+          "kind",
+          "operation",
+          "external_id",
+          "title",
+          "decision",
+          "evidence",
+          "note",
+          "resource_id",
+          "review",
+          "reviewer",
+          "reviewed_at",
+          "created_at",
+          "run_started_at",
+          "run_dump_version"
+        ],
+        "type": "object"
+      },
+      "CatalogTriggerResultDto": {
+        "properties": {
+          "run_id": {
+            "type": "number"
+          },
+          "started": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "run_id",
+          "started"
+        ],
+        "type": "object"
       },
       "ChangeRequestBatchItemDto": {
         "properties": {
@@ -9946,13 +10403,6 @@
             },
             "type": "array"
           },
-          "held_reasons": {
-            "description": "书音提交时，作品送审的原因",
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryReasonDto"
-            },
-            "type": "array"
-          },
           "id": {
             "type": "number"
           },
@@ -10191,130 +10641,6 @@
         ],
         "type": "object"
       },
-      "ChangeRequestSourceDto": {
-        "properties": {
-          "excluded": {
-            "type": "boolean"
-          },
-          "outcome": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryOutcome"
-              }
-            ],
-            "nullable": true
-          },
-          "reasons": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryReasonDto"
-            },
-            "type": "array"
-          },
-          "records": {
-            "items": {
-              "$ref": "#/components/schemas/ChangeRequestSourceRecordDto"
-            },
-            "type": "array"
-          },
-          "section": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySection"
-              }
-            ]
-          },
-          "work_id": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "work_id",
-          "section",
-          "outcome",
-          "excluded",
-          "reasons",
-          "records"
-        ],
-        "type": "object"
-      },
-      "ChangeRequestSourceFieldDto": {
-        "properties": {
-          "field": {
-            "enum": [
-              "title",
-              "volume",
-              "label",
-              "author",
-              "staff",
-              "publisher",
-              "brand",
-              "date",
-              "isbn",
-              "jan",
-              "ndc",
-              "platforms",
-              "price",
-              "cover",
-              "homepage"
-            ],
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "field",
-          "value"
-        ],
-        "type": "object"
-      },
-      "ChangeRequestSourceRecordDto": {
-        "properties": {
-          "fields": {
-            "description": "该记录提供的字段及其值",
-            "items": {
-              "$ref": "#/components/schemas/ChangeRequestSourceFieldDto"
-            },
-            "type": "array"
-          },
-          "first_hand": {
-            "type": "boolean"
-          },
-          "first_seen_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "last_seen_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "source": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySourceKey"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "url": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "source",
-          "first_hand",
-          "title",
-          "url",
-          "fields",
-          "first_seen_at",
-          "last_seen_at"
-        ],
-        "type": "object"
-      },
       "ChangeRequestSummaryDto": {
         "properties": {
           "author": {
@@ -10359,13 +10685,6 @@
             ],
             "nullable": true,
             "type": "object"
-          },
-          "held_reasons": {
-            "description": "书音提交时，作品送审的原因",
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryReasonDto"
-            },
-            "type": "array"
           },
           "id": {
             "type": "number"
@@ -10795,10 +11114,6 @@
       },
       "CheckEntityDto": {
         "properties": {
-          "applied": {
-            "description": "变更请求已合并时：条目当前已指向建议的既有记录",
-            "type": "boolean"
-          },
           "change_request_id": {
             "type": "number"
           },
@@ -10967,10 +11282,6 @@
       },
       "CheckFieldDto": {
         "properties": {
-          "applied": {
-            "description": "变更请求已合并时：条目当前已是核实的值",
-            "type": "boolean"
-          },
           "display": {
             "type": "string"
           },
@@ -13119,31 +13430,6 @@
         ],
         "type": "object"
       },
-      "CreateDiscoveryLabelDto": {
-        "properties": {
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryLabelKind"
-              }
-            ]
-          },
-          "name": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "translated_webtoon": {
-            "description": "出版条漫译本的文库",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "kind",
-          "name"
-        ],
-        "type": "object"
-      },
       "CreateDownloadTaskDto": {
         "properties": {
           "format": {
@@ -13307,26 +13593,6 @@
           "content": {
             "maxLength": 1000,
             "type": "string"
-          }
-        },
-        "required": [
-          "content"
-        ],
-        "type": "object"
-      },
-      "CreateMangaPageNoteDto": {
-        "properties": {
-          "content": {
-            "maxLength": 1000,
-            "type": "string"
-          },
-          "rect": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaNoteRectInputDto"
-              }
-            ],
-            "description": "圈出的区域，按页面宽高归一化；省略时批注整页"
           }
         },
         "required": [
@@ -14124,47 +14390,6 @@
         },
         "type": "object"
       },
-      "CreateTelegramScheduleDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramScheduleKind"
-              }
-            ]
-          },
-          "time": {
-            "description": "北京时间 HH:mm",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
-            "type": "string"
-          },
-          "weekdays": {
-            "description": "1 为星期一，7 为星期日；空数组表示每天",
-            "items": {
-              "maximum": 7,
-              "minimum": 1,
-              "type": "number"
-            },
-            "maxItems": 7,
-            "type": "array",
-            "uniqueItems": true
-          }
-        },
-        "required": [
-          "enabled",
-          "time",
-          "weekdays",
-          "chat_id",
-          "kind"
-        ],
-        "type": "object"
-      },
       "CreateTopicDto": {
         "properties": {
           "name": {
@@ -14712,992 +14937,6 @@
           "resource_type",
           "resource_id",
           "snapshot"
-        ],
-        "type": "object"
-      },
-      "DiscoveryCountersDto": {
-        "properties": {
-          "date_changes": {
-            "type": "number"
-          },
-          "doubtful": {
-            "type": "number"
-          },
-          "failed": {
-            "type": "number"
-          },
-          "new": {
-            "type": "number"
-          },
-          "new_volumes": {
-            "type": "number"
-          },
-          "on_site": {
-            "type": "number"
-          },
-          "out_of_scope": {
-            "type": "number"
-          },
-          "read": {
-            "type": "number"
-          },
-          "skipped_days": {
-            "description": "当天变更记录过多而跳过的日期",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "waiting": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "read",
-          "new",
-          "doubtful",
-          "on_site",
-          "out_of_scope",
-          "waiting",
-          "date_changes",
-          "new_volumes",
-          "failed",
-          "skipped_days"
-        ],
-        "type": "object"
-      },
-      "DiscoveryDateChangeDto": {
-        "properties": {
-          "from": {
-            "nullable": true,
-            "type": "string"
-          },
-          "partial": {
-            "nullable": true,
-            "type": "string"
-          },
-          "to": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "from",
-          "to",
-          "partial"
-        ],
-        "type": "object"
-      },
-      "DiscoveryEditionDto": {
-        "properties": {
-          "date": {
-            "nullable": true,
-            "type": "string"
-          },
-          "edition": {
-            "enum": [
-              "package",
-              "download",
-              "limited",
-              "trial",
-              "other"
-            ],
-            "type": "string"
-          },
-          "partial": {
-            "nullable": true,
-            "type": "string"
-          },
-          "quote": {
-            "description": "页面原文",
-            "type": "string"
-          }
-        },
-        "required": [
-          "edition",
-          "date",
-          "partial",
-          "quote"
-        ],
-        "type": "object"
-      },
-      "DiscoveryLabelCountDto": {
-        "properties": {
-          "count": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "count"
-        ],
-        "type": "object"
-      },
-      "DiscoveryLabelDto": {
-        "properties": {
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryLabelKind"
-              }
-            ]
-          },
-          "name": {
-            "type": "string"
-          },
-          "translated_webtoon": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "id",
-          "kind",
-          "name",
-          "translated_webtoon",
-          "created_at"
-        ],
-        "type": "object"
-      },
-      "DiscoveryLabelKind": {
-        "enum": [
-          "LIGHT_NOVEL",
-          "COMICS"
-        ],
-        "type": "string"
-      },
-      "DiscoveryLabelPreviewDto": {
-        "properties": {
-          "admitted": {
-            "description": "按改动后的名单，上一次 JPRO 运行会多收的记录数",
-            "type": "number"
-          },
-          "dropped": {
-            "description": "按改动后的名单，上一次 JPRO 运行会少收的作品数",
-            "type": "number"
-          },
-          "run_id": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "admitted",
-          "dropped",
-          "run_id"
-        ],
-        "type": "object"
-      },
-      "DiscoveryOfficialPageDto": {
-        "properties": {
-          "editions": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryEditionDto"
-            },
-            "type": "array"
-          },
-          "galgame": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryPageGalgameDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "id": {
-            "type": "number"
-          },
-          "last_read_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "says": {
-            "description": "页面上写日期的那句话",
-            "nullable": true,
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryPageStatus"
-              }
-            ]
-          },
-          "url": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "url",
-          "galgame",
-          "status",
-          "says",
-          "editions",
-          "last_read_at"
-        ],
-        "type": "object"
-      },
-      "DiscoveryOutcome": {
-        "enum": [
-          "NEW",
-          "DOUBTFUL",
-          "ON_SITE",
-          "OUT_OF_SCOPE",
-          "WAITING"
-        ],
-        "type": "string"
-      },
-      "DiscoveryOutcomeCountDto": {
-        "properties": {
-          "count": {
-            "type": "number"
-          },
-          "outcome": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryOutcome"
-              }
-            ]
-          },
-          "section": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySection"
-              }
-            ]
-          }
-        },
-        "required": [
-          "section",
-          "outcome",
-          "count"
-        ],
-        "type": "object"
-      },
-      "DiscoveryOutcomeTallyDto": {
-        "properties": {
-          "DOUBTFUL": {
-            "type": "number"
-          },
-          "NEW": {
-            "type": "number"
-          },
-          "ON_SITE": {
-            "type": "number"
-          },
-          "OUT_OF_SCOPE": {
-            "type": "number"
-          },
-          "WAITING": {
-            "type": "number"
-          }
-        },
-        "type": "object"
-      },
-      "DiscoveryOverviewDto": {
-        "properties": {
-          "sections": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoverySectionStatDto"
-            },
-            "type": "array"
-          },
-          "sources": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoverySourceDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "sections",
-          "sources"
-        ],
-        "type": "object"
-      },
-      "DiscoveryPageGalgameDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "origin_title": {
-            "type": "string"
-          },
-          "trans_title": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "origin_title",
-          "trans_title"
-        ],
-        "type": "object"
-      },
-      "DiscoveryPageStatus": {
-        "enum": [
-          "OK",
-          "NO_DATE",
-          "UNREADABLE"
-        ],
-        "type": "string"
-      },
-      "DiscoveryPolicyDto": {
-        "properties": {
-          "dlsite_work_types": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "downstream_company": {
-            "type": "boolean"
-          },
-          "downstream_min_votes": {
-            "nullable": true,
-            "type": "number"
-          },
-          "downstream_store": {
-            "type": "boolean"
-          },
-          "follow_past_days": {
-            "type": "number"
-          },
-          "review_date_far": {
-            "type": "boolean"
-          },
-          "review_date_passed": {
-            "type": "boolean"
-          },
-          "review_person_newer": {
-            "type": "boolean"
-          },
-          "steam_languages": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "steam_languages",
-          "dlsite_work_types",
-          "follow_past_days",
-          "downstream_company",
-          "downstream_store",
-          "downstream_min_votes",
-          "review_person_newer",
-          "review_date_passed",
-          "review_date_far"
-        ],
-        "type": "object"
-      },
-      "DiscoveryPolicyPreviewDto": {
-        "properties": {
-          "after": {
-            "$ref": "#/components/schemas/DiscoveryOutcomeTallyDto"
-          },
-          "before": {
-            "$ref": "#/components/schemas/DiscoveryOutcomeTallyDto"
-          },
-          "runs": {
-            "description": "参与预览的运行数（每个数据源的最近一次）",
-            "type": "number"
-          },
-          "works": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "runs",
-          "works",
-          "before",
-          "after"
-        ],
-        "type": "object"
-      },
-      "DiscoveryReasonDto": {
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "params": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
-          },
-          "text": {
-            "description": "给人看的原因",
-            "type": "string"
-          }
-        },
-        "required": [
-          "code",
-          "params",
-          "text"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRulesDto": {
-        "properties": {
-          "comics_labels": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryLabelDto"
-            },
-            "type": "array"
-          },
-          "light_novel_labels": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryLabelDto"
-            },
-            "type": "array"
-          },
-          "policy": {
-            "$ref": "#/components/schemas/DiscoveryPolicyDto"
-          },
-          "turned_away": {
-            "description": "近 30 天 JPRO 被拒文库及次数",
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryLabelCountDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "policy",
-          "light_novel_labels",
-          "comics_labels",
-          "turned_away"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRunBriefDto": {
-        "properties": {
-          "dry_run": {
-            "type": "boolean"
-          },
-          "error_message": {
-            "nullable": true,
-            "type": "string"
-          },
-          "finished_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryRunStatus"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "dry_run",
-          "started_at",
-          "finished_at",
-          "error_message"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRunDetailDto": {
-        "properties": {
-          "actor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "counters": {
-            "$ref": "#/components/schemas/DiscoveryCountersDto"
-          },
-          "dry_run": {
-            "type": "boolean"
-          },
-          "error_message": {
-            "nullable": true,
-            "type": "string"
-          },
-          "finished_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "outcomes": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryOutcomeCountDto"
-            },
-            "type": "array"
-          },
-          "since": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "source": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySourceKey"
-              }
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryRunStatus"
-              }
-            ]
-          },
-          "trigger": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryTrigger"
-              }
-            ]
-          },
-          "turned_away": {
-            "description": "被拒文库及次数",
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryLabelCountDto"
-            },
-            "type": "array"
-          },
-          "until": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "source",
-          "trigger",
-          "status",
-          "dry_run",
-          "since",
-          "until",
-          "counters",
-          "started_at",
-          "finished_at",
-          "error_message",
-          "actor",
-          "outcomes",
-          "turned_away"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRunDto": {
-        "properties": {
-          "actor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "counters": {
-            "$ref": "#/components/schemas/DiscoveryCountersDto"
-          },
-          "dry_run": {
-            "type": "boolean"
-          },
-          "error_message": {
-            "nullable": true,
-            "type": "string"
-          },
-          "finished_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "since": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "source": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySourceKey"
-              }
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryRunStatus"
-              }
-            ]
-          },
-          "trigger": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryTrigger"
-              }
-            ]
-          },
-          "until": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "source",
-          "trigger",
-          "status",
-          "dry_run",
-          "since",
-          "until",
-          "counters",
-          "started_at",
-          "finished_at",
-          "error_message",
-          "actor"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRunItemDto": {
-        "properties": {
-          "change_request_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "date_change": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryDateChangeDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "id": {
-            "type": "number"
-          },
-          "maker": {
-            "nullable": true,
-            "type": "string"
-          },
-          "outcome": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryOutcome"
-              }
-            ]
-          },
-          "reasons": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoveryReasonDto"
-            },
-            "type": "array"
-          },
-          "release_date": {
-            "nullable": true,
-            "type": "string"
-          },
-          "resource_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "resource_type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ContributionResourceType"
-              }
-            ],
-            "nullable": true
-          },
-          "section": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySection"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "work_id": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "id",
-          "work_id",
-          "section",
-          "title",
-          "release_date",
-          "maker",
-          "outcome",
-          "date_change",
-          "reasons",
-          "resource_type",
-          "resource_id",
-          "change_request_id"
-        ],
-        "type": "object"
-      },
-      "DiscoveryRunStatus": {
-        "enum": [
-          "QUEUED",
-          "RUNNING",
-          "SUCCEEDED",
-          "FAILED"
-        ],
-        "type": "string"
-      },
-      "DiscoverySection": {
-        "enum": [
-          "GALGAME",
-          "LIGHT_NOVEL",
-          "MANGA"
-        ],
-        "type": "string"
-      },
-      "DiscoverySectionStatDto": {
-        "properties": {
-          "added_7d": {
-            "description": "近 7 天新增的条目",
-            "type": "number"
-          },
-          "date_changes_7d": {
-            "description": "近 7 天跟随的改期",
-            "type": "number"
-          },
-          "in_review": {
-            "description": "书音提交、仍在审核中的请求",
-            "type": "number"
-          },
-          "section": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySection"
-              }
-            ]
-          },
-          "upcoming_30d": {
-            "description": "未来 30 天内发售、站内已有的条目",
-            "type": "number"
-          }
-        },
-        "required": [
-          "section",
-          "added_7d",
-          "upcoming_30d",
-          "date_changes_7d",
-          "in_review"
-        ],
-        "type": "object"
-      },
-      "DiscoverySourceDto": {
-        "properties": {
-          "anchor_enabled": {
-            "type": "boolean"
-          },
-          "anchor_shadow": {
-            "type": "boolean"
-          },
-          "anchorable": {
-            "description": "该来源可锚定站内存量条目",
-            "type": "boolean"
-          },
-          "configured": {
-            "description": "所需的密钥已配置",
-            "type": "boolean"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "errors_7d": {
-            "description": "近 7 天失败的运行数",
-            "type": "number"
-          },
-          "first_hand": {
-            "type": "boolean"
-          },
-          "key": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySourceKey"
-              }
-            ]
-          },
-          "last_run": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryRunBriefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "last_success_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "look_back_days": {
-            "type": "number"
-          },
-          "needs_permission": {
-            "type": "boolean"
-          },
-          "permission_note": {
-            "nullable": true,
-            "type": "string"
-          },
-          "permitted_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "permitter": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "records": {
-            "description": "该来源保存的来源记录数",
-            "type": "number"
-          },
-          "runnable": {
-            "description": "已有可用的采集实现",
-            "type": "boolean"
-          },
-          "schedule": {
-            "type": "string"
-          },
-          "sections": {
-            "items": {
-              "$ref": "#/components/schemas/DiscoverySection"
-            },
-            "type": "array"
-          },
-          "shadow": {
-            "type": "boolean"
-          },
-          "shadow_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "shadow_reason": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "key",
-          "sections",
-          "first_hand",
-          "runnable",
-          "configured",
-          "enabled",
-          "shadow",
-          "shadow_reason",
-          "shadow_at",
-          "anchorable",
-          "anchor_enabled",
-          "anchor_shadow",
-          "schedule",
-          "look_back_days",
-          "needs_permission",
-          "permitted_at",
-          "permitter",
-          "permission_note",
-          "last_success_at",
-          "records",
-          "errors_7d",
-          "last_run"
-        ],
-        "type": "object"
-      },
-      "DiscoverySourceKey": {
-        "enum": [
-          "MOEPEDIA",
-          "OFFICIAL_PAGE",
-          "BRAND_LIST",
-          "STEAM",
-          "DLSITE",
-          "JPRO",
-          "PUBLISHER",
-          "VNDB",
-          "BANGUMI",
-          "OPENBD",
-          "NDL"
-        ],
-        "type": "string"
-      },
-      "DiscoveryTrigger": {
-        "enum": [
-          "CRON",
-          "MANUAL",
-          "ANCHOR"
-        ],
-        "type": "string"
-      },
-      "DiscoveryTriggerResultDto": {
-        "properties": {
-          "run_id": {
-            "type": "number"
-          },
-          "started": {
-            "description": "为 false 时同一来源已有进行中的运行",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "run_id",
-          "started"
         ],
         "type": "object"
       },
@@ -20550,15 +19789,6 @@
             "nullable": true,
             "type": "string"
           },
-          "age_rating": {
-            "enum": [
-              "ALL_AGES",
-              "R15",
-              "R18"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
           "aliases": {
             "items": {
               "type": "string"
@@ -20591,12 +19821,6 @@
           "download_resource_count": {
             "description": "可下载资源数，由 shionlib 同步而来",
             "type": "number"
-          },
-          "editions": {
-            "items": {
-              "$ref": "#/components/schemas/GalgameEditionDto"
-            },
-            "type": "array"
           },
           "en_intro": {
             "nullable": true,
@@ -20687,10 +19911,6 @@
             },
             "type": "array"
           },
-          "title_reading": {
-            "nullable": true,
-            "type": "string"
-          },
           "trans_intro": {
             "nullable": true,
             "type": "string"
@@ -20732,9 +19952,6 @@
           "engine",
           "origin_lang",
           "dev_status",
-          "title_reading",
-          "age_rating",
-          "editions",
           "prices",
           "external_links",
           "steam_apps",
@@ -21011,159 +20228,6 @@
           "tags",
           "screenshots"
         ],
-        "type": "object"
-      },
-      "GalgameEditionDto": {
-        "properties": {
-          "age_rating": {
-            "enum": [
-              "ALL_AGES",
-              "R15",
-              "R18"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "currency": {
-            "nullable": true,
-            "type": "string"
-          },
-          "jan": {
-            "nullable": true,
-            "type": "string"
-          },
-          "kind": {
-            "enum": [
-              "REGULAR",
-              "LIMITED",
-              "DOWNLOAD",
-              "BUDGET",
-              "PORT",
-              "ENHANCED",
-              "BUNDLE",
-              "OTHER"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "platform": {
-            "nullable": true,
-            "type": "string"
-          },
-          "price": {
-            "nullable": true,
-            "type": "number"
-          },
-          "product_code": {
-            "nullable": true,
-            "type": "string"
-          },
-          "release_date": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "release_status": {
-            "enum": [
-              "PLANNED",
-              "RELEASED",
-              "DELAYED",
-              "CANCELLED"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "tax_included": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "kind",
-          "title",
-          "jan",
-          "product_code",
-          "platform",
-          "price",
-          "currency",
-          "tax_included",
-          "release_date",
-          "release_status",
-          "age_rating"
-        ],
-        "type": "object"
-      },
-      "GalgameEditionRowDto": {
-        "properties": {
-          "age_rating": {
-            "enum": [
-              "ALL_AGES",
-              "R15",
-              "R18"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "currency": {
-            "nullable": true,
-            "type": "string"
-          },
-          "jan": {
-            "nullable": true,
-            "type": "string"
-          },
-          "kind": {
-            "enum": [
-              "REGULAR",
-              "LIMITED",
-              "DOWNLOAD",
-              "BUDGET",
-              "PORT",
-              "ENHANCED",
-              "BUNDLE",
-              "OTHER"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "platform": {
-            "nullable": true,
-            "type": "string"
-          },
-          "price": {
-            "nullable": true,
-            "type": "number"
-          },
-          "product_code": {
-            "nullable": true,
-            "type": "string"
-          },
-          "release_date": {
-            "description": "YYYY-MM-DD",
-            "nullable": true,
-            "type": "string"
-          },
-          "release_status": {
-            "enum": [
-              "PLANNED",
-              "RELEASED",
-              "DELAYED",
-              "CANCELLED"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
-          "tax_included": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
         "type": "object"
       },
       "GalgameExternalLinkDto": {
@@ -21549,6 +20613,27 @@
           "currency",
           "tax_included"
         ],
+        "type": "object"
+      },
+      "GalgamePriceRowDto": {
+        "properties": {
+          "amount": {
+            "nullable": true,
+            "type": "number"
+          },
+          "currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tax_included": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "version": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "GalgameProducerRelationDto": {
@@ -25106,102 +24191,17 @@
         ],
         "type": "object"
       },
-      "ListingItemDto": {
+      "LinkCatalogItemDto": {
         "properties": {
-          "decision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CatalogSyncDecision"
-              }
-            ]
-          },
-          "evidence": {
-            "additionalProperties": true,
+          "resource_id": {
+            "description": "认定为哪个站内条目；传 null 表示不是重复，下次同步照常创建",
+            "minimum": 1,
             "nullable": true,
-            "type": "object"
-          },
-          "id": {
             "type": "number"
-          },
-          "manga_id": {
-            "type": "number"
-          },
-          "title": {
-            "type": "string"
           }
         },
         "required": [
-          "id",
-          "manga_id",
-          "title",
-          "decision",
-          "evidence"
-        ],
-        "type": "object"
-      },
-      "ListingRunDto": {
-        "properties": {
-          "actor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "changed": {
-            "type": "number"
-          },
-          "dry_run": {
-            "type": "boolean"
-          },
-          "error_message": {
-            "nullable": true,
-            "type": "string"
-          },
-          "finished_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "scanned": {
-            "description": "扫描的条目数",
-            "type": "number"
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CatalogSyncStatus"
-              }
-            ]
-          },
-          "trigger": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CatalogSyncTrigger"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "trigger",
-          "dry_run",
-          "scanned",
-          "changed",
-          "started_at",
-          "finished_at",
-          "error_message",
-          "actor"
+          "resource_id"
         ],
         "type": "object"
       },
@@ -25627,41 +24627,6 @@
         "required": [
           "pending_links",
           "failed_chapters"
-        ],
-        "type": "object"
-      },
-      "MangaBaselinePageDto": {
-        "properties": {
-          "byte_size": {
-            "nullable": true,
-            "type": "number"
-          },
-          "height": {
-            "nullable": true,
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "page_number": {
-            "type": "number"
-          },
-          "url": {
-            "description": "图片的限时访问地址",
-            "type": "string"
-          },
-          "width": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "id",
-          "page_number",
-          "width",
-          "height",
-          "byte_size",
-          "url"
         ],
         "type": "object"
       },
@@ -26123,169 +25088,6 @@
         "required": [
           "role",
           "character"
-        ],
-        "type": "object"
-      },
-      "MangaCheckBaselinePageDto": {
-        "properties": {
-          "byte_size": {
-            "nullable": true,
-            "type": "number"
-          },
-          "height": {
-            "nullable": true,
-            "type": "number"
-          },
-          "page_id": {
-            "type": "number"
-          },
-          "width": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "page_id",
-          "width",
-          "height",
-          "byte_size"
-        ],
-        "type": "object"
-      },
-      "MangaCheckPageDto": {
-        "properties": {
-          "byte_size": {
-            "nullable": true,
-            "type": "number"
-          },
-          "duplicate_of": {
-            "description": "疑似与之重复的页面",
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "flags": {
-            "description": "疑似重复、可能空白、尺寸异常",
-            "items": {
-              "enum": [
-                "duplicate",
-                "blank",
-                "size"
-              ],
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "height": {
-            "type": "number"
-          },
-          "match": {
-            "description": "对应的现有版本页面在 baseline 中的序号，从 0 开始；没有对应时为 null",
-            "nullable": true,
-            "type": "number"
-          },
-          "page_id": {
-            "type": "number"
-          },
-          "width": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "page_id",
-          "width",
-          "height",
-          "byte_size",
-          "flags",
-          "duplicate_of",
-          "match"
-        ],
-        "type": "object"
-      },
-      "MangaCheckResultDto": {
-        "properties": {
-          "baseline": {
-            "description": "现有版本的页面；不是替换投稿时为 null",
-            "items": {
-              "$ref": "#/components/schemas/MangaCheckBaselinePageDto"
-            },
-            "nullable": true,
-            "type": "array"
-          },
-          "pages": {
-            "description": "按页序排列",
-            "items": {
-              "$ref": "#/components/schemas/MangaCheckPageDto"
-            },
-            "type": "array"
-          },
-          "summary": {
-            "$ref": "#/components/schemas/MangaCheckSummaryDto"
-          }
-        },
-        "required": [
-          "pages",
-          "baseline",
-          "summary"
-        ],
-        "type": "object"
-      },
-      "MangaCheckSummaryDto": {
-        "properties": {
-          "average_bytes": {
-            "description": "每页的平均字节数",
-            "nullable": true,
-            "type": "number"
-          },
-          "baseline_average_bytes": {
-            "nullable": true,
-            "type": "number"
-          },
-          "baseline_height": {
-            "nullable": true,
-            "type": "number"
-          },
-          "baseline_page_count": {
-            "nullable": true,
-            "type": "number"
-          },
-          "baseline_width": {
-            "nullable": true,
-            "type": "number"
-          },
-          "flagged": {
-            "description": "带有标记或在现有版本中没有对应页的页数",
-            "type": "number"
-          },
-          "height": {
-            "description": "页面高度的中位数",
-            "type": "number"
-          },
-          "matched": {
-            "description": "与现有版本一一对应的页数",
-            "nullable": true,
-            "type": "number"
-          },
-          "page_count": {
-            "type": "number"
-          },
-          "width": {
-            "description": "页面宽度的中位数",
-            "type": "number"
-          }
-        },
-        "required": [
-          "page_count",
-          "width",
-          "height",
-          "average_bytes",
-          "flagged",
-          "baseline_page_count",
-          "baseline_width",
-          "baseline_height",
-          "baseline_average_bytes",
-          "matched"
         ],
         "type": "object"
       },
@@ -26921,22 +25723,10 @@
           "id": {
             "type": "number"
           },
-          "page_id": {
-            "type": "number"
-          },
-          "rect": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaNoteRectDto"
-              }
-            ],
-            "description": "批注圈出的区域",
-            "nullable": true,
-            "type": "object"
+          "region": {
+            "$ref": "#/components/schemas/MangaNoteRegionDto"
           },
           "region_id": {
-            "description": "批注所在的文本框",
-            "nullable": true,
             "type": "string"
           },
           "resolved_at": {
@@ -26951,9 +25741,8 @@
         },
         "required": [
           "id",
-          "page_id",
           "region_id",
-          "rect",
+          "region",
           "content",
           "resolved_at",
           "created_at",
@@ -26961,61 +25750,14 @@
         ],
         "type": "object"
       },
-      "MangaNoteRectDto": {
+      "MangaNoteRegionDto": {
         "properties": {
-          "h": {
-            "description": "高度，按页面高度归一化",
-            "type": "number"
-          },
-          "w": {
-            "description": "宽度，按页面宽度归一化",
-            "type": "number"
-          },
-          "x": {
-            "description": "左边缘，按页面宽度归一化到 0 至 1",
-            "type": "number"
-          },
-          "y": {
-            "description": "上边缘，按页面高度归一化到 0 至 1",
+          "page_id": {
             "type": "number"
           }
         },
         "required": [
-          "x",
-          "y",
-          "w",
-          "h"
-        ],
-        "type": "object"
-      },
-      "MangaNoteRectInputDto": {
-        "properties": {
-          "h": {
-            "maximum": 1,
-            "minimum": 0,
-            "type": "number"
-          },
-          "w": {
-            "maximum": 1,
-            "minimum": 0,
-            "type": "number"
-          },
-          "x": {
-            "maximum": 1,
-            "minimum": 0,
-            "type": "number"
-          },
-          "y": {
-            "maximum": 1,
-            "minimum": 0,
-            "type": "number"
-          }
-        },
-        "required": [
-          "x",
-          "y",
-          "w",
-          "h"
+          "page_id"
         ],
         "type": "object"
       },
@@ -27304,76 +26046,6 @@
         ],
         "type": "object"
       },
-      "MangaProjectCheckDto": {
-        "properties": {
-          "error": {
-            "nullable": true,
-            "type": "string"
-          },
-          "result": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaCheckResultDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaProjectCheckStatus"
-              }
-            ]
-          },
-          "submitted_at": {
-            "description": "检查对应的投稿轮次",
-            "format": "date-time",
-            "type": "string"
-          },
-          "updated_at": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "required": [
-          "status",
-          "submitted_at",
-          "error",
-          "result",
-          "updated_at"
-        ],
-        "type": "object"
-      },
-      "MangaProjectCheckStatus": {
-        "enum": [
-          "PENDING",
-          "READY",
-          "FAILED"
-        ],
-        "type": "string"
-      },
-      "MangaProjectCheckSummaryDto": {
-        "properties": {
-          "flagged": {
-            "description": "带有标记的页数，检查完成前为 null",
-            "nullable": true,
-            "type": "number"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaProjectCheckStatus"
-              }
-            ]
-          }
-        },
-        "required": [
-          "status",
-          "flagged"
-        ],
-        "type": "object"
-      },
       "MangaProjectDto": {
         "properties": {
           "batch_id": {
@@ -27439,16 +26111,6 @@
             "format": "date-time",
             "nullable": true,
             "type": "string"
-          },
-          "replaces": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaProjectReplacesDto"
-              }
-            ],
-            "description": "目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换",
-            "nullable": true,
-            "type": "object"
           },
           "scope": {
             "description": "一话或整卷",
@@ -27568,7 +26230,6 @@
           "team",
           "last_activity_at",
           "created_at",
-          "replaces",
           "machine_label_percent",
           "published_at",
           "page_count",
@@ -27576,44 +26237,6 @@
           "viewer_reviewer",
           "viewer_capabilities"
         ],
-        "type": "object"
-      },
-      "MangaProjectInfoDto": {
-        "properties": {
-          "chapter_name": {
-            "maxLength": 200,
-            "nullable": true,
-            "type": "string"
-          },
-          "chapter_number": {
-            "maxLength": 20,
-            "nullable": true,
-            "type": "string"
-          },
-          "chapter_type": {
-            "enum": [
-              "SERIALIZATION",
-              "EXTRA",
-              "ONESHOT",
-              "VOLUME"
-            ],
-            "type": "string"
-          },
-          "scope": {
-            "description": "只有尚未对应到章节的项目可以改",
-            "enum": [
-              "CHAPTER",
-              "VOLUME"
-            ],
-            "type": "string"
-          },
-          "volume_id": {
-            "description": "单行本条目",
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          }
-        },
         "type": "object"
       },
       "MangaProjectListEntryDto": {
@@ -27649,16 +26272,6 @@
             ],
             "type": "string"
           },
-          "check": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaProjectCheckSummaryDto"
-              }
-            ],
-            "description": "最新一轮投稿的检查",
-            "nullable": true,
-            "type": "object"
-          },
           "created_at": {
             "format": "date-time",
             "type": "string"
@@ -27693,16 +26306,6 @@
           },
           "progress": {
             "$ref": "#/components/schemas/MangaProjectProgressDto"
-          },
-          "replaces": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaProjectReplacesDto"
-              }
-            ],
-            "description": "目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换",
-            "nullable": true,
-            "type": "object"
           },
           "scope": {
             "description": "一话或整卷",
@@ -27793,9 +26396,7 @@
           "created_at",
           "progress",
           "preview",
-          "placement_complete",
-          "replaces",
-          "check"
+          "placement_complete"
         ],
         "type": "object"
       },
@@ -27831,11 +26432,6 @@
         "properties": {
           "assisted_count": {
             "description": "选定译文由机翻修改而来的文本框数",
-            "type": "number"
-          },
-          "byte_size": {
-            "description": "发布时使用的图片的字节数",
-            "nullable": true,
             "type": "number"
           },
           "cleaned_image": {
@@ -27909,7 +26505,6 @@
           "original_image",
           "cleaned_image",
           "rendered_image",
-          "byte_size",
           "original_url",
           "cleaned_url",
           "rendered_url",
@@ -27934,18 +26529,6 @@
         "required": [
           "pages",
           "rendered"
-        ],
-        "type": "object"
-      },
-      "MangaProjectReplacesDto": {
-        "properties": {
-          "page_count": {
-            "description": "现有版本的页数",
-            "type": "number"
-          }
-        },
-        "required": [
-          "page_count"
         ],
         "type": "object"
       },
@@ -30787,29 +29370,6 @@
           },
           "loser_id": {
             "description": "The merged-away (deleted) resource id.",
-            "type": "number"
-          },
-          "undo_id": {
-            "description": "The record that undoes this merge, when this kind of merge can be undone.",
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "canonical_id",
-          "loser_id",
-          "undo_id"
-        ],
-        "type": "object"
-      },
-      "MergeUndoResultDto": {
-        "properties": {
-          "canonical_id": {
-            "description": "The resource that kept the merged data.",
-            "type": "number"
-          },
-          "loser_id": {
-            "description": "The restored resource id.",
             "type": "number"
           }
         },
@@ -37064,93 +35624,6 @@
         ],
         "type": "object"
       },
-      "PreviewDiscoveryLabelsDto": {
-        "properties": {
-          "add": {
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 100,
-            "type": "array"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoveryLabelKind"
-              }
-            ]
-          },
-          "remove": {
-            "items": {
-              "type": "number"
-            },
-            "maxItems": 100,
-            "type": "array"
-          }
-        },
-        "required": [
-          "kind"
-        ],
-        "type": "object"
-      },
-      "PreviewDiscoveryPolicyDto": {
-        "properties": {
-          "dlsite_work_types": {
-            "description": "收录的 DLsite 作品类型",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "type": "array"
-          },
-          "downstream_company": {
-            "type": "boolean"
-          },
-          "downstream_min_votes": {
-            "maximum": 100000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "downstream_store": {
-            "type": "boolean"
-          },
-          "follow_past_days": {
-            "description": "跟随改期的已过天数上限",
-            "maximum": 365,
-            "minimum": 0,
-            "type": "number"
-          },
-          "review_date_far": {
-            "type": "boolean"
-          },
-          "review_date_passed": {
-            "type": "boolean"
-          },
-          "review_person_newer": {
-            "type": "boolean"
-          },
-          "section": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DiscoverySection"
-              }
-            ]
-          },
-          "steam_languages": {
-            "description": "收录的 Steam 原始语言",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "type": "array"
-          }
-        },
-        "required": [
-          "section"
-        ],
-        "type": "object"
-      },
       "PreviewPostDto": {
         "properties": {
           "client_schema_version": {
@@ -37777,9 +36250,6 @@
           "email": {
             "format": "email",
             "type": "string"
-          },
-          "is_bot": {
-            "type": "boolean"
           },
           "nickname": {
             "type": "string"
@@ -40135,6 +38605,46 @@
         ],
         "type": "object"
       },
+      "ReviewCatalogItemsDto": {
+        "properties": {
+          "all_matching": {
+            "description": "对当前筛选下所有待复核明细生效",
+            "type": "boolean"
+          },
+          "decision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncDecision"
+              }
+            ]
+          },
+          "item_ids": {
+            "description": "显式勾选的明细，与 all_matching 二选一",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "type": "array"
+          },
+          "keyword": {
+            "description": "按标题模糊匹配",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "review": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncReview"
+              }
+            ]
+          }
+        },
+        "required": [
+          "review"
+        ],
+        "type": "object"
+      },
       "ReviewChangeRequestBatchDto": {
         "properties": {
           "body": {
@@ -40160,9 +38670,6 @@
               "$ref": "#/components/schemas/ReviewEntityChoiceDto"
             },
             "type": "array"
-          },
-          "not_for_site": {
-            "type": "boolean"
           },
           "overrides": {
             "items": {
@@ -40195,9 +38702,6 @@
               "$ref": "#/components/schemas/ReviewEntityChoiceDto"
             },
             "type": "array"
-          },
-          "not_for_site": {
-            "type": "boolean"
           },
           "overrides": {
             "items": {
@@ -41381,101 +39885,6 @@
         ],
         "type": "object"
       },
-      "SteamPriceDto": {
-        "properties": {
-          "app_id": {
-            "type": "number"
-          },
-          "currency": {
-            "description": "中国区价格的币种",
-            "nullable": true,
-            "type": "string"
-          },
-          "discount_ends_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "discount_percent": {
-            "type": "number"
-          },
-          "discount_started_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "fetched_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "final_cents": {
-            "description": "现价（分）",
-            "nullable": true,
-            "type": "number"
-          },
-          "initial_cents": {
-            "description": "原价（分）",
-            "nullable": true,
-            "type": "number"
-          },
-          "purchasable": {
-            "description": "在中国区可购买",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "app_id",
-          "currency",
-          "initial_cents",
-          "final_cents",
-          "discount_percent",
-          "discount_ends_at",
-          "discount_started_at",
-          "purchasable",
-          "fetched_at"
-        ],
-        "type": "object"
-      },
-      "SteamSaleDto": {
-        "properties": {
-          "galgame": {
-            "$ref": "#/components/schemas/SteamSaleGalgameDto"
-          },
-          "price": {
-            "$ref": "#/components/schemas/SteamPriceDto"
-          }
-        },
-        "required": [
-          "galgame",
-          "price"
-        ],
-        "type": "object"
-      },
-      "SteamSaleGalgameDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "nsfw": {
-            "type": "boolean"
-          },
-          "origin_title": {
-            "type": "string"
-          },
-          "trans_title": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "origin_title",
-          "trans_title",
-          "nsfw"
-        ],
-        "type": "object"
-      },
       "SubmitChangeRequestBatchDto": {
         "properties": {
           "items": {
@@ -42002,20 +40411,16 @@
         ],
         "type": "object"
       },
-      "TelegramActionConfirmDto": {
-        "properties": {
-          "telegram_id": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "telegram_id"
-        ],
-        "type": "object"
-      },
       "TelegramBotStatusDto": {
         "properties": {
           "bot_username": {
+            "nullable": true,
+            "type": "string"
+          },
+          "chat_usage": {
+            "$ref": "#/components/schemas/TelegramChatUsageDto"
+          },
+          "group_id": {
             "nullable": true,
             "type": "string"
           },
@@ -42043,225 +40448,172 @@
             ],
             "nullable": true,
             "type": "string"
-          },
-          "version": {
-            "nullable": true,
-            "type": "string"
           }
         },
         "required": [
           "online",
           "state",
           "bot_username",
-          "version",
+          "group_id",
           "pending_joins",
           "started_at",
-          "last_seen_at"
-        ],
-        "type": "object"
-      },
-      "TelegramCardButtonDto": {
-        "properties": {
-          "text": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "text",
-          "url"
-        ],
-        "type": "object"
-      },
-      "TelegramCardDto": {
-        "properties": {
-          "buttons": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramCardButtonDto"
-            },
-            "type": "array"
-          },
-          "caption": {
-            "description": "Telegram HTML",
-            "type": "string"
-          },
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "rich": {
-            "description": "富消息 HTML",
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "galgame",
-              "light_novel",
-              "manga"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "id",
-          "title",
-          "cover",
-          "caption",
-          "rich",
-          "buttons"
+          "last_seen_at",
+          "chat_usage"
         ],
         "type": "object"
       },
       "TelegramChatDto": {
         "properties": {
-          "addressed": {
-            "type": "boolean"
-          },
           "chat_id": {
-            "type": "number"
-          },
-          "chat_title": {
-            "maxLength": 255,
+            "pattern": "^-?\\d{1,20}$",
             "type": "string"
           },
-          "fresh": {
+          "is_private": {
             "type": "boolean"
-          },
-          "images": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramChatImageDto"
-            },
-            "maxItems": 4,
-            "type": "array"
-          },
-          "kind": {
-            "enum": [
-              "group",
-              "private",
-              "guest"
-            ],
-            "type": "string"
           },
           "messages": {
             "items": {
               "$ref": "#/components/schemas/TelegramChatMessageDto"
             },
-            "maxItems": 60,
+            "maxItems": 50,
             "type": "array"
           },
           "telegram_id": {
             "type": "number"
-          },
-          "telegram_name": {
-            "maxLength": 200,
-            "type": "string"
           }
         },
         "required": [
-          "kind",
           "chat_id",
           "telegram_id",
-          "telegram_name",
-          "addressed",
+          "is_private",
           "messages"
-        ],
-        "type": "object"
-      },
-      "TelegramChatImageDto": {
-        "properties": {
-          "data": {
-            "format": "base64",
-            "maxLength": 4000000,
-            "type": "string"
-          },
-          "source": {
-            "enum": [
-              "message",
-              "reply"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "data",
-          "source"
         ],
         "type": "object"
       },
       "TelegramChatInputDto": {
         "properties": {
+          "context_window": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "number"
+          },
+          "daily_message_budget": {
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "daily_token_budget": {
+            "maximum": 100000000,
+            "minimum": 0,
+            "type": "number"
+          },
           "enabled": {
             "type": "boolean"
           },
-          "guest_mode": {
-            "type": "boolean"
-          },
-          "private": {
-            "$ref": "#/components/schemas/TelegramPrivateChatInputDto"
+          "persona": {
+            "$ref": "#/components/schemas/TelegramChatPersonaInputDto"
           },
           "reply_max_chars": {
             "maximum": 2000,
             "minimum": 50,
             "type": "number"
+          },
+          "trigger_keywords": {
+            "description": "bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关)",
+            "items": {
+              "maxLength": 50,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "type": "array"
+          },
+          "user_cooldown_seconds": {
+            "maximum": 3600,
+            "minimum": 0,
+            "type": "number"
           }
         },
         "required": [
           "enabled",
+          "persona",
+          "trigger_keywords",
+          "context_window",
           "reply_max_chars",
-          "private",
-          "guest_mode"
+          "user_cooldown_seconds",
+          "daily_message_budget",
+          "daily_token_budget"
         ],
         "type": "object"
       },
-      "TelegramChatKind": {
-        "enum": [
-          "GROUP",
-          "PRIVATE",
-          "GUEST"
-        ],
-        "type": "string"
-      },
       "TelegramChatMessageDto": {
         "properties": {
-          "from_id": {
-            "type": "number"
-          },
-          "image": {
-            "type": "boolean"
-          },
-          "message_id": {
-            "type": "number"
-          },
           "name": {
-            "maxLength": 200,
+            "maxLength": 4000,
             "type": "string"
-          },
-          "reply_to": {
-            "$ref": "#/components/schemas/TelegramQuotedMessageDto"
           },
           "self": {
             "type": "boolean"
           },
           "text": {
-            "maxLength": 4096,
+            "maxLength": 4000,
             "type": "string"
           }
         },
         "required": [
-          "message_id",
-          "from_id",
           "name",
-          "self",
-          "text"
+          "text",
+          "self"
+        ],
+        "type": "object"
+      },
+      "TelegramChatPersonaInputDto": {
+        "properties": {
+          "guardrails": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "role_core": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "style_anchor": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "world_knowledge": {
+            "maxLength": 4000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "role_core",
+          "style_anchor",
+          "world_knowledge",
+          "guardrails"
+        ],
+        "type": "object"
+      },
+      "TelegramChatUsageDto": {
+        "properties": {
+          "date": {
+            "description": "统计日期 (UTC, YYYY-MM-DD)",
+            "type": "string"
+          },
+          "messages": {
+            "type": "number"
+          },
+          "tokens": {
+            "type": "number"
+          },
+          "tool_calls": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "messages",
+          "tokens",
+          "tool_calls"
         ],
         "type": "object"
       },
@@ -42298,308 +40650,6 @@
         ],
         "type": "object"
       },
-      "TelegramContextMessageDto": {
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "role": {
-            "enum": [
-              "user",
-              "assistant"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "role",
-          "content"
-        ],
-        "type": "object"
-      },
-      "TelegramConversationDetailDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "chat_kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramChatKind"
-              }
-            ]
-          },
-          "chat_title": {
-            "nullable": true,
-            "type": "string"
-          },
-          "cost_usd": {
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "last_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "last_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramTurnStatus"
-              }
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "telegram_name": {
-            "type": "string"
-          },
-          "telegram_user_id": {
-            "type": "number"
-          },
-          "tool_calls": {
-            "type": "number"
-          },
-          "turn_list": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTurnDto"
-            },
-            "type": "array"
-          },
-          "turns": {
-            "type": "number"
-          },
-          "user": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          }
-        },
-        "required": [
-          "id",
-          "chat_kind",
-          "chat_id",
-          "chat_title",
-          "telegram_user_id",
-          "telegram_name",
-          "user",
-          "started_at",
-          "last_at",
-          "turns",
-          "tool_calls",
-          "cost_usd",
-          "last_status",
-          "turn_list"
-        ],
-        "type": "object"
-      },
-      "TelegramConversationDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "chat_kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramChatKind"
-              }
-            ]
-          },
-          "chat_title": {
-            "nullable": true,
-            "type": "string"
-          },
-          "cost_usd": {
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "last_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "last_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramTurnStatus"
-              }
-            ]
-          },
-          "started_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "telegram_name": {
-            "type": "string"
-          },
-          "telegram_user_id": {
-            "type": "number"
-          },
-          "tool_calls": {
-            "type": "number"
-          },
-          "turns": {
-            "type": "number"
-          },
-          "user": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/UserRefDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          }
-        },
-        "required": [
-          "id",
-          "chat_kind",
-          "chat_id",
-          "chat_title",
-          "telegram_user_id",
-          "telegram_name",
-          "user",
-          "started_at",
-          "last_at",
-          "turns",
-          "tool_calls",
-          "cost_usd",
-          "last_status"
-        ],
-        "type": "object"
-      },
-      "TelegramDeletedDto": {
-        "properties": {
-          "deleted": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "deleted"
-        ],
-        "type": "object"
-      },
-      "TelegramGroupDto": {
-        "properties": {
-          "added_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "chat_enabled": {
-            "type": "boolean"
-          },
-          "chat_id": {
-            "type": "number"
-          },
-          "context_messages": {
-            "type": "number"
-          },
-          "daily_budget_usd": {
-            "nullable": true,
-            "type": "number"
-          },
-          "daily_reply_limit": {
-            "nullable": true,
-            "type": "number"
-          },
-          "images_enabled": {
-            "type": "boolean"
-          },
-          "join_gate": {
-            "type": "boolean"
-          },
-          "member_cooldown_seconds": {
-            "type": "number"
-          },
-          "member_daily_limit": {
-            "nullable": true,
-            "type": "number"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramGroupStatus"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "trigger_keywords": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "welcome_enabled": {
-            "type": "boolean"
-          },
-          "welcome_text": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "chat_id",
-          "title",
-          "status",
-          "join_gate",
-          "chat_enabled",
-          "trigger_keywords",
-          "context_messages",
-          "images_enabled",
-          "daily_budget_usd",
-          "daily_reply_limit",
-          "member_daily_limit",
-          "member_cooldown_seconds",
-          "welcome_enabled",
-          "welcome_text",
-          "added_at"
-        ],
-        "type": "object"
-      },
-      "TelegramGroupLeftDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "chat_id"
-        ],
-        "type": "object"
-      },
-      "TelegramGroupSeenDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "title": {
-            "maxLength": 255,
-            "type": "string"
-          }
-        },
-        "required": [
-          "chat_id",
-          "title"
-        ],
-        "type": "object"
-      },
-      "TelegramGroupStatus": {
-        "enum": [
-          "PENDING",
-          "ENABLED",
-          "LEFT"
-        ],
-        "type": "string"
-      },
       "TelegramIssueCodeDto": {
         "properties": {
           "telegram_id": {
@@ -42624,6 +40674,9 @@
       },
       "TelegramJoinGateInputDto": {
         "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
           "pending_ttl_hours": {
             "maximum": 720,
             "minimum": 1,
@@ -42640,6 +40693,7 @@
           }
         },
         "required": [
+          "enabled",
           "require_username",
           "require_avatar",
           "require_binding",
@@ -42647,24 +40701,8 @@
         ],
         "type": "object"
       },
-      "TelegramLeftDto": {
-        "properties": {
-          "left": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "left"
-        ],
-        "type": "object"
-      },
       "TelegramMessagesInputDto": {
         "properties": {
-          "ai_unavailable": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          },
           "already_linked": {
             "maxLength": 1000,
             "minLength": 1,
@@ -42676,11 +40714,6 @@
             "type": "string"
           },
           "bind_success_joined": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "budget_exhausted": {
             "maxLength": 1000,
             "minLength": 1,
             "type": "string"
@@ -42745,17 +40778,7 @@
             "minLength": 1,
             "type": "string"
           },
-          "guest_link_required": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          },
           "identifier_prompt": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "image_declined": {
             "maxLength": 1000,
             "minLength": 1,
             "type": "string"
@@ -42831,613 +40854,7 @@
           "checkin_not_linked",
           "checkin_unavailable",
           "pending_expired",
-          "dm_fallback",
-          "budget_exhausted",
-          "ai_unavailable",
-          "image_declined",
-          "guest_link_required"
-        ],
-        "type": "object"
-      },
-      "TelegramNotificationUpdateDto": {
-        "properties": {
-          "galgame_plans": {
-            "type": "boolean"
-          },
-          "interactions": {
-            "type": "boolean"
-          },
-          "system": {
-            "type": "boolean"
-          },
-          "updates": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "TelegramNotificationsInputDto": {
-        "properties": {
-          "galgame_plans": {
-            "type": "boolean"
-          },
-          "interactions": {
-            "type": "boolean"
-          },
-          "merge_minutes": {
-            "maximum": 120,
-            "minimum": 1,
-            "type": "number"
-          },
-          "merge_threshold": {
-            "maximum": 100,
-            "minimum": 1,
-            "type": "number"
-          },
-          "system": {
-            "type": "boolean"
-          },
-          "updates": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "updates",
-          "galgame_plans",
-          "interactions",
-          "system",
-          "merge_minutes",
-          "merge_threshold"
-        ],
-        "type": "object"
-      },
-      "TelegramNotifyCategory": {
-        "enum": [
-          "UPDATES",
-          "GALGAME_PLANS",
-          "INTERACTIONS",
-          "SYSTEM"
-        ],
-        "type": "string"
-      },
-      "TelegramNotifyCategoryStatsDto": {
-        "properties": {
-          "allowed": {
-            "type": "boolean"
-          },
-          "category": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramNotifyCategory"
-              }
-            ]
-          },
-          "failed_today": {
-            "type": "number"
-          },
-          "sent_today": {
-            "type": "number"
-          },
-          "subscribed": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "category",
-          "allowed",
-          "subscribed",
-          "sent_today",
-          "failed_today"
-        ],
-        "type": "object"
-      },
-      "TelegramNotifyStatsDto": {
-        "properties": {
-          "categories": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramNotifyCategoryStatsDto"
-            },
-            "type": "array"
-          },
-          "merge_minutes": {
-            "type": "number"
-          },
-          "merge_threshold": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "categories",
-          "merge_minutes",
-          "merge_threshold"
-        ],
-        "type": "object"
-      },
-      "TelegramOutboxClaimDto": {
-        "properties": {
-          "limit": {
-            "maximum": 50,
-            "minimum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "limit"
-        ],
-        "type": "object"
-      },
-      "TelegramOutboxResultDto": {
-        "properties": {
-          "blocked": {
-            "type": "boolean"
-          },
-          "error": {
-            "maxLength": 2000,
-            "type": "string"
-          },
-          "ok": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "ok"
-        ],
-        "type": "object"
-      },
-      "TelegramOverviewChannelDto": {
-        "properties": {
-          "daily_budget_usd": {
-            "nullable": true,
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramChatKind"
-              }
-            ]
-          },
-          "replies_today": {
-            "type": "number"
-          },
-          "spend_today": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "kind",
-          "enabled",
-          "daily_budget_usd",
-          "replies_today",
-          "spend_today"
-        ],
-        "type": "object"
-      },
-      "TelegramOverviewDto": {
-        "properties": {
-          "channels": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramOverviewChannelDto"
-            },
-            "type": "array"
-          },
-          "groups": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramOverviewGroupDto"
-            },
-            "type": "array"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TelegramBotStatusDto"
-          },
-          "today": {
-            "$ref": "#/components/schemas/TelegramUsageDto"
-          },
-          "trend": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTrendDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "status",
-          "today",
-          "trend",
-          "groups",
-          "channels"
-        ],
-        "type": "object"
-      },
-      "TelegramOverviewGroupDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "daily_budget_usd": {
-            "nullable": true,
-            "type": "number"
-          },
-          "replies_today": {
-            "type": "number"
-          },
-          "schedules": {
-            "type": "number"
-          },
-          "spend_today": {
-            "type": "number"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramGroupStatus"
-              }
-            ]
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "chat_id",
-          "title",
-          "status",
-          "replies_today",
-          "spend_today",
-          "daily_budget_usd",
-          "schedules"
-        ],
-        "type": "object"
-      },
-      "TelegramPersonaDto": {
-        "properties": {
-          "defaults": {
-            "$ref": "#/components/schemas/TelegramPersonaInputDto"
-          },
-          "persona": {
-            "$ref": "#/components/schemas/TelegramPersonaInputDto"
-          }
-        },
-        "required": [
-          "persona",
-          "defaults"
-        ],
-        "type": "object"
-      },
-      "TelegramPersonaInputDto": {
-        "properties": {
-          "guardrails": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "role_core": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "style_anchor": {
-            "maxLength": 4000,
-            "type": "string"
-          },
-          "world_knowledge": {
-            "maxLength": 4000,
-            "type": "string"
-          }
-        },
-        "required": [
-          "role_core",
-          "style_anchor",
-          "world_knowledge",
-          "guardrails"
-        ],
-        "type": "object"
-      },
-      "TelegramPersonaTestDto": {
-        "properties": {
-          "addressed": {
-            "description": "群聊试聊时消息是否 @ 或回复了书音；为 false 时按只提到触发词处理，默认 true",
-            "type": "boolean"
-          },
-          "chat_id": {
-            "description": "群聊试聊所在的群组；省略时使用通用群名",
-            "type": "number"
-          },
-          "messages": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTestMessageDto"
-            },
-            "maxItems": 30,
-            "minItems": 1,
-            "type": "array"
-          },
-          "persona": {
-            "$ref": "#/components/schemas/TelegramPersonaInputDto"
-          },
-          "user_id": {
-            "description": "以该站内账号的身份私聊；省略则在群聊中试聊",
-            "minimum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "persona",
-          "messages"
-        ],
-        "type": "object"
-      },
-      "TelegramPollDto": {
-        "properties": {
-          "correct": {
-            "type": "number"
-          },
-          "explanation": {
-            "type": "string"
-          },
-          "options": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "question": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "question",
-          "options",
-          "correct",
-          "explanation"
-        ],
-        "type": "object"
-      },
-      "TelegramPostDto": {
-        "properties": {
-          "buttons": {
-            "items": {
-              "items": {
-                "properties": {
-                  "data": {
-                    "type": "string"
-                  },
-                  "text": {
-                    "type": "string"
-                  },
-                  "url": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "text"
-                ],
-                "type": "object"
-              },
-              "type": "array"
-            },
-            "type": "array"
-          },
-          "empty": {
-            "description": "内容为空，到点时跳过定时发送",
-            "type": "boolean"
-          },
-          "parts": {
-            "description": "Telegram HTML",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "photo": {
-            "nullable": true,
-            "type": "string"
-          },
-          "poll": {
-            "$ref": "#/components/schemas/TelegramPollDto"
-          }
-        },
-        "required": [
-          "parts"
-        ],
-        "type": "object"
-      },
-      "TelegramPrivateChatInputDto": {
-        "properties": {
-          "context_messages": {
-            "maximum": 50,
-            "minimum": 1,
-            "type": "number"
-          },
-          "daily_budget_usd": {
-            "maximum": 1000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "images_enabled": {
-            "type": "boolean"
-          },
-          "member_cooldown_seconds": {
-            "maximum": 3600,
-            "minimum": 0,
-            "type": "number"
-          },
-          "member_daily_limit": {
-            "maximum": 10000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "enabled",
-          "context_messages",
-          "images_enabled",
-          "daily_budget_usd",
-          "member_daily_limit",
-          "member_cooldown_seconds"
-        ],
-        "type": "object"
-      },
-      "TelegramQueuedDto": {
-        "properties": {
-          "queued": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "queued"
-        ],
-        "type": "object"
-      },
-      "TelegramQuotedMessageDto": {
-        "properties": {
-          "from_id": {
-            "type": "number"
-          },
-          "image": {
-            "type": "boolean"
-          },
-          "name": {
-            "maxLength": 200,
-            "type": "string"
-          },
-          "self": {
-            "type": "boolean"
-          },
-          "text": {
-            "maxLength": 4096,
-            "type": "string"
-          }
-        },
-        "required": [
-          "from_id",
-          "name",
-          "self",
-          "text"
-        ],
-        "type": "object"
-      },
-      "TelegramScheduleDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "id": {
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramScheduleKind"
-              }
-            ]
-          },
-          "last_error": {
-            "nullable": true,
-            "type": "string"
-          },
-          "last_sent_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "time": {
-            "type": "string"
-          },
-          "weekdays": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "id",
-          "chat_id",
-          "kind",
-          "enabled",
-          "time",
-          "weekdays",
-          "last_sent_at",
-          "last_error"
-        ],
-        "type": "object"
-      },
-      "TelegramScheduleKind": {
-        "enum": [
-          "TODAY_UPDATES",
-          "WEEK_RELEASES",
-          "STEAM_SALES",
-          "DAILY_QUIZ"
-        ],
-        "type": "string"
-      },
-      "TelegramScheduleListItemDto": {
-        "properties": {
-          "chat_id": {
-            "type": "number"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "group_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramGroupStatus"
-              }
-            ]
-          },
-          "group_title": {
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "kind": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramScheduleKind"
-              }
-            ]
-          },
-          "last_error": {
-            "nullable": true,
-            "type": "string"
-          },
-          "last_sent_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "time": {
-            "type": "string"
-          },
-          "weekdays": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "id",
-          "chat_id",
-          "kind",
-          "enabled",
-          "time",
-          "weekdays",
-          "last_sent_at",
-          "last_error",
-          "group_title",
-          "group_status"
+          "dm_fallback"
         ],
         "type": "object"
       },
@@ -43458,6 +40875,10 @@
           "enabled": {
             "type": "boolean"
           },
+          "group_id": {
+            "nullable": true,
+            "type": "string"
+          },
           "join_gate": {
             "$ref": "#/components/schemas/TelegramJoinGateInputDto"
           },
@@ -43466,9 +40887,6 @@
           },
           "messages": {
             "$ref": "#/components/schemas/TelegramMessagesInputDto"
-          },
-          "notifications": {
-            "$ref": "#/components/schemas/TelegramNotificationsInputDto"
           },
           "settings_poll_seconds": {
             "type": "number"
@@ -43481,14 +40899,14 @@
           "enabled",
           "bot_token_set",
           "bot_token_hint",
+          "group_id",
           "settings_poll_seconds",
           "join_gate",
           "check_in_enabled",
           "verification",
           "messages",
           "message_defaults",
-          "chat",
-          "notifications"
+          "chat"
         ],
         "type": "object"
       },
@@ -43515,298 +40933,12 @@
               "idle"
             ],
             "type": "string"
-          },
-          "version": {
-            "maxLength": 32,
-            "type": "string"
           }
         },
         "required": [
           "state",
           "pending_joins",
           "started_at"
-        ],
-        "type": "object"
-      },
-      "TelegramTestMessageDto": {
-        "properties": {
-          "self": {
-            "type": "boolean"
-          },
-          "text": {
-            "maxLength": 2000,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "text",
-          "self"
-        ],
-        "type": "object"
-      },
-      "TelegramTestReplyDto": {
-        "properties": {
-          "cards": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramCardDto"
-            },
-            "type": "array"
-          },
-          "input_tokens": {
-            "type": "number"
-          },
-          "model": {
-            "nullable": true,
-            "type": "string"
-          },
-          "output_tokens": {
-            "type": "number"
-          },
-          "parts": {
-            "description": "Telegram HTML，按 4096 字符分段",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "reply": {
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramTurnStatus"
-              }
-            ]
-          },
-          "tool_calls": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTurnToolDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "status",
-          "reply",
-          "parts",
-          "cards",
-          "tool_calls",
-          "model",
-          "input_tokens",
-          "output_tokens"
-        ],
-        "type": "object"
-      },
-      "TelegramToolCountDto": {
-        "properties": {
-          "count": {
-            "type": "number"
-          },
-          "label": {
-            "type": "string"
-          },
-          "tool_key": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "tool_key",
-          "label",
-          "count"
-        ],
-        "type": "object"
-      },
-      "TelegramTrendDto": {
-        "properties": {
-          "date": {
-            "description": "北京时间日期 YYYY-MM-DD",
-            "type": "string"
-          },
-          "replies": {
-            "type": "number"
-          },
-          "spend_usd": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "date",
-          "replies",
-          "spend_usd"
-        ],
-        "type": "object"
-      },
-      "TelegramTurnCardDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "galgame",
-              "light_novel",
-              "manga"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "id",
-          "title",
-          "cover"
-        ],
-        "type": "object"
-      },
-      "TelegramTurnDto": {
-        "properties": {
-          "cards": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTurnCardDto"
-            },
-            "type": "array"
-          },
-          "context": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramContextMessageDto"
-            },
-            "nullable": true,
-            "type": "array"
-          },
-          "cost_usd": {
-            "type": "number"
-          },
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "duration_ms": {
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "images": {
-            "type": "number"
-          },
-          "images_declined": {
-            "type": "number"
-          },
-          "input_tokens": {
-            "type": "number"
-          },
-          "message": {
-            "nullable": true,
-            "type": "string"
-          },
-          "model": {
-            "nullable": true,
-            "type": "string"
-          },
-          "output_tokens": {
-            "type": "number"
-          },
-          "reply": {
-            "nullable": true,
-            "type": "string"
-          },
-          "request_id": {
-            "description": "AI 请求记录 ID",
-            "nullable": true,
-            "type": "string"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/TelegramTurnStatus"
-              }
-            ]
-          },
-          "tool_calls": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramTurnToolDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "id",
-          "created_at",
-          "status",
-          "message",
-          "context",
-          "reply",
-          "cards",
-          "images",
-          "images_declined",
-          "model",
-          "input_tokens",
-          "output_tokens",
-          "cost_usd",
-          "duration_ms",
-          "request_id",
-          "tool_calls"
-        ],
-        "type": "object"
-      },
-      "TelegramTurnStatus": {
-        "enum": [
-          "REPLIED",
-          "SKIPPED",
-          "FAILED",
-          "BUDGET",
-          "LIMITED",
-          "IMAGE_DECLINED",
-          "STOPPED"
-        ],
-        "type": "string"
-      },
-      "TelegramTurnToolDto": {
-        "properties": {
-          "duration_ms": {
-            "type": "number"
-          },
-          "input": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
-          },
-          "label": {
-            "type": "string"
-          },
-          "output": {
-            "additionalProperties": true,
-            "nullable": true,
-            "type": "object"
-          },
-          "status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AiToolCallStatus"
-              }
-            ]
-          },
-          "tool_key": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "tool_key",
-          "label",
-          "status",
-          "input",
-          "output",
-          "duration_ms"
         ],
         "type": "object"
       },
@@ -43818,36 +40950,6 @@
         },
         "required": [
           "unlinked"
-        ],
-        "type": "object"
-      },
-      "TelegramUsageDto": {
-        "properties": {
-          "failures": {
-            "type": "number"
-          },
-          "replies": {
-            "type": "number"
-          },
-          "spend_usd": {
-            "type": "number"
-          },
-          "tool_calls": {
-            "type": "number"
-          },
-          "tools": {
-            "items": {
-              "$ref": "#/components/schemas/TelegramToolCountDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "replies",
-          "tool_calls",
-          "tools",
-          "spend_usd",
-          "failures"
         ],
         "type": "object"
       },
@@ -44255,13 +41357,27 @@
         ],
         "type": "object"
       },
-      "TriggerDiscoveryRunDto": {
+      "TriggerCatalogSyncDto": {
         "properties": {
           "dry_run": {
-            "description": "试运行：只判定、不写入",
             "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CatalogSyncKind"
+              }
+            ]
+          },
+          "limit": {
+            "description": "本轮最多处理多少条，0 表示不限",
+            "minimum": 0,
+            "type": "number"
           }
         },
+        "required": [
+          "kind"
+        ],
         "type": "object"
       },
       "UgcBacklogDto": {
@@ -44830,6 +41946,67 @@
         ],
         "type": "object"
       },
+      "UpdateCatalogSettingsDto": {
+        "properties": {
+          "auto_publish": {
+            "description": "新建条目直接发布，否则留待复核",
+            "type": "boolean"
+          },
+          "batch_limit": {
+            "description": "单次最多创建多少条，0 表示不限",
+            "minimum": 0,
+            "type": "number"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "item_keep_days": {
+            "description": "同步明细保留天数",
+            "minimum": 0,
+            "type": "number"
+          },
+          "kinds": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            },
+            "type": "array"
+          },
+          "origin_unknown_listed": {
+            "description": "产地未知的漫画是否上架",
+            "type": "boolean"
+          },
+          "origins": {
+            "description": "收录的漫画产地",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "schedule": {
+            "description": "cron 表达式，保存后立即重排",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "since_months": {
+            "description": "只处理最近多少个月出版的条目",
+            "maximum": 600,
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled",
+          "schedule",
+          "kinds",
+          "since_months",
+          "batch_limit",
+          "auto_publish",
+          "item_keep_days",
+          "origins",
+          "origin_unknown_listed"
+        ],
+        "type": "object"
+      },
       "UpdateCheckInSettingsDto": {
         "properties": {
           "check_in_daily_point_max": {
@@ -45075,106 +42252,6 @@
               "client_secret_post"
             ],
             "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "UpdateDiscoveryLabelDto": {
-        "properties": {
-          "translated_webtoon": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "translated_webtoon"
-        ],
-        "type": "object"
-      },
-      "UpdateDiscoveryPolicyDto": {
-        "properties": {
-          "dlsite_work_types": {
-            "description": "收录的 DLsite 作品类型",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "type": "array"
-          },
-          "downstream_company": {
-            "type": "boolean"
-          },
-          "downstream_min_votes": {
-            "maximum": 100000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "downstream_store": {
-            "type": "boolean"
-          },
-          "follow_past_days": {
-            "description": "跟随改期的已过天数上限",
-            "maximum": 365,
-            "minimum": 0,
-            "type": "number"
-          },
-          "review_date_far": {
-            "type": "boolean"
-          },
-          "review_date_passed": {
-            "type": "boolean"
-          },
-          "review_person_newer": {
-            "type": "boolean"
-          },
-          "steam_languages": {
-            "description": "收录的 Steam 原始语言",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "UpdateDiscoverySourceDto": {
-        "properties": {
-          "anchor_enabled": {
-            "description": "按确定键锚定站内存量条目",
-            "type": "boolean"
-          },
-          "anchor_shadow": {
-            "description": "锚定只记录打算写入的内容",
-            "type": "boolean"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "look_back_days": {
-            "description": "首次运行的回溯天数",
-            "maximum": 3650,
-            "minimum": 0,
-            "type": "number"
-          },
-          "permission_note": {
-            "description": "许可的说明或凭据位置",
-            "maxLength": 500,
-            "nullable": true,
-            "type": "string"
-          },
-          "permitted": {
-            "description": "已取得来源方许可",
-            "type": "boolean"
-          },
-          "schedule": {
-            "description": "cron 表达式，含秒字段",
-            "maxLength": 100,
-            "minLength": 9,
-            "type": "string"
-          },
-          "shadow": {
-            "type": "boolean"
           }
         },
         "type": "object"
@@ -45520,27 +42597,6 @@
             "type": "number"
           }
         },
-        "type": "object"
-      },
-      "UpdateListingPolicyDto": {
-        "properties": {
-          "origins": {
-            "description": "上架的产地",
-            "items": {
-              "type": "string"
-            },
-            "maxItems": 20,
-            "type": "array"
-          },
-          "unknown_listed": {
-            "description": "产地未知的作品是否上架",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "origins",
-          "unknown_listed"
-        ],
         "type": "object"
       },
       "UpdateMangaChapterDto": {
@@ -47002,113 +44058,6 @@
         ],
         "type": "object"
       },
-      "UpdateTelegramGroupDto": {
-        "properties": {
-          "chat_enabled": {
-            "type": "boolean"
-          },
-          "context_messages": {
-            "maximum": 50,
-            "minimum": 1,
-            "type": "number"
-          },
-          "daily_budget_usd": {
-            "maximum": 1000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "daily_reply_limit": {
-            "maximum": 100000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "images_enabled": {
-            "type": "boolean"
-          },
-          "join_gate": {
-            "type": "boolean"
-          },
-          "member_cooldown_seconds": {
-            "maximum": 3600,
-            "minimum": 0,
-            "type": "number"
-          },
-          "member_daily_limit": {
-            "maximum": 10000,
-            "minimum": 0,
-            "nullable": true,
-            "type": "number"
-          },
-          "status": {
-            "enum": [
-              "PENDING",
-              "ENABLED"
-            ],
-            "type": "string"
-          },
-          "trigger_keywords": {
-            "items": {
-              "maxLength": 50,
-              "type": "string"
-            },
-            "maxItems": 50,
-            "type": "array"
-          },
-          "welcome_enabled": {
-            "type": "boolean"
-          },
-          "welcome_text": {
-            "maxLength": 2000,
-            "type": "string"
-          }
-        },
-        "required": [
-          "status",
-          "join_gate",
-          "chat_enabled",
-          "trigger_keywords",
-          "context_messages",
-          "images_enabled",
-          "daily_budget_usd",
-          "daily_reply_limit",
-          "member_daily_limit",
-          "member_cooldown_seconds",
-          "welcome_enabled",
-          "welcome_text"
-        ],
-        "type": "object"
-      },
-      "UpdateTelegramScheduleDto": {
-        "properties": {
-          "enabled": {
-            "type": "boolean"
-          },
-          "time": {
-            "description": "北京时间 HH:mm",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
-            "type": "string"
-          },
-          "weekdays": {
-            "description": "1 为星期一，7 为星期日；空数组表示每天",
-            "items": {
-              "maximum": 7,
-              "minimum": 1,
-              "type": "number"
-            },
-            "maxItems": 7,
-            "type": "array",
-            "uniqueItems": true
-          }
-        },
-        "required": [
-          "enabled",
-          "time",
-          "weekdays"
-        ],
-        "type": "object"
-      },
       "UpdateTelegramSettingsDto": {
         "properties": {
           "bot_token": {
@@ -47126,14 +44075,16 @@
           "enabled": {
             "type": "boolean"
           },
+          "group_id": {
+            "nullable": true,
+            "pattern": "^-?\\d{1,20}$",
+            "type": "string"
+          },
           "join_gate": {
             "$ref": "#/components/schemas/TelegramJoinGateInputDto"
           },
           "messages": {
             "$ref": "#/components/schemas/TelegramMessagesInputDto"
-          },
-          "notifications": {
-            "$ref": "#/components/schemas/TelegramNotificationsInputDto"
           },
           "settings_poll_seconds": {
             "maximum": 3600,
@@ -47146,13 +44097,13 @@
         },
         "required": [
           "enabled",
+          "group_id",
           "settings_poll_seconds",
           "join_gate",
           "check_in_enabled",
           "verification",
           "messages",
-          "chat",
-          "notifications"
+          "chat"
         ],
         "type": "object"
       },
@@ -50665,6 +47616,79 @@
         ]
       }
     },
+    "/api/v3/admin/catalog/items/{id}/candidates": {
+      "get": {
+        "operationId": "AdminCatalogController_candidates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DuplicateCandidateDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/items/{id}/link": {
+      "post": {
+        "operationId": "AdminCatalogController_link",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkCatalogItemDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogItemDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
     "/api/v3/admin/catalog/listing/manga/{id}": {
       "patch": {
         "operationId": "AdminCatalogController_setListing",
@@ -50729,56 +47753,6 @@
         ]
       }
     },
-    "/api/v3/admin/catalog/listing/policy": {
-      "get": {
-        "operationId": "AdminCatalogController_listingPolicy",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CatalogListingPolicyDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      },
-      "put": {
-        "operationId": "AdminCatalogController_updateListingPolicy",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateListingPolicyDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CatalogListingPolicyDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
     "/api/v3/admin/catalog/listing/recompute": {
       "post": {
         "operationId": "AdminCatalogController_recompute",
@@ -50810,53 +47784,16 @@
         ]
       }
     },
-    "/api/v3/admin/catalog/listing/runs": {
+    "/api/v3/admin/catalog/overview": {
       "get": {
-        "operationId": "AdminCatalogController_listingRuns",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "default": 1,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "required": true,
-            "schema": {
-              "default": 10,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
+        "operationId": "AdminCatalogController_overview",
+        "parameters": [],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "items": {
-                      "items": {
-                        "$ref": "#/components/schemas/ListingRunDto"
-                      },
-                      "type": "array"
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PageMetaDto"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "meta"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/CatalogOverviewDto"
                 }
               }
             },
@@ -50868,16 +47805,24 @@
         ]
       }
     },
-    "/api/v3/admin/catalog/listing/runs/{id}/items": {
+    "/api/v3/admin/catalog/review": {
       "get": {
-        "operationId": "AdminCatalogController_listingItems",
+        "operationId": "AdminCatalogController_pending",
         "parameters": [
           {
-            "in": "path",
-            "name": "id",
-            "required": true,
+            "in": "query",
+            "name": "decision",
+            "required": false,
             "schema": {
-              "type": "number"
+              "$ref": "#/components/schemas/CatalogSyncDecision"
+            }
+          },
+          {
+            "in": "query",
+            "name": "review",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncReview"
             }
           },
           {
@@ -50920,7 +47865,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/ListingItemDto"
+                        "$ref": "#/components/schemas/CatalogItemDto"
                       },
                       "type": "array"
                     },
@@ -50936,133 +47881,6 @@
                 }
               }
             },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/overview": {
-      "get": {
-        "operationId": "AdminCatalogController_overview",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryOverviewDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules": {
-      "get": {
-        "operationId": "AdminCatalogController_rules",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryRulesDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/labels": {
-      "post": {
-        "operationId": "AdminCatalogController_addLabel",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDiscoveryLabelDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryLabelDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/labels/preview": {
-      "post": {
-        "operationId": "AdminCatalogController_previewLabels",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PreviewDiscoveryLabelsDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryLabelPreviewDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/labels/{id}": {
-      "delete": {
-        "operationId": "AdminCatalogController_removeLabel",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
             "description": ""
           }
         },
@@ -51070,161 +47888,14 @@
           "admin/catalog"
         ]
       },
-      "patch": {
-        "operationId": "AdminCatalogController_updateLabel",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDiscoveryLabelDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryLabelDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/official-pages": {
-      "get": {
-        "operationId": "AdminCatalogController_officialPages",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/DiscoveryPageStatus"
-            }
-          },
-          {
-            "description": "按地址或游戏标题模糊匹配",
-            "in": "query",
-            "name": "keyword",
-            "required": false,
-            "schema": {
-              "maxLength": 100,
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "default": 1,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "required": true,
-            "schema": {
-              "default": 10,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "items": {
-                      "items": {
-                        "$ref": "#/components/schemas/DiscoveryOfficialPageDto"
-                      },
-                      "type": "array"
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PageMetaDto"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "meta"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/policy": {
-      "put": {
-        "operationId": "AdminCatalogController_updatePolicy",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDiscoveryPolicyDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryPolicyDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/rules/policy/preview": {
       "post": {
-        "operationId": "AdminCatalogController_previewPolicy",
+        "operationId": "AdminCatalogController_review",
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PreviewDiscoveryPolicyDto"
+                "$ref": "#/components/schemas/ReviewCatalogItemsDto"
               }
             }
           },
@@ -51235,7 +47906,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DiscoveryPolicyPreviewDto"
+                  "$ref": "#/components/schemas/CatalogReviewResultDto"
                 }
               }
             },
@@ -51253,10 +47924,18 @@
         "parameters": [
           {
             "in": "query",
-            "name": "source",
+            "name": "kind",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/DiscoverySourceKey"
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "operation",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncOperation"
             }
           },
           {
@@ -51264,7 +47943,7 @@
             "name": "status",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/DiscoveryRunStatus"
+              "$ref": "#/components/schemas/CatalogSyncStatus"
             }
           },
           {
@@ -51297,7 +47976,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/DiscoveryRunDto"
+                        "$ref": "#/components/schemas/CatalogRunItemDto"
                       },
                       "type": "array"
                     },
@@ -51310,6 +47989,35 @@
                     "meta"
                   ],
                   "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      },
+      "post": {
+        "operationId": "AdminCatalogController_trigger",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerCatalogSyncDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogTriggerResultDto"
                 }
               }
             },
@@ -51339,7 +48047,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DiscoveryRunDetailDto"
+                  "$ref": "#/components/schemas/CatalogRunDetailDto"
                 }
               }
             },
@@ -51365,18 +48073,18 @@
           },
           {
             "in": "query",
-            "name": "outcome",
+            "name": "decision",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/DiscoveryOutcome"
+              "$ref": "#/components/schemas/CatalogSyncDecision"
             }
           },
           {
             "in": "query",
-            "name": "section",
+            "name": "review",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/DiscoverySection"
+              "$ref": "#/components/schemas/CatalogSyncReview"
             }
           },
           {
@@ -51419,7 +48127,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/DiscoveryRunItemDto"
+                        "$ref": "#/components/schemas/CatalogItemDto"
                       },
                       "type": "array"
                     },
@@ -51443,125 +48151,94 @@
         ]
       }
     },
-    "/api/v3/admin/catalog/sources": {
+    "/api/v3/admin/catalog/settings": {
       "get": {
-        "operationId": "AdminCatalogController_sources",
+        "operationId": "AdminCatalogController_settings",
         "parameters": [],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/CatalogSyncSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      },
+      "put": {
+        "operationId": "AdminCatalogController_updateSettings",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCatalogSettingsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogSyncSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/catalog"
+        ]
+      }
+    },
+    "/api/v3/admin/catalog/trace/{externalId}": {
+      "get": {
+        "operationId": "AdminCatalogController_trace",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "externalId",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "operation",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/CatalogSyncOperation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/DiscoverySourceDto"
+                    "$ref": "#/components/schemas/CatalogTraceEntryDto"
                   },
                   "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/sources/{key}": {
-      "patch": {
-        "operationId": "AdminCatalogController_updateSource",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "key",
-            "required": true,
-            "schema": {
-              "enum": [
-                "PUBLISHER",
-                "BANGUMI",
-                "VNDB",
-                "JPRO",
-                "MOEPEDIA",
-                "STEAM",
-                "DLSITE",
-                "NDL",
-                "OPENBD",
-                "OFFICIAL_PAGE",
-                "BRAND_LIST"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateDiscoverySourceDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoverySourceDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/catalog"
-        ]
-      }
-    },
-    "/api/v3/admin/catalog/sources/{key}/runs": {
-      "post": {
-        "operationId": "AdminCatalogController_trigger",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "key",
-            "required": true,
-            "schema": {
-              "enum": [
-                "PUBLISHER",
-                "BANGUMI",
-                "VNDB",
-                "JPRO",
-                "MOEPEDIA",
-                "STEAM",
-                "DLSITE",
-                "NDL",
-                "OPENBD",
-                "OFFICIAL_PAGE",
-                "BRAND_LIST"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TriggerDiscoveryRunDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DiscoveryTriggerResultDto"
                 }
               }
             },
@@ -58648,545 +55325,6 @@
         ]
       }
     },
-    "/api/v3/admin/telegram/conversations": {
-      "get": {
-        "operationId": "AdminTelegramConversationsController_list",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "kind",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/TelegramChatKind"
-            }
-          },
-          {
-            "in": "query",
-            "name": "chat_id",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "description": "Telegram 名称、站内账号名或 Telegram ID",
-            "in": "query",
-            "name": "search",
-            "required": false,
-            "schema": {
-              "maxLength": 100,
-              "type": "string"
-            }
-          },
-          {
-            "description": "最近多少天，默认 7",
-            "in": "query",
-            "name": "days",
-            "required": false,
-            "schema": {
-              "maximum": 30,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "default": 1,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "required": true,
-            "schema": {
-              "default": 10,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "items": {
-                      "items": {
-                        "$ref": "#/components/schemas/TelegramConversationDto"
-                      },
-                      "type": "array"
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PageMetaDto"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "meta"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/conversations/{id}": {
-      "get": {
-        "operationId": "AdminTelegramConversationsController_detail",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramConversationDetailDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/groups": {
-      "get": {
-        "operationId": "AdminTelegramGroupsController_list",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/AdminTelegramGroupDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/groups/{chat_id}": {
-      "put": {
-        "operationId": "AdminTelegramGroupsController_update",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "chat_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTelegramGroupDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramGroupDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/groups/{chat_id}/leave": {
-      "post": {
-        "operationId": "AdminTelegramGroupsController_leave",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "chat_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramLeftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/notifications": {
-      "get": {
-        "operationId": "AdminTelegramSchedulesController_notifications",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramNotifyStatsDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/overview": {
-      "get": {
-        "operationId": "AdminTelegramSettingsController_overview",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramOverviewDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/persona": {
-      "get": {
-        "operationId": "AdminTelegramSettingsController_persona",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramPersonaDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      },
-      "put": {
-        "operationId": "AdminTelegramSettingsController_savePersona",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramPersonaInputDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramPersonaDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/persona/test": {
-      "post": {
-        "operationId": "AdminTelegramSettingsController_test",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramPersonaTestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramTestReplyDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/schedules": {
-      "get": {
-        "operationId": "AdminTelegramSchedulesController_list",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "chat_id",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/TelegramScheduleListItemDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      },
-      "post": {
-        "operationId": "AdminTelegramSchedulesController_create",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateTelegramScheduleDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramScheduleDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/schedules/preview": {
-      "get": {
-        "operationId": "AdminTelegramSchedulesController_preview",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "kind",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/TelegramScheduleKind"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/TelegramPostDto"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/schedules/{id}": {
-      "delete": {
-        "operationId": "AdminTelegramSchedulesController_remove",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramDeletedDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      },
-      "put": {
-        "operationId": "AdminTelegramSchedulesController_update",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTelegramScheduleDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramScheduleDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
-    "/api/v3/admin/telegram/schedules/{id}/send": {
-      "post": {
-        "operationId": "AdminTelegramSchedulesController_send",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramQueuedDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/telegram"
-        ]
-      }
-    },
     "/api/v3/admin/telegram/settings": {
       "get": {
         "operationId": "AdminTelegramSettingsController_get",
@@ -59226,6 +55364,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TelegramSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/telegram"
+        ]
+      }
+    },
+    "/api/v3/admin/telegram/status": {
+      "get": {
+        "operationId": "AdminTelegramSettingsController_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TelegramBotStatusDto"
                 }
               }
             },
@@ -65127,36 +61286,6 @@
         ]
       }
     },
-    "/api/v3/admin/wiki/galgames/merges/{id}/undo": {
-      "post": {
-        "operationId": "AdminMergeController_undoGalgameMerge",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MergeUndoResultDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/wiki"
-        ]
-      }
-    },
     "/api/v3/admin/wiki/galgames/{id}": {
       "delete": {
         "operationId": "AdminGalgameController_softDelete",
@@ -67670,23 +63799,11 @@
                 "image_moderation",
                 "epub_judge",
                 "telegram_chat",
-                "telegram_private",
                 "novel_volume_align",
                 "novel_content_gate",
                 "manga_credit_check",
                 "manga_chapter_plan",
-                "wiki_official",
-                "wiki_image_read",
-                "entry_check",
-                "book_identity",
-                "book_investigate",
-                "galgame_identity",
-                "galgame_investigate",
-                "galgame_duplicate",
-                "galgame_duplicate_investigate",
-                "wiki_credit_align",
-                "book_key_check",
-                "wiki_series_check"
+                "entry_check"
               ],
               "type": "string"
             }
@@ -68231,14 +64348,6 @@
             }
           },
           {
-            "in": "query",
-            "name": "by_bot",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
             "description": "同一次导入的 CR 批次 id,用于捆绑审核分组",
             "in": "query",
             "name": "batch_id",
@@ -68754,39 +64863,6 @@
         },
         "tags": [
           "ChangeRequest"
-        ]
-      }
-    },
-    "/api/v3/change-requests/{id}/sources": {
-      "get": {
-        "operationId": "ChangeRequestSourceController_sources",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ChangeRequestSourceDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "change-requests"
         ]
       }
     },
@@ -72974,76 +69050,6 @@
         ]
       }
     },
-    "/api/v3/galgames/steam/sales": {
-      "get": {
-        "operationId": "GalgameSteamPriceController_sales",
-        "parameters": [
-          {
-            "description": "最低折扣（百分比）",
-            "in": "query",
-            "name": "min_discount",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "default": 1,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "required": true,
-            "schema": {
-              "default": 10,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "items": {
-                      "items": {
-                        "$ref": "#/components/schemas/SteamSaleDto"
-                      },
-                      "type": "array"
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PageMetaDto"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "meta"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "galgames"
-        ]
-      }
-    },
     "/api/v3/galgames/{id}": {
       "get": {
         "operationId": "GalgameController_getById",
@@ -74016,39 +70022,6 @@
         },
         "tags": [
           "Galgame"
-        ]
-      }
-    },
-    "/api/v3/galgames/{id}/steam/prices": {
-      "get": {
-        "operationId": "GalgameSteamPriceController_prices",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/SteamPriceDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "galgames"
         ]
       }
     },
@@ -75030,19 +71003,20 @@
         ]
       }
     },
-    "/api/v3/internal/telegram/accounts/{telegram_id}/unlink": {
+    "/api/v3/internal/telegram/chat": {
       "post": {
-        "operationId": "TelegramInternalController_unlink",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "telegram_id",
-            "required": true,
-            "schema": {
-              "type": "number"
+        "operationId": "TelegramInternalController_reply",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelegramChatDto"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": ""
@@ -75050,94 +71024,6 @@
         },
         "tags": [
           "TelegramInternal"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/actions/{id}/confirm": {
-      "post": {
-        "operationId": "TelegramContentController_confirm",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramActionConfirmDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/chat": {
-      "post": {
-        "operationId": "TelegramChatController_reply",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramChatDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramChat"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/chat/stream": {
-      "post": {
-        "operationId": "TelegramChatController_stream",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramChatDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramChat"
         ]
       }
     },
@@ -75165,316 +71051,19 @@
         ]
       }
     },
-    "/api/v3/internal/telegram/groups/left": {
-      "post": {
-        "operationId": "TelegramInternalController_left",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramGroupLeftDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramInternal"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/groups/seen": {
-      "post": {
-        "operationId": "TelegramInternalController_seen",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramGroupSeenDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TelegramGroupDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramInternal"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/inline": {
-      "get": {
-        "operationId": "TelegramContentController_inline",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "q",
-            "required": false,
-            "schema": {
-              "maxLength": 200,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "type": "object"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/me/{telegram_id}": {
-      "get": {
-        "operationId": "TelegramContentController_me",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "telegram_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/notifications/{telegram_id}": {
-      "get": {
-        "operationId": "TelegramContentController_notifications",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "telegram_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      },
-      "put": {
-        "operationId": "TelegramContentController_updateNotifications",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "telegram_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramNotificationUpdateDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/outbox/claim": {
-      "post": {
-        "operationId": "TelegramContentController_claim",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramOutboxClaimDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/outbox/{id}/result": {
-      "post": {
-        "operationId": "TelegramContentController_result",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TelegramOutboxResultDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/releases": {
-      "get": {
-        "operationId": "TelegramContentController_releases",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "period",
-            "required": false,
-            "schema": {
-              "enum": [
-                "week",
-                "month",
-                "next_month",
-                "tba"
-              ],
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/sales": {
-      "get": {
-        "operationId": "TelegramContentController_sales",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/search": {
-      "get": {
-        "operationId": "TelegramContentController_search",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "q",
-            "required": false,
-            "schema": {
-              "maxLength": 200,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
-        ]
-      }
-    },
     "/api/v3/internal/telegram/settings": {
       "get": {
         "operationId": "TelegramInternalController_getSettings",
         "parameters": [],
         "responses": {
           "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
             "description": ""
           }
         },
@@ -75504,27 +71093,6 @@
         },
         "tags": [
           "TelegramInternal"
-        ]
-      }
-    },
-    "/api/v3/internal/telegram/today": {
-      "get": {
-        "operationId": "TelegramContentController_today",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "TelegramContent"
         ]
       }
     },
@@ -78374,46 +73942,6 @@
         ]
       }
     },
-    "/api/v3/manga-project-pages/{page_id}/notes": {
-      "post": {
-        "operationId": "MangaPageController_createNote",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "page_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateMangaPageNoteDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaNoteDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaPage"
-        ]
-      }
-    },
     "/api/v3/manga-project-pages/{page_id}/regions": {
       "get": {
         "operationId": "MangaPageController_getRegions",
@@ -78752,97 +74280,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MangaProjectDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
-        ]
-      }
-    },
-    "/api/v3/manga-projects/{project_id}/baseline-pages": {
-      "get": {
-        "operationId": "MangaProjectController_getBaselinePages",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/MangaBaselinePageDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
-        ]
-      }
-    },
-    "/api/v3/manga-projects/{project_id}/check": {
-      "get": {
-        "operationId": "MangaProjectController_getCheck",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaProjectCheckDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
-        ]
-      },
-      "post": {
-        "operationId": "MangaProjectController_rerunCheck",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaProjectCheckDto"
                 }
               }
             },
@@ -79203,46 +74640,6 @@
         },
         "tags": [
           "MangaProjectPage"
-        ]
-      }
-    },
-    "/api/v3/manga-projects/{project_id}/placement": {
-      "put": {
-        "operationId": "MangaProjectController_correct",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MangaProjectInfoDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaProjectDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
         ]
       }
     },
@@ -89279,51 +84676,6 @@
         },
         "tags": [
           "Tag"
-        ]
-      }
-    },
-    "/api/v3/telegram/covers/{type}/{id}": {
-      "get": {
-        "operationId": "TelegramCoverController_get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "enum": [
-                "galgame",
-                "light_novel",
-                "manga"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "image/jpeg": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "telegram"
         ]
       }
     },

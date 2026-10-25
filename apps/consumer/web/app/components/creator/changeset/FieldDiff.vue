@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Card, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { isEmpty, isMedia } from './field-diff/helpers'
-  import { ROW_DIFF } from '~/features/creator/changeset/row-diff'
 
   const props = defineProps<{
     op: Record<string, unknown>
@@ -16,7 +15,6 @@
   }
 
   const kind = computed(() => String(props.op.kind))
-  const rowSpec = computed(() => ROW_DIFF[String(props.op.field)])
 
   const mode = computed(() => {
     if (kind.value === 'relation_add') return 'relation-add'
@@ -28,7 +26,7 @@
       if (props.op.field === 'labels') return 'labels'
       if (props.op.field === 'external_links') return 'external-links'
       if (props.op.field === 'steam_apps') return 'steam-apps'
-      return 'rows'
+      return 'prices'
     }
     const from = props.op.from
     const to = props.op.to
@@ -59,12 +57,7 @@
       <CreatorChangesetFieldDiffBlock v-else-if="mode === 'removed'" :op="op" variant="removed" />
       <CreatorChangesetFieldDiffInline v-else-if="mode === 'inline'" :op="op" />
       <CreatorChangesetFieldDiffRef v-else-if="mode === 'ref'" :op="op" />
-      <CreatorChangesetFieldDiffRows
-        v-else-if="mode === 'rows' && rowSpec"
-        :op="op"
-        :spec="rowSpec"
-      />
-      <CreatorChangesetFieldDiffArray v-else-if="mode === 'rows'" :op="op" />
+      <CreatorChangesetFieldDiffPrices v-else-if="mode === 'prices'" :op="op" />
       <CreatorChangesetFieldDiffLabels v-else-if="mode === 'labels'" :op="op" />
       <CreatorChangesetFieldDiffExternalLinks v-else-if="mode === 'external-links'" :op="op" />
       <CreatorChangesetFieldDiffSteamApps v-else-if="mode === 'steam-apps'" :op="op" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Select, Stack, Text, Textarea } from '@hina-ui/vue'
+  import { Button, Inline, Stack, Text, Textarea } from '@hina-ui/vue'
   import { Check, MessageSquare, X } from '@lucide/vue'
   import type { CheckEntityChoice, CheckOverride } from '~/features/creator/check'
 
@@ -9,14 +9,11 @@
     batchPendingCount?: number
     overrides?: CheckOverride[]
     entityChoices?: CheckEntityChoice[]
-    discovered?: boolean
   }>()
   const emit = defineEmits<{ reviewed: [] }>()
 
   const { confirm } = useHikariConfirm()
   const body = ref('')
-  const reason = ref<string | null>(null)
-  const reasons = [{ value: 'not_for_site', label: '不收录' }]
   const submitting = ref(false)
   const chosen = computed(() => (props.overrides?.length ?? 0) + (props.entityChoices?.length ?? 0))
   const choices = computed(() =>
@@ -26,7 +23,6 @@
   async function submitReview(decision: 'APPROVE' | 'REJECT' | 'COMMENT') {
     if (submitting.value) return
     submitting.value = true
-    const notForSite = decision === 'REJECT' && reason.value === 'not_for_site'
     try {
       if (decision !== 'COMMENT' && props.batchId) {
         await hikariRequest('/api/v3/change-requests/batches/{batch_id}/reviews', {
@@ -36,7 +32,6 @@
             decision,
             body: body.value.trim() || undefined,
             ...(decision === 'APPROVE' ? choices.value : {}),
-            ...(notForSite ? { not_for_site: true } : {}),
           },
         })
       } else {
@@ -47,12 +42,10 @@
             decision,
             body: body.value.trim() || undefined,
             ...(decision === 'APPROVE' ? choices.value : {}),
-            ...(notForSite ? { not_for_site: true } : {}),
           },
         })
       }
       body.value = ''
-      reason.value = null
       emit('reviewed')
     } catch (error) {
       emit('reviewed')
@@ -96,15 +89,6 @@
       class="w-full"
     />
     <Inline gap="sm" justify="end" align="center">
-      <Select
-        v-if="discovered"
-        v-model="reason"
-        :options="reasons"
-        placeholder="原因"
-        aria-label="原因"
-        clearable
-        class="w-48"
-      />
       <Text v-if="chosen > 0" as="span" size="sm" tone="muted" class="mr-auto">
         将采用核对结果中的 {{ chosen }} 个值。
       </Text>
@@ -125,8 +109,5 @@
         {{ chosen > 0 ? '按所选通过' : '通过并合并' }}
       </Button>
     </Inline>
-    <Text v-if="reason === 'not_for_site'" size="sm" tone="muted" class="text-right">
-      以「不收录」驳回后，书音不会再提议此来源记录。
-    </Text>
   </Stack>
 </template>

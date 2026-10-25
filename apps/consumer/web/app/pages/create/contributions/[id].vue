@@ -25,7 +25,6 @@
     v-if="data"
     :change-request="data.change_request"
     :batch-members="data.batch_members"
-    :sources="data.sources"
     @reviewed="refresh"
     @closed="refresh"
   />

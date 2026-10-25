@@ -4,18 +4,12 @@ export const lightNovelVolumePresentation: EditorPresentation = {
   fields: {
     series_id: { label: '所属系列' },
     name: { label: '名称' },
-    name_reading: { label: '标题读音' },
     name_cn: { label: '中文名' },
     volume_type: { label: '卷类型' },
     volume_number: { label: '卷号' },
     volume_label: { label: '卷标' },
     cover_id: { label: '封面' },
     isbn: { label: 'ISBN' },
-    label_id: { label: '文库' },
-    format: { label: '开本' },
-    release_status: { label: '发售状态' },
-    credits: { label: '创作者' },
-    variants: { label: '特装版与限定版', control: 'variants' },
     price_amount: { label: '价格' },
     price_currency: {
       label: '货币',

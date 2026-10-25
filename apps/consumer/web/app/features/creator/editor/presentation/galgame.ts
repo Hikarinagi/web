@@ -6,7 +6,6 @@ export const galgamePresentation: EditorPresentation = {
   fields: {
     trans_title: { label: '译名' },
     origin_title: { label: '原名' },
-    title_reading: { label: '标题读音' },
     en_title: { label: '英文标题' },
     aliases: { label: '别名' },
     release_date: {
@@ -25,11 +24,10 @@ export const galgamePresentation: EditorPresentation = {
     adv_type: { label: 'ADV 类型' },
     platforms: { label: '平台', control: 'multiselect', options: PLATFORM_OPTIONS },
     homepage: { label: '官方网站' },
-    editions: { label: '版本', control: 'editions' },
+    prices: { label: '价格' },
     external_links: { label: '外部链接', control: 'external-links' },
     steam_apps: { label: 'Steam App ID', control: 'steam-apps' },
     nsfw: { label: 'NSFW' },
-    age_rating: { label: '年龄分级' },
     engine: { label: '引擎' },
     origin_lang: { label: '原始语言', control: 'select', options: LANGUAGE_OPTIONS },
     dev_status: { label: '开发状态' },
@@ -42,7 +40,5 @@ export const galgamePresentation: EditorPresentation = {
     covers: { label: '封面' },
     images: { label: '截图 / CG' },
     source_relations: { label: '相关作品' },
-    light_novel_relations: { label: '相关轻小说' },
-    manga_relations: { label: '相关漫画' },
   },
 }

@@ -3,7 +3,6 @@ import type { EditorPresentation } from './types'
 export const characterPresentation: EditorPresentation = {
   fields: {
     name: { label: '姓名' },
-    name_reading: { label: '名称读音' },
     trans_name: { label: '译名' },
     en_name: { label: '英文名 / 罗马字' },
     aliases: { label: '别名' },

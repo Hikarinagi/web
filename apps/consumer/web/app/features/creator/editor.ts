@@ -5,6 +5,5 @@ export type BackendEditorField = BackendEditorSchema['fields'][number]
 export type BackendEntitySummary = ApiData<'/api/v3/tags', 'get'>['items'][number]
 
 export type BackendEditorRef = components['schemas']['EntityRefSummaryDto'] | null
-export type BackendGalgameEditionRow = components['schemas']['GalgameEditionRowDto']
-export type BackendBookVariantRow = components['schemas']['BookVariantRowDto']
+export type BackendGalgamePriceRow = components['schemas']['GalgamePriceRowDto']
 export type BackendGalgameExternalLinkRow = components['schemas']['GalgameExternalLinkDto']

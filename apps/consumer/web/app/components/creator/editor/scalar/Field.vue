@@ -162,15 +162,8 @@
       :disabled="disabled"
     />
 
-    <CreatorEditorScalarEditionsField
-      v-else-if="presentation?.control === 'editions'"
-      v-model="asObjectArray"
-      :field="field"
-      :disabled="disabled"
-    />
-
-    <CreatorEditorScalarVariantsField
-      v-else-if="presentation?.control === 'variants'"
+    <CreatorEditorScalarPricesField
+      v-else-if="field.value_type === 'object[]'"
       v-model="asObjectArray"
       :field="field"
       :disabled="disabled"

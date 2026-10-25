@@ -3,21 +3,20 @@ import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 import { groupByBatch } from '../../../utils/review-queue'
 
-const VIEWS = ['disputed', 'running', 'bot'] as const
+const CHECK_FILTERS = ['disputed', 'running'] as const
 
 async function handler(event: H3Event) {
   const rawQuery = getQuery(event)
-  const view = VIEWS.find(value => value === rawQuery.view)
-  const total = (query: { status?: 'PENDING'; check?: 'disputed' | 'running'; by_bot?: boolean }) =>
+  const check = CHECK_FILTERS.find(value => value === rawQuery.check)
+  const total = (query: { status?: 'PENDING'; check?: (typeof CHECK_FILTERS)[number] }) =>
     fetchBackendData(event, '/api/v3/change-requests', {
       query: { ...query, page: 1, page_size: 1 },
     }).then(result => result.meta.total_items)
-  const [pending, all, disputed, running, bot] = await Promise.all([
+  const [pending, all, disputed, running] = await Promise.all([
     fetchBackendData(event, '/api/v3/change-requests', {
       query: {
-        ...(view === 'disputed' ? {} : { status: 'PENDING' as const }),
-        ...(view === 'disputed' || view === 'running' ? { check: view } : {}),
-        ...(view === 'bot' ? { by_bot: true } : {}),
+        ...(check === 'disputed' ? {} : { status: 'PENDING' as const }),
+        ...(check ? { check } : {}),
         page: Number(rawQuery.page) || 1,
         page_size: Number(rawQuery.page_size) || 20,
       },
@@ -25,12 +24,11 @@ async function handler(event: H3Event) {
     total({ status: 'PENDING' }),
     total({ check: 'disputed' }),
     total({ status: 'PENDING', check: 'running' }),
-    total({ status: 'PENDING', by_bot: true }),
   ])
 
   return {
     pending: { meta: pending.meta, items: groupByBatch(pending.items) },
-    counts: { all, disputed, running, bot },
+    counts: { all, disputed, running },
   }
 }
 

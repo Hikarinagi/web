@@ -773,6 +773,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/catalog/items/{id}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_candidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/items/{id}/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminCatalogController_link"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/catalog/listing/manga/{id}": {
         parameters: {
             query?: never;
@@ -805,22 +837,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/listing/policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingPolicy"];
-        put: operations["AdminCatalogController_updateListingPolicy"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/catalog/listing/recompute": {
         parameters: {
             query?: never;
@@ -831,38 +847,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminCatalogController_recompute"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/listing/runs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingRuns"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/listing/runs/{id}/items": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingItems"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -885,112 +869,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/rules": {
+    "/api/v3/admin/catalog/review": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCatalogController_rules"];
+        get: operations["AdminCatalogController_pending"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_addLabel"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_previewLabels"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminCatalogController_removeLabel"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminCatalogController_updateLabel"];
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/official-pages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_officialPages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminCatalogController_updatePolicy"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/policy/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_previewPolicy"];
+        post: operations["AdminCatalogController_review"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1006,7 +894,7 @@ export interface paths {
         };
         get: operations["AdminCatalogController_listRuns"];
         put?: never;
-        post?: never;
+        post: operations["AdminCatalogController_trigger"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1045,15 +933,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/sources": {
+    "/api/v3/admin/catalog/settings": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCatalogController_sources"];
-        put?: never;
+        get: operations["AdminCatalogController_settings"];
+        put: operations["AdminCatalogController_updateSettings"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1061,32 +949,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/sources/{key}": {
+    "/api/v3/admin/catalog/trace/{externalId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["AdminCatalogController_trace"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminCatalogController_updateSource"];
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/sources/{key}/runs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_trigger"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3381,214 +3253,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/telegram/conversations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramConversationsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/conversations/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramConversationsController_detail"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramGroupsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups/{chat_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminTelegramGroupsController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups/{chat_id}/leave": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramGroupsController_leave"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/notifications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_notifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSettingsController_overview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/persona": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSettingsController_persona"];
-        put: operations["AdminTelegramSettingsController_savePersona"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/persona/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramSettingsController_test"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_list"];
-        put?: never;
-        post: operations["AdminTelegramSchedulesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_preview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminTelegramSchedulesController_update"];
-        post?: never;
-        delete: operations["AdminTelegramSchedulesController_remove"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/{id}/send": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramSchedulesController_send"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/telegram/settings": {
         parameters: {
             query?: never;
@@ -3598,6 +3262,22 @@ export interface paths {
         };
         get: operations["AdminTelegramSettingsController_get"];
         put: operations["AdminTelegramSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSettingsController_getStatus"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -5909,22 +5589,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/galgames/merges/{id}/undo": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminMergeController_undoGalgameMerge"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/wiki/galgames/{id}": {
         parameters: {
             query?: never;
@@ -7221,22 +6885,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/change-requests/{id}/sources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ChangeRequestSourceController_sources"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/characters": {
         parameters: {
             query?: never;
@@ -8405,22 +8053,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/steam/sales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameSteamPriceController_sales"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}": {
         parameters: {
             query?: never;
@@ -8741,22 +8373,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/steam/prices": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameSteamPriceController_prices"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}/tags": {
         parameters: {
             query?: never;
@@ -9061,38 +8677,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/internal/telegram/accounts/{telegram_id}/unlink": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_unlink"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/actions/{id}/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_confirm"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/internal/telegram/chat": {
         parameters: {
             query?: never;
@@ -9102,23 +8686,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["TelegramChatController_reply"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/chat/stream": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramChatController_stream"];
+        post: operations["TelegramInternalController_reply"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9135,166 +8703,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_checkIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/groups/left": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_left"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/groups/seen": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_seen"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/inline": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_inline"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/me/{telegram_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_me"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/notifications/{telegram_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_notifications"];
-        put: operations["TelegramContentController_updateNotifications"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/outbox/claim": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_claim"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/outbox/{id}/result": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_result"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/releases": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_releases"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/sales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_sales"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_search"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -9327,22 +8735,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_reportStatus"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/today": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_today"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -10325,22 +9717,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-project-pages/{page_id}/notes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["MangaPageController_createNote"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-project-pages/{page_id}/regions": {
         parameters: {
             query?: never;
@@ -10421,38 +9797,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-projects/{project_id}/baseline-pages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaProjectController_getBaselinePages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/manga-projects/{project_id}/check": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaProjectController_getCheck"];
-        put?: never;
-        post: operations["MangaProjectController_rerunCheck"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-projects/{project_id}/labelplus": {
         parameters: {
             query?: never;
@@ -10526,22 +9870,6 @@ export interface paths {
         };
         get?: never;
         put: operations["MangaProjectPageController_reorder"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/manga-projects/{project_id}/placement": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["MangaProjectController_correct"];
         post?: never;
         delete?: never;
         options?: never;
@@ -13809,22 +13137,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/telegram/covers/{type}/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramCoverController_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/topics": {
         parameters: {
             query?: never;
@@ -15432,7 +14744,7 @@ export interface components {
             /** @description 提供给模型的描述 */
             description: string;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             /** @description 由模型填写的参数 */
             input: {
                 [key: string]: unknown;
@@ -15454,7 +14766,7 @@ export interface components {
         };
         AdminAiToolDto: {
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             scenes: components["schemas"]["AiToolSceneDto"][];
@@ -16458,26 +15770,6 @@ export interface components {
             status: "ACTIVE" | "NEXT" | "RETIRED";
             use: string;
         };
-        AdminTelegramGroupDto: {
-            /** Format: date-time */
-            added_at: string;
-            chat_enabled: boolean;
-            chat_id: number;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            replies_today: number;
-            spend_today: number;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
         AdminUploadResultDto: {
             /** @description 对应 MediaAsset id；持久化为媒体 FK 时使用（不入个人媒体库） */
             id: number;
@@ -16966,10 +16258,6 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
-            /** @description Telegram 会话 ID */
-            telegram_chat_id: number | null;
-            /** @description Telegram 用户 ID */
-            telegram_user_id: number | null;
             tool_calls: components["schemas"]["AiToolCallDto"][];
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
@@ -16997,10 +16285,6 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
-            /** @description Telegram 会话 ID */
-            telegram_chat_id: number | null;
-            /** @description Telegram 用户 ID */
-            telegram_user_id: number | null;
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
         };
@@ -17140,7 +16424,7 @@ export interface components {
             available: boolean;
             enabled: boolean;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             required: boolean;
@@ -17609,16 +16893,6 @@ export interface components {
              */
             token_expires_at: string | null;
         };
-        BookVariantRowDto: {
-            isbn?: string | null;
-            /** @enum {string} */
-            kind?: "SPECIAL" | "LIMITED" | "BUNDLE" | "DIGITAL" | "OTHER";
-            price_amount?: number | null;
-            price_currency?: string | null;
-            /** @description YYYY-MM-DD */
-            publication_date?: string | null;
-            title: string;
-        };
         BulkAdjustPointDto: {
             /** @enum {string} */
             action: "ADD" | "SUBTRACT";
@@ -17646,6 +16920,26 @@ export interface components {
          * @enum {string}
          */
         CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
+        CatalogItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
+            /** Format: date-time */
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_id: number;
+            title: string;
+        };
         CatalogListingPolicyDto: {
             origins: string[];
             unknown_listed: boolean;
@@ -17663,6 +16957,27 @@ export interface components {
             /** @description 未删除的条目数 */
             total: number;
         };
+        CatalogOverviewDto: {
+            light_novel: components["schemas"]["CatalogOverviewNovelDto"];
+            manga: components["schemas"]["CatalogOverviewMangaDto"];
+            pending_review: number;
+            recent_runs: components["schemas"]["CatalogRunItemDto"][];
+        };
+        CatalogOverviewMangaDto: {
+            hidden: number;
+            listed: number;
+            origin_unknown: number;
+            override_hidden: number;
+            override_shown: number;
+            /** @description 已发布、已上架且有章节的作品数 */
+            readable: number;
+            total: number;
+        };
+        CatalogOverviewNovelDto: {
+            pending: number;
+            total: number;
+            volumes: number;
+        };
         CatalogRecomputeResultDto: {
             changed: number;
             dry_run: boolean;
@@ -17672,6 +16987,61 @@ export interface components {
             to_hidden: number;
             to_listed: number;
         };
+        CatalogReviewResultDto: {
+            /** @description 因通过复核而发布的条目数 */
+            published: number;
+            updated: number;
+        };
+        CatalogRunDecisionCountDto: {
+            count: number;
+            decision: components["schemas"]["CatalogSyncDecision"];
+        };
+        CatalogRunDetailDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            config: {
+                [key: string]: unknown;
+            } | null;
+            created: number;
+            decisions: components["schemas"]["CatalogRunDecisionCountDto"][];
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
+        CatalogRunItemDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            created: number;
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
         CatalogScalarDto: {
             field: string;
             label: string;
@@ -17679,9 +17049,54 @@ export interface components {
         /** @enum {string} */
         CatalogSyncDecision: "CREATED" | "VOLUMES_ADDED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED" | "SERIES_LINKED" | "HELD_DUPLICATE";
         /** @enum {string} */
+        CatalogSyncKind: "MANGA" | "LIGHT_NOVEL";
+        /** @enum {string} */
+        CatalogSyncOperation: "IMPORT" | "LISTING";
+        /** @enum {string} */
+        CatalogSyncReview: "PENDING" | "APPROVED" | "REJECTED";
+        CatalogSyncSettingsDto: {
+            auto_publish: boolean;
+            batch_limit: number;
+            enabled: boolean;
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            listing: components["schemas"]["CatalogListingPolicyDto"];
+            ln_label_count: number;
+            ln_label_min: number;
+            schedule: string;
+            since_months: number;
+        };
+        /** @enum {string} */
         CatalogSyncStatus: "RUNNING" | "SUCCEEDED" | "FAILED";
         /** @enum {string} */
         CatalogSyncTrigger: "CRON" | "MANUAL";
+        CatalogTraceEntryDto: {
+            /** Format: date-time */
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
+            /** Format: date-time */
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_dump_version: string | null;
+            run_id: number;
+            /** Format: date-time */
+            run_started_at: string;
+            title: string;
+        };
+        CatalogTriggerResultDto: {
+            run_id: number;
+            started: boolean;
+        };
         ChangeRequestBatchItemDto: {
             change_request_id?: number;
             changeset: {
@@ -17739,8 +17154,6 @@ export interface components {
             duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
             duplicates: components["schemas"]["DuplicateCandidateDto"][];
             events: components["schemas"]["ChangeRequestEventItemDto"][];
-            /** @description 书音提交时，作品送审的原因 */
-            held_reasons?: components["schemas"]["DiscoveryReasonDto"][];
             id: number;
             /** Format: date-time */
             merged_at: string | null;
@@ -17788,31 +17201,6 @@ export interface components {
             id: number;
             version: number;
         };
-        ChangeRequestSourceDto: {
-            excluded: boolean;
-            outcome: components["schemas"]["DiscoveryOutcome"] | null;
-            reasons: components["schemas"]["DiscoveryReasonDto"][];
-            records: components["schemas"]["ChangeRequestSourceRecordDto"][];
-            section: components["schemas"]["DiscoverySection"];
-            work_id: number;
-        };
-        ChangeRequestSourceFieldDto: {
-            /** @enum {string} */
-            field: "title" | "volume" | "label" | "author" | "staff" | "publisher" | "brand" | "date" | "isbn" | "jan" | "ndc" | "platforms" | "price" | "cover" | "homepage";
-            value: string;
-        };
-        ChangeRequestSourceRecordDto: {
-            /** @description 该记录提供的字段及其值 */
-            fields: components["schemas"]["ChangeRequestSourceFieldDto"][];
-            first_hand: boolean;
-            /** Format: date-time */
-            first_seen_at: string;
-            /** Format: date-time */
-            last_seen_at: string;
-            source: components["schemas"]["DiscoverySourceKey"];
-            title: string;
-            url: string | null;
-        };
         ChangeRequestSummaryDto: {
             author: components["schemas"]["UserRefDto"];
             base_revision_id: number | null;
@@ -17823,8 +17211,6 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
-            /** @description 书音提交时，作品送审的原因 */
-            held_reasons?: components["schemas"]["DiscoveryReasonDto"][];
             id: number;
             /** Format: date-time */
             merged_at: string | null;
@@ -17913,8 +17299,6 @@ export interface components {
             query?: string;
         };
         CheckEntityDto: {
-            /** @description 变更请求已合并时：条目当前已指向建议的既有记录 */
-            applied?: boolean;
             change_request_id: number;
             evidence?: components["schemas"]["CheckEvidenceDto"][];
             existing_id: number | null;
@@ -17958,8 +17342,6 @@ export interface components {
             work?: string;
         };
         CheckFieldDto: {
-            /** @description 变更请求已合并时：条目当前已是核实的值 */
-            applied?: boolean;
             display: string;
             /**
              * @description 条目编辑器中的字段名
@@ -18461,12 +17843,6 @@ export interface components {
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
-        CreateDiscoveryLabelDto: {
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            name: string;
-            /** @description 出版条漫译本的文库 */
-            translated_webtoon?: boolean;
-        };
         CreateDownloadTaskDto: {
             /**
              * @description 轻小说只能是 EPUB
@@ -18513,11 +17889,6 @@ export interface components {
         };
         CreateMangaNoteDto: {
             content: string;
-        };
-        CreateMangaPageNoteDto: {
-            content: string;
-            /** @description 圈出的区域，按页面宽高归一化；省略时批注整页 */
-            rect?: components["schemas"]["MangaNoteRectInputDto"];
         };
         CreateMangaPageTasksDto: {
             /** @description 仅对 DETECT 生效：完成后自动继续机翻与擦除原文 */
@@ -18748,15 +18119,6 @@ export interface components {
              */
             alg: "RS256";
         };
-        CreateTelegramScheduleDto: {
-            chat_id: number;
-            enabled: boolean;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            /** @description 北京时间 HH:mm */
-            time: string;
-            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
-            weekdays: number[];
-        };
         CreateTopicDto: {
             name: string;
         };
@@ -18932,241 +18294,6 @@ export interface components {
             snapshot: {
                 [key: string]: unknown;
             };
-        };
-        DiscoveryCountersDto: {
-            date_changes: number;
-            doubtful: number;
-            failed: number;
-            new: number;
-            new_volumes: number;
-            on_site: number;
-            out_of_scope: number;
-            read: number;
-            /** @description 当天变更记录过多而跳过的日期 */
-            skipped_days: string[];
-            waiting: number;
-        };
-        DiscoveryDateChangeDto: {
-            from: string | null;
-            partial: string | null;
-            to: string | null;
-        };
-        DiscoveryEditionDto: {
-            date: string | null;
-            /** @enum {string} */
-            edition: "package" | "download" | "limited" | "trial" | "other";
-            partial: string | null;
-            /** @description 页面原文 */
-            quote: string;
-        };
-        DiscoveryLabelCountDto: {
-            count: number;
-            name: string;
-        };
-        DiscoveryLabelDto: {
-            /** Format: date-time */
-            created_at: string;
-            id: number;
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            name: string;
-            translated_webtoon: boolean;
-        };
-        /** @enum {string} */
-        DiscoveryLabelKind: "LIGHT_NOVEL" | "COMICS";
-        DiscoveryLabelPreviewDto: {
-            /** @description 按改动后的名单，上一次 JPRO 运行会多收的记录数 */
-            admitted: number;
-            /** @description 按改动后的名单，上一次 JPRO 运行会少收的作品数 */
-            dropped: number;
-            run_id: number | null;
-        };
-        DiscoveryOfficialPageDto: {
-            editions: components["schemas"]["DiscoveryEditionDto"][];
-            galgame: components["schemas"]["DiscoveryPageGalgameDto"] | null;
-            id: number;
-            /** Format: date-time */
-            last_read_at: string | null;
-            /** @description 页面上写日期的那句话 */
-            says: string | null;
-            status: components["schemas"]["DiscoveryPageStatus"];
-            url: string;
-        };
-        /** @enum {string} */
-        DiscoveryOutcome: "NEW" | "DOUBTFUL" | "ON_SITE" | "OUT_OF_SCOPE" | "WAITING";
-        DiscoveryOutcomeCountDto: {
-            count: number;
-            outcome: components["schemas"]["DiscoveryOutcome"];
-            section: components["schemas"]["DiscoverySection"];
-        };
-        DiscoveryOutcomeTallyDto: {
-            DOUBTFUL?: number;
-            NEW?: number;
-            ON_SITE?: number;
-            OUT_OF_SCOPE?: number;
-            WAITING?: number;
-        };
-        DiscoveryOverviewDto: {
-            sections: components["schemas"]["DiscoverySectionStatDto"][];
-            sources: components["schemas"]["DiscoverySourceDto"][];
-        };
-        DiscoveryPageGalgameDto: {
-            id: number;
-            origin_title: string;
-            trans_title: string | null;
-        };
-        /** @enum {string} */
-        DiscoveryPageStatus: "OK" | "NO_DATE" | "UNREADABLE";
-        DiscoveryPolicyDto: {
-            dlsite_work_types: string[];
-            downstream_company: boolean;
-            downstream_min_votes: number | null;
-            downstream_store: boolean;
-            follow_past_days: number;
-            review_date_far: boolean;
-            review_date_passed: boolean;
-            review_person_newer: boolean;
-            steam_languages: string[];
-        };
-        DiscoveryPolicyPreviewDto: {
-            after: components["schemas"]["DiscoveryOutcomeTallyDto"];
-            before: components["schemas"]["DiscoveryOutcomeTallyDto"];
-            /** @description 参与预览的运行数（每个数据源的最近一次） */
-            runs: number;
-            works: number;
-        };
-        DiscoveryReasonDto: {
-            code: string;
-            params: {
-                [key: string]: unknown;
-            } | null;
-            /** @description 给人看的原因 */
-            text: string;
-        };
-        DiscoveryRulesDto: {
-            comics_labels: components["schemas"]["DiscoveryLabelDto"][];
-            light_novel_labels: components["schemas"]["DiscoveryLabelDto"][];
-            policy: components["schemas"]["DiscoveryPolicyDto"];
-            /** @description 近 30 天 JPRO 被拒文库及次数 */
-            turned_away: components["schemas"]["DiscoveryLabelCountDto"][];
-        };
-        DiscoveryRunBriefDto: {
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-        };
-        DiscoveryRunDetailDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            counters: components["schemas"]["DiscoveryCountersDto"];
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            outcomes: components["schemas"]["DiscoveryOutcomeCountDto"][];
-            /** Format: date-time */
-            since: string | null;
-            source: components["schemas"]["DiscoverySourceKey"];
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-            trigger: components["schemas"]["DiscoveryTrigger"];
-            /** @description 被拒文库及次数 */
-            turned_away: components["schemas"]["DiscoveryLabelCountDto"][];
-            /** Format: date-time */
-            until: string | null;
-        };
-        DiscoveryRunDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            counters: components["schemas"]["DiscoveryCountersDto"];
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** Format: date-time */
-            since: string | null;
-            source: components["schemas"]["DiscoverySourceKey"];
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-            trigger: components["schemas"]["DiscoveryTrigger"];
-            /** Format: date-time */
-            until: string | null;
-        };
-        DiscoveryRunItemDto: {
-            change_request_id: number | null;
-            date_change: components["schemas"]["DiscoveryDateChangeDto"] | null;
-            id: number;
-            maker: string | null;
-            outcome: components["schemas"]["DiscoveryOutcome"];
-            reasons: components["schemas"]["DiscoveryReasonDto"][];
-            release_date: string | null;
-            resource_id: number | null;
-            resource_type: components["schemas"]["ContributionResourceType"] | null;
-            section: components["schemas"]["DiscoverySection"];
-            title: string;
-            work_id: number | null;
-        };
-        /** @enum {string} */
-        DiscoveryRunStatus: "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED";
-        /** @enum {string} */
-        DiscoverySection: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
-        DiscoverySectionStatDto: {
-            /** @description 近 7 天新增的条目 */
-            added_7d: number;
-            /** @description 近 7 天跟随的改期 */
-            date_changes_7d: number;
-            /** @description 书音提交、仍在审核中的请求 */
-            in_review: number;
-            section: components["schemas"]["DiscoverySection"];
-            /** @description 未来 30 天内发售、站内已有的条目 */
-            upcoming_30d: number;
-        };
-        DiscoverySourceDto: {
-            anchor_enabled: boolean;
-            anchor_shadow: boolean;
-            /** @description 该来源可锚定站内存量条目 */
-            anchorable: boolean;
-            /** @description 所需的密钥已配置 */
-            configured: boolean;
-            enabled: boolean;
-            /** @description 近 7 天失败的运行数 */
-            errors_7d: number;
-            first_hand: boolean;
-            key: components["schemas"]["DiscoverySourceKey"];
-            last_run: components["schemas"]["DiscoveryRunBriefDto"] | null;
-            /** Format: date-time */
-            last_success_at: string | null;
-            look_back_days: number;
-            needs_permission: boolean;
-            permission_note: string | null;
-            /** Format: date-time */
-            permitted_at: string | null;
-            permitter: components["schemas"]["UserRefDto"] | null;
-            /** @description 该来源保存的来源记录数 */
-            records: number;
-            /** @description 已有可用的采集实现 */
-            runnable: boolean;
-            schedule: string;
-            sections: components["schemas"]["DiscoverySection"][];
-            shadow: boolean;
-            /** Format: date-time */
-            shadow_at: string | null;
-            shadow_reason: string | null;
-        };
-        /** @enum {string} */
-        DiscoverySourceKey: "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "STEAM" | "DLSITE" | "JPRO" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
-        /** @enum {string} */
-        DiscoveryTrigger: "CRON" | "MANUAL" | "ANCHOR";
-        DiscoveryTriggerResultDto: {
-            run_id: number;
-            /** @description 为 false 时同一来源已有进行中的运行 */
-            started: boolean;
         };
         DownloadCardsDto: {
             available: number;
@@ -20393,8 +19520,6 @@ export interface components {
         };
         GalgameDetailDto: {
             adv_type: string | null;
-            /** @enum {string|null} */
-            age_rating: "ALL_AGES" | "R15" | "R18" | null;
             aliases: string[];
             bangumi_game_id: number | null;
             covers: components["schemas"]["GalgameDetailCoverDto"][];
@@ -20404,7 +19529,6 @@ export interface components {
             dev_status: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED" | null;
             /** @description 可下载资源数，由 shionlib 同步而来 */
             download_resource_count: number;
-            editions: components["schemas"]["GalgameEditionDto"][];
             en_intro: string | null;
             en_title: string | null;
             engine: string | null;
@@ -20428,7 +19552,6 @@ export interface components {
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** @description Steam 应用，首条为主商店页 */
             steam_apps: components["schemas"]["GalgameSteamAppDto"][];
-            title_reading: string | null;
             trans_intro: string | null;
             trans_title: string | null;
             /** Format: date-time */
@@ -20506,40 +19629,6 @@ export interface components {
             sources_match: boolean | null;
             staff: components["schemas"]["ResolvedStaffDto"][];
             tags: components["schemas"]["ResolvedTagDto"][];
-        };
-        GalgameEditionDto: {
-            /** @enum {string|null} */
-            age_rating: "ALL_AGES" | "R15" | "R18" | null;
-            currency: string | null;
-            jan: string | null;
-            /** @enum {string|null} */
-            kind: "REGULAR" | "LIMITED" | "DOWNLOAD" | "BUDGET" | "PORT" | "ENHANCED" | "BUNDLE" | "OTHER" | null;
-            platform: string | null;
-            price: number | null;
-            product_code: string | null;
-            /** Format: date-time */
-            release_date: string | null;
-            /** @enum {string|null} */
-            release_status: "PLANNED" | "RELEASED" | "DELAYED" | "CANCELLED" | null;
-            tax_included: boolean | null;
-            title: string;
-        };
-        GalgameEditionRowDto: {
-            /** @enum {string|null} */
-            age_rating?: "ALL_AGES" | "R15" | "R18" | null;
-            currency?: string | null;
-            jan?: string | null;
-            /** @enum {string|null} */
-            kind?: "REGULAR" | "LIMITED" | "DOWNLOAD" | "BUDGET" | "PORT" | "ENHANCED" | "BUNDLE" | "OTHER" | null;
-            platform?: string | null;
-            price?: number | null;
-            product_code?: string | null;
-            /** @description YYYY-MM-DD */
-            release_date?: string | null;
-            /** @enum {string|null} */
-            release_status?: "PLANNED" | "RELEASED" | "DELAYED" | "CANCELLED" | null;
-            tax_included?: boolean | null;
-            title?: string;
         };
         GalgameExternalLinkDto: {
             /** @description 链接显示名称 */
@@ -20631,6 +19720,12 @@ export interface components {
             currency: string | null;
             tax_included: boolean | null;
             version: string | null;
+        };
+        GalgamePriceRowDto: {
+            amount?: number | null;
+            currency?: string | null;
+            tax_included?: boolean | null;
+            version?: string | null;
         };
         GalgameProducerRelationDto: {
             note: string;
@@ -21535,29 +20630,9 @@ export interface components {
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
         };
-        ListingItemDto: {
-            decision: components["schemas"]["CatalogSyncDecision"];
-            evidence: {
-                [key: string]: unknown;
-            } | null;
-            id: number;
-            manga_id: number;
-            title: string;
-        };
-        ListingRunDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            changed: number;
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** @description 扫描的条目数 */
-            scanned: number;
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["CatalogSyncStatus"];
-            trigger: components["schemas"]["CatalogSyncTrigger"];
+        LinkCatalogItemDto: {
+            /** @description 认定为哪个站内条目；传 null 表示不是重复，下次同步照常创建 */
+            resource_id: number | null;
         };
         LnDraftDto: {
             author: components["schemas"]["ResolvedEntityDto"] | null;
@@ -21667,15 +20742,6 @@ export interface components {
             failed_chapters: number;
             pending_links: number;
         };
-        MangaBaselinePageDto: {
-            byte_size: number | null;
-            height: number | null;
-            id: number;
-            page_number: number;
-            /** @description 图片的限时访问地址 */
-            url: string;
-            width: number | null;
-        };
         MangaCardSummaryResDto: {
             author_name: string | null;
             id: number;
@@ -21784,48 +20850,6 @@ export interface components {
         MangaCharacterRelationDto: {
             character: components["schemas"]["CharacterPreviewDto"];
             role: components["schemas"]["CharacterRole"];
-        };
-        MangaCheckBaselinePageDto: {
-            byte_size: number | null;
-            height: number | null;
-            page_id: number;
-            width: number | null;
-        };
-        MangaCheckPageDto: {
-            byte_size: number | null;
-            /** @description 疑似与之重复的页面 */
-            duplicate_of: number[];
-            /** @description 疑似重复、可能空白、尺寸异常 */
-            flags: ("duplicate" | "blank" | "size")[];
-            height: number;
-            /** @description 对应的现有版本页面在 baseline 中的序号，从 0 开始；没有对应时为 null */
-            match: number | null;
-            page_id: number;
-            width: number;
-        };
-        MangaCheckResultDto: {
-            /** @description 现有版本的页面；不是替换投稿时为 null */
-            baseline: components["schemas"]["MangaCheckBaselinePageDto"][] | null;
-            /** @description 按页序排列 */
-            pages: components["schemas"]["MangaCheckPageDto"][];
-            summary: components["schemas"]["MangaCheckSummaryDto"];
-        };
-        MangaCheckSummaryDto: {
-            /** @description 每页的平均字节数 */
-            average_bytes: number | null;
-            baseline_average_bytes: number | null;
-            baseline_height: number | null;
-            baseline_page_count: number | null;
-            baseline_width: number | null;
-            /** @description 带有标记或在现有版本中没有对应页的页数 */
-            flagged: number;
-            /** @description 页面高度的中位数 */
-            height: number;
-            /** @description 与现有版本一一对应的页数 */
-            matched: number | null;
-            page_count: number;
-            /** @description 页面宽度的中位数 */
-            width: number;
         };
         MangaContributorsDto: {
             contributors: components["schemas"]["UserRefDto"][];
@@ -21974,11 +20998,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             id: number;
-            page_id: number;
-            /** @description 批注圈出的区域 */
-            rect: components["schemas"]["MangaNoteRectDto"] | null;
-            /** @description 批注所在的文本框 */
-            region_id: string | null;
+            region: components["schemas"]["MangaNoteRegionDto"];
+            region_id: string;
             /**
              * Format: date-time
              * @description 批注标记为已处理的时间
@@ -21986,21 +21007,8 @@ export interface components {
             resolved_at: string | null;
             user: components["schemas"]["UserRefDto"];
         };
-        MangaNoteRectDto: {
-            /** @description 高度，按页面高度归一化 */
-            h: number;
-            /** @description 宽度，按页面宽度归一化 */
-            w: number;
-            /** @description 左边缘，按页面宽度归一化到 0 至 1 */
-            x: number;
-            /** @description 上边缘，按页面高度归一化到 0 至 1 */
-            y: number;
-        };
-        MangaNoteRectInputDto: {
-            h: number;
-            w: number;
-            x: number;
-            y: number;
+        MangaNoteRegionDto: {
+            page_id: number;
         };
         MangaNotifySettingDto: {
             enabled: boolean;
@@ -22068,25 +21076,6 @@ export interface components {
             volume_id: number | null;
             volume_number: number | null;
         };
-        MangaProjectCheckDto: {
-            error: string | null;
-            result: components["schemas"]["MangaCheckResultDto"] | null;
-            status: components["schemas"]["MangaProjectCheckStatus"];
-            /**
-             * Format: date-time
-             * @description 检查对应的投稿轮次
-             */
-            submitted_at: string;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        /** @enum {string} */
-        MangaProjectCheckStatus: "PENDING" | "READY" | "FAILED";
-        MangaProjectCheckSummaryDto: {
-            /** @description 带有标记的页数，检查完成前为 null */
-            flagged: number | null;
-            status: components["schemas"]["MangaProjectCheckStatus"];
-        };
         MangaProjectDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -22108,8 +21097,6 @@ export interface components {
             page_count: number;
             /** Format: date-time */
             published_at: string | null;
-            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
-            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -22133,19 +21120,6 @@ export interface components {
             volume_number: number | null;
             withdrawn_count: number;
         };
-        MangaProjectInfoDto: {
-            chapter_name?: string | null;
-            chapter_number?: string | null;
-            /** @enum {string} */
-            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /**
-             * @description 只有尚未对应到章节的项目可以改
-             * @enum {string}
-             */
-            scope?: "CHAPTER" | "VOLUME";
-            /** @description 单行本条目 */
-            volume_id?: number | null;
-        };
         MangaProjectListEntryDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -22154,8 +21128,6 @@ export interface components {
             chapter_number: string | null;
             /** @enum {string} */
             chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /** @description 最新一轮投稿的检查 */
-            check: components["schemas"]["MangaProjectCheckSummaryDto"] | null;
             /** Format: date-time */
             created_at: string;
             id: number;
@@ -22169,8 +21141,6 @@ export interface components {
             /** @description 前几页的图片地址 */
             preview: string[];
             progress: components["schemas"]["MangaProjectProgressDto"];
-            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
-            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -22200,8 +21170,6 @@ export interface components {
         MangaProjectPageDto: {
             /** @description 选定译文由机翻修改而来的文本框数 */
             assisted_count: number;
-            /** @description 发布时使用的图片的字节数 */
-            byte_size: number | null;
             cleaned_image: components["schemas"]["MediaAssetDto"] | null;
             /** @description 清理图的限时访问地址 */
             cleaned_url: string | null;
@@ -22227,10 +21195,6 @@ export interface components {
             pages: number;
             /** @description 已有成品图的页数 */
             rendered: number;
-        };
-        MangaProjectReplacesDto: {
-            /** @description 现有版本的页数 */
-            page_count: number;
         };
         MangaProjectReviewDto: {
             confidence: number | null;
@@ -22966,14 +21930,6 @@ export interface components {
             /** @description The surviving canonical resource id. */
             canonical_id: number;
             /** @description The merged-away (deleted) resource id. */
-            loser_id: number;
-            /** @description The record that undoes this merge, when this kind of merge can be undone. */
-            undo_id: number | null;
-        };
-        MergeUndoResultDto: {
-            /** @description The resource that kept the merged data. */
-            canonical_id: number;
-            /** @description The restored resource id. */
             loser_id: number;
         };
         MessageHistoryDto: {
@@ -24730,26 +23686,6 @@ export interface components {
                 [key: string]: unknown;
             };
         };
-        PreviewDiscoveryLabelsDto: {
-            add?: string[];
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            remove?: number[];
-        };
-        PreviewDiscoveryPolicyDto: {
-            /** @description 收录的 DLsite 作品类型 */
-            dlsite_work_types?: string[];
-            downstream_company?: boolean;
-            downstream_min_votes?: number | null;
-            downstream_store?: boolean;
-            /** @description 跟随改期的已过天数上限 */
-            follow_past_days?: number;
-            review_date_far?: boolean;
-            review_date_passed?: boolean;
-            review_person_newer?: boolean;
-            section: components["schemas"]["DiscoverySection"];
-            /** @description 收录的 Steam 原始语言 */
-            steam_languages?: string[];
-        };
         PreviewPostDto: {
             client_schema_version: number;
             content_json: {
@@ -24891,7 +23827,6 @@ export interface components {
         ProvisionUserDto: {
             /** Format: email */
             email: string;
-            is_bot?: boolean;
             nickname?: string;
             sub: number;
             username: string;
@@ -25467,13 +24402,22 @@ export interface components {
             cover: string | null;
             title: string;
         };
+        ReviewCatalogItemsDto: {
+            /** @description 对当前筛选下所有待复核明细生效 */
+            all_matching?: boolean;
+            decision?: components["schemas"]["CatalogSyncDecision"];
+            /** @description 显式勾选的明细，与 all_matching 二选一 */
+            item_ids?: number[];
+            /** @description 按标题模糊匹配 */
+            keyword?: string;
+            review: components["schemas"]["CatalogSyncReview"];
+        };
         ReviewChangeRequestBatchDto: {
             body?: string;
             change_request_ids?: number[];
             /** @enum {string} */
             decision: "REJECT" | "APPROVE";
             entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
-            not_for_site?: boolean;
             overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
         ReviewChangeRequestDto: {
@@ -25481,7 +24425,6 @@ export interface components {
             /** @enum {string} */
             decision: "COMMENT" | "REJECT" | "APPROVE";
             entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
-            not_for_site?: boolean;
             overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
         ReviewEntityChoiceDto: {
@@ -25779,34 +24722,6 @@ export interface components {
             group: string;
             manga_id: number;
         };
-        SteamPriceDto: {
-            app_id: number;
-            /** @description 中国区价格的币种 */
-            currency: string | null;
-            /** Format: date-time */
-            discount_ends_at: string | null;
-            discount_percent: number;
-            /** Format: date-time */
-            discount_started_at: string | null;
-            /** Format: date-time */
-            fetched_at: string | null;
-            /** @description 现价（分） */
-            final_cents: number | null;
-            /** @description 原价（分） */
-            initial_cents: number | null;
-            /** @description 在中国区可购买 */
-            purchasable: boolean;
-        };
-        SteamSaleDto: {
-            galgame: components["schemas"]["SteamSaleGalgameDto"];
-            price: components["schemas"]["SteamPriceDto"];
-        };
-        SteamSaleGalgameDto: {
-            id: number;
-            nsfw: boolean;
-            origin_title: string;
-            trans_title: string | null;
-        };
         SubmitChangeRequestBatchDto: {
             items: components["schemas"]["ChangeRequestBatchItemDto"][];
             summary: string;
@@ -25920,11 +24835,10 @@ export interface components {
             telegram_username: string | null;
             user: components["schemas"]["UserRefDto"];
         };
-        TelegramActionConfirmDto: {
-            telegram_id: number;
-        };
         TelegramBotStatusDto: {
             bot_username: string | null;
+            chat_usage: components["schemas"]["TelegramChatUsageDto"];
+            group_id: string | null;
             /** Format: date-time */
             last_seen_at: string | null;
             online: boolean;
@@ -25933,58 +24847,41 @@ export interface components {
             started_at: string | null;
             /** @enum {string|null} */
             state: "running" | "idle" | null;
-            version: string | null;
-        };
-        TelegramCardButtonDto: {
-            text: string;
-            url: string;
-        };
-        TelegramCardDto: {
-            buttons: components["schemas"]["TelegramCardButtonDto"][];
-            /** @description Telegram HTML */
-            caption: string;
-            cover: string | null;
-            id: number;
-            /** @description 富消息 HTML */
-            rich: string;
-            title: string;
-            /** @enum {string} */
-            type: "galgame" | "light_novel" | "manga";
         };
         TelegramChatDto: {
-            addressed: boolean;
-            chat_id: number;
-            chat_title?: string;
-            fresh?: boolean;
-            images?: components["schemas"]["TelegramChatImageDto"][];
-            /** @enum {string} */
-            kind: "group" | "private" | "guest";
+            chat_id: string;
+            is_private: boolean;
             messages: components["schemas"]["TelegramChatMessageDto"][];
             telegram_id: number;
-            telegram_name: string;
-        };
-        TelegramChatImageDto: {
-            /** Format: base64 */
-            data: string;
-            /** @enum {string} */
-            source: "message" | "reply";
         };
         TelegramChatInputDto: {
+            context_window: number;
+            daily_message_budget: number;
+            daily_token_budget: number;
             enabled: boolean;
-            guest_mode: boolean;
-            private: components["schemas"]["TelegramPrivateChatInputDto"];
+            persona: components["schemas"]["TelegramChatPersonaInputDto"];
             reply_max_chars: number;
+            /** @description bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关) */
+            trigger_keywords: string[];
+            user_cooldown_seconds: number;
         };
-        /** @enum {string} */
-        TelegramChatKind: "GROUP" | "PRIVATE" | "GUEST";
         TelegramChatMessageDto: {
-            from_id: number;
-            image?: boolean;
-            message_id: number;
             name: string;
-            reply_to?: components["schemas"]["TelegramQuotedMessageDto"];
             self: boolean;
             text: string;
+        };
+        TelegramChatPersonaInputDto: {
+            guardrails: string;
+            role_core: string;
+            style_anchor: string;
+            world_knowledge: string;
+        };
+        TelegramChatUsageDto: {
+            /** @description 统计日期 (UTC, YYYY-MM-DD) */
+            date: string;
+            messages: number;
+            tokens: number;
+            tool_calls: number;
         };
         TelegramCheckInDto: {
             telegram_id: number;
@@ -25994,96 +24891,22 @@ export interface components {
             telegram_id: number;
             telegram_username?: string;
         };
-        TelegramContextMessageDto: {
-            content: string;
-            /** @enum {string} */
-            role: "user" | "assistant";
-        };
-        TelegramConversationDetailDto: {
-            chat_id: number;
-            chat_kind: components["schemas"]["TelegramChatKind"];
-            chat_title: string | null;
-            cost_usd: number;
-            id: number;
-            /** Format: date-time */
-            last_at: string;
-            last_status: components["schemas"]["TelegramTurnStatus"];
-            /** Format: date-time */
-            started_at: string;
-            telegram_name: string;
-            telegram_user_id: number;
-            tool_calls: number;
-            turn_list: components["schemas"]["TelegramTurnDto"][];
-            turns: number;
-            user: components["schemas"]["UserRefDto"] | null;
-        };
-        TelegramConversationDto: {
-            chat_id: number;
-            chat_kind: components["schemas"]["TelegramChatKind"];
-            chat_title: string | null;
-            cost_usd: number;
-            id: number;
-            /** Format: date-time */
-            last_at: string;
-            last_status: components["schemas"]["TelegramTurnStatus"];
-            /** Format: date-time */
-            started_at: string;
-            telegram_name: string;
-            telegram_user_id: number;
-            tool_calls: number;
-            turns: number;
-            user: components["schemas"]["UserRefDto"] | null;
-        };
-        TelegramDeletedDto: {
-            deleted: boolean;
-        };
-        TelegramGroupDto: {
-            /** Format: date-time */
-            added_at: string;
-            chat_enabled: boolean;
-            chat_id: number;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
-        TelegramGroupLeftDto: {
-            chat_id: number;
-        };
-        TelegramGroupSeenDto: {
-            chat_id: number;
-            title: string;
-        };
-        /** @enum {string} */
-        TelegramGroupStatus: "PENDING" | "ENABLED" | "LEFT";
         TelegramIssueCodeDto: {
             telegram_id: number;
             telegram_username?: string;
             user: string;
         };
         TelegramJoinGateInputDto: {
+            enabled: boolean;
             pending_ttl_hours: number;
             require_avatar: boolean;
             require_binding: boolean;
             require_username: boolean;
         };
-        TelegramLeftDto: {
-            left: boolean;
-        };
         TelegramMessagesInputDto: {
-            ai_unavailable: string;
             already_linked: string;
             bind_success: string;
             bind_success_joined: string;
-            budget_exhausted: string;
             cancel_reset: string;
             checkin_already: string;
             checkin_milestone: string;
@@ -26096,9 +24919,7 @@ export interface components {
             code_sent: string;
             dm_fallback: string;
             generic_error: string;
-            guest_link_required: string;
             identifier_prompt: string;
-            image_declined: string;
             join_guide: string;
             join_profile_incomplete: string;
             join_service_unavailable: string;
@@ -26109,158 +24930,16 @@ export interface components {
             too_frequent: string;
             user_not_found: string;
         };
-        TelegramNotificationUpdateDto: {
-            galgame_plans?: boolean;
-            interactions?: boolean;
-            system?: boolean;
-            updates?: boolean;
-        };
-        TelegramNotificationsInputDto: {
-            galgame_plans: boolean;
-            interactions: boolean;
-            merge_minutes: number;
-            merge_threshold: number;
-            system: boolean;
-            updates: boolean;
-        };
-        /** @enum {string} */
-        TelegramNotifyCategory: "UPDATES" | "GALGAME_PLANS" | "INTERACTIONS" | "SYSTEM";
-        TelegramNotifyCategoryStatsDto: {
-            allowed: boolean;
-            category: components["schemas"]["TelegramNotifyCategory"];
-            failed_today: number;
-            sent_today: number;
-            subscribed: number;
-        };
-        TelegramNotifyStatsDto: {
-            categories: components["schemas"]["TelegramNotifyCategoryStatsDto"][];
-            merge_minutes: number;
-            merge_threshold: number;
-        };
-        TelegramOutboxClaimDto: {
-            limit: number;
-        };
-        TelegramOutboxResultDto: {
-            blocked?: boolean;
-            error?: string;
-            ok: boolean;
-        };
-        TelegramOverviewChannelDto: {
-            daily_budget_usd: number | null;
-            enabled: boolean;
-            kind: components["schemas"]["TelegramChatKind"];
-            replies_today: number;
-            spend_today: number;
-        };
-        TelegramOverviewDto: {
-            channels: components["schemas"]["TelegramOverviewChannelDto"][];
-            groups: components["schemas"]["TelegramOverviewGroupDto"][];
-            status: components["schemas"]["TelegramBotStatusDto"];
-            today: components["schemas"]["TelegramUsageDto"];
-            trend: components["schemas"]["TelegramTrendDto"][];
-        };
-        TelegramOverviewGroupDto: {
-            chat_id: number;
-            daily_budget_usd: number | null;
-            replies_today: number;
-            schedules: number;
-            spend_today: number;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-        };
-        TelegramPersonaDto: {
-            defaults: components["schemas"]["TelegramPersonaInputDto"];
-            persona: components["schemas"]["TelegramPersonaInputDto"];
-        };
-        TelegramPersonaInputDto: {
-            guardrails: string;
-            role_core: string;
-            style_anchor: string;
-            world_knowledge: string;
-        };
-        TelegramPersonaTestDto: {
-            /** @description 群聊试聊时消息是否 @ 或回复了书音；为 false 时按只提到触发词处理，默认 true */
-            addressed?: boolean;
-            /** @description 群聊试聊所在的群组；省略时使用通用群名 */
-            chat_id?: number;
-            messages: components["schemas"]["TelegramTestMessageDto"][];
-            persona: components["schemas"]["TelegramPersonaInputDto"];
-            /** @description 以该站内账号的身份私聊；省略则在群聊中试聊 */
-            user_id?: number;
-        };
-        TelegramPollDto: {
-            correct: number;
-            explanation: string;
-            options: string[];
-            question: string;
-        };
-        TelegramPostDto: {
-            buttons?: {
-                data?: string;
-                text: string;
-                url?: string;
-            }[][];
-            /** @description 内容为空，到点时跳过定时发送 */
-            empty?: boolean;
-            /** @description Telegram HTML */
-            parts: string[];
-            photo?: string | null;
-            poll?: components["schemas"]["TelegramPollDto"];
-        };
-        TelegramPrivateChatInputDto: {
-            context_messages: number;
-            daily_budget_usd: number | null;
-            enabled: boolean;
-            images_enabled: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-        };
-        TelegramQueuedDto: {
-            queued: boolean;
-        };
-        TelegramQuotedMessageDto: {
-            from_id: number;
-            image?: boolean;
-            name: string;
-            self: boolean;
-            text: string;
-        };
-        TelegramScheduleDto: {
-            chat_id: number;
-            enabled: boolean;
-            id: number;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            last_error: string | null;
-            /** Format: date-time */
-            last_sent_at: string | null;
-            time: string;
-            weekdays: number[];
-        };
-        /** @enum {string} */
-        TelegramScheduleKind: "TODAY_UPDATES" | "WEEK_RELEASES" | "STEAM_SALES" | "DAILY_QUIZ";
-        TelegramScheduleListItemDto: {
-            chat_id: number;
-            enabled: boolean;
-            group_status: components["schemas"]["TelegramGroupStatus"];
-            group_title: string;
-            id: number;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            last_error: string | null;
-            /** Format: date-time */
-            last_sent_at: string | null;
-            time: string;
-            weekdays: number[];
-        };
         TelegramSettingsDto: {
             bot_token_hint: string;
             bot_token_set: boolean;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
+            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             message_defaults: components["schemas"]["TelegramMessagesInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
-            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -26271,84 +24950,9 @@ export interface components {
             started_at: string;
             /** @enum {string} */
             state: "running" | "idle";
-            version?: string;
-        };
-        TelegramTestMessageDto: {
-            self: boolean;
-            text: string;
-        };
-        TelegramTestReplyDto: {
-            cards: components["schemas"]["TelegramCardDto"][];
-            input_tokens: number;
-            model: string | null;
-            output_tokens: number;
-            /** @description Telegram HTML，按 4096 字符分段 */
-            parts: string[];
-            reply: string;
-            status: components["schemas"]["TelegramTurnStatus"];
-            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
-        };
-        TelegramToolCountDto: {
-            count: number;
-            label: string;
-            tool_key: string;
-        };
-        TelegramTrendDto: {
-            /** @description 北京时间日期 YYYY-MM-DD */
-            date: string;
-            replies: number;
-            spend_usd: number;
-        };
-        TelegramTurnCardDto: {
-            cover: string | null;
-            id: number;
-            title: string | null;
-            /** @enum {string} */
-            type: "galgame" | "light_novel" | "manga";
-        };
-        TelegramTurnDto: {
-            cards: components["schemas"]["TelegramTurnCardDto"][];
-            context: components["schemas"]["TelegramContextMessageDto"][] | null;
-            cost_usd: number;
-            /** Format: date-time */
-            created_at: string;
-            duration_ms: number;
-            id: number;
-            images: number;
-            images_declined: number;
-            input_tokens: number;
-            message: string | null;
-            model: string | null;
-            output_tokens: number;
-            reply: string | null;
-            /** @description AI 请求记录 ID */
-            request_id: string | null;
-            status: components["schemas"]["TelegramTurnStatus"];
-            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
-        };
-        /** @enum {string} */
-        TelegramTurnStatus: "REPLIED" | "SKIPPED" | "FAILED" | "BUDGET" | "LIMITED" | "IMAGE_DECLINED" | "STOPPED";
-        TelegramTurnToolDto: {
-            duration_ms: number;
-            input: {
-                [key: string]: unknown;
-            } | null;
-            label: string;
-            output: {
-                [key: string]: unknown;
-            } | null;
-            status: components["schemas"]["AiToolCallStatus"];
-            tool_key: string;
         };
         TelegramUnlinkResultDto: {
             unlinked: boolean;
-        };
-        TelegramUsageDto: {
-            failures: number;
-            replies: number;
-            spend_usd: number;
-            tool_calls: number;
-            tools: components["schemas"]["TelegramToolCountDto"][];
         };
         TelegramVerificationInputDto: {
             code_ttl_seconds: number;
@@ -26454,9 +25058,11 @@ export interface components {
         TrendingResponseDto: {
             items: components["schemas"]["TrendingItemDto"][];
         };
-        TriggerDiscoveryRunDto: {
-            /** @description 试运行：只判定、不写入 */
+        TriggerCatalogSyncDto: {
             dry_run?: boolean;
+            kind: components["schemas"]["CatalogSyncKind"];
+            /** @description 本轮最多处理多少条，0 表示不限 */
+            limit?: number;
         };
         UgcBacklogDto: {
             failed: number;
@@ -26612,6 +25218,24 @@ export interface components {
             client_id: string;
             client_secret: string;
         };
+        UpdateCatalogSettingsDto: {
+            /** @description 新建条目直接发布，否则留待复核 */
+            auto_publish: boolean;
+            /** @description 单次最多创建多少条，0 表示不限 */
+            batch_limit: number;
+            enabled: boolean;
+            /** @description 同步明细保留天数 */
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            /** @description 产地未知的漫画是否上架 */
+            origin_unknown_listed: boolean;
+            /** @description 收录的漫画产地 */
+            origins: string[];
+            /** @description cron 表达式，保存后立即重排 */
+            schedule: string;
+            /** @description 只处理最近多少个月出版的条目 */
+            since_months: number;
+        };
         UpdateCheckInSettingsDto: {
             check_in_daily_point_max?: number;
             check_in_daily_point_min?: number;
@@ -26684,39 +25308,6 @@ export interface components {
              * @enum {string}
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
-        };
-        UpdateDiscoveryLabelDto: {
-            translated_webtoon: boolean;
-        };
-        UpdateDiscoveryPolicyDto: {
-            /** @description 收录的 DLsite 作品类型 */
-            dlsite_work_types?: string[];
-            downstream_company?: boolean;
-            downstream_min_votes?: number | null;
-            downstream_store?: boolean;
-            /** @description 跟随改期的已过天数上限 */
-            follow_past_days?: number;
-            review_date_far?: boolean;
-            review_date_passed?: boolean;
-            review_person_newer?: boolean;
-            /** @description 收录的 Steam 原始语言 */
-            steam_languages?: string[];
-        };
-        UpdateDiscoverySourceDto: {
-            /** @description 按确定键锚定站内存量条目 */
-            anchor_enabled?: boolean;
-            /** @description 锚定只记录打算写入的内容 */
-            anchor_shadow?: boolean;
-            enabled?: boolean;
-            /** @description 首次运行的回溯天数 */
-            look_back_days?: number;
-            /** @description 许可的说明或凭据位置 */
-            permission_note?: string | null;
-            /** @description 已取得来源方许可 */
-            permitted?: boolean;
-            /** @description cron 表达式，含秒字段 */
-            schedule?: string;
-            shadow?: boolean;
         };
         UpdateDownloadPolicyDto: {
             card_price: number;
@@ -26816,12 +25407,6 @@ export interface components {
             verification_code_resend_cooldown_seconds?: number;
             verification_code_ttl_seconds?: number;
             verification_ticket_ttl_seconds?: number;
-        };
-        UpdateListingPolicyDto: {
-            /** @description 上架的产地 */
-            origins: string[];
-            /** @description 产地未知的作品是否上架 */
-            unknown_listed: boolean;
         };
         UpdateMangaChapterDto: {
             chapter_number?: string | null;
@@ -27190,37 +25775,15 @@ export interface components {
         UpdateSourceLinkGroupsDto: {
             groups: string[];
         };
-        UpdateTelegramGroupDto: {
-            chat_enabled: boolean;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            /** @enum {string} */
-            status: "PENDING" | "ENABLED";
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
-        UpdateTelegramScheduleDto: {
-            enabled: boolean;
-            /** @description 北京时间 HH:mm */
-            time: string;
-            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
-            weekdays: number[];
-        };
         UpdateTelegramSettingsDto: {
             /** @description 仅在轮换时传入，省略则保持现值 */
             bot_token?: string;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
+            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
-            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -28949,6 +27512,52 @@ export interface operations {
             };
         };
     };
+    AdminCatalogController_candidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateCandidateDto"][];
+                };
+            };
+        };
+    };
+    AdminCatalogController_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkCatalogItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"];
+                };
+            };
+        };
+    };
     AdminCatalogController_setListing: {
         parameters: {
             query?: never;
@@ -28993,48 +27602,6 @@ export interface operations {
             };
         };
     };
-    AdminCatalogController_listingPolicy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CatalogListingPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_updateListingPolicy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateListingPolicyDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CatalogListingPolicyDto"];
-                };
-            };
-        };
-    };
     AdminCatalogController_recompute: {
         parameters: {
             query?: never;
@@ -29058,60 +27625,6 @@ export interface operations {
             };
         };
     };
-    AdminCatalogController_listingRuns: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["ListingRunDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminCatalogController_listingItems: {
-        parameters: {
-            query: {
-                /** @description 按标题模糊匹配 */
-                keyword?: string;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["ListingItemDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     AdminCatalogController_overview: {
         parameters: {
             query?: never;
@@ -29126,125 +27639,17 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryOverviewDto"];
+                    "application/json": components["schemas"]["CatalogOverviewDto"];
                 };
             };
         };
     };
-    AdminCatalogController_rules: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryRulesDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_addLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateDiscoveryLabelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_previewLabels: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PreviewDiscoveryLabelsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelPreviewDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_removeLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminCatalogController_updateLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateDiscoveryLabelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_officialPages: {
+    AdminCatalogController_pending: {
         parameters: {
             query: {
-                status?: components["schemas"]["DiscoveryPageStatus"];
-                /** @description 按地址或游戏标题模糊匹配 */
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
+                /** @description 按标题模糊匹配 */
                 keyword?: string;
                 page: number;
                 page_size: number;
@@ -29261,14 +27666,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryOfficialPageDto"][];
+                        items: components["schemas"]["CatalogItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminCatalogController_updatePolicy: {
+    AdminCatalogController_review: {
         parameters: {
             query?: never;
             header?: never;
@@ -29277,7 +27682,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateDiscoveryPolicyDto"];
+                "application/json": components["schemas"]["ReviewCatalogItemsDto"];
             };
         };
         responses: {
@@ -29286,30 +27691,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_previewPolicy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PreviewDiscoveryPolicyDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryPolicyPreviewDto"];
+                    "application/json": components["schemas"]["CatalogReviewResultDto"];
                 };
             };
         };
@@ -29317,8 +27699,9 @@ export interface operations {
     AdminCatalogController_listRuns: {
         parameters: {
             query: {
-                source?: components["schemas"]["DiscoverySourceKey"];
-                status?: components["schemas"]["DiscoveryRunStatus"];
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+                status?: components["schemas"]["CatalogSyncStatus"];
                 page: number;
                 page_size: number;
             };
@@ -29334,9 +27717,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryRunDto"][];
+                        items: components["schemas"]["CatalogRunItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    AdminCatalogController_trigger: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerCatalogSyncDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogTriggerResultDto"];
                 };
             };
         };
@@ -29357,7 +27763,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryRunDetailDto"];
+                    "application/json": components["schemas"]["CatalogRunDetailDto"];
                 };
             };
         };
@@ -29365,8 +27771,8 @@ export interface operations {
     AdminCatalogController_listItems: {
         parameters: {
             query: {
-                outcome?: components["schemas"]["DiscoveryOutcome"];
-                section?: components["schemas"]["DiscoverySection"];
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
                 /** @description 按标题模糊匹配 */
                 keyword?: string;
                 page: number;
@@ -29386,14 +27792,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryRunItemDto"][];
+                        items: components["schemas"]["CatalogItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminCatalogController_sources: {
+    AdminCatalogController_settings: {
         parameters: {
             query?: never;
             header?: never;
@@ -29407,23 +27813,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoverySourceDto"][];
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
                 };
             };
         };
     };
-    AdminCatalogController_updateSource: {
+    AdminCatalogController_updateSettings: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OPENBD" | "OFFICIAL_PAGE" | "BRAND_LIST";
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateDiscoverySourceDto"];
+                "application/json": components["schemas"]["UpdateCatalogSettingsDto"];
             };
         };
         responses: {
@@ -29432,32 +27836,31 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoverySourceDto"];
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
                 };
             };
         };
     };
-    AdminCatalogController_trigger: {
+    AdminCatalogController_trace: {
         parameters: {
-            query?: never;
+            query?: {
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+            };
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "MOEPEDIA" | "STEAM" | "DLSITE" | "NDL" | "OPENBD" | "OFFICIAL_PAGE" | "BRAND_LIST";
+                externalId: number;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TriggerDiscoveryRunDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryTriggerResultDto"];
+                    "application/json": components["schemas"]["CatalogTraceEntryDto"][];
                 };
             };
         };
@@ -33730,358 +32133,6 @@ export interface operations {
             };
         };
     };
-    AdminTelegramConversationsController_list: {
-        parameters: {
-            query: {
-                kind?: components["schemas"]["TelegramChatKind"];
-                chat_id?: number;
-                /** @description Telegram 名称、站内账号名或 Telegram ID */
-                search?: string;
-                /** @description 最近多少天，默认 7 */
-                days?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["TelegramConversationDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminTelegramConversationsController_detail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramConversationDetailDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminTelegramGroupDto"][];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                chat_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTelegramGroupDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramGroupDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_leave: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                chat_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramLeftDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_notifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramNotifyStatsDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_overview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramOverviewDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_persona: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPersonaDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_savePersona: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramPersonaInputDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPersonaDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_test: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramPersonaTestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramTestReplyDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_list: {
-        parameters: {
-            query?: {
-                chat_id?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleListItemDto"][];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTelegramScheduleDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_preview: {
-        parameters: {
-            query: {
-                kind: components["schemas"]["TelegramScheduleKind"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPostDto"] | null;
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTelegramScheduleDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramDeletedDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_send: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramQueuedDto"];
-                };
-            };
-        };
-    };
     AdminTelegramSettingsController_get: {
         parameters: {
             query?: never;
@@ -34120,6 +32171,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TelegramSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_getStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramBotStatusDto"];
                 };
             };
         };
@@ -37588,27 +35658,6 @@ export interface operations {
             };
         };
     };
-    AdminMergeController_undoGalgameMerge: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MergeUndoResultDto"];
-                };
-            };
-        };
-    };
     AdminGalgameController_softDelete: {
         parameters: {
             query?: never;
@@ -38999,7 +37048,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_official" | "wiki_image_read" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_credit_align" | "book_key_check" | "wiki_series_check";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "entry_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -39319,7 +37368,6 @@ export interface operations {
             query: {
                 resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
                 status?: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
-                by_bot?: boolean;
                 /** @description 同一次导入的 CR 批次 id,用于捆绑审核分组 */
                 batch_id?: string;
                 /** @description disputed：核对结果与请求不一致（不传 status 时含近期已合并的）；running：核对排队或进行中 */
@@ -39623,27 +37671,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ChangeRequestDetailDto"];
-                };
-            };
-        };
-    };
-    ChangeRequestSourceController_sources: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ChangeRequestSourceDto"][];
                 };
             };
         };
@@ -41876,33 +39903,6 @@ export interface operations {
             };
         };
     };
-    GalgameSteamPriceController_sales: {
-        parameters: {
-            query: {
-                /** @description 最低折扣（百分比） */
-                min_discount?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["SteamSaleDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     GalgameController_getById: {
         parameters: {
             query?: never;
@@ -42455,27 +40455,6 @@ export interface operations {
             };
         };
     };
-    GalgameSteamPriceController_prices: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SteamPriceDto"][];
-                };
-            };
-        };
-    };
     GalgameController_getTags: {
         parameters: {
             query?: never;
@@ -42921,49 +40900,7 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_unlink: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_confirm: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramActionConfirmDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramChatController_reply: {
+    TelegramInternalController_reply: {
         parameters: {
             query?: never;
             header?: never;
@@ -42977,29 +40914,6 @@ export interface operations {
         };
         responses: {
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramChatController_stream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramChatDto"];
-            };
-        };
-        responses: {
-            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -43028,235 +40942,6 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_left: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramGroupLeftDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramInternalController_seen: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramGroupSeenDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramGroupDto"];
-                };
-            };
-        };
-    };
-    TelegramContentController_inline: {
-        parameters: {
-            query?: {
-                q?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>[];
-                };
-            };
-        };
-    };
-    TelegramContentController_me: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_notifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_updateNotifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramNotificationUpdateDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_claim: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramOutboxClaimDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_result: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramOutboxResultDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_releases: {
-        parameters: {
-            query?: {
-                period?: "week" | "month" | "next_month" | "tba";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramContentController_sales: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramContentController_search: {
-        parameters: {
-            query?: {
-                q?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     TelegramInternalController_getSettings: {
         parameters: {
             query?: never;
@@ -43270,7 +40955,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -43292,25 +40979,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    TelegramContentController_today: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
             };
         };
     };
@@ -44947,31 +42615,6 @@ export interface operations {
             };
         };
     };
-    MangaPageController_createNote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                page_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateMangaPageNoteDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaNoteDto"];
-                };
-            };
-        };
-    };
     MangaPageController_getRegions: {
         parameters: {
             query?: never;
@@ -45160,69 +42803,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectDto"];
-                };
-            };
-        };
-    };
-    MangaProjectController_getBaselinePages: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaBaselinePageDto"][];
-                };
-            };
-        };
-    };
-    MangaProjectController_getCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectCheckDto"];
-                };
-            };
-        };
-    };
-    MangaProjectController_rerunCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectCheckDto"];
                 };
             };
         };
@@ -45438,31 +43018,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectPageDto"][];
-                };
-            };
-        };
-    };
-    MangaProjectController_correct: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MangaProjectInfoDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectDto"];
                 };
             };
         };
@@ -51176,28 +48731,6 @@ export interface operations {
                         items: components["schemas"]["TagLightNovelRelationDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
-                };
-            };
-        };
-    };
-    TelegramCoverController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                type: "galgame" | "light_novel" | "manga";
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "image/jpeg": string;
                 };
             };
         };

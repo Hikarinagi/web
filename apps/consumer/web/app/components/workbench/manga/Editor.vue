@@ -16,11 +16,7 @@
   import { usePageUpload } from '~/features/workbench/manga/composables/usePageUpload'
   import { usePageNavigation } from '~/features/workbench/manga/composables/usePageNavigation'
   import { projectKind } from '~/features/workbench/manga/labels'
-  import type {
-    BackendMangaProject,
-    MangaNoteRect,
-    MangaRegionChange,
-  } from '~/features/workbench/manga/manga'
+  import type { BackendMangaProject, MangaRegionChange } from '~/features/workbench/manga/manga'
   import { tally } from '~/features/workbench/manga/progress'
   import { typesetRegions } from '~/features/workbench/manga/render'
   import { projectEpisode, seriesTitle } from '~/features/workbench/manga/series'
@@ -95,22 +91,14 @@
   )
   watch(selectedId, id => focus(id))
 
-  const mark = ref<{ page_id: number; rect: MangaNoteRect } | null>(null)
-  function jump(note: { page_id: number; region_id: string | null; rect: MangaNoteRect | null }) {
-    openPage(note.page_id)
-    if (note.region_id) selectedId.value = note.region_id
-    mark.value = note.rect ? { page_id: note.page_id, rect: note.rect } : null
+  function jump(note: { region_id: string; region: { page_id: number } }) {
+    openPage(note.region.page_id)
+    selectedId.value = note.region_id
   }
 </script>
 
 <template>
-  <WorkbenchEditorTopBar
-    back="/create/projects"
-    :title="series"
-    :subtitle="episode"
-    :kind="kind"
-    :replaces="!!project.replaces"
-  >
+  <WorkbenchEditorTopBar back="/create/projects" :title="series" :subtitle="episode" :kind="kind">
     <template #status>
       <WorkbenchMangaShellSteps :project="project" />
       <WorkbenchMangaShellStatus
@@ -194,7 +182,6 @@
           :saving="saving"
           :dirty="dirty"
           :stale="stale.has(page.id)"
-          :mark="mark?.page_id === page.id ? mark.rect : null"
           class="min-h-0 flex-1"
           @select="id => (selectedId = id)"
           @create="shape => store.create(page!.id, shape)"

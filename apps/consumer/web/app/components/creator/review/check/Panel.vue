@@ -35,22 +35,6 @@
     (verification.value?.fields ?? []).filter(field => !field.verified),
   )
   const chosen = computed(() => props.overrides.length + props.entityChoices.length)
-  const suggested = computed(() =>
-    (verification.value?.entities ?? []).filter(
-      entity => entity.verified && entity.existing_id != null,
-    ),
-  )
-  const correctable = computed(
-    () =>
-      (!identified.value && verifiedFields.value.some(field => !field.applied)) ||
-      suggested.value.some(entity => !entity.applied),
-  )
-  const settled = computed(
-    () =>
-      !correctable.value &&
-      (verifiedFields.value.some(field => field.applied) ||
-        suggested.value.some(entity => entity.applied)),
-  )
 
   const rerunning = ref(false)
   const correcting = ref(false)
@@ -152,14 +136,11 @@
           :resource-type="changeRequest.resource_type"
         />
         <CreatorReviewCheckSources :sources="verification.sources" />
-        <Inline v-if="mode === 'correct' && correctable" justify="end">
+        <Inline v-if="mode === 'correct'" justify="end">
           <Button :disabled="chosen === 0" :loading="correcting" @click="correct">
             按所选提交修正
           </Button>
         </Inline>
-        <Text v-else-if="mode === 'correct' && settled" size="sm" tone="muted">
-          条目已使用本次核对所核实的全部值。
-        </Text>
         <Text v-if="mode === 'view' && identified" size="sm" tone="muted">
           审核员将作出决定。你也可以自行撤回。
         </Text>

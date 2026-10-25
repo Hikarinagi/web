@@ -11,7 +11,6 @@
     Tag,
     Tags,
   } from '@lucide/vue'
-  import { GALGAME_EDITION_KIND_CN } from '@hikarinagi/shared'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { platformLabel } from '~/features/galgame/platforms'
   import { CURRENCY_SYMBOL, langLabel, producerRoleLabel } from '~/features/galgame/labels'
@@ -31,15 +30,14 @@
   const platformsText = computed(() => props.galgame.platforms.map(platformLabel).join(' · '))
   const aliasesText = computed(() => props.galgame.aliases.join(' / '))
   const priceText = computed(() =>
-    props.galgame.editions
-      .filter(e => e.price != null)
-      .map(e => {
-        const symbol = (e.currency && CURRENCY_SYMBOL[e.currency]) || ''
-        const label = `${symbol}${Number(e.price).toLocaleString()}`
+    props.galgame.prices
+      .filter(p => p.amount != null)
+      .map(p => {
+        const symbol = (p.currency && CURRENCY_SYMBOL[p.currency]) || ''
+        const label = `${symbol}${Number(p.amount).toLocaleString()}`
         const tax =
-          e.tax_included === true ? '（含税）' : e.tax_included === false ? '（不含税）' : ''
-        const name = e.title || (e.kind ? GALGAME_EDITION_KIND_CN[e.kind] : '')
-        return `${name ? `${name} ` : ''}${label}${tax}`
+          p.tax_included === true ? '（含税）' : p.tax_included === false ? '（不含税）' : ''
+        return `${p.version ? `${p.version} ` : ''}${label}${tax}`
       })
       .join(' / '),
   )
