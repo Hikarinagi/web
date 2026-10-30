@@ -45,7 +45,7 @@
       <Button
         v-else-if="release.current_month"
         :as="NuxtLink"
-        to="/create/edit"
+        to="/create/new"
         target="_blank"
         variant="outline"
         tone="neutral"

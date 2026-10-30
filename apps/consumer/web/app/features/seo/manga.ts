@@ -24,7 +24,7 @@ export function mangaSeo(data: MangaPageData) {
   const meta = [volumeCount ? `单行本 ${volumeCount} 卷` : '', status].filter(Boolean).join(' · ')
   const metaText = meta ? `，${meta}` : ''
   const readText = readable ? '在线看全话，' : ''
-  const fallbackDesc = `「${name}」${byText}${metaText}。在 Hikarinagi ${readText}查看章节列表、登场角色与评分`
+  const fallbackDesc = `「${name}」${byText}${metaText}。在 Hikarinagi ${readText}查看章节列表、出场角色与评分`
 
   const comic: Record<string, unknown> = { '@type': 'ComicSeries' }
   comic.name = name

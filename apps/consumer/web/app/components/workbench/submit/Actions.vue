@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Button, Inline, Tag, toast } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
 
   const props = defineProps<{
     kind: 'novel' | 'manga'
@@ -14,6 +15,8 @@
       withdrawn_count?: number
     }
     blocker: string
+    reviewTo?: string
+    submitHint?: string
   }>()
   const emit = defineEmits<{ changed: [] }>()
 
@@ -77,7 +80,7 @@
   function confirmSubmit() {
     confirm({
       title: submitLabel.value,
-      description: copy.value[props.project.mode] ?? '',
+      description: props.submitHint ?? copy.value[props.project.mode] ?? '',
       confirmText: '提交',
       cancelText: '取消',
       onConfirm: () => run('submit', '已提交审核'),
@@ -98,7 +101,10 @@
 <template>
   <Inline gap="sm" align="center" :wrap="false">
     <template v-if="project.status === 'REVIEW'">
-      <template v-if="project.viewer_reviewer">
+      <Button v-if="project.viewer_reviewer && reviewTo" size="sm" :as="NuxtLink" :to="reviewTo">
+        去审核
+      </Button>
+      <template v-else-if="project.viewer_reviewer">
         <Button size="sm" variant="soft" tone="danger" :disabled="busy" @click="rejectOpen = true">
           退回
         </Button>

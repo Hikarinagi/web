@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <WorkSection v-if="characters.length" title="登场角色" :meta="`共 ${total} 位`">
+  <WorkSection v-if="characters.length" title="出场角色" :meta="`共 ${total} 位`">
     <Grid :cols="1" gap="none" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <MangaCharactersCard
         v-for="item in characters"

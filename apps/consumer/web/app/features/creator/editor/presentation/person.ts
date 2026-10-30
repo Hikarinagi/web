@@ -3,6 +3,7 @@ import type { EditorPresentation } from './types'
 export const personPresentation: EditorPresentation = {
   fields: {
     name: { label: '姓名' },
+    name_reading: { label: '名称读音' },
     trans_name: { label: '译名' },
     aliases: { label: '别名' },
     intro: { label: '简介', control: 'textarea' },

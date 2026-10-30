@@ -11,7 +11,6 @@
   const chapterOpen = ref(false)
   const importOpen = ref(false)
   const uploadOpen = ref(false)
-  const bookTarget = ref<{ slug: 'manga'; id: number } | null>(null)
 
   async function exportLabelPlus(content: 'source' | 'translation') {
     const file = await hikariRequest('/api/v3/manga-projects/{project_id}/labelplus', {
@@ -43,13 +42,19 @@
       if (props.project.status === 'PUBLISHED') chapterOpen.value = true
       else infoOpen.value = true
     } else if (action === 'series-info')
-      bookTarget.value = { slug: 'manga', id: props.project.series.id }
+      void navigateTo(`/create/edit/manga/${props.project.series.id}`, {
+        open: { target: '_blank' },
+      })
     else if (action === 'collaborators') membersOpen.value = true
     else if (action === 'labelplus-import') importOpen.value = true
     else if (action === 'labelplus-source') void exportLabelPlus('source')
     else if (action === 'labelplus-translation') void exportLabelPlus('translation')
     else if (action === 'view') void navigateTo(`/mangas/${props.project.series.id}`)
-    else if (action === 'archive') {
+    else if (action === 'current' && props.project.chapter) {
+      void navigateTo(`/mangas/${props.project.series.id}/read/${props.project.chapter.id}`, {
+        open: { target: '_blank' },
+      })
+    } else if (action === 'archive') {
       confirm({
         title: '归档',
         description: '归档会停止协作，并把这份投稿从列表中隐藏。页面与项目信息都会保留。',
@@ -88,5 +93,4 @@
     "
   />
   <WorkbenchMangaPageUploadDialog v-model:visible="uploadOpen" @uploaded="emit('refresh')" />
-  <WorkbenchProjectBookInfoDrawer :target="bookTarget" @close="bookTarget = null" />
 </template>

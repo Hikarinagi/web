@@ -2,7 +2,7 @@
   import { Stack } from '@hina-ui/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { tagRoute } from '~/features/manga/explore'
-  import { getRevisionFieldPath } from '~/features/revision/resources'
+  import { getRevisionEditPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'MangaAboutIntro' })
 
@@ -28,11 +28,7 @@
 
 <template>
   <Stack gap="none" class="min-w-0 flex-1 gap-5">
-    <WorkIntro
-      :text="primary"
-      :original="jp"
-      :edit-to="getRevisionFieldPath('manga', manga.id, 'summary_cn')"
-    />
+    <WorkIntro :text="primary" :original="jp" :edit-to="getRevisionEditPath('manga', manga.id)" />
     <WorkTagLinks :tags="tagLinks" />
   </Stack>
 </template>

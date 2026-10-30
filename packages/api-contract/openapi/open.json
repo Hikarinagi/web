@@ -566,7 +566,12 @@
           "COLLECTED_WORK",
           "SAME_UNIVERSE",
           "DIFFERENT_ADAPTATION",
-          "EXPANSION"
+          "EXPANSION",
+          "REMAKE",
+          "ORIGINAL",
+          "FAN_DISC",
+          "MAIN_GAME",
+          "SAME_SERIES"
         ],
         "type": "string"
       },
@@ -3810,9 +3815,9 @@
           "width",
           "thumb_hash",
           "height",
-          "nsfw",
           "sexual",
-          "violence"
+          "violence",
+          "nsfw"
         ],
         "type": "object"
       },

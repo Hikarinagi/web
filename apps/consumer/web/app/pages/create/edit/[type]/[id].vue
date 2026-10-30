@@ -1,18 +1,13 @@
 <script setup lang="ts">
-  import type { CreatorEditorPageData } from '~~/server/api/pages/create/editor/[type]/[id].get'
+  import type { EditRedirectPageData } from '~~/server/api/pages/create/edit/[type]/[id].get'
 
-  definePageMeta({ title: '编辑', middleware: 'wiki-editor-content-limit' })
+  definePageMeta({ title: '编辑条目', middleware: 'wiki-editor-content-limit' })
 
   const route = useRoute()
-  const type = computed(() => String(route.params.type))
-  const id = computed(() => Number(route.params.id))
-
-  const requestUrl = computed<`/api/pages/${string}`>(
-    () => `/api/pages/create/editor/${type.value}/${id.value}`,
+  const { data } = await useHikariApiData<EditRedirectPageData>(
+    `/api/pages/create/edit/${String(route.params.type)}/${Number(route.params.id)}`,
+    { fatal: true },
   )
-  const { data } = await useHikariApiData<CreatorEditorPageData>(requestUrl, { fatal: true })
+  if (data.value)
+    await navigateTo({ path: data.value.target, query: route.query }, { replace: true })
 </script>
-
-<template>
-  <CreatorEditorShell v-if="data" :page-data="data" :resource-type="type" :resource-id="id" />
-</template>

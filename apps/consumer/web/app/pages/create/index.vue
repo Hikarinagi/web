@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import { SimpleGrid, Stack } from '@hina-ui/vue'
   import type { CreatorOverviewPageData } from '~~/server/api/pages/create/overview.get'
 
   definePageMeta({ title: '概览' })
@@ -11,10 +11,16 @@
 
 <template>
   <Stack v-if="data" gap="lg">
-    <CreatorReviewQueueSection :counts="data.review_counts" />
+    <CreatorOverviewQueues :counts="data.review_counts" />
     <CreatorProjectSection :novels="data.novels" :mangas="data.mangas" />
-    <CreatorContributionPendingSection :list="data.pending" />
-    <CreatorContributionStatsHeatmap :stats="data.stats" />
-    <CreatorContributionActivityFeed :initial-items="data.activity" />
+    <SimpleGrid min="24rem" gap="lg">
+      <CreatorOverviewChanges title="我的编辑" :list="data.edits" empty-text="暂无编辑" />
+      <CreatorOverviewChanges
+        title="关注的条目"
+        :list="data.watched"
+        empty-text="你关注的条目暂无更改"
+        editor
+      />
+    </SimpleGrid>
   </Stack>
 </template>

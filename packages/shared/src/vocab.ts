@@ -107,6 +107,75 @@ export const VOLUME_TYPE_CN = {
   EXTRA: '番外',
 } as const
 
+export const AGE_RATING_CN = {
+  ALL_AGES: '全年龄',
+  R15: 'R-15',
+  R18: 'R-18',
+} as const
+
+export const GALGAME_EDITION_KIND_CN = {
+  REGULAR: '首发',
+  LIMITED: '不同包装',
+  DOWNLOAD: '不同销售形式',
+  BUDGET: '再发售',
+  PORT: '移植',
+  ENHANCED: '增强再发售',
+  BUNDLE: '套装',
+  ADDON: '追加内容',
+  BONUS: '附赠',
+  FREE: '免费发布',
+  SUBSCRIPTION: '订阅服务',
+  OTHER: '其他',
+} as const
+
+export const RELEASE_STATUS_CN = {
+  PLANNED: '预定发售',
+  RELEASED: '已发售',
+  DELAYED: '延期',
+  CANCELLED: '发售中止',
+} as const
+
+export const BOOK_FORMAT_CN = {
+  BUNKO: '文库本',
+  SHINSHO: '新书版',
+  SHIROKU: '四六判',
+  B6: 'B6',
+  A5: 'A5',
+  B5: 'B5',
+  LARGE: '大开本',
+  DIGITAL: '仅电子版',
+  OTHER: '其他',
+} as const
+
+export const BOOK_VARIANT_KIND_CN = {
+  SPECIAL: '特装版',
+  LIMITED: '限定版',
+  BUNDLE: '附赠特典版',
+  DIGITAL: '电子版',
+  BUNKO: '文库本',
+  NEW_EDITION: '新装版',
+  COMPLETE: '完全版',
+  REVISED: '改订版',
+  EXPANDED: '增补版',
+  OTHER: '其他',
+} as const
+
+export const LIGHT_NOVEL_CREDIT_ROLE_CN = {
+  AUTHOR: '作者',
+  ILLUSTRATOR: '插画',
+  ORIGINAL_CREATOR: '原作',
+  CHARACTER_DESIGN: '人物设定',
+  OTHER: '其他',
+} as const
+
+export const CROSS_MEDIA_RELATION_CN = {
+  ADAPTATION: '改编作品',
+  ORIGINAL: '原作',
+  SPIN_OFF: '衍生作品',
+  SAME_UNIVERSE: '同一世界观',
+  OTHER: '其他',
+} as const
+
 export const USER_ROLE_CN = {
   USER: '用户',
   ADMIN: '管理员',

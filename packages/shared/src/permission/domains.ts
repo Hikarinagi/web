@@ -36,6 +36,7 @@ export const USERS_PERMISSIONS = {
   DETAIL_READ: 'users.detail.read',
   BAN_WRITE: 'users.ban.write',
   ROLE_WRITE: 'users.role.write',
+  PROFILE_WRITE: 'users.profile.write',
 } as const
 
 export const IDP_PERMISSIONS = {

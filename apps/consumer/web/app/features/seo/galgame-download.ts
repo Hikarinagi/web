@@ -5,7 +5,7 @@ import { zhText } from '~/utils/seo'
 export function galgameDownloadSeo(data: GalgameDownloadsPageData) {
   const g = data.galgame
   const name = g.trans_title || g.origin_title
-  const developer = data.producers.find(p => p.role === 'DEVELOPER')?.producer.name
+  const developer = data.display.brands[0]?.text
   const resources = data.downloads?.resources ?? []
   const fileCount = resources.reduce((total, resource) => total + resource.files.length, 0)
   const platforms = [...new Set(resources.flatMap(resource => resource.platform))]

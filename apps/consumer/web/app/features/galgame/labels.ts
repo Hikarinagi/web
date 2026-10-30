@@ -55,6 +55,11 @@ export const RELATION_LABELS: Record<string, string> = {
   SAME_UNIVERSE: '同一世界观',
   DIFFERENT_ADAPTATION: '不同改编',
   EXPANSION: '资料片',
+  REMAKE: '重制',
+  ORIGINAL: '原作',
+  FAN_DISC: 'FD',
+  MAIN_GAME: '本篇',
+  SAME_SERIES: '同系列',
 }
 
 export const PRODUCER_ROLE_LABELS: Record<string, string> = PRODUCER_ROLE_CN

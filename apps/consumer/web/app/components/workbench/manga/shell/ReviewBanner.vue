@@ -55,7 +55,7 @@
                 @update:model-value="value => toggle(note, !!value)"
               />
               <Text size="xs" tone="muted" class="shrink-0 tabular-nums">
-                第 {{ pageNumber(note.region.page_id) }} 页
+                第 {{ pageNumber(note.page_id) }} 页
               </Text>
               <Text
                 size="sm"
@@ -65,7 +65,7 @@
                 {{ note.content }}
               </Text>
               <Button variant="link" size="sm" class="shrink-0" @click="emit('jump', note)">
-                转到文本框
+                转到页面
               </Button>
             </Inline>
           </Stack>

@@ -2,13 +2,10 @@ import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 import { breadcrumbNode, ratingNode } from './shared'
 import { zhText } from '~/utils/seo'
 
-type Producers = GalgamePageData['producers']
-type ProducerRole = 'DEVELOPER' | 'PUBLISHER'
-
-function producerName(producers: Producers, roles: ProducerRole[]) {
+function creditName(data: GalgamePageData, roles: string[]) {
   for (const role of roles) {
-    const hit = producers.find(p => p.role === role)
-    if (hit) return hit.producer.name
+    const hit = data.credits.groups.find(group => group.code === role)?.credits[0]
+    if (hit) return hit.text
   }
   return undefined
 }
@@ -16,7 +13,7 @@ function producerName(producers: Producers, roles: ProducerRole[]) {
 export function galgameSeo(data: GalgamePageData) {
   const g = data.galgame
   const name = g.trans_title || g.origin_title
-  const developer = producerName(data.producers, ['DEVELOPER', 'PUBLISHER'])
+  const developer = creditName(data, ['DEVELOPER', 'PUBLISHER'])
   const platform = g.platforms[0]
   const year = g.release_date ? new Date(g.release_date).getFullYear() : undefined
 
@@ -34,7 +31,7 @@ export function galgameSeo(data: GalgamePageData) {
   if (g.origin_lang) videoGame.inLanguage = g.origin_lang
   if (g.release_date) videoGame.datePublished = g.release_date.slice(0, 10)
   if (g.platforms.length) videoGame.gamePlatform = g.platforms
-  const publisher = producerName(data.producers, ['PUBLISHER', 'DEVELOPER'])
+  const publisher = creditName(data, ['PUBLISHER', 'DEVELOPER'])
   if (publisher) videoGame.publisher = { '@type': 'Organization', name: publisher }
   const rating = ratingNode(data.rate_stats)
   if (rating) videoGame.aggregateRating = rating

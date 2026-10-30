@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
-  import { getRevisionFieldPath } from '~/features/revision/resources'
+  import { getRevisionEditPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'LightNovelVolumeAboutIntro' })
   const props = defineProps<{ volume: LightNovelVolumePageData['volume'] }>()
@@ -19,6 +19,6 @@
   <WorkIntro
     :text="primary"
     :original="jp"
-    :edit-to="getRevisionFieldPath('light-novel-volume', volume.id, 'summary_cn')"
+    :edit-to="getRevisionEditPath('light-novel-volume', volume.id)"
   />
 </template>

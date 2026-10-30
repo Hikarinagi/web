@@ -20,10 +20,10 @@ function plainNotes<T extends { note: string }>(items: T[]) {
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
 
-  const [galgame, producers, my_rate, favorite, my_cover_vote, downloads, patches, banners] =
+  const [galgame, display, my_rate, favorite, my_cover_vote, downloads, patches, banners] =
     await Promise.all([
       fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
-      fetchBackendData(event, '/api/v3/galgames/{id}/producers', { path: { id } }),
+      fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
       fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
       fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
         path: { galgame_id: id },
@@ -42,7 +42,7 @@ async function handler(event: H3Event) {
 
   return {
     galgame,
-    producers,
+    display,
     my_rate,
     favorite,
     my_cover_vote,

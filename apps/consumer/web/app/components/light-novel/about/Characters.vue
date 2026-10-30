@@ -8,7 +8,7 @@
 
 <template>
   <Stack v-if="characters.length" gap="none" class="gap-4">
-    <Heading :level="3" size="base" class="font-bold">登场角色</Heading>
+    <Heading :level="3" size="base" class="font-bold">出场角色</Heading>
     <Grid :cols="1" gap="none" class="gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <LightNovelAboutCharacterCard
         v-for="item in characters"

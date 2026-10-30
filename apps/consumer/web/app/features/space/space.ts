@@ -239,8 +239,20 @@ export function contributionResourceLabel(type: string): string {
   return RESOURCE_LABEL[type] ?? type
 }
 
-export function contributionDetailPath(changeRequestId: number | null): string | null {
-  return changeRequestId ? `/create/contributions/${changeRequestId}` : null
+const RESOURCE_PATH: Record<string, string> = {
+  GALGAME: '/galgames',
+  LIGHT_NOVEL: '/light-novels',
+  LIGHT_NOVEL_VOLUME: '/light-novel-volumes',
+  MANGA: '/mangas',
+  MANGA_VOLUME: '/manga-volumes',
+  PERSON: '/people',
+  CHARACTER: '/characters',
+  PRODUCER: '/producers',
+}
+
+export function contributionDetailPath(type: string, id: number | null): string | null {
+  const base = RESOURCE_PATH[type]
+  return base && id ? `${base}/${id}` : null
 }
 
 export const CONTRIBUTION_TYPE_FILTERS = [

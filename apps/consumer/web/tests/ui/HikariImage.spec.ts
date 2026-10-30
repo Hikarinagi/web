@@ -63,6 +63,13 @@ describe('HikariImage', () => {
     expect(props.lazy).toBe(true)
   })
 
+  it('blurs an image that has not been rated yet', () => {
+    limit = 'blur'
+    const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: null, violence: null })
+    expect(props.src).toMatch(/^data:image\/png;base64,/)
+    expect(render({ src: 'media/b.webp', sexual: 0, violence: 0 }).src).toContain('media/b.webp')
+  })
+
   it('never shows the thumb hash of a blocked image', () => {
     limit = 'block'
     const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: 2 })
