@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Button, Heading, Inline, Stack, Tag, Text } from '@hina-ui/vue'
-  import { ExternalLink, GitMerge, History, MoveRight, Split } from '@lucide/vue'
+  import { ExternalLink, GitMerge, MoveRight, Split } from '@lucide/vue'
   import { NuxtLink } from '#components'
 
   defineOptions({ name: 'CreatorEntryHeader' })
@@ -9,7 +9,6 @@
     type: string
     meta: string[]
     to: string | null
-    historyTo: string
     splittable?: boolean
     movable?: boolean
   }>()
@@ -39,10 +38,6 @@
       <Button v-if="movable" variant="outline" tone="neutral" size="sm" @click="$emit('move')">
         <template #icon><MoveRight /></template>
         移动
-      </Button>
-      <Button :as="NuxtLink" :to="historyTo" variant="outline" tone="neutral" size="sm">
-        <template #icon><History /></template>
-        历史
       </Button>
       <Button v-if="to" :as="NuxtLink" :to="to" variant="outline" tone="neutral" size="sm">
         <template #icon><ExternalLink /></template>

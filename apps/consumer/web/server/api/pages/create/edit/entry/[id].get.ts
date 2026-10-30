@@ -2,7 +2,6 @@ import { getRouterParam, type H3Event } from 'h3'
 import { MATCHING_CODES } from '~/features/creator/entry/codes'
 import { fetchBackendData } from '../../../../../utils/backend-api'
 import { definePageBffHandler } from '../../../../../utils/page-bff'
-import { historyRowsOf } from '../../../../../utils/entry-history'
 
 const EDITORS: Record<string, string> = {
   galgame: '/create/edit/galgame',
@@ -21,14 +20,10 @@ async function handler(event: H3Event) {
       ? entry.statements.find(item => item.property === 'WORK' && item.status !== 'DEPRECATED')
           ?.target?.id
       : undefined
-  const [definitions, todos, revisions, references, versions] = await Promise.all([
+  const [definitions, todos, references, versions] = await Promise.all([
     fetchBackendData(event, '/api/v3/wiki/definitions'),
     fetchBackendData(event, '/api/v3/wiki/todos', {
       query: { entry_id: id, page: 1, page_size: 20 },
-    }),
-    fetchBackendData(event, '/api/v3/wiki/entries/{id}/revisions', {
-      path: { id },
-      query: { page: 1, page_size: 3 },
     }),
     fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', { path: { id } }),
     work
@@ -53,7 +48,6 @@ async function handler(event: H3Event) {
         ),
       })),
       todos,
-      history: historyRowsOf(entry, revisions),
       references,
       versions: versions
         .filter(

@@ -1,5 +1,17 @@
 <script setup lang="ts">
-  import { Button, Flex, Heading, Inline, Link, Stack, Tag, Text } from '@hina-ui/vue'
+  import {
+    Button,
+    Heading,
+    Inline,
+    Link,
+    Stack,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+    Tag,
+    Text,
+  } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { ProductEditPageData } from '~~/server/api/pages/create/edit/product/[id].get'
@@ -21,8 +33,10 @@
     ),
   )
   const game = computed(() => props.pageData.product.games[0] ?? null)
+  const tab = ref('facts')
   const editing = ref<{ property: string; target: number | 'new' } | null>(null)
   const fix = (statement: BackendStatement) => {
+    tab.value = 'facts'
     editing.value = { property: statement.property, target: statement.id }
   }
   const route = useRoute()
@@ -66,23 +80,50 @@
         返回游戏
       </Button>
     </Inline>
-    <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start">
-      <CreatorEntryFacts
-        v-model:editing="editing"
-        :entry="pageData.entry"
-        :definitions="definitions"
-        :groups="PRODUCT_GROUPS"
-        class="min-w-0 flex-1"
-        @saved="$emit('saved')"
-      />
-      <CreatorEntryTodos
-        :todos="pageData.todos"
-        :entry="pageData.entry"
-        :definitions="definitions"
-        class="lg:w-80 lg:shrink-0"
-        @fix="fix"
-        @saved="$emit('saved')"
-      />
-    </Flex>
+    <Tabs v-model="tab">
+      <TabsList aria-label="编辑内容">
+        <TabsTrigger value="facts">资料</TabsTrigger>
+        <TabsTrigger value="todos">
+          待完善
+          <Text as="span" size="sm" tone="muted" class="tabular-nums">
+            {{ pageData.todos.meta.total_items }}
+          </Text>
+        </TabsTrigger>
+        <TabsTrigger value="history">历史</TabsTrigger>
+      </TabsList>
+      <TabsContent value="facts" class="pt-6">
+        <CreatorEntryFacts
+          v-model:editing="editing"
+          :entry="pageData.entry"
+          :definitions="definitions"
+          :groups="PRODUCT_GROUPS"
+          @saved="$emit('saved')"
+        />
+      </TabsContent>
+      <TabsContent value="todos" class="pt-6">
+        <CreatorEntryTodos
+          :todos="pageData.todos"
+          :entry="pageData.entry"
+          :definitions="definitions"
+          @fix="fix"
+          @saved="$emit('saved')"
+        />
+      </TabsContent>
+      <TabsContent value="history" class="pt-6">
+        <CreatorEntryHistoryTab
+          v-if="tab === 'history'"
+          :source="`/api/pages/create/edit/entry/${pageData.entry.id}/history`"
+          :revision-to="
+            revision =>
+              revision > 1
+                ? `/create/edit/entry/${pageData.entry.id}/compare?from=${revision - 1}&to=${revision}`
+                : null
+          "
+          :compare-to="
+            (from, to) => `/create/edit/entry/${pageData.entry.id}/compare?from=${from}&to=${to}`
+          "
+        />
+      </TabsContent>
+    </Tabs>
   </Stack>
 </template>

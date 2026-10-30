@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Flex, Stack } from '@hina-ui/vue'
+  import { Stack, Tabs, TabsContent, TabsList, TabsTrigger, Text } from '@hina-ui/vue'
   import type { EntryEditPageData } from '~~/server/api/pages/create/edit/entry/[id].get'
   import {
     ENTRY_TYPE_NAMES,
@@ -49,8 +49,10 @@
   const seriesDefinition = computed(() =>
     definitions.value.find(item => item.property === 'SERIES'),
   )
+  const tab = ref('facts')
   const editing = ref<{ property: string; target: number | 'new' } | null>(null)
   const fix = (statement: BackendStatement) => {
+    tab.value = 'facts'
     editing.value = { property: statement.property, target: statement.id }
   }
   const route = useRoute()
@@ -68,25 +70,39 @@
       :type="owner?.label ?? ''"
       :meta="[]"
       :to="readerPath(entry.resource)"
-      :history-to="`/create/edit/entry/${entry.id}/history`"
       :splittable="entry.type !== 'CHARACTER'"
       :movable="Boolean(placement)"
       @merge="merging = true"
       @split="splitting = true"
       @move="moving = true"
     />
-    <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start">
-      <Stack gap="lg" class="min-w-0 flex-1">
-        <CreatorEntryFacts
-          v-model:editing="editing"
-          :entry="entry"
-          :definitions="definitions"
-          :groups="ENTRY_GROUPS[entry.type] ?? []"
-          @saved="$emit('saved')"
-        />
-        <CreatorEntryReferences :groups="pageData.references" :definitions="pageData.definitions" />
-      </Stack>
-      <Stack gap="lg" class="lg:w-80 lg:shrink-0">
+    <Tabs v-model="tab">
+      <TabsList aria-label="编辑内容">
+        <TabsTrigger value="facts">资料</TabsTrigger>
+        <TabsTrigger value="todos">
+          待完善
+          <Text as="span" size="sm" tone="muted" class="tabular-nums">
+            {{ pageData.todos.meta.total_items }}
+          </Text>
+        </TabsTrigger>
+        <TabsTrigger value="history">历史</TabsTrigger>
+      </TabsList>
+      <TabsContent value="facts" class="pt-6">
+        <Stack gap="lg">
+          <CreatorEntryFacts
+            v-model:editing="editing"
+            :entry="entry"
+            :definitions="definitions"
+            :groups="ENTRY_GROUPS[entry.type] ?? []"
+            @saved="$emit('saved')"
+          />
+          <CreatorEntryReferences
+            :groups="pageData.references"
+            :definitions="pageData.definitions"
+          />
+        </Stack>
+      </TabsContent>
+      <TabsContent value="todos" class="pt-6">
         <CreatorEntryTodos
           :todos="pageData.todos"
           :entry="entry"
@@ -94,18 +110,21 @@
           @fix="fix"
           @saved="$emit('saved')"
         />
-        <CreatorEntryRecent
-          :rows="pageData.history.items"
-          :history-to="`/create/edit/entry/${entry.id}/history`"
+      </TabsContent>
+      <TabsContent value="history" class="pt-6">
+        <CreatorEntryHistoryTab
+          v-if="tab === 'history'"
+          :source="`/api/pages/create/edit/entry/${entry.id}/history`"
           :revision-to="
             revision =>
               revision > 1
                 ? `/create/edit/entry/${entry.id}/compare?from=${revision - 1}&to=${revision}`
                 : null
           "
+          :compare-to="(from, to) => `/create/edit/entry/${entry.id}/compare?from=${from}&to=${to}`"
         />
-      </Stack>
-    </Flex>
+      </TabsContent>
+    </Tabs>
     <CreatorEntryMergeDialog v-model:open="merging" :entry="entry" :definitions="definitions" />
     <CreatorEntrySplitDialog
       v-model:open="splitting"

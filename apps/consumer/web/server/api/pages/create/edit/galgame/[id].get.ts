@@ -7,17 +7,13 @@ async function handler(event: H3Event) {
   const galgame = await fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } })
   if (!galgame.entry_id) throw createError({ statusCode: 404, statusMessage: 'Entry not found' })
 
-  const [display, entry, definitions, products, todos, history, references] = await Promise.all([
+  const [display, entry, definitions, products, todos, references] = await Promise.all([
     fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
     fetchBackendData(event, '/api/v3/wiki/entries/{id}', { path: { id: galgame.entry_id } }),
     fetchBackendData(event, '/api/v3/wiki/definitions'),
     fetchBackendData(event, '/api/v3/galgames/{id}/products', { path: { id } }),
     fetchBackendData(event, '/api/v3/wiki/todos', {
       query: { entry_id: galgame.entry_id, page: 1, page_size: 20 },
-    }),
-    fetchBackendData(event, '/api/v3/galgames/{id}/history', {
-      path: { id },
-      query: { page: 1, page_size: 3 },
     }),
     fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', {
       path: { id: galgame.entry_id },
@@ -31,7 +27,6 @@ async function handler(event: H3Event) {
     definitions,
     products,
     todos,
-    history,
     appearances: references.filter(group => group.type === 'APPEARANCE'),
     links:
       references.find(group => group.type === 'PRODUCT' && group.property === 'INCLUDED_GAME') ??
