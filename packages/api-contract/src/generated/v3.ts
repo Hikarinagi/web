@@ -10325,6 +10325,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/og/cards/{type}/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OgController_card"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/og/defaults": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OgController_defaults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/catalog/changes": {
         parameters: {
             query?: never;
@@ -22737,6 +22769,39 @@ export interface components {
         };
         ObjectEditDto: {
             reason: string;
+        };
+        OgAuthorDto: {
+            avatar: string | null;
+            name: string;
+            nickname: string | null;
+        };
+        OgCardDto: {
+            author: components["schemas"]["OgAuthorDto"] | null;
+            banner: string | null;
+            cover: components["schemas"]["OgImageDto"] | null;
+            covers: components["schemas"]["OgImageDto"][];
+            date: string | null;
+            meta: string[];
+            stats: components["schemas"]["OgStatsDto"] | null;
+            subtitle: string | null;
+            title: string;
+            /** @enum {string} */
+            variant: "work" | "profile" | "content" | "user" | "collection";
+        };
+        OgDefaultsDto: {
+            avatars: string[];
+            covers: string[];
+            members: number;
+        };
+        OgImageDto: {
+            blur: boolean;
+            height: number | null;
+            src: string;
+            width: number | null;
+        };
+        OgStatsDto: {
+            followers: number;
+            following: number;
         };
         OpenCatalogChangesDto: {
             /** @description 本页之后是否还有更多事件 */
@@ -44941,6 +45006,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NovelSegmentStateDto"];
+                };
+            };
+        };
+    };
+    OgController_card: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                type: "galgame" | "light-novel" | "light-novel-volume" | "manga" | "manga-volume" | "post" | "article" | "person" | "character" | "producer" | "user" | "collection";
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OgCardDto"];
+                };
+            };
+        };
+    };
+    OgController_defaults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OgDefaultsDto"];
                 };
             };
         };

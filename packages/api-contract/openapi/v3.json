@@ -33903,6 +33903,173 @@
         ],
         "type": "object"
       },
+      "OgAuthorDto": {
+        "properties": {
+          "avatar": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nickname": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "nickname",
+          "avatar"
+        ],
+        "type": "object"
+      },
+      "OgCardDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OgAuthorDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "banner": {
+            "nullable": true,
+            "type": "string"
+          },
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OgImageDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/OgImageDto"
+            },
+            "type": "array"
+          },
+          "date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "meta": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "stats": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OgStatsDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "subtitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "variant": {
+            "enum": [
+              "work",
+              "profile",
+              "content",
+              "user",
+              "collection"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "variant",
+          "title",
+          "subtitle",
+          "meta",
+          "cover",
+          "covers",
+          "banner",
+          "stats",
+          "author",
+          "date"
+        ],
+        "type": "object"
+      },
+      "OgDefaultsDto": {
+        "properties": {
+          "avatars": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "covers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "members": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "covers",
+          "avatars",
+          "members"
+        ],
+        "type": "object"
+      },
+      "OgImageDto": {
+        "properties": {
+          "blur": {
+            "type": "boolean"
+          },
+          "height": {
+            "nullable": true,
+            "type": "number"
+          },
+          "src": {
+            "type": "string"
+          },
+          "width": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "src",
+          "width",
+          "height",
+          "blur"
+        ],
+        "type": "object"
+      },
+      "OgStatsDto": {
+        "properties": {
+          "followers": {
+            "type": "number"
+          },
+          "following": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "following",
+          "followers"
+        ],
+        "type": "object"
+      },
       "OpenCatalogChangesDto": {
         "properties": {
           "has_more": {
@@ -81254,6 +81421,80 @@
         },
         "tags": [
           "NovelTranslation"
+        ]
+      }
+    },
+    "/api/v3/og/cards/{type}/{id}": {
+      "get": {
+        "operationId": "OgController_card",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light-novel",
+                "light-novel-volume",
+                "manga",
+                "manga-volume",
+                "post",
+                "article",
+                "person",
+                "character",
+                "producer",
+                "user",
+                "collection"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OgCardDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "og"
+        ]
+      }
+    },
+    "/api/v3/og/defaults": {
+      "get": {
+        "operationId": "OgController_defaults",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OgDefaultsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "og"
         ]
       }
     },

@@ -52,7 +52,7 @@ importers:
         version: 1.7.16(tailwindcss@4.3.3)(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3))
       '@lucide/vue':
         specifier: ^1.14.0
-        version: 1.65.0(vue@3.5.44(typescript@6.0.3))
+        version: 1.66.0(vue@3.5.44(typescript@6.0.3))
       '@nuxt/content':
         specifier: ^3.16.0
         version: 3.16.2(@nuxt/schema@4.6.3)(@oxc-project/types@0.156.0)(confbox@0.3.2)(dotenv@17.4.2)(esbuild@0.27.7)(giget@3.3.1)(magic-string@1.4.5)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.16)(rollup@4.67.2)(valibot@1.5.0(typescript@6.0.3))(vite@8.3.5(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
@@ -1526,8 +1526,8 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  '@lucide/vue@1.65.0':
-    resolution: {integrity: sha512-J34stKcr0jKIkzhG09Hz/lJgAnl9yhGgvaUcRcTQXv4qVGdfEBDzHGsZ5skS8anlRALLHV+EekBYWswEVkcBww==}
+  '@lucide/vue@1.66.0':
+    resolution: {integrity: sha512-cyALYgAzCD2uZ557pM5I/dmFAyTKqtwY7PrdU67gzITkTH+V635u7Uv7VBpQ5hqvmlGqRtbqSDx08LCJHU+GAw==}
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -9376,7 +9376,7 @@ snapshots:
       '@floating-ui/vue': 1.1.11(vue@3.5.44(typescript@6.0.3))
       '@internationalized/date': 3.12.4
       '@internationalized/number': 3.6.9
-      '@lucide/vue': 1.65.0(vue@3.5.44(typescript@6.0.3))
+      '@lucide/vue': 1.66.0(vue@3.5.44(typescript@6.0.3))
       '@tanstack/vue-table': 9.3.1(vue@3.5.44(typescript@6.0.3))
       '@tanstack/vue-virtual': 3.13.50(vue@3.5.44(typescript@6.0.3))
       '@vueuse/core': 12.8.2(typescript@6.0.3)
@@ -9793,7 +9793,7 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@lucide/vue@1.65.0(vue@3.5.44(typescript@6.0.3))':
+  '@lucide/vue@1.66.0(vue@3.5.44(typescript@6.0.3))':
     dependencies:
       vue: 3.5.44(typescript@6.0.3)
 
