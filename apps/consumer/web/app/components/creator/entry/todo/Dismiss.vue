@@ -3,7 +3,7 @@
   import { dismissSchema, type DismissValues } from '~/features/creator/entry/schemas/todo.schema'
 
   defineOptions({ name: 'CreatorEntryTodoDismiss' })
-  const props = defineProps<{ id: number; text: string }>()
+  const props = defineProps<{ id: number }>()
   const emit = defineEmits<{ saved: [] }>()
   const open = defineModel<boolean>('open', { required: true })
 
@@ -34,13 +34,7 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:open="open"
-    title="驳回此待完善事项"
-    :description="text"
-    size="sm"
-    :locked="submitting"
-  >
+  <Dialog v-model:open="open" title="驳回此事项" size="sm" :locked="submitting">
     <template #content>
       <Form
         ref="form"
@@ -49,14 +43,12 @@
         :disabled="submitting"
         @submit="onSubmit"
       >
-        <FormField
-          name="reason"
-          label="原因"
-          required
-          description="除非证据发生变化，否则该待完善事项将不再出现。"
-          description-placement="control"
-        >
-          <Textarea v-model="values.reason" :rows="3" placeholder="请说明为何这不是问题" />
+        <FormField name="reason" required>
+          <template #label>
+            理由
+            <CreatorEntryHint name="dismiss" class="ms-1 align-middle" />
+          </template>
+          <Textarea v-model="values.reason" :rows="3" placeholder="必填" />
         </FormField>
       </Form>
     </template>

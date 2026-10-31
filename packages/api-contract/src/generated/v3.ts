@@ -2949,22 +2949,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/novel/series/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminNovelSeriesController_updateStatus"];
-        trace?: never;
-    };
     "/api/v3/admin/novel/volumes": {
         parameters: {
             query?: never;
@@ -6741,134 +6725,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/external-source/cover-media": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["ExternalSourceController_coverMedia"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/entity-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_entityDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/galgame-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_galgameDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/light-novel-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_lnDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/light-novel-volume-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_volumeDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/manga-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_mangaDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/manga-volume-draft": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_mangaVolumeDraft"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/external-source/{source}/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ExternalSourceController_search"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/favorite-collections": {
         parameters: {
             query?: never;
@@ -7408,22 +7264,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/covers/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CurrentUserGalgameCoverVoteController_getMine"];
-        put: operations["CurrentUserGalgameCoverVoteController_vote"];
-        post?: never;
-        delete: operations["CurrentUserGalgameCoverVoteController_retract"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8357,22 +8197,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/light-novel-volumes/{id}/covers/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CurrentUserLightNovelVolumeCoverVoteController_getMine"];
-        put: operations["CurrentUserLightNovelVolumeCoverVoteController_vote"];
-        post?: never;
-        delete: operations["CurrentUserLightNovelVolumeCoverVoteController_retract"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/light-novel-volumes/{id}/epub": {
         parameters: {
             query?: never;
@@ -8704,22 +8528,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/light-novels/{id}/covers/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["CurrentUserLightNovelCoverVoteController_getMine"];
-        put: operations["CurrentUserLightNovelCoverVoteController_vote"];
-        post?: never;
-        delete: operations["CurrentUserLightNovelCoverVoteController_retract"];
         options?: never;
         head?: never;
         patch?: never;
@@ -14904,13 +14712,6 @@ export interface components {
             from: number;
             to: number;
         };
-        AdminMangaLayoutRelatedDto: {
-            cover: string | null;
-            id: number;
-            name: string;
-            name_cn: string | null;
-            relation: components["schemas"]["MangaRelationType"];
-        };
         AdminMangaLayoutResultDto: {
             counts: components["schemas"]["AdminMangaLayoutCountsDto"];
             rows: components["schemas"]["AdminMangaLayoutRowDto"][];
@@ -14978,9 +14779,10 @@ export interface components {
             other_names: string[];
             /** Format: date */
             publication_date: string | null;
+            /** @description 出版状态编码 */
+            publication_status: string | null;
             readers: number;
-            related: components["schemas"]["AdminMangaLayoutRelatedDto"][];
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            related: components["schemas"]["AdminMangaSummaryDto"][];
             shared: components["schemas"]["AdminMangaSummaryDto"][];
             summary: string | null;
             volumes: components["schemas"]["AdminMangaLayoutVolumeDto"][];
@@ -14995,8 +14797,9 @@ export interface components {
             other_names: string[];
             /** Format: date */
             publication_date: string | null;
+            /** @description 出版状态编码 */
+            publication_status: string | null;
             readers: number;
-            serial_status: components["schemas"]["MangaSerialStatus"];
             staff: components["schemas"]["AdminMangaStaffMarkDto"][];
             uploads: number;
         };
@@ -15088,7 +14891,7 @@ export interface components {
         };
         AdminMangaSourceReleaseDto: {
             manga_id: number;
-            name: string;
+            name: string | null;
             readers: number;
             removed: number;
         };
@@ -15140,17 +14943,19 @@ export interface components {
             name_cn: string | null;
             /** Format: date */
             publication_date: string | null;
+            /** @description 出版状态编码 */
+            publication_status: string | null;
             readers: number;
-            serial_status: components["schemas"]["MangaSerialStatus"];
             staff: components["schemas"]["AdminMangaStaffMarkDto"][];
         };
         AdminMangaStaffMarkDto: {
             ai_names: string[];
             art: boolean;
+            /** @description 制作信息编码 */
+            code: string;
             credited: boolean;
             name: string;
             person_id: number;
-            role: components["schemas"]["MangaStaffRole"];
         };
         AdminMangaSummaryDto: {
             cover: string | null;
@@ -15206,8 +15011,9 @@ export interface components {
             nsfw: boolean;
             origin_country: string | null;
             primary_source_key: string | null;
+            /** @description 出版状态编码 */
+            publication_status: string | null;
             recent_errors: components["schemas"]["AdminMangaWorkErrorDto"][];
-            serial_status: components["schemas"]["MangaSerialStatus"];
             views: number;
         };
         AdminMangaWorkErrorDto: {
@@ -15234,7 +15040,8 @@ export interface components {
             name_cn: string | null;
             origin_country: string | null;
             pending_count: number;
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            /** @description 出版状态编码 */
+            publication_status: string | null;
             /** Format: date-time */
             updated_at: string;
         };
@@ -15380,7 +15187,7 @@ export interface components {
             matched_by: "TITLE" | "AUTHOR" | "ISBN" | "NUMBER" | "COVER" | "LLM" | "MANUAL";
             next_attempt_at: string | null;
             report: components["schemas"]["NovelVolumeBuildReportDto"] | null;
-            series_id: number;
+            series_id: number | null;
             series_name: string | null;
             source_key: string;
             source_volume_id: string;
@@ -16783,11 +16590,14 @@ export interface components {
             target_type: string;
         };
         AppearanceDto: {
+            /** @description Character this appearance belongs to */
+            character_id: number | null;
             /** @description Group title on the official site */
             group: string | null;
             /** @description Only the work itself records this appearance */
             hidden: boolean;
             id: number;
+            image: components["schemas"]["ScoredMediaAssetDto"] | null;
             /** @description Name on the cast list */
             label: string;
             voices: components["schemas"]["VoiceDto"][];
@@ -17119,6 +16929,8 @@ export interface components {
             intro: string;
             labels: components["schemas"]["EntityLabelDto"][];
             name: string;
+            /** @description 最早公开出场作品所载的资料，照录原文 */
+            profile: components["schemas"]["CharacterProfileDto"];
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -17134,13 +16946,25 @@ export interface components {
         CharacterGalgameRelationDto: {
             actors: components["schemas"]["PersonPreviewDto"][];
             galgame: components["schemas"]["GalgameSummaryDto"];
+            /** @description 官网角色页的分组，照录 */
+            group: string | null;
+            /** @description 这部作品名单中的名字 */
+            label: string;
             role: components["schemas"]["CharacterRole"];
         };
         CharacterLightNovelRelationDto: {
+            /** @description 官网角色页的分组，照录 */
+            group: string | null;
+            /** @description 这部作品名单中的名字 */
+            label: string;
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             role: components["schemas"]["CharacterRole"];
         };
         CharacterMangaRelationDto: {
+            /** @description 官网角色页的分组，照录 */
+            group: string | null;
+            /** @description 这部作品名单中的名字 */
+            label: string;
             manga: components["schemas"]["MangaSummaryDto"];
             role: components["schemas"]["CharacterRole"];
         };
@@ -17149,6 +16973,13 @@ export interface components {
             image: components["schemas"]["MediaAssetDto"] | null;
             name: string;
             trans_name: string | null;
+        };
+        CharacterProfileDto: {
+            age: string | null;
+            birthday: string | null;
+            height: string | null;
+            measurements: string | null;
+            weight: string | null;
         };
         /** @enum {string} */
         CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
@@ -17220,7 +17051,7 @@ export interface components {
             citations: components["schemas"]["CheckedCitationDto"][];
             entry_id: number;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             statement_id: number;
             /** @enum {string} */
             status: "ACTIVE" | "CLUE" | "DEPRECATED";
@@ -17481,24 +17312,6 @@ export interface components {
         CountByTypeDto: {
             count: number;
             target_type: string;
-        };
-        CoverMediaDto: {
-            url: string;
-        };
-        CoverMediaResultDto: {
-            id: number;
-            src: string;
-        };
-        CoverTallyDto: {
-            media_id: number;
-            votes: number;
-        };
-        CoverVoteDto: {
-            media_id: number;
-        };
-        CoverVoteStateDto: {
-            covers: components["schemas"]["CoverTallyDto"][];
-            my_media_id: number | null;
         };
         CreateAiModelDto: {
             /** @description 模型目录中的规范 ID */
@@ -18111,7 +17924,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "MANGA" | "LIGHT_NOVEL" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "CHARACTER" | "TAG";
+            resource_type: "PERSON" | "CHARACTER" | "LIGHT_NOVEL" | "MANGA" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -18581,7 +18394,7 @@ export interface components {
             op: "create_entry" | "add" | "modify" | "cite" | "deprecate" | "restore" | "move" | "merge" | "split" | "delete_entry" | "restore_entry";
             position?: number;
             /** @enum {string} */
-            property?: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property?: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             qualifiers?: components["schemas"]["EditQualifiersDto"];
             /** @enum {string} */
             reason?: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED";
@@ -18665,7 +18478,7 @@ export interface components {
             entry_id: number;
             other_entry_id?: number;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             /** @enum {string} */
             reason: "required" | "single" | "period_overlap" | "duplicate";
         };
@@ -18777,17 +18590,6 @@ export interface components {
             maintains_index: boolean;
             reachable: boolean;
         };
-        EntityDraftDto: {
-            cover: string | null;
-            draft: {
-                [key: string]: unknown;
-            };
-            existing_id: number | null;
-            field_sources: {
-                [key: string]: string;
-            };
-            sources_match: boolean | null;
-        };
         EntityLabelDto: {
             key: string;
             order: number;
@@ -18822,6 +18624,11 @@ export interface components {
             partial?: boolean;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        };
+        EntityWebsiteDto: {
+            /** @description 网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT */
+            code: string;
+            url: string;
         };
         EntryChangeDto: {
             id: number;
@@ -18872,10 +18679,14 @@ export interface components {
             operations: components["schemas"]["EditOperationDto"][];
         };
         /** @enum {string} */
-        EntryProperty: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+        EntryProperty: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
         /** @enum {string} */
         EntryProtection: "LOCKED" | "NEW_MEMBER_REVIEW";
         EntryProtectionDto: {
+            /** @description When the entry was protected */
+            at: string | null;
+            /** @description Who protected the entry */
+            by: components["schemas"]["UserRefDto"] | null;
             /** @enum {string} */
             level: "LOCKED" | "NEW_MEMBER_REVIEW";
             /** @description Reason given when the entry was protected */
@@ -18893,6 +18704,8 @@ export interface components {
             /** @description Names credited on an appearance, in order */
             credits: string[];
             entry: components["schemas"]["EntryRefDto"];
+            /** @description The statement has a source other than an import */
+            sourced: boolean;
             statement_id: number;
             /** @description Works of an appearance listed under another entry than its work */
             works: string[];
@@ -18901,7 +18714,7 @@ export interface components {
             /** @description The first 100 references */
             items: components["schemas"]["EntryReferenceDto"][];
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             total: number;
             /**
              * @description Type of the entries holding the statements
@@ -18959,6 +18772,7 @@ export interface components {
         EpubDuplicateVolumeDto: {
             id: number;
             name: string | null;
+            name_cn: string | null;
             series: components["schemas"]["EpubResourceSeriesDto"];
             volume_number: number | null;
         };
@@ -19062,7 +18876,6 @@ export interface components {
             volume_id: number;
         };
         EpubResourceDetailDto: {
-            bangumi_book_id: number | null;
             /** @description 当前 EPUB 的 15 分钟临时下载地址 */
             download_url: string | null;
             epub_curated: boolean;
@@ -19080,7 +18893,6 @@ export interface components {
             online_reading_available: boolean;
             pending_report_count: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
-            series_id: number;
             /** @description 引用同一个文件的其他分卷，非空通常意味着合集误挂或错卷 */
             shared_volumes: components["schemas"]["EpubResourceSharedVolumeDto"][];
             /** Format: date-time */
@@ -19090,7 +18902,6 @@ export interface components {
             volume_number: number | null;
         };
         EpubResourceItemDto: {
-            bangumi_book_id: number | null;
             epub_curated: boolean;
             epub_is_collection: boolean;
             /** @enum {string} */
@@ -19102,7 +18913,6 @@ export interface components {
             online_reading_available: boolean;
             pending_report_count: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
-            series_id: number;
             /** Format: date-time */
             updated_at: string;
             volume_number: number | null;
@@ -19127,7 +18937,7 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
         };
         EpubResourceSeriesDto: {
-            id: number;
+            id: number | null;
             name: string;
             name_cn: string | null;
         };
@@ -19222,21 +19032,11 @@ export interface components {
             /** @description 装扮相对头像的缩放比例 */
             scale: number;
         };
-        ExternalSearchItemDto: {
-            aliases?: string[];
-            authors?: string[];
-            cover: string | null;
-            existing_id: number | null;
-            external_id: string;
-            subtitle: string | null;
-            title: string;
-            year: string | null;
-        };
         FactDto: {
             /** @description Name of the property */
             label: string;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             values: components["schemas"]["FactValueDto"][];
         };
         FactValueDto: {
@@ -19727,23 +19527,6 @@ export interface components {
             /** @description 是否已开始同步；已有同步在进行时为 false */
             started: boolean;
         };
-        GalgameDraftDto: {
-            characters: components["schemas"]["ResolvedCharacterDto"][];
-            cover: string | null;
-            draft: {
-                [key: string]: unknown;
-            };
-            existing_id: number | null;
-            field_sources: {
-                [key: string]: string;
-            };
-            producers: components["schemas"]["ResolvedProducerDto"][];
-            relations: components["schemas"]["ResolvedRelationDto"][];
-            screenshots: components["schemas"]["ScreenshotDto"][];
-            sources_match: boolean | null;
-            staff: components["schemas"]["ResolvedStaffDto"][];
-            tags: components["schemas"]["ResolvedTagDto"][];
-        };
         GalgameEditionDto: {
             /** @enum {string|null} */
             age_rating: "ALL_AGES" | "R15" | "R18" | null;
@@ -20033,6 +19816,8 @@ export interface components {
             like_count: number;
         };
         GalgameRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             /** @enum {string} */
             relation: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION" | "REMAKE" | "ORIGINAL" | "FAN_DISC" | "MAIN_GAME" | "SAME_SERIES";
             target_galgame: components["schemas"]["GalgameRelationTargetDto"];
@@ -20052,6 +19837,8 @@ export interface components {
          */
         GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION" | "REMAKE" | "ORIGINAL" | "FAN_DISC" | "MAIN_GAME" | "SAME_SERIES";
         GalgameStaffRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
@@ -20306,6 +20093,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             download_times: number;
+            /** @description 条目 ID */
+            entry_id: number;
             id: number;
             name: string;
             name_cn: string | null;
@@ -20315,13 +20104,19 @@ export interface components {
             other_names: string[];
             /** Format: date-time */
             publication_date: string | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
             read_times: number;
+            /** @description 标题读音 */
+            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             summary: string | null;
             summary_cn: string | null;
+            /** @description 英文简介 */
+            summary_en: string | null;
             total_volumes: number;
             /** Format: date-time */
             updated_at: string;
@@ -20334,11 +20129,15 @@ export interface components {
             title: string;
         };
         LightNovelPeopleRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             note: string | null;
             person: components["schemas"]["PersonPreviewDto"];
             relation: string;
         };
         LightNovelProducerRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             note: string | null;
             producer: components["schemas"]["ProducerPreviewDto"];
             relation: string;
@@ -20509,6 +20308,8 @@ export interface components {
             like_count: number;
         };
         LightNovelRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             /** @enum {string} */
             relation: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER" | "SETTING_BOOK" | "SETTING_SOURCE" | "ANTHOLOGY" | "ANTHOLOGY_SOURCE";
             target_light_novel: components["schemas"]["LightNovelRelationTargetDto"];
@@ -20620,6 +20421,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             download_times: number;
+            /** @description 条目 ID */
+            entry_id: number;
             /** @description 当前电子书由用户投稿并通过审核时为投稿者，其他来源为空 */
             epub_provider: components["schemas"]["UserRefDto"] | null;
             id: number;
@@ -20780,22 +20583,6 @@ export interface components {
             started_at: string;
             status: components["schemas"]["CatalogSyncStatus"];
             trigger: components["schemas"]["CatalogSyncTrigger"];
-        };
-        LnDraftDto: {
-            author: components["schemas"]["ResolvedEntityDto"] | null;
-            characters: components["schemas"]["ResolvedEntityDto"][];
-            cover: string | null;
-            draft: {
-                [key: string]: unknown;
-            };
-            existing_id: number | null;
-            field_sources: {
-                [key: string]: string;
-            };
-            illustrators: components["schemas"]["ResolvedEntityDto"][];
-            publishers: components["schemas"]["ResolvedEntityDto"][];
-            relations: components["schemas"]["ResolvedRelationDto"][];
-            sources_match: boolean | null;
         };
         LogEntryDto: {
             id: number;
@@ -21086,6 +20873,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             editions: components["schemas"]["MangaEditionDto"][] | null;
+            /** @description 条目 ID */
+            entry_id: number;
             homepage: string | null;
             id: number;
             isbn: string | null;
@@ -21103,7 +20892,11 @@ export interface components {
             publication_date: string | null;
             /** Format: date-time */
             publication_end_date: string | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
             read_times: number;
+            /** @description 标题读音 */
+            reading: string | null;
             reading_mode: components["schemas"]["MangaReadingMode"];
             /** Format: date-time */
             revised_at: string | null;
@@ -21112,6 +20905,8 @@ export interface components {
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             summary: string | null;
             summary_cn: string | null;
+            /** @description 英文简介 */
+            summary_en: string | null;
             /** Format: date-time */
             updated_at: string;
             views: number;
@@ -21249,6 +21044,8 @@ export interface components {
             queues: components["schemas"]["MangaQueueStatusDto"][];
         };
         MangaProducerRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             note: string;
             producer: components["schemas"]["ProducerPreviewDto"];
             role: components["schemas"]["MangaProducerRole"];
@@ -21716,6 +21513,8 @@ export interface components {
             like_count: number;
         };
         MangaRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             manga: components["schemas"]["MangaSummaryDto"];
             relation: components["schemas"]["MangaRelationType"];
         };
@@ -21787,6 +21586,8 @@ export interface components {
             languages?: string[];
         };
         MangaStaffRelationDto: {
+            /** @description 新的职责或关系编码 */
+            code: string;
             note: string;
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["MangaStaffRole"];
@@ -21893,6 +21694,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             editions: components["schemas"]["MangaEditionDto"][] | null;
+            /** @description 条目 ID */
+            entry_id: number;
             id: number;
             isbn: string | null;
             manga: components["schemas"]["MangaSummaryDto"];
@@ -22227,7 +22030,7 @@ export interface components {
             created_before?: string;
             reasons?: string[];
             /** @enum {string} */
-            status?: "FAILED" | "REJECTED" | "PENDING" | "RUNNING" | "PASSED" | "NEEDS_HUMAN";
+            status?: "FAILED" | "REJECTED" | "PASSED" | "PENDING" | "RUNNING" | "NEEDS_HUMAN";
             target_type?: string;
         };
         ModerationBulkDto: {
@@ -22661,30 +22464,21 @@ export interface components {
             available_count: number;
             download_times: number;
             id: number;
-            /** @description 缺 EPUB 的分卷，按卷号升序 */
+            /** @description 缺 EPUB 的分卷，按卷的排列顺序 */
             missing_volumes: components["schemas"]["NovelSeriesMissingVolumeDto"][];
             name: string;
             name_cn: string | null;
             /** @description 该系列下待处理的 EPUB 举报数 */
             pending_report_count: number;
             read_times: number;
-            /** @enum {string} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             views: number;
-            /** @description 已发布的分卷总数 */
+            /** @description 分卷总数 */
             volume_count: number;
         };
         NovelSeriesMissingVolumeDto: {
             id: number;
             name: string | null;
             volume_number: number | null;
-        };
-        NovelSeriesStatusDto: {
-            /**
-             * @description 系列发布状态
-             * @enum {string}
-             */
-            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
         NovelSourceDashboardDto: {
             links_pending: number;
@@ -22751,7 +22545,7 @@ export interface components {
         };
         NovelSourceRecentErrorDto: {
             error: string;
-            series_id: number;
+            series_id: number | null;
             source_key: string;
             updated_at: string;
             volume_name: string | null;
@@ -22865,8 +22659,6 @@ export interface components {
             /** @description 最近 10 条纠错复核 */
             reviews: components["schemas"]["NovelVolumeReviewDto"][];
             series: components["schemas"]["EpubResourceSeriesDto"];
-            /** @enum {string} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** Format: date-time */
             updated_at: string;
             /** @description 详情页浏览次数 */
@@ -22880,11 +22672,6 @@ export interface components {
             epub_curated?: boolean;
             /** @description 文件是否是合集而非单卷 */
             epub_is_collection?: boolean;
-            /**
-             * @description 发布状态
-             * @enum {string}
-             */
-            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
         NovelVolumeItemDto: {
             /** @description EPUB 下载次数 */
@@ -22902,8 +22689,6 @@ export interface components {
             /** @description 在线阅读次数 */
             read_times: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
-            /** @enum {string} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** Format: date-time */
             updated_at: string;
             /** @description 详情页浏览次数 */
@@ -23216,7 +23001,7 @@ export interface components {
              * @description 厂商类型
              * @enum {string}
              */
-            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
+            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL";
             /** @description 官方网站 */
             website: string | null;
         };
@@ -23573,7 +23358,7 @@ export interface components {
              * @description 厂商类型
              * @enum {string}
              */
-            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
+            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL";
             /**
              * Format: date-time
              * @description 条目最后更新时间
@@ -23761,6 +23546,8 @@ export interface components {
             intro: string;
             labels: components["schemas"]["EntityLabelDto"][];
             name: string;
+            /** @description 名字的读音 */
+            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -23770,17 +23557,25 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             vndb_id: string | null;
+            /** @description 本人的官网与官方账号 */
+            websites: components["schemas"]["EntityWebsiteDto"][];
         };
         PersonGalgameRelationDto: {
+            /** @description 在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
             roles: string[];
         };
         PersonLightNovelRelationDto: {
+            /** @description 在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
             relation: string;
         };
         PersonMangaRelationDto: {
+            /** @description 在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
             roles: components["schemas"]["MangaStaffRole"][];
         };
@@ -23984,7 +23779,7 @@ export interface components {
             /** @enum {string} */
             entry_type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             qualifiers: {
                 [key: string]: unknown;
             } | null;
@@ -24075,8 +23870,14 @@ export interface components {
             id: number;
             intro: string | null;
             labels: components["schemas"]["EntityLabelDto"][];
+            /** @description 所在地，照录 */
+            location: string | null;
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
+            /** @description 组织类型，取值为新的类型编码 */
+            organization_type: string | null;
+            /** @description 名称的读音 */
+            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -24089,15 +23890,21 @@ export interface components {
             website: string | null;
         };
         ProducerGalgameRelationDto: {
+            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
             note: string;
         };
         ProducerLightNovelRelationDto: {
+            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
             relation: string;
         };
         ProducerMangaRelationDto: {
+            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
             note: string;
             role: components["schemas"]["MangaProducerRole"];
@@ -24228,7 +24035,7 @@ export interface components {
         };
         PropertyChangeDto: {
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             statements: components["schemas"]["StatementChangeDto"][];
         };
         PropertyDefinitionDto: {
@@ -24246,7 +24053,7 @@ export interface components {
             /** @description Photos of the package or of the credits in the work can support it */
             package_image: boolean;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             public_only: boolean;
             qualifiers: string[];
             reading: boolean;
@@ -24265,7 +24072,7 @@ export interface components {
             before: components["schemas"]["ComparedValueDto"][];
             label: string;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
         };
         ProtectEntryDto: {
             /** @enum {string} */
@@ -24812,63 +24619,6 @@ export interface components {
         ResolveSourceDto: {
             input: string;
         };
-        ResolvedCharacterDto: {
-            actors: components["schemas"]["ResolvedEntityDto"][];
-            cover: string | null;
-            duplicate_ids: number[];
-            external: components["schemas"]["SourceIdsDto"];
-            matched_id: number | null;
-            name: string;
-            role: components["schemas"]["CharacterRole"];
-            source_names: string[];
-            /** @enum {string|null} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
-        };
-        ResolvedEntityDto: {
-            cover: string | null;
-            duplicate_ids: number[];
-            external: components["schemas"]["SourceIdsDto"];
-            matched_id: number | null;
-            name: string;
-            source_names: string[];
-            /** @enum {string|null} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
-        };
-        ResolvedProducerDto: {
-            cover: string | null;
-            duplicate_ids: number[];
-            external: components["schemas"]["SourceIdsDto"];
-            matched_id: number | null;
-            name: string;
-            /** @enum {string} */
-            role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
-            source_names: string[];
-            /** @enum {string|null} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
-        };
-        ResolvedRelationDto: {
-            cover: string | null;
-            matched_id: number;
-            name: string;
-            relation: string;
-            /** @enum {string} */
-            source: "bangumi" | "vndb";
-        };
-        ResolvedStaffDto: {
-            cover: string | null;
-            duplicate_ids: number[];
-            external: components["schemas"]["SourceIdsDto"];
-            matched_id: number | null;
-            name: string;
-            role: components["schemas"]["GalgameStaffRole"];
-            source_names: string[];
-            /** @enum {string|null} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
-        };
-        ResolvedTagDto: {
-            matched_id: number | null;
-            name: string;
-        };
         ResourceEntryDto: {
             /** @description Entry the site page is projected from */
             entry_id: number;
@@ -25066,11 +24816,6 @@ export interface components {
             /** @description 图片宽度，单位像素 */
             width: number | null;
         };
-        ScreenshotDto: {
-            sexual: number;
-            url: string;
-            violence: number;
-        };
         SearchCoverDto: {
             /** @description 图片高度，单位像素 */
             height: number | null;
@@ -25209,10 +24954,6 @@ export interface components {
             url: string | null;
             values: components["schemas"]["PrefillValueDto"][];
         };
-        SourceIdsDto: {
-            bangumi_id?: string;
-            vndb_id?: string;
-        };
         SourceImageDto: {
             alt: string;
             url: string;
@@ -25303,6 +25044,7 @@ export interface components {
             deprecation_note: string | null;
             /** @enum {string|null} */
             deprecation_reason: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED" | null;
+            editor: components["schemas"]["UserRefDto"];
             id: number;
             is_public: boolean;
             language: string | null;
@@ -25318,7 +25060,7 @@ export interface components {
             period_to_precision: "YEAR" | "MONTH" | "DAY" | null;
             position: number;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             reading: string | null;
             role: string | null;
             song: string | null;
@@ -26109,7 +25851,7 @@ export interface components {
             id: number;
             number: number | null;
             /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "END_OF_SERVICE_DATE" | "FULL_RELEASE_DATE" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             /** @enum {string} */
             status: "ACTIVE" | "CLUE" | "DEPRECATED";
             target: components["schemas"]["EntryRefDto"] | null;
@@ -27004,7 +26746,7 @@ export interface components {
         };
         UpdateWikiStatusDto: {
             /** @enum {string} */
-            status: "REJECTED" | "PUBLISHED" | "PENDING" | "DRAFT";
+            status: "REJECTED" | "PENDING" | "PUBLISHED" | "DRAFT";
         };
         UpdateWorkbenchPolicyDto: {
             ai: components["schemas"]["WorkbenchAiPolicyInputDto"];
@@ -29206,7 +28948,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "OPENBD" | "NDL";
+                key: "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
             };
             cookie?: never;
         };
@@ -29231,7 +28973,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                key: "PUBLISHER" | "BANGUMI" | "VNDB" | "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "OPENBD" | "NDL";
+                key: "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
             };
             cookie?: never;
         };
@@ -32492,7 +32234,6 @@ export interface operations {
             query: {
                 /** @description 系列名或系列 ID */
                 q?: string;
-                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
                 /** @description 只看还有分卷缺 EPUB 的系列 */
                 incomplete?: boolean;
                 page: number;
@@ -32517,37 +32258,11 @@ export interface operations {
             };
         };
     };
-    AdminNovelSeriesController_updateStatus: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["NovelSeriesStatusDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NovelSeriesItemDto"];
-                };
-            };
-        };
-    };
     AdminNovelVolumeController_list: {
         parameters: {
             query: {
                 /** @description 卷名、系列名或分卷 ID */
                 q?: string;
-                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
                 /** @description 只看已校订 / 未校订 */
                 curated?: boolean;
                 /** @description 只看被标记为合集的分卷 */
@@ -38842,182 +38557,6 @@ export interface operations {
             };
         };
     };
-    ExternalSourceController_coverMedia: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CoverMediaDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverMediaResultDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_entityDraft: {
-        parameters: {
-            query: {
-                type: "person" | "character" | "producer";
-                bangumi_id?: string;
-                vndb_id?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntityDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_galgameDraft: {
-        parameters: {
-            query?: {
-                bangumi_id?: string;
-                vndb_id?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GalgameDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_lnDraft: {
-        parameters: {
-            query: {
-                bangumi_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LnDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_volumeDraft: {
-        parameters: {
-            query: {
-                bangumi_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntityDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_mangaDraft: {
-        parameters: {
-            query: {
-                bangumi_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntityDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_mangaVolumeDraft: {
-        parameters: {
-            query: {
-                bangumi_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntityDraftDto"];
-                };
-            };
-        };
-    };
-    ExternalSourceController_search: {
-        parameters: {
-            query: {
-                type: "galgame" | "light-novel" | "light-novel-volume" | "manga" | "manga-volume" | "person" | "character" | "producer";
-                q: string;
-            };
-            header?: never;
-            path: {
-                source: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ExternalSearchItemDto"][];
-                };
-            };
-        };
-    };
     FavoriteCollectionController_getList: {
         parameters: {
             query?: {
@@ -40227,73 +39766,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameContributorsDto"];
-                };
-            };
-        };
-    };
-    CurrentUserGalgameCoverVoteController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserGalgameCoverVoteController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CoverVoteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserGalgameCoverVoteController_retract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };
@@ -41619,73 +41091,6 @@ export interface operations {
             };
         };
     };
-    CurrentUserLightNovelVolumeCoverVoteController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserLightNovelVolumeCoverVoteController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CoverVoteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserLightNovelVolumeCoverVoteController_retract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
     LightNovelVolumeController_uploadEpub: {
         parameters: {
             query?: never;
@@ -42256,73 +41661,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelContributorsDto"];
-                };
-            };
-        };
-    };
-    CurrentUserLightNovelCoverVoteController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserLightNovelCoverVoteController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CoverVoteDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
-                };
-            };
-        };
-    };
-    CurrentUserLightNovelCoverVoteController_retract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };

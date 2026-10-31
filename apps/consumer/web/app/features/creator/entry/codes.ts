@@ -41,6 +41,15 @@ export const CODE_LABELS: Partial<Record<BackendEntryProperty, Record<string, st
     OTHER: '其他',
   },
   ADULT_PATCH: { YES: '是', NO: '否' },
+  EXTERNAL_LINK: {
+    VNDB: 'VNDB',
+    BANGUMI: 'Bangumi',
+    EROGAMESCAPE: '批評空間',
+    MYANIMELIST: 'MyAnimeList',
+    ANILIST: 'AniList',
+    WIKIDATA: 'Wikidata',
+    STORE: '商店页面',
+  },
   WEBSITE: {
     OFFICIAL_SITE: '官网',
     OFFICIAL_ACCOUNT: '官方账号',

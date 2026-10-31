@@ -41,7 +41,6 @@
       :galgame="data.galgame"
       :display="data.display"
       :my-rate="data.my_rate"
-      :my-cover-vote="data.my_cover_vote"
       :favorited="data.favorite?.favorited ?? false"
     />
 

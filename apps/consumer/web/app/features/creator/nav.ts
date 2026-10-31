@@ -1,15 +1,14 @@
 import { WORKBENCH_PERMISSIONS, type PermissionCheck } from '@hikarinagi/shared'
 import {
+  Activity,
   BookCheck,
   BookImage,
-  ClipboardList,
   FilePlus,
   FolderKanban,
-  Hourglass,
-  ListChecks,
-  History,
   LayoutDashboard,
-  SquarePlus,
+  ListTodo,
+  Megaphone,
+  Upload,
 } from '@lucide/vue'
 import type { Component } from 'vue'
 
@@ -28,22 +27,21 @@ export interface CreatorNavGroup {
 
 export const CREATOR_NAV: CreatorNavGroup[] = [
   {
-    items: [{ label: '概览', to: '/create', icon: LayoutDashboard }],
+    items: [{ label: '概览', to: '/create', also: ['/create/edits'], icon: LayoutDashboard }],
   },
   {
-    label: '条目编辑',
+    label: '条目',
     items: [
-      { label: '新建条目', to: '/create/new', icon: SquarePlus },
-      { label: '我的编辑', to: '/create/edits', icon: ListChecks },
-      { label: '待完善', to: '/create/todos', icon: ClipboardList },
-      { label: '最近更改', to: '/create/changes', icon: History },
-      { label: '公示中的编辑', to: '/create/notices', icon: Hourglass },
+      { label: '新建条目', to: '/create/new', icon: FilePlus },
+      { label: '待完善', to: '/create/todos', icon: ListTodo },
+      { label: '最近更改', to: '/create/changes', icon: Activity },
+      { label: '公示中', to: '/create/notices', icon: Megaphone },
     ],
   },
   {
     label: '投稿',
     items: [
-      { label: '发起投稿', to: '/create/submit', icon: FilePlus },
+      { label: '发起投稿', to: '/create/submit', icon: Upload },
       {
         label: '我的投稿',
         to: '/create/projects',

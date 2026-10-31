@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Spinner, Stack, Text } from '@hina-ui/vue'
+  import { Alert, Inline, RadioGroup, Spinner, Stack, Text } from '@hina-ui/vue'
   import type {
     BackendEditableEntry,
     BackendPropertyDefinition,
@@ -11,6 +11,7 @@
     entryId: number
     statements: number[]
     definition: BackendPropertyDefinition
+    mine: string
   }>()
   const emit = defineEmits<{ keep: []; mine: [revision: number] }>()
 
@@ -18,6 +19,16 @@
   const theirs = computed(
     () => fresh.value?.statements.filter(item => props.statements.includes(item.id)) ?? [],
   )
+  const editor = computed(() => theirs.value[0]?.editor ?? null)
+  const OPTIONS = [
+    { value: 'theirs', label: '对方的值' },
+    { value: 'mine', label: '你的值' },
+  ]
+  const choice = ref<string | null>(null)
+  watch(choice, value => {
+    if (value === 'theirs') emit('keep')
+    if (value === 'mine' && fresh.value) emit('mine', fresh.value.revision)
+  })
 
   onMounted(async () => {
     fresh.value = await hikariRequest('/api/v3/wiki/entries/{id}', { path: { id: props.entryId } })
@@ -25,33 +36,41 @@
 </script>
 
 <template>
-  <Stack gap="sm" class="rounded-lg bg-warning-soft p-4">
-    <Text as="p" size="sm" weight="medium">{{ definition.label }}已被他人更改</Text>
-    <Text as="p" size="sm" tone="muted">对方当前的值如下。保留对方的值，或以你的值覆盖保存。</Text>
+  <Stack gap="md">
+    <Alert open tone="warning" :title="`${definition.label}已被修改`">
+      <Stack gap="xs">
+        <Inline v-if="editor" gap="xs" align="center" wrap>
+          <Avatar :user="editor" class="size-5!" />
+          <UserName :user="editor" class="text-sm" />
+          <Text as="span" size="sm">保存了新的{{ definition.label }}。</Text>
+        </Inline>
+        <Text as="p" size="sm">请选择要保留的值。</Text>
+      </Stack>
+    </Alert>
     <Spinner v-if="!fresh" size="sm" />
-    <Stack v-for="statement in theirs" :key="statement.id" gap="xs">
-      <Text
-        as="span"
-        size="sm"
-        :class="statement.status === 'DEPRECATED' ? 'line-through' : undefined"
-      >
-        {{ statementText(statement) }}
-      </Text>
-      <Text v-if="statement.status === 'DEPRECATED'" as="span" size="xs" tone="muted">
-        对方已作废该值。
-      </Text>
-      <CreatorEntrySource v-else :statement="statement" :label="definition.label" />
-    </Stack>
-    <Inline gap="sm">
-      <Button variant="soft" tone="neutral" size="sm" @click="emit('keep')">保留对方的值</Button>
-      <Button
-        variant="soft"
-        size="sm"
-        :disabled="!fresh"
-        @click="fresh && emit('mine', fresh.revision)"
-      >
-        使用我的值
-      </Button>
-    </Inline>
+    <RadioGroup v-else v-model="choice" :options="OPTIONS" aria-label="要保留的值">
+      <template #option="{ option }">
+        <Stack v-if="option.value === 'theirs'" gap="xs" class="min-w-0">
+          <Text as="span" size="xs" tone="muted">对方的值</Text>
+          <Stack v-for="statement in theirs" :key="statement.id" gap="xs">
+            <Text
+              as="span"
+              :class="statement.status === 'DEPRECATED' ? 'line-through' : undefined"
+              lang="ja"
+            >
+              {{ statementText(statement) }}
+            </Text>
+            <Text v-if="statement.status === 'DEPRECATED'" as="span" size="xs" tone="muted">
+              对方已作废此值。
+            </Text>
+            <CreatorEntrySource v-else :statement="statement" />
+          </Stack>
+        </Stack>
+        <Stack v-else gap="xs" class="min-w-0">
+          <Text as="span" size="xs" tone="muted">你的值</Text>
+          <Text as="span" lang="ja">{{ mine }}</Text>
+        </Stack>
+      </template>
+    </RadioGroup>
   </Stack>
 </template>

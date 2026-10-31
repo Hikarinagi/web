@@ -5,26 +5,22 @@ import { definePageBffHandler } from '../../../../utils/page-bff'
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
 
-  const [galgame, display, my_rate, favorite, my_cover_vote, rates, statistics, keywords] =
-    await Promise.all([
-      fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
-      fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
-      fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
-      fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
-        path: { galgame_id: id },
-      }).catch(() => null),
-      fetchBackendData(event, '/api/v3/galgames/{id}/covers/vote', { path: { id } }).catch(
-        () => null,
-      ),
-      fetchBackendData(event, '/api/v3/galgames/{id}/rates', {
-        path: { id },
-        query: { page: 1, page_size: 20, sort: 'hot', has_content: true },
-      }),
-      fetchBackendData(event, '/api/v3/galgames/{id}/rates/statistics', { path: { id } }),
-      fetchBackendData(event, '/api/v3/galgames/{id}/rates/keywords', { path: { id } }),
-    ])
+  const [galgame, display, my_rate, favorite, rates, statistics, keywords] = await Promise.all([
+    fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
+    fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
+    fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
+    fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
+      path: { galgame_id: id },
+    }).catch(() => null),
+    fetchBackendData(event, '/api/v3/galgames/{id}/rates', {
+      path: { id },
+      query: { page: 1, page_size: 20, sort: 'hot', has_content: true },
+    }),
+    fetchBackendData(event, '/api/v3/galgames/{id}/rates/statistics', { path: { id } }),
+    fetchBackendData(event, '/api/v3/galgames/{id}/rates/keywords', { path: { id } }),
+  ])
 
-  return { galgame, display, my_rate, favorite, my_cover_vote, rates, statistics, keywords }
+  return { galgame, display, my_rate, favorite, rates, statistics, keywords }
 }
 
 export type GalgameRatesPageData = Awaited<ReturnType<typeof handler>>

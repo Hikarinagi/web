@@ -26,6 +26,12 @@ export function useStatementEdit(options: {
   const values = reactive<StatementValues>({
     text: statement?.text ?? '',
     code: statement?.code ?? options.code ?? '',
+    role: statement?.role ?? '',
+    original: statement?.original ?? '',
+    archive: statement?.archive_url ?? '',
+    machine: statement?.code === 'MACHINE_TRANSLATION',
+    language: statement?.language ?? '',
+    versions: statement?.versions.map(item => item.id) ?? [],
     date: statement?.date?.slice(0, LENGTH[statement.date_precision ?? 'DAY']) ?? '',
     amount: statement?.amount ?? '',
     currency: statement?.currency ?? 'JPY',
@@ -59,9 +65,15 @@ export function useStatementEdit(options: {
   const checking = ref(false)
   const saving = ref(false)
   const base = ref(entry.revision)
-  const retryAt = ref<string | null>(null)
+  const retryAt = ref<{
+    at: string
+    limit: number | null
+    seconds: number | null
+    fresh: boolean
+  } | null>(null)
   const refusal = ref<{ reason: string | null; message: string } | null>(null)
 
+  const originalOf = () => (definition.original ? { original: values.original || null } : {})
   const value = computed(() => {
     const shape = definition.shape
     if (shape === 'date')
@@ -77,9 +89,11 @@ export function useStatementEdit(options: {
             amount: values.amount,
             currency: values.currency,
             tax_included: values.tax === 'unknown' ? null : values.tax === 'included',
+            ...originalOf(),
           }
         : null
-    if (shape === 'code' || shape === 'language') return values.code ? { code: values.code } : null
+    if (shape === 'code' || shape === 'language')
+      return values.code ? { code: values.code, ...originalOf() } : null
     if (shape === 'entry')
       return values.target && (values.code || !definition.codes || definition.optional_code)
         ? {
@@ -95,7 +109,7 @@ export function useStatementEdit(options: {
             code: values.code,
             text: values.text,
             reading: values.reading || null,
-            role: statement?.role ?? null,
+            role: values.role || null,
             song: sung ? values.song || null : null,
             song_kind: sung ? values.song_kind || null : null,
             target: values.target,
@@ -108,12 +122,20 @@ export function useStatementEdit(options: {
       ? {
           text: values.text,
           ...(definition.reading ? { reading: values.reading || null } : {}),
+          ...(definition.archive ? { archive_url: values.archive || null } : {}),
+          ...(definition.machine_translation
+            ? { code: values.machine ? 'MACHINE_TRANSLATION' : null }
+            : shape === 'url' && definition.codes
+              ? { code: values.code || null }
+              : {}),
         }
       : null
   })
   const allowed = new Set(definition.qualifiers)
   const qualifiers = computed(() => ({
     ...(allowed.has('part') ? { part: values.part || null } : {}),
+    ...(allowed.has('language') ? { language: values.language || null } : {}),
+    ...(allowed.has('version') ? { versions: values.versions } : {}),
     ...(allowed.has('period')
       ? {
           period_from: values.period_from
@@ -155,7 +177,11 @@ export function useStatementEdit(options: {
       return [{ method: 'EXCERPT' as const, url: values.source, excerpt: values.excerpt || null }]
     return []
   })
-  const operations = computed<BackendEditOperation[]>(() => {
+  const extras = ref<BackendEditOperation[]>([])
+  const operations = computed<BackendEditOperation[]>(() =>
+    own.value.length ? [...own.value, ...extras.value] : [],
+  )
+  const own = computed<BackendEditOperation[]>(() => {
     if (!value.value) return []
     const extra = Object.keys(qualifiers.value).length ? { qualifiers: qualifiers.value } : {}
     if (!statement)
@@ -296,9 +322,18 @@ export function useStatementEdit(options: {
       return true
     } catch (error) {
       if (!isApiError(error)) throw error
-      if (error.code === HIKARI_BIZ_CODE.COMMON_RATE_LIMITED)
-        retryAt.value = typeof error.details?.retry_at === 'string' ? error.details.retry_at : null
-      else if (error.code === HIKARI_BIZ_CODE.WIKI_EDIT_CONFLICT) await verify()
+      if (error.code === HIKARI_BIZ_CODE.COMMON_RATE_LIMITED) {
+        const details = error.details ?? {}
+        retryAt.value =
+          typeof details.retry_at === 'string'
+            ? {
+                at: details.retry_at,
+                limit: typeof details.limit === 'number' ? details.limit : null,
+                seconds: typeof details.window_seconds === 'number' ? details.window_seconds : null,
+                fresh: details.new_member === true,
+              }
+            : null
+      } else if (error.code === HIKARI_BIZ_CODE.WIKI_EDIT_CONFLICT) await verify()
       else showApiErrorToast(error)
       return false
     } finally {
@@ -313,6 +348,9 @@ export function useStatementEdit(options: {
 
   return {
     values,
+    value,
+    extras,
+    citations,
     source,
     shots,
     uploading,

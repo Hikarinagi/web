@@ -105,7 +105,7 @@
           <Alert :open="refusal === 'target'" tone="info" title="选择新条目归入的条目" />
         </CreatorNewDraft>
         <CreatorNewEntries v-if="similar.length" title="可能重复" :entries="similar">
-          <Checkbox v-model="confirmed" label="确认都不是同一条目" />
+          <Checkbox v-model="confirmed">确认都不是同一条目</Checkbox>
         </CreatorNewEntries>
       </template>
     </template>

@@ -110,9 +110,10 @@
               v-for="statement in statements"
               :key="statement.id"
               :model-value="picked.includes(statement.id)"
-              :label="`${label(statement.property)}：${statementText(statement)}`"
               @update:model-value="value => (picked = toggle(picked, statement.id, value === true))"
-            />
+            >
+              {{ label(statement.property) }}：{{ statementText(statement) }}
+            </Checkbox>
           </Stack>
           <Stack v-if="children?.items.length" gap="sm">
             <Text as="span" size="sm" weight="medium">
@@ -122,11 +123,12 @@
               v-for="item in children.items"
               :key="item.statement_id"
               :model-value="moving.includes(item.statement_id)"
-              :label="item.entry.label"
               @update:model-value="
                 value => (moving = toggle(moving, item.statement_id, value === true))
               "
-            />
+            >
+              {{ item.entry.label }}
+            </Checkbox>
           </Stack>
           <FormField name="note" label="拆分条目的原因" required>
             <Input v-model="values.note" placeholder="例如，品牌将两个发行版本列为各自独立的游戏" />

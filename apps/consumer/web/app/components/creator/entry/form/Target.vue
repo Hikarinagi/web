@@ -74,6 +74,7 @@
   <Combobox
     v-model="target"
     v-model:search="search"
+    variant="secondary"
     :options="options"
     :selected-option="chosen"
     :loading="loading"

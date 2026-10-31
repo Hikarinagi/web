@@ -6,7 +6,6 @@
   defineOptions({ name: 'CreatorTodosActions' })
   const props = defineProps<{
     todo: CreatorTodosPageData['todos']['items'][number]
-    text: string
   }>()
   const emit = defineEmits<{ changed: [] }>()
 
@@ -47,11 +46,6 @@
       采纳
     </Button>
     <Button variant="ghost" tone="neutral" size="xs" @click="dismissing = true">驳回</Button>
-    <CreatorEntryTodoDismiss
-      :id="todo.id"
-      v-model:open="dismissing"
-      :text="text"
-      @saved="emit('changed')"
-    />
+    <CreatorEntryTodoDismiss :id="todo.id" v-model:open="dismissing" @saved="emit('changed')" />
   </Inline>
 </template>

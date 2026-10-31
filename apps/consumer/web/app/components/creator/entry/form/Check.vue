@@ -18,6 +18,7 @@
     unpublished: boolean
     incomplete: boolean
     screenshot: boolean
+    target?: string | null
   }>()
 
   const REFUSALS: Record<string, string> = {
@@ -56,8 +57,8 @@
       if (!verification)
         return {
           tone: 'warning',
-          title: '没有来源',
-          body: '若无来源，该值仍会被保存，并作为无来源的值显示在条目页上。',
+          title: '无来源',
+          body: '可以保存，保存后标为无来源，添加来源后标记消失。',
         }
       if (verification === 'PASSED')
         return {
@@ -72,7 +73,13 @@
       if (verification === 'EXCERPT_NOT_FOUND')
         return { tone: 'danger', title: '页面中未找到此摘录' }
       if (verification === 'SOURCE_NOT_ALLOWED')
-        return { tone: 'danger', title: `该来源无法用于${label}` }
+        return {
+          tone: 'danger',
+          title: `此来源不能用于${label}`,
+          body: props.source?.classes.includes('DOWNSTREAM')
+            ? '第三方数据库不能作为来源。'
+            : undefined,
+        }
       if (verification === 'VALUE_MISMATCH' && record) {
         const value = record.values.find(
           item =>
@@ -87,6 +94,12 @@
           adopt: Boolean(value),
         }
       }
+      if (verification === 'VALUE_MISMATCH' && props.definition.shape === 'entry' && props.target)
+        return {
+          tone: 'danger',
+          title: '摘录与所选条目不一致',
+          body: `摘录中未包含「${props.target}」。`,
+        }
       if (verification === 'VALUE_MISMATCH')
         return { tone: 'danger', title: '摘录与该值不符', body: '摘录必须按页面上的写法包含该值。' }
       if (verification === 'UNREACHABLE')

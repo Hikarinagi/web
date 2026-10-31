@@ -1499,39 +1499,6 @@
         ],
         "type": "object"
       },
-      "AdminMangaLayoutRelatedDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "name_cn": {
-            "nullable": true,
-            "type": "string"
-          },
-          "relation": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaRelationType"
-              }
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "name_cn",
-          "cover",
-          "relation"
-        ],
-        "type": "object"
-      },
       "AdminMangaLayoutResultDto": {
         "properties": {
           "counts": {
@@ -1846,27 +1813,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "readers": {
             "type": "number"
           },
           "related": {
             "items": {
-              "$ref": "#/components/schemas/AdminMangaLayoutRelatedDto"
+              "$ref": "#/components/schemas/AdminMangaSummaryDto"
             },
             "type": "array"
-          },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
           },
           "shared": {
             "items": {
@@ -1892,7 +1851,7 @@
           "cover",
           "other_names",
           "authors",
-          "serial_status",
+          "publication_status",
           "publication_date",
           "readers",
           "summary",
@@ -1935,21 +1894,13 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "readers": {
             "type": "number"
-          },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
           },
           "staff": {
             "items": {
@@ -1968,7 +1919,7 @@
           "cover",
           "other_names",
           "publication_date",
-          "serial_status",
+          "publication_status",
           "readers",
           "chapters",
           "uploads",
@@ -2380,6 +2331,7 @@
             "type": "number"
           },
           "name": {
+            "nullable": true,
             "type": "string"
           },
           "readers": {
@@ -2597,21 +2549,13 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "readers": {
             "type": "number"
-          },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
           },
           "staff": {
             "items": {
@@ -2627,7 +2571,7 @@
           "cover",
           "link_id",
           "publication_date",
-          "serial_status",
+          "publication_status",
           "readers",
           "chapters",
           "groups",
@@ -2647,6 +2591,10 @@
           "art": {
             "type": "boolean"
           },
+          "code": {
+            "description": "制作信息编码",
+            "type": "string"
+          },
           "credited": {
             "type": "boolean"
           },
@@ -2655,25 +2603,10 @@
           },
           "person_id": {
             "type": "number"
-          },
-          "role": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaStaffRole"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ART": "作画",
-              "AUTHOR": "作者",
-              "CHARACTER_DESIGN": "人物原案",
-              "ILLUSTRATION": "插图",
-              "ORIGINAL_CREATOR": "原作",
-              "SCRIPT": "脚本"
-            }
           }
         },
         "required": [
-          "role",
+          "code",
           "person_id",
           "name",
           "credited",
@@ -2899,24 +2832,16 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "recent_errors": {
             "items": {
               "$ref": "#/components/schemas/AdminMangaWorkErrorDto"
             },
             "type": "array"
-          },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
           },
           "views": {
             "type": "number"
@@ -2927,7 +2852,7 @@
           "name",
           "name_cn",
           "cover",
-          "serial_status",
+          "publication_status",
           "origin_country",
           "nsfw",
           "heat",
@@ -3024,18 +2949,10 @@
           "pending_count": {
             "type": "number"
           },
-          "serial_status": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaSerialStatus"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ABANDONED": "中止连载",
-              "FINISHED": "已完结",
-              "PAUSED": "暂停连载",
-              "SERIALIZING": "连载中"
-            }
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
           },
           "updated_at": {
             "format": "date-time",
@@ -3047,7 +2964,7 @@
           "name",
           "name_cn",
           "cover",
-          "serial_status",
+          "publication_status",
           "origin_country",
           "listed",
           "listing",
@@ -3669,6 +3586,7 @@
             "type": "object"
           },
           "series_id": {
+            "nullable": true,
             "type": "number"
           },
           "series_name": {
@@ -9238,6 +9156,11 @@
       },
       "AppearanceDto": {
         "properties": {
+          "character_id": {
+            "description": "Character this appearance belongs to",
+            "nullable": true,
+            "type": "number"
+          },
           "group": {
             "description": "Group title on the official site",
             "nullable": true,
@@ -9249,6 +9172,15 @@
           },
           "id": {
             "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScoredMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
           },
           "label": {
             "description": "Name on the cast list",
@@ -9266,7 +9198,9 @@
           "label",
           "group",
           "hidden",
-          "voices"
+          "voices",
+          "character_id",
+          "image"
         ],
         "type": "object"
       },
@@ -10551,6 +10485,14 @@
           "name": {
             "type": "string"
           },
+          "profile": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterProfileDto"
+              }
+            ],
+            "description": "最早公开出场作品所载的资料，照录原文"
+          },
           "revised_at": {
             "format": "date-time",
             "nullable": true,
@@ -10617,7 +10559,8 @@
           "revised_at",
           "vndb_id",
           "bangumi_id",
-          "labels"
+          "labels",
+          "profile"
         ],
         "type": "object"
       },
@@ -10631,6 +10574,15 @@
           },
           "galgame": {
             "$ref": "#/components/schemas/GalgameSummaryDto"
+          },
+          "group": {
+            "description": "官网角色页的分组，照录",
+            "nullable": true,
+            "type": "string"
+          },
+          "label": {
+            "description": "这部作品名单中的名字",
+            "type": "string"
           },
           "role": {
             "allOf": [
@@ -10647,6 +10599,8 @@
           }
         },
         "required": [
+          "group",
+          "label",
           "role",
           "actors",
           "galgame"
@@ -10655,6 +10609,15 @@
       },
       "CharacterLightNovelRelationDto": {
         "properties": {
+          "group": {
+            "description": "官网角色页的分组，照录",
+            "nullable": true,
+            "type": "string"
+          },
+          "label": {
+            "description": "这部作品名单中的名字",
+            "type": "string"
+          },
           "light_novel": {
             "$ref": "#/components/schemas/LightNovelSummaryDto"
           },
@@ -10673,6 +10636,8 @@
           }
         },
         "required": [
+          "group",
+          "label",
           "role",
           "light_novel"
         ],
@@ -10680,6 +10645,15 @@
       },
       "CharacterMangaRelationDto": {
         "properties": {
+          "group": {
+            "description": "官网角色页的分组，照录",
+            "nullable": true,
+            "type": "string"
+          },
+          "label": {
+            "description": "这部作品名单中的名字",
+            "type": "string"
+          },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
           },
@@ -10698,6 +10672,8 @@
           }
         },
         "required": [
+          "group",
+          "label",
           "role",
           "manga"
         ],
@@ -10730,6 +10706,38 @@
           "name",
           "trans_name",
           "image"
+        ],
+        "type": "object"
+      },
+      "CharacterProfileDto": {
+        "properties": {
+          "age": {
+            "nullable": true,
+            "type": "string"
+          },
+          "birthday": {
+            "nullable": true,
+            "type": "string"
+          },
+          "height": {
+            "nullable": true,
+            "type": "string"
+          },
+          "measurements": {
+            "nullable": true,
+            "type": "string"
+          },
+          "weight": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "age",
+          "birthday",
+          "height",
+          "weight",
+          "measurements"
         ],
         "type": "object"
       },
@@ -11050,8 +11058,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -12265,79 +12271,6 @@
         "required": [
           "target_type",
           "count"
-        ],
-        "type": "object"
-      },
-      "CoverMediaDto": {
-        "properties": {
-          "url": {
-            "maxLength": 500,
-            "type": "string"
-          }
-        },
-        "required": [
-          "url"
-        ],
-        "type": "object"
-      },
-      "CoverMediaResultDto": {
-        "properties": {
-          "id": {
-            "type": "number"
-          },
-          "src": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "src"
-        ],
-        "type": "object"
-      },
-      "CoverTallyDto": {
-        "properties": {
-          "media_id": {
-            "type": "number"
-          },
-          "votes": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "media_id",
-          "votes"
-        ],
-        "type": "object"
-      },
-      "CoverVoteDto": {
-        "properties": {
-          "media_id": {
-            "minimum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "media_id"
-        ],
-        "type": "object"
-      },
-      "CoverVoteStateDto": {
-        "properties": {
-          "covers": {
-            "items": {
-              "$ref": "#/components/schemas/CoverTallyDto"
-            },
-            "type": "array"
-          },
-          "my_media_id": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "my_media_id",
-          "covers"
         ],
         "type": "object"
       },
@@ -14461,15 +14394,15 @@
           },
           "resource_type": {
             "enum": [
-              "MANGA",
+              "PERSON",
+              "CHARACTER",
               "LIGHT_NOVEL",
+              "MANGA",
               "PRODUCER",
               "GALGAME",
               "LIGHT_NOVEL_VOLUME",
               "MANGA_VOLUME",
               "MANGA_CHAPTER",
-              "PERSON",
-              "CHARACTER",
               "TAG"
             ],
             "type": "string"
@@ -16412,8 +16345,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -16829,8 +16760,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -17331,40 +17260,6 @@
         ],
         "type": "object"
       },
-      "EntityDraftDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "draft": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "existing_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "field_sources": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "sources_match": {
-            "nullable": true,
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "draft",
-          "cover",
-          "field_sources",
-          "existing_id",
-          "sources_match"
-        ],
-        "type": "object"
-      },
       "EntityLabelDto": {
         "properties": {
           "key": {
@@ -17535,6 +17430,22 @@
           "name",
           "cover",
           "status"
+        ],
+        "type": "object"
+      },
+      "EntityWebsiteDto": {
+        "properties": {
+          "code": {
+            "description": "网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT",
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "url"
         ],
         "type": "object"
       },
@@ -17789,8 +17700,6 @@
           "PRICE",
           "RELEASE_DATE",
           "RELEASE_STATUS",
-          "END_OF_SERVICE_DATE",
-          "FULL_RELEASE_DATE",
           "AGE_RATING",
           "ADULT_PATCH",
           "BONUS",
@@ -17848,6 +17757,21 @@
       },
       "EntryProtectionDto": {
         "properties": {
+          "at": {
+            "description": "When the entry was protected",
+            "nullable": true,
+            "type": "string"
+          },
+          "by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "Who protected the entry",
+            "nullable": true,
+            "type": "object"
+          },
           "level": {
             "enum": [
               "LOCKED",
@@ -17868,7 +17792,9 @@
         "required": [
           "level",
           "until",
-          "reason"
+          "reason",
+          "by",
+          "at"
         ],
         "type": "object"
       },
@@ -17918,6 +17844,10 @@
           "entry": {
             "$ref": "#/components/schemas/EntryRefDto"
           },
+          "sourced": {
+            "description": "The statement has a source other than an import",
+            "type": "boolean"
+          },
           "statement_id": {
             "type": "number"
           },
@@ -17933,6 +17863,7 @@
           "statement_id",
           "code",
           "entry",
+          "sourced",
           "credits",
           "works"
         ],
@@ -17970,8 +17901,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -18257,6 +18186,10 @@
             "nullable": true,
             "type": "string"
           },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
           "series": {
             "$ref": "#/components/schemas/EpubResourceSeriesDto"
           },
@@ -18268,6 +18201,7 @@
         "required": [
           "id",
           "name",
+          "name_cn",
           "volume_number",
           "series"
         ],
@@ -18612,10 +18546,6 @@
       },
       "EpubResourceDetailDto": {
         "properties": {
-          "bangumi_book_id": {
-            "nullable": true,
-            "type": "number"
-          },
           "download_url": {
             "description": "当前 EPUB 的 15 分钟临时下载地址",
             "nullable": true,
@@ -18672,9 +18602,6 @@
           "series": {
             "$ref": "#/components/schemas/EpubResourceSeriesDto"
           },
-          "series_id": {
-            "type": "number"
-          },
           "shared_volumes": {
             "description": "引用同一个文件的其他分卷，非空通常意味着合集误挂或错卷",
             "items": {
@@ -18703,8 +18630,6 @@
         },
         "required": [
           "id",
-          "bangumi_book_id",
-          "series_id",
           "name",
           "name_cn",
           "volume_number",
@@ -18727,10 +18652,6 @@
       },
       "EpubResourceItemDto": {
         "properties": {
-          "bangumi_book_id": {
-            "nullable": true,
-            "type": "number"
-          },
           "epub_curated": {
             "type": "boolean"
           },
@@ -18769,9 +18690,6 @@
           "series": {
             "$ref": "#/components/schemas/EpubResourceSeriesDto"
           },
-          "series_id": {
-            "type": "number"
-          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
@@ -18783,8 +18701,6 @@
         },
         "required": [
           "id",
-          "bangumi_book_id",
-          "series_id",
           "name",
           "name_cn",
           "volume_number",
@@ -18885,6 +18801,7 @@
       "EpubResourceSeriesDto": {
         "properties": {
           "id": {
+            "nullable": true,
             "type": "number"
           },
           "name": {
@@ -19281,53 +19198,6 @@
         ],
         "type": "object"
       },
-      "ExternalSearchItemDto": {
-        "properties": {
-          "aliases": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "authors": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "existing_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "external_id": {
-            "type": "string"
-          },
-          "subtitle": {
-            "nullable": true,
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "year": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "external_id",
-          "title",
-          "subtitle",
-          "year",
-          "cover",
-          "existing_id"
-        ],
-        "type": "object"
-      },
       "FactDto": {
         "properties": {
           "label": {
@@ -19357,8 +19227,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -21374,82 +21242,6 @@
         ],
         "type": "object"
       },
-      "GalgameDraftDto": {
-        "properties": {
-          "characters": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedCharacterDto"
-            },
-            "type": "array"
-          },
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "draft": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "existing_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "field_sources": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "producers": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedProducerDto"
-            },
-            "type": "array"
-          },
-          "relations": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedRelationDto"
-            },
-            "type": "array"
-          },
-          "screenshots": {
-            "items": {
-              "$ref": "#/components/schemas/ScreenshotDto"
-            },
-            "type": "array"
-          },
-          "sources_match": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "staff": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedStaffDto"
-            },
-            "type": "array"
-          },
-          "tags": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedTagDto"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "draft",
-          "cover",
-          "field_sources",
-          "existing_id",
-          "sources_match",
-          "producers",
-          "staff",
-          "characters",
-          "relations",
-          "tags",
-          "screenshots"
-        ],
-        "type": "object"
-      },
       "GalgameEditionDto": {
         "properties": {
           "age_rating": {
@@ -22633,6 +22425,10 @@
       },
       "GalgameRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "relation": {
             "enum": [
               "SEQUEL",
@@ -22659,6 +22455,7 @@
           }
         },
         "required": [
+          "code",
           "relation",
           "target_galgame"
         ],
@@ -22725,6 +22522,10 @@
       },
       "GalgameStaffRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "person": {
             "$ref": "#/components/schemas/PersonPreviewDto"
           },
@@ -22773,6 +22574,7 @@
           }
         },
         "required": [
+          "code",
           "role",
           "person"
         ],
@@ -23761,6 +23563,10 @@
           "download_times": {
             "type": "number"
           },
+          "entry_id": {
+            "description": "条目 ID",
+            "type": "number"
+          },
           "id": {
             "type": "number"
           },
@@ -23794,8 +23600,18 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "read_times": {
             "type": "number"
+          },
+          "reading": {
+            "description": "标题读音",
+            "nullable": true,
+            "type": "string"
           },
           "revised_at": {
             "format": "date-time",
@@ -23819,6 +23635,11 @@
             "nullable": true,
             "type": "string"
           },
+          "summary_en": {
+            "description": "英文简介",
+            "nullable": true,
+            "type": "string"
+          },
           "total_volumes": {
             "type": "number"
           },
@@ -23832,16 +23653,20 @@
         },
         "required": [
           "id",
+          "entry_id",
           "bangumi_book_id",
           "name",
           "name_cn",
+          "reading",
           "other_names",
           "covers",
           "publication_date",
           "novel_status",
+          "publication_status",
           "total_volumes",
           "summary",
           "summary_cn",
+          "summary_en",
           "nsfw",
           "status",
           "views",
@@ -23878,6 +23703,10 @@
       },
       "LightNovelPeopleRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "note": {
             "nullable": true,
             "type": "string"
@@ -23891,6 +23720,7 @@
         },
         "required": [
           "relation",
+          "code",
           "note",
           "person"
         ],
@@ -23898,6 +23728,10 @@
       },
       "LightNovelProducerRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "note": {
             "nullable": true,
             "type": "string"
@@ -23911,6 +23745,7 @@
         },
         "required": [
           "relation",
+          "code",
           "note",
           "producer"
         ],
@@ -24545,6 +24380,10 @@
       },
       "LightNovelRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "relation": {
             "enum": [
               "SERIES",
@@ -24572,6 +24411,7 @@
         },
         "required": [
           "relation",
+          "code",
           "target_light_novel"
         ],
         "type": "object"
@@ -24971,6 +24811,10 @@
           "download_times": {
             "type": "number"
           },
+          "entry_id": {
+            "description": "条目 ID",
+            "type": "number"
+          },
           "epub_provider": {
             "allOf": [
               {
@@ -25085,6 +24929,7 @@
         },
         "required": [
           "id",
+          "entry_id",
           "bangumi_book_id",
           "series_id",
           "volume_type",
@@ -25617,78 +25462,6 @@
           "finished_at",
           "error_message",
           "actor"
-        ],
-        "type": "object"
-      },
-      "LnDraftDto": {
-        "properties": {
-          "author": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ResolvedEntityDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "characters": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedEntityDto"
-            },
-            "type": "array"
-          },
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "draft": {
-            "additionalProperties": true,
-            "type": "object"
-          },
-          "existing_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "field_sources": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "illustrators": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedEntityDto"
-            },
-            "type": "array"
-          },
-          "publishers": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedEntityDto"
-            },
-            "type": "array"
-          },
-          "relations": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedRelationDto"
-            },
-            "type": "array"
-          },
-          "sources_match": {
-            "nullable": true,
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "draft",
-          "cover",
-          "field_sources",
-          "existing_id",
-          "sources_match",
-          "author",
-          "illustrators",
-          "publishers",
-          "characters",
-          "relations"
         ],
         "type": "object"
       },
@@ -26887,6 +26660,10 @@
             "nullable": true,
             "type": "array"
           },
+          "entry_id": {
+            "description": "条目 ID",
+            "type": "number"
+          },
           "homepage": {
             "nullable": true,
             "type": "string"
@@ -26945,8 +26722,18 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "read_times": {
             "type": "number"
+          },
+          "reading": {
+            "description": "标题读音",
+            "nullable": true,
+            "type": "string"
           },
           "reading_mode": {
             "allOf": [
@@ -26995,6 +26782,11 @@
             "nullable": true,
             "type": "string"
           },
+          "summary_en": {
+            "description": "英文简介",
+            "nullable": true,
+            "type": "string"
+          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
@@ -27005,9 +26797,13 @@
         },
         "required": [
           "id",
+          "entry_id",
           "bangumi_subject_id",
           "name",
           "name_cn",
+          "reading",
+          "publication_status",
+          "summary_en",
           "other_names",
           "covers",
           "serial_status",
@@ -27567,6 +27363,10 @@
       },
       "MangaProducerRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "note": {
             "type": "string"
           },
@@ -27588,6 +27388,7 @@
         },
         "required": [
           "role",
+          "code",
           "note",
           "producer"
         ],
@@ -29372,6 +29173,10 @@
       },
       "MangaRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
           },
@@ -29385,6 +29190,7 @@
         },
         "required": [
           "relation",
+          "code",
           "manga"
         ],
         "type": "object"
@@ -29687,6 +29493,10 @@
       },
       "MangaStaffRelationDto": {
         "properties": {
+          "code": {
+            "description": "新的职责或关系编码",
+            "type": "string"
+          },
           "note": {
             "type": "string"
           },
@@ -29711,6 +29521,7 @@
         },
         "required": [
           "role",
+          "code",
           "note",
           "person"
         ],
@@ -30098,6 +29909,10 @@
             "nullable": true,
             "type": "array"
           },
+          "entry_id": {
+            "description": "条目 ID",
+            "type": "number"
+          },
           "id": {
             "type": "number"
           },
@@ -30187,6 +30002,7 @@
         },
         "required": [
           "id",
+          "entry_id",
           "bangumi_book_id",
           "series_id",
           "volume_number",
@@ -31372,9 +31188,9 @@
             "enum": [
               "FAILED",
               "REJECTED",
+              "PASSED",
               "PENDING",
               "RUNNING",
-              "PASSED",
               "NEEDS_HUMAN"
             ],
             "type": "string"
@@ -33052,7 +32868,7 @@
             "type": "number"
           },
           "missing_volumes": {
-            "description": "缺 EPUB 的分卷，按卷号升序",
+            "description": "缺 EPUB 的分卷，按卷的排列顺序",
             "items": {
               "$ref": "#/components/schemas/NovelSeriesMissingVolumeDto"
             },
@@ -33072,20 +32888,11 @@
           "read_times": {
             "type": "number"
           },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "type": "string"
-          },
           "views": {
             "type": "number"
           },
           "volume_count": {
-            "description": "已发布的分卷总数",
+            "description": "分卷总数",
             "type": "number"
           }
         },
@@ -33093,7 +32900,6 @@
           "id",
           "name",
           "name_cn",
-          "status",
           "volume_count",
           "available_count",
           "missing_volumes",
@@ -33123,21 +32929,6 @@
           "volume_number",
           "name"
         ],
-        "type": "object"
-      },
-      "NovelSeriesStatusDto": {
-        "properties": {
-          "status": {
-            "description": "系列发布状态",
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "type": "string"
-          }
-        },
         "type": "object"
       },
       "NovelSourceDashboardDto": {
@@ -33407,6 +33198,7 @@
             "type": "string"
           },
           "series_id": {
+            "nullable": true,
             "type": "number"
           },
           "source_key": {
@@ -33804,15 +33596,6 @@
           "series": {
             "$ref": "#/components/schemas/EpubResourceSeriesDto"
           },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "type": "string"
-          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
@@ -33840,7 +33623,6 @@
           "volume_number",
           "volume_type",
           "series",
-          "status",
           "online_reading_available",
           "epub_curated",
           "epub_is_collection",
@@ -33868,16 +33650,6 @@
           "epub_is_collection": {
             "description": "文件是否是合集而非单卷",
             "type": "boolean"
-          },
-          "status": {
-            "description": "发布状态",
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "type": "string"
           }
         },
         "type": "object"
@@ -33923,15 +33695,6 @@
           "series": {
             "$ref": "#/components/schemas/EpubResourceSeriesDto"
           },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "type": "string"
-          },
           "updated_at": {
             "format": "date-time",
             "type": "string"
@@ -33959,7 +33722,6 @@
           "volume_number",
           "volume_type",
           "series",
-          "status",
           "online_reading_available",
           "epub_curated",
           "epub_is_collection",
@@ -34899,9 +34661,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
             "type": "string"
           },
@@ -35978,9 +35740,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
             "type": "string"
           },
@@ -36694,6 +36456,11 @@
           "name": {
             "type": "string"
           },
+          "reading": {
+            "description": "名字的读音",
+            "nullable": true,
+            "type": "string"
+          },
           "revised_at": {
             "format": "date-time",
             "nullable": true,
@@ -36723,6 +36490,13 @@
           "vndb_id": {
             "nullable": true,
             "type": "string"
+          },
+          "websites": {
+            "description": "本人的官网与官方账号",
+            "items": {
+              "$ref": "#/components/schemas/EntityWebsiteDto"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -36740,12 +36514,21 @@
           "revised_at",
           "vndb_id",
           "bangumi_id",
-          "labels"
+          "labels",
+          "reading",
+          "websites"
         ],
         "type": "object"
       },
       "PersonGalgameRelationDto": {
         "properties": {
+          "codes": {
+            "description": "在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "galgame": {
             "$ref": "#/components/schemas/GalgameSummaryDto"
           },
@@ -36757,6 +36540,7 @@
           }
         },
         "required": [
+          "codes",
           "roles",
           "galgame"
         ],
@@ -36764,6 +36548,13 @@
       },
       "PersonLightNovelRelationDto": {
         "properties": {
+          "codes": {
+            "description": "在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "light_novel": {
             "$ref": "#/components/schemas/LightNovelSummaryDto"
           },
@@ -36776,6 +36567,7 @@
           }
         },
         "required": [
+          "codes",
           "relation",
           "note",
           "light_novel"
@@ -36784,6 +36576,13 @@
       },
       "PersonMangaRelationDto": {
         "properties": {
+          "codes": {
+            "description": "在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
           },
@@ -36795,6 +36594,7 @@
           }
         },
         "required": [
+          "codes",
           "roles",
           "manga"
         ],
@@ -37673,8 +37473,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -38094,6 +37892,11 @@
             },
             "type": "array"
           },
+          "location": {
+            "description": "所在地，照录",
+            "nullable": true,
+            "type": "string"
+          },
           "logo": {
             "allOf": [
               {
@@ -38104,6 +37907,16 @@
             "type": "object"
           },
           "name": {
+            "type": "string"
+          },
+          "organization_type": {
+            "description": "组织类型，取值为新的类型编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "reading": {
+            "description": "名称的读音",
+            "nullable": true,
             "type": "string"
           },
           "revised_at": {
@@ -38168,12 +37981,22 @@
           "revised_at",
           "vndb_id",
           "bangumi_id",
-          "labels"
+          "labels",
+          "reading",
+          "organization_type",
+          "location"
         ],
         "type": "object"
       },
       "ProducerGalgameRelationDto": {
         "properties": {
+          "codes": {
+            "description": "这家组织在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "galgame": {
             "$ref": "#/components/schemas/GalgameSummaryDto"
           },
@@ -38182,6 +38005,7 @@
           }
         },
         "required": [
+          "codes",
           "note",
           "galgame"
         ],
@@ -38189,6 +38013,13 @@
       },
       "ProducerLightNovelRelationDto": {
         "properties": {
+          "codes": {
+            "description": "这家组织在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "light_novel": {
             "$ref": "#/components/schemas/LightNovelSummaryDto"
           },
@@ -38201,6 +38032,7 @@
           }
         },
         "required": [
+          "codes",
           "relation",
           "note",
           "light_novel"
@@ -38209,6 +38041,13 @@
       },
       "ProducerMangaRelationDto": {
         "properties": {
+          "codes": {
+            "description": "这家组织在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
           },
@@ -38229,6 +38068,7 @@
           }
         },
         "required": [
+          "codes",
           "role",
           "note",
           "manga"
@@ -38813,8 +38653,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -38942,8 +38780,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -39125,8 +38961,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -41329,327 +41163,6 @@
         ],
         "type": "object"
       },
-      "ResolvedCharacterDto": {
-        "properties": {
-          "actors": {
-            "items": {
-              "$ref": "#/components/schemas/ResolvedEntityDto"
-            },
-            "type": "array"
-          },
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "duplicate_ids": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "external": {
-            "$ref": "#/components/schemas/SourceIdsDto"
-          },
-          "matched_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "role": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CharacterRole"
-              }
-            ],
-            "x-enum-descriptions": {
-              "GUEST": "客串",
-              "MAIN": "主角",
-              "PRIMARY": "主要角色",
-              "SUPPORTING": "配角"
-            }
-          },
-          "source_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "matched_id",
-          "status",
-          "name",
-          "cover",
-          "duplicate_ids",
-          "source_names",
-          "external",
-          "role",
-          "actors"
-        ],
-        "type": "object"
-      },
-      "ResolvedEntityDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "duplicate_ids": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "external": {
-            "$ref": "#/components/schemas/SourceIdsDto"
-          },
-          "matched_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "source_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "matched_id",
-          "status",
-          "name",
-          "cover",
-          "duplicate_ids",
-          "source_names",
-          "external"
-        ],
-        "type": "object"
-      },
-      "ResolvedProducerDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "duplicate_ids": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "external": {
-            "$ref": "#/components/schemas/SourceIdsDto"
-          },
-          "matched_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "role": {
-            "enum": [
-              "DEVELOPER",
-              "PUBLISHER",
-              "LOCALIZER"
-            ],
-            "type": "string"
-          },
-          "source_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "matched_id",
-          "status",
-          "name",
-          "cover",
-          "duplicate_ids",
-          "source_names",
-          "external",
-          "role"
-        ],
-        "type": "object"
-      },
-      "ResolvedRelationDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "matched_id": {
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "relation": {
-            "type": "string"
-          },
-          "source": {
-            "enum": [
-              "bangumi",
-              "vndb"
-            ],
-            "type": "string"
-          }
-        },
-        "required": [
-          "matched_id",
-          "name",
-          "cover",
-          "relation",
-          "source"
-        ],
-        "type": "object"
-      },
-      "ResolvedStaffDto": {
-        "properties": {
-          "cover": {
-            "nullable": true,
-            "type": "string"
-          },
-          "duplicate_ids": {
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          },
-          "external": {
-            "$ref": "#/components/schemas/SourceIdsDto"
-          },
-          "matched_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          },
-          "role": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/GalgameStaffRole"
-              }
-            ],
-            "x-enum-descriptions": {
-              "ANIMATION_DIRECTOR": "动画监督",
-              "ANIMATION_PRODUCTION": "动画制作",
-              "ANIMATION_SCRIPT": "动画剧本",
-              "ANIMATION_SUPERVISOR": "作画监督",
-              "ART": "原画",
-              "BACKGROUND": "背景",
-              "CG_SUPERVISOR": "CG 监修",
-              "CHARACTER_DESIGN": "人物设定",
-              "COOPERATION": "协力",
-              "COVER_ART": "海报",
-              "DIRECTOR": "导演",
-              "EDITOR": "编辑",
-              "EXECUTIVE_PRODUCER": "制作总指挥",
-              "GAME_DESIGNER": "游戏设计师",
-              "GRAPHICS": "美工",
-              "INSERT_PERFORMANCE": "插入歌演出",
-              "LEVEL_DESIGN": "关卡设计",
-              "MECHANICAL_DESIGN": "机械设定",
-              "MUSIC": "音乐",
-              "ORIGINAL_WORK": "原作",
-              "PLANNING": "企画",
-              "PRODUCER": "制作人",
-              "PROGRAM": "程序",
-              "QC": "QC",
-              "SCENARIO": "剧本",
-              "SD_ART": "SD原画",
-              "SERIES_COMPOSITION": "系列构成",
-              "SOUND_DIRECTOR": "音响监督",
-              "SUPERVISOR": "监修",
-              "THEME_COMPOSITION": "主题歌作曲",
-              "THEME_LYRICS": "主题歌作词",
-              "THEME_PERFORMANCE": "主题歌演出",
-              "TRANSLATOR": "翻译"
-            }
-          },
-          "source_names": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "status": {
-            "enum": [
-              "PENDING",
-              "PUBLISHED",
-              "REJECTED",
-              "DRAFT"
-            ],
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "matched_id",
-          "status",
-          "name",
-          "cover",
-          "duplicate_ids",
-          "source_names",
-          "external",
-          "role"
-        ],
-        "type": "object"
-      },
-      "ResolvedTagDto": {
-        "properties": {
-          "matched_id": {
-            "nullable": true,
-            "type": "number"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "matched_id"
-        ],
-        "type": "object"
-      },
       "ResourceEntryDto": {
         "properties": {
           "entry_id": {
@@ -42417,25 +41930,6 @@
         ],
         "type": "object"
       },
-      "ScreenshotDto": {
-        "properties": {
-          "sexual": {
-            "type": "number"
-          },
-          "url": {
-            "type": "string"
-          },
-          "violence": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "url",
-          "sexual",
-          "violence"
-        ],
-        "type": "object"
-      },
       "SearchCoverDto": {
         "properties": {
           "height": {
@@ -42957,17 +42451,6 @@
         ],
         "type": "object"
       },
-      "SourceIdsDto": {
-        "properties": {
-          "bangumi_id": {
-            "type": "string"
-          },
-          "vndb_id": {
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "SourceImageDto": {
         "properties": {
           "alt": {
@@ -43341,6 +42824,9 @@
             "nullable": true,
             "type": "string"
           },
+          "editor": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
           "id": {
             "type": "number"
           },
@@ -43424,8 +42910,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -43563,6 +43047,7 @@
           "is_public",
           "deprecation_reason",
           "deprecation_note",
+          "editor",
           "citations"
         ],
         "type": "object"
@@ -46856,8 +46341,6 @@
               "PRICE",
               "RELEASE_DATE",
               "RELEASE_STATUS",
-              "END_OF_SERVICE_DATE",
-              "FULL_RELEASE_DATE",
               "AGE_RATING",
               "ADULT_PATCH",
               "BONUS",
@@ -50294,8 +49777,8 @@
           "status": {
             "enum": [
               "REJECTED",
-              "PUBLISHED",
               "PENDING",
+              "PUBLISHED",
               "DRAFT"
             ],
             "type": "string"
@@ -54589,15 +54072,15 @@
             "required": true,
             "schema": {
               "enum": [
-                "PUBLISHER",
-                "BANGUMI",
-                "VNDB",
                 "JPRO",
                 "STEAM",
                 "MOEPEDIA",
                 "OFFICIAL_PAGE",
                 "BRAND_LIST",
                 "DLSITE",
+                "PUBLISHER",
+                "VNDB",
+                "BANGUMI",
                 "OPENBD",
                 "NDL"
               ],
@@ -54642,15 +54125,15 @@
             "required": true,
             "schema": {
               "enum": [
-                "PUBLISHER",
-                "BANGUMI",
-                "VNDB",
                 "JPRO",
                 "STEAM",
                 "MOEPEDIA",
                 "OFFICIAL_PAGE",
                 "BRAND_LIST",
                 "DLSITE",
+                "PUBLISHER",
+                "VNDB",
+                "BANGUMI",
                 "OPENBD",
                 "NDL"
               ],
@@ -60183,20 +59666,6 @@
             }
           },
           {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "enum": [
-                "PENDING",
-                "PUBLISHED",
-                "REJECTED",
-                "DRAFT"
-              ],
-              "type": "string"
-            }
-          },
-          {
             "description": "只看还有分卷缺 EPUB 的系列",
             "in": "query",
             "name": "incomplete",
@@ -60259,46 +59728,6 @@
         ]
       }
     },
-    "/api/v3/admin/novel/series/{id}": {
-      "patch": {
-        "operationId": "AdminNovelSeriesController_updateStatus",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NovelSeriesStatusDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NovelSeriesItemDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "admin/novel"
-        ]
-      }
-    },
     "/api/v3/admin/novel/volumes": {
       "get": {
         "operationId": "AdminNovelVolumeController_list",
@@ -60309,20 +59738,6 @@
             "name": "q",
             "required": false,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "status",
-            "required": false,
-            "schema": {
-              "enum": [
-                "PENDING",
-                "PUBLISHED",
-                "REJECTED",
-                "DRAFT"
-              ],
               "type": "string"
             }
           },
@@ -70759,314 +70174,6 @@
         ]
       }
     },
-    "/api/v3/external-source/cover-media": {
-      "post": {
-        "operationId": "ExternalSourceController_coverMedia",
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CoverMediaDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverMediaResultDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/entity-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_entityDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "enum": [
-                "person",
-                "character",
-                "producer"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": false,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "vndb_id",
-            "required": false,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/galgame-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_galgameDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": false,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "vndb_id",
-            "required": false,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GalgameDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/light-novel-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_lnDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": true,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LnDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/light-novel-volume-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_volumeDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": true,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/manga-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_mangaDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": true,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/manga-volume-draft": {
-      "get": {
-        "operationId": "ExternalSourceController_mangaVolumeDraft",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "bangumi_id",
-            "required": true,
-            "schema": {
-              "maxLength": 32,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityDraftDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
-    "/api/v3/external-source/{source}/search": {
-      "get": {
-        "operationId": "ExternalSourceController_search",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "source",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "type",
-            "required": true,
-            "schema": {
-              "enum": [
-                "galgame",
-                "light-novel",
-                "light-novel-volume",
-                "manga",
-                "manga-volume",
-                "person",
-                "character",
-                "producer"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "q",
-            "required": true,
-            "schema": {
-              "maxLength": 200,
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ExternalSearchItemDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "ExternalSource"
-        ]
-      }
-    },
     "/api/v3/favorite-collections": {
       "get": {
         "operationId": "FavoriteCollectionController_getList",
@@ -73476,102 +72583,6 @@
         ]
       }
     },
-    "/api/v3/galgames/{id}/covers/vote": {
-      "delete": {
-        "operationId": "CurrentUserGalgameCoverVoteController_retract",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "get": {
-        "operationId": "CurrentUserGalgameCoverVoteController_getMine",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "put": {
-        "operationId": "CurrentUserGalgameCoverVoteController_vote",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CoverVoteDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      }
-    },
     "/api/v3/galgames/{id}/credits": {
       "get": {
         "operationId": "GalgameEntryController_getCredits",
@@ -75579,102 +74590,6 @@
         ]
       }
     },
-    "/api/v3/light-novel-volumes/{id}/covers/vote": {
-      "delete": {
-        "operationId": "CurrentUserLightNovelVolumeCoverVoteController_retract",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "get": {
-        "operationId": "CurrentUserLightNovelVolumeCoverVoteController_getMine",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "put": {
-        "operationId": "CurrentUserLightNovelVolumeCoverVoteController_vote",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CoverVoteDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      }
-    },
     "/api/v3/light-novel-volumes/{id}/epub": {
       "delete": {
         "operationId": "LightNovelVolumeController_deleteEpub",
@@ -76772,102 +75687,6 @@
         },
         "tags": [
           "LightNovel"
-        ]
-      }
-    },
-    "/api/v3/light-novels/{id}/covers/vote": {
-      "delete": {
-        "operationId": "CurrentUserLightNovelCoverVoteController_retract",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "get": {
-        "operationId": "CurrentUserLightNovelCoverVoteController_getMine",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
-        ]
-      },
-      "put": {
-        "operationId": "CurrentUserLightNovelCoverVoteController_vote",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CoverVoteDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CoverVoteStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "cover-vote"
         ]
       }
     },

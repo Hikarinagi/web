@@ -10,7 +10,7 @@
     Text,
   } from '@hina-ui/vue'
   import type { BackendStatement } from '~/features/creator/entry/contract'
-  import { statementText } from '~/features/creator/entry/values'
+  import { sourcesOf, statementText } from '~/features/creator/entry/values'
 
   defineOptions({ name: 'CreatorEntryDeprecated' })
   const props = defineProps<{
@@ -21,13 +21,18 @@
 
   const REASONS: Record<string, string> = {
     CONTRADICTED: '与一手来源矛盾',
-    WRONG_ENTRY: '不属于该条目',
-    DUPLICATE: '与另一值重复',
+    WRONG_ENTRY: '不属于本条目',
+    DUPLICATE: '与其他值重复',
     RESCHEDULED: '发售已改期',
     BAD_SOURCE: '该来源无法使用',
     REVERTED: '该次编辑已撤销',
   }
   const restoring = ref<number | null>(null)
+  const sources = (statement: BackendStatement) =>
+    sourcesOf(statement)
+      .map(citation => citation.source ?? citation.url)
+      .filter(Boolean)
+      .join('、')
 
   async function restore(statement: BackendStatement) {
     restoring.value = statement.id
@@ -51,7 +56,7 @@
     <CollapsibleTrigger as-child>
       <Button variant="ghost" tone="neutral" size="xs" class="self-start">
         <template #trailing><DisclosureIcon /></template>
-        {{ statements.length }} 个已作废的值
+        {{ statements.length }} 个作废的值
       </Button>
     </CollapsibleTrigger>
     <CollapsibleContent>
@@ -65,15 +70,24 @@
           :wrap="false"
           class="rounded-md bg-subtle px-3 py-2"
         >
-          <Stack gap="none" class="min-w-0">
-            <Text as="span" size="sm" tone="muted" class="line-through">{{
-              statementText(statement)
-            }}</Text>
-            <Text v-if="statement.deprecation_reason" as="span" size="xs" tone="muted">
-              {{ REASONS[statement.deprecation_reason] ?? statement.deprecation_reason
-              }}<template v-if="statement.deprecation_note"
-                >。说明：{{ statement.deprecation_note }}</template
-              >
+          <Stack gap="xs" class="min-w-0">
+            <Text as="span" size="sm" lang="ja">{{ statementText(statement) }}</Text>
+            <Inline gap="xs" align="center" wrap class="text-xs text-muted">
+              <Text as="span" size="xs" tone="muted">
+                {{ sources(statement) ? `来源：${sources(statement)}` : '没有来源' }}，已由
+              </Text>
+              <Avatar :user="statement.editor" class="size-4!" />
+              <UserName :user="statement.editor" class="text-xs" />
+              <Text as="span" size="xs" tone="muted">
+                作废<template v-if="statement.deprecation_reason"
+                  >（{{
+                    REASONS[statement.deprecation_reason] ?? statement.deprecation_reason
+                  }}）</template
+                >。
+              </Text>
+            </Inline>
+            <Text v-if="statement.deprecation_note" as="span" size="xs" tone="muted">
+              说明：{{ statement.deprecation_note }}
             </Text>
           </Stack>
           <Button

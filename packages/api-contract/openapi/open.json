@@ -2085,9 +2085,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
             "type": "string"
           },
@@ -3147,9 +3147,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
             "type": "string"
           },

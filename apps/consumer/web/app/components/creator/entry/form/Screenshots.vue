@@ -89,7 +89,12 @@
     </FileUpload>
     <Grid v-if="workContent" :cols="2" gap="md">
       <FormField name="version" label="版本">
-        <Select v-model="values.version" :options="options" placeholder="请选择" />
+        <Select
+          v-model="values.version"
+          variant="secondary"
+          :options="options"
+          placeholder="请选择"
+        />
       </FormField>
       <FormField name="location">
         <template #label>
@@ -98,7 +103,12 @@
             填写截图在作品中的位置，照作品自己的章节、路线或时期名称，例如路线名。
           </Question>
         </template>
-        <Input v-model="values.location" placeholder="章节或路线名称" lang="ja" />
+        <Input
+          v-model="values.location"
+          variant="secondary"
+          placeholder="章节或路线名称"
+          lang="ja"
+        />
       </FormField>
     </Grid>
   </Stack>

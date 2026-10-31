@@ -13,7 +13,6 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
-    my_cover_vote,
     rates,
     statistics,
     keywords,
@@ -29,9 +28,6 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/reader/light-novels/{light_novel_id}/progress', {
       path: { light_novel_id: id },
     }).catch(() => null),
-    fetchBackendData(event, '/api/v3/light-novels/{id}/covers/vote', { path: { id } }).catch(
-      () => null,
-    ),
     fetchBackendData(event, '/api/v3/light-novels/{id}/rates', {
       path: { id },
       query: { page: 1, page_size: 20, sort: 'hot', has_content: true },
@@ -48,7 +44,6 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
-    my_cover_vote,
     rates,
     statistics,
     keywords,

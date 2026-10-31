@@ -13,6 +13,15 @@ const day = (label: string) =>
 export const statementSchema = v.object({
   text: optional('值'),
   code: optional('取值'),
+  role: optional('职责'),
+  original: optional('原文'),
+  archive: v.pipe(
+    optional('网页存档'),
+    v.check(value => !value || /^https?:\/\//i.test(value), '网页存档应为网址'),
+  ),
+  machine: v.boolean('请注明是否机器翻译'),
+  language: optional('语言'),
+  versions: v.array(v.number('所选版本无效'), '所选版本无效'),
   date: day('日期'),
   amount: v.pipe(
     optional('金额'),

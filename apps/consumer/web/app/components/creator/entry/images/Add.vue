@@ -12,7 +12,7 @@
     Tag,
     Text,
   } from '@hina-ui/vue'
-  import { Link2 } from '@lucide/vue'
+  import { Link as LinkIcon } from '@lucide/vue'
   import type {
     BackendPropertyDefinition,
     BackendStatement,
@@ -65,12 +65,13 @@
       <template v-if="method === 'link'">
         <Input
           v-model="url"
-          placeholder="粘贴网址"
+          variant="secondary"
+          placeholder="粘贴网址、ISBN 或 JAN"
           aria-label="来源"
           @change="add.read()"
           @paste="$nextTick(() => add.read())"
         >
-          <template #leading><Link2 /></template>
+          <template #leading><LinkIcon /></template>
         </Input>
         <Spinner v-if="reading" size="sm" />
         <Stack v-else-if="source" gap="sm" class="rounded-md bg-subtle p-3">

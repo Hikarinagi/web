@@ -1,5 +1,6 @@
 import { getRouterParam, type H3Event } from 'h3'
 import { MATCHING_CODES } from '~/features/creator/entry/codes'
+import { readerPath } from '~/features/creator/entry/references'
 import { fetchBackendData } from '../../../../../utils/backend-api'
 import { definePageBffHandler } from '../../../../../utils/page-bff'
 
@@ -15,12 +16,14 @@ async function handler(event: H3Event) {
   const editor = entry.resource ? EDITORS[entry.resource.kind] : undefined
   if (editor && entry.resource) return { target: `${editor}/${entry.resource.id}`, editor: null }
 
-  const work =
+  const owner = (property: string) =>
     entry.type === 'APPEARANCE'
-      ? entry.statements.find(item => item.property === 'WORK' && item.status !== 'DEPRECATED')
+      ? entry.statements.find(item => item.property === property && item.status !== 'DEPRECATED')
           ?.target?.id
       : undefined
-  const [definitions, todos, references, versions] = await Promise.all([
+  const work = owner('WORK')
+  const character = owner('CHARACTER')
+  const [definitions, todos, references, versions, parent] = await Promise.all([
     fetchBackendData(event, '/api/v3/wiki/definitions'),
     fetchBackendData(event, '/api/v3/wiki/todos', {
       query: { entry_id: id, page: 1, page_size: 20 },
@@ -29,6 +32,9 @@ async function handler(event: H3Event) {
     work
       ? fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', { path: { id: work } })
       : Promise.resolve([]),
+    character
+      ? fetchBackendData(event, '/api/v3/wiki/entries/{id}', { path: { id: character } })
+      : Promise.resolve(null),
   ])
   return {
     target: null,
@@ -39,6 +45,7 @@ async function handler(event: H3Event) {
           item => item.property !== 'IDENTIFIER' || !MATCHING_CODES.includes(item.code ?? ''),
         ),
       },
+      reader: readerPath(entry.resource ?? parent?.resource ?? null),
       definitions: definitions.map(definition => ({
         ...definition,
         properties: definition.properties.map(property =>

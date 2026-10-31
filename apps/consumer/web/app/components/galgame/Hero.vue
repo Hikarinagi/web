@@ -8,7 +8,6 @@
     galgame: GalgamePageData['galgame']
     display: BackendGameDisplay
     myRate: GalgamePageData['my_rate']
-    myCoverVote: GalgamePageData['my_cover_vote']
     favorited: boolean
   }>()
 
@@ -49,12 +48,7 @@
       class="mx-auto min-h-[calc(520px+var(--app-header-height))] w-full max-w-app gap-8 px-5 pt-[calc(var(--app-header-height)+2.25rem)] pb-12 sm:px-6 sm:pt-[calc(var(--app-header-height)+3rem)] lg:min-h-[calc(540px+var(--app-header-height))] lg:flex-row lg:items-center lg:justify-start lg:gap-10 lg:py-14"
     >
       <GalgameHeroCover :cover="cover" :title="title">
-        <WorkCoverVoteEntry
-          work="galgame"
-          :work-id="galgame.id"
-          :covers="galgame.covers"
-          :my-media-id="myCoverVote?.my_media_id ?? null"
-        />
+        <WorkCoverAdd resource="galgame" :work-id="galgame.id" />
       </GalgameHeroCover>
 
       <Stack gap="lg" class="w-full min-w-0 flex-1 text-center lg:text-left">

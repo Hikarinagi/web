@@ -1,13 +1,18 @@
 <script setup lang="ts">
   import { Button, Inline } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
-  import type { BackendHistoryRow } from '~/features/creator/entry/contract'
+  import type {
+    BackendHistoryRow,
+    BackendPropertyDefinition,
+  } from '~/features/creator/entry/contract'
   import { displayName } from '~/utils/user'
 
   defineOptions({ name: 'CreatorEntryHistoryActions' })
   const props = defineProps<{
     row: BackendHistoryRow
     latest: boolean
+    entryId?: number
+    definitions?: BackendPropertyDefinition[]
   }>()
   const emit = defineEmits<{ changed: [] }>()
 
@@ -19,9 +24,14 @@
   )
   const single = computed(() => (props.row.edits.length === 1 ? props.row.edits[0] : null))
 
+  const reverting = ref(false)
   function undo() {
     const edit = single.value
     if (!edit) return
+    if (props.entryId && props.definitions && props.row.revision !== null) {
+      reverting.value = true
+      return
+    }
     confirm({
       title: '撤销本次编辑？',
       description:
@@ -93,5 +103,13 @@
     <Button v-if="patrol && latest" variant="ghost" tone="neutral" size="xs" @click="rollback">
       回退
     </Button>
+    <CreatorEntryHistoryRevert
+      v-if="entryId && definitions"
+      v-model:open="reverting"
+      :row="row"
+      :entry-id="entryId"
+      :definitions="definitions"
+      @changed="emit('changed')"
+    />
   </Inline>
 </template>

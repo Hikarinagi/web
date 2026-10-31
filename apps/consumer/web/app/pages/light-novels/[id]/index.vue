@@ -37,7 +37,6 @@
       :people="data.people"
       :producers="data.producers"
       :my-rate="data.my_rate"
-      :my-cover-vote="data.my_cover_vote"
       :favorited="data.favorite?.favorited ?? false"
       :progress="data.progress"
     />

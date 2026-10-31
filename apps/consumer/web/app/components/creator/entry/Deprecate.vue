@@ -10,6 +10,7 @@
     Text,
     Textarea,
   } from '@hina-ui/vue'
+  import { Link as LinkIcon } from '@lucide/vue'
   import type {
     BackendPropertyDefinition,
     BackendStatement,
@@ -31,8 +32,8 @@
 
   const REASONS = [
     { value: 'CONTRADICTED', label: '与一手来源矛盾' },
-    { value: 'WRONG_ENTRY', label: '不属于该条目' },
-    { value: 'DUPLICATE', label: '与另一值重复' },
+    { value: 'WRONG_ENTRY', label: '不属于本条目' },
+    { value: 'DUPLICATE', label: '与其他值重复' },
   ]
   const values = reactive<DeprecateValues>({
     reason: 'CONTRADICTED',
@@ -101,8 +102,14 @@
             <RadioGroup v-model="values.reason" :options="REASONS" />
           </FormField>
           <template v-if="values.reason === 'CONTRADICTED'">
-            <FormField name="source" label="相矛盾的来源" required>
-              <Input v-model="values.source" placeholder="粘贴网址、ISBN 或 JAN" />
+            <FormField name="source" required>
+              <template #label>
+                矛盾的来源
+                <CreatorEntryHint name="contradict" class="ms-1 align-middle" />
+              </template>
+              <Input v-model="values.source" placeholder="粘贴网址、ISBN 或 JAN">
+                <template #leading><LinkIcon /></template>
+              </Input>
             </FormField>
             <FormField name="excerpt" label="摘录">
               <Textarea v-model="values.excerpt" :rows="2" placeholder="复制页面上包含该值的文字" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Empty, Panel, Stack, Tabs, TabsContent, TabsList, TabsTrigger, Text } from '@hina-ui/vue'
+  import { Stack, Tabs, TabsContent, TabsList, TabsTrigger, Text } from '@hina-ui/vue'
   import type { GalgameEditPageData } from '~~/server/api/pages/create/edit/galgame/[id].get'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { ENTRY_TYPE_NAMES, type BackendStatement } from '~/features/creator/entry/contract'
@@ -34,17 +34,20 @@
       .filter(item => item.property === 'SAMPLE_IMAGE' && item.status !== 'DEPRECATED')
       .sort((a, b) => a.position - b.position || a.id - b.id),
   )
-  const retired = computed(() =>
-    props.pageData.entry.statements.filter(
-      item => item.property === 'SAMPLE_IMAGE' && item.status === 'DEPRECATED',
-    ),
-  )
   const readonly = computed(
     () => props.pageData.entry.protection?.level === 'LOCKED' && !can(WIKI_PERMISSIONS.PATROL),
   )
   const appearances = computed(() =>
     props.pageData.appearances.reduce((total, group) => total + group.total, 0),
   )
+  const tabs = computed(() => [
+    { value: 'facts', label: '资料', count: 0 },
+    { value: 'products', label: '发行版本', count: props.pageData.products.length },
+    { value: 'appearances', label: '出场角色', count: appearances.value },
+    { value: 'images', label: '图片', count: images.value.length },
+    { value: 'todos', label: '待完善', count: props.pageData.todos.meta.total_items },
+    { value: 'history', label: '历史', count: 0 },
+  ])
   const meta = computed(() => [
     ...props.pageData.display.brands.map(brand => brand.text),
     ...(props.pageData.display.release?.text ? [props.pageData.display.release.text] : []),
@@ -60,38 +63,28 @@
 <template>
   <Stack gap="lg">
     <CreatorEntryHeader
+      :readonly="readonly"
       :title="pageData.display.original_title ?? pageData.display.title"
       type="游戏"
-      :meta="meta"
+      :cover="pageData.galgame.cover"
       :to="`/galgames/${pageData.galgame.id}`"
       splittable
       @merge="merging = true"
       @split="splitting = true"
-    />
+    >
+      <Text v-for="item in meta" :key="item" as="span" size="sm" tone="muted" lang="ja">
+        {{ item }}
+      </Text>
+    </CreatorEntryHeader>
+    <CreatorEntryProtection :protection="pageData.entry.protection" />
     <Tabs v-model="tab">
       <TabsList aria-label="编辑内容">
-        <TabsTrigger value="facts">资料</TabsTrigger>
-        <TabsTrigger value="products">
-          发行版本
-          <Text as="span" size="sm" tone="muted" class="tabular-nums">
-            {{ pageData.products.length }}
+        <TabsTrigger v-for="item in tabs" :key="item.value" :value="item.value">
+          {{ item.label }}
+          <Text v-if="item.count" as="span" size="sm" tone="muted" class="tabular-nums">
+            {{ item.count }}
           </Text>
         </TabsTrigger>
-        <TabsTrigger value="appearances">
-          出场角色
-          <Text as="span" size="sm" tone="muted" class="tabular-nums">{{ appearances }}</Text>
-        </TabsTrigger>
-        <TabsTrigger value="images">
-          图片
-          <Text as="span" size="sm" tone="muted" class="tabular-nums">{{ images.length }}</Text>
-        </TabsTrigger>
-        <TabsTrigger value="todos">
-          待完善
-          <Text as="span" size="sm" tone="muted" class="tabular-nums">
-            {{ pageData.todos.meta.total_items }}
-          </Text>
-        </TabsTrigger>
-        <TabsTrigger value="history">历史</TabsTrigger>
       </TabsList>
       <TabsContent value="facts" class="pt-6">
         <CreatorEntryFacts
@@ -103,28 +96,19 @@
         />
       </TabsContent>
       <TabsContent value="products" class="pt-6">
-        <CreatorEntryProducts :products="pageData.products" />
+        <CreatorEntryProductsTab :page-data="pageData" />
       </TabsContent>
       <TabsContent value="appearances" class="pt-6">
-        <Stack gap="lg">
-          <CreatorEntryReferences
-            :groups="pageData.appearances"
-            :definitions="pageData.definitions"
-          />
-          <Empty v-if="!appearances" title="尚无出场角色" />
-        </Stack>
+        <CreatorEntryCastTab :groups="pageData.appearances" />
       </TabsContent>
       <TabsContent value="images" class="pt-6">
-        <Panel v-if="sample" :title="sample.label" :count="images.length">
-          <CreatorEntryImagesGallery
-            :entry="pageData.entry"
-            :definition="sample"
-            :statements="images"
-            :deprecated="retired"
-            :readonly="readonly"
-            @saved="$emit('saved')"
-          />
-        </Panel>
+        <CreatorEntryImagesTab
+          v-if="sample"
+          :entry="pageData.entry"
+          :definition="sample"
+          :readonly="readonly"
+          @saved="$emit('saved')"
+        />
       </TabsContent>
       <TabsContent value="todos" class="pt-6">
         <CreatorEntryTodos
@@ -138,11 +122,10 @@
       <TabsContent value="history" class="pt-6">
         <CreatorEntryHistoryTab
           v-if="tab === 'history'"
+          :entry-id="pageData.galgame.entry_id"
+          :definitions="definitions"
           :source="`/api/pages/create/edit/galgame/${pageData.galgame.id}/history`"
           :revision-to="revision => `/galgames/${pageData.galgame.id}/revisions/${revision}`"
-          :compare-to="
-            (from, to) => `/galgames/${pageData.galgame.id}/revisions/compare?from=${from}&to=${to}`
-          "
         />
       </TabsContent>
     </Tabs>

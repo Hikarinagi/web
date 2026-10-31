@@ -83,7 +83,7 @@
       </Text>
     </template>
     <template #cell-actions="{ row }">
-      <CreatorTodosActions :todo="row" :text="text(row)" class="py-3" @changed="$emit('changed')" />
+      <CreatorTodosActions :todo="row" class="py-3" @changed="$emit('changed')" />
     </template>
   </CreatorDataTable>
 </template>

@@ -1,13 +1,17 @@
 <script setup lang="ts">
   import { Skeleton } from '@hina-ui/vue'
   import type { PageResult } from '@hikarinagi/shared'
-  import type { BackendHistoryRow } from '~/features/creator/entry/contract'
+  import type {
+    BackendHistoryRow,
+    BackendPropertyDefinition,
+  } from '~/features/creator/entry/contract'
 
   defineOptions({ name: 'CreatorEntryHistoryTab' })
   const props = defineProps<{
     source: `/api/pages/${string}`
     revisionTo: (revision: number) => string | null
-    compareTo: (from: number, to: number) => string
+    entryId?: number
+    definitions?: BackendPropertyDefinition[]
   }>()
 
   const page = ref(1)
@@ -23,7 +27,8 @@
     :history="data.history"
     :loading="pending"
     :revision-to="revisionTo"
-    :compare-to="compareTo"
+    :entry-id="entryId"
+    :definitions="definitions"
     @changed="refresh()"
   />
   <Skeleton v-else class="h-64 w-full" />

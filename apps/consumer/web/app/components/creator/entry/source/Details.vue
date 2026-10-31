@@ -1,74 +1,29 @@
 <script setup lang="ts">
-  import { Blockquote, Inline, Link, Stack, Tag, Text } from '@hina-ui/vue'
-  import type { BackendStatement } from '~/features/creator/entry/contract'
+  import {
+    Blockquote,
+    DescriptionDetails,
+    DescriptionList,
+    DescriptionTerm,
+    Inline,
+    Link,
+    Stack,
+  } from '@hina-ui/vue'
+  import type {
+    BackendStatement,
+    BackendStatementCitation,
+  } from '~/features/creator/entry/contract'
   import { accessedText } from '~/features/creator/entry/values'
-  import { importSourceText } from '~/features/entry/labels'
 
   defineOptions({ name: 'CreatorEntrySourceDetails' })
-  const props = defineProps<{ statement: BackendStatement; label: string }>()
-
-  type Citation = BackendStatement['citations'][number]
-  const METHODS: Record<string, string> = {
-    RECORD: '结构化记录',
-    EXCERPT: '页面摘录',
-    SCREENSHOT: '截图',
-    MEMBER: '由成员录入',
-  }
-  const VERIFICATIONS: Record<string, string> = {
-    PASSED: '已核验',
-    UNCHECKED: '未核验',
-    EXCERPT_NOT_FOUND: '页面中未找到此摘录',
-    VALUE_MISMATCH: '摘录与该值不符',
-    UNREACHABLE: '无法打开来源页面',
-    UNCONFIRMED_MATCH: '来源页面未明确指向该条目',
-  }
-  const method = (citation: Citation) =>
-    citation.method === 'IMPORT'
-      ? `从 ${importSourceText(citation.origin?.split(',') ?? [])} 导入`
-      : (METHODS[citation.method] ?? citation.method)
-  const verification = (citation: Citation) =>
-    citation.method === 'IMPORT' || citation.method === 'MEMBER'
-      ? null
-      : citation.verification === 'SOURCE_NOT_ALLOWED'
-        ? `该来源无法用于${props.label}`
-        : (VERIFICATIONS[citation.verification] ?? citation.verification)
+  defineProps<{ statement: BackendStatement; sources: BackendStatementCitation[] }>()
 </script>
 
 <template>
-  <Stack gap="md" class="rounded-md bg-subtle p-3">
-    <Stack v-for="(citation, index) in statement.citations" :key="index" gap="xs">
-      <Inline gap="sm" align="center">
-        <Text as="span" size="xs" weight="medium">{{ method(citation) }}</Text>
-        <Tag v-if="citation.role === 'LINK'" tone="neutral">表明所列名称对应所关联的条目</Tag>
-        <Tag v-else-if="citation.role === 'CONTRADICT'" tone="danger">与该值矛盾</Tag>
-        <Text
-          v-if="verification(citation)"
-          as="span"
-          size="xs"
-          :tone="citation.verification === 'PASSED' ? 'success' : 'muted'"
-        >
-          {{ verification(citation) }}
-        </Text>
-      </Inline>
-      <Link
-        v-if="citation.url"
-        as="a"
-        :href="citation.url"
-        target="_blank"
-        rel="noopener noreferrer"
-        tone="accent"
-        class="text-xs break-all"
-      >
-        {{ citation.source ?? citation.url }}
-      </Link>
-      <Text v-else-if="citation.source" as="span" size="xs">{{ citation.source }}</Text>
-      <Blockquote v-if="citation.excerpt" class="text-xs">{{ citation.excerpt }}</Blockquote>
-      <Text v-if="citation.version" as="span" size="xs" tone="muted" lang="ja">
-        版本：{{ citation.version.label }}
-      </Text>
-      <Text v-if="citation.location" as="span" size="xs" tone="muted">
-        位置：{{ citation.location }}
-      </Text>
+  <Stack gap="md" class="mt-1 rounded-md bg-subtle p-3">
+    <Stack v-for="(citation, index) in sources" :key="index" gap="sm">
+      <Blockquote v-if="citation.excerpt" class="text-sm whitespace-pre-line" lang="ja">
+        {{ citation.excerpt }}
+      </Blockquote>
       <HikariImageGroup v-if="citation.media.length" class="flex-row flex-wrap gap-2">
         <HikariImage
           v-for="media in citation.media"
@@ -80,22 +35,47 @@
           image-class="size-full object-cover"
         />
       </HikariImageGroup>
-      <Inline gap="md" align="center">
-        <Link
-          v-if="citation.archive_url"
-          as="a"
-          :href="citation.archive_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          tone="accent"
-          class="text-xs"
-        >
-          存档副本
-        </Link>
-        <Text v-if="accessedText(citation.accessed_at)" as="span" size="xs" tone="muted">
-          访问于 {{ accessedText(citation.accessed_at) }}
-        </Text>
-      </Inline>
+      <DescriptionList orientation="horizontal" class="text-xs text-muted">
+        <template v-if="citation.url">
+          <DescriptionTerm>网址</DescriptionTerm>
+          <DescriptionDetails class="break-all">{{ citation.url }}</DescriptionDetails>
+        </template>
+        <template v-if="citation.version">
+          <DescriptionTerm>版本</DescriptionTerm>
+          <DescriptionDetails lang="ja">{{ citation.version.label }}</DescriptionDetails>
+        </template>
+        <template v-if="citation.location">
+          <DescriptionTerm>位置</DescriptionTerm>
+          <DescriptionDetails lang="ja">{{ citation.location }}</DescriptionDetails>
+        </template>
+        <template v-if="citation.accessed_at">
+          <DescriptionTerm>访问时间</DescriptionTerm>
+          <DescriptionDetails>{{ accessedText(citation.accessed_at, true) }}</DescriptionDetails>
+        </template>
+        <template v-if="citation.archive_url">
+          <DescriptionTerm>存档</DescriptionTerm>
+          <DescriptionDetails>
+            <Link
+              as="a"
+              :href="citation.archive_url"
+              target="_blank"
+              rel="noopener noreferrer"
+              tone="accent"
+            >
+              网页存档
+            </Link>
+          </DescriptionDetails>
+        </template>
+        <template v-if="index === sources.length - 1">
+          <DescriptionTerm>添加者</DescriptionTerm>
+          <DescriptionDetails>
+            <Inline gap="sm" align="center" :wrap="false">
+              <Avatar :user="statement.editor" class="size-5!" />
+              <UserName :user="statement.editor" class="min-w-0" />
+            </Inline>
+          </DescriptionDetails>
+        </template>
+      </DescriptionList>
     </Stack>
   </Stack>
 </template>

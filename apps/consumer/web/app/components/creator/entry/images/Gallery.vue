@@ -5,6 +5,7 @@
     BackendPropertyDefinition,
     BackendStatement,
   } from '~/features/creator/entry/contract'
+  import { sourcesOf } from '~/features/creator/entry/values'
 
   defineOptions({ name: 'CreatorEntryImagesGallery' })
   const props = defineProps<{
@@ -13,20 +14,37 @@
     statements: BackendStatement[]
     deprecated: BackendStatement[]
     readonly: boolean
+    actions?: boolean
   }>()
   const emit = defineEmits<{ saved: [] }>()
 
-  const adding = ref(false)
+  const adding = defineModel<boolean>('adding', { default: false })
   const shown = ref<BackendStatement | null>(null)
   const open = ref(false)
   const multiple = computed(() => props.definition.cardinality === 'multiple')
+  const portrait = computed(() => props.definition.property === 'IMAGE')
+  const sources = computed(() => {
+    const seen = new Map<string, BackendStatement>()
+    for (const statement of props.statements) {
+      const citation = sourcesOf(statement)[0]
+      const key = citation ? `${citation.source}|${citation.url}` : ''
+      if (!seen.has(key)) seen.set(key, statement)
+    }
+    return [...seen.values()]
+  })
   const existing = computed(() =>
     props.statements.flatMap(statement => (statement.media ? [statement.media.src] : [])),
   )
   const title = computed(() => {
-    const index = shown.value ? props.statements.indexOf(shown.value) + 1 : 0
+    const index = shown.value
+      ? props.statements.findIndex(item => item.id === shown.value?.id) + 1
+      : 0
     return multiple.value ? `截图 ${index}` : props.definition.label
   })
+  const ratio = (statement: BackendStatement) =>
+    statement.media?.width && statement.media.height
+      ? statement.media.width / statement.media.height
+      : 3 / 4
   function view(statement: BackendStatement) {
     shown.value = statement
     open.value = true
@@ -39,7 +57,7 @@
 
 <template>
   <Stack gap="md">
-    <SimpleGrid v-if="statements.length" :min="multiple ? '12rem' : '10rem'" gap="sm">
+    <SimpleGrid v-if="multiple && statements.length" :min="portrait ? '10rem' : '20rem'" gap="sm">
       <Card
         v-for="statement in statements"
         :key="statement.id"
@@ -54,11 +72,51 @@
           :src="statement.media ?? null"
           alt=""
           preset="small"
-          :class="multiple ? 'aspect-video w-full' : 'aspect-3/4 w-full'"
-          image-class="size-full object-cover"
+          :class="portrait ? 'aspect-3/4 w-full' : 'aspect-video w-full'"
+          :image-class="portrait ? 'size-full object-cover object-top' : 'size-full object-cover'"
         />
       </Card>
     </SimpleGrid>
+    <Inline
+      v-else-if="statements[0] && !adding"
+      gap="md"
+      align="start"
+      justify="between"
+      :wrap="false"
+    >
+      <Stack gap="xs" class="items-start">
+        <Card
+          as="button"
+          type="button"
+          :padded="false"
+          class="hn-state-layer hn-interactive overflow-hidden hn-press-lg"
+          :aria-label="`查看${definition.label}`"
+          @click="view(statements[0])"
+        >
+          <HikariImage
+            :src="statements[0].media ?? null"
+            alt=""
+            preset="small"
+            :ratio="ratio(statements[0])"
+            class="w-56"
+            image-class="size-full object-cover"
+          />
+        </Card>
+        <CreatorEntrySource :statement="statements[0]" />
+      </Stack>
+      <Button
+        v-if="!readonly && actions !== false"
+        variant="ghost"
+        tone="neutral"
+        size="sm"
+        @click="adding = true"
+      >
+        修改
+      </Button>
+    </Inline>
+    <template v-if="multiple && statements.length">
+      <CreatorEntrySource v-for="statement in sources" :key="statement.id" :statement="statement" />
+    </template>
     <CreatorEntryImagesAdd
       v-if="adding"
       :entry="entry"
@@ -68,11 +126,16 @@
       @cancel="adding = false"
       @saved="done"
     />
-    <Inline v-else-if="!readonly" gap="md" align="center" justify="between">
+    <Inline
+      v-else-if="!readonly && actions !== false && (multiple || !statements.length)"
+      gap="md"
+      align="center"
+      justify="between"
+    >
       <Text v-if="!statements.length" as="span" size="sm" tone="faint">未填写</Text>
       <Button variant="ghost" tone="neutral" size="sm" class="ms-auto" @click="adding = true">
-        <template v-if="multiple || !statements.length" #icon><Plus /></template>
-        {{ multiple ? '添加图片' : statements.length ? '修改' : '添加' }}
+        <template #icon><Plus /></template>
+        {{ multiple ? '添加图片' : '添加' }}
       </Button>
     </Inline>
     <CreatorEntryDeprecated

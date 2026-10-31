@@ -24,5 +24,8 @@ export type BackendHistoryRow = ApiData<'/api/v3/galgames/{id}/history', 'get'>[
 export type BackendEntryDraft = ApiData<'/api/v3/wiki/entries/drafts', 'post'>
 export type BackendEntryLookup = ApiData<'/api/v3/wiki/entries/lookups', 'post'>
 export type BackendEntryDefinition = ApiData<'/api/v3/wiki/definitions', 'get'>[number]
+export const ENTRY_PROPERTIES: InjectionKey<
+  ComputedRef<{ definitions: BackendPropertyDefinition[]; statements: BackendStatement[] }>
+> = Symbol('entry-properties')
 export const ENTRY_VERSIONS: InjectionKey<ComputedRef<{ id: number; label: string }[]>> =
   Symbol('entry-versions')

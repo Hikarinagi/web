@@ -3,7 +3,10 @@
   import { GitCompare } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { PageResult } from '@hikarinagi/shared'
-  import type { BackendHistoryRow } from '~/features/creator/entry/contract'
+  import type {
+    BackendHistoryRow,
+    BackendPropertyDefinition,
+  } from '~/features/creator/entry/contract'
   import { revisionTime } from '~/features/entry/time'
 
   type Row = BackendHistoryRow & { id: number }
@@ -12,25 +15,27 @@
     history: PageResult<Row>
     loading: boolean
     revisionTo: (revision: number) => string | null
-    compareTo: (from: number, to: number) => string
+    compareTo?: (from: number, to: number) => string
+    entryId?: number
+    definitions?: BackendPropertyDefinition[]
   }>()
   defineEmits<{ changed: [] }>()
   const page = defineModel<number>('page', { required: true })
 
-  const columns: DataTableColumn<Row>[] = [
-    { key: 'select', label: '选择' },
+  const columns = computed<DataTableColumn<Row>[]>(() => [
+    ...(props.compareTo ? [{ key: 'select', label: '选择' }] : []),
     { key: 'time', label: '时间' },
     { key: 'editor', label: '编辑者' },
-    { key: 'summary', label: '编辑摘要' },
-    { key: 'actions', label: '操作' },
-  ]
+    { key: 'summary', label: '摘要' },
+    { key: 'actions', label: '' },
+  ])
   const selected = ref<number[]>([])
   const toggle = (revision: number, on: boolean) => {
     const rest = selected.value.filter(item => item !== revision)
     selected.value = on ? [...rest, revision].slice(-2) : rest
   }
   const compareTo = computed(() => {
-    if (selected.value.length !== 2) return null
+    if (!props.compareTo || selected.value.length !== 2) return null
     const [from, to] = [...selected.value].sort((a, b) => a - b)
     return props.compareTo(from!, to!)
   })
@@ -44,14 +49,14 @@
 <template>
   <CreatorDataTable
     v-model:page="page"
-    title="修订历史"
+    title="修订"
     :list="history"
     :columns="columns"
     :loading="loading"
     :count="history.meta.total_items"
     @row-click="open"
   >
-    <template #actions>
+    <template v-if="props.compareTo" #actions>
       <Button
         :as="compareTo ? NuxtLink : 'button'"
         :to="compareTo ?? undefined"
@@ -103,12 +108,25 @@
       </Stack>
     </template>
     <template #cell-actions="{ row, index }">
-      <CreatorEntryHistoryActions
-        :row="row"
-        :latest="page === 1 && index === 0"
-        class="py-3"
-        @changed="$emit('changed')"
-      />
+      <Inline gap="xs" align="center" justify="end" :wrap="false" class="py-3" @click.stop>
+        <Button
+          v-if="row.revision !== null && revisionTo(row.revision)"
+          :as="NuxtLink"
+          :to="revisionTo(row.revision)!"
+          variant="ghost"
+          tone="neutral"
+          size="xs"
+        >
+          对比
+        </Button>
+        <CreatorEntryHistoryActions
+          :row="row"
+          :latest="page === 1 && index === 0"
+          :entry-id="entryId"
+          :definitions="definitions"
+          @changed="$emit('changed')"
+        />
+      </Inline>
     </template>
   </CreatorDataTable>
 </template>
