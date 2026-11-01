@@ -22547,6 +22547,14 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "trans_title": {
             "nullable": true,
             "type": "string"
@@ -22558,6 +22566,7 @@
           "trans_title",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "covers"
         ],
         "type": "object"
@@ -22763,6 +22772,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -22776,6 +22794,7 @@
           "covers",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "producers"
         ],
         "type": "object"
@@ -24712,6 +24731,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "publishers": {
             "description": "出版方",
             "items": {
@@ -24727,7 +24759,9 @@
           "covers",
           "nsfw",
           "novel_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "author",
           "bunko",
           "publishers"
@@ -24951,6 +24985,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "read_times": {
             "type": "number"
           },
@@ -25020,6 +25062,7 @@
           "price_amount",
           "price_currency",
           "publication_date",
+          "publication_date_precision",
           "pages",
           "summary",
           "summary_cn",
@@ -25123,6 +25166,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "series": {
             "$ref": "#/components/schemas/LightNovelVolumeSummarySeriesDto"
           },
@@ -25150,6 +25201,7 @@
           "volume_number",
           "volume_label",
           "publication_date",
+          "publication_date_precision",
           "covers",
           "series",
           "has_epub"
@@ -25237,6 +25289,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "relation": {
             "type": "string"
           },
@@ -25265,6 +25325,7 @@
           "name_cn",
           "covers",
           "publication_date",
+          "publication_date_precision",
           "relation",
           "online_reading_available",
           "online_reading_is_collection",
@@ -25296,6 +25357,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "series": {
             "$ref": "#/components/schemas/LightNovelVolumeSummarySeriesDto"
           },
@@ -25323,6 +25392,7 @@
           "volume_number",
           "volume_label",
           "publication_date",
+          "publication_date_precision",
           "covers",
           "series"
         ],
@@ -25386,6 +25456,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "readers": {
             "description": "读完上一卷的读者人数",
             "type": "number"
@@ -25417,6 +25495,7 @@
           "volume_number",
           "volume_label",
           "publication_date",
+          "publication_date_precision",
           "covers",
           "series",
           "previous",
@@ -29783,6 +29862,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "serial_status": {
             "allOf": [
               {
@@ -29806,7 +29898,9 @@
           "covers",
           "nsfw",
           "serial_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "latest_chapter_at"
         ],
         "type": "object"
@@ -30048,6 +30142,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "publisher": {
             "nullable": true,
             "type": "string"
@@ -30114,6 +30216,7 @@
           "summary",
           "summary_cn",
           "publication_date",
+          "publication_date_precision",
           "page_count",
           "cover",
           "status",
@@ -30161,6 +30264,14 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "sort_key": {
             "type": "number"
           },
@@ -30177,6 +30288,7 @@
           "cover",
           "isbn",
           "publication_date",
+          "publication_date_precision",
           "page_count",
           "sort_key"
         ],
@@ -35222,6 +35334,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -35234,6 +35355,7 @@
           "trans_title",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "covers"
         ],
         "type": "object"
@@ -35546,6 +35668,15 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
+          },
           "relation": {
             "description": "与所属作品的关联说明",
             "type": "string"
@@ -35582,6 +35713,7 @@
           "name_cn",
           "covers",
           "publication_date",
+          "publication_date_precision",
           "relation"
         ],
         "type": "object"
@@ -35952,6 +36084,15 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
+          },
           "volume_number": {
             "description": "卷号",
             "nullable": true,
@@ -35966,6 +36107,7 @@
           "cover",
           "isbn",
           "publication_date",
+          "publication_date_precision",
           "page_count"
         ],
         "type": "object"

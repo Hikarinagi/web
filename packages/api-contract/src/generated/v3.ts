@@ -19887,6 +19887,7 @@ export interface components {
             origin_title: string;
             /** Format: date-time */
             release_date: string | null;
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
             trans_title: string | null;
         };
         /**
@@ -19922,6 +19923,8 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 译名 */
             trans_title: string | null;
         };
@@ -20437,6 +20440,9 @@ export interface components {
              * @description 首卷出版日期
              */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
             /** @description 出版方 */
             publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
         };
@@ -20502,6 +20508,7 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             read_times: number;
             relation: string;
             /** Format: date-time */
@@ -20541,6 +20548,7 @@ export interface components {
             name_cn: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
             volume_label: string | null;
             volume_number: number | null;
@@ -20573,6 +20581,7 @@ export interface components {
             online_reading_translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             relation: string;
             volume_label: string | null;
             volume_number: number | null;
@@ -20586,6 +20595,7 @@ export interface components {
             name_cn: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
             volume_label: string | null;
             volume_number: number | null;
@@ -20608,6 +20618,7 @@ export interface components {
             projects: components["schemas"]["LightNovelVolumeWantedProjectDto"][];
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 读完上一卷的读者人数 */
             readers: number;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
@@ -21707,6 +21718,9 @@ export interface components {
              * @description 开始连载日期
              */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
             /** @description 连载状态，系列没有记录出版状态时为空 */
             serial_status: components["schemas"]["MangaSerialStatus"] | null;
         };
@@ -21771,6 +21785,7 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             publisher: string | null;
             read_times: number;
             /** Format: date-time */
@@ -21795,6 +21810,7 @@ export interface components {
             page_count: number | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             sort_key: number;
             volume_number: number | null;
         };
@@ -23186,6 +23202,8 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 译名 */
             trans_title: string | null;
         };
@@ -23285,6 +23303,8 @@ export interface components {
              * @description 出版日期
              */
             publication_date: string | null;
+            /** @description 出版日期的精度 */
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 与所属作品的关联说明 */
             relation: string;
             /** @description 卷号的展示文本 */
@@ -23416,6 +23436,8 @@ export interface components {
              * @description 出版日期
              */
             publication_date: string | null;
+            /** @description 出版日期的精度 */
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 卷号 */
             volume_number: number | null;
         };

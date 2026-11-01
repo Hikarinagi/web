@@ -691,6 +691,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -704,6 +713,7 @@
           "covers",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "producers"
         ],
         "type": "object"
@@ -968,6 +978,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "publishers": {
             "description": "出版方",
             "items": {
@@ -983,7 +1006,9 @@
           "covers",
           "nsfw",
           "novel_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "author",
           "bunko",
           "publishers"
@@ -1259,6 +1284,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "serial_status": {
             "allOf": [
               {
@@ -1282,7 +1320,9 @@
           "covers",
           "nsfw",
           "serial_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "latest_chapter_at"
         ],
         "type": "object"
@@ -2395,6 +2435,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -2407,6 +2456,7 @@
           "trans_title",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "covers"
         ],
         "type": "object"
@@ -2719,6 +2769,15 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
+          },
           "relation": {
             "description": "与所属作品的关联说明",
             "type": "string"
@@ -2755,6 +2814,7 @@
           "name_cn",
           "covers",
           "publication_date",
+          "publication_date_precision",
           "relation"
         ],
         "type": "object"
@@ -3125,6 +3185,15 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
+          },
           "volume_number": {
             "description": "卷号",
             "nullable": true,
@@ -3139,6 +3208,7 @@
           "cover",
           "isbn",
           "publication_date",
+          "publication_date_precision",
           "page_count"
         ],
         "type": "object"
