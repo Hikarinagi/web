@@ -59,7 +59,11 @@ export function imageSourceSafety(source: HikariImageSource): HikariImageSafety 
   const media = readMedia(source)
 
   return {
-    nsfw: Boolean(readField(source, 'nsfw') || readField(media, 'nsfw')),
+    nsfw:
+      Boolean(readField(source, 'nsfw') || readField(media, 'nsfw')) ||
+      [source, media].some(
+        item => readField(item, 'sexual') === null || readField(item, 'violence') === null,
+      ),
     sexual: Math.max(readScore(readField(source, 'sexual')), readScore(readField(media, 'sexual'))),
     violence: Math.max(
       readScore(readField(source, 'violence')),

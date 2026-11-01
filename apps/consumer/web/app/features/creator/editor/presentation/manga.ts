@@ -3,6 +3,7 @@ import type { EditorPresentation } from './types'
 export const mangaPresentation: EditorPresentation = {
   fields: {
     name: { label: '原名' },
+    name_reading: { label: '标题读音' },
     name_cn: { label: '中文名' },
     other_names: { label: '别名' },
     serial_status: { label: '连载状态' },

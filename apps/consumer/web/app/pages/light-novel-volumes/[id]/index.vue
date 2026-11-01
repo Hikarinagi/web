@@ -59,7 +59,6 @@
       :light-novel="data.light_novel"
       :progress="data.progress"
       :my-rate="data.my_rate"
-      :my-cover-vote="data.my_cover_vote"
       :preceding-count="currentIndex + 1"
       @progress-change="applyProgresses"
     />

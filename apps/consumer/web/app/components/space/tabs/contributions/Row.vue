@@ -16,7 +16,9 @@
   const isEntity = computed(() =>
     ['PERSON', 'CHARACTER', 'PRODUCER'].includes(props.item.resource_type),
   )
-  const to = computed(() => contributionDetailPath(props.item.change_request_id))
+  const to = computed(() =>
+    contributionDetailPath(props.item.resource_type, props.item.resource_id),
+  )
   const mediaClass = computed(() => (isEntity.value ? 'size-10 rounded-full' : 'h-12 w-9 rounded'))
   const mediaImageClass = computed(() =>
     isEntity.value ? 'size-full object-cover object-top' : 'size-full object-cover',

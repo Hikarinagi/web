@@ -45,6 +45,10 @@ export const MANGA_RELATION_LABELS = {
   CHARACTER: '角色出演',
   COLLABORATION: '联动',
   OTHER: '相关',
+  SETTING_BOOK: '设定集',
+  SETTING_SOURCE: '原作',
+  ANTHOLOGY: '选集',
+  ANTHOLOGY_SOURCE: '原作',
 } satisfies Record<components['schemas']['MangaRelationType'], string>
 
 export function mangaSerialStatusLabel(value: string | null | undefined) {

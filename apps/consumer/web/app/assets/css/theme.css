@@ -389,6 +389,20 @@ html.dark {
   }
 }
 
+@utility hikari-panel-table {
+  & thead th {
+    border-radius: 0 !important;
+  }
+
+  & :is(th, td):first-child {
+    padding-inline-start: var(--hn-panel-p);
+  }
+
+  & :is(th, td):last-child {
+    padding-inline-end: var(--hn-panel-p);
+  }
+}
+
 @utility hikari-brand-inline {
   height: 1.2em;
   vertical-align: -0.264em;

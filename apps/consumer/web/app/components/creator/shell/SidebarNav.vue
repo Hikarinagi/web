@@ -16,8 +16,8 @@
   )
 
   function isActive(item: CreatorNavItem): boolean {
-    if (item.to === '/create') return route.path === '/create'
-    return [item.to, ...(item.also ?? [])].some(
+    if (route.path === item.to) return true
+    return [...(item.to === '/create' ? [] : [item.to]), ...(item.also ?? [])].some(
       prefix => route.path === prefix || route.path.startsWith(`${prefix}/`),
     )
   }

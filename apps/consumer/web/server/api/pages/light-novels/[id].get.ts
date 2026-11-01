@@ -20,7 +20,6 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
-    my_cover_vote,
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/light-novels/{id}', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/volumes', { path: { id } }),
@@ -46,9 +45,6 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/reader/light-novels/{light_novel_id}/progress', {
       path: { light_novel_id: id },
     }).catch(() => null),
-    fetchBackendData(event, '/api/v3/light-novels/{id}/covers/vote', { path: { id } }).catch(
-      () => null,
-    ),
   ])
 
   return {
@@ -66,7 +62,6 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
-    my_cover_vote,
   }
 }
 

@@ -18,7 +18,6 @@
   const membersOpen = ref(false)
   const creditsOpen = ref(false)
   const importOpen = ref(false)
-  const bookTarget = ref<{ slug: 'light-novel' | 'light-novel-volume'; id: number } | null>(null)
 
   async function archive() {
     await hikariRequest('/api/v3/novel-projects/{project_id}/archive', {
@@ -33,9 +32,13 @@
     if (action === 'glossary') glossaryOpen.value = true
     else if (action === 'ai') aiOpen.value = true
     else if (action === 'volume-info')
-      bookTarget.value = { slug: 'light-novel-volume', id: project.value.volume.id }
+      void navigateTo(`/create/edit/light-novel-volume/${project.value.volume.id}`, {
+        open: { target: '_blank' },
+      })
     else if (action === 'series-info')
-      bookTarget.value = { slug: 'light-novel', id: project.value.volume.series.id }
+      void navigateTo(`/create/edit/light-novel/${project.value.volume.series.id}`, {
+        open: { target: '_blank' },
+      })
     else if (action === 'collaborators') membersOpen.value = true
     else if (action === 'credits') creditsOpen.value = true
     else if (action === 'import') importOpen.value = true
@@ -93,5 +96,4 @@
     :has-epub="data.has_epub"
     @preview="emit('preview', $event)"
   />
-  <WorkbenchProjectBookInfoDrawer :target="bookTarget" @close="bookTarget = null" />
 </template>

@@ -11,7 +11,6 @@ import {
   VenetianMask,
 } from '@lucide/vue'
 import type { Component } from 'vue'
-import type { BackendChangeRequestSummary } from '~/features/creator/contribution'
 
 const labels = {
   GALGAME: 'Galgame',
@@ -24,7 +23,7 @@ const labels = {
   PRODUCER: '厂商',
   CHARACTER: '角色',
   TAG: '标签',
-} satisfies Record<BackendChangeRequestSummary['resource_type'], string>
+}
 
 export const RESOURCE_TYPE_LABEL: Record<string, string> = labels
 
@@ -39,7 +38,7 @@ const slugs = {
   PRODUCER: 'producer',
   CHARACTER: 'character',
   TAG: 'tag',
-} satisfies Record<BackendChangeRequestSummary['resource_type'], string>
+} satisfies Record<keyof typeof labels, string>
 
 export const RESOURCE_SLUG: Record<string, string> = slugs
 
@@ -54,7 +53,7 @@ const icons = {
   PRODUCER: Building2,
   CHARACTER: VenetianMask,
   TAG: Tag,
-} satisfies Record<BackendChangeRequestSummary['resource_type'], Component>
+} satisfies Record<keyof typeof labels, Component>
 
 export const RESOURCE_TYPE_ICON: Record<string, Component> = icons
 

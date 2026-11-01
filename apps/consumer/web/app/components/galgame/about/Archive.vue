@@ -1,114 +1,85 @@
 <script setup lang="ts">
-  import { Inline, Link, Stack } from '@hina-ui/vue'
-  import {
-    Building2,
-    CalendarDays,
-    Coins,
-    Cpu,
-    Languages,
-    Link2,
-    Monitor,
-    Tag,
-    Tags,
-  } from '@lucide/vue'
+  import { DescriptionDetails, DescriptionList, DescriptionTerm, Inline, Link } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { platformLabel } from '~/features/galgame/platforms'
-  import { CURRENCY_SYMBOL, langLabel, producerRoleLabel } from '~/features/galgame/labels'
+  import { langLabel } from '~/features/galgame/labels'
 
   defineOptions({ name: 'GalgameAboutArchive' })
   const props = defineProps<{
     galgame: GalgamePageData['galgame']
-    producers: GalgamePageData['producers']
+    facts: GalgamePageData['facts']
+    display: GalgamePageData['display']
     contributors: GalgamePageData['contributors']
   }>()
 
-  const releaseText = computed(() =>
-    props.galgame.release_date_tbd
-      ? '未定'
-      : timeFormat(props.galgame.release_date, TimeFormatEnum.YYYY_MM_DD) || '未收录',
+  const values = (property: string) =>
+    props.facts.find(fact => fact.property === property)?.values ?? []
+  const joined = (property: string) =>
+    values(property)
+      .map(value => (property === 'LANGUAGE' ? langLabel(value.code ?? value.text) : value.text))
+      .join('、')
+  const external = computed(() =>
+    values('EXTERNAL_LINK').flatMap(value =>
+      value.code === 'VNDB'
+        ? [{ label: 'VNDB', href: `https://vndb.org/${value.text}` }]
+        : value.code === 'BANGUMI'
+          ? [{ label: 'Bangumi', href: `https://bgm.tv/subject/${value.text}` }]
+          : [],
+    ),
   )
-  const platformsText = computed(() => props.galgame.platforms.map(platformLabel).join(' · '))
-  const aliasesText = computed(() => props.galgame.aliases.join(' / '))
-  const priceText = computed(() =>
-    props.galgame.prices
-      .filter(p => p.amount != null)
-      .map(p => {
-        const symbol = (p.currency && CURRENCY_SYMBOL[p.currency]) || ''
-        const label = `${symbol}${Number(p.amount).toLocaleString()}`
-        const tax =
-          p.tax_included === true ? '（含税）' : p.tax_included === false ? '（不含税）' : ''
-        return `${p.version ? `${p.version} ` : ''}${label}${tax}`
-      })
-      .join(' / '),
-  )
-  const producerGroups = computed(() => {
-    const map = new Map<string, string[]>()
-    for (const p of props.producers) {
-      const label = producerRoleLabel(p.role) || '厂商'
-      const name = p.note ? `${p.producer.name}(${p.note})` : p.producer.name
-      if (!map.has(label)) map.set(label, [])
-      map.get(label)!.push(name)
-    }
-    return [...map.entries()].map(([label, names]) => ({ label, text: names.join(' / ') }))
-  })
-  const homepageText = computed(() =>
-    props.galgame.homepage?.replace(/^https?:\/\//, '').replace(/\/$/, ''),
-  )
-  const vndbUrl = computed(() =>
-    props.galgame.vndb_id != null ? `https://vndb.org/v${props.galgame.vndb_id}` : null,
-  )
+  const host = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '')
 </script>
 
 <template>
   <ResourceArchiveCard>
-    <Stack gap="sm" class="px-5 py-3.5">
-      <ResourceArchiveRow v-if="galgame.adv_type" :icon="Tag">{{
-        galgame.adv_type
-      }}</ResourceArchiveRow>
-      <ResourceArchiveRow :icon="CalendarDays">{{ releaseText }}</ResourceArchiveRow>
-      <ResourceArchiveRow v-if="platformsText" :icon="Monitor">{{
-        platformsText
-      }}</ResourceArchiveRow>
-      <ResourceArchiveRow v-if="galgame.origin_lang" :icon="Languages">
-        {{ langLabel(galgame.origin_lang) }}
-      </ResourceArchiveRow>
-      <ResourceArchiveRow v-if="galgame.engine" :icon="Cpu">{{
-        galgame.engine
-      }}</ResourceArchiveRow>
-      <ResourceArchiveRow v-if="priceText" :icon="Coins" align="start">{{
-        priceText
-      }}</ResourceArchiveRow>
-      <ResourceArchiveRow
-        v-for="g in producerGroups"
-        :key="g.label"
-        :icon="Building2"
-        :label="g.label"
-      >
-        {{ g.text }}
-      </ResourceArchiveRow>
-      <ResourceArchiveRow v-if="galgame.homepage" :icon="Link2">
-        <Link
-          as="a"
-          :href="galgame.homepage"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="truncate"
+    <DescriptionList orientation="horizontal" class="px-5 py-4 text-sm [&>dt]:text-muted">
+      <template v-if="values('GENRE_TEXT').length">
+        <DescriptionTerm>类型说明</DescriptionTerm>
+        <DescriptionDetails lang="ja">{{ joined('GENRE_TEXT') }}</DescriptionDetails>
+      </template>
+      <template v-if="values('RELEASE_DATE').length">
+        <DescriptionTerm>发售日</DescriptionTerm>
+        <DescriptionDetails>{{ joined('RELEASE_DATE') }}</DescriptionDetails>
+      </template>
+      <template v-if="values('LANGUAGE').length">
+        <DescriptionTerm>语言</DescriptionTerm>
+        <DescriptionDetails>{{ joined('LANGUAGE') }}</DescriptionDetails>
+      </template>
+      <template v-if="display.brands.length">
+        <DescriptionTerm>开发</DescriptionTerm>
+        <DescriptionDetails v-for="(brand, index) in display.brands" :key="index">
+          <Link
+            v-if="brand.producer_id"
+            :as="NuxtLink"
+            :to="`/producers/${brand.producer_id}`"
+            tone="accent"
+          >
+            {{ brand.text }}
+          </Link>
+          <template v-else>{{ brand.text }}</template>
+        </DescriptionDetails>
+      </template>
+      <template v-if="values('WEBSITE').length">
+        <DescriptionTerm>官网</DescriptionTerm>
+        <DescriptionDetails
+          v-for="(value, index) in values('WEBSITE')"
+          :key="index"
+          class="min-w-0 truncate"
         >
-          {{ homepageText }}
-        </Link>
-      </ResourceArchiveRow>
-      <ResourceArchiveRow v-if="galgame.aliases.length" :icon="Tags" align="start">
-        {{ aliasesText }}
-      </ResourceArchiveRow>
-    </Stack>
+          <Link as="a" :href="value.text" target="_blank" rel="noopener noreferrer" tone="accent">
+            {{ host(value.text) }}
+          </Link>
+        </DescriptionDetails>
+      </template>
+      <template v-if="values('ALIAS').length">
+        <DescriptionTerm>别名</DescriptionTerm>
+        <DescriptionDetails class="wrap-anywhere">{{ joined('ALIAS') }}</DescriptionDetails>
+      </template>
+    </DescriptionList>
 
-    <Inline v-if="galgame.vndb_id || galgame.bangumi_game_id" gap="sm" class="px-5 pb-4">
-      <ResourceArchiveExternalChip v-if="vndbUrl" :href="vndbUrl">VNDB</ResourceArchiveExternalChip>
-      <ResourceArchiveExternalChip
-        v-if="galgame.bangumi_game_id"
-        :href="`https://bgm.tv/subject/${galgame.bangumi_game_id}`"
-      >
-        Bangumi
+    <Inline v-if="external.length" gap="sm" class="px-5 pb-4">
+      <ResourceArchiveExternalChip v-for="item in external" :key="item.label" :href="item.href">
+        {{ item.label }}
       </ResourceArchiveExternalChip>
     </Inline>
 
