@@ -25,7 +25,8 @@ export function entityTypeLabel(kind: EntityKind): string {
 
 export function heroTypeLabel(kind: EntityKind, entity: EntityDetail): string {
   if (kind !== 'producer') return TYPE_LABELS[kind]
-  return PRODUCER_TYPE_LABELS[(entity as ProducerDetail).type] ?? '厂商'
+  const type = (entity as ProducerDetail).type
+  return (type && PRODUCER_TYPE_LABELS[type]) || '厂商'
 }
 
 export function entityTitle(kind: EntityKind, entity: EntityDetail): string {

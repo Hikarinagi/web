@@ -11,7 +11,9 @@
 
 <template>
   <Inline justify="center" align="center" gap="sm" class="lg:justify-start">
-    <Tag tone="accent" size="md">{{ getNovelStatusLabel(lightNovel.novel_status) }}</Tag>
+    <Tag v-if="lightNovel.novel_status" tone="accent" size="md">
+      {{ getNovelStatusLabel(lightNovel.novel_status) }}
+    </Tag>
     <NuxtLink
       v-if="bunko"
       v-slot="{ href, navigate }"

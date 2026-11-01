@@ -19,8 +19,9 @@
   const producerGroups = computed(() => {
     const map = new Map<string, { relation: string; items: { id: number; name: string }[] }>()
     for (const p of props.producers) {
-      const label = getLightNovelProducerRelationLabel(p.relation)
-      if (!map.has(label)) map.set(label, { relation: p.relation, items: [] })
+      const relation = p.relation ?? 'other'
+      const label = getLightNovelProducerRelationLabel(relation)
+      if (!map.has(label)) map.set(label, { relation, items: [] })
       map.get(label)!.items.push({ id: p.producer.id, name: p.producer.name })
     }
     return [...map.entries()].map(([label, group]) => ({ label, ...group }))
@@ -35,7 +36,7 @@
 <template>
   <ResourceArchiveCard>
     <Stack gap="sm" class="px-5 py-3.5">
-      <ResourceArchiveRow :icon="BookMarked">
+      <ResourceArchiveRow v-if="lightNovel.novel_status" :icon="BookMarked">
         {{ getNovelStatusLabel(lightNovel.novel_status) }}
       </ResourceArchiveRow>
       <ResourceArchiveRow :icon="CalendarDays">{{ publicationText }}</ResourceArchiveRow>

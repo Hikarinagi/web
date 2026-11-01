@@ -17810,6 +17810,11 @@ export interface components {
             day: string;
             status: string;
         };
+        /**
+         * @description 发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日
+         * @enum {string}
+         */
+        DatePrecision: "YEAR" | "MONTH" | "DAY";
         DecideEditDto: {
             apply: boolean;
         };
@@ -19504,8 +19509,12 @@ export interface components {
             prices: components["schemas"]["GalgamePriceDto"][];
             /** Format: date-time */
             release_date: string | null;
+            /** @description 发售日的精度；只到年或月的发售日，release_date 是当年 1 月 1 日或当月 1 日 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
             release_date_tbd: boolean;
             release_date_tbd_note: string;
+            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED */
+            release_status: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -19665,6 +19674,8 @@ export interface components {
             version: string | null;
         };
         GalgameProducerRelationDto: {
+            /** @description 新的职责编码 */
+            code: string;
             note: string;
             producer: components["schemas"]["ProducerPreviewDto"];
             /** @enum {string|null} */
@@ -20145,12 +20156,13 @@ export interface components {
             id: number;
             name: string;
             name_cn: string | null;
-            /** @enum {string} */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+            /** @enum {string|null} */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
             nsfw: boolean;
             other_names: string[];
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 新的出版状态编码 */
             publication_status: string | null;
             read_times: number;
@@ -20180,6 +20192,7 @@ export interface components {
             code: string;
             note: string | null;
             person: components["schemas"]["PersonPreviewDto"];
+            /** @description 由 code 反推：author、illustrator，其余职责为 other */
             relation: string;
         };
         LightNovelProducerRelationDto: {
@@ -20187,7 +20200,8 @@ export interface components {
             code: string;
             note: string | null;
             producer: components["schemas"]["ProducerPreviewDto"];
-            relation: string;
+            /** @description 由 code 反推：bunko、publisher，对不上的为空 */
+            relation: string | null;
         };
         LightNovelProgressEntryDto: {
             current_chapter_title: string | null;
@@ -20412,10 +20426,10 @@ export interface components {
             /** @description 中文名 */
             name_cn: string | null;
             /**
-             * @description 连载状态
-             * @enum {string}
+             * @description 连载状态，系列没有记录出版状态时为空
+             * @enum {string|null}
              */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
             /**
@@ -20937,6 +20951,7 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** Format: date-time */
             publication_end_date: string | null;
             /** @description 新的出版状态编码 */
@@ -20947,7 +20962,7 @@ export interface components {
             reading_mode: components["schemas"]["MangaReadingMode"];
             /** Format: date-time */
             revised_at: string | null;
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             summary: string | null;
@@ -21095,10 +21110,11 @@ export interface components {
             code: string;
             note: string;
             producer: components["schemas"]["ProducerPreviewDto"];
-            role: components["schemas"]["MangaProducerRole"];
+            /** @description 由 code 反推，对不上旧角色的为空 */
+            role: components["schemas"]["MangaProducerRole"] | null;
         };
         /**
-         * @description 承担的角色
+         * @description 承担的角色，由 code 反推，对不上旧角色的为空
          * @enum {string}
          */
         MangaProducerRole: "PUBLISHER" | "MAGAZINE" | "LABEL";
@@ -21452,7 +21468,7 @@ export interface components {
             name_cn: string | null;
             nsfw: boolean;
             reading_mode: components["schemas"]["MangaReadingMode"];
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
         };
         /**
          * @description 阅读方向
@@ -21568,7 +21584,7 @@ export interface components {
         /** @enum {string} */
         MangaRelationType: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER" | "SETTING_BOOK" | "SETTING_SOURCE" | "ANTHOLOGY" | "ANTHOLOGY_SOURCE";
         /**
-         * @description 连载状态
+         * @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空
          * @enum {string}
          */
         MangaSerialStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
@@ -21589,7 +21605,7 @@ export interface components {
             /** Format: date-time */
             last_read: string;
             manga_id: number;
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
             title: string;
             /** @description 当前项所在单位的项数 */
             total_chapters: number;
@@ -21637,10 +21653,11 @@ export interface components {
             code: string;
             note: string;
             person: components["schemas"]["PersonPreviewDto"];
-            role: components["schemas"]["MangaStaffRole"];
+            /** @description 由 code 反推，对不上旧职位的为空 */
+            role: components["schemas"]["MangaStaffRole"] | null;
         };
         /**
-         * @description 担任的职位
+         * @description 担任的职位，由 code 反推，对不上旧职位的为空
          * @enum {string}
          */
         MangaStaffRole: "AUTHOR" | "ART" | "ORIGINAL_CREATOR" | "SCRIPT" | "ILLUSTRATION" | "CHARACTER_DESIGN";
@@ -21690,8 +21707,8 @@ export interface components {
              * @description 开始连载日期
              */
             publication_date: string | null;
-            /** @description 连载状态 */
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            /** @description 连载状态，系列没有记录出版状态时为空 */
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
         };
         MangaSweeperSettingDto: {
             backpressure_max: number;
@@ -22615,7 +22632,7 @@ export interface components {
             unreachable_cooldown_ms: number;
         };
         /**
-         * @description 连载状态
+         * @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空
          * @enum {string}
          */
         NovelStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
@@ -22843,11 +22860,39 @@ export interface components {
             /** @description 发生变更的资源类型 */
             resource_type: components["schemas"]["ContributionResourceType"];
         };
+        OpenCharacterAppearanceDto: {
+            /** @description 只在作品内记录、没有公开记录；名字可能是剧透，是否显示由调用方决定 */
+            hidden: boolean;
+            /** @description 出场角色 ID */
+            id: number;
+            /** @description 该作中的名字 */
+            label: string;
+            /** @description 未公开记录的来源；公开记录为空数组 */
+            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
+            /** @description 作品 */
+            work: components["schemas"]["OpenCharacterAppearanceWorkDto"] | null;
+        };
+        OpenCharacterAppearanceSourceDto: {
+            /** @description 在作品中的位置 */
+            location: string | null;
+            /** @description 来源类型，作品内截图为 SCREENSHOT */
+            method: string;
+            /** @description 所依的发行版本或出版版本的条目 ID */
+            version_entry_id: number | null;
+        };
+        OpenCharacterAppearanceWorkDto: {
+            /** @description 作品 ID */
+            id: number;
+            /** @description 作品类型：GAME、LIGHT_NOVEL、MANGA */
+            kind: string;
+        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
             /** @description 别名列表 */
             aliases: string[];
+            /** @description 各作品中的出场角色，含只在作品内记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里 */
+            appearances: components["schemas"]["OpenCharacterAppearanceDto"][];
             /** @description 生日日 */
             birthday_day: number | null;
             /** @description 生日月份 */
@@ -22867,8 +22912,8 @@ export interface components {
             en_intro: string | null;
             /** @description 英文名或罗马字 */
             en_name: string | null;
-            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
-            external_source?: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 外部数据源 ID */
+            external_source: components["schemas"]["OpenExternalSourceDto"];
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -23002,12 +23047,12 @@ export interface components {
             en_intro: string | null;
             /** @description 官方英文标题 */
             en_title: string | null;
-            /** @description 游戏引擎 */
+            /** @description 游戏引擎；收录规则不单独记录引擎，恒为空，引擎照录在发行版本的规格与运行环境中 */
             engine: string | null;
             /** @description 官网、商店页等外部链接 */
             external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
-            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
-            external_source?: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 外部数据源 ID */
+            external_source: components["schemas"]["OpenExternalSourceDto"];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -23033,10 +23078,14 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
+            /** @description 发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 发行日期是否待定 */
             release_date_tbd: boolean;
             /** @description 发行日期待定时的补充说明 */
             release_date_tbd_note: string;
+            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED；dev_status 由它反推 */
+            release_status: string | null;
             /**
              * Format: date-time
              * @description 最近一次修订通过审核的时间
@@ -23063,8 +23112,10 @@ export interface components {
             country: string;
             /** @description 英文简介 */
             en_intro: string | null;
-            /** @description 成立日期 */
+            /** @description 成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM） */
             established: string | null;
+            /** @description 成立日期的精度 */
+            established_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -23075,13 +23126,15 @@ export interface components {
             name: string;
             /** @description 该作品下的厂商备注 */
             note: string;
+            /** @description 组织类型编码 */
+            organization_type: string | null;
             /** @description 简介译文 */
             trans_intro: string | null;
             /**
-             * @description 厂商类型
-             * @enum {string}
+             * @description 厂商类型，由 organization_type 反推；没有记录类型时为空
+             * @enum {string|null}
              */
-            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL";
+            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL" | null;
             /** @description 官方网站 */
             website: string | null;
         };
@@ -23104,11 +23157,13 @@ export interface components {
             version: string | null;
         };
         OpenGalgameProducerDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 角色备注 */
             note: string;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 厂商承担的角色 */
+            /** @description 厂商承担的角色，由 code 反推，对不上旧角色的为空 */
             role: components["schemas"]["ProducerRole"] | null;
         };
         OpenGalgameRelationDto: {
@@ -23135,9 +23190,11 @@ export interface components {
             trans_title: string | null;
         };
         OpenGalgameStaffDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位 */
+            /** @description 担任的职位，由 code 反推，对不上旧职位的为空 */
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
         OpenGalgameSteamAppDto: {
@@ -23158,8 +23215,8 @@ export interface components {
             name: string;
             /** @description 中文名 */
             name_cn: string | null;
-            /** @description 连载状态 */
-            novel_status: components["schemas"]["NovelStatus"];
+            /** @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空 */
+            novel_status: components["schemas"]["NovelStatus"] | null;
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
             /** @description 别名列表 */
@@ -23169,6 +23226,10 @@ export interface components {
              * @description 首卷出版日期
              */
             publication_date: string | null;
+            /** @description 首卷出版日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日 */
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 出版状态编码：ONGOING、COMPLETED、HIATUS */
+            publication_status: string | null;
             /** @description 评分统计 */
             rating: components["schemas"]["OpenRatingDto"];
             /**
@@ -23191,20 +23252,24 @@ export interface components {
             updated_at: string;
         };
         OpenLightNovelPersonDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 职位备注 */
             note: string | null;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位 */
+            /** @description 担任的职位：author、illustrator，其余职责为 other */
             relation: string;
         };
         OpenLightNovelProducerDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 角色备注 */
             note: string | null;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 承担的角色 */
-            relation: string;
+            /** @description 承担的角色：bunko、publisher，对不上的为空 */
+            relation: string | null;
         };
         OpenLightNovelVolumeDto: {
             /** @description 封面列表，按得票数由高到低排序 */
@@ -23273,11 +23338,15 @@ export interface components {
              * @description 开始连载日期
              */
             publication_date: string | null;
+            /** @description 开始日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日 */
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /**
              * Format: date-time
              * @description 完结日期
              */
             publication_end_date: string | null;
+            /** @description 出版状态编码：ONGOING、COMPLETED、HIATUS */
+            publication_status: string | null;
             /** @description 评分统计 */
             rating: components["schemas"]["OpenRatingDto"];
             /** @description 阅读方向 */
@@ -23287,8 +23356,8 @@ export interface components {
              * @description 最近一次修订通过审核的时间
              */
             revised_at: string | null;
-            /** @description 连载状态 */
-            serial_status: components["schemas"]["MangaSerialStatus"];
+            /** @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空 */
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
             /** @description 原文简介 */
             summary: string | null;
             /** @description 简介译文 */
@@ -23310,20 +23379,24 @@ export interface components {
             label: string;
         };
         OpenMangaProducerDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 角色备注 */
             note: string;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 承担的角色 */
-            role: components["schemas"]["MangaProducerRole"];
+            /** @description 承担的角色，由 code 反推，对不上旧角色的为空 */
+            role: components["schemas"]["MangaProducerRole"] | null;
         };
         OpenMangaStaffDto: {
+            /** @description 职责编码 */
+            code: string;
             /** @description 职位备注 */
             note: string;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位 */
-            role: components["schemas"]["MangaStaffRole"];
+            /** @description 担任的职位，由 code 反推，对不上旧职位的为空 */
+            role: components["schemas"]["MangaStaffRole"] | null;
         };
         OpenMangaVolumeDto: {
             /** @description 分卷封面 */
@@ -23413,10 +23486,12 @@ export interface components {
             created_at: string;
             /** @description 英文简介 */
             en_intro: string | null;
-            /** @description 成立日期 */
+            /** @description 成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM） */
             established: string | null;
-            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
-            external_source?: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 成立日期的精度 */
+            established_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 外部数据源 ID */
+            external_source: components["schemas"]["OpenExternalSourceDto"];
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -23427,6 +23502,8 @@ export interface components {
             logo: components["schemas"]["OpenMediaDto"] | null;
             /** @description 厂商名 */
             name: string;
+            /** @description 组织类型编码：COMPANY、BRAND、LABEL、MAGAZINE、PLATFORM、CIRCLE、TRANSLATION_GROUP */
+            organization_type: string | null;
             /**
              * Format: date-time
              * @description 最近一次修订通过审核的时间
@@ -23435,10 +23512,10 @@ export interface components {
             /** @description 简介译文 */
             trans_intro: string | null;
             /**
-             * @description 厂商类型
-             * @enum {string}
+             * @description 厂商类型，由 organization_type 反推；没有记录类型时为空
+             * @enum {string|null}
              */
-            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL";
+            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL" | null;
             /**
              * Format: date-time
              * @description 条目最后更新时间
@@ -23946,7 +24023,9 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             en_intro: string | null;
+            /** @description 成立日期，按 established_precision 截到年或月 */
             established: string | null;
+            established_precision: components["schemas"]["DatePrecision"] | null;
             id: number;
             intro: string | null;
             labels: components["schemas"]["EntityLabelDto"][];
@@ -23963,7 +24042,8 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             trans_intro: string | null;
-            type: components["schemas"]["ProducerType"];
+            /** @description 由 organization_type 反推，没有记录类型时为空 */
+            type: components["schemas"]["ProducerType"] | null;
             /** Format: date-time */
             updated_at: string;
             vndb_id: string | null;
@@ -24000,7 +24080,7 @@ export interface components {
             target_producer: components["schemas"]["ProducerSummaryDto"];
         };
         /**
-         * @description 厂商承担的角色
+         * @description 厂商承担的角色，由 code 反推，对不上旧角色的为空
          * @enum {string}
          */
         ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
@@ -24009,7 +24089,10 @@ export interface components {
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
         };
-        /** @enum {string} */
+        /**
+         * @description 由 organization_type 反推，没有记录类型时为空
+         * @enum {string}
+         */
         ProducerType: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
         ProductCreditDto: {
             code: string;
