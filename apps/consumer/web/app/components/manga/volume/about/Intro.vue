@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
-  import { getRevisionEditPath } from '~/features/revision/resources'
+  import { getRevisionFieldPath } from '~/features/revision/resources'
 
   defineOptions({ name: 'MangaVolumeAboutIntro' })
   const props = defineProps<{ volume: MangaVolumePageData['volume'] }>()
@@ -19,7 +19,7 @@
   <WorkIntro
     :text="primary"
     :original="jp"
-    :edit-to="getRevisionEditPath('manga-volume', volume.id)"
+    :edit-to="getRevisionFieldPath('manga-volume', volume.id, 'summary_cn')"
     size="sm"
   />
 </template>

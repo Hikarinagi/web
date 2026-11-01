@@ -31,8 +31,9 @@
   <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameHero
       :galgame="data.galgame"
-      :display="data.display"
+      :producers="data.producers"
       :my-rate="data.my_rate"
+      :my-cover-vote="data.my_cover_vote"
       :favorited="data.favorite?.favorited ?? false"
     />
 
@@ -46,15 +47,11 @@
 
       <GalgameAbout
         :galgame="data.galgame"
-        :display="data.display"
-        :facts="data.facts"
         :tags="data.tags"
+        :characters="data.characters"
+        :producers="data.producers"
         :contributors="data.contributors"
       />
-
-      <GalgameProducts :galgame-id="galgameId" :products="data.products" />
-
-      <GalgameCast :galgame-id="galgameId" :characters="data.characters" />
 
       <WorkLongReviews :articles="data.articles" />
 
@@ -62,7 +59,7 @@
 
       <GalgameRelations :relations="data.relations" />
 
-      <GalgameCrew :galgame-id="galgameId" :credits="data.credits" />
+      <GalgameCrew :producers="data.producers" :staff="data.staff" />
     </Stack>
   </Stack>
 </template>

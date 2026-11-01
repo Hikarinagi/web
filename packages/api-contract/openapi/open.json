@@ -566,12 +566,7 @@
           "COLLECTED_WORK",
           "SAME_UNIVERSE",
           "DIFFERENT_ADAPTATION",
-          "EXPANSION",
-          "REMAKE",
-          "ORIGINAL",
-          "FAN_DISC",
-          "MAIN_GAME",
-          "SAME_SERIES"
+          "EXPANSION"
         ],
         "type": "string"
       },
@@ -2085,9 +2080,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
-              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL"
+              "INDIVIDUAL",
+              "MAGAZINE"
             ],
             "type": "string"
           },
@@ -3147,9 +3142,9 @@
             "description": "厂商类型",
             "enum": [
               "COMPANY",
-              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL"
+              "INDIVIDUAL",
+              "MAGAZINE"
             ],
             "type": "string"
           },
@@ -3815,9 +3810,9 @@
           "width",
           "thumb_hash",
           "height",
+          "nsfw",
           "sexual",
-          "violence",
-          "nsfw"
+          "violence"
         ],
         "type": "object"
       },

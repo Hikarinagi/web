@@ -9,6 +9,7 @@
     people: LightNovelPageData['people']
     producers: LightNovelPageData['producers']
     myRate: LightNovelPageData['my_rate']
+    myCoverVote: LightNovelPageData['my_cover_vote']
     favorited: boolean
     progress: LightNovelPageData['progress']
   }>()
@@ -55,7 +56,12 @@
       class="mx-auto w-full max-w-app gap-8 px-5 pt-[calc(var(--app-header-height)+2rem)] pb-10 sm:px-6 lg:flex-row lg:items-start lg:gap-8 lg:pt-[calc(var(--app-header-height)+2.5rem)] lg:pb-12"
     >
       <LightNovelHeroCover :cover="cover" :title="title">
-        <WorkCoverAdd resource="light-novel" :work-id="lightNovel.id" />
+        <WorkCoverVoteEntry
+          work="light_novel"
+          :work-id="lightNovel.id"
+          :covers="lightNovel.covers"
+          :my-media-id="myCoverVote?.my_media_id ?? null"
+        />
       </LightNovelHeroCover>
 
       <Stack gap="none" class="w-full min-w-0 flex-1 gap-4 text-center lg:text-left">

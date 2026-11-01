@@ -93,8 +93,8 @@ describe('volumeOptions', () => {
       [],
     )
     expect(options.slice(0, 3)).toEqual([
-      { value: 11, label: '第 1 卷', description: '已收录', disabled: true },
-      { value: 12, label: '第 2 卷', description: '已收录', disabled: true },
+      { value: 11, label: '第 1 卷（已收录）', disabled: true },
+      { value: 12, label: '第 2 卷（已收录）', disabled: true },
       { value: 13, label: '第 3 卷' },
     ])
   })
@@ -111,8 +111,8 @@ describe('volumeOptions', () => {
     )
     expect(options).toEqual([
       { value: 11, label: '第 1 卷' },
-      { value: 12, label: '第 2 卷', description: 'ichi 正在上传', disabled: true },
-      { value: 13, label: '第 3 卷', description: 'ichi 正在上传', disabled: true },
+      { value: 12, label: '第 2 卷（ichi 正在上传）', disabled: true },
+      { value: 13, label: '第 3 卷（ichi 正在上传）', disabled: true },
       { value: 14, label: '第 4 卷' },
       { value: NEW_TARGET, label: '新建这一卷的条目…' },
     ])

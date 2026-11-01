@@ -5,9 +5,9 @@
   defineOptions({ name: 'GalgameAbout' })
   defineProps<{
     galgame: GalgamePageData['galgame']
-    display: GalgamePageData['display']
-    facts: GalgamePageData['facts']
     tags: GalgamePageData['tags']
+    characters: GalgamePageData['characters']
+    producers: GalgamePageData['producers']
     contributors: GalgamePageData['contributors']
   }>()
 </script>
@@ -15,14 +15,19 @@
 <template>
   <WorkSection title="关于此作">
     <Flex direction="col" gap="xl" class="lg:flex-row lg:items-start">
-      <GalgameAboutIntro :galgame="galgame" :intros="display.intros" :tags="tags" />
+      <GalgameAboutIntro :galgame="galgame" :tags="tags" />
       <GalgameAboutArchive
         :galgame="galgame"
-        :facts="facts"
-        :display="display"
+        :producers="producers"
         :contributors="contributors"
         class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]"
       />
     </Flex>
+    <GalgameAboutSteam
+      v-if="galgame.steam_apps.length"
+      :galgame-id="galgame.id"
+      :app-ids="galgame.steam_apps.map(app => app.app_id)"
+    />
+    <GalgameAboutCharacters :characters="characters" />
   </WorkSection>
 </template>

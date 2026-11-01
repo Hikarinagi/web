@@ -9,13 +9,13 @@
 
     if (
       typeof value === 'string' &&
-      (value.startsWith('/create/edit') || value.startsWith('/create/new')) &&
+      value.startsWith('/create/edit') &&
       !value.startsWith('/create/edit/content-limit')
     ) {
       return value
     }
 
-    return '/create/new'
+    return '/create/edit'
   })
 </script>
 

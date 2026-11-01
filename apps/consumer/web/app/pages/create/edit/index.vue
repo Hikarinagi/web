@@ -1,3 +1,7 @@
 <script setup lang="ts">
-  definePageMeta({ redirect: '/create/new' })
+  definePageMeta({ title: '发起编辑', middleware: 'wiki-editor-content-limit' })
 </script>
+
+<template>
+  <CreatorFind />
+</template>

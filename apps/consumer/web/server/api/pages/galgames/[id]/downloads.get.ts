@@ -20,25 +20,32 @@ function plainNotes<T extends { note: string }>(items: T[]) {
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
 
-  const [galgame, display, my_rate, favorite, downloads, patches, banners] = await Promise.all([
-    fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
-    fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
-    fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
-    fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
-      path: { galgame_id: id },
-    }).catch(() => null),
-    fetchBackendData(event, '/api/v3/galgames/{id}/downloads', { path: { id } }).catch(() => null),
-    fetchBackendData(event, '/api/v3/galgames/{id}/patches', { path: { id } }).catch(() => null),
-    fetchBackendData(event, '/api/v3/promotions/banners', {
-      query: { surface: 'GALGAME_DOWNLOAD' },
-    }).catch(() => []),
-  ])
+  const [galgame, producers, my_rate, favorite, my_cover_vote, downloads, patches, banners] =
+    await Promise.all([
+      fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
+      fetchBackendData(event, '/api/v3/galgames/{id}/producers', { path: { id } }),
+      fetchBackendData(event, '/api/v3/galgames/{id}/rate', { path: { id } }).catch(() => null),
+      fetchBackendData(event, '/api/v3/user/me/favorite/galgames/{galgame_id}', {
+        path: { galgame_id: id },
+      }).catch(() => null),
+      fetchBackendData(event, '/api/v3/galgames/{id}/covers/vote', { path: { id } }).catch(
+        () => null,
+      ),
+      fetchBackendData(event, '/api/v3/galgames/{id}/downloads', { path: { id } }).catch(
+        () => null,
+      ),
+      fetchBackendData(event, '/api/v3/galgames/{id}/patches', { path: { id } }).catch(() => null),
+      fetchBackendData(event, '/api/v3/promotions/banners', {
+        query: { surface: 'GALGAME_DOWNLOAD' },
+      }).catch(() => []),
+    ])
 
   return {
     galgame,
-    display,
+    producers,
     my_rate,
     favorite,
+    my_cover_vote,
     downloads,
     patches: patches && {
       web_url: patches.web_url,

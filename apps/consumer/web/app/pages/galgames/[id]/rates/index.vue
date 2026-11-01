@@ -39,8 +39,9 @@
   <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
     <GalgameHero
       :galgame="data.galgame"
-      :display="data.display"
+      :producers="data.producers"
       :my-rate="data.my_rate"
+      :my-cover-vote="data.my_cover_vote"
       :favorited="data.favorite?.favorited ?? false"
     />
 
