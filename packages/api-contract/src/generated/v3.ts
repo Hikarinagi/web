@@ -14355,6 +14355,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/wiki/users/{id}/revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["WikiPatrolController_revertEditor"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -18429,7 +18445,7 @@ export interface components {
             property?: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             qualifiers?: components["schemas"]["EditQualifiersDto"];
             /** @enum {string} */
-            reason?: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED";
+            reason?: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE";
             ref?: string;
             statement?: number;
             statements?: number[];
@@ -18706,6 +18722,8 @@ export interface components {
         EntryMergePreviewDto: {
             /** @description Comments moved to the entry kept */
             comments: number;
+            /** @description Properties where both entries hold different sourced values, or include different entries */
+            conflicts: ("TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "ENGLISH_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "ADULT_PATCH" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "CHINESE_EDITION_REGION" | "CHINESE_EDITION_VOLUME" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "MEMBER_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK")[];
             moved: components["schemas"]["EntryMergeMovedDto"][];
             /** @description Operations of the merge: the repeated values deprecated, then the merge */
             operations: components["schemas"]["EditOperationDto"][];
@@ -24129,6 +24147,7 @@ export interface components {
             structural: boolean;
             targets: ("GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE")[];
             unique: string | null;
+            unique_codes: string[] | null;
             /** @description Screenshots of the work content, with the version and location, can support it */
             work_content: boolean;
         };
@@ -24698,6 +24717,21 @@ export interface components {
         };
         RevertEditDto: {
             note?: string;
+        };
+        RevertEditorDto: {
+            limit: number;
+            note?: string;
+            since: string;
+        };
+        RevertFailureDto: {
+            code: string;
+            edit_id: number;
+        };
+        RevertOutcomeDto: {
+            failed: components["schemas"]["RevertFailureDto"][];
+            rejected: number;
+            remaining: number;
+            reverted: components["schemas"]["EditResultDto"][];
         };
         ReviewGroupApplicationDto: {
             /** Format: date-time */
@@ -51619,7 +51653,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EditResultDto"][];
+                    "application/json": components["schemas"]["RevertOutcomeDto"];
                 };
             };
         };
@@ -52151,7 +52185,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EditResultDto"][];
+                    "application/json": components["schemas"]["RevertOutcomeDto"];
                 };
             };
         };
@@ -52394,6 +52428,31 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    WikiPatrolController_revertEditor: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RevertEditorDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevertOutcomeDto"];
+                };
             };
         };
     };

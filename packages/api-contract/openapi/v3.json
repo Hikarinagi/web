@@ -16402,8 +16402,7 @@
               "WRONG_ENTRY",
               "DUPLICATE",
               "RESCHEDULED",
-              "BAD_SOURCE",
-              "REVERTED"
+              "BAD_SOURCE"
             ],
             "type": "string"
           },
@@ -17656,6 +17655,81 @@
             "description": "Comments moved to the entry kept",
             "type": "number"
           },
+          "conflicts": {
+            "description": "Properties where both entries hold different sourced values, or include different entries",
+            "items": {
+              "enum": [
+                "TITLE",
+                "READING",
+                "CHINESE_TITLE",
+                "ENGLISH_TITLE",
+                "ALIAS",
+                "ORIGINAL_INTRO",
+                "CHINESE_INTRO",
+                "ENGLISH_INTRO",
+                "INTRO",
+                "GENRE_TEXT",
+                "SAMPLE_IMAGE",
+                "WEBSITE",
+                "JAN",
+                "ISBN",
+                "PRODUCT_CODE",
+                "CHANNEL_CODE",
+                "PLATFORM",
+                "LANGUAGE",
+                "PRICE",
+                "RELEASE_DATE",
+                "RELEASE_STATUS",
+                "AGE_RATING",
+                "ADULT_PATCH",
+                "BONUS",
+                "SPECIFICATION",
+                "COVER",
+                "MEDIUM",
+                "PUBLICATION_STATUS",
+                "VOLUME_NUMBER",
+                "ORDER",
+                "BOOK_FORMAT",
+                "PAGE_COUNT",
+                "TRIM_SIZE",
+                "CHINESE_EDITION_REGION",
+                "CHINESE_EDITION_VOLUME",
+                "NAME",
+                "IDENTIFIER",
+                "GENDER",
+                "ORGANIZATION_TYPE",
+                "LOCATION",
+                "END_DATE",
+                "FOUNDED_DATE",
+                "LABEL",
+                "OFFICIAL_INTRO",
+                "MEMBER_INTRO",
+                "IMAGE",
+                "AGE",
+                "BIRTHDAY",
+                "HEIGHT",
+                "WEIGHT",
+                "MEASUREMENTS",
+                "BLOOD_TYPE",
+                "SITE_GROUP",
+                "SERIES",
+                "INCLUDED_VOLUME",
+                "INCLUDED_GAME",
+                "WORK",
+                "CHARACTER",
+                "CREDIT",
+                "PARENT",
+                "MEMBER",
+                "GAME_RELATION",
+                "SERIES_RELATION",
+                "ADAPTATION",
+                "APPEARANCE_RELATION",
+                "EXTERNAL_LINK"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "moved": {
             "items": {
               "$ref": "#/components/schemas/EntryMergeMovedDto"
@@ -17673,7 +17747,8 @@
         "required": [
           "operations",
           "moved",
-          "comments"
+          "comments",
+          "conflicts"
         ],
         "type": "object"
       },
@@ -39058,6 +39133,13 @@
             "nullable": true,
             "type": "string"
           },
+          "unique_codes": {
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
           "work_content": {
             "description": "Screenshots of the work content, with the version and location, can support it",
             "type": "boolean"
@@ -39082,6 +39164,7 @@
           "move_only",
           "public_only",
           "unique",
+          "unique_codes",
           "sources",
           "work_content",
           "package_image"
@@ -41381,6 +41464,71 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "RevertEditorDto": {
+        "properties": {
+          "limit": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          },
+          "note": {
+            "maxLength": 500,
+            "type": "string"
+          },
+          "since": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "since",
+          "limit"
+        ],
+        "type": "object"
+      },
+      "RevertFailureDto": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "edit_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "edit_id",
+          "code"
+        ],
+        "type": "object"
+      },
+      "RevertOutcomeDto": {
+        "properties": {
+          "failed": {
+            "items": {
+              "$ref": "#/components/schemas/RevertFailureDto"
+            },
+            "type": "array"
+          },
+          "rejected": {
+            "type": "number"
+          },
+          "remaining": {
+            "type": "number"
+          },
+          "reverted": {
+            "items": {
+              "$ref": "#/components/schemas/EditResultDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "reverted",
+          "failed",
+          "rejected",
+          "remaining"
+        ],
         "type": "object"
       },
       "ReviewGroupApplicationDto": {
@@ -93404,10 +93552,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/EditResultDto"
-                  },
-                  "type": "array"
+                  "$ref": "#/components/schemas/RevertOutcomeDto"
                 }
               }
             },
@@ -94352,10 +94497,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/EditResultDto"
-                  },
-                  "type": "array"
+                  "$ref": "#/components/schemas/RevertOutcomeDto"
                 }
               }
             },
@@ -94912,6 +95054,46 @@
         },
         "tags": [
           "WikiTodo"
+        ]
+      }
+    },
+    "/api/v3/wiki/users/{id}/revert": {
+      "post": {
+        "operationId": "WikiPatrolController_revertEditor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevertEditorDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevertOutcomeDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "WikiPatrol"
         ]
       }
     },
