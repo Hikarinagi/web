@@ -44649,6 +44649,10 @@
             "description": "Edits made since the task was enabled",
             "type": "number"
           },
+          "unverified": {
+            "description": "Statements last written by the recent edits that failed citation verification and stayed unsourced",
+            "type": "number"
+          },
           "writes": {
             "items": {
               "$ref": "#/components/schemas/TaskWriteDto"
@@ -44677,6 +44681,7 @@
           "last_edit_at",
           "recent",
           "reverted",
+          "unverified",
           "budget_weight",
           "deferrable",
           "budget",
@@ -44812,6 +44817,10 @@
           "trial_used": {
             "description": "Edits made since the task was enabled",
             "type": "number"
+          },
+          "unverified": {
+            "description": "Statements last written by the recent edits that failed citation verification and stayed unsourced",
+            "type": "number"
           }
         },
         "required": [
@@ -44835,6 +44844,7 @@
           "last_edit_at",
           "recent",
           "reverted",
+          "unverified",
           "budget_weight",
           "deferrable",
           "budget"

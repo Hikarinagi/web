@@ -25505,6 +25505,8 @@ export interface components {
             trial_limit: number | null;
             /** @description Edits made since the task was enabled */
             trial_used: number;
+            /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
+            unverified: number;
             writes: components["schemas"]["TaskWriteDto"][];
         };
         TaskEditsDto: {
@@ -25546,6 +25548,8 @@ export interface components {
             trial_limit: number | null;
             /** @description Edits made since the task was enabled */
             trial_used: number;
+            /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
+            unverified: number;
         };
         TaskPropertiesDto: {
             properties: components["schemas"]["EntryProperty"][];
