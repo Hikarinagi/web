@@ -17098,6 +17098,8 @@ export interface components {
         CheckedStatementDto: {
             citations: components["schemas"]["CheckedCitationDto"][];
             entry_id: number;
+            /** @description Whether the value is a public record of every work it concerns (A.9.5.5) */
+            is_public: boolean;
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             statement_id: number;
@@ -18383,6 +18385,8 @@ export interface components {
             record_key?: string | null;
             /** @enum {string} */
             role?: "SUPPORT" | "CONTRADICT" | "LINK";
+            /** @enum {string|null} */
+            subject?: "PACKAGE" | "MANUAL" | "CREDITS" | "CONTENT" | null;
             url?: string | null;
             version?: number | null;
             version_ref?: string;
@@ -22886,10 +22890,40 @@ export interface components {
             id: number;
             /** @description 该作中的名字 */
             label: string;
+            /** @description 该作中的全部名字 */
+            names: components["schemas"]["OpenCharacterAppearanceNameDto"][];
+            /** @description 与其他出场角色的关系 */
+            relations: components["schemas"]["OpenCharacterAppearanceRelationDto"][];
             /** @description 未公开记录的来源；公开记录为空数组 */
             sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
             /** @description 作品 */
             work: components["schemas"]["OpenCharacterAppearanceWorkDto"] | null;
+        };
+        OpenCharacterAppearanceNameDto: {
+            /** @description 不是该作的公开记录；名字可能是剧透，是否显示由调用方决定 */
+            hidden: boolean;
+            /** @description 适用于作品的哪一部分 */
+            part: string | null;
+            /** @description 读音 */
+            reading: string | null;
+            /** @description 未公开记录的来源；公开记录为空数组 */
+            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
+            /** @description 名字 */
+            text: string;
+        };
+        OpenCharacterAppearanceRelationDto: {
+            /** @description 另一个出场角色的 ID */
+            appearance: number;
+            /** @description 关系：SAME_PERSON 为同一人物 */
+            code: string;
+            /** @description 不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定 */
+            hidden: boolean;
+            /** @description 另一个出场角色的名字 */
+            label: string;
+            /** @description 适用于作品的哪一部分 */
+            part: string | null;
+            /** @description 未公开记录的来源；公开记录为空数组 */
+            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
         };
         OpenCharacterAppearanceSourceDto: {
             /** @description 在作品中的位置 */
@@ -25229,6 +25263,8 @@ export interface components {
             role: "SUPPORT" | "CONTRADICT" | "LINK";
             /** @description Record source name or page host */
             source: string | null;
+            /** @enum {string|null} */
+            subject: "PACKAGE" | "MANUAL" | "CREDITS" | "CONTENT" | null;
             url: string | null;
             /** @enum {string} */
             verification: "UNCHECKED" | "PASSED" | "EXCERPT_NOT_FOUND" | "SOURCE_NOT_ALLOWED" | "VALUE_MISMATCH" | "UNREACHABLE" | "UNCONFIRMED_MATCH";

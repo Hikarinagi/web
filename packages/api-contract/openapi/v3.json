@@ -11035,6 +11035,10 @@
           "entry_id": {
             "type": "number"
           },
+          "is_public": {
+            "description": "Whether the value is a public record of every work it concerns (A.9.5.5)",
+            "type": "boolean"
+          },
           "property": {
             "enum": [
               "TITLE",
@@ -11118,6 +11122,7 @@
           "statement_id",
           "property",
           "status",
+          "is_public",
           "citations"
         ],
         "type": "object"
@@ -16059,6 +16064,16 @@
               "CONTRADICT",
               "LINK"
             ],
+            "type": "string"
+          },
+          "subject": {
+            "enum": [
+              "PACKAGE",
+              "MANUAL",
+              "CREDITS",
+              "CONTENT"
+            ],
+            "nullable": true,
             "type": "string"
           },
           "url": {
@@ -34378,6 +34393,20 @@
             "description": "该作中的名字",
             "type": "string"
           },
+          "names": {
+            "description": "该作中的全部名字",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceNameDto"
+            },
+            "type": "array"
+          },
+          "relations": {
+            "description": "与其他出场角色的关系",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceRelationDto"
+            },
+            "type": "array"
+          },
           "sources": {
             "description": "未公开记录的来源；公开记录为空数组",
             "items": {
@@ -34401,6 +34430,86 @@
           "label",
           "hidden",
           "work",
+          "sources",
+          "names",
+          "relations"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceNameDto": {
+        "properties": {
+          "hidden": {
+            "description": "不是该作的公开记录；名字可能是剧透，是否显示由调用方决定",
+            "type": "boolean"
+          },
+          "part": {
+            "description": "适用于作品的哪一部分",
+            "nullable": true,
+            "type": "string"
+          },
+          "reading": {
+            "description": "读音",
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "未公开记录的来源；公开记录为空数组",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceSourceDto"
+            },
+            "type": "array"
+          },
+          "text": {
+            "description": "名字",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "reading",
+          "part",
+          "hidden",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceRelationDto": {
+        "properties": {
+          "appearance": {
+            "description": "另一个出场角色的 ID",
+            "type": "number"
+          },
+          "code": {
+            "description": "关系：SAME_PERSON 为同一人物",
+            "type": "string"
+          },
+          "hidden": {
+            "description": "不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定",
+            "type": "boolean"
+          },
+          "label": {
+            "description": "另一个出场角色的名字",
+            "type": "string"
+          },
+          "part": {
+            "description": "适用于作品的哪一部分",
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "未公开记录的来源；公开记录为空数组",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceSourceDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "appearance",
+          "label",
+          "code",
+          "part",
+          "hidden",
           "sources"
         ],
         "type": "object"
@@ -43413,6 +43522,16 @@
             "nullable": true,
             "type": "string"
           },
+          "subject": {
+            "enum": [
+              "PACKAGE",
+              "MANUAL",
+              "CREDITS",
+              "CONTENT"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "url": {
             "nullable": true,
             "type": "string"
@@ -43453,6 +43572,7 @@
           "archive_url",
           "excerpt",
           "location",
+          "subject",
           "version",
           "origin",
           "verification",
