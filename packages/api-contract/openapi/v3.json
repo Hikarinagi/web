@@ -16302,6 +16302,10 @@
             "minimum": 1,
             "type": "number"
           },
+          "media": {
+            "minimum": 1,
+            "type": "number"
+          },
           "note": {
             "maxLength": 1000,
             "type": "string"
@@ -16314,6 +16318,7 @@
               "cite",
               "deprecate",
               "restore",
+              "rate",
               "move",
               "merge",
               "split",
@@ -16409,6 +16414,11 @@
             "maxLength": 100,
             "type": "string"
           },
+          "sexual": {
+            "maximum": 2,
+            "minimum": 0,
+            "type": "number"
+          },
           "statement": {
             "minimum": 1,
             "type": "number"
@@ -16445,6 +16455,11 @@
           },
           "value": {
             "$ref": "#/components/schemas/EditValueDto"
+          },
+          "violence": {
+            "maximum": 2,
+            "minimum": 0,
+            "type": "number"
           }
         },
         "required": [
