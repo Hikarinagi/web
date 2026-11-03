@@ -71,12 +71,10 @@ export function useVolumeCreate(series: () => { id: number }) {
     }
   }
 
-  const operations = async (): Promise<{ operations: BackendEditOperation[]; clause: string }> => {
-    if (method.value === 'isbn' && draft.value)
-      return { operations: draft.value.operations, clause: draft.value.clause }
+  const operations = async (): Promise<{ operations: BackendEditOperation[] }> => {
+    if (method.value === 'isbn' && draft.value) return { operations: draft.value.operations }
     const target = await seriesEntry()
     return {
-      clause: '5.2',
       operations: [
         { op: 'create_entry', ref: 'v', type: 'VOLUME' },
         { op: 'add', entry_ref: 'v', property: 'SERIES', value: { target } },

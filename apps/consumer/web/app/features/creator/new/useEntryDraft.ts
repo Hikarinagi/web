@@ -101,7 +101,7 @@ export function useEntryDraft() {
       if (draft.value.operations.length)
         check.value = await hikariRequest('/api/v3/wiki/edits/checks', {
           method: 'POST',
-          body: { operations: draft.value.operations, base: [], clause: draft.value.clause },
+          body: { operations: draft.value.operations, base: [] },
           toast: false,
         })
     } catch (error) {
@@ -121,7 +121,7 @@ export function useEntryDraft() {
     try {
       const result = await hikariRequest('/api/v3/wiki/edits', {
         method: 'POST',
-        body: { operations: current.operations, base: [], clause: current.clause },
+        body: { operations: current.operations, base: [] },
       })
       if (result.status !== 'APPLIED') return navigateTo('/create/notices')
       const creates = current.operations.filter(operation => operation.op === 'create_entry')
