@@ -16996,23 +16996,23 @@ export interface components {
             galgame: components["schemas"]["GalgameSummaryDto"];
             /** @description 官网角色页的分组，照录 */
             group: string | null;
-            /** @description 这部作品名单中的名字 */
-            label: string;
+            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
+            label: string | null;
             role: components["schemas"]["CharacterRole"];
         };
         CharacterLightNovelRelationDto: {
             /** @description 官网角色页的分组，照录 */
             group: string | null;
-            /** @description 这部作品名单中的名字 */
-            label: string;
+            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
+            label: string | null;
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             role: components["schemas"]["CharacterRole"];
         };
         CharacterMangaRelationDto: {
             /** @description 官网角色页的分组，照录 */
             group: string | null;
-            /** @description 这部作品名单中的名字 */
-            label: string;
+            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
+            label: string | null;
             manga: components["schemas"]["MangaSummaryDto"];
             role: components["schemas"]["CharacterRole"];
         };

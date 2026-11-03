@@ -10581,7 +10581,8 @@
             "type": "string"
           },
           "label": {
-            "description": "这部作品名单中的名字",
+            "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
+            "nullable": true,
             "type": "string"
           },
           "role": {
@@ -10615,7 +10616,8 @@
             "type": "string"
           },
           "label": {
-            "description": "这部作品名单中的名字",
+            "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
+            "nullable": true,
             "type": "string"
           },
           "light_novel": {
@@ -10651,7 +10653,8 @@
             "type": "string"
           },
           "label": {
-            "description": "这部作品名单中的名字",
+            "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
+            "nullable": true,
             "type": "string"
           },
           "manga": {
