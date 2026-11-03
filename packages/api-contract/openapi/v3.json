@@ -44802,6 +44802,10 @@
             "description": "Statements last written by the recent edits that failed citation verification and stayed unsourced",
             "type": "number"
           },
+          "violations": {
+            "description": "Open constraint violations raised after the recent edits on the entries those edits touched",
+            "type": "number"
+          },
           "writes": {
             "items": {
               "$ref": "#/components/schemas/TaskWriteDto"
@@ -44831,6 +44835,7 @@
           "recent",
           "reverted",
           "unverified",
+          "violations",
           "budget_weight",
           "deferrable",
           "budget",
@@ -44970,6 +44975,10 @@
           "unverified": {
             "description": "Statements last written by the recent edits that failed citation verification and stayed unsourced",
             "type": "number"
+          },
+          "violations": {
+            "description": "Open constraint violations raised after the recent edits on the entries those edits touched",
+            "type": "number"
           }
         },
         "required": [
@@ -44994,6 +45003,7 @@
           "recent",
           "reverted",
           "unverified",
+          "violations",
           "budget_weight",
           "deferrable",
           "budget"
@@ -50594,6 +50604,61 @@
         ],
         "type": "object"
       },
+      "UpdateWikiSettingsDto": {
+        "properties": {
+          "bot_structural_edits_per_window": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "member_edits_per_window": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "new_member_days": {
+            "maximum": 365,
+            "minimum": 0,
+            "type": "number"
+          },
+          "new_member_edits": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "new_member_edits_per_window": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "new_member_moves_per_window": {
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "notice_hours": {
+            "maximum": 720,
+            "minimum": 1,
+            "type": "number"
+          },
+          "rate_window_seconds": {
+            "maximum": 86400,
+            "minimum": 10,
+            "type": "number"
+          },
+          "task_stop_reverts": {
+            "maximum": 10000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "task_stop_window": {
+            "maximum": 10000,
+            "minimum": 10,
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
       "UpdateWikiStatusDto": {
         "properties": {
           "status": {
@@ -51541,6 +51606,63 @@
           "CHARACTER"
         ],
         "type": "string"
+      },
+      "WikiSettingsDto": {
+        "properties": {
+          "bot_structural_edits_per_window": {
+            "description": "Structural edits a task may write in one window",
+            "type": "number"
+          },
+          "member_edits_per_window": {
+            "description": "Edits any other member may submit in one window",
+            "type": "number"
+          },
+          "new_member_days": {
+            "description": "Days since registration during which a member counts as new",
+            "type": "number"
+          },
+          "new_member_edits": {
+            "description": "Applied edits below which a member counts as new",
+            "type": "number"
+          },
+          "new_member_edits_per_window": {
+            "description": "Edits a new member may submit in one window",
+            "type": "number"
+          },
+          "new_member_moves_per_window": {
+            "description": "Moves, merges and splits a new member may submit in one window",
+            "type": "number"
+          },
+          "notice_hours": {
+            "description": "Hours a structural edit by a member stays up for notice",
+            "type": "number"
+          },
+          "rate_window_seconds": {
+            "description": "Length of the rate window in seconds",
+            "type": "number"
+          },
+          "task_stop_reverts": {
+            "description": "Reverted or corrected edits within the window above which a task stops",
+            "type": "number"
+          },
+          "task_stop_window": {
+            "description": "Recent edits of a task counted for the automatic stop",
+            "type": "number"
+          }
+        },
+        "required": [
+          "notice_hours",
+          "new_member_days",
+          "new_member_edits",
+          "rate_window_seconds",
+          "new_member_edits_per_window",
+          "new_member_moves_per_window",
+          "member_edits_per_window",
+          "bot_structural_edits_per_window",
+          "task_stop_window",
+          "task_stop_reverts"
+        ],
+        "type": "object"
       },
       "WikiSnapshotDto": {
         "properties": {
@@ -68439,6 +68561,56 @@
         },
         "tags": [
           "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/settings": {
+      "get": {
+        "operationId": "AdminSettingsController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      },
+      "put": {
+        "operationId": "AdminSettingsController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWikiSettingsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
         ]
       }
     },

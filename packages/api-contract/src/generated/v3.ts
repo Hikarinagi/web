@@ -5893,6 +5893,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSettingsController_get"];
+        put: operations["AdminSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/snapshot": {
         parameters: {
             query?: never;
@@ -25545,6 +25561,8 @@ export interface components {
             trial_used: number;
             /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
             unverified: number;
+            /** @description Open constraint violations raised after the recent edits on the entries those edits touched */
+            violations: number;
             writes: components["schemas"]["TaskWriteDto"][];
         };
         TaskEditsDto: {
@@ -25588,6 +25606,8 @@ export interface components {
             trial_used: number;
             /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
             unverified: number;
+            /** @description Open constraint violations raised after the recent edits on the entries those edits touched */
+            violations: number;
         };
         TaskPropertiesDto: {
             properties: components["schemas"]["EntryProperty"][];
@@ -26986,6 +27006,18 @@ export interface components {
             /** @enum {string} */
             role: "ADMIN" | "MEMBER";
         };
+        UpdateWikiSettingsDto: {
+            bot_structural_edits_per_window?: number;
+            member_edits_per_window?: number;
+            new_member_days?: number;
+            new_member_edits?: number;
+            new_member_edits_per_window?: number;
+            new_member_moves_per_window?: number;
+            notice_hours?: number;
+            rate_window_seconds?: number;
+            task_stop_reverts?: number;
+            task_stop_window?: number;
+        };
         UpdateWikiStatusDto: {
             /** @enum {string} */
             status: "REJECTED" | "PENDING" | "PUBLISHED" | "DRAFT";
@@ -27237,6 +27269,28 @@ export interface components {
         WikiLogAction: "LOCK" | "UNLOCK" | "PROTECT" | "UNPROTECT" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
         /** @enum {string} */
         WikiSection: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
+        WikiSettingsDto: {
+            /** @description Structural edits a task may write in one window */
+            bot_structural_edits_per_window: number;
+            /** @description Edits any other member may submit in one window */
+            member_edits_per_window: number;
+            /** @description Days since registration during which a member counts as new */
+            new_member_days: number;
+            /** @description Applied edits below which a member counts as new */
+            new_member_edits: number;
+            /** @description Edits a new member may submit in one window */
+            new_member_edits_per_window: number;
+            /** @description Moves, merges and splits a new member may submit in one window */
+            new_member_moves_per_window: number;
+            /** @description Hours a structural edit by a member stays up for notice */
+            notice_hours: number;
+            /** @description Length of the rate window in seconds */
+            rate_window_seconds: number;
+            /** @description Reverted or corrected edits within the window above which a task stops */
+            task_stop_reverts: number;
+            /** @description Recent edits of a task counted for the automatic stop */
+            task_stop_window: number;
+        };
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
             snapshot: {
@@ -37323,6 +37377,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RevisionSwitchResultDto"];
+                };
+            };
+        };
+    };
+    AdminSettingsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminSettingsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiSettingsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiSettingsDto"];
                 };
             };
         };
