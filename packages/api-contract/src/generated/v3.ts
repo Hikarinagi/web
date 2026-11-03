@@ -27007,16 +27007,16 @@ export interface components {
             role: "ADMIN" | "MEMBER";
         };
         UpdateWikiSettingsDto: {
-            bot_structural_edits_per_window?: number;
-            member_edits_per_window?: number;
-            new_member_days?: number;
-            new_member_edits?: number;
-            new_member_edits_per_window?: number;
-            new_member_moves_per_window?: number;
-            notice_hours?: number;
-            rate_window_seconds?: number;
-            task_stop_reverts?: number;
-            task_stop_window?: number;
+            bot_structural_edits_per_window?: number | null;
+            member_edits_per_window?: number | null;
+            new_member_days?: number | null;
+            new_member_edits?: number | null;
+            new_member_edits_per_window?: number | null;
+            new_member_moves_per_window?: number | null;
+            notice_hours?: number | null;
+            rate_window_seconds?: number | null;
+            task_stop_reverts?: number | null;
+            task_stop_window?: number | null;
         };
         UpdateWikiStatusDto: {
             /** @enum {string} */

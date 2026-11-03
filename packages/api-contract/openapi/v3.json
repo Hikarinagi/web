@@ -50609,51 +50609,61 @@
           "bot_structural_edits_per_window": {
             "maximum": 10000,
             "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "member_edits_per_window": {
             "maximum": 10000,
             "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "new_member_days": {
             "maximum": 365,
             "minimum": 0,
+            "nullable": true,
             "type": "number"
           },
           "new_member_edits": {
             "maximum": 1000,
             "minimum": 0,
+            "nullable": true,
             "type": "number"
           },
           "new_member_edits_per_window": {
             "maximum": 10000,
             "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "new_member_moves_per_window": {
             "maximum": 10000,
             "minimum": 0,
+            "nullable": true,
             "type": "number"
           },
           "notice_hours": {
             "maximum": 720,
             "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "rate_window_seconds": {
             "maximum": 86400,
             "minimum": 10,
+            "nullable": true,
             "type": "number"
           },
           "task_stop_reverts": {
             "maximum": 10000,
             "minimum": 0,
+            "nullable": true,
             "type": "number"
           },
           "task_stop_window": {
             "maximum": 10000,
             "minimum": 10,
+            "nullable": true,
             "type": "number"
           }
         },
