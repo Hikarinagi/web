@@ -48729,6 +48729,11 @@
           "is_verified": {
             "type": "boolean"
           },
+          "reason": {
+            "description": "封禁或解封的理由，记入维基日志",
+            "maxLength": 500,
+            "type": "string"
+          },
           "status": {
             "enum": [
               "ACTIVE",

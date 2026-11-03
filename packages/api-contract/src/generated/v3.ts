@@ -26522,6 +26522,8 @@ export interface components {
             /** Format: email */
             email?: string;
             is_verified?: boolean;
+            /** @description 封禁或解封的理由，记入维基日志 */
+            reason?: string;
             /** @enum {string} */
             status?: "ACTIVE" | "INACTIVE" | "BANNED";
         };
