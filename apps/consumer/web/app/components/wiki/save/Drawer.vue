@@ -22,22 +22,14 @@
   const emit = defineEmits<{ saved: [result: EditResult | undefined] }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const router = useRouter()
   const flow = useSaveFlow(editor, result => emit('saved', result))
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const conflicting = ref(false)
 
-  const active = usePageActive()
   onDeactivated(() => {
     conflicting.value = false
   })
-  const open = computed({
-    get: () => active.value && route.query.save === '1',
-    set: next => {
-      const { save: _save, ...query } = route.query
-      void router.replace({ query: next ? { ...query, save: '1' } : query })
-    },
-  })
+  const open = useQueryPanel('save')
   const problems = computed(() =>
     problemsOf(
       editor.draft.value,

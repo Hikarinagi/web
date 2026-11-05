@@ -2,7 +2,6 @@
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { Button, Card, Inline, ScrollArea, Skeleton, Stack, Text } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
-  import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { editBody } from '~/features/wiki/composables/useSaveFlow'
@@ -48,9 +47,10 @@
   })
   const back = computed(() => ({ path: props.base, query: route.query }))
   const router = useRouter()
+  const nav = useTabNav()
 
   function save() {
-    void router.replace({ query: { ...route.query, save: '1' } })
+    void router.push({ query: { ...route.query, save: '1' } })
   }
 </script>
 
@@ -59,7 +59,7 @@
     <Card :padded="false" class="shrink-0">
       <Inline gap="md" align="center" justify="between" :wrap="false" class="px-4 py-3">
         <Inline gap="sm" align="center" :wrap="false">
-          <Button :as="NuxtLink" :to="back" variant="ghost" tone="neutral" size="sm">
+          <Button variant="ghost" tone="neutral" size="sm" @click="nav.dismiss(back, true)">
             <template #icon><ArrowLeft /></template>
             返回编辑
           </Button>

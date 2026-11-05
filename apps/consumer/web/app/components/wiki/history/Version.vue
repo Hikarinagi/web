@@ -23,7 +23,7 @@
   const props = defineProps<{ data: VersionPageData }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
-  const router = useRouter()
+  const nav = useTabNav()
   const drafts = useWikiDraftsStore()
   const { typeName } = useWikiDefinitions()
   const active = usePageActive()
@@ -45,7 +45,7 @@
     computed({
       get: () => active.value && route.params.panel === name,
       set: next => {
-        if (!next) void router.replace(here.value)
+        if (!next) void nav.dismiss(here.value)
       },
     })
   const undoOpen = panel('undo')

@@ -11,6 +11,7 @@
   const props = defineProps<{ entry: EditableEntry; panel: EditorPanel | null; base: string }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
+  const nav = useTabNav()
   const active = usePageActive()
   const kind = ref<string | null>(null)
   const relating = computed(
@@ -37,7 +38,7 @@
   )
 
   function close() {
-    void navigateTo({ path: props.base, query: route.query })
+    void nav.dismiss({ path: props.base, query: route.query })
   }
 
   function add(property: 'GAME_RELATION' | 'APPEARANCE_RELATION', item: WikiSearchItem) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { tabKey } from '~/features/creator/tabs'
+  import { resourceKey } from '~/features/creator/tabs'
   import { partsOf } from '~/features/wiki/editor/route'
   import type { EditorPageData } from '~~/server/api/pages/entries/[id]/edit.get'
 
@@ -21,7 +21,7 @@
 
   const drafts = useWikiDraftsStore()
   useRefreshOnSaved(
-    () => (drafts.count(tabKey(route.path)) ? undefined : refresh()),
+    () => (drafts.count(resourceKey(route.path)) ? undefined : refresh()),
     () =>
       data.value?.entry ? [data.value.entry.id, ...data.value.parts.map(part => part.id)] : null,
   )

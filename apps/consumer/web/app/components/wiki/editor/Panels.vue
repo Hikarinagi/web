@@ -14,6 +14,7 @@
   }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
+  const nav = useTabNav()
   const { canAny } = useCreatorPermissions()
   const patrol = computed(() => canAny(WIKI_PERMISSIONS.PATROL))
   const active = usePageActive()
@@ -22,7 +23,7 @@
     computed({
       get: () => active.value && props.panel === panel && patrol.value,
       set: next => {
-        if (!next) void navigateTo({ path: props.base, query: route.query })
+        if (!next) void nav.dismiss({ path: props.base, query: route.query })
       },
     })
   const protecting = opened('protect')
@@ -30,7 +31,7 @@
   const dismissing = computed({
     get: () => active.value && props.panel === 'dismiss' && props.suggestion !== null,
     set: next => {
-      if (!next) void navigateTo({ path: props.base, query: route.query })
+      if (!next) void nav.dismiss({ path: props.base, query: route.query })
     },
   })
   const until = computed(() => props.entry.protection?.until?.slice(0, 10) ?? null)

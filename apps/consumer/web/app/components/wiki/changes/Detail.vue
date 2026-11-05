@@ -13,7 +13,7 @@
   const props = defineProps<{ data: ChangePageData; back: string; backLabel: string }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
-  const router = useRouter()
+  const nav = useTabNav()
   const auth = useAuthStore()
   const { canAny } = useCreatorPermissions()
   const reloadList = inject(RELOAD_CHANGES, () => {})
@@ -50,7 +50,7 @@
   const undoOpen = computed({
     get: () => active.value && route.params.panel === 'undo',
     set: next => {
-      if (!next) void router.replace(here.value)
+      if (!next) void nav.dismiss(here.value)
     },
   })
 

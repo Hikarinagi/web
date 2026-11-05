@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Button, Page, PageBody, ScrollArea, Stack } from '@hina-ui/vue'
-  import { tabKey } from '~/features/creator/tabs'
+  import { resourceKey } from '~/features/creator/tabs'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditResult } from '~/features/wiki/composables/useSaveFlow'
   import { emptyValue, type EntryDefinition } from '~/features/wiki/editor/draft'
@@ -11,7 +11,7 @@
   const route = useRoute()
   const { typeName } = useWikiDefinitions()
   const editor = useEntryEditor({
-    key: () => tabKey(route.path),
+    key: () => resourceKey(route.path),
     title: () => '新建条目',
     entries: () => [],
     definitions: () => props.definitions,

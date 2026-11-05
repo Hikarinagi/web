@@ -1,46 +1,50 @@
 <script setup lang="ts">
   import { Button, Dialog, Text } from '@hina-ui/vue'
+  import { currentPath, resourceKey } from '~/features/creator/tabs'
 
   defineOptions({ name: 'CreatorShellCloseConfirm' })
 
-  const emit = defineEmits<{ close: [key: string] }>()
+  const emit = defineEmits<{ close: [id: string] }>()
   const route = useRoute()
   const router = useRouter()
   const tabs = useCreatorTabsStore()
   const drafts = useWikiDraftsStore()
+  const nav = useTabNav()
 
-  const tab = computed(() => tabs.tabs.find(item => item.key === route.query.close))
+  const tab = computed(() => tabs.tabs.find(item => item.id === route.query.close))
+  const key = computed(() => (tab.value ? resourceKey(currentPath(tab.value)) : ''))
+  const here = computed(() => {
+    const { close: _close, ...query } = route.query
+    return { path: route.path, query, hash: route.hash }
+  })
   const open = computed({
     get: () => Boolean(tab.value),
     set: next => {
-      if (next) return
-      const { close: _close, ...query } = route.query
-      void router.replace({ query })
+      if (!next) void nav.dismiss(here.value)
     },
   })
 
-  function save() {
+  async function save() {
     const target = tab.value
     if (!target) return
-    const [path, search = ''] = target.path.split('?')
-    const query = new URLSearchParams(search)
-    query.set('save', '1')
-    void navigateTo(`${path}?${query.toString()}`)
+    await nav.dismiss(here.value)
+    await nav.activate(target)
+    await router.push({ query: { ...router.currentRoute.value.query, save: '1' } })
   }
 
-  function drop() {
+  async function drop() {
     const target = tab.value
     if (!target) return
-    open.value = false
-    drafts.discard(target.key)
-    emit('close', target.key)
+    drafts.discard(key.value)
+    await nav.dismiss(here.value)
+    emit('close', target.id)
   }
 </script>
 
 <template>
   <Dialog v-model:open="open" :title="`关闭「${tab?.title ?? ''}」`" size="sm">
     <template #content>
-      <Text size="sm">这个标签页有 {{ tab ? drafts.count(tab.key) : 0 }} 处未保存的修改。</Text>
+      <Text size="sm">这个标签页有 {{ key ? drafts.count(key) : 0 }} 处未保存的修改。</Text>
     </template>
     <template #footer>
       <Button variant="ghost" tone="neutral" @click="open = false">取消</Button>

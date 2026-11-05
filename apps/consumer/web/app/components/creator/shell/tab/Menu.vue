@@ -39,7 +39,7 @@
 
   function revive(tab: CreatorTab) {
     open.value = false
-    actions.reopen(tab.key)
+    actions.reopen(tab.id)
   }
 </script>
 
@@ -55,23 +55,18 @@
           <Stack gap="none">
             <Button
               v-for="tab in shown"
-              :key="tab.key"
+              :key="tab.id"
               variant="ghost"
               tone="neutral"
               size="sm"
-              :class="cn('justify-start', actions.active.value === tab.key && 'bg-subtle')"
+              :class="cn('justify-start', store.activeId === tab.id && 'bg-subtle')"
               @click="pick(tab)"
             >
               <template #icon><component :is="tabIcon(tab)" /></template>
               <Text as="span" size="sm" truncate class="min-w-0 flex-1 text-start">
                 {{ tab.title }}
               </Text>
-              <Indicator
-                v-if="actions.dirty(tab.key)"
-                tone="accent"
-                size="sm"
-                label="有未保存的修改"
-              />
+              <Indicator v-if="actions.dirty(tab)" tone="accent" size="sm" label="有未保存的修改" />
               <Pin v-if="tab.pinned" class="size-3.5 text-faint" aria-label="已固定" role="img" />
             </Button>
             <Empty v-if="!shown.length" size="sm" title="没有符合的标签页" />
@@ -80,7 +75,7 @@
               <Text size="xs" tone="muted" class="px-2 pb-1">最近关闭</Text>
               <Button
                 v-for="tab in recent"
-                :key="`closed-${tab.key}`"
+                :key="`closed-${tab.id}`"
                 variant="ghost"
                 tone="neutral"
                 size="sm"

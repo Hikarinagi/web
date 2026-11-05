@@ -2,6 +2,8 @@ import type { MaybeRefOrGetter } from 'vue'
 
 type Offset = [top: number, left: number]
 
+const KEPT_PAGES = 50
+
 export function useTabScroll(content: MaybeRefOrGetter<HTMLElement | null | undefined>) {
   const route = useRoute()
   const store = useCreatorTabsStore()
@@ -20,7 +22,9 @@ export function useTabScroll(content: MaybeRefOrGetter<HTMLElement | null | unde
       if (!outer && !root.contains(target)) return
       if (outer) viewports.add(target)
       const map = positions.get(key.value) ?? new Map<Element, Offset>()
+      positions.delete(key.value)
       positions.set(key.value, map.set(target, [target.scrollTop, target.scrollLeft]))
+      if (positions.size > KEPT_PAGES) positions.delete(positions.keys().next().value!)
     },
     { capture: true, passive: true },
   )
@@ -28,12 +32,6 @@ export function useTabScroll(content: MaybeRefOrGetter<HTMLElement | null | unde
   watch(
     key,
     async next => {
-      const open = new Set(store.tabs.map(tab => tab.key))
-      for (const stored of positions.keys()) {
-        const base = stored.split('#')[0]!
-        if (stored !== next && (!open.has(base) || store.pageKey(base) !== stored))
-          positions.delete(stored)
-      }
       await nextTick()
       requestAnimationFrame(() => {
         const map = positions.get(next)

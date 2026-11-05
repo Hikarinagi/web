@@ -7,7 +7,7 @@
 
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const router = useRouter()
+  const nav = useTabNav()
   const target = ref<number | null>(null)
 
   const asked = computed(() => {
@@ -37,7 +37,7 @@
     set: next => {
       if (next) return
       const { move: _move, ...query } = route.query
-      void router.replace({ query })
+      void nav.dismiss({ path: route.path, query, hash: route.hash })
     },
   })
 

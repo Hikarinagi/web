@@ -5,25 +5,16 @@
   defineOptions({ name: 'WikiEditorSaveBar' })
 
   const editor = inject(ENTRY_EDITOR)!
-  const route = useRoute()
-  const router = useRouter()
   const count = computed(() => editor.count.value)
-
-  function panel(key: 'save' | 'discard', open: boolean) {
-    const { [key]: _current, ...query } = route.query
-    void router.replace({ query: open ? { ...query, [key]: '1' } : query })
-  }
   const active = usePageActive()
-  const discarding = computed({
-    get: () => active.value && route.query.discard === '1',
-    set: open => panel('discard', open),
-  })
+  const saving = useQueryPanel('save')
+  const discarding = useQueryPanel('discard')
 
   useEventListener('keydown', event => {
     if (!active.value) return
     if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 's') return
     event.preventDefault()
-    if (count.value) panel('save', true)
+    if (count.value && !saving.value) saving.value = true
   })
 </script>
 
@@ -38,8 +29,8 @@
       <Inline gap="sm" align="center" justify="between" :wrap="false">
         <Text size="sm" weight="medium">已修改 {{ count }} 处</Text>
         <Inline gap="sm" align="center" :wrap="false">
-          <Button variant="ghost" tone="neutral" @click="panel('discard', true)">放弃修改</Button>
-          <Button @click="panel('save', true)">保存</Button>
+          <Button variant="ghost" tone="neutral" @click="discarding = true">放弃修改</Button>
+          <Button @click="saving = true">保存</Button>
         </Inline>
       </Inline>
     </Container>

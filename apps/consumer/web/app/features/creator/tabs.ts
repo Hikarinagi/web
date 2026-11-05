@@ -1,14 +1,18 @@
 export interface CreatorTab {
-  key: string
-  path: string
+  id: string
+  history: string[]
+  index: number
   title: string
   kind?: string
   pinned?: boolean
+  opener?: string
 }
 
 export interface ClosedTab extends CreatorTab {
-  index: number
+  position: number
 }
+
+export const TAB_HISTORY_LIMIT = 50
 
 const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
   [/^\/entries\/(\d+)\/edit(?:\/|$)/, match => `edit:${match[1]}`],
@@ -20,7 +24,7 @@ const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
 
 const TRANSIENT = ['save', 'discard', 'close', 'find', 'check', 'saved', 'later', 'undone']
 
-export function tabKey(path: string): string {
+export function resourceKey(path: string): string {
   const bare = path.split(/[?#]/)[0]!.replace(/\/+$/, '') || '/'
   for (const [pattern, key] of GROUPS) {
     const match = pattern.exec(bare)
@@ -36,6 +40,20 @@ export function tabPath(fullPath: string): string {
   for (const name of TRANSIENT) query.delete(name)
   const kept = query.toString()
   return `${path}${kept ? `?${kept}` : ''}${hash ? `#${hash}` : ''}`
+}
+
+export function samePlace(a: string, b: string): boolean {
+  const normal = (fullPath: string) => {
+    const [rest, hash = ''] = fullPath.split('#')
+    const [path, search = ''] = rest!.split('?')
+    const query = [...new URLSearchParams(search)].sort(([x], [y]) => x.localeCompare(y))
+    return `${path!.replace(/\/+$/, '')}?${new URLSearchParams(query).toString()}#${hash}`
+  }
+  return normal(a) === normal(b)
+}
+
+export function currentPath(tab: Pick<CreatorTab, 'history' | 'index'>): string {
+  return tab.history[tab.index] ?? '/create'
 }
 
 export function pinnedCount(tabs: CreatorTab[]): number {

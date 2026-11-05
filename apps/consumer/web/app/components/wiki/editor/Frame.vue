@@ -16,7 +16,7 @@
 
   defineProps<{ title: string }>()
   const route = useRoute()
-  const router = useRouter()
+  const nav = useTabNav()
   const mounted = useMounted()
   const wide = useMediaQuery('(min-width: 1280px)')
   const narrow = computed(() => mounted.value && !wide.value)
@@ -26,7 +26,7 @@
     set: next => {
       if (next) return
       const { side: _side, focus: _focus, ...query } = route.query
-      void router.replace({ query })
+      void nav.dismiss({ path: route.path, query, hash: route.hash })
     },
   })
 </script>

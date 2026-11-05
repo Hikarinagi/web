@@ -1,31 +1,32 @@
 <script setup lang="ts">
-  import { Inline, ScrollArea } from '@hina-ui/vue'
+  import { IconButton, Inline, ScrollArea, Space } from '@hina-ui/vue'
+  import { Plus } from '@lucide/vue'
   import Sortable from 'sortablejs'
   import type { ComponentPublicInstance } from 'vue'
 
   defineOptions({ name: 'CreatorShellTabStrip' })
 
-  const route = useRoute()
   const store = useCreatorTabsStore()
   const actions = useCreatorTabActions()
+  const nav = useTabNav()
   const list = useTemplateRef<ComponentPublicInstance>('list')
+  const mounted = useMounted()
   let sortable: Sortable | null = null
   useTabShortcuts()
 
-  const visit = (path: string) =>
-    store.visit(path, (route.meta.title as string | undefined) ?? '创作者中心')
-
-  function reveal(key: string) {
+  function reveal(id: string) {
     const root = list.value?.$el as HTMLElement | undefined
     root
-      ?.querySelector<HTMLElement>(`[data-tab-key="${CSS.escape(key)}"]`)
+      ?.querySelector<HTMLElement>(`[data-tab-id="${CSS.escape(id)}"]`)
       ?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
   }
 
   onMounted(() => {
-    visit(route.fullPath)
-    watch(() => route.fullPath, visit)
-    watch(actions.active, key => nextTick(() => reveal(key)), { immediate: true })
+    watch(
+      () => store.activeId,
+      id => nextTick(() => reveal(id)),
+      { immediate: true },
+    )
     const root = list.value?.$el as HTMLElement | undefined
     if (!root) return
     sortable = Sortable.create(root, {
@@ -52,7 +53,7 @@
       direction="horizontal"
       :scrollbar="false"
       label="打开的标签页"
-      class="h-full min-w-0 flex-1"
+      class="h-full min-w-0 shrink"
     >
       <Inline
         ref="list"
@@ -63,15 +64,28 @@
         :wrap="false"
         class="h-full"
       >
-        <CreatorShellTabItem
-          v-for="(tab, index) in store.tabs"
-          :key="tab.key"
-          :tab="tab"
-          :index="index"
-        />
+        <template v-if="mounted">
+          <CreatorShellTabItem
+            v-for="(tab, index) in store.tabs"
+            :key="tab.id"
+            :tab="tab"
+            :index="index"
+          />
+        </template>
       </Inline>
     </ScrollArea>
+    <IconButton
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      label="新建标签页"
+      class="shrink-0 self-center"
+      @click="nav.open('/create/wiki', true)"
+    >
+      <Plus />
+    </IconButton>
+    <Space />
     <CreatorShellTabMenu class="self-center" />
   </Inline>
-  <CreatorShellCloseConfirm @close="key => actions.remove([key])" />
+  <CreatorShellCloseConfirm @close="id => actions.remove([id])" />
 </template>

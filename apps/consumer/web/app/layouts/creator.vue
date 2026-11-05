@@ -3,7 +3,6 @@
   import { useCreatorSidebar } from '~/features/creator/composables/useCreatorSidebar'
   import type { ComponentPublicInstance } from 'vue'
   import { SITE_CONFIG } from '~/config/site'
-  import { tabKey } from '~/features/creator/tabs'
   import { cn } from '~/utils/cn'
   import { buildSeoTitle } from '~/utils/seo'
 
@@ -11,14 +10,12 @@
   const route = useRoute()
   const title = computed(() => (route.meta.title as string | undefined) ?? '创作者中心')
   const content = useTemplateRef<ComponentPublicInstance>('content')
+  useTabRouter()
+  useTabLinks()
   useTabScroll(() => content.value?.$el as HTMLElement | undefined)
   const tabs = useCreatorTabsStore()
   useHead({
-    title: () =>
-      buildSeoTitle(
-        tabs.tabs.find(tab => tab.key === tabKey(route.path))?.title ?? title.value,
-        SITE_CONFIG.name,
-      ),
+    title: () => buildSeoTitle(tabs.active?.title || title.value, SITE_CONFIG.name),
   })
 </script>
 
@@ -33,11 +30,12 @@
     <Stack gap="none" class="h-full min-h-0">
       <VisuallyHidden as="h1">{{ title }}</VisuallyHidden>
       <Inline
-        gap="none"
+        gap="sm"
         align="center"
         :wrap="false"
-        class="h-10 shrink-0 border-b border-line bg-canvas px-6 max-md:px-4"
+        class="h-10 shrink-0 border-b border-line bg-canvas px-4 max-md:px-2"
       >
+        <CreatorShellHistory />
         <CreatorShellCrumbs />
       </Inline>
       <ScrollArea class="min-h-0 flex-1">

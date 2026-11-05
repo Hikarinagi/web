@@ -122,7 +122,10 @@
           <Ellipsis />
         </IconButton>
         <template #content>
-          <DropdownMenuItem v-if="reader" @select="navigateTo(reader)">
+          <DropdownMenuItem
+            v-if="reader"
+            @select="navigateTo(reader, { open: { target: '_blank' } })"
+          >
             {{ PAGES[entry.type] ?? '查看作品页' }}
           </DropdownMenuItem>
           <DropdownMenuItem @select="navigateTo(`/entries/${entry.id}/merge`)">

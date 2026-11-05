@@ -6,9 +6,9 @@ export function useTabShortcuts() {
   useEventListener('keydown', event => {
     if (!event.altKey || event.ctrlKey || event.metaKey || event.repeat) return
     if (focused.value?.closest('[role="dialog"], [role="alertdialog"]')) return
-    const current = store.tabs.find(tab => tab.key === actions.active.value)
+    const current = store.active
     if (event.code === 'KeyW' && !event.shiftKey) {
-      if (current && !current.pinned) actions.close(current.key)
+      if (current && !current.pinned) actions.close(current)
     } else if (event.code === 'KeyT' && event.shiftKey) {
       actions.reopen()
     } else if (/^Digit[1-9]$/.test(event.code) && !event.shiftKey) {

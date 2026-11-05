@@ -9,7 +9,7 @@
   const { open } = useWikiFinder()
   const { typeName } = useWikiDefinitions()
   const route = useRoute()
-  const router = useRouter()
+  const nav = useTabNav()
 
   watch(
     () => route.query.find,
@@ -21,7 +21,7 @@
   watch(open, next => {
     if (next || route.query.find === undefined) return
     const { find: _find, ...query } = route.query
-    void router.replace({ query })
+    void nav.dismiss({ path: route.path, query, hash: route.hash })
   })
 
   const search = ref('')

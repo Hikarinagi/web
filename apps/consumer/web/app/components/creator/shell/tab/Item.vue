@@ -11,7 +11,7 @@
   } from '@hina-ui/vue'
   import { Link2, Pin, PinOff } from '@lucide/vue'
   import { tabIcon } from '~/features/creator/tab-icons'
-  import type { CreatorTab } from '~/features/creator/tabs'
+  import { currentPath, tabPath, type CreatorTab } from '~/features/creator/tabs'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'CreatorShellTabItem' })
@@ -20,25 +20,26 @@
   const store = useCreatorTabsStore()
   const actions = useCreatorTabActions()
 
-  const current = computed(() => actions.active.value === props.tab.key)
+  const current = computed(() => store.activeId === props.tab.id)
   const icon = computed(() => tabIcon(props.tab))
-  const keys = (list: CreatorTab[]) => list.map(item => item.key)
-  const others = computed(() => keys(store.tabs.filter(item => item.key !== props.tab.key)))
-  const left = computed(() => keys(store.tabs.slice(0, props.index)))
-  const right = computed(() => keys(store.tabs.slice(props.index + 1)))
-  const clean = computed(() => keys(store.tabs.filter(item => !actions.dirty(item.key))))
+  const path = computed(() => tabPath(currentPath(props.tab)))
+  const ids = (list: CreatorTab[]) => list.map(item => item.id)
+  const others = computed(() => ids(store.tabs.filter(item => item.id !== props.tab.id)))
+  const left = computed(() => ids(store.tabs.slice(0, props.index)))
+  const right = computed(() => ids(store.tabs.slice(props.index + 1)))
+  const clean = computed(() => ids(store.tabs.filter(item => !actions.dirty(item))))
 
   function auxclick(event: MouseEvent) {
     if (event.button !== 1) return
     event.preventDefault()
-    if (!props.tab.pinned) actions.close(props.tab.key)
+    if (!props.tab.pinned) actions.close(props.tab)
   }
 </script>
 
 <template>
   <Inline
     data-creator-tab
-    :data-tab-key="tab.key"
+    :data-tab-id="tab.id"
     :data-pinned="tab.pinned ? 'true' : 'false'"
     gap="none"
     align="stretch"
@@ -54,13 +55,18 @@
   >
     <ContextMenu :label="`${tab.title}的操作`" class="h-full">
       <Inline gap="none" align="center" :wrap="false" class="h-full max-w-60 pe-1">
-        <NuxtLink
+        <Inline
           v-tooltip="tab.title"
-          :to="tab.path"
+          as="a"
+          :href="path"
           role="tab"
           :aria-selected="current"
           draggable="false"
-          class="flex h-full min-w-0 items-center gap-2 ps-3 pe-1 outline-none focus-visible:bg-subtle"
+          gap="sm"
+          align="center"
+          :wrap="false"
+          class="h-full min-w-0 ps-3 pe-1 outline-none focus-visible:bg-subtle"
+          @click.prevent="actions.open(tab)"
         >
           <component
             :is="icon"
@@ -76,23 +82,18 @@
           >
             {{ tab.title }}
           </Text>
-          <Indicator v-if="actions.dirty(tab.key)" tone="accent" size="sm" label="有未保存的修改" />
-        </NuxtLink>
+          <Indicator v-if="actions.dirty(tab)" tone="accent" size="sm" label="有未保存的修改" />
+        </Inline>
         <Pin
           v-if="tab.pinned"
           class="mx-1 size-3.5 shrink-0 text-faint"
           aria-label="已固定"
           role="img"
         />
-        <CloseButton
-          v-else
-          size="xs"
-          :label="`关闭「${tab.title}」`"
-          @click="actions.close(tab.key)"
-        />
+        <CloseButton v-else size="xs" :label="`关闭「${tab.title}」`" @click="actions.close(tab)" />
       </Inline>
       <template #content>
-        <ContextMenuItem :disabled="tab.pinned" @select="actions.close(tab.key)">
+        <ContextMenuItem :disabled="tab.pinned" @select="actions.close(tab)">
           关闭
           <template v-if="current" #trailing><Kbd>Alt</Kbd> <Kbd>W</Kbd></template>
         </ContextMenuItem>
@@ -108,11 +109,11 @@
         <ContextMenuItem :disabled="!clean.length" @select="actions.closeMany(clean)">
           关闭没有修改的标签页
         </ContextMenuItem>
-        <ContextMenuItem @select="actions.closeMany(keys(store.tabs))">
+        <ContextMenuItem @select="actions.closeMany(ids(store.tabs))">
           关闭全部标签页
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem @select="actions.pin(tab.key, !tab.pinned)">
+        <ContextMenuItem @select="actions.pin(tab.id, !tab.pinned)">
           <template #icon><PinOff v-if="tab.pinned" /><Pin v-else /></template>
           {{ tab.pinned ? '取消固定' : '固定' }}
         </ContextMenuItem>
