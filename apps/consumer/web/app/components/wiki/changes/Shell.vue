@@ -36,6 +36,7 @@
       })
       selected.value = []
       reload()
+      void refreshNuxtData('wiki-unchecked-count')
     } finally {
       marking.value = false
     }

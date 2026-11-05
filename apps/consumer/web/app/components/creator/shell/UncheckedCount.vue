@@ -3,7 +3,7 @@
 
   defineOptions({ name: 'CreatorShellUncheckedCount' })
 
-  const { data } = useHikariApiData('/api/v3/wiki/changes', {
+  const { data, refresh } = useHikariApiData('/api/v3/wiki/changes', {
     key: 'wiki-unchecked-count',
     query: { unpatrolled: true, page: 1, page_size: 1 },
     lazy: true,
@@ -11,6 +11,8 @@
     toast: false,
   })
   const count = computed(() => data.value?.meta.total_items ?? 0)
+  useWikiSavedBus().on(() => void refresh())
+  useEventBus<number[]>('wiki-saved-remote').on(() => void refresh())
 </script>
 
 <template>

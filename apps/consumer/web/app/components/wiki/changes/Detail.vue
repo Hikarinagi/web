@@ -60,6 +60,7 @@
       })
       emit('changed')
       reloadList()
+      void refreshNuxtData('wiki-unchecked-count')
     } finally {
       marking.value = false
     }
