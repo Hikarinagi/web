@@ -10,7 +10,7 @@
   const props = defineProps<{ definitions: EntryDefinition[] }>()
   const route = useRoute()
   const { typeName } = useWikiDefinitions()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const editor = useEntryEditor({
     key: () => resourceKey(route.path),
     title: () => '新建条目',

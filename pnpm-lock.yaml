@@ -208,7 +208,7 @@ importers:
         version: 15.0.3
       motion-v:
         specifier: ^2.2.1
-        version: 2.11.0(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3))
+        version: 2.11.1(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3))
       nuxt:
         specifier: ^4.4.6
         version: 4.6.4(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.13))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.13))(@oxc-project/types@0.156.0)(@types/node@22.20.5)(@vercel/blob@2.8.2)(@vue/compiler-sfc@3.5.45)(acorn@8.19.0)(bare-buffer@3.7.1)(confbox@0.3.2)(db0@0.3.4)(dotenv@17.4.2)(esbuild@0.27.7)(eslint@9.39.5(jiti@2.7.0))(giget@3.3.1)(ioredis@5.11.1)(lightningcss@1.33.0)(mlly@1.8.2)(optionator@0.9.4)(oxc-parser@0.141.0)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.45(typescript@6.0.3)))(rolldown@1.2.16)(rollup-plugin-visualizer@7.1.2(rolldown@1.2.16)(rollup@4.67.5))(rollup@4.67.5)(srvx@1.0.8)(terser@5.51.2)(typescript@6.0.3)(vite@8.3.6(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(vue-tsc@3.3.14(typescript@6.0.3))(yaml@2.9.1)
@@ -5601,8 +5601,8 @@ packages:
     resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==}
     engines: {node: '>=20'}
 
-  isomorphic-git@1.44.10:
-    resolution: {integrity: sha512-OMlkGP84A84E01mEuXXTzaVJtBqDpK8n8KevA229oVscY4SqgkQ20ByGudME5V6Y2wPpHbH7gYjY5dMK1PXFkQ==}
+  isomorphic-git@1.44.11:
+    resolution: {integrity: sha512-Y1BohMJU12rnkEMwpiBklgQ+ZQo9PtQencCKQz/zsziilL9+Tn1Bip45cJ51czB8abrf/9oHLDGQE+4IlOVxbA==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -6317,8 +6317,8 @@ packages:
   motion-utils@14.7.0:
     resolution: {integrity: sha512-woO0/Nb7ys75f94fjvQi/6leiHGvZUYkeHUPEZ3vxsV+9OpEVhkxp01x8MlRwX0zt31EqgXsKDAoBoJLC148Tw==}
 
-  motion-v@2.11.0:
-    resolution: {integrity: sha512-zOq6ccT5IW0G7sLVYZfUD60NBoD2doTRQfd2OA9k3WLuQ3f/z38YkrBAts3OtpA5N3kir+iVUIPKw98ZQnwv2w==}
+  motion-v@2.11.1:
+    resolution: {integrity: sha512-4/yP0rIutpw28itNLqhXGIuL6uwq5tJ+Z/izQOWpj2tFNTQSvtQkHsnQAsh9o+xJVsbLwMLXEs6RnQpYs21/Lg==}
     peerDependencies:
       '@vueuse/core': '>=10.0.0'
       vue: '>=3.0.0'
@@ -9249,7 +9249,7 @@ snapshots:
       aria-hidden: 1.2.6
       clsx: 2.1.1
       embla-carousel: 8.6.0
-      motion-v: 2.11.0(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3))
+      motion-v: 2.11.1(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3))
       overlayscrollbars: 2.16.0
       shiki: 4.0.2
       tailwind-merge: 3.7.0
@@ -9831,7 +9831,7 @@ snapshots:
       git-url-parse: 16.1.0
       h3: 1.15.11
       hookable: 5.5.3
-      isomorphic-git: 1.44.10
+      isomorphic-git: 1.44.11
       jiti: 2.7.0
       json-schema-to-typescript-lite: 15.0.0
       mdast-util-to-hast: 13.2.1
@@ -14963,7 +14963,7 @@ snapshots:
 
   isexe@4.0.0: {}
 
-  isomorphic-git@1.44.10:
+  isomorphic-git@1.44.11:
     dependencies:
       async-lock: 1.4.1
       clean-git-ref: 2.0.1
@@ -14973,7 +14973,6 @@ snapshots:
       minimisted: 2.0.1
       pako: 1.0.11
       pify: 4.0.1
-      readable-stream: 4.8.0
       sha.js: 2.4.12
       simple-get: 4.0.1
 
@@ -16076,7 +16075,7 @@ snapshots:
 
   motion-utils@14.7.0: {}
 
-  motion-v@2.11.0(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3)):
+  motion-v@2.11.1(@vueuse/core@12.8.2(typescript@6.0.3))(vue@3.5.45(typescript@6.0.3)):
     dependencies:
       '@vueuse/core': 12.8.2(typescript@6.0.3)
       framer-motion: 14.9.1

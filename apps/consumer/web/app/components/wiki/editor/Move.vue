@@ -7,7 +7,7 @@
 
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const target = ref<number | null>(null)
 
   const asked = computed(() => {
@@ -35,9 +35,7 @@
   const open = computed({
     get: () => active.value && Boolean(item.value && options.value.length),
     set: next => {
-      if (next) return
-      const { move: _move, ...query } = route.query
-      void nav.dismiss({ path: route.path, query, hash: route.hash })
+      if (!next) void nav.close(['move'])
     },
   })
 

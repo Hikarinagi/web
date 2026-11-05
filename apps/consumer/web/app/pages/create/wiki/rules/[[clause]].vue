@@ -16,7 +16,7 @@
   )
   const { data, error, status, refresh } = useHikariApiData<RulesPageData>(
     '/api/pages/create/wiki/rules',
-    { key: 'wiki-rules' },
+    { key: 'wiki-rules', dedupe: 'defer', getCachedData: reusePayload },
   )
   useCreatorPage({
     title: '编辑规范',

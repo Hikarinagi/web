@@ -9,7 +9,7 @@
   const props = defineProps<{ data: MergePickPageData }>()
   const { typeName } = useWikiDefinitions()
   const active = usePageActive()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const edit = computed(() => `/entries/${props.data.entry.id}/edit`)
 </script>
 
@@ -34,6 +34,6 @@
     :exclude="[data.entry.id]"
     confirm="下一步"
     @close="nav.finish(edit)"
-    @pick="item => navigateTo(`/entries/${data.entry.id}/merge/${item.id}`)"
+    @pick="item => nav.push(`/entries/${data.entry.id}/merge/${item.id}`)"
   />
 </template>

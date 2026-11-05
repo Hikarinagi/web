@@ -10,11 +10,9 @@
     entry: EditableEntry
     panel: EditorPanel | null
     suggestion: number | null
-    base: string
   }>()
   const emit = defineEmits<{ changed: [] }>()
-  const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const { canAny } = useCreatorPermissions()
   const patrol = computed(() => canAny(WIKI_PERMISSIONS.PATROL))
   const active = usePageActive()
@@ -23,7 +21,7 @@
     computed({
       get: () => active.value && props.panel === panel && patrol.value,
       set: next => {
-        if (!next) void nav.dismiss({ path: props.base, query: route.query })
+        if (!next) void nav.close(['panel'])
       },
     })
   const protecting = opened('protect')
@@ -31,7 +29,7 @@
   const dismissing = computed({
     get: () => active.value && props.panel === 'dismiss' && props.suggestion !== null,
     set: next => {
-      if (!next) void nav.dismiss({ path: props.base, query: route.query })
+      if (!next) void nav.close(['panel', 'hint'])
     },
   })
   const until = computed(() => props.entry.protection?.until?.slice(0, 10) ?? null)
@@ -42,13 +40,13 @@
     <Text size="sm"> {{ entry.protection?.reason }}{{ until ? `，到 ${until} 为止` : '' }} </Text>
   </Alert>
   <Alert :open="entry.deleted" tone="danger" title="条目已删除">
-    <Button v-if="patrol" variant="link" size="sm" @click="navigateTo(`${base}/delete`)">
+    <Button v-if="patrol" variant="link" size="sm" @click="nav.query({ panel: 'delete' })">
       恢复条目
     </Button>
   </Alert>
   <WikiEditorProtect v-model:open="protecting" :entry="entry" @done="emit('changed')" />
   <WikiEditorDelete v-model:open="deleting" :entry="entry" @done="emit('changed')" />
-  <WikiEditorDismiss v-model:open="dismissing" :entry="entry.id" :suggestion="suggestion" />
+  <WikiEditorDismiss v-model:open="dismissing" :suggestion="suggestion" />
   <WikiEditorMove />
-  <WikiEditorPicks :entry="entry" :panel="panel" :base="base" />
+  <WikiEditorPicks :entry="entry" :panel="panel" />
 </template>

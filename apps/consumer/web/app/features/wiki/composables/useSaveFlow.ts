@@ -33,8 +33,7 @@ export function useSaveFlow(
   const checking = ref(false)
   const saving = ref(false)
   const bus = useWikiSavedBus()
-  const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
   const body = () => editBody(editor)
 
   async function inspect() {
@@ -78,10 +77,10 @@ export function useSaveFlow(
       editor.discard()
       bus.emit(result.entries)
       check.value = null
-      const { save: _save, saved: _saved, later: _later, undone: _undone, ...query } = route.query
-      await router.replace({
-        query: { ...query, saved: String(result.edit_id), ...(later ? { later: '1' } : {}) },
-      })
+      await nav.query(
+        { save: null, undone: null, saved: String(result.edit_id), later: later ? '1' : null },
+        'replace',
+      )
       await saved(result)
       return true
     } catch {

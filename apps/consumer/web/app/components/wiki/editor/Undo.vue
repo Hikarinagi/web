@@ -3,15 +3,16 @@
 
   defineOptions({ name: 'WikiEditorUndo' })
 
-  const props = defineProps<{ edit: number | null; base: string }>()
+  const props = defineProps<{ edit: number | null }>()
   const emit = defineEmits<{ done: [edit: number] }>()
-  const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const active = usePageActive()
   const request = computed(
     () => `/api/pages/create/wiki/changes/${props.edit ?? 0}` as `/api/pages/${string}`,
   )
   const { data, execute } = useHikariApiData<ChangePageData>(request, {
+    key: computed(() => `wiki-editor-undo:${props.edit ?? 0}`),
+    dedupe: 'defer',
     lazy: true,
     server: false,
     immediate: false,
@@ -28,7 +29,7 @@
   const open = computed({
     get: () => active.value && props.edit !== null && data.value?.edit.id === props.edit,
     set: next => {
-      if (!next) void nav.dismiss({ path: props.base, query: route.query })
+      if (!next) void nav.close(['panel', 'edit'])
     },
   })
 </script>

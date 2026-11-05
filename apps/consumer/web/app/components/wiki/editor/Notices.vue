@@ -8,7 +8,7 @@
   const props = defineProps<{ base: string }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
   const leftover = ref(false)
   onMounted(() => {
     leftover.value = editor.count.value > 0
@@ -21,9 +21,7 @@
   const notice = computed({
     get: () => saved.value !== null,
     set: next => {
-      if (next) return
-      const { saved: _saved, later: _later, undone: _undone, ...query } = route.query
-      void router.replace({ query })
+      if (!next) void nav.query({ saved: null, later: null, undone: null }, 'replace')
     },
   })
   const undone = computed(() => route.query.undone === '1')
@@ -55,7 +53,7 @@
         <Link
           v-if="!undone"
           :as="NuxtLink"
-          :to="{ path: `${props.base}/undo/${saved}`, query: route.query }"
+          :to="{ path: props.base, query: { ...route.query, panel: 'undo', edit: String(saved) } }"
           class="text-sm"
         >
           撤销

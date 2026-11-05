@@ -24,7 +24,7 @@
   const props = defineProps<{ data: VersionPageData }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const drafts = useWikiDraftsStore()
   const { typeName } = useWikiDefinitions()
   const active = usePageActive()
@@ -32,7 +32,6 @@
   const entry = computed(() => props.data.entry)
   const version = computed(() => props.data.version)
   const base = computed(() => `/entries/${entry.value.id}/history`)
-  const here = computed(() => `${base.value}/${version.value.number}`)
   const editPath = computed(() => `/entries/${entry.value.id}/edit`)
   const part = computed(() =>
     props.data.edit.entries.find(item => item.entry.id === entry.value.id),
@@ -44,9 +43,9 @@
 
   const panel = (name: string) =>
     computed({
-      get: () => active.value && route.params.panel === name,
+      get: () => active.value && route.query.panel === name,
       set: next => {
-        if (!next) void nav.dismiss(here.value)
+        if (!next) void nav.close(['panel'])
       },
     })
   const undoOpen = panel('undo')
@@ -61,7 +60,7 @@
       { title: entry.value.label || '未命名', path: editPath.value },
       draft => restoreInto(draft, entry.value, values),
     )
-    void navigateTo({ path: editPath.value, query: { save: '1' } })
+    void nav.push({ path: editPath.value, query: { save: '1' } })
   }
 </script>
 
@@ -78,21 +77,19 @@
         </Button>
         <Button
           v-if="undoable"
-          :as="NuxtLink"
-          :to="`${here}/undo`"
           variant="outline"
           tone="neutral"
           size="sm"
+          @click="nav.query({ panel: 'undo' })"
         >
           撤销本次修改
         </Button>
         <Button
           v-if="version.number < version.latest"
-          :as="NuxtLink"
-          :to="`${here}/restore`"
           variant="outline"
           tone="neutral"
           size="sm"
+          @click="nav.query({ panel: 'restore' })"
         >
           恢复到此版本
         </Button>

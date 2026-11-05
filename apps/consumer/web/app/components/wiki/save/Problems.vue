@@ -11,6 +11,7 @@
 
   const props = defineProps<{ problems: Problem[]; check: Check | null }>()
   const editor = inject(ENTRY_EDITOR)!
+  const nav = usePageNav()
 
   const VIOLATIONS: Record<string, string> = {
     required: '必填项为空',
@@ -62,7 +63,7 @@
             ? `/${volume}/${problem.entry}`
             : ''
     const path = root.type === 'GAME' || root.type === 'SERIES' ? `/${part}${selection}` : ''
-    void navigateTo({
+    void nav.push({
       path: `/entries/${root.id}/edit${path}`,
       query: problem.id === null ? {} : { focus: String(problem.id) },
     })

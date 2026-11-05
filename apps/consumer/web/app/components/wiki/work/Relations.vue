@@ -21,6 +21,7 @@
   import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditableEntry } from '~/features/wiki/editor/draft'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { codeLabel, relationPhrase } from '~/features/wiki/values'
   import { cn } from '~/utils/cn'
 
@@ -42,15 +43,9 @@
       label: codeLabel('GAME_RELATION', value),
     })),
   )
-  const { data } = useHikariApiData('/api/v3/wiki/entries/{id}/references', {
-    key: `wiki-entry-references-${props.work.id}`,
-    path: { id: props.work.id },
-    lazy: true,
-    server: false,
-    toast: false,
-  })
+  const page = inject(ENTRY_PAGE)!
   const incoming = computed(() =>
-    (data.value ?? [])
+    page.references.value
       .filter(group => group.property === 'GAME_RELATION' && props.work.type === 'GAME')
       .flatMap(group => group.items),
   )
@@ -68,7 +63,7 @@
       <WikiFieldRule v-if="relation.clauses.length" label="相关作品" :clauses="relation.clauses" />
       <Button
         :as="NuxtLink"
-        :to="{ path: `${base}/relation`, query: route.query }"
+        :to="{ path: base, query: { ...route.query, panel: 'relation' } }"
         size="sm"
         variant="ghost"
       >

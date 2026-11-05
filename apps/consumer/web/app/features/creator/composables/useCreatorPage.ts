@@ -35,11 +35,13 @@ export function useCreatorPage(page: {
   })
   onScopeDispose(() => loadingPages.delete(id))
   watchEffect(() => {
+    const title = toValue(page.title)
+    if (title) tabs.rename(route.path, title, toValue(page.kind))
+  })
+  watchEffect(() => {
     const tab = tabs.active
     if (!active.value || !tab) return
     if (resourceKey(tab.path) !== resourceKey(route.path)) return
-    const title = toValue(page.title)
-    if (title) tabs.rename(title, toValue(page.kind))
     const items = toValue(page.crumbs)
     if (items) crumbs.value = { path: route.path, items }
   })

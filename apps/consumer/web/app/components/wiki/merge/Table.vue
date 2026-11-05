@@ -28,7 +28,7 @@
   const { typeName } = useWikiDefinitions()
   const choices = ref<Record<string, 'kept' | 'merged'>>({})
   const bus = useWikiSavedBus()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const note = ref('')
   const submitting = ref(false)
   watch(

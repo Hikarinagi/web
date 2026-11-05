@@ -16,7 +16,7 @@
 
   defineProps<{ title: string }>()
   const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const mounted = useMounted()
   const wide = useMediaQuery('(min-width: 1280px)')
   const narrow = computed(() => mounted.value && !wide.value)
@@ -24,9 +24,7 @@
   const side = computed({
     get: () => active.value && narrow.value && Boolean(route.query.side),
     set: next => {
-      if (next) return
-      const { side: _side, focus: _focus, ...query } = route.query
-      void nav.dismiss({ path: route.path, query, hash: route.hash })
+      if (!next) void nav.close(['side', 'focus'])
     },
   })
 </script>

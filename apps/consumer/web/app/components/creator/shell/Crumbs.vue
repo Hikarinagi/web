@@ -5,11 +5,12 @@
 
   defineOptions({ name: 'CreatorShellCrumbs' })
 
-  const route = useRoute()
+  const { currentRoute } = useRouter()
   const published = useCreatorCrumbs()
   const mounted = useMounted()
 
   const items = computed<CreatorCrumb[]>(() => {
+    const route = currentRoute.value
     const path = route.path
     const wiki =
       path === '/create/wiki' || path.startsWith('/create/wiki/') || path.startsWith('/entries/')

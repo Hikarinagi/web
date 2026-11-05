@@ -15,19 +15,16 @@
   import { buildSeoTitle } from '~/utils/seo'
 
   const { state } = useCreatorSidebar()
-  const route = useRoute()
-  const title = computed(() => (route.meta.title as string | undefined) ?? '创作者中心')
+  const { currentRoute: route } = useRouter()
+  const title = computed(() => (route.value.meta.title as string | undefined) ?? '创作者中心')
   const content = useTemplateRef<ComponentPublicInstance>('content')
   useTabRouter()
   useTabLinks()
   useTabScroll(() => content.value?.$el as HTMLElement | undefined)
   const tabs = useCreatorTabsStore()
-  const router = useRouter()
   const mounted = useMounted()
   const pending = useCreatorLoading()
-  const loading = computed(
-    () => mounted.value && [...pending.values()].includes(router.currentRoute.value.path),
-  )
+  const loading = computed(() => mounted.value && [...pending.values()].includes(route.value.path))
   useHead({
     title: () => buildSeoTitle(tabs.active?.title || title.value, SITE_CONFIG.name),
   })

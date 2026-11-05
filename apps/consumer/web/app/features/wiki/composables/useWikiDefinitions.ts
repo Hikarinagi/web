@@ -4,6 +4,8 @@ export function useWikiDefinitions() {
     lazy: true,
     server: false,
     toast: false,
+    dedupe: 'defer',
+    getCachedData: reusePayload,
   })
   const names = computed(
     () => new Map((data.value ?? []).map(definition => [definition.type, definition.label])),

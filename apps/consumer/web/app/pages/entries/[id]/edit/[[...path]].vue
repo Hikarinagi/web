@@ -25,7 +25,7 @@
   )
 
   useCreatorPage({
-    loading: () => status.value === 'pending',
+    loading: () => !data.value && status.value === 'pending',
     title: () => (data.value?.entry ? data.value.entry.label || '未命名' : undefined),
     kind: () => data.value?.entry?.type,
     crumbs: () => {
@@ -57,6 +57,10 @@
     :owner="data.owner"
     :versions="data.versions"
     :definitions="data.definitions"
+    :hints="data.hints"
+    :history="data.history"
+    :references="data.references"
+    :watched="data.watched"
     @saved="refresh()"
   />
 </template>

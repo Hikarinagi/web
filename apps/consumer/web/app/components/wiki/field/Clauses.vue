@@ -12,6 +12,8 @@
     lazy: true,
     server: false,
     toast: false,
+    dedupe: 'defer',
+    getCachedData: reusePayload,
   })
   const quoted = computed(() =>
     props.clauses.flatMap(id => data.value?.clauses.find(item => item.id === id) ?? []),

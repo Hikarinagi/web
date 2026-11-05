@@ -31,6 +31,7 @@
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
+  const nav = usePageNav()
   const moved = computed(() =>
     props.item.moved === null
       ? null
@@ -107,12 +108,7 @@
     move: (step: -1 | 1) =>
       editor.order(props.entry, props.definition.property, props.item.id, step),
     relocate: () =>
-      navigateTo({
-        query: {
-          ...route.query,
-          move: `${props.entry}|${props.definition.property}|${props.item.id}`,
-        },
-      }),
+      nav.query({ move: `${props.entry}|${props.definition.property}|${props.item.id}` }),
     remove,
   }
 </script>

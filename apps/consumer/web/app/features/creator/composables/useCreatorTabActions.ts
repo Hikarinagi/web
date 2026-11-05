@@ -4,28 +4,28 @@ import { resourceKey, type CreatorTab } from '~/features/creator/tabs'
 export function useCreatorTabActions() {
   const store = useCreatorTabsStore()
   const drafts = useWikiDraftsStore()
-  const route = useRoute()
   const router = useRouter()
   const nav = useTabNav()
   const { copy: copyText } = useClipboard({ legacy: true })
   const dirty = (tab: CreatorTab) => drafts.count(resourceKey(tab.path)) > 0
 
   async function remove(ids: string[]) {
-    if (!ids.length) return
-    const current = ids.includes(store.activeId)
-    const next = current ? store.successor(ids) : undefined
-    store.close(ids)
-    if (!current) return
-    if (next) await nav.leave(next)
-    else await router.replace('/create/wiki')
+    let gone = ids
+    const current = store.find(router.currentRoute.value.fullPath)
+    if (current && gone.includes(current.id)) {
+      const next = store.successor(gone)
+      if (next) {
+        if (await nav.leave(next)) return
+      } else if (resourceKey(current.path) === resourceKey('/create/wiki')) {
+        gone = gone.filter(id => id !== current.id)
+      } else if (await router.replace('/create/wiki')) return
+    }
+    if (gone.length) store.close(gone)
   }
 
   function close(tab: CreatorTab) {
-    if (dirty(tab)) {
-      void router.push({ query: { ...route.query, close: tab.id } })
-      return
-    }
-    void remove([tab.id])
+    if (dirty(tab)) store.confirm = tab.id
+    else void remove([tab.id])
   }
 
   function closeMany(ids: string[]) {
@@ -37,7 +37,9 @@ export function useCreatorTabActions() {
 
   function reopen(id = store.closed[0]?.id) {
     const tab = store.closed.find(item => item.id === id)
-    if (tab) void router.push(tab.path)
+    if (!tab) return
+    store.expect(tab.path, 'restore')
+    void router.push(tab.path)
   }
 
   async function copy(tab: CreatorTab) {

@@ -1,33 +1,10 @@
-import type { RouteLocationRaw } from 'vue-router'
-import { resourceKey, samePlace, type CreatorTab } from '~/features/creator/tabs'
+import { goBack, previousPath } from '~/features/creator/history'
+import { resourceKey, type CreatorTab } from '~/features/creator/tabs'
 
 export function useTabNav() {
   const store = useCreatorTabsStore()
   const router = useRouter()
-
-  function back() {
-    return new Promise<void>(resolve => {
-      const stop = router.afterEach(() => {
-        stop()
-        resolve()
-      })
-      router.back()
-    })
-  }
-
-  function previous() {
-    const state = import.meta.client ? window.history.state : null
-    return typeof state?.back === 'string' ? (state.back as string) : null
-  }
-
-  function dismiss(to: RouteLocationRaw, loose = false) {
-    const wanted = router.resolve(to).fullPath
-    const last = previous()
-    const same = (path: string) =>
-      loose ? resourceKey(path) === resourceKey(wanted) : samePlace(path, wanted)
-    if (last && same(last)) return back()
-    return router.replace(to)
-  }
+  const request = useRequestFetch()
 
   function activate(tab: CreatorTab) {
     if (tab.id === store.activeId) return
@@ -35,23 +12,33 @@ export function useTabNav() {
   }
 
   function leave(tab: CreatorTab) {
-    const last = previous()
-    if (last && resourceKey(last) === resourceKey(tab.path)) return back()
+    const last = previousPath()
+    if (last && resourceKey(last) === resourceKey(tab.path)) return goBack(router)
     return router.replace(tab.path)
   }
 
-  function open(path: string, focus: boolean) {
-    const target = router.resolve(path)
-    if (focus || resourceKey(target.fullPath) === resourceKey(router.currentRoute.value.fullPath))
-      return router.push(target.fullPath)
-    store.open(target.fullPath, (target.meta.title as string | undefined) ?? '')
+  async function open(path: string, focus: boolean) {
+    if (focus) return router.push(path)
+    const target = await resolveTarget(router.resolve(path).fullPath)
+    if (resourceKey(target) === resourceKey(router.currentRoute.value.fullPath))
+      return router.push(target)
+    const resolved = router.resolve(target)
+    store.open(resolved.fullPath, (resolved.meta.title as string | undefined) ?? '')
   }
 
-  async function finish(path: string) {
-    const from = store.activeId
-    await router.replace(path)
-    if (from && store.activeId !== from) store.close([from])
+  async function resolveTarget(fullPath: string) {
+    const match = /^\/entries\/(\d+)\/edit(?:[/?#]|$)/.exec(fullPath)
+    if (!match) return fullPath
+    const found = await request<{ target: string | null }>(
+      `/api/pages/entries/${match[1]}/target`,
+    ).catch(() => null)
+    return found?.target ?? fullPath
   }
 
-  return { dismiss, activate, leave, open, finish }
+  function create() {
+    store.expect('/create/wiki', 'end')
+    return router.push('/create/wiki')
+  }
+
+  return { activate, leave, open, create }
 }

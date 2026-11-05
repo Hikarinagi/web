@@ -14,13 +14,12 @@
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
   const key = computed(() => `${props.entry}|${props.definition.property}`)
   const open = computed(() => route.query.gone === key.value)
 
   function toggle() {
-    const { gone: _gone, ...query } = route.query
-    void router.replace({ query: open.value ? query : { ...query, gone: key.value } })
+    void nav.query({ gone: open.value ? null : key.value }, 'replace')
   }
 
   const describe = (statement: EntryStatement) => {

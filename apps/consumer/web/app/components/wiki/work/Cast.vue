@@ -24,7 +24,7 @@
   const props = defineProps<{ work: EditableEntry }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
   const parts = useEditorParts(editor, () => ({
     id: props.work.id,
     type: props.work.type,
@@ -33,8 +33,7 @@
   const filter = computed({
     get: () => (typeof route.query.q === 'string' ? route.query.q : ''),
     set: value => {
-      const { q: _q, ...query } = route.query
-      void router.replace({ query: value ? { ...query, q: value } : query })
+      void nav.query({ q: value || null }, 'replace')
     },
   })
   const field = (property: 'LABEL' | 'CREDIT') =>

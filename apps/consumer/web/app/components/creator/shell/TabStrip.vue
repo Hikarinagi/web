@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IconButton, Inline, ScrollArea, Space } from '@hina-ui/vue'
+  import { IconButton, Inline, ScrollArea } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
   import Sortable from 'sortablejs'
   import type { ComponentPublicInstance } from 'vue'
@@ -80,12 +80,11 @@
       size="sm"
       label="新建标签页"
       class="shrink-0 self-center"
-      @click="nav.open('/create/wiki', true)"
+      @click="nav.create()"
     >
       <Plus />
     </IconButton>
-    <Space />
-    <CreatorShellTabMenu class="self-center" />
+    <CreatorShellTabMenu />
   </Inline>
   <CreatorShellCloseConfirm @close="id => actions.remove([id])" />
 </template>

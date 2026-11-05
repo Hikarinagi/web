@@ -5,38 +5,32 @@
   defineOptions({ name: 'CreatorShellCloseConfirm' })
 
   const emit = defineEmits<{ close: [id: string] }>()
-  const route = useRoute()
   const router = useRouter()
   const tabs = useCreatorTabsStore()
   const drafts = useWikiDraftsStore()
-  const nav = useTabNav()
 
-  const tab = computed(() => tabs.tabs.find(item => item.id === route.query.close))
+  const tab = computed(() => tabs.tabs.find(item => item.id === tabs.confirm))
   const key = computed(() => (tab.value ? resourceKey(tab.value.path) : ''))
-  const here = computed(() => {
-    const { close: _close, ...query } = route.query
-    return { path: route.path, query, hash: route.hash }
-  })
   const open = computed({
     get: () => Boolean(tab.value),
     set: next => {
-      if (!next) void nav.dismiss(here.value)
+      if (!next) tabs.confirm = null
     },
   })
 
   async function save() {
     const target = tab.value
+    tabs.confirm = null
     if (!target) return
-    await nav.dismiss(here.value)
-    await nav.activate(target)
-    await router.push({ query: { ...router.currentRoute.value.query, save: '1' } })
+    const to = router.resolve(target.path)
+    await router.push({ path: to.path, query: { ...to.query, save: '1' }, hash: to.hash })
   }
 
-  async function drop() {
+  function drop() {
     const target = tab.value
+    tabs.confirm = null
     if (!target) return
-    drafts.discard(key.value)
-    await nav.dismiss(here.value)
+    drafts.discard(resourceKey(target.path))
     emit('close', target.id)
   }
 </script>

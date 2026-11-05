@@ -6,6 +6,7 @@ import {
   tabPath,
   type ClosedTab,
   type CreatorTab,
+  type Placing,
 } from '~/features/creator/tabs'
 
 export const useCreatorTabsStore = defineStore('creator-tabs', () => {
@@ -13,15 +14,17 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
   const tabs = useSessionStorage<CreatorTab[]>('hikari-creator-tabs', [], local)
   const closed = useSessionStorage<ClosedTab[]>('hikari-creator-closed-tabs', [], local)
   const recent = useSessionStorage<string[]>('hikari-creator-recent-tabs', [], local)
-  const here = shallowRef('')
+  const router = useRouter()
+  const confirm = shallowRef<string | null>(null)
   const generations = new Map<string, number>()
   const stale = new Set<string>()
+  let expected: { resource: string; placing: Placing } | null = null
 
   const find = (path: string) => {
     const resource = resourceKey(path)
     return tabs.value.find(tab => resourceKey(tab.path) === resource)
   }
-  const active = computed(() => (here.value ? find(here.value) : undefined))
+  const active = computed(() => find(router.currentRoute.value.fullPath))
   const activeId = computed(() => active.value?.id ?? '')
 
   function place(tab: CreatorTab, opener: string) {
@@ -52,20 +55,29 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
     return true
   }
 
-  function create(path: string, title: string, opener: string) {
+  function create(path: string, title: string, opener: string, placing: Placing) {
     const resource = resourceKey(path)
     if (stale.delete(resource)) generations.set(resource, (generations.get(resource) ?? 0) + 1)
-    if (!revive(path)) place({ id: crypto.randomUUID(), path, title, opener }, opener)
+    if (placing === 'restore' && revive(path)) return
+    closed.value = closed.value.filter(tab => resourceKey(tab.path) !== resource)
+    const tab = { id: crypto.randomUUID(), path, title, opener }
+    if (placing === 'end') tabs.value = [...tabs.value, tab]
+    else place(tab, opener)
   }
 
-  function visit(fullPath: string, title: string) {
+  function expect(fullPath: string, placing: Placing) {
+    expected = { resource: resourceKey(fullPath), placing }
+  }
+
+  function visit(fullPath: string, title: string, from: string) {
     const path = tabPath(fullPath)
-    const opener = activeId.value
-    here.value = path
+    const resource = resourceKey(path)
+    const placing = expected?.resource === resource ? expected.placing : 'beside'
+    expected = null
     const tab = find(path)
     if (tab) tab.path = path
-    else create(path, title, opener)
-    const id = activeId.value
+    else create(path, title, find(from)?.id ?? '', placing)
+    const id = find(path)?.id
     if (id && recent.value[0] !== id)
       recent.value = [id, ...recent.value.filter(item => item !== id)].slice(0, RECENT_LIMIT)
   }
@@ -74,12 +86,23 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
     const path = tabPath(fullPath)
     const tab = find(path)
     if (tab) tab.path = path
-    else create(path, title, activeId.value)
+    else create(path, title, activeId.value, 'beside')
   }
 
-  function rename(title: string, kind?: string) {
-    const tab = active.value
-    if (!tab || !title) return
+  function retarget(id: string, fullPath: string, title: string) {
+    const path = tabPath(fullPath)
+    const tab = tabs.value.find(item => item.id === id)
+    if (!tab) return
+    if (find(path)) return close([id])
+    tab.path = path
+    tab.title = title
+    delete tab.kind
+  }
+
+  function rename(path: string, title: string, kind?: string) {
+    const tab = find(path)
+    const bare = (value: string) => value.split(/[?#]/)[0]!.replace(/\/+$/, '')
+    if (!tab || !title || bare(tab.path) !== bare(path)) return
     tab.title = title
     if (kind) tab.kind = kind
     else delete tab.kind
@@ -131,9 +154,12 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
     closed: skipHydrate(closed),
     active,
     activeId,
+    confirm,
     find,
+    expect,
     visit,
     open,
+    retarget,
     rename,
     successor,
     close,

@@ -1,3 +1,4 @@
+import type { LocationQuery } from 'vue-router'
 import { GAME_PARTS, SERIES_PARTS, type EditorPart } from './parts'
 import type { EditableEntry } from './draft'
 
@@ -10,31 +11,29 @@ export function partsOf(type: EditableEntry['type']): readonly EditorPart[] {
   return []
 }
 
-function panelOf(path: string[]) {
-  const last = path.at(-1)
-  const id = Number(last)
-  if (last === 'dismiss' && path.at(-3) === 'suggestions' && Number.isInteger(Number(path.at(-2))))
-    return { panel: 'dismiss' as const, param: Number(path.at(-2)), size: 3 }
-  if (path.at(-2) === 'undo' && Number.isInteger(id))
-    return { panel: 'undo' as const, param: id, size: 2 }
-  const panel = PANELS.find(item => item === last && item !== 'dismiss' && item !== 'undo')
-  return panel ? { panel, param: null, size: 1 } : { panel: null, param: null, size: 0 }
+function single(value: LocationQuery[string] | undefined) {
+  const raw = Array.isArray(value) ? value[0] : value
+  return typeof raw === 'string' ? raw : null
 }
 
-export function editorPath(type: EditableEntry['type'], path: string[]) {
-  const { panel, param, size } = panelOf(path)
-  const segments = size ? path.slice(0, -size) : path
+function idOf(value: LocationQuery[string] | undefined) {
+  const id = Number(single(value))
+  return Number.isInteger(id) && id > 0 ? id : null
+}
+
+export function editorPath(type: EditableEntry['type'], segments: string[], query: LocationQuery) {
   const parts = partsOf(type)
   const part = parts.find(item => item.key === segments[0])?.key ?? parts[0]?.key ?? null
   const selection = (part && segments[0] === part ? segments.slice(1) : [])
     .map(Number)
     .filter(Number.isInteger)
+  const panel = PANELS.find(item => item === single(query.panel)) ?? null
   return {
     part,
     selection,
     panel,
-    suggestion: panel === 'dismiss' ? param : null,
-    edit: panel === 'undo' ? param : null,
+    suggestion: panel === 'dismiss' ? idOf(query.hint) : null,
+    edit: panel === 'undo' ? idOf(query.edit) : null,
     segments,
   }
 }

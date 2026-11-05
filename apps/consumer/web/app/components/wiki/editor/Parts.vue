@@ -12,6 +12,7 @@
     totals: Record<string, number>
   }>()
   const route = useRoute()
+  const nav = usePageNav()
 
   const options = computed(() =>
     props.parts.map(part => ({
@@ -25,7 +26,7 @@
   function open(part: string | number | null | undefined) {
     if (!part || part === props.current) return
     const { focus: _focus, ...query } = route.query
-    void navigateTo({ path: `/entries/${props.entry}/edit/${String(part)}`, query })
+    void nav.push({ path: `/entries/${props.entry}/edit/${String(part)}`, query })
   }
 </script>
 

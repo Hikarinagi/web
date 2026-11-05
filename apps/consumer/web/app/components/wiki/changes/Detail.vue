@@ -13,7 +13,7 @@
   const props = defineProps<{ data: ChangePageData; back: string; backLabel: string }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const auth = useAuthStore()
   const { canAny } = useCreatorPermissions()
   const reloadList = inject(RELOAD_CHANGES, () => {})
@@ -42,15 +42,11 @@
       !edit.value.reverted_at &&
       (edit.value.entry_count === 1 || edit.value.editor.id === auth.user?.id || patrol.value),
   )
-  const here = computed(() => ({
-    path: `/create/wiki/changes/${edit.value.id}`,
-    query: route.query,
-  }))
   const active = usePageActive()
   const undoOpen = computed({
-    get: () => active.value && route.params.panel === 'undo',
+    get: () => active.value && route.query.panel === 'undo',
     set: next => {
-      if (!next) void nav.dismiss(here.value)
+      if (!next) void nav.close(['panel'])
     },
   })
 
@@ -111,11 +107,10 @@
         <Inline gap="sm" :wrap="false">
           <Button
             v-if="undoable"
-            :as="NuxtLink"
-            :to="{ ...here, path: `${here.path}/undo` }"
             variant="outline"
             tone="neutral"
             size="sm"
+            @click="nav.query({ panel: 'undo' })"
           >
             撤销
           </Button>

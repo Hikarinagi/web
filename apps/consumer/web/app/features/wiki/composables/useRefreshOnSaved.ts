@@ -8,11 +8,17 @@ export function useRefreshOnSaved(
 ) {
   const active = usePageActive()
   const stale = ref(false)
-  useWikiSavedBus().on(entries => {
-    if (active.value) return
+  const touches = (entries: number[]) => {
     const mine = related?.()
-    if (mine && !mine.some(id => entries.includes(id))) return
-    stale.value = true
+    return !mine || mine.some(id => entries.includes(id))
+  }
+  useWikiSavedBus().on(entries => {
+    if (!active.value && touches(entries)) stale.value = true
+  })
+  useEventBus<number[]>('wiki-saved-remote').on(entries => {
+    if (!touches(entries)) return
+    if (active.value) void refresh()
+    else stale.value = true
   })
   onActivated(() => {
     if (!stale.value) return

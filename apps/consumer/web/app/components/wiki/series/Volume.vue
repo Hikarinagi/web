@@ -16,6 +16,7 @@
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
+  const nav = usePageNav()
   const parts = useEditorParts(editor, () => ({
     id: props.series.id,
     type: props.series.type,
@@ -52,12 +53,12 @@
       ],
       ['TITLE', { text: titleOf(props.volume.id, '') }],
     ])
-    void navigateTo({ path: `${base.value}/${id}`, query: route.query })
+    void nav.push({ path: `${base.value}/${id}`, query: route.query })
   }
 
   function drop(id: number, to: string) {
     editor.uncreate(id)
-    void navigateTo({ path: to, query: route.query })
+    void nav.push({ path: to, query: route.query })
   }
 </script>
 

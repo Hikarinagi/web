@@ -28,6 +28,7 @@
     label: props.game.label,
   }))
   const route = useRoute()
+  const nav = usePageNav()
   const base = computed(() => `/entries/${props.game.id}/edit/releases`)
   const releases = computed(() => parts.entriesOf('PRODUCT'))
   const current = computed(
@@ -39,7 +40,7 @@
 
   function drop(id: number) {
     editor.uncreate(id)
-    void navigateTo({ path: base.value, query: route.query })
+    void nav.push({ path: base.value, query: route.query })
   }
   const definition = computed(() => editor.definitions.value.get('PRODUCT'))
   const titleOf = (id: number) => parts.first(id, 'TITLE')?.text || '未命名的发行版本'
@@ -60,11 +61,11 @@
       ['INCLUDED_GAME', { target: { id: props.game.id, type: 'GAME', label: props.game.label } }],
       ['TITLE', { text: parts.first(props.game.id, 'TITLE')?.text ?? props.game.label }],
     ])
-    void navigateTo(`${base.value}/${id}`)
+    void nav.push(`${base.value}/${id}`)
   }
 
   function copy(source: number) {
-    void navigateTo(`${base.value}/${parts.copy(source, 'PRODUCT')}`)
+    void nav.push(`${base.value}/${parts.copy(source, 'PRODUCT')}`)
   }
 </script>
 

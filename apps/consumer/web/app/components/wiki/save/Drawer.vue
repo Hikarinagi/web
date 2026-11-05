@@ -40,9 +40,9 @@
   )
   const preview = computed(() => {
     const root = editor.root === null ? undefined : editor.entries.value.get(editor.root)
-    if (root?.resource?.kind !== 'galgame' || route.path.endsWith('/preview')) return null
+    if (root?.resource?.kind !== 'galgame' || route.query.panel === 'preview') return null
     const { save: _save, ...query } = route.query
-    return { path: `${route.path.replace(/\/$/, '')}/preview`, query }
+    return { path: route.path, query: { ...query, panel: 'preview' } }
   })
   const values = computed(() => ({
     note: editor.draft.value.note,

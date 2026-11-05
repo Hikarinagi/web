@@ -5,9 +5,9 @@ type Offset = [top: number, left: number]
 const KEPT_PAGES = 50
 
 export function useTabScroll(content: MaybeRefOrGetter<HTMLElement | null | undefined>) {
-  const route = useRoute()
+  const { currentRoute } = useRouter()
   const store = useCreatorTabsStore()
-  const key = computed(() => store.pageKey(route.path))
+  const key = computed(() => store.pageKey(currentRoute.value.path))
   const positions = new Map<string, Map<Element, Offset>>()
   const viewports = new Set<Element>()
 

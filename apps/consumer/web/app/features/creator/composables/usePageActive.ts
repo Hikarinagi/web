@@ -6,5 +6,8 @@ export function usePageActive() {
   onDeactivated(() => {
     active.value = false
   })
+  onBeforeUnmount(() => {
+    active.value = false
+  })
   return readonly(active)
 }

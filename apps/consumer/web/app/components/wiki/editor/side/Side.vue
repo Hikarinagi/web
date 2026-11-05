@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { Tabs, TabsContent, TabsList, TabsTrigger } from '@hina-ui/vue'
   import type { EntryDefinition } from '~/features/wiki/editor/draft'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
 
   defineOptions({ name: 'WikiEditorSide' })
 
-  const props = defineProps<{
+  defineProps<{
     entry: number
     type: string
     definitions: EntryDefinition[]
@@ -12,18 +13,15 @@
   }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
-  const hints = useEntryHints(props.entry)
-  const count = computed(() => hints.data.value?.items.length ?? 0)
-  const router = useRouter()
+  const page = inject(ENTRY_PAGE)!
+  const count = computed(() => page.hints.value.length)
+  const nav = usePageNav()
   const side = computed(() =>
     route.query.side === 'hints' || route.query.side === 'refs' ? route.query.side : 'history',
   )
 
   function choose(value: string | undefined) {
-    const { side: _side, ...query } = route.query
-    void router.replace({
-      query: !value || value === 'history' ? query : { ...query, side: value },
-    })
+    void nav.query({ side: !value || value === 'history' ? null : value }, 'replace')
   }
 </script>
 
@@ -35,13 +33,13 @@
       <TabsTrigger value="refs">相关条目</TabsTrigger>
     </TabsList>
     <TabsContent value="history" class="pt-4">
-      <WikiEditorSideHistory :entry="entry" />
+      <WikiEditorSideHistory />
     </TabsContent>
     <TabsContent value="hints" class="pt-4">
       <WikiEditorSideHints :entry="entry" :base="base" @changed="emit('changed')" />
     </TabsContent>
     <TabsContent value="refs" class="pt-4">
-      <WikiEditorSideRefs :entry="entry" :type="type" :definitions="definitions" />
+      <WikiEditorSideRefs :type="type" :definitions="definitions" />
     </TabsContent>
   </Tabs>
 </template>

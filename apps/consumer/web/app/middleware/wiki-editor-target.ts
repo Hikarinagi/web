@@ -4,6 +4,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const id = String(to.params.id)
   if (from.fullPath !== to.fullPath && from.name === to.name && String(from.params.id) === id)
     return
+  const nuxtApp = useNuxtApp()
+  if (import.meta.client && nuxtApp.isHydrating && nuxtApp.payload.serverRendered) return
+  if (import.meta.client && useCreatorTabsStore().find(to.fullPath)) return
   const seq = useNavigationSeq()
   const ticket = seq.value
   const request = useRequestFetch()

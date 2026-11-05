@@ -8,10 +8,9 @@
 
   defineOptions({ name: 'WikiEditorPicks' })
 
-  const props = defineProps<{ entry: EditableEntry; panel: EditorPanel | null; base: string }>()
+  const props = defineProps<{ entry: EditableEntry; panel: EditorPanel | null }>()
   const editor = inject(ENTRY_EDITOR)!
-  const route = useRoute()
-  const nav = useTabNav()
+  const nav = usePageNav()
   const active = usePageActive()
   const kind = ref<string | null>(null)
   const relating = computed(
@@ -38,7 +37,7 @@
   )
 
   function close() {
-    void nav.dismiss({ path: props.base, query: route.query })
+    void nav.close(['panel'])
   }
 
   function add(property: 'GAME_RELATION' | 'APPEARANCE_RELATION', item: WikiSearchItem) {

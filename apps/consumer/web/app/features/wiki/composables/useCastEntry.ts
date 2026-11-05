@@ -1,6 +1,7 @@
 import type { MaybeRefOrGetter } from 'vue'
 import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
 import { emptyValue, isBlank, type ValueDraft } from '~/features/wiki/editor/draft'
+import { ENTRY_PAGE } from '~/features/wiki/editor/page'
 
 type Field = 'LABEL' | 'CREDIT'
 
@@ -21,10 +22,10 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
   const touched = (property: Field) =>
     !created.value && view(property).values.some(item => item.state !== 'same')
   const dirty = computed(() => created.value || touched('LABEL') || touched('CREDIT'))
-  const hints = editor.root ? useEntryHints(editor.root) : null
+  const page = inject(ENTRY_PAGE, null)
   const hinted = computed(
     () =>
-      (hints?.data.value?.items ?? []).filter(
+      (page?.hints.value ?? []).filter(
         hint => (hint.proposal ?? hint.statement)?.entry_id === id.value,
       ).length,
   )

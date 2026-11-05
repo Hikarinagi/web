@@ -1,15 +1,16 @@
 <script setup lang="ts">
   import { Button, Dialog, Form, FormField, Textarea, toast } from '@hina-ui/vue'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { reasonSchema } from '~/features/wiki/schemas/governance.schema'
 
   defineOptions({ name: 'WikiEditorDismiss' })
 
-  const props = defineProps<{ entry: number; suggestion: number | null }>()
+  const props = defineProps<{ suggestion: number | null }>()
   const open = defineModel<boolean>('open', { required: true })
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const values = reactive({ reason: '' })
   const submitting = ref(false)
-  const { refresh } = useEntryHints(props.entry)
+  const page = inject(ENTRY_PAGE)!
 
   watch(open, next => {
     if (!next) return
@@ -28,7 +29,7 @@
       })
       toast.success('已驳回')
       open.value = false
-      await refresh()
+      page.refresh()
     } finally {
       submitting.value = false
     }

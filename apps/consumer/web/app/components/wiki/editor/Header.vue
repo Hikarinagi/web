@@ -16,6 +16,7 @@
   import { Ellipsis, History, Lightbulb } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { EditableEntry, ValueDraft } from '~/features/wiki/editor/draft'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { readerPath } from '~/features/wiki/entries'
   import { cn } from '~/utils/cn'
 
@@ -27,15 +28,15 @@
     owner: ValueDraft['target']
     image: ValueDraft['media']
     stacked: boolean
-    base: string
   }>()
   const route = useRoute()
+  const nav = usePageNav()
   const { canAny } = useCreatorPermissions()
   const patrol = computed(() => canAny(WIKI_PERMISSIONS.PATROL))
   const reader = computed(() => readerPath(props.entry.resource))
   const portrait = computed(() => props.entry.type === 'GAME' || props.entry.type === 'SERIES')
-  const hints = useEntryHints(props.entry.id)
-  const count = computed(() => hints.data.value?.items.length ?? 0)
+  const page = inject(ENTRY_PAGE)!
+  const count = computed(() => page.hints.value.length)
   const PAGES: Partial<Record<EditableEntry['type'], string>> = {
     GAME: '查看游戏页',
     SERIES: '查看作品页',
@@ -128,17 +129,17 @@
           >
             {{ PAGES[entry.type] ?? '查看作品页' }}
           </DropdownMenuItem>
-          <DropdownMenuItem @select="navigateTo(`/entries/${entry.id}/merge`)">
+          <DropdownMenuItem @select="nav.push(`/entries/${entry.id}/merge`)">
             与重复的条目合并
           </DropdownMenuItem>
           <template v-if="patrol">
             <DropdownMenuSeparator />
-            <DropdownMenuItem @select="navigateTo({ path: `${base}/protect`, query: route.query })">
+            <DropdownMenuItem @select="nav.query({ panel: 'protect' })">
               {{ entry.protection ? '解除锁定' : '锁定' }}
             </DropdownMenuItem>
             <DropdownMenuItem
               :tone="entry.deleted ? undefined : 'danger'"
-              @select="navigateTo({ path: `${base}/delete`, query: route.query })"
+              @select="nav.query({ panel: 'delete' })"
             >
               {{ entry.deleted ? '恢复此条目' : '删除此条目' }}
             </DropdownMenuItem>

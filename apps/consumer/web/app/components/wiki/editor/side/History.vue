@@ -1,31 +1,21 @@
 <script setup lang="ts">
-  import { Empty, Inline, Link, Skeleton, Stack, Text } from '@hina-ui/vue'
+  import { Empty, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { revisionTime } from '~/features/entry/time'
   import { changeLines } from '~/features/wiki/changes'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'WikiEditorSideHistory' })
 
-  const props = defineProps<{ entry: number }>()
-  const { data, status, refresh } = useHikariApiData('/api/v3/wiki/changes', {
-    key: `wiki-entry-changes-${props.entry}`,
-    query: { within: props.entry, content: true, page: 1, page_size: 30 },
-    lazy: true,
-    server: false,
-    toast: false,
-  })
-  useWikiSavedBus().on(() => void refresh())
+  const page = inject(ENTRY_PAGE)!
 </script>
 
 <template>
-  <Stack v-if="!data && status !== 'success' && status !== 'error'" gap="md">
-    <Skeleton v-for="index in 4" :key="index" class="h-12" />
-  </Stack>
-  <Empty v-else-if="!data?.items.length" title="暂无修改记录" />
+  <Empty v-if="!page.history.value.length" title="暂无修改记录" />
   <Stack v-else gap="none">
     <Stack
-      v-for="change in data.items"
+      v-for="change in page.history.value"
       :key="change.id"
       gap="xs"
       class="min-w-0 border-b border-line py-2.5 last:border-b-0"

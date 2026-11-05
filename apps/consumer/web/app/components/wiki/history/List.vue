@@ -8,6 +8,7 @@
 
   const props = defineProps<{ data: HistoryPageData; loading: boolean }>()
   const { typeName } = useWikiDefinitions()
+  const nav = usePageNav()
   const picked = ref<number[]>([])
   const revisionOf = (id: number) =>
     props.data.changes.items
@@ -25,7 +26,7 @@
       .filter((value): value is number => value !== null)
       .sort((a, b) => a - b)
     if (from && to)
-      void navigateTo({
+      void nav.push({
         path: `/entries/${props.data.entry.id}/history/compare`,
         query: { from: String(from), to: String(to) },
       })

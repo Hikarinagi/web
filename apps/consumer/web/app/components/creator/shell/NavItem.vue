@@ -8,7 +8,7 @@
 
   const props = defineProps<{ item: CreatorNavItem }>()
 
-  const route = useRoute()
+  const { currentRoute } = useRouter()
   const finder = useWikiFinder()
 
   const link = computed(() =>
@@ -16,6 +16,7 @@
   )
 
   const active = computed(() => {
+    const route = currentRoute.value
     const item = props.item
     if (!item.to) return false
     const exact = item.to === '/create' || item.to === '/create/wiki'

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { Button, Empty, Inline, Link, Skeleton, Stack, Text } from '@hina-ui/vue'
+  import { Button, Empty, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { revisionTime } from '~/features/entry/time'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { HINT_KINDS, type WikiHint } from '~/features/wiki/hints'
   import { valueText } from '~/features/wiki/values'
   import { cn } from '~/utils/cn'
@@ -13,9 +14,8 @@
   const emit = defineEmits<{ changed: [] }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const { data, status, refresh } = useEntryHints(props.entry)
+  const page = inject(ENTRY_PAGE)!
   const { accepting, accept } = useHintAcceptance(editor, async () => {
-    await refresh()
     emit('changed')
   })
   const focus = computed(() => (typeof route.query.focus === 'string' ? route.query.focus : ''))
@@ -47,13 +47,10 @@
 </script>
 
 <template>
-  <Stack v-if="!data && status !== 'success' && status !== 'error'" gap="md">
-    <Skeleton v-for="index in 3" :key="index" class="h-14" />
-  </Stack>
-  <Empty v-else-if="!data?.items.length" title="暂无待处理的建议" />
+  <Empty v-if="!page.hints.value.length" title="暂无待处理的建议" />
   <Stack v-else gap="sm">
     <Stack
-      v-for="hint in data.items"
+      v-for="hint in page.hints.value"
       :key="hint.id"
       gap="sm"
       :class="
@@ -78,7 +75,10 @@
         <Inline gap="sm" align="center" :wrap="false" class="shrink-0">
           <Link
             :as="NuxtLink"
-            :to="{ path: `${base}/suggestions/${hint.id}/dismiss`, query: route.query }"
+            :to="{
+              path: base,
+              query: { ...route.query, panel: 'dismiss', hint: String(hint.id) },
+            }"
             class="text-sm"
           >
             驳回

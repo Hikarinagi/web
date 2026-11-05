@@ -10,9 +10,8 @@
 
   type Derived = ApiData<'/api/v3/galgames/{id}/previews', 'post'>
 
-  const props = defineProps<{ galgame: number; base: string }>()
+  const props = defineProps<{ galgame: number }>()
   const editor = inject(ENTRY_EDITOR)!
-  const route = useRoute()
   const { data: page, refresh } = useHikariApiData<GalgamePageData>(
     `/api/pages/galgames/${props.galgame}`,
     { lazy: true, server: false },
@@ -45,13 +44,7 @@
     if (derived.value) return { ...page.value, ...derived.value }
     return count.value ? null : page.value
   })
-  const back = computed(() => ({ path: props.base, query: route.query }))
-  const router = useRouter()
-  const nav = useTabNav()
-
-  function save() {
-    void router.push({ query: { ...route.query, save: '1' } })
-  }
+  const nav = usePageNav()
 </script>
 
 <template>
@@ -59,7 +52,7 @@
     <Card :padded="false" class="shrink-0">
       <Inline gap="md" align="center" justify="between" :wrap="false" class="px-4 py-3">
         <Inline gap="sm" align="center" :wrap="false">
-          <Button variant="ghost" tone="neutral" size="sm" @click="nav.dismiss(back, true)">
+          <Button variant="ghost" tone="neutral" size="sm" @click="nav.close(['panel'])">
             <template #icon><ArrowLeft /></template>
             返回编辑
           </Button>
@@ -67,7 +60,7 @@
             {{ count ? `已修改 ${count} 处` : '没有未保存的修改' }}
           </Text>
         </Inline>
-        <Button size="sm" :disabled="!count" @click="save">保存</Button>
+        <Button size="sm" :disabled="!count" @click="nav.query({ save: '1' })">保存</Button>
       </Inline>
     </Card>
     <ScrollArea class="min-h-0 flex-1">

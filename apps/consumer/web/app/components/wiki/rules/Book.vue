@@ -21,15 +21,14 @@
 
   const props = defineProps<{ book: RulesPageData; clause: string | null }>()
   const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
 
   const clauses = computed(() => new Map(props.book.clauses.map(item => [item.id, item])))
   const query = computed(() => (typeof route.query.q === 'string' ? route.query.q : ''))
   const search = computed({
     get: () => query.value,
     set: value => {
-      const { q: _q, ...rest } = route.query
-      void router.replace({ query: value.trim() ? { ...rest, q: value } : rest })
+      void nav.query({ q: value.trim() ? value : null }, 'replace')
     },
   })
   const found = computed(() => {
@@ -56,7 +55,7 @@
 
   function jump(value: unknown) {
     const section = props.book.sections.find(item => item.id === value)
-    if (section) void router.push(target(section))
+    if (section) void nav.push(target(section))
   }
 
   function follow(event: MouseEvent) {
@@ -64,7 +63,7 @@
     const href = link?.getAttribute('href')
     if (!href?.startsWith('/create/wiki/rules/')) return
     event.preventDefault()
-    void router.push(href)
+    void nav.push(href)
   }
 </script>
 

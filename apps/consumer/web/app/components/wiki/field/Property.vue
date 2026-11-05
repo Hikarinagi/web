@@ -15,6 +15,7 @@
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { emptyValue, type PropertyDefinition } from '~/features/wiki/editor/draft'
   import type { QualifierKind } from '~/features/wiki/editor/inputs'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { codeLabel } from '~/features/wiki/values'
   import { cn } from '~/utils/cn'
 
@@ -76,10 +77,10 @@
       seen.set(key(item.value), [...(seen.get(key(item.value)) ?? []), item.id])
     return new Set([...seen.values()].filter(ids => ids.length > 1).flat())
   })
-  const hints = editor.root ? useEntryHints(editor.root) : null
+  const page = inject(ENTRY_PAGE, null)
   const hinted = computed(
     () =>
-      (hints?.data.value?.items ?? []).filter(hint => {
+      (page?.hints.value ?? []).filter(hint => {
         const value = hint.proposal ?? hint.statement
         return value?.entry_id === props.entry && value.property === props.definition.property
       }).length,

@@ -17,7 +17,7 @@ async function handler(event: H3Event) {
       ? (entry.statements.find(item => item.property === 'WORK' && item.status !== 'DEPRECATED')
           ?.target ?? null)
       : null
-  const [definitions, parts, references] = await Promise.all([
+  const [definitions, parts, references, related, hints, history, watch] = await Promise.all([
     fetchBackendData(event, '/api/v3/wiki/definitions'),
     ['GAME', 'SERIES', 'APPEARANCE'].includes(entry.type)
       ? fetchBackendData(event, '/api/v3/wiki/entries/{id}/parts', { path: { id } })
@@ -25,6 +25,14 @@ async function handler(event: H3Event) {
     owner?.type === 'GAME'
       ? fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', { path: { id: owner.id } })
       : Promise.resolve<ReferenceGroup[]>([]),
+    fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', { path: { id } }),
+    fetchBackendData(event, '/api/v3/wiki/todos', {
+      query: { within: id, page: 1, page_size: 100 },
+    }),
+    fetchBackendData(event, '/api/v3/wiki/changes', {
+      query: { within: id, content: true, page: 1, page_size: 30 },
+    }),
+    fetchBackendData(event, '/api/v3/wiki/entries/{id}/watch', { path: { id } }),
   ])
   const visible = (item: EditableEntry): EditableEntry => ({
     ...item,
@@ -68,6 +76,10 @@ async function handler(event: H3Event) {
     parts: parts.map(visible),
     versions,
     owner,
+    references: related,
+    hints: hints.items,
+    history: history.items,
+    watched: watch.watched,
     definitions: definitions.map(definition => ({
       ...definition,
       properties: definition.properties.map(property =>

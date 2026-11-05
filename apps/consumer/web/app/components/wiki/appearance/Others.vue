@@ -47,7 +47,7 @@
       />
       <Button
         :as="NuxtLink"
-        :to="{ path: `${base}/same`, query: route.query }"
+        :to="{ path: base, query: { ...route.query, panel: 'same' } }"
         size="sm"
         variant="ghost"
       >

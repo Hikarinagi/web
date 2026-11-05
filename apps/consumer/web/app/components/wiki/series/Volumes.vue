@@ -12,6 +12,7 @@
   const props = defineProps<{ series: EditableEntry; volume: number | null; book: number | null }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
+  const nav = usePageNav()
   const parts = useEditorParts(editor, () => ({
     id: props.series.id,
     type: props.series.type,
@@ -41,7 +42,7 @@
       ['SERIES', { target: { id: props.series.id, type: 'SERIES', label: props.series.label } }],
       ['TITLE', {}],
     ])
-    void navigateTo({ path: `${base.value}/${id}`, query: route.query })
+    void nav.push({ path: `${base.value}/${id}`, query: route.query })
   }
 </script>
 

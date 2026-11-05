@@ -21,7 +21,7 @@
 
   const emit = defineEmits<{ create: [type: Kind, name: string] }>()
   const route = useRoute()
-  const router = useRouter()
+  const nav = usePageNav()
   const { typeName } = useWikiDefinitions()
   const KINDS: { value: Kind; label: string }[] = [
     { value: 'GAME', label: '游戏' },
@@ -39,7 +39,7 @@
   let sequence = 0
 
   function setQuery(next: { type?: Kind; q?: string }) {
-    void router.replace({ query: { ...route.query, ...next } })
+    void nav.query(next, 'replace')
   }
 
   function pick(value: unknown) {

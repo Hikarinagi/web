@@ -11,6 +11,8 @@ export interface ClosedTab extends CreatorTab {
   position: number
 }
 
+export type Placing = 'beside' | 'end' | 'restore'
+
 export const RECENT_LIMIT = 50
 
 export const editKey = (id: number | string) => `edit:${id}`
@@ -23,7 +25,18 @@ const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
   [/^\/create\/wiki\/rules(?:\/|$)/, () => 'rules'],
 ]
 
-const TRANSIENT = ['save', 'discard', 'close', 'find', 'check', 'saved', 'later', 'undone']
+const TRANSIENT = [
+  'panel',
+  'edit',
+  'hint',
+  'save',
+  'discard',
+  'move',
+  'focus',
+  'saved',
+  'later',
+  'undone',
+]
 
 export function resourceKey(path: string): string {
   const bare = path.split(/[?#]/)[0]!.replace(/\/+$/, '') || '/'
@@ -41,16 +54,6 @@ export function tabPath(fullPath: string): string {
   for (const name of TRANSIENT) query.delete(name)
   const kept = query.toString()
   return `${path}${kept ? `?${kept}` : ''}${hash ? `#${hash}` : ''}`
-}
-
-export function samePlace(a: string, b: string): boolean {
-  const normal = (fullPath: string) => {
-    const [rest, hash = ''] = fullPath.split('#')
-    const [path, search = ''] = rest!.split('?')
-    const query = [...new URLSearchParams(search)].sort(([x], [y]) => x.localeCompare(y))
-    return `${path!.replace(/\/+$/, '')}?${new URLSearchParams(query).toString()}#${hash}`
-  }
-  return normal(a) === normal(b)
 }
 
 export function pinnedCount(tabs: CreatorTab[]): number {

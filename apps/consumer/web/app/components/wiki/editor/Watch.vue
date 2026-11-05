@@ -1,16 +1,15 @@
 <script setup lang="ts">
   import { IconButton } from '@hina-ui/vue'
   import { Bell, BellRing } from '@lucide/vue'
+  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
 
   defineOptions({ name: 'WikiEditorWatch' })
 
   const props = defineProps<{ entry: number }>()
-  const { data, refresh } = useHikariApiData('/api/v3/wiki/entries/{id}/watch', {
-    key: `wiki-watch-${props.entry}`,
-    path: { id: props.entry },
-    lazy: true,
-    server: false,
-    toast: false,
+  const page = inject(ENTRY_PAGE)!
+  const watched = ref(page.watched.value)
+  watch(page.watched, next => {
+    watched.value = next
   })
   const busy = ref(false)
 
@@ -18,10 +17,10 @@
     busy.value = true
     try {
       await hikariRequest('/api/v3/wiki/entries/{id}/watch', {
-        method: data.value?.watched ? 'DELETE' : 'PUT',
+        method: watched.value ? 'DELETE' : 'PUT',
         path: { id: props.entry },
       })
-      await refresh()
+      watched.value = !watched.value
     } finally {
       busy.value = false
     }
@@ -30,16 +29,15 @@
 
 <template>
   <IconButton
-    :label="data?.watched ? '取消关注' : '关注此条目'"
-    :variant="data?.watched ? 'soft' : 'outline'"
-    :tone="data?.watched ? 'accent' : 'neutral'"
+    :label="watched ? '取消关注' : '关注此条目'"
+    :variant="watched ? 'soft' : 'outline'"
+    :tone="watched ? 'accent' : 'neutral'"
     size="sm"
     :loading="busy"
-    :disabled="!data"
     class="shrink-0"
     @click="toggle"
   >
-    <BellRing v-if="data?.watched" />
+    <BellRing v-if="watched" />
     <Bell v-else />
   </IconButton>
 </template>

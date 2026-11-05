@@ -8,21 +8,6 @@
 
   const { open } = useWikiFinder()
   const { typeName } = useWikiDefinitions()
-  const route = useRoute()
-  const nav = useTabNav()
-
-  watch(
-    () => route.query.find,
-    find => {
-      if (find === '1') open.value = true
-    },
-    { immediate: true },
-  )
-  watch(open, next => {
-    if (next || route.query.find === undefined) return
-    const { find: _find, ...query } = route.query
-    void nav.dismiss({ path: route.path, query, hash: route.hash })
-  })
 
   const search = ref('')
   const found = shallowRef<WikiSearchItem[]>([])

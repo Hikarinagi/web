@@ -45,7 +45,13 @@
 
 <template>
   <Popover v-model:open="open" align="end">
-    <IconButton variant="ghost" tone="neutral" size="sm" label="全部标签页" class="shrink-0">
+    <IconButton
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      label="全部标签页"
+      class="shrink-0 self-center"
+    >
       <ChevronDown />
     </IconButton>
     <template #content>
