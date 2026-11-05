@@ -1,5 +1,5 @@
 import type { MaybeRefOrGetter } from 'vue'
-import { currentPath, resourceKey } from '~/features/creator/tabs'
+import { resourceKey } from '~/features/creator/tabs'
 
 export interface CreatorCrumb {
   label: string
@@ -23,7 +23,7 @@ export function useCreatorPage(page: {
   watchEffect(() => {
     const tab = tabs.active
     if (!active.value || !tab) return
-    if (resourceKey(currentPath(tab)) !== resourceKey(route.path)) return
+    if (resourceKey(tab.path) !== resourceKey(route.path)) return
     const title = toValue(page.title)
     if (title) tabs.rename(title, toValue(page.kind))
     const items = toValue(page.crumbs)

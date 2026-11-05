@@ -11,7 +11,7 @@
   } from '@hina-ui/vue'
   import { Link2, Pin, PinOff } from '@lucide/vue'
   import { tabIcon } from '~/features/creator/tab-icons'
-  import { currentPath, tabPath, type CreatorTab } from '~/features/creator/tabs'
+  import type { CreatorTab } from '~/features/creator/tabs'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'CreatorShellTabItem' })
@@ -22,7 +22,6 @@
 
   const current = computed(() => store.activeId === props.tab.id)
   const icon = computed(() => tabIcon(props.tab))
-  const path = computed(() => tabPath(currentPath(props.tab)))
   const ids = (list: CreatorTab[]) => list.map(item => item.id)
   const others = computed(() => ids(store.tabs.filter(item => item.id !== props.tab.id)))
   const left = computed(() => ids(store.tabs.slice(0, props.index)))
@@ -58,7 +57,7 @@
         <Inline
           v-tooltip="tab.title"
           as="a"
-          :href="path"
+          :href="tab.path"
           role="tab"
           :aria-selected="current"
           draggable="false"

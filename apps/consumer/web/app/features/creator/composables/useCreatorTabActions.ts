@@ -1,5 +1,5 @@
 import { toast } from '@hina-ui/vue'
-import { currentPath, resourceKey, tabPath, type CreatorTab } from '~/features/creator/tabs'
+import { resourceKey, type CreatorTab } from '~/features/creator/tabs'
 
 export function useCreatorTabActions() {
   const store = useCreatorTabsStore()
@@ -8,18 +8,16 @@ export function useCreatorTabActions() {
   const router = useRouter()
   const nav = useTabNav()
   const { copy: copyText } = useClipboard({ legacy: true })
-  const dirty = (tab: CreatorTab) => drafts.count(resourceKey(currentPath(tab))) > 0
+  const dirty = (tab: CreatorTab) => drafts.count(resourceKey(tab.path)) > 0
 
   async function remove(ids: string[]) {
     if (!ids.length) return
-    if (ids.includes(store.activeId)) {
-      const index = store.tabs.findIndex(tab => tab.id === store.activeId)
-      const rest = store.tabs.filter(tab => !ids.includes(tab.id))
-      const next = rest[Math.min(index, rest.length - 1)]
-      if (next) await nav.activate(next)
-      else await nav.open('/create/wiki', true)
-    }
+    const current = ids.includes(store.activeId)
+    const next = current ? store.successor(ids) : undefined
     store.close(ids)
+    if (!current) return
+    if (next) await nav.leave(next)
+    else await router.replace('/create/wiki')
   }
 
   function close(tab: CreatorTab) {
@@ -38,13 +36,12 @@ export function useCreatorTabActions() {
   }
 
   function reopen(id = store.closed[0]?.id) {
-    if (!id) return
-    const tab = store.reopen(id)
-    if (tab) void nav.activate(tab)
+    const tab = store.closed.find(item => item.id === id)
+    if (tab) void router.push(tab.path)
   }
 
   async function copy(tab: CreatorTab) {
-    await copyText(new URL(tabPath(currentPath(tab)), window.location.origin).toString())
+    await copyText(new URL(tab.path, window.location.origin).toString())
     toast.success('已复制链接')
   }
 

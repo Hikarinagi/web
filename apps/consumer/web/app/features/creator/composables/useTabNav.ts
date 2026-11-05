@@ -1,71 +1,57 @@
 import type { RouteLocationRaw } from 'vue-router'
-import { currentPath, resourceKey, samePlace, type CreatorTab } from '~/features/creator/tabs'
+import { resourceKey, samePlace, type CreatorTab } from '~/features/creator/tabs'
 
 export function useTabNav() {
   const store = useCreatorTabsStore()
   const router = useRouter()
 
-  const canBack = computed(() => (store.active?.index ?? 0) > 0)
-  const canForward = computed(() => {
-    const tab = store.active
-    return Boolean(tab && tab.index < tab.history.length - 1)
-  })
-
-  function visit(fullPath: string) {
-    const target = router.resolve(fullPath)
-    return router.replace({
-      path: target.path,
-      query: target.query,
-      hash: target.hash,
-      force: true,
+  function back() {
+    return new Promise<void>(resolve => {
+      const stop = router.afterEach(() => {
+        stop()
+        resolve()
+      })
+      router.back()
     })
   }
 
-  function go(delta: number) {
-    const tab = store.active
-    const index = (tab?.index ?? 0) + delta
-    const target = tab?.history[index]
-    if (!target) return
-    store.travel = index
-    return visit(target)
+  function previous() {
+    const state = import.meta.client ? window.history.state : null
+    return typeof state?.back === 'string' ? (state.back as string) : null
   }
 
   function dismiss(to: RouteLocationRaw, loose = false) {
-    const tab = store.active
     const wanted = router.resolve(to).fullPath
-    const previous = tab?.history[tab.index - 1]
-    const same = (a: string) =>
-      loose ? resourceKey(a) === resourceKey(wanted) : samePlace(a, wanted)
-    if (previous && same(previous)) return go(-1)
+    const last = previous()
+    const same = (path: string) =>
+      loose ? resourceKey(path) === resourceKey(wanted) : samePlace(path, wanted)
+    if (last && same(last)) return back()
     return router.replace(to)
   }
 
-  function activate(tab: CreatorTab, push = false) {
-    if (tab.id === store.activeId && !push) return
-    store.pending = { id: tab.id, push }
-    return visit(currentPath(tab))
+  function activate(tab: CreatorTab) {
+    if (tab.id === store.activeId) return
+    return router.push(tab.path)
+  }
+
+  function leave(tab: CreatorTab) {
+    const last = previous()
+    if (last && resourceKey(last) === resourceKey(tab.path)) return back()
+    return router.replace(tab.path)
   }
 
   function open(path: string, focus: boolean) {
     const target = router.resolve(path)
-    const tab = store.open(target.fullPath, (target.meta.title as string | undefined) ?? '')
-    if (focus) return activate(tab)
+    if (focus || resourceKey(target.fullPath) === resourceKey(router.currentRoute.value.fullPath))
+      return router.push(target.fullPath)
+    store.open(target.fullPath, (target.meta.title as string | undefined) ?? '')
   }
 
   async function finish(path: string) {
     const from = store.activeId
-    await router.push(path)
-    if (store.activeId !== from) store.close([from])
+    await router.replace(path)
+    if (from && store.activeId !== from) store.close([from])
   }
 
-  return {
-    canBack,
-    canForward,
-    back: () => go(-1),
-    forward: () => go(1),
-    dismiss,
-    activate,
-    open,
-    finish,
-  }
+  return { dismiss, activate, leave, open, finish }
 }

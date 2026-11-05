@@ -35,7 +35,6 @@
         :wrap="false"
         class="h-10 shrink-0 border-b border-line bg-canvas px-4 max-md:px-2"
       >
-        <CreatorShellHistory />
         <CreatorShellCrumbs />
       </Inline>
       <ScrollArea class="min-h-0 flex-1">

@@ -14,7 +14,7 @@ import {
 } from '@lucide/vue'
 import type { Component } from 'vue'
 import { CREATOR_NAV } from './nav'
-import { currentPath, resourceKey, type CreatorTab } from './tabs'
+import { resourceKey, type CreatorTab } from './tabs'
 
 const KINDS: Record<string, Component> = {
   GAME: Gamepad2,
@@ -29,7 +29,7 @@ const KINDS: Record<string, Component> = {
 }
 
 export function tabIcon(tab: CreatorTab): Component {
-  const full = currentPath(tab)
+  const full = tab.path
   const key = resourceKey(full)
   if (key.startsWith('history:')) return History
   if (key.startsWith('merge:')) return GitMerge

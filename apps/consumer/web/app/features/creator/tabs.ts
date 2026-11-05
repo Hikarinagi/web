@@ -1,7 +1,6 @@
 export interface CreatorTab {
   id: string
-  history: string[]
-  index: number
+  path: string
   title: string
   kind?: string
   pinned?: boolean
@@ -12,7 +11,7 @@ export interface ClosedTab extends CreatorTab {
   position: number
 }
 
-export const TAB_HISTORY_LIMIT = 50
+export const RECENT_LIMIT = 50
 
 const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
   [/^\/entries\/(\d+)\/edit(?:\/|$)/, match => `edit:${match[1]}`],
@@ -50,10 +49,6 @@ export function samePlace(a: string, b: string): boolean {
     return `${path!.replace(/\/+$/, '')}?${new URLSearchParams(query).toString()}#${hash}`
   }
   return normal(a) === normal(b)
-}
-
-export function currentPath(tab: Pick<CreatorTab, 'history' | 'index'>): string {
-  return tab.history[tab.index] ?? '/create'
 }
 
 export function pinnedCount(tabs: CreatorTab[]): number {

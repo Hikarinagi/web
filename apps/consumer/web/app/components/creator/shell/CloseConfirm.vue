@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Button, Dialog, Text } from '@hina-ui/vue'
-  import { currentPath, resourceKey } from '~/features/creator/tabs'
+  import { resourceKey } from '~/features/creator/tabs'
 
   defineOptions({ name: 'CreatorShellCloseConfirm' })
 
@@ -12,7 +12,7 @@
   const nav = useTabNav()
 
   const tab = computed(() => tabs.tabs.find(item => item.id === route.query.close))
-  const key = computed(() => (tab.value ? resourceKey(currentPath(tab.value)) : ''))
+  const key = computed(() => (tab.value ? resourceKey(tab.value.path) : ''))
   const here = computed(() => {
     const { close: _close, ...query } = route.query
     return { path: route.path, query, hash: route.hash }

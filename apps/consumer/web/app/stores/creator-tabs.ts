@@ -1,7 +1,6 @@
 import { defineStore, skipHydrate } from 'pinia'
 import {
-  TAB_HISTORY_LIMIT,
-  currentPath,
+  RECENT_LIMIT,
   pinnedCount,
   resourceKey,
   tabPath,
@@ -11,95 +10,71 @@ import {
 
 export const useCreatorTabsStore = defineStore('creator-tabs', () => {
   const local = { listenToStorageChanges: false }
-  const tabs = useLocalStorage<CreatorTab[]>('hikari-creator-tab-list', [], local)
-  const closed = useSessionStorage<ClosedTab[]>('hikari-creator-closed-tab-list', [], local)
-  const activeId = useSessionStorage('hikari-creator-active-tab', '', local)
-  const enteredId = shallowRef('')
-  const pending = shallowRef<{ id: string; push: boolean } | null>(null)
-  const travel = shallowRef<number | null>(null)
-  const keys = new Map<string, string>()
-  let first: { resource: string; key: string } | null = null
-  let serial = 0
+  const tabs = useSessionStorage<CreatorTab[]>('hikari-creator-tabs', [], local)
+  const closed = useSessionStorage<ClosedTab[]>('hikari-creator-closed-tabs', [], local)
+  const recent = useSessionStorage<string[]>('hikari-creator-recent-tabs', [], local)
+  const here = shallowRef('')
+  const generations = new Map<string, number>()
+  const stale = new Set<string>()
 
-  const active = computed(() => tabs.value.find(tab => tab.id === activeId.value))
-
-  function create(fullPath: string, title: string): CreatorTab {
-    return { id: crypto.randomUUID(), history: [fullPath], index: 0, title }
+  const find = (path: string) => {
+    const resource = resourceKey(path)
+    return tabs.value.find(tab => resourceKey(tab.path) === resource)
   }
+  const active = computed(() => (here.value ? find(here.value) : undefined))
+  const activeId = computed(() => active.value?.id ?? '')
 
-  function retitle(tab: CreatorTab, before: string, title: string) {
-    if (resourceKey(before) === resourceKey(currentPath(tab))) return
-    tab.title = title
-    delete tab.kind
-  }
-
-  function push(tab: CreatorTab, fullPath: string, title: string) {
-    const before = currentPath(tab)
-    if (before === fullPath) return
-    tab.history = [...tab.history.slice(0, tab.index + 1), fullPath].slice(-TAB_HISTORY_LIMIT)
-    tab.index = tab.history.length - 1
-    retitle(tab, before, title)
-  }
-
-  function replace(tab: CreatorTab, fullPath: string, title: string) {
-    const before = currentPath(tab)
-    tab.history[tab.index] = fullPath
-    retitle(tab, before, title)
-  }
-
-  function open(fullPath: string, title = '') {
-    const tab: CreatorTab = { ...create(fullPath, title), opener: activeId.value }
+  function place(tab: CreatorTab, opener: string) {
     const list = [...tabs.value]
-    let at = list.findIndex(item => item.id === activeId.value)
+    let at = list.findIndex(item => item.id === opener)
     if (at < 0) at = list.length
     else {
       at = Math.max(at + 1, pinnedCount(list))
-      while (list[at]?.opener === activeId.value) at += 1
+      while (list[at]?.opener === opener) at += 1
     }
     list.splice(at, 0, tab)
     tabs.value = list
-    return tab
   }
 
-  function enter(fullPath: string, title: string) {
-    const resource = resourceKey(fullPath)
-    const same = (tab: CreatorTab) => resourceKey(currentPath(tab)) === resource
-    const found =
-      (active.value && same(active.value) ? active.value : null) ?? tabs.value.find(same)
-    if (found) {
-      if (tabPath(currentPath(found)) === tabPath(fullPath)) found.history[found.index] = fullPath
-      else push(found, fullPath, title)
-      activeId.value = found.id
-      enteredId.value = found.id
-      return
-    }
-    const tab = create(fullPath, title)
-    tabs.value = [...tabs.value, tab]
-    activeId.value = tab.id
-    enteredId.value = tab.id
+  function revive(path: string) {
+    const resource = resourceKey(path)
+    const found = closed.value.find(tab => resourceKey(tab.path) === resource)
+    if (!found) return false
+    closed.value = closed.value.filter(tab => tab.id !== found.id)
+    const { position, ...rest } = found
+    const list = [...tabs.value]
+    const pinned = pinnedCount(list)
+    const at = rest.pinned
+      ? Math.min(position, pinned)
+      : Math.min(Math.max(position, pinned), list.length)
+    list.splice(at, 0, { ...rest, path })
+    tabs.value = list
+    return true
   }
 
-  function settle(fullPath: string, delta: number, title: string) {
-    const target = pending.value
-    pending.value = null
-    const chosen = target && tabs.value.find(tab => tab.id === target.id)
-    if (chosen) {
-      activeId.value = chosen.id
-      if (target.push) push(chosen, fullPath, title)
-      else replace(chosen, fullPath, title)
-      return
-    }
-    const tab = active.value
-    if (!tab) return enter(fullPath, title)
-    const index = travel.value
-    travel.value = null
-    if (index !== null && tab.history[index] !== undefined) {
-      const before = currentPath(tab)
-      tab.index = index
-      tab.history[index] = fullPath
-      retitle(tab, before, title)
-    } else if (delta > 0) push(tab, fullPath, title)
-    else replace(tab, fullPath, title)
+  function create(path: string, title: string, opener: string) {
+    const resource = resourceKey(path)
+    if (stale.delete(resource)) generations.set(resource, (generations.get(resource) ?? 0) + 1)
+    if (!revive(path)) place({ id: crypto.randomUUID(), path, title, opener }, opener)
+  }
+
+  function visit(fullPath: string, title: string) {
+    const path = tabPath(fullPath)
+    const opener = activeId.value
+    here.value = path
+    const tab = find(path)
+    if (tab) tab.path = path
+    else create(path, title, opener)
+    const id = activeId.value
+    if (id && recent.value[0] !== id)
+      recent.value = [id, ...recent.value.filter(item => item !== id)].slice(0, RECENT_LIMIT)
+  }
+
+  function open(fullPath: string, title: string) {
+    const path = tabPath(fullPath)
+    const tab = find(path)
+    if (tab) tab.path = path
+    else create(path, title, activeId.value)
   }
 
   function rename(title: string, kind?: string) {
@@ -110,33 +85,23 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
     else delete tab.kind
   }
 
-  function release(id: string) {
-    for (const slot of [...keys.keys()]) if (slot.startsWith(`${id}|`)) keys.delete(slot)
+  function successor(ids: string[]) {
+    const left = tabs.value.filter(tab => !ids.includes(tab.id))
+    return recent.value.map(id => left.find(tab => tab.id === id)).find(Boolean) ?? left[0]
   }
 
   function close(ids: string[]) {
     const gone = tabs.value
       .map((tab, position) => ({ ...tab, position }))
       .filter(tab => ids.includes(tab.id))
-    closed.value = [...gone.reverse(), ...closed.value].slice(0, 10)
-    for (const id of ids) release(id)
+    const resources = new Set(gone.map(tab => resourceKey(tab.path)))
+    for (const resource of resources) stale.add(resource)
+    closed.value = [
+      ...gone.reverse(),
+      ...closed.value.filter(tab => !resources.has(resourceKey(tab.path))),
+    ].slice(0, 10)
     tabs.value = tabs.value.filter(tab => !ids.includes(tab.id))
-  }
-
-  function reopen(id: string): CreatorTab | undefined {
-    const found = closed.value.find(tab => tab.id === id)
-    if (!found) return undefined
-    closed.value = closed.value.filter(tab => tab.id !== id)
-    const { position, ...rest } = found
-    const tab: CreatorTab = { ...rest, id: crypto.randomUUID() }
-    const list = [...tabs.value]
-    const pinned = pinnedCount(list)
-    const at = tab.pinned
-      ? Math.min(position, pinned)
-      : Math.min(Math.max(position, pinned), list.length)
-    list.splice(at, 0, tab)
-    tabs.value = list
-    return tab
+    recent.value = recent.value.filter(id => !ids.includes(id))
   }
 
   function pin(id: string, pinned: boolean) {
@@ -158,35 +123,20 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
 
   function pageKey(path: string) {
     const resource = resourceKey(path)
-    const id = activeId.value
-    if (!id) {
-      first ??= { resource, key: `${resource}#0` }
-      return first.resource === resource ? first.key : `${resource}#0`
-    }
-    const slot = `${id}|${resource}`
-    let key = keys.get(slot)
-    if (!key) {
-      key = first?.resource === resource ? first.key : `${resource}#${++serial}`
-      if (first?.resource === resource) first = null
-      keys.set(slot, key)
-    }
-    return key
+    return `${resource}#${generations.get(resource) ?? 0}`
   }
 
   return {
     tabs: skipHydrate(tabs),
     closed: skipHydrate(closed),
-    activeId: skipHydrate(activeId),
-    enteredId,
     active,
-    pending,
-    travel,
+    activeId,
+    find,
+    visit,
     open,
-    enter,
-    settle,
     rename,
+    successor,
     close,
-    reopen,
     pin,
     move,
     pageKey,
