@@ -131,7 +131,7 @@
           class="min-w-0 flex-1"
           @update:model-value="next => sync(next, 'text')"
         />
-        <Space class="w-8 shrink-0" />
+        <Space class="w-8 flex-none" />
       </Inline>
       <Inline v-else-if="mode === 'chips'" gap="xs" align="center" :wrap="false">
         <MultiSelect
@@ -142,7 +142,7 @@
           class="min-w-0 flex-1"
           @update:model-value="next => sync(next.map(String), 'code')"
         />
-        <Space class="w-8 shrink-0" />
+        <Space class="w-8 flex-none" />
       </Inline>
       <WikiFieldImages
         v-else-if="bare && definition.shape === 'image'"

@@ -16457,10 +16457,15 @@
             "$ref": "#/components/schemas/UserRefDto"
           },
           "entries": {
+            "description": "One page of the entries the edit touched",
             "items": {
               "$ref": "#/components/schemas/EditEntryDto"
             },
             "type": "array"
+          },
+          "entry_count": {
+            "description": "Entries the edit touched",
+            "type": "number"
           },
           "id": {
             "type": "number"
@@ -16507,6 +16512,7 @@
           "reverted_at",
           "reverts_id",
           "patrolled_at",
+          "entry_count",
           "entries"
         ],
         "type": "object"
@@ -16937,10 +16943,15 @@
             "$ref": "#/components/schemas/UserRefDto"
           },
           "entries": {
+            "description": "The first entries the edit touched, and those within the entry asked for",
             "items": {
               "$ref": "#/components/schemas/EditPartDto"
             },
             "type": "array"
+          },
+          "entry_count": {
+            "description": "Entries the edit touched",
+            "type": "number"
           },
           "id": {
             "type": "number"
@@ -16975,6 +16986,7 @@
           "applied_at",
           "patrolled_at",
           "reverted_at",
+          "entry_count",
           "entries"
         ],
         "type": "object"
@@ -18252,6 +18264,21 @@
           "entry": {
             "$ref": "#/components/schemas/EntryRefDto"
           },
+          "owner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryRefDto"
+              }
+            ],
+            "description": "Game a release belongs to",
+            "nullable": true,
+            "type": "object"
+          },
+          "role": {
+            "description": "Role as printed on a credit",
+            "nullable": true,
+            "type": "string"
+          },
           "sourced": {
             "description": "The statement has a source other than an import",
             "type": "boolean"
@@ -18270,7 +18297,9 @@
         "required": [
           "statement_id",
           "code",
+          "role",
           "entry",
+          "owner",
           "sourced",
           "credits",
           "works"
@@ -95273,6 +95302,37 @@
             "name": "id",
             "required": true,
             "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Give only the part of the edit on this entry",
+            "in": "query",
+            "name": "entry_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
               "type": "number"
             }
           }

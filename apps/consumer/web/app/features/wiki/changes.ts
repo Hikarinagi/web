@@ -17,11 +17,10 @@ export function shownEntries<T extends { type: string }>(entries: T[]): T[] {
   return entries.filter(entry => entry.type !== 'CHARACTER')
 }
 
-export function changeTitle(change: Pick<WikiChange, 'entries'>): string {
+export function changeTitle(change: Pick<WikiChange, 'entries' | 'entry_count'>): string {
   const labels = shownEntries(change.entries).map(entry => entry.label || '未命名')
-  return labels.length > 3
-    ? `${labels.slice(0, 3).join('、')}等 ${labels.length} 个条目`
-    : labels.join('、')
+  const total = Math.max(change.entry_count, labels.length)
+  return total > 3 ? `${labels.slice(0, 3).join('、')}等 ${total} 个条目` : labels.join('、')
 }
 
 export const CHANGE_FILTERS = ['all', 'unchecked', 'mine', 'watched'] as const
@@ -35,6 +34,8 @@ export const CHANGE_TITLES: Record<ChangeFilter, string> = {
 }
 
 export const CHANGES_PAGE_SIZE = 30
+
+export const CHANGE_PARTS_PAGE_SIZE = 20
 
 export interface ChangesState {
   f: ChangeFilter

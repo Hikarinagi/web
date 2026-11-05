@@ -85,10 +85,10 @@ importers:
         version: 0.11.3(@nuxt/schema@4.6.4)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(mlly@1.8.2)(oxc-parser@0.141.0)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.44(typescript@6.0.3)))(rolldown@1.2.16)(unplugin@3.7.0(esbuild@0.27.7)(rolldown@1.2.16)(rollup@4.67.5)(vite@8.3.6(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)))
       '@ritojs/core':
         specifier: ^4.0.0
-        version: 4.1.0
+        version: 4.2.0
       '@ritojs/kit':
         specifier: ^4.0.0
-        version: 4.1.0
+        version: 4.2.0
       '@rybbit/js':
         specifier: ^0.6.2
         version: 0.6.3
@@ -2416,11 +2416,11 @@ packages:
     resolution: {integrity: sha512-si5RAEgXylHljgfvUr5k3b+doRmLcWaF8X5RLtPmZSBt3paskSXauqJ6DDx7IChInlUnXz0SHQSXI/5xff61oA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
-  '@ritojs/core@4.1.0':
-    resolution: {integrity: sha512-01BmiIuk1gyi02QsyMjx4B4XES7UcW0PsafGRO4gkQYF0nzw47f/Ule8/E5T6Yiw0xqxnTEPN9MjRfXRjGTcFA==}
+  '@ritojs/core@4.2.0':
+    resolution: {integrity: sha512-iSHlD2EzbaMdOMdTWl/QhGpP9ApAjh3ACRQlSbr27U+zQEZrnr0L6LZZ6e8EXls73CN1LKXzmLkoGOpsQ4KUgg==}
 
-  '@ritojs/kit@4.1.0':
-    resolution: {integrity: sha512-Z9/kt43SaxfreqOY73wQ3vwOtJM6fsmtPI1RwWQR1nuJEQmcz0cfUj0A7o4RiYH+x/N3wtui0UUY5De40fEbjA==}
+  '@ritojs/kit@4.2.0':
+    resolution: {integrity: sha512-LNhlO5VqKp5/IUqBe+Tyt4COrNMmZP0zxP/Za2sQPE2NLLg073b3tfIL9pS+cxjW7GT79nlSR0KRsJSgqovzPg==}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     resolution: {integrity: sha512-ia3DwAs0OsMGS7+IConptSiyk9pEXkOx/AbJ2n/lAGxH3QkWQus1t8d7gnAT38FCU2sQu8lUbeR6AiZFv4JxaA==}
@@ -11489,11 +11489,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ritojs/core@4.1.0': {}
+  '@ritojs/core@4.2.0': {}
 
-  '@ritojs/kit@4.1.0':
+  '@ritojs/kit@4.2.0':
     dependencies:
-      '@ritojs/core': 4.1.0
+      '@ritojs/core': 4.2.0
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     optional: true

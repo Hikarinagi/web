@@ -45,11 +45,15 @@ describe('changeLines', () => {
 
 describe('changeTitle', () => {
   it('leaves characters out and counts the entries past three', () => {
-    expect(changeTitle({ entries: [part(1, '甲', null), part(9, '', null, 'CHARACTER')] })).toBe(
-      '甲',
-    )
     expect(
       changeTitle({
+        entry_count: 2,
+        entries: [part(1, '甲', null), part(9, '', null, 'CHARACTER')],
+      }),
+    ).toBe('甲')
+    expect(
+      changeTitle({
+        entry_count: 4,
         entries: [
           part(1, '甲', null),
           part(2, '乙', null),
@@ -58,5 +62,14 @@ describe('changeTitle', () => {
         ],
       }),
     ).toBe('甲、乙、丙等 4 个条目')
+  })
+
+  it('counts every entry of the edit when only the first ones come with it', () => {
+    expect(
+      changeTitle({
+        entry_count: 500,
+        entries: [part(1, '甲', null), part(2, '乙', null), part(3, '丙', null)],
+      }),
+    ).toBe('甲、乙、丙等 500 个条目')
   })
 })

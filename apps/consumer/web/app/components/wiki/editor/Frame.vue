@@ -56,7 +56,7 @@
             <slot name="header" :stacked="true" />
           </Stack>
         </Affix>
-        <Stack class="p-4 pt-0"><slot name="side" /></Stack>
+        <Stack class="p-4"><slot name="side" /></Stack>
       </ScrollArea>
     </SplitterPanel>
   </Splitter>

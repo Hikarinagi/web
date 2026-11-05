@@ -16,9 +16,11 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/wiki/entries/{id}', { path: { id } }),
     fetchBackendData(event, '/api/v3/wiki/definitions'),
   ])
-  const edit = await fetchBackendData(event, '/api/v3/wiki/edits/{id}', {
-    path: { id: version.edit_id },
-  })
+  const { operations: _operations, ...edit } = await fetchBackendData(
+    event,
+    '/api/v3/wiki/edits/{id}',
+    { path: { id: version.edit_id }, query: { entry_id: id, page: 1, page_size: 1 } },
+  )
   return {
     version,
     entry,

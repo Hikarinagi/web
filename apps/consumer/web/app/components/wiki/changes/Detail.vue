@@ -4,7 +4,7 @@
   import { ArrowLeft } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import { revisionTime } from '~/features/entry/time'
-  import { changeLines, shownEntries } from '~/features/wiki/changes'
+  import { CHANGE_PARTS_PAGE_SIZE, changeLines, shownEntries } from '~/features/wiki/changes'
   import { RELOAD_CHANGES } from '~/features/wiki/composables/useChangesResults'
   import type { ChangePageData } from '~~/server/api/pages/create/wiki/changes/[id].get'
 
@@ -29,11 +29,18 @@
       entries: edit.value.entries.map(part => ({ ...part.entry, ...part })),
     }),
   )
+  const meta = computed(() => ({
+    page: props.data.page,
+    page_size: CHANGE_PARTS_PAGE_SIZE,
+    total_items: edit.value.entry_count,
+    item_count: edit.value.entries.length,
+    total_pages: Math.ceil(edit.value.entry_count / CHANGE_PARTS_PAGE_SIZE),
+  }))
   const undoable = computed(
     () =>
       !edit.value.batch.imported &&
       !edit.value.reverted_at &&
-      (edit.value.entries.length === 1 || edit.value.editor.id === auth.user?.id || patrol.value),
+      (edit.value.entry_count === 1 || edit.value.editor.id === auth.user?.id || patrol.value),
   )
   const here = computed(() => ({
     path: `/create/wiki/changes/${edit.value.id}`,
@@ -128,6 +135,13 @@
         :part="part"
         :names="data.names"
         :several="lines.length > 1"
+      />
+      <Paginator
+        v-if="meta.total_pages > 1"
+        :meta="meta"
+        route="push"
+        page-param="entry_page"
+        align="center"
       />
     </Stack>
     <WikiChangesUndo v-model:open="undoOpen" :edit="edit" :names="data.names" @done="undone" />

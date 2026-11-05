@@ -144,6 +144,7 @@
     <template #side>
       <WikiEditorSide
         :entry="entry.id"
+        :type="entry.type"
         :definitions="definitions"
         :base="base"
         @changed="emit('saved')"

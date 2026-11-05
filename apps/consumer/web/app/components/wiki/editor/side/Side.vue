@@ -4,7 +4,12 @@
 
   defineOptions({ name: 'WikiEditorSide' })
 
-  const props = defineProps<{ entry: number; definitions: EntryDefinition[]; base: string }>()
+  const props = defineProps<{
+    entry: number
+    type: string
+    definitions: EntryDefinition[]
+    base: string
+  }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
   const hints = useEntryHints(props.entry)
@@ -36,7 +41,7 @@
       <WikiEditorSideHints :entry="entry" :base="base" @changed="emit('changed')" />
     </TabsContent>
     <TabsContent value="refs" class="pt-4">
-      <WikiEditorSideRefs :entry="entry" :definitions="definitions" />
+      <WikiEditorSideRefs :entry="entry" :type="type" :definitions="definitions" />
     </TabsContent>
   </Tabs>
 </template>

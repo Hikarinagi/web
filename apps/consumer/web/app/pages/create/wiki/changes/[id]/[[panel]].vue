@@ -5,6 +5,7 @@
     changesRoute,
     readChangesQuery,
   } from '~/features/wiki/changes'
+  import { readPage } from '~/features/wiki/history'
   import type { ChangePageData } from '~~/server/api/pages/create/wiki/changes/[id].get'
 
   definePageMeta({
@@ -13,9 +14,10 @@
   })
 
   const route = useRoute()
-  const request = computed(
-    () => `/api/pages/create/wiki/changes/${String(route.params.id)}` as `/api/pages/${string}`,
-  )
+  const request = computed(() => {
+    const page = readPage(route.query.entry_page)
+    return `/api/pages/create/wiki/changes/${String(route.params.id)}${page > 1 ? `?entry_page=${page}` : ''}` as `/api/pages/${string}`
+  })
   const { data, refresh } = await useHikariApiData<ChangePageData>(request, { fatal: true })
   const state = computed(() => readChangesQuery(route.query))
   const list = computed(() => changesRoute(state.value))
@@ -26,6 +28,7 @@
             { label: CHANGE_TITLES[state.value.f], to: list.value },
             {
               label: changeTitle({
+                entry_count: data.value.edit.entry_count,
                 entries: data.value.edit.entries.map(part => ({ ...part.entry, ...part })),
               }),
             },

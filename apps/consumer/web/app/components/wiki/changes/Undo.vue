@@ -23,6 +23,9 @@
         part.comparison && !part.reverted_at && (!props.entry || part.entry.id === props.entry),
     ),
   )
+  const rest = computed(() =>
+    props.entry ? 0 : props.edit.entry_count - props.edit.entries.length,
+  )
   const kept = (entry: number) =>
     plan.value?.kept.flatMap(item =>
       item.entry_id === entry && item.statement_id !== null ? [item.statement_id] : [],
@@ -88,6 +91,7 @@
             />
           </Card>
         </Stack>
+        <Text v-if="rest" size="sm" tone="muted">另有 {{ rest }} 个条目上的修改一并撤销</Text>
       </Stack>
     </template>
     <template #footer>

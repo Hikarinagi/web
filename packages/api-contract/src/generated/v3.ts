@@ -18454,7 +18454,10 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             editor: components["schemas"]["UserRefDto"];
+            /** @description One page of the entries the edit touched */
             entries: components["schemas"]["EditEntryDto"][];
+            /** @description Entries the edit touched */
+            entry_count: number;
             id: number;
             note: string | null;
             operations: Record<string, never>[];
@@ -18551,7 +18554,10 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             editor: components["schemas"]["UserRefDto"];
+            /** @description The first entries the edit touched, and those within the entry asked for */
             entries: components["schemas"]["EditPartDto"][];
+            /** @description Entries the edit touched */
+            entry_count: number;
             id: number;
             note: string | null;
             /** Format: date-time */
@@ -18814,6 +18820,10 @@ export interface components {
             /** @description Names credited on an appearance, in order */
             credits: string[];
             entry: components["schemas"]["EntryRefDto"];
+            /** @description Game a release belongs to */
+            owner: components["schemas"]["EntryRefDto"] | null;
+            /** @description Role as printed on a credit */
+            role: string | null;
             /** @description The statement has a source other than an import */
             sourced: boolean;
             statement_id: number;
@@ -52138,7 +52148,12 @@ export interface operations {
     };
     WikiEditController_getById: {
         parameters: {
-            query?: never;
+            query: {
+                /** @description Give only the part of the edit on this entry */
+                entry_id?: number;
+                page: number;
+                page_size: number;
+            };
             header?: never;
             path: {
                 id: number;
