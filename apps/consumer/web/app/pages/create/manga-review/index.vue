@@ -4,8 +4,10 @@
   import type { WorkbenchMangaReviewPageData } from '~~/server/api/pages/create/manga-review.get'
 
   definePageMeta({
+    layout: 'creator',
+    floatingToolbar: false,
     title: '漫画投稿审核',
-    middleware: 'creator-permission',
+    middleware: ['auth', 'creator-permission'],
     requiredPermission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
   })
 
@@ -13,15 +15,15 @@
   const requestUrl = computed<`/api/pages/${string}`>(
     () => `/api/pages/create/manga-review?page=${page.value}`,
   )
-  const { data, pending, refresh } = await useHikariApiData<WorkbenchMangaReviewPageData>(
-    requestUrl,
-    { fatal: true },
-  )
+  const { data, error, pending, refresh } =
+    useHikariApiData<WorkbenchMangaReviewPageData>(requestUrl)
+  useCreatorPage({ loading: () => pending.value && !data.value })
 </script>
 
 <template>
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
   <WorkbenchMangaProjectTable
-    v-if="data"
+    v-else-if="data"
     v-model:page="page"
     purpose="review"
     title="待审核的漫画投稿"

@@ -14,11 +14,10 @@
     const page = Number(route.query.page) > 1 ? `?page=${String(route.query.page)}` : ''
     return `/api/pages/entries/${String(route.params.id)}/history${page}` as `/api/pages/${string}`
   })
-  const { data, pending, refresh } = await useHikariApiData<HistoryPageData>(request, {
-    fatal: true,
-  })
+  const { data, error, pending, refresh } = useHikariApiData<HistoryPageData>(request)
   useRefreshOnSaved(refresh)
   useCreatorPage({
+    loading: () => pending.value && !data.value,
     title: () => (data.value ? `${data.value.entry.label || '未命名'}的修改记录` : undefined),
     crumbs: () =>
       data.value
@@ -34,5 +33,6 @@
 </script>
 
 <template>
-  <WikiHistoryList v-if="data" :data="data" :loading="pending" />
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <WikiHistoryList v-else-if="data" :data="data" :loading="pending" />
 </template>

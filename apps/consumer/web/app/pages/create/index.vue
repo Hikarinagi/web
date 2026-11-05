@@ -2,15 +2,22 @@
   import { SimpleGrid, Stack } from '@hina-ui/vue'
   import type { CreatorOverviewPageData } from '~~/server/api/pages/create/overview.get'
 
-  definePageMeta({ title: '概览' })
-
-  const { data } = await useHikariApiData<CreatorOverviewPageData>('/api/pages/create/overview', {
-    fatal: true,
+  definePageMeta({
+    layout: 'creator',
+    middleware: 'auth',
+    floatingToolbar: false,
+    title: '概览',
   })
+
+  const { data, error, status, refresh } = useHikariApiData<CreatorOverviewPageData>(
+    '/api/pages/create/overview',
+  )
+  useCreatorPage({ loading: () => status.value === 'pending' })
 </script>
 
 <template>
-  <Stack v-if="data" gap="lg">
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <Stack v-else-if="data" gap="lg">
     <CreatorOverviewQueues :counts="data.review_counts" />
     <CreatorProjectSection :novels="data.novels" :mangas="data.mangas" />
     <SimpleGrid min="24rem" gap="lg">

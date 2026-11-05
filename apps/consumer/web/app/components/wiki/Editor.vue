@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
-  import { resourceKey } from '~/features/creator/tabs'
+  import { editKey } from '~/features/creator/tabs'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditableEntry, EntryDefinition, ValueDraft } from '~/features/wiki/editor/draft'
   import { changedParts } from '~/features/wiki/editor/parts'
@@ -21,7 +21,7 @@
   const emit = defineEmits<{ saved: [] }>()
   const route = useRoute()
   const editor = useEntryEditor({
-    key: () => resourceKey(route.path),
+    key: () => editKey(props.entry.id),
     title: () => props.entry.label || '未命名',
     entries: () => [props.entry, ...props.parts],
     definitions: () => props.definitions,

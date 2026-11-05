@@ -15,8 +15,9 @@
     () =>
       `/api/pages/entries/${String(route.params.id)}/history/${String(route.params.revision)}` as `/api/pages/${string}`,
   )
-  const { data, refresh } = await useHikariApiData<VersionPageData>(request, { fatal: true })
+  const { data, error, status, refresh } = useHikariApiData<VersionPageData>(request)
   useCreatorPage({
+    loading: () => status.value === 'pending',
     title: () =>
       data.value
         ? `${data.value.entry.label || '未命名'}：${versionName(data.value.version.created_at)}`
@@ -36,5 +37,6 @@
 </script>
 
 <template>
-  <WikiHistoryVersion v-if="data" :data="data" @changed="refresh()" />
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <WikiHistoryVersion v-else-if="data" :data="data" @changed="refresh()" />
 </template>

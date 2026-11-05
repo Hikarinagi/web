@@ -6,49 +6,12 @@ import { codeLabel, dateText } from '~/features/wiki/values'
 import { fetchBackendData } from '~~/server/utils/backend-api'
 import { definePageBffHandler } from '~~/server/utils/page-bff'
 
-function targetOf(entry: EditableEntry, property: string): number | undefined {
-  return entry.statements.find(item => item.property === property && item.status !== 'DEPRECATED')
-    ?.target?.id
-}
-
-async function editorOf(event: H3Event, entry: EditableEntry): Promise<string | null> {
-  if (entry.redirect_id) return `/entries/${entry.redirect_id}/edit`
-  if (entry.type === 'PRODUCT') {
-    const game = targetOf(entry, 'INCLUDED_GAME')
-    return game ? `/entries/${game}/edit/releases/${entry.id}` : null
-  }
-  if (entry.type === 'VOLUME') {
-    const series = targetOf(entry, 'SERIES')
-    return series ? `/entries/${series}/edit/volumes/${entry.id}` : null
-  }
-  if (entry.type === 'BOOK') {
-    const volume = targetOf(entry, 'INCLUDED_VOLUME')
-    if (!volume) return null
-    const owner = await fetchBackendData(event, '/api/v3/wiki/entries/{id}', {
-      path: { id: volume },
-    })
-    const series = targetOf(owner, 'SERIES')
-    return series ? `/entries/${series}/edit/volumes/${volume}/${entry.id}` : null
-  }
-  if (entry.type === 'CHARACTER') {
-    const groups = await fetchBackendData(event, '/api/v3/wiki/entries/{id}/references', {
-      path: { id: entry.id },
-    })
-    const appearance = groups.find(group => group.type === 'APPEARANCE')?.items[0]?.entry.id
-    return appearance ? `/entries/${appearance}/edit` : null
-  }
-  return null
-}
-
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
   if (!Number.isInteger(id) || id < 1) {
     throw createError({ statusCode: 400, statusMessage: 'Bad Request' })
   }
   const entry = await fetchBackendData(event, '/api/v3/wiki/entries/{id}', { path: { id } })
-  const redirect = await editorOf(event, entry)
-  if (redirect)
-    return { redirect, entry: null, parts: [], versions: [], definitions: [], owner: null }
   const owner =
     entry.type === 'APPEARANCE'
       ? (entry.statements.find(item => item.property === 'WORK' && item.status !== 'DEPRECATED')
@@ -101,7 +64,6 @@ async function handler(event: H3Event) {
             }
           })
   return {
-    redirect: null,
     entry: visible(entry),
     parts: parts.map(visible),
     versions,

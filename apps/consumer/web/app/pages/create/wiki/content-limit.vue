@@ -1,5 +1,10 @@
 <script setup lang="ts">
-  definePageMeta({ title: '内容显示确认' })
+  definePageMeta({
+    layout: 'creator',
+    middleware: 'auth',
+    floatingToolbar: false,
+    title: '内容显示确认',
+  })
 
   const route = useRoute()
   const redirectTo = computed(() => {

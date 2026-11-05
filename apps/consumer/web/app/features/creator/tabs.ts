@@ -13,8 +13,10 @@ export interface ClosedTab extends CreatorTab {
 
 export const RECENT_LIMIT = 50
 
+export const editKey = (id: number | string) => `edit:${id}`
+
 const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
-  [/^\/entries\/(\d+)\/edit(?:\/|$)/, match => `edit:${match[1]}`],
+  [/^\/entries\/(\d+)\/edit(?:\/|$)/, match => editKey(match[1]!)],
   [/^\/entries\/(\d+)\/history(?:\/|$)/, match => `history:${match[1]}`],
   [/^\/entries\/(\d+)\/merge(?:\/|$)/, match => `merge:${match[1]}`],
   [/^\/create\/wiki\/changes(?:\/|$)/, () => 'changes'],

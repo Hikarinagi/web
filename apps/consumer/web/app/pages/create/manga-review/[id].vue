@@ -4,7 +4,8 @@
 
   definePageMeta({
     layout: 'workbench',
-    middleware: 'creator-permission',
+    floatingToolbar: false,
+    middleware: ['auth', 'creator-permission'],
     requiredPermission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
   })
 

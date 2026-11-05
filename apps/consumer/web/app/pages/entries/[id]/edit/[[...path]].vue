@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import { resourceKey } from '~/features/creator/tabs'
+  import { editKey } from '~/features/creator/tabs'
   import { partsOf } from '~/features/wiki/editor/route'
   import type { EditorPageData } from '~~/server/api/pages/entries/[id]/edit.get'
 
   definePageMeta({
     layout: 'creator',
-    middleware: ['auth', 'wiki-editor-content-limit'],
+    middleware: ['auth', 'wiki-editor-content-limit', 'wiki-editor-target'],
     floatingToolbar: false,
     fill: true,
     title: '编辑条目',
@@ -13,20 +13,19 @@
   })
 
   const route = useRoute()
-  const { data, refresh } = await useHikariApiData<EditorPageData>(
+  const { data, error, status, refresh } = useHikariApiData<EditorPageData>(
     `/api/pages/entries/${String(route.params.id)}/edit`,
-    { fatal: true },
   )
-  if (data.value?.redirect) await navigateTo(data.value.redirect, { replace: true })
 
   const drafts = useWikiDraftsStore()
   useRefreshOnSaved(
-    () => (drafts.count(resourceKey(route.path)) ? undefined : refresh()),
+    () => (data.value?.entry && drafts.count(editKey(data.value.entry.id)) ? undefined : refresh()),
     () =>
       data.value?.entry ? [data.value.entry.id, ...data.value.parts.map(part => part.id)] : null,
   )
 
   useCreatorPage({
+    loading: () => status.value === 'pending',
     title: () => (data.value?.entry ? data.value.entry.label || '未命名' : undefined),
     kind: () => data.value?.entry?.type,
     crumbs: () => {
@@ -50,8 +49,9 @@
 </script>
 
 <template>
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
   <WikiEditor
-    v-if="data?.entry"
+    v-else-if="data?.entry"
     :entry="data.entry"
     :parts="data.parts"
     :owner="data.owner"

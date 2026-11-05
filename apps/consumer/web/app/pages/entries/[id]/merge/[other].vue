@@ -14,8 +14,9 @@
     () =>
       `/api/pages/entries/${String(route.params.id)}/merge/${String(route.params.other)}` as `/api/pages/${string}`,
   )
-  const { data } = await useHikariApiData<MergePageData>(request, { fatal: true })
+  const { data, error, status, refresh } = useHikariApiData<MergePageData>(request)
   useCreatorPage({
+    loading: () => status.value === 'pending',
     crumbs: () =>
       data.value
         ? [
@@ -28,5 +29,6 @@
 </script>
 
 <template>
-  <WikiMergeTable v-if="data" :data="data" />
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <WikiMergeTable v-else-if="data" :data="data" />
 </template>

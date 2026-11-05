@@ -1,5 +1,13 @@
 <script setup lang="ts">
-  import { AppShell, Inline, ScrollArea, SidebarTrigger, Stack, VisuallyHidden } from '@hina-ui/vue'
+  import {
+    AppShell,
+    Inline,
+    LoadingOverlay,
+    ScrollArea,
+    SidebarTrigger,
+    Stack,
+    VisuallyHidden,
+  } from '@hina-ui/vue'
   import { useCreatorSidebar } from '~/features/creator/composables/useCreatorSidebar'
   import type { ComponentPublicInstance } from 'vue'
   import { SITE_CONFIG } from '~/config/site'
@@ -14,6 +22,12 @@
   useTabLinks()
   useTabScroll(() => content.value?.$el as HTMLElement | undefined)
   const tabs = useCreatorTabsStore()
+  const router = useRouter()
+  const mounted = useMounted()
+  const pending = useCreatorLoading()
+  const loading = computed(
+    () => mounted.value && [...pending.values()].includes(router.currentRoute.value.path),
+  )
   useHead({
     title: () => buildSeoTitle(tabs.active?.title || title.value, SITE_CONFIG.name),
   })
@@ -37,15 +51,18 @@
       >
         <CreatorShellCrumbs />
       </Inline>
-      <ScrollArea class="min-h-0 flex-1">
-        <Stack
-          ref="content"
-          gap="lg"
-          :class="cn(route.meta.fill ? 'h-full' : 'min-h-full px-6 py-6 max-md:px-4')"
-        >
-          <slot />
-        </Stack>
-      </ScrollArea>
+      <Stack gap="none" class="relative min-h-0 flex-1">
+        <ScrollArea class="min-h-0 flex-1">
+          <Stack
+            ref="content"
+            gap="lg"
+            :class="cn(route.meta.fill ? 'h-full' : 'min-h-full px-6 py-6 max-md:px-4')"
+          >
+            <slot />
+          </Stack>
+        </ScrollArea>
+        <LoadingOverlay :visible="loading" />
+      </Stack>
     </Stack>
     <CreatorShellFinder />
   </AppShell>

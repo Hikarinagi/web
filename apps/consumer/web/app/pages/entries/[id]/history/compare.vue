@@ -17,8 +17,9 @@
     })
     return `/api/pages/entries/${String(route.params.id)}/history/compare?${query.toString()}` as `/api/pages/${string}`
   })
-  const { data } = await useHikariApiData<ComparePageData>(request, { fatal: true })
+  const { data, error, status, refresh } = useHikariApiData<ComparePageData>(request)
   useCreatorPage({
+    loading: () => status.value === 'pending',
     title: () => (data.value ? `${data.value.entry.label || '未命名'}：两个版本的对照` : undefined),
     crumbs: () =>
       data.value
@@ -35,5 +36,6 @@
 </script>
 
 <template>
-  <WikiHistoryCompare v-if="data" :data="data" />
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <WikiHistoryCompare v-else-if="data" :data="data" />
 </template>

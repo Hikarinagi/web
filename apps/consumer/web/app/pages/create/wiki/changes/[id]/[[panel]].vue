@@ -10,7 +10,7 @@
 
   definePageMeta({
     title: '修改详情',
-    key: route => `/create/wiki/changes/${String(route.params.id)}`,
+    key: () => '/create/wiki/changes/detail',
   })
 
   const route = useRoute()
@@ -18,7 +18,7 @@
     const page = readPage(route.query.entry_page)
     return `/api/pages/create/wiki/changes/${String(route.params.id)}${page > 1 ? `?entry_page=${page}` : ''}` as `/api/pages/${string}`
   })
-  const { data, refresh } = await useHikariApiData<ChangePageData>(request, { fatal: true })
+  const { data, error, status, refresh } = useHikariApiData<ChangePageData>(request)
   const state = computed(() => readChangesQuery(route.query))
   const list = computed(() => changesRoute(state.value))
   useCreatorPage({
@@ -34,12 +34,15 @@
             },
           ]
         : undefined,
+    loading: () => status.value === 'pending',
   })
 </script>
 
 <template>
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
   <WikiChangesDetail
-    v-if="data"
+    v-else-if="data"
+    :key="data.edit.id"
     :data="data"
     :back="list"
     :back-label="CHANGE_TITLES[state.f]"

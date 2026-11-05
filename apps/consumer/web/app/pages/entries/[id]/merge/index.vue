@@ -10,11 +10,11 @@
   })
 
   const route = useRoute()
-  const { data } = await useHikariApiData<MergePickPageData>(
+  const { data, error, status, refresh } = useHikariApiData<MergePickPageData>(
     `/api/pages/entries/${String(route.params.id)}/merge`,
-    { fatal: true },
   )
   useCreatorPage({
+    loading: () => status.value === 'pending',
     title: () => (data.value ? `合并到「${data.value.entry.label || '未命名'}」` : undefined),
     crumbs: () =>
       data.value
@@ -30,5 +30,6 @@
 </script>
 
 <template>
-  <WikiMergePick v-if="data" :data="data" />
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <WikiMergePick v-else-if="data" :data="data" />
 </template>

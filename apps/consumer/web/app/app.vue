@@ -17,9 +17,7 @@
   const creator = computed(() => route.meta.layout === 'creator')
   const keepalive = computed(() => (creator.value ? { max: 12 } : { include: ['HomePage'] }))
   const creatorKey = (page: RouteLocationNormalizedLoaded) =>
-    page.path.startsWith('/create')
-      ? '/create'
-      : `${tabs.pageKey(page.path)}:${String(page.matched[0]?.name ?? '')}`
+    `${tabs.pageKey(page.path)}:${String(page.matched[0]?.name ?? '')}`
 
   useSchemaOrg([
     defineWebSite({

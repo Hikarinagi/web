@@ -13,6 +13,7 @@
   } from '@hina-ui/vue'
   import { ArrowLeft, ChevronLeft, ChevronRight } from '@lucide/vue'
   import { NuxtLink } from '#components'
+  import { editKey } from '~/features/creator/tabs'
   import { revisionTime } from '~/features/entry/time'
   import { restoreInto } from '~/features/wiki/editor/restore'
   import { versionName } from '~/features/wiki/history'
@@ -39,7 +40,7 @@
   const reverted = computed(() => !!(part.value?.reverted_at || props.data.edit.reverted_at))
   const undoable = computed(() => !props.data.edit.batch.imported && !reverted.value)
   const names = computed(() => props.data.names[entry.value.type]?.properties ?? {})
-  const pending = computed(() => drafts.count(`edit:${entry.value.id}`))
+  const pending = computed(() => drafts.count(editKey(entry.value.id)))
 
   const panel = (name: string) =>
     computed({
@@ -56,7 +57,7 @@
       group.statements.flatMap(item => (item.after ? [item.after] : [])),
     )
     drafts.update(
-      `edit:${entry.value.id}`,
+      editKey(entry.value.id),
       { title: entry.value.label || '未命名', path: editPath.value },
       draft => restoreInto(draft, entry.value, values),
     )
