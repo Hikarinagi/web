@@ -54,7 +54,7 @@ export function notificationTarget(
     return target.id == null ? null : `/create/manga/${target.id}`
   }
   if (target.kind === 'change_request') {
-    return '/create/edits'
+    return '/create/wiki/changes?f=mine'
   }
 
   const rate = RATE_ROUTE[target.kind]

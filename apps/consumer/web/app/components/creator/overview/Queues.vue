@@ -13,7 +13,7 @@
     [
       {
         label: '尚未巡查的更改',
-        to: '/create/changes?filter=unpatrolled',
+        to: '/create/wiki/changes?f=unchecked',
         value: props.counts.unpatrolled,
         permission: WIKI_PERMISSIONS.PATROL,
       },

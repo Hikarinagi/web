@@ -1,8 +1,8 @@
 import { useAuthSession } from '~/features/auth/composables/useAuthSession'
 import { NEVER_SHOW_NSFW } from '~/features/nsfw/composables/useNsfwPolicy'
 
-const CONFIRM_PATH = '/create/edit/content-limit'
-const FALLBACK_PATH = '/create/new'
+const CONFIRM_PATH = '/create/wiki/content-limit'
+const FALLBACK_PATH = '/create/wiki/new'
 
 export default defineNuxtRouteMiddleware(async to => {
   if (to.path === CONFIRM_PATH) return

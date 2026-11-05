@@ -3,14 +3,17 @@
     Card,
     DropdownMenu,
     DropdownMenuItem,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
     Inline,
     SidebarLabel,
     Stack,
     Text,
     type SidebarState,
   } from '@hina-ui/vue'
-  import { ChevronUp, LogOut, Settings, UserRound } from '@lucide/vue'
+  import { ChevronUp, House, LogOut, Settings, UserRound } from '@lucide/vue'
   import { cn } from '~/utils/cn'
   import { displayName } from '~/utils/user'
 
@@ -20,6 +23,7 @@
 
   const auth = useAuthStore()
   const { open: openLogout } = useLogout()
+  const theme = useThemeMode()
 
   const user = computed(() => auth.user)
   const roleLabel = computed(() => getUserRoleLabel(user.value?.role))
@@ -64,7 +68,22 @@
         <template #icon><Settings /></template>
         账号设置
       </DropdownMenuItem>
+      <DropdownMenuSub label="主题">
+        <template #icon><component :is="theme.current.value.icon" /></template>
+        <DropdownMenuRadioGroup
+          :model-value="theme.current.value.value"
+          @update:model-value="theme.set"
+        >
+          <DropdownMenuRadioItem v-for="mode in theme.modes" :key="mode.value" :value="mode.value">
+            {{ mode.label }}
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuSub>
       <DropdownMenuSeparator />
+      <DropdownMenuItem @select="navigateTo('/')">
+        <template #icon><House /></template>
+        返回首页
+      </DropdownMenuItem>
       <DropdownMenuItem tone="danger" @select="openLogout">
         <template #icon><LogOut /></template>
         退出登录

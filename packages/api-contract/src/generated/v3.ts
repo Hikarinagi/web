@@ -7413,6 +7413,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/previews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GalgameEntryController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/producers": {
         parameters: {
             query?: never;
@@ -8208,22 +8224,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/light-novel-volumes/{id}/epub": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["LightNovelVolumeController_uploadEpub"];
-        delete: operations["LightNovelVolumeController_deleteEpub"];
         options?: never;
         head?: never;
         patch?: never;
@@ -13587,6 +13587,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/wiki/watches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["WikiMeController_getWatches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/wiki/watchlist": {
         parameters: {
             query?: never;
@@ -13955,55 +13971,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/wiki/edits/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEditController_getById"];
-        put?: never;
-        post?: never;
-        delete: operations["WikiEditController_withdraw"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/{id}/decision": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEditController_decide"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/{id}/objections": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEditController_object"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/{id}/patrol": {
+    "/api/v3/wiki/edits/patrols": {
         parameters: {
             query?: never;
             header?: never;
@@ -14019,6 +13987,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/wiki/edits/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["WikiEditController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/wiki/edits/{id}/revert": {
         parameters: {
             query?: never;
@@ -14026,7 +14010,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["WikiEditController_previewRevert"];
         put?: never;
         post: operations["WikiEditController_revert"];
         delete?: never;
@@ -14123,6 +14107,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["WikiEntryController_previewMerge"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/wiki/entries/{id}/parts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["WikiEntryController_getParts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -14234,26 +14234,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["WikiEntryController_getWatch"];
         put: operations["WikiEntryController_watch"];
         post?: never;
         delete: operations["WikiEntryController_unwatch"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/notices": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiPatrolController_getNotices"];
-        put?: never;
-        post?: never;
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -17247,6 +17231,47 @@ export interface components {
             /** @enum {number} */
             my_value: -1 | 0 | 1;
         };
+        ComparedStatementDto: {
+            amount: string | null;
+            archive_url: string | null;
+            citations: components["schemas"]["StatementCitationDto"][];
+            code: string | null;
+            currency: string | null;
+            date: string | null;
+            /** @enum {string|null} */
+            date_precision: "YEAR" | "MONTH" | "DAY" | null;
+            deprecation_note: string | null;
+            /** @enum {string|null} */
+            deprecation_reason: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED" | null;
+            id: number;
+            is_public: boolean;
+            language: string | null;
+            media: components["schemas"]["ScoredMediaAssetDto"] | null;
+            number: number | null;
+            original: string | null;
+            part: string | null;
+            period_from: string | null;
+            /** @enum {string|null} */
+            period_from_precision: "YEAR" | "MONTH" | "DAY" | null;
+            period_to: string | null;
+            /** @enum {string|null} */
+            period_to_precision: "YEAR" | "MONTH" | "DAY" | null;
+            position: number;
+            /** @enum {string} */
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            reading: string | null;
+            role: string | null;
+            song: string | null;
+            song_kind: string | null;
+            /** @enum {string} */
+            status: "ACTIVE" | "CLUE" | "DEPRECATED";
+            target: components["schemas"]["EntryRefDto"] | null;
+            tax_included: boolean | null;
+            text: string | null;
+            /** @enum {string} */
+            value_kind: "VALUE" | "UNKNOWN";
+            versions: components["schemas"]["EntryRefDto"][];
+        };
         ComparedValueDto: {
             citations: components["schemas"]["CitationSummaryDto"][];
             code: string | null;
@@ -17791,7 +17816,7 @@ export interface components {
             description?: string;
             name: string;
             /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "lookup" | "org_lookup" | "person_lookup" | "book_lookup" | "volume_check" | "image_rating";
+            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "lookup" | "org_lookup" | "person_lookup" | "book_lookup" | "volume_check" | "image_rating";
         };
         CreateTelegramScheduleDto: {
             chat_id: number;
@@ -17833,9 +17858,6 @@ export interface components {
          * @enum {string}
          */
         DatePrecision: "YEAR" | "MONTH" | "DAY";
-        DecideEditDto: {
-            apply: boolean;
-        };
         DecorationConditionPresetRefDto: {
             id: number;
             name: string;
@@ -17854,6 +17876,10 @@ export interface components {
             /** @enum {string} */
             type: "AVATAR_FRAME" | "BADGE";
             unlock_description: string | null;
+        };
+        DeletedChangeDto: {
+            after: boolean;
+            before: boolean;
         };
         DeletedEntryDto: {
             /** Format: date-time */
@@ -18369,6 +18395,14 @@ export interface components {
             updated_at: string;
             view_count: number;
         };
+        EditBasisDto: {
+            media: components["schemas"]["ScoredMediaAssetDto"][];
+            url: string | null;
+        };
+        EditBasisInputDto: {
+            media?: number[];
+            url?: string | null;
+        };
         EditBatchRefDto: {
             id: number;
             /** @description Imported from the old site; cannot be reverted */
@@ -18384,8 +18418,8 @@ export interface components {
         EditCheckDto: {
             conflicts: components["schemas"]["EditConflictDto"][];
             locked: number[];
-            missing_source: components["schemas"]["MissingSourceDto"] | null;
-            notice: boolean;
+            /** @description A character the edit creates without any appearance pointing to it */
+            orphan: number | null;
             statements: components["schemas"]["CheckedStatementDto"][];
             /** @description Summary the edit will be saved with */
             summary: string;
@@ -18414,31 +18448,32 @@ export interface components {
         EditDetailDto: {
             /** Format: date-time */
             applied_at: string | null;
+            basis: components["schemas"]["EditBasisDto"] | null;
             batch: components["schemas"]["EditBatchRefDto"];
             clause: string | null;
             /** Format: date-time */
             created_at: string;
             editor: components["schemas"]["UserRefDto"];
-            /** Format: date-time */
-            effective_at: string | null;
             entries: components["schemas"]["EditEntryDto"][];
             id: number;
             note: string | null;
-            objections: components["schemas"]["EditObjectionDto"][];
             operations: Record<string, never>[];
             /** Format: date-time */
             patrolled_at: string | null;
             /** Format: date-time */
             reverted_at: string | null;
             reverts_id: number | null;
-            /** @enum {string} */
-            status: "APPLIED" | "PENDING" | "WITHDRAWN" | "REJECTED";
             summary: string;
         };
         EditEntryDto: {
             base_revision: number;
+            /** @description The entry before and after the edit */
+            comparison: components["schemas"]["RevisionComparisonDto"] | null;
             entry: components["schemas"]["EntryRefDto"];
+            /** Format: date-time */
+            reverted_at: string | null;
             revision: number | null;
+            summary: string | null;
         };
         EditMangaChapterDto: {
             chapter_number?: string | null;
@@ -18449,13 +18484,6 @@ export interface components {
             title?: string | null;
             volume_id?: number | null;
         };
-        EditObjectionDto: {
-            /** Format: date-time */
-            created_at: string;
-            id: number;
-            reason: string;
-            user: components["schemas"]["UserRefDto"];
-        };
         EditOperationDto: {
             citations?: components["schemas"]["EditCitationDto"][];
             entry?: number;
@@ -18465,7 +18493,7 @@ export interface components {
             media?: number;
             note?: string;
             /** @enum {string} */
-            op: "create_entry" | "add" | "modify" | "cite" | "deprecate" | "restore" | "rate" | "move" | "merge" | "split" | "delete_entry" | "restore_entry";
+            op: "create_entry" | "add" | "modify" | "cite" | "deprecate" | "restore" | "rate" | "move" | "merge" | "split" | "delete_entry" | "restore_entry" | "detach";
             position?: number;
             /** @enum {string} */
             property?: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
@@ -18483,6 +18511,21 @@ export interface components {
             value?: components["schemas"]["EditValueDto"];
             violence?: number;
         };
+        EditPartDto: {
+            id: number;
+            label: string;
+            /**
+             * Format: date-time
+             * @description When the part of the edit on this entry was undone
+             */
+            reverted_at: string | null;
+            /** @description The revision the edit made of this entry */
+            revision: number | null;
+            /** @description What the edit changed on this entry; empty when the edit summary covers it */
+            summary: string | null;
+            /** @enum {string} */
+            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
+        };
         EditQualifiersDto: {
             language?: string | null;
             part?: string | null;
@@ -18498,29 +18541,23 @@ export interface components {
         EditResultDto: {
             edit_id: number;
             entries: number[];
-            /** @enum {string} */
-            status: "APPLIED" | "PENDING" | "WITHDRAWN" | "REJECTED";
         };
         EditSummaryDto: {
             /** Format: date-time */
             applied_at: string | null;
+            basis: components["schemas"]["EditBasisDto"] | null;
             batch: components["schemas"]["EditBatchRefDto"];
             clause: string | null;
             /** Format: date-time */
             created_at: string;
             editor: components["schemas"]["UserRefDto"];
-            /** Format: date-time */
-            effective_at: string | null;
-            entries: components["schemas"]["EntryRefDto"][];
+            entries: components["schemas"]["EditPartDto"][];
             id: number;
             note: string | null;
-            objection_count: number;
             /** Format: date-time */
             patrolled_at: string | null;
             /** Format: date-time */
             reverted_at: string | null;
-            /** @enum {string} */
-            status: "APPLIED" | "PENDING" | "WITHDRAWN" | "REJECTED";
             summary: string;
         };
         EditValueDto: {
@@ -18756,14 +18793,12 @@ export interface components {
         /** @enum {string} */
         EntryProperty: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
         /** @enum {string} */
-        EntryProtection: "LOCKED" | "NEW_MEMBER_REVIEW";
+        EntryProtection: "LOCKED";
         EntryProtectionDto: {
             /** @description When the entry was protected */
             at: string | null;
             /** @description Who protected the entry */
             by: components["schemas"]["UserRefDto"] | null;
-            /** @enum {string} */
-            level: "LOCKED" | "NEW_MEMBER_REVIEW";
             /** @description Reason given when the entry was protected */
             reason: string | null;
             until: string | null;
@@ -18806,8 +18841,12 @@ export interface components {
             chinese_title: string | null;
             id: number;
             label: string;
+            /** @description The work or volume a release, appearance, volume or book belongs to */
+            owner: components["schemas"]["EntryRefDto"] | null;
             /** @enum {string} */
             type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
+            /** @description Up to two works a person or organization is credited on */
+            works: components["schemas"]["EntryRefDto"][];
         };
         EntrySectionCountDto: {
             count: number;
@@ -19690,6 +19729,15 @@ export interface components {
             name: string;
             popularity: number;
         };
+        GalgamePreviewDto: {
+            characters: components["schemas"]["GalgameCharacterRelationDto"][];
+            credits: components["schemas"]["GameCreditsDto"];
+            display: components["schemas"]["GameDisplayDto"];
+            facts: components["schemas"]["FactDto"][];
+            galgame: components["schemas"]["GalgameDetailDto"];
+            products: components["schemas"]["ProductSummaryDto"][];
+            relations: components["schemas"]["GalgameRelationDto"][];
+        };
         GalgamePriceDto: {
             amount: number | null;
             currency: string | null;
@@ -20139,6 +20187,15 @@ export interface components {
         InternalReleaseNoteDto: {
             created: boolean;
             id: number;
+        };
+        KeptValueDto: {
+            entry_id: number;
+            /** @description The value changed since; empty when the entry itself changed since */
+            statement_id: number | null;
+        };
+        LabelChangeDto: {
+            after: string;
+            before: string;
         };
         LightNovelBunkoDto: {
             id: number;
@@ -22116,10 +22173,6 @@ export interface components {
             has_more: boolean;
             items: components["schemas"]["PrivateMessageItemDto"][];
         };
-        MissingSourceDto: {
-            entry: number;
-            reason: string;
-        };
         ModerationApproveDto: {
             notes?: string;
         };
@@ -22837,9 +22890,6 @@ export interface components {
             pending: number;
             review: number;
             throttled: number;
-        };
-        ObjectEditDto: {
-            reason: string;
         };
         OgAuthorDto: {
             avatar: string | null;
@@ -23674,7 +23724,6 @@ export interface components {
             todos: components["schemas"]["TodoCountDto"][];
         };
         OverviewEditsDto: {
-            notices: number;
             today: number;
             today_bots: number;
             unpatrolled: number;
@@ -23724,6 +23773,9 @@ export interface components {
             total_items: number;
             /** @description 总页数 */
             total_pages: number;
+        };
+        PatrolEditsDto: {
+            edit_ids: number[];
         };
         PermissionCatalogDto: {
             permissions: components["schemas"]["PermissionCatalogEntryDto"][];
@@ -24233,7 +24285,6 @@ export interface components {
             properties: components["schemas"]["TaskPropertiesDto"][];
             rate: number;
             schedule: string;
-            suggests: boolean;
         };
         ProgramListDto: {
             items: components["schemas"]["ProgramDto"][];
@@ -24280,6 +24331,8 @@ export interface components {
             archive: boolean;
             /** @enum {string} */
             cardinality: "single" | "multiple" | "single_per_period";
+            /** @description Clauses of the cataloging rules that govern this property */
+            clauses: string[];
             codes: string[] | null;
             /** @description Name of the property */
             label: string;
@@ -24287,6 +24340,8 @@ export interface components {
             move_only: boolean;
             note: boolean;
             optional_code: boolean;
+            /** @description A value without a source is still a valid value of this property */
+            optional_source: boolean;
             original: boolean;
             /** @description Photos of the package or of the credits in the work can support it */
             package_image: boolean;
@@ -24314,8 +24369,6 @@ export interface components {
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
         };
         ProtectEntryDto: {
-            /** @enum {string} */
-            level: "LOCKED" | "NEW_MEMBER_REVIEW";
             reason: string;
             until?: string | null;
         };
@@ -24696,6 +24749,10 @@ export interface components {
             /** @description 只出预览记录，不改条目 */
             dry_run?: boolean;
         };
+        RedirectChangeDto: {
+            after: number | null;
+            before: number | null;
+        };
         ReferencedRefsDto: {
             article_ids?: number[];
             character_ids?: number[];
@@ -24871,6 +24928,8 @@ export interface components {
             number: number;
         };
         RevertEditDto: {
+            /** @description Undo only the part of the edit on this entry */
+            entry_id?: number;
             note?: string;
         };
         RevertEditorDto: {
@@ -24882,11 +24941,25 @@ export interface components {
             code: string;
             edit_id: number;
         };
+        RevertNoteDto: {
+            note?: string;
+        };
         RevertOutcomeDto: {
             failed: components["schemas"]["RevertFailureDto"][];
-            rejected: number;
             remaining: number;
-            reverted: components["schemas"]["EditResultDto"][];
+            reverted: components["schemas"]["RevertResultDto"][];
+        };
+        RevertPreviewDto: {
+            /** @description Nothing of the edit is left to undo */
+            empty: boolean;
+            /** @description Values that changed after the edit and will be left as they are */
+            kept: components["schemas"]["KeptValueDto"][];
+        };
+        RevertResultDto: {
+            edit_id: number;
+            entries: number[];
+            /** @description Values that changed after the edit, left as they are */
+            kept: components["schemas"]["KeptValueDto"][];
         };
         ReviewGroupApplicationDto: {
             /** Format: date-time */
@@ -24921,13 +24994,23 @@ export interface components {
             name: string;
         };
         RevisionComparisonDto: {
-            deleted: components["schemas"]["ValueChangeDto"] | null;
+            deleted: components["schemas"]["DeletedChangeDto"] | null;
             entries: components["schemas"]["EntryRefDto"][];
             from: number;
-            label: components["schemas"]["ValueChangeDto"] | null;
+            /**
+             * Format: date-time
+             * @description When the earlier revision was made
+             */
+            from_at: string | null;
+            label: components["schemas"]["LabelChangeDto"] | null;
             properties: components["schemas"]["PropertyChangeDto"][];
-            redirect_id: components["schemas"]["ValueChangeDto"] | null;
+            redirect_id: components["schemas"]["RedirectChangeDto"] | null;
             to: number;
+            /**
+             * Format: date-time
+             * @description When the later revision was made
+             */
+            to_at: string | null;
         };
         RevisionDetailDto: {
             change_request_id: number | null;
@@ -24955,8 +25038,14 @@ export interface components {
             source: "NATIVE" | "LEGACY" | "IMPORT";
         };
         RevisionEditDto: {
+            basis: components["schemas"]["EditBasisDto"] | null;
             batch: components["schemas"]["EditBatchRefDto"];
             editor: components["schemas"]["UserRefDto"];
+            /**
+             * Format: date-time
+             * @description When the part of the edit on this entry was undone
+             */
+            entry_reverted_at: string | null;
             id: number;
             note: string | null;
             /** Format: date-time */
@@ -24964,8 +25053,6 @@ export interface components {
             /** Format: date-time */
             reverted_at: string | null;
             reverts_id: number | null;
-            /** @enum {string} */
-            status: "APPLIED" | "PENDING" | "WITHDRAWN" | "REJECTED";
             summary: string;
         };
         RevisionItemDto: {
@@ -24975,13 +25062,17 @@ export interface components {
             number: number;
         };
         RevisionSnapshotDto: {
+            basis: components["schemas"]["EditBasisDto"] | null;
+            /** @description The entry at this revision, every value given as added to an empty entry */
+            content: components["schemas"]["RevisionComparisonDto"];
             /** Format: date-time */
             created_at: string;
             edit_id: number;
+            editor: components["schemas"]["UserRefDto"];
+            /** @description The revision the entry is at now */
+            latest: number;
+            note: string | null;
             number: number;
-            snapshot: {
-                [key: string]: unknown;
-            };
         };
         RevisionSummaryDto: {
             change_request_id: number | null;
@@ -25258,12 +25349,8 @@ export interface components {
             manga_id: number;
         };
         StatementChangeDto: {
-            after: {
-                [key: string]: unknown;
-            } | null;
-            before: {
-                [key: string]: unknown;
-            } | null;
+            after: components["schemas"]["ComparedStatementDto"] | null;
+            before: components["schemas"]["ComparedStatementDto"] | null;
         };
         StatementCitationDto: {
             accessed_at: string | null;
@@ -25367,6 +25454,7 @@ export interface components {
         };
         SubmitEditDto: {
             base: components["schemas"]["BaseRevisionDto"][];
+            basis?: components["schemas"]["EditBasisInputDto"];
             note?: string;
             operations: components["schemas"]["EditOperationDto"][];
         };
@@ -25554,8 +25642,6 @@ export interface components {
             /** @description Six-field cron expression in Asia/Shanghai */
             schedule: string;
             stopped_reason: components["schemas"]["WikiTaskStop"] | null;
-            /** @description The program only raises suggestions */
-            suggests: boolean;
             trial_limit: number | null;
             /** @description Edits made since the task was enabled */
             trial_used: number;
@@ -25599,8 +25685,6 @@ export interface components {
             /** @description Six-field cron expression in Asia/Shanghai */
             schedule: string;
             stopped_reason: components["schemas"]["WikiTaskStop"] | null;
-            /** @description The program only raises suggestions */
-            suggests: boolean;
             trial_limit: number | null;
             /** @description Edits made since the task was enabled */
             trial_used: number;
@@ -26091,6 +26175,8 @@ export interface components {
             /** @enum {string} */
             kind: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
             problem: string;
+            /** @description The single value the suggestion would add or write over an existing one */
+            proposal: components["schemas"]["TodoProposalDto"] | null;
             resolution: string | null;
             /** Format: date-time */
             resolved_at: string | null;
@@ -26101,6 +26187,25 @@ export interface components {
             suggestion: {
                 [key: string]: unknown;
             } | null;
+        };
+        TodoProposalDto: {
+            amount: string | null;
+            code: string | null;
+            currency: string | null;
+            /** @description The value the suggestion replaces; null when it adds a value */
+            current: components["schemas"]["TodoStatementDto"] | null;
+            date: string | null;
+            /** @enum {string|null} */
+            date_precision: "YEAR" | "MONTH" | "DAY" | null;
+            entry_id: number;
+            number: number | null;
+            /** @enum {string} */
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            role: string | null;
+            song: string | null;
+            target: components["schemas"]["EntryRefDto"] | null;
+            tax_included: boolean | null;
+            text: string | null;
         };
         TodoStatementDto: {
             amount: string | null;
@@ -27015,7 +27120,6 @@ export interface components {
             new_member_edits?: number | null;
             new_member_edits_per_window?: number | null;
             new_member_moves_per_window?: number | null;
-            notice_hours?: number | null;
             rate_window_seconds?: number | null;
             task_stop_reverts?: number | null;
             task_stop_window?: number | null;
@@ -27246,10 +27350,6 @@ export interface components {
             system_message_count: number;
             total_count: number;
         };
-        ValueChangeDto: {
-            after: Record<string, never> | null;
-            before: Record<string, never> | null;
-        };
         VersionRefDto: {
             id: number;
             platforms: string[];
@@ -27267,8 +27367,16 @@ export interface components {
          * @enum {string}
          */
         VolumeType: "MAIN" | "EXTRA";
+        WatchStateDto: {
+            watched: boolean;
+        };
+        WatchedEntryDto: {
+            entry: components["schemas"]["EntryRefDto"];
+            /** Format: date-time */
+            watched_at: string;
+        };
         /** @enum {string} */
-        WikiLogAction: "LOCK" | "UNLOCK" | "PROTECT" | "UNPROTECT" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
+        WikiLogAction: "LOCK" | "UNLOCK" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
         /** @enum {string} */
         WikiSection: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
         WikiSettingsDto: {
@@ -27284,8 +27392,6 @@ export interface components {
             new_member_edits_per_window: number;
             /** @description Moves, merges and splits a new member may submit in one window */
             new_member_moves_per_window: number;
-            /** @description Hours a structural edit by a member stays up for notice */
-            notice_hours: number;
             /** @description Length of the rate window in seconds */
             rate_window_seconds: number;
             /** @description Reverted or corrected edits within the window above which a task stops */
@@ -37161,7 +37267,6 @@ export interface operations {
     AdminEntryController_getProtected: {
         parameters: {
             query: {
-                level?: components["schemas"]["EntryProtection"];
                 page: number;
                 page_size: number;
             };
@@ -40068,6 +40173,7 @@ export interface operations {
     GalgameEntryController_compare: {
         parameters: {
             query: {
+                /** @description 0 compares the first revision with an empty entry */
                 from: number;
                 to: number;
             };
@@ -40287,6 +40393,31 @@ export interface operations {
                         items: components["schemas"]["GalgameRelatedPostDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    GalgameEntryController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitEditDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgamePreviewDto"];
                 };
             };
         };
@@ -41427,55 +41558,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelContributorsDto"];
-                };
-            };
-        };
-    };
-    LightNovelVolumeController_uploadEpub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": {
-                    /** Format: binary */
-                    file: string;
-                };
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LightNovelVolumeFileStateDto"];
-                };
-            };
-        };
-    };
-    LightNovelVolumeController_deleteEpub: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LightNovelVolumeFileStateDto"];
                 };
             };
         };
@@ -51349,7 +51431,7 @@ export interface operations {
     WikiMeController_getEdits: {
         parameters: {
             query: {
-                state?: "applied" | "reverted" | "pending";
+                state?: "applied" | "reverted";
                 page: number;
                 page_size: number;
             };
@@ -51372,6 +51454,31 @@ export interface operations {
             };
         };
     };
+    WikiMeController_getWatches: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["WatchedEntryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     WikiMeController_getWatchlist: {
         parameters: {
             query: {
@@ -51384,6 +51491,10 @@ export interface operations {
                 section?: components["schemas"]["WikiSection"];
                 entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
                 entry_id?: number;
+                /** @description Edits on this entry or on its releases, appearances, volumes and the books of those volumes */
+                within?: number;
+                /** @description Only edits that change values, leaving out those that only touch sources */
+                content?: boolean;
                 editor_id?: number;
                 task_id?: number;
                 page: number;
@@ -51885,7 +51996,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RevertEditDto"];
+                "application/json": components["schemas"]["RevertNoteDto"];
             };
         };
         responses: {
@@ -51911,6 +52022,10 @@ export interface operations {
                 section?: components["schemas"]["WikiSection"];
                 entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
                 entry_id?: number;
+                /** @description Edits on this entry or on its releases, appearances, volumes and the books of those volumes */
+                within?: number;
+                /** @description Only edits that change values, leaving out those that only touch sources */
+                content?: boolean;
                 editor_id?: number;
                 task_id?: number;
                 page: number;
@@ -52000,6 +52115,27 @@ export interface operations {
             };
         };
     };
+    WikiEditController_patrol: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatrolEditsDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     WikiEditController_getById: {
         parameters: {
             query?: never;
@@ -52021,9 +52157,12 @@ export interface operations {
             };
         };
     };
-    WikiEditController_withdraw: {
+    WikiEditController_previewRevert: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Undo only the part of the edit on this entry */
+                entry_id?: number;
+            };
             header?: never;
             path: {
                 id: number;
@@ -52032,76 +52171,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
-            };
-        };
-    };
-    WikiEditController_decide: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DecideEditDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
+                content: {
+                    "application/json": components["schemas"]["RevertPreviewDto"];
                 };
-                content?: never;
-            };
-        };
-    };
-    WikiEditController_object: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ObjectEditDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiEditController_patrol: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
@@ -52125,7 +52201,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EditResultDto"];
+                    "application/json": components["schemas"]["RevertResultDto"];
                 };
             };
         };
@@ -52222,6 +52298,7 @@ export interface operations {
     WikiEntryController_compare: {
         parameters: {
             query: {
+                /** @description 0 compares the first revision with an empty entry */
                 from: number;
                 to: number;
             };
@@ -52263,6 +52340,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EntryMergePreviewDto"];
+                };
+            };
+        };
+    };
+    WikiEntryController_getParts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Entries edited together with this one: the releases and appearances of a game, the volumes, books and appearances of a series, the other appearances of the character of an appearance */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EditableEntryDto"][];
                 };
             };
         };
@@ -52431,6 +52530,27 @@ export interface operations {
             };
         };
     };
+    WikiEntryController_getWatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WatchStateDto"];
+                };
+            };
+        };
+    };
     WikiEntryController_watch: {
         parameters: {
             query?: never;
@@ -52466,42 +52586,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    WikiPatrolController_getNotices: {
-        parameters: {
-            query: {
-                unpatrolled?: boolean;
-                new_members?: boolean;
-                deletions?: boolean;
-                work_content?: boolean;
-                structural?: boolean;
-                bot?: boolean;
-                section?: components["schemas"]["WikiSection"];
-                entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-                entry_id?: number;
-                editor_id?: number;
-                task_id?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["EditSummaryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
             };
         };
     };
@@ -52581,6 +52665,8 @@ export interface operations {
                 section?: components["schemas"]["WikiSection"];
                 entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
                 entry_id?: number;
+                /** @description An entry together with its products, appearances, volumes and books */
+                within?: number;
                 page: number;
                 page_size: number;
             };

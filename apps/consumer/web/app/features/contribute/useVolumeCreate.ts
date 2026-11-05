@@ -1,4 +1,5 @@
-import type { BackendEditOperation, BackendEntryDraft } from '~/features/creator/entry/contract'
+import type { ApiData } from '@hikarinagi/api-contract/v3'
+import type { EditOperation } from '~/features/wiki/editor/draft'
 import { isApiError } from '~/utils/api/error'
 
 export function useVolumeCreate(series: () => { id: number }) {
@@ -6,7 +7,7 @@ export function useVolumeCreate(series: () => { id: number }) {
   const isbn = ref('')
   const number = ref('')
   const title = ref('')
-  const draft = ref<BackendEntryDraft | null>(null)
+  const draft = ref<ApiData<'/api/v3/wiki/entries/drafts', 'post'> | null>(null)
   const notice = ref<string | null>(null)
   const loading = ref(false)
   const saving = ref(false)
@@ -71,7 +72,7 @@ export function useVolumeCreate(series: () => { id: number }) {
     }
   }
 
-  const operations = async (): Promise<{ operations: BackendEditOperation[] }> => {
+  const operations = async (): Promise<{ operations: EditOperation[] }> => {
     if (method.value === 'isbn' && draft.value) return { operations: draft.value.operations }
     const target = await seriesEntry()
     return {

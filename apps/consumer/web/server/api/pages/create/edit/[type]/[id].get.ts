@@ -21,7 +21,7 @@ async function handler(event: H3Event) {
   const resource = await fetchBackendData(event, '/api/v3/wiki/resources/{kind}/{id}', {
     path: { kind, id },
   })
-  return { target: `/create/edit/entry/${resource.entry_id}` }
+  return { target: `/entries/${resource.entry_id}/edit` }
 }
 
 export type EditRedirectPageData = Awaited<ReturnType<typeof handler>>

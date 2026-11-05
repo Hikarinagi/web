@@ -11700,6 +11700,277 @@
         ],
         "type": "object"
       },
+      "ComparedStatementDto": {
+        "properties": {
+          "amount": {
+            "nullable": true,
+            "type": "string"
+          },
+          "archive_url": {
+            "nullable": true,
+            "type": "string"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/StatementCitationDto"
+            },
+            "type": "array"
+          },
+          "code": {
+            "nullable": true,
+            "type": "string"
+          },
+          "currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "date_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "deprecation_note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "deprecation_reason": {
+            "enum": [
+              "CONTRADICTED",
+              "WRONG_ENTRY",
+              "DUPLICATE",
+              "RESCHEDULED",
+              "BAD_SOURCE",
+              "REVERTED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_public": {
+            "type": "boolean"
+          },
+          "language": {
+            "nullable": true,
+            "type": "string"
+          },
+          "media": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScoredMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "original": {
+            "nullable": true,
+            "type": "string"
+          },
+          "part": {
+            "nullable": true,
+            "type": "string"
+          },
+          "period_from": {
+            "nullable": true,
+            "type": "string"
+          },
+          "period_from_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "period_to": {
+            "nullable": true,
+            "type": "string"
+          },
+          "period_to_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          },
+          "property": {
+            "enum": [
+              "TITLE",
+              "READING",
+              "CHINESE_TITLE",
+              "ENGLISH_TITLE",
+              "ALIAS",
+              "ORIGINAL_INTRO",
+              "CHINESE_INTRO",
+              "INTRO",
+              "GENRE_TEXT",
+              "SAMPLE_IMAGE",
+              "WEBSITE",
+              "JAN",
+              "ISBN",
+              "PRODUCT_CODE",
+              "CHANNEL_CODE",
+              "PLATFORM",
+              "LANGUAGE",
+              "PRICE",
+              "RELEASE_DATE",
+              "RELEASE_STATUS",
+              "AGE_RATING",
+              "BONUS",
+              "SPECIFICATION",
+              "COVER",
+              "MEDIUM",
+              "PUBLICATION_STATUS",
+              "VOLUME_NUMBER",
+              "ORDER",
+              "BOOK_FORMAT",
+              "PAGE_COUNT",
+              "TRIM_SIZE",
+              "NAME",
+              "IDENTIFIER",
+              "GENDER",
+              "ORGANIZATION_TYPE",
+              "LOCATION",
+              "END_DATE",
+              "FOUNDED_DATE",
+              "LABEL",
+              "LABEL_NUMBER",
+              "OFFICIAL_INTRO",
+              "IMAGE",
+              "AGE",
+              "BIRTHDAY",
+              "HEIGHT",
+              "WEIGHT",
+              "MEASUREMENTS",
+              "BLOOD_TYPE",
+              "SITE_GROUP",
+              "SERIES",
+              "INCLUDED_VOLUME",
+              "INCLUDED_GAME",
+              "WORK",
+              "CHARACTER",
+              "CREDIT",
+              "PARENT",
+              "MEMBER",
+              "GAME_RELATION",
+              "SERIES_RELATION",
+              "ADAPTATION",
+              "APPEARANCE_RELATION",
+              "EXTERNAL_LINK"
+            ],
+            "type": "string"
+          },
+          "reading": {
+            "nullable": true,
+            "type": "string"
+          },
+          "role": {
+            "nullable": true,
+            "type": "string"
+          },
+          "song": {
+            "nullable": true,
+            "type": "string"
+          },
+          "song_kind": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ACTIVE",
+              "CLUE",
+              "DEPRECATED"
+            ],
+            "type": "string"
+          },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "tax_included": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "text": {
+            "nullable": true,
+            "type": "string"
+          },
+          "value_kind": {
+            "enum": [
+              "VALUE",
+              "UNKNOWN"
+            ],
+            "type": "string"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/EntryRefDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "property",
+          "status",
+          "value_kind",
+          "text",
+          "reading",
+          "original",
+          "code",
+          "role",
+          "song",
+          "song_kind",
+          "target",
+          "date",
+          "date_precision",
+          "amount",
+          "currency",
+          "tax_included",
+          "number",
+          "media",
+          "archive_url",
+          "period_from",
+          "period_from_precision",
+          "period_to",
+          "period_to_precision",
+          "part",
+          "language",
+          "versions",
+          "position",
+          "is_public",
+          "deprecation_reason",
+          "deprecation_note",
+          "citations"
+        ],
+        "type": "object"
+      },
       "ComparedValueDto": {
         "properties": {
           "citations": {
@@ -13734,6 +14005,8 @@
               "book_intake",
               "credit_link",
               "game_link",
+              "basis_cite",
+              "character_merge",
               "identifier_merge",
               "game_intake",
               "book_judge",
@@ -13903,17 +14176,6 @@
         ],
         "type": "string"
       },
-      "DecideEditDto": {
-        "properties": {
-          "apply": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "apply"
-        ],
-        "type": "object"
-      },
       "DecorationConditionPresetRefDto": {
         "properties": {
           "id": {
@@ -13990,6 +14252,21 @@
           "image",
           "scale",
           "price"
+        ],
+        "type": "object"
+      },
+      "DeletedChangeDto": {
+        "properties": {
+          "after": {
+            "type": "boolean"
+          },
+          "before": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "before",
+          "after"
         ],
         "type": "object"
       },
@@ -15920,6 +16197,45 @@
         ],
         "type": "object"
       },
+      "EditBasisDto": {
+        "properties": {
+          "media": {
+            "items": {
+              "$ref": "#/components/schemas/ScoredMediaAssetDto"
+            },
+            "type": "array"
+          },
+          "url": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "media"
+        ],
+        "type": "object"
+      },
+      "EditBasisInputDto": {
+        "properties": {
+          "media": {
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 20,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "url": {
+            "maxLength": 2000,
+            "nullable": true,
+            "pattern": "^https?:\\/\\/",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "EditBatchRefDto": {
         "properties": {
           "id": {
@@ -15981,17 +16297,10 @@
             },
             "type": "array"
           },
-          "missing_source": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MissingSourceDto"
-              }
-            ],
+          "orphan": {
+            "description": "A character the edit creates without any appearance pointing to it",
             "nullable": true,
-            "type": "object"
-          },
-          "notice": {
-            "type": "boolean"
+            "type": "number"
           },
           "statements": {
             "items": {
@@ -16012,12 +16321,11 @@
         },
         "required": [
           "summary",
-          "notice",
           "locked",
           "statements",
           "violations",
           "conflicts",
-          "missing_source"
+          "orphan"
         ],
         "type": "object"
       },
@@ -16125,6 +16433,15 @@
             "nullable": true,
             "type": "string"
           },
+          "basis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditBasisDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "batch": {
             "$ref": "#/components/schemas/EditBatchRefDto"
           },
@@ -16139,11 +16456,6 @@
           "editor": {
             "$ref": "#/components/schemas/UserRefDto"
           },
-          "effective_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
           "entries": {
             "items": {
               "$ref": "#/components/schemas/EditEntryDto"
@@ -16156,12 +16468,6 @@
           "note": {
             "nullable": true,
             "type": "string"
-          },
-          "objections": {
-            "items": {
-              "$ref": "#/components/schemas/EditObjectionDto"
-            },
-            "type": "array"
           },
           "operations": {
             "items": {
@@ -16183,36 +16489,25 @@
             "nullable": true,
             "type": "number"
           },
-          "status": {
-            "enum": [
-              "APPLIED",
-              "PENDING",
-              "WITHDRAWN",
-              "REJECTED"
-            ],
-            "type": "string"
-          },
           "summary": {
             "type": "string"
           }
         },
         "required": [
           "id",
-          "status",
           "editor",
           "batch",
           "summary",
           "note",
+          "basis",
           "clause",
           "operations",
           "created_at",
           "applied_at",
-          "effective_at",
           "reverted_at",
           "reverts_id",
           "patrolled_at",
-          "entries",
-          "objections"
+          "entries"
         ],
         "type": "object"
       },
@@ -16221,18 +16516,40 @@
           "base_revision": {
             "type": "number"
           },
+          "comparison": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RevisionComparisonDto"
+              }
+            ],
+            "description": "The entry before and after the edit",
+            "nullable": true,
+            "type": "object"
+          },
           "entry": {
             "$ref": "#/components/schemas/EntryRefDto"
+          },
+          "reverted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
           },
           "revision": {
             "nullable": true,
             "type": "number"
+          },
+          "summary": {
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "entry",
           "base_revision",
-          "revision"
+          "revision",
+          "summary",
+          "reverted_at",
+          "comparison"
         ],
         "type": "object"
       },
@@ -16269,30 +16586,6 @@
         },
         "required": [
           "chapter_type"
-        ],
-        "type": "object"
-      },
-      "EditObjectionDto": {
-        "properties": {
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "type": "number"
-          },
-          "reason": {
-            "type": "string"
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserRefDto"
-          }
-        },
-        "required": [
-          "id",
-          "user",
-          "reason",
-          "created_at"
         ],
         "type": "object"
       },
@@ -16342,7 +16635,8 @@
               "merge",
               "split",
               "delete_entry",
-              "restore_entry"
+              "restore_entry",
+              "detach"
             ],
             "type": "string"
           },
@@ -16487,6 +16781,55 @@
         ],
         "type": "object"
       },
+      "EditPartDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "label": {
+            "type": "string"
+          },
+          "reverted_at": {
+            "description": "When the part of the edit on this entry was undone",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "revision": {
+            "description": "The revision the edit made of this entry",
+            "nullable": true,
+            "type": "number"
+          },
+          "summary": {
+            "description": "What the edit changed on this entry; empty when the edit summary covers it",
+            "nullable": true,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "GAME",
+              "PRODUCT",
+              "SERIES",
+              "VOLUME",
+              "BOOK",
+              "PERSON",
+              "ORGANIZATION",
+              "CHARACTER",
+              "APPEARANCE"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "label",
+          "summary",
+          "reverted_at",
+          "revision"
+        ],
+        "type": "object"
+      },
       "EditQualifiersDto": {
         "properties": {
           "language": {
@@ -16555,20 +16898,10 @@
               "type": "number"
             },
             "type": "array"
-          },
-          "status": {
-            "enum": [
-              "APPLIED",
-              "PENDING",
-              "WITHDRAWN",
-              "REJECTED"
-            ],
-            "type": "string"
           }
         },
         "required": [
           "edit_id",
-          "status",
           "entries"
         ],
         "type": "object"
@@ -16579,6 +16912,15 @@
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "basis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditBasisDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
           },
           "batch": {
             "$ref": "#/components/schemas/EditBatchRefDto"
@@ -16594,14 +16936,9 @@
           "editor": {
             "$ref": "#/components/schemas/UserRefDto"
           },
-          "effective_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
           "entries": {
             "items": {
-              "$ref": "#/components/schemas/EntryRefDto"
+              "$ref": "#/components/schemas/EditPartDto"
             },
             "type": "array"
           },
@@ -16611,9 +16948,6 @@
           "note": {
             "nullable": true,
             "type": "string"
-          },
-          "objection_count": {
-            "type": "number"
           },
           "patrolled_at": {
             "format": "date-time",
@@ -16625,34 +16959,23 @@
             "nullable": true,
             "type": "string"
           },
-          "status": {
-            "enum": [
-              "APPLIED",
-              "PENDING",
-              "WITHDRAWN",
-              "REJECTED"
-            ],
-            "type": "string"
-          },
           "summary": {
             "type": "string"
           }
         },
         "required": [
           "id",
-          "status",
           "editor",
           "batch",
           "summary",
           "note",
+          "basis",
           "clause",
           "created_at",
           "applied_at",
-          "effective_at",
           "patrolled_at",
           "reverted_at",
-          "entries",
-          "objection_count"
+          "entries"
         ],
         "type": "object"
       },
@@ -17844,8 +18167,7 @@
       },
       "EntryProtection": {
         "enum": [
-          "LOCKED",
-          "NEW_MEMBER_REVIEW"
+          "LOCKED"
         ],
         "type": "string"
       },
@@ -17866,13 +18188,6 @@
             "nullable": true,
             "type": "object"
           },
-          "level": {
-            "enum": [
-              "LOCKED",
-              "NEW_MEMBER_REVIEW"
-            ],
-            "type": "string"
-          },
           "reason": {
             "description": "Reason given when the entry was protected",
             "nullable": true,
@@ -17884,7 +18199,6 @@
           }
         },
         "required": [
-          "level",
           "until",
           "reason",
           "by",
@@ -18104,6 +18418,16 @@
           "label": {
             "type": "string"
           },
+          "owner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryRefDto"
+              }
+            ],
+            "description": "The work or volume a release, appearance, volume or book belongs to",
+            "nullable": true,
+            "type": "object"
+          },
           "type": {
             "enum": [
               "GAME",
@@ -18117,13 +18441,22 @@
               "APPEARANCE"
             ],
             "type": "string"
+          },
+          "works": {
+            "description": "Up to two works a person or organization is credited on",
+            "items": {
+              "$ref": "#/components/schemas/EntryRefDto"
+            },
+            "type": "array"
           }
         },
         "required": [
           "id",
           "type",
           "label",
-          "chinese_title"
+          "chinese_title",
+          "owner",
+          "works"
         ],
         "type": "object"
       },
@@ -21723,6 +22056,53 @@
         ],
         "type": "object"
       },
+      "GalgamePreviewDto": {
+        "properties": {
+          "characters": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameCharacterRelationDto"
+            },
+            "type": "array"
+          },
+          "credits": {
+            "$ref": "#/components/schemas/GameCreditsDto"
+          },
+          "display": {
+            "$ref": "#/components/schemas/GameDisplayDto"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactDto"
+            },
+            "type": "array"
+          },
+          "galgame": {
+            "$ref": "#/components/schemas/GalgameDetailDto"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductSummaryDto"
+            },
+            "type": "array"
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameRelationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "galgame",
+          "display",
+          "facts",
+          "products",
+          "credits",
+          "characters",
+          "relations"
+        ],
+        "type": "object"
+      },
       "GalgamePriceDto": {
         "properties": {
           "amount": {
@@ -23529,6 +23909,38 @@
         "required": [
           "id",
           "created"
+        ],
+        "type": "object"
+      },
+      "KeptValueDto": {
+        "properties": {
+          "entry_id": {
+            "type": "number"
+          },
+          "statement_id": {
+            "description": "The value changed since; empty when the entry itself changed since",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "entry_id",
+          "statement_id"
+        ],
+        "type": "object"
+      },
+      "LabelChangeDto": {
+        "properties": {
+          "after": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "before",
+          "after"
         ],
         "type": "object"
       },
@@ -31377,21 +31789,6 @@
         ],
         "type": "object"
       },
-      "MissingSourceDto": {
-        "properties": {
-          "entry": {
-            "type": "number"
-          },
-          "reason": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "entry",
-          "reason"
-        ],
-        "type": "object"
-      },
       "ModerationApproveDto": {
         "properties": {
           "notes": {
@@ -34140,19 +34537,6 @@
         ],
         "type": "object"
       },
-      "ObjectEditDto": {
-        "properties": {
-          "reason": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "reason"
-        ],
-        "type": "object"
-      },
       "OgAuthorDto": {
         "properties": {
           "avatar": {
@@ -36789,9 +37173,6 @@
       },
       "OverviewEditsDto": {
         "properties": {
-          "notices": {
-            "type": "number"
-          },
           "today": {
             "type": "number"
           },
@@ -36813,8 +37194,7 @@
           "today_bots",
           "week",
           "week_bots",
-          "unpatrolled",
-          "notices"
+          "unpatrolled"
         ],
         "type": "object"
       },
@@ -36981,6 +37361,24 @@
           "total_items",
           "item_count",
           "total_pages"
+        ],
+        "type": "object"
+      },
+      "PatrolEditsDto": {
+        "properties": {
+          "edit_ids": {
+            "items": {
+              "minimum": 1,
+              "type": "number"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "edit_ids"
         ],
         "type": "object"
       },
@@ -39218,16 +39616,12 @@
           },
           "schedule": {
             "type": "string"
-          },
-          "suggests": {
-            "type": "boolean"
           }
         },
         "required": [
           "key",
           "label",
           "description",
-          "suggests",
           "budgeted",
           "schedule",
           "rate",
@@ -39483,6 +39877,13 @@
             ],
             "type": "string"
           },
+          "clauses": {
+            "description": "Clauses of the cataloging rules that govern this property",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "codes": {
             "items": {
               "type": "string"
@@ -39504,6 +39905,10 @@
             "type": "boolean"
           },
           "optional_code": {
+            "type": "boolean"
+          },
+          "optional_source": {
+            "description": "A value without a source is still a valid value of this property",
             "type": "boolean"
           },
           "original": {
@@ -39675,6 +40080,8 @@
           "unique",
           "unique_codes",
           "sources",
+          "optional_source",
+          "clauses",
           "work_content",
           "package_image"
         ],
@@ -39775,13 +40182,6 @@
       },
       "ProtectEntryDto": {
         "properties": {
-          "level": {
-            "enum": [
-              "LOCKED",
-              "NEW_MEMBER_REVIEW"
-            ],
-            "type": "string"
-          },
           "reason": {
             "maxLength": 500,
             "minLength": 1,
@@ -39793,7 +40193,6 @@
           }
         },
         "required": [
-          "level",
           "reason"
         ],
         "type": "object"
@@ -41202,6 +41601,23 @@
         },
         "type": "object"
       },
+      "RedirectChangeDto": {
+        "properties": {
+          "after": {
+            "nullable": true,
+            "type": "number"
+          },
+          "before": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "before",
+          "after"
+        ],
+        "type": "object"
+      },
       "ReferencedRefsDto": {
         "properties": {
           "article_ids": {
@@ -41964,6 +42380,11 @@
       },
       "RevertEditDto": {
         "properties": {
+          "entry_id": {
+            "description": "Undo only the part of the edit on this entry",
+            "minimum": 1,
+            "type": "number"
+          },
           "note": {
             "maxLength": 500,
             "type": "string"
@@ -42007,6 +42428,15 @@
         ],
         "type": "object"
       },
+      "RevertNoteDto": {
+        "properties": {
+          "note": {
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "RevertOutcomeDto": {
         "properties": {
           "failed": {
@@ -42015,15 +42445,12 @@
             },
             "type": "array"
           },
-          "rejected": {
-            "type": "number"
-          },
           "remaining": {
             "type": "number"
           },
           "reverted": {
             "items": {
-              "$ref": "#/components/schemas/EditResultDto"
+              "$ref": "#/components/schemas/RevertResultDto"
             },
             "type": "array"
           }
@@ -42031,8 +42458,53 @@
         "required": [
           "reverted",
           "failed",
-          "rejected",
           "remaining"
+        ],
+        "type": "object"
+      },
+      "RevertPreviewDto": {
+        "properties": {
+          "empty": {
+            "description": "Nothing of the edit is left to undo",
+            "type": "boolean"
+          },
+          "kept": {
+            "description": "Values that changed after the edit and will be left as they are",
+            "items": {
+              "$ref": "#/components/schemas/KeptValueDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "kept",
+          "empty"
+        ],
+        "type": "object"
+      },
+      "RevertResultDto": {
+        "properties": {
+          "edit_id": {
+            "type": "number"
+          },
+          "entries": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "kept": {
+            "description": "Values that changed after the edit, left as they are",
+            "items": {
+              "$ref": "#/components/schemas/KeptValueDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "edit_id",
+          "entries",
+          "kept"
         ],
         "type": "object"
       },
@@ -42168,7 +42640,7 @@
           "deleted": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ValueChangeDto"
+                "$ref": "#/components/schemas/DeletedChangeDto"
               }
             ],
             "nullable": true,
@@ -42183,10 +42655,16 @@
           "from": {
             "type": "number"
           },
+          "from_at": {
+            "description": "When the earlier revision was made",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
           "label": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ValueChangeDto"
+                "$ref": "#/components/schemas/LabelChangeDto"
               }
             ],
             "nullable": true,
@@ -42201,7 +42679,7 @@
           "redirect_id": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ValueChangeDto"
+                "$ref": "#/components/schemas/RedirectChangeDto"
               }
             ],
             "nullable": true,
@@ -42209,11 +42687,19 @@
           },
           "to": {
             "type": "number"
+          },
+          "to_at": {
+            "description": "When the later revision was made",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "from",
           "to",
+          "from_at",
+          "to_at",
           "label",
           "deleted",
           "redirect_id",
@@ -42320,11 +42806,26 @@
       },
       "RevisionEditDto": {
         "properties": {
+          "basis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditBasisDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "batch": {
             "$ref": "#/components/schemas/EditBatchRefDto"
           },
           "editor": {
             "$ref": "#/components/schemas/UserRefDto"
+          },
+          "entry_reverted_at": {
+            "description": "When the part of the edit on this entry was undone",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
           },
           "id": {
             "type": "number"
@@ -42347,26 +42848,18 @@
             "nullable": true,
             "type": "number"
           },
-          "status": {
-            "enum": [
-              "APPLIED",
-              "PENDING",
-              "WITHDRAWN",
-              "REJECTED"
-            ],
-            "type": "string"
-          },
           "summary": {
             "type": "string"
           }
         },
         "required": [
           "id",
-          "status",
           "summary",
           "note",
+          "basis",
           "patrolled_at",
           "reverted_at",
+          "entry_reverted_at",
           "reverts_id",
           "batch",
           "editor"
@@ -42395,6 +42888,23 @@
       },
       "RevisionSnapshotDto": {
         "properties": {
+          "basis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditBasisDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "content": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RevisionComparisonDto"
+              }
+            ],
+            "description": "The entry at this revision, every value given as added to an empty entry"
+          },
           "created_at": {
             "format": "date-time",
             "type": "string"
@@ -42402,19 +42912,30 @@
           "edit_id": {
             "type": "number"
           },
-          "number": {
+          "editor": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "latest": {
+            "description": "The revision the entry is at now",
             "type": "number"
           },
-          "snapshot": {
-            "additionalProperties": true,
-            "type": "object"
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "number": {
+            "type": "number"
           }
         },
         "required": [
           "number",
           "created_at",
           "edit_id",
-          "snapshot"
+          "note",
+          "basis",
+          "editor",
+          "latest",
+          "content"
         ],
         "type": "object"
       },
@@ -43467,12 +43988,20 @@
       "StatementChangeDto": {
         "properties": {
           "after": {
-            "additionalProperties": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ComparedStatementDto"
+              }
+            ],
             "nullable": true,
             "type": "object"
           },
           "before": {
-            "additionalProperties": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ComparedStatementDto"
+              }
+            ],
             "nullable": true,
             "type": "object"
           }
@@ -43999,6 +44528,9 @@
             },
             "maxItems": 200,
             "type": "array"
+          },
+          "basis": {
+            "$ref": "#/components/schemas/EditBasisInputDto"
           },
           "note": {
             "maxLength": 500,
@@ -44786,10 +45318,6 @@
             ],
             "nullable": true
           },
-          "suggests": {
-            "description": "The program only raises suggestions",
-            "type": "boolean"
-          },
           "trial_limit": {
             "nullable": true,
             "type": "number"
@@ -44818,7 +45346,6 @@
           "program",
           "name",
           "description",
-          "suggests",
           "bot",
           "creates",
           "properties",
@@ -44960,10 +45487,6 @@
             ],
             "nullable": true
           },
-          "suggests": {
-            "description": "The program only raises suggestions",
-            "type": "boolean"
-          },
           "trial_limit": {
             "nullable": true,
             "type": "number"
@@ -44986,7 +45509,6 @@
           "program",
           "name",
           "description",
-          "suggests",
           "bot",
           "creates",
           "properties",
@@ -47069,6 +47591,16 @@
           "problem": {
             "type": "string"
           },
+          "proposal": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TodoProposalDto"
+              }
+            ],
+            "description": "The single value the suggestion would add or write over an existing one",
+            "nullable": true,
+            "type": "object"
+          },
           "resolution": {
             "nullable": true,
             "type": "string"
@@ -47114,7 +47646,163 @@
           "resolution",
           "created_by",
           "entries",
-          "statement"
+          "statement",
+          "proposal"
+        ],
+        "type": "object"
+      },
+      "TodoProposalDto": {
+        "properties": {
+          "amount": {
+            "nullable": true,
+            "type": "string"
+          },
+          "code": {
+            "nullable": true,
+            "type": "string"
+          },
+          "currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "current": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TodoStatementDto"
+              }
+            ],
+            "description": "The value the suggestion replaces; null when it adds a value",
+            "nullable": true,
+            "type": "object"
+          },
+          "date": {
+            "nullable": true,
+            "type": "string"
+          },
+          "date_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "entry_id": {
+            "type": "number"
+          },
+          "number": {
+            "nullable": true,
+            "type": "number"
+          },
+          "property": {
+            "enum": [
+              "TITLE",
+              "READING",
+              "CHINESE_TITLE",
+              "ENGLISH_TITLE",
+              "ALIAS",
+              "ORIGINAL_INTRO",
+              "CHINESE_INTRO",
+              "INTRO",
+              "GENRE_TEXT",
+              "SAMPLE_IMAGE",
+              "WEBSITE",
+              "JAN",
+              "ISBN",
+              "PRODUCT_CODE",
+              "CHANNEL_CODE",
+              "PLATFORM",
+              "LANGUAGE",
+              "PRICE",
+              "RELEASE_DATE",
+              "RELEASE_STATUS",
+              "AGE_RATING",
+              "BONUS",
+              "SPECIFICATION",
+              "COVER",
+              "MEDIUM",
+              "PUBLICATION_STATUS",
+              "VOLUME_NUMBER",
+              "ORDER",
+              "BOOK_FORMAT",
+              "PAGE_COUNT",
+              "TRIM_SIZE",
+              "NAME",
+              "IDENTIFIER",
+              "GENDER",
+              "ORGANIZATION_TYPE",
+              "LOCATION",
+              "END_DATE",
+              "FOUNDED_DATE",
+              "LABEL",
+              "LABEL_NUMBER",
+              "OFFICIAL_INTRO",
+              "IMAGE",
+              "AGE",
+              "BIRTHDAY",
+              "HEIGHT",
+              "WEIGHT",
+              "MEASUREMENTS",
+              "BLOOD_TYPE",
+              "SITE_GROUP",
+              "SERIES",
+              "INCLUDED_VOLUME",
+              "INCLUDED_GAME",
+              "WORK",
+              "CHARACTER",
+              "CREDIT",
+              "PARENT",
+              "MEMBER",
+              "GAME_RELATION",
+              "SERIES_RELATION",
+              "ADAPTATION",
+              "APPEARANCE_RELATION",
+              "EXTERNAL_LINK"
+            ],
+            "type": "string"
+          },
+          "role": {
+            "nullable": true,
+            "type": "string"
+          },
+          "song": {
+            "nullable": true,
+            "type": "string"
+          },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "tax_included": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "text": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry_id",
+          "property",
+          "current",
+          "text",
+          "code",
+          "date",
+          "date_precision",
+          "amount",
+          "currency",
+          "tax_included",
+          "number",
+          "role",
+          "song",
+          "target"
         ],
         "type": "object"
       },
@@ -50647,12 +51335,6 @@
             "nullable": true,
             "type": "number"
           },
-          "notice_hours": {
-            "maximum": 720,
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          },
           "rate_window_seconds": {
             "maximum": 86400,
             "minimum": 10,
@@ -51512,23 +52194,6 @@
         ],
         "type": "object"
       },
-      "ValueChangeDto": {
-        "properties": {
-          "after": {
-            "nullable": true,
-            "type": "object"
-          },
-          "before": {
-            "nullable": true,
-            "type": "object"
-          }
-        },
-        "required": [
-          "before",
-          "after"
-        ],
-        "type": "object"
-      },
       "VersionRefDto": {
         "properties": {
           "id": {
@@ -51588,12 +52253,37 @@
           "MAIN": "正篇"
         }
       },
+      "WatchStateDto": {
+        "properties": {
+          "watched": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "watched"
+        ],
+        "type": "object"
+      },
+      "WatchedEntryDto": {
+        "properties": {
+          "entry": {
+            "$ref": "#/components/schemas/EntryRefDto"
+          },
+          "watched_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry",
+          "watched_at"
+        ],
+        "type": "object"
+      },
       "WikiLogAction": {
         "enum": [
           "LOCK",
           "UNLOCK",
-          "PROTECT",
-          "UNPROTECT",
           "GRANT",
           "REVOKE",
           "BAN",
@@ -51648,10 +52338,6 @@
             "description": "Moves, merges and splits a new member may submit in one window",
             "type": "number"
           },
-          "notice_hours": {
-            "description": "Hours a structural edit by a member stays up for notice",
-            "type": "number"
-          },
           "rate_window_seconds": {
             "description": "Length of the rate window in seconds",
             "type": "number"
@@ -51666,7 +52352,6 @@
           }
         },
         "required": [
-          "notice_hours",
           "new_member_days",
           "new_member_edits",
           "rate_window_seconds",
@@ -68175,14 +68860,6 @@
         "parameters": [
           {
             "in": "query",
-            "name": "level",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/EntryProtection"
-            }
-          },
-          {
-            "in": "query",
             "name": "page",
             "required": true,
             "schema": {
@@ -73527,11 +74204,12 @@
             }
           },
           {
+            "description": "0 compares the first revision with an empty entry",
             "in": "query",
             "name": "from",
             "required": true,
             "schema": {
-              "minimum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
@@ -73912,6 +74590,46 @@
         },
         "tags": [
           "Galgame"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/previews": {
+      "post": {
+        "operationId": "GalgameEntryController_preview",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitEditDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgamePreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "GalgameEntry"
         ]
       }
     },
@@ -75588,83 +76306,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LightNovelContributorsDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "LightNovelVolume"
-        ]
-      }
-    },
-    "/api/v3/light-novel-volumes/{id}/epub": {
-      "delete": {
-        "operationId": "LightNovelVolumeController_deleteEpub",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LightNovelVolumeFileStateDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "LightNovelVolume"
-        ]
-      },
-      "post": {
-        "operationId": "LightNovelVolumeController_uploadEpub",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "properties": {
-                  "file": {
-                    "format": "binary",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "file"
-                ],
-                "type": "object"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LightNovelVolumeFileStateDto"
                 }
               }
             },
@@ -92911,8 +93552,7 @@
             "schema": {
               "enum": [
                 "applied",
-                "reverted",
-                "pending"
+                "reverted"
               ],
               "type": "string"
             }
@@ -92948,6 +93588,64 @@
                     "items": {
                       "items": {
                         "$ref": "#/components/schemas/EditSummaryDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "WikiMe"
+        ]
+      }
+    },
+    "/api/v3/user/me/wiki/watches": {
+      "get": {
+        "operationId": "WikiMeController_getWatches",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/WatchedEntryDto"
                       },
                       "type": "array"
                     },
@@ -93057,6 +93755,25 @@
             "schema": {
               "minimum": 1,
               "type": "number"
+            }
+          },
+          {
+            "description": "Edits on this entry or on its releases, appearances, volumes and the books of those volumes",
+            "in": "query",
+            "name": "within",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Only edits that change values, leaving out those that only touch sources",
+            "in": "query",
+            "name": "content",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -94235,7 +94952,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RevertEditDto"
+                "$ref": "#/components/schemas/RevertNoteDto"
               }
             }
           },
@@ -94344,6 +95061,25 @@
             "schema": {
               "minimum": 1,
               "type": "number"
+            }
+          },
+          {
+            "description": "Edits on this entry or on its releases, appearances, volumes and the books of those volumes",
+            "in": "query",
+            "name": "within",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Only edits that change values, leaving out those that only touch sources",
+            "in": "query",
+            "name": "content",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -94504,19 +95240,20 @@
         ]
       }
     },
-    "/api/v3/wiki/edits/{id}": {
-      "delete": {
-        "operationId": "WikiEditController_withdraw",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
+    "/api/v3/wiki/edits/patrols": {
+      "post": {
+        "operationId": "WikiEditController_patrol",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatrolEditsDto"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": ""
@@ -94525,7 +95262,9 @@
         "tags": [
           "WikiEdit"
         ]
-      },
+      }
+    },
+    "/api/v3/wiki/edits/{id}": {
       "get": {
         "operationId": "WikiEditController_getById",
         "parameters": [
@@ -94555,96 +95294,45 @@
         ]
       }
     },
-    "/api/v3/wiki/edits/{id}/decision": {
-      "post": {
-        "operationId": "WikiEditController_decide",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DecideEditDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "WikiEdit"
-        ]
-      }
-    },
-    "/api/v3/wiki/edits/{id}/objections": {
-      "post": {
-        "operationId": "WikiEditController_object",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ObjectEditDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "WikiEdit"
-        ]
-      }
-    },
-    "/api/v3/wiki/edits/{id}/patrol": {
-      "post": {
-        "operationId": "WikiEditController_patrol",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "WikiEdit"
-        ]
-      }
-    },
     "/api/v3/wiki/edits/{id}/revert": {
+      "get": {
+        "operationId": "WikiEditController_previewRevert",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "Undo only the part of the edit on this entry",
+            "in": "query",
+            "name": "entry_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevertPreviewDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "WikiEdit"
+        ]
+      },
       "post": {
         "operationId": "WikiEditController_revert",
         "parameters": [
@@ -94672,7 +95360,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EditResultDto"
+                  "$ref": "#/components/schemas/RevertResultDto"
                 }
               }
             },
@@ -94847,11 +95535,12 @@
             }
           },
           {
+            "description": "0 compares the first revision with an empty entry",
             "in": "query",
             "name": "from",
             "required": true,
             "schema": {
-              "minimum": 1,
+              "minimum": 0,
               "type": "number"
             }
           },
@@ -94915,6 +95604,39 @@
               }
             },
             "description": ""
+          }
+        },
+        "tags": [
+          "WikiEntry"
+        ]
+      }
+    },
+    "/api/v3/wiki/entries/{id}/parts": {
+      "get": {
+        "operationId": "WikiEntryController_getParts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EditableEntryDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Entries edited together with this one: the releases and appearances of a game, the volumes, books and appearances of a series, the other appearances of the character of an appearance"
           }
         },
         "tags": [
@@ -95225,6 +95947,34 @@
           "WikiEntry"
         ]
       },
+      "get": {
+        "operationId": "WikiEntryController_getWatch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WatchStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "WikiEntry"
+        ]
+      },
       "put": {
         "operationId": "WikiEntryController_watch",
         "parameters": [
@@ -95244,166 +95994,6 @@
         },
         "tags": [
           "WikiEntry"
-        ]
-      }
-    },
-    "/api/v3/wiki/notices": {
-      "get": {
-        "operationId": "WikiPatrolController_getNotices",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "unpatrolled",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "new_members",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "deletions",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "work_content",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "structural",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "bot",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "section",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/WikiSection"
-            }
-          },
-          {
-            "in": "query",
-            "name": "entry_type",
-            "required": false,
-            "schema": {
-              "enum": [
-                "GAME",
-                "PRODUCT",
-                "SERIES",
-                "VOLUME",
-                "BOOK",
-                "PERSON",
-                "ORGANIZATION",
-                "CHARACTER",
-                "APPEARANCE"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "entry_id",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "editor_id",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "task_id",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "required": true,
-            "schema": {
-              "default": 1,
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page_size",
-            "required": true,
-            "schema": {
-              "default": 10,
-              "maximum": 100,
-              "minimum": 1,
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "items": {
-                      "items": {
-                        "$ref": "#/components/schemas/EditSummaryDto"
-                      },
-                      "type": "array"
-                    },
-                    "meta": {
-                      "$ref": "#/components/schemas/PageMetaDto"
-                    }
-                  },
-                  "required": [
-                    "items",
-                    "meta"
-                  ],
-                  "type": "object"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "WikiPatrol"
         ]
       }
     },
@@ -95588,6 +96178,16 @@
           {
             "in": "query",
             "name": "entry_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "description": "An entry together with its products, appearances, volumes and books",
+            "in": "query",
+            "name": "within",
             "required": false,
             "schema": {
               "minimum": 1,

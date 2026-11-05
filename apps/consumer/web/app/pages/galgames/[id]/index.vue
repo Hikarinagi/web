@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
   import { galgameSeo } from '~/features/seo/galgame'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
@@ -28,41 +27,5 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
-    <GalgameHero
-      :galgame="data.galgame"
-      :display="data.display"
-      :my-rate="data.my_rate"
-      :favorited="data.favorite?.favorited ?? false"
-    />
-
-    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
-      <GalgameRatesSummary
-        :stats="data.rate_stats"
-        :top-rates="data.top_rates"
-        :galgame="data.galgame"
-        :my-rate="data.my_rate"
-      />
-
-      <GalgameAbout
-        :galgame="data.galgame"
-        :display="data.display"
-        :facts="data.facts"
-        :tags="data.tags"
-        :contributors="data.contributors"
-      />
-
-      <GalgameProducts :galgame-id="galgameId" :products="data.products" />
-
-      <GalgameCast :galgame-id="galgameId" :characters="data.characters" />
-
-      <WorkLongReviews :articles="data.articles" />
-
-      <GalgameImages :galgame="data.galgame" />
-
-      <GalgameRelations :relations="data.relations" />
-
-      <GalgameCrew :galgame-id="galgameId" :credits="data.credits" />
-    </Stack>
-  </Stack>
+  <GalgamePage v-if="data" :data="data" :galgame-id="galgameId" class="-mt-(--app-header-height)" />
 </template>

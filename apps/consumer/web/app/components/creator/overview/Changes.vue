@@ -16,7 +16,13 @@
 <template>
   <Panel :title="title" :count="list.meta.total_items">
     <template #actions>
-      <Button :as="NuxtLink" to="/create/edits" variant="ghost" tone="neutral" size="xs">
+      <Button
+        :as="NuxtLink"
+        to="/create/wiki/changes?f=mine"
+        variant="ghost"
+        tone="neutral"
+        size="xs"
+      >
         查看全部
       </Button>
     </template>
@@ -29,7 +35,7 @@
               v-for="entry in row.entries.slice(0, 1)"
               :key="entry.id"
               :as="NuxtLink"
-              :to="`/create/edit/entry/${entry.id}`"
+              :to="`/entries/${entry.id}/edit`"
               class="min-w-0 truncate text-sm"
               lang="ja"
             >

@@ -1,23 +1,30 @@
-import { WORKBENCH_PERMISSIONS, type PermissionCheck } from '@hikarinagi/shared'
+import { WIKI_PERMISSIONS, WORKBENCH_PERMISSIONS, type PermissionCheck } from '@hikarinagi/shared'
 import {
-  Activity,
   BookCheck,
   BookImage,
+  BookOpenText,
+  Eye,
   FilePlus,
   FolderKanban,
+  History,
   LayoutDashboard,
-  ListTodo,
-  Megaphone,
+  NotebookPen,
+  Search,
+  ShieldCheck,
   Upload,
+  UserPen,
 } from '@lucide/vue'
 import type { Component } from 'vue'
 
 export interface CreatorNavItem {
   label: string
-  to: string
-  also?: string[]
   icon: Component
+  to?: string
+  filter?: string
+  also?: string[]
   permission?: PermissionCheck
+  find?: boolean
+  unchecked?: boolean
 }
 
 export interface CreatorNavGroup {
@@ -27,15 +34,26 @@ export interface CreatorNavGroup {
 
 export const CREATOR_NAV: CreatorNavGroup[] = [
   {
-    items: [{ label: '概览', to: '/create', also: ['/create/edits'], icon: LayoutDashboard }],
+    items: [{ label: '概览', to: '/create', icon: LayoutDashboard }],
   },
   {
-    label: '条目',
+    label: '维基',
     items: [
-      { label: '新建条目', to: '/create/new', icon: FilePlus },
-      { label: '待完善', to: '/create/todos', icon: ListTodo },
-      { label: '最近更改', to: '/create/changes', icon: Activity },
-      { label: '公示中', to: '/create/notices', icon: Megaphone },
+      { label: '查找条目', icon: Search, find: true },
+      { label: '工作台', to: '/create/wiki', icon: NotebookPen },
+      { label: '新建条目', to: '/create/wiki/new', icon: FilePlus },
+      { label: '全部修改', to: '/create/wiki/changes', icon: History },
+      {
+        label: '未检查的修改',
+        to: '/create/wiki/changes',
+        filter: 'unchecked',
+        icon: ShieldCheck,
+        permission: WIKI_PERMISSIONS.PATROL,
+        unchecked: true,
+      },
+      { label: '我的修改', to: '/create/wiki/changes', filter: 'mine', icon: UserPen },
+      { label: '我关注的', to: '/create/wiki/changes', filter: 'watched', icon: Eye },
+      { label: '编辑规范', to: '/create/wiki/rules', icon: BookOpenText },
     ],
   },
   {

@@ -15,11 +15,16 @@ export function useThemeMode() {
     () => THEME_MODES.find(mode => mode.value === colorMode.preference) ?? THEME_MODES[0],
   )
 
+  function set(value: string | undefined) {
+    const mode = THEME_MODES.find(item => item.value === value)
+    if (mode) colorMode.preference = mode.value
+  }
+
   function cycle() {
     const index = THEME_MODES.findIndex(mode => mode.value === current.value.value)
     const next = THEME_MODES[(index + 1) % THEME_MODES.length] ?? THEME_MODES[0]
     colorMode.preference = next.value
   }
 
-  return { current, cycle }
+  return { current, modes: THEME_MODES, set, cycle }
 }

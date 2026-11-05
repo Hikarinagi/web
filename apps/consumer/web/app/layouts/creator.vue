@@ -1,20 +1,26 @@
 <script setup lang="ts">
-  import { AppShell, Stack } from '@hina-ui/vue'
+  import { AppShell, SidebarTrigger, Stack, VisuallyHidden } from '@hina-ui/vue'
   import { useCreatorSidebar } from '~/features/creator/composables/useCreatorSidebar'
+  import { cn } from '~/utils/cn'
 
   const { state } = useCreatorSidebar()
-
-  const shell = useTemplateRef<InstanceType<typeof AppShell>>('shell')
-  const viewport = computed(() => shell.value?.mainViewport ?? null)
+  const route = useRoute()
+  const title = computed(() => (route.meta.title as string | undefined) ?? '创作者中心')
 </script>
 
 <template>
-  <AppShell ref="shell" v-model:sidebar="state" mobile-title="创作者中心" restore-key="creator">
+  <AppShell v-model:sidebar="state" mobile-title="创作者中心" restore-key="creator">
     <template #sidebar><CreatorShellSidebar /></template>
-    <template #header><CreatorShellTopbar :viewport="viewport" /></template>
+    <template #header>
+      <SidebarTrigger />
+      <CreatorShellTabStrip />
+    </template>
 
-    <Stack class="px-5 py-6">
+    <Stack gap="md" :class="cn('px-5 py-4', route.meta.fill ? 'h-full' : 'min-h-full')">
+      <VisuallyHidden as="h1">{{ title }}</VisuallyHidden>
+      <CreatorShellCrumbs />
       <slot />
     </Stack>
+    <CreatorShellFinder />
   </AppShell>
 </template>
