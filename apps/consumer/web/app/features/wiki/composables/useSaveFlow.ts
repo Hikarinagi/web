@@ -1,5 +1,4 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { toast } from '@hina-ui/vue'
 import type { EntryEditor } from '~/features/wiki/composables/useEntryEditor'
 
 type EditCheck = ApiData<'/api/v3/wiki/edits/checks', 'post'>
@@ -33,6 +32,9 @@ export function useSaveFlow(
   const check = shallowRef<EditCheck | null>(null)
   const checking = ref(false)
   const saving = ref(false)
+  const bus = useWikiSavedBus()
+  const route = useRoute()
+  const router = useRouter()
   const body = () => editBody(editor)
 
   async function inspect() {
@@ -48,16 +50,6 @@ export function useSaveFlow(
     } finally {
       checking.value = false
     }
-  }
-
-  async function undo(edit: number) {
-    await hikariRequest('/api/v3/wiki/edits/{id}/revert', {
-      method: 'POST',
-      path: { id: edit },
-      body: {},
-    })
-    toast.success('已撤销')
-    await saved()
   }
 
   async function save() {
@@ -84,14 +76,11 @@ export function useSaveFlow(
           ),
         )
       editor.discard()
+      bus.emit(result.entries)
       check.value = null
-      toast.success('已保存', {
-        description: later ? '确认后显示在作品页' : undefined,
-        action: {
-          label: '查看本次修改',
-          onClick: () => void navigateTo(`/create/wiki/changes/${result.edit_id}`),
-        },
-        cancel: { label: '撤销', onClick: () => void undo(result.edit_id) },
+      const { save: _save, saved: _saved, later: _later, undone: _undone, ...query } = route.query
+      await router.replace({
+        query: { ...query, saved: String(result.edit_id), ...(later ? { later: '1' } : {}) },
       })
       await saved(result)
       return true

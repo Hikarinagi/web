@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { CloseButton, FileUpload, Inline, Input, Stack } from '@hina-ui/vue'
+  import { ImagePlus } from '@lucide/vue'
   import { uploadImage } from '~/components/media-library/lib/upload'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
 
@@ -36,15 +37,19 @@
 </script>
 
 <template>
-  <Stack gap="sm">
-    <Input
-      :model-value="basis.url"
-      type="url"
-      inputmode="url"
-      placeholder="https://"
-      aria-label="依据的网址"
-      @update:model-value="value => editor.basis({ ...basis, url: String(value) })"
-    />
+  <Stack gap="xs">
+    <Inline gap="sm" align="center" :wrap="false">
+      <Input
+        :model-value="basis.url"
+        type="url"
+        inputmode="url"
+        placeholder="依据的网址"
+        aria-label="依据的网址"
+        class="min-w-0 flex-1"
+        @update:model-value="value => editor.basis({ ...basis, url: String(value) })"
+      />
+      <WikiFieldRule label="依据" :clauses="['A.13.8', 'A.2.1.6']" />
+    </Inline>
     <Inline gap="sm" align="center">
       <Inline
         v-for="(media, index) in basis.media"
@@ -78,6 +83,7 @@
         :list="false"
         @update:model-value="upload"
       >
+        <template #icon><ImagePlus /></template>
         添加截图
       </FileUpload>
     </Inline>

@@ -6,14 +6,16 @@
     layout: 'creator',
     middleware: ['auth', 'wiki-editor-content-limit'],
     floatingToolbar: false,
+    fill: true,
     title: '单个版本',
   })
 
   const route = useRoute()
-  const { data, refresh } = await useHikariApiData<VersionPageData>(
-    `/api/pages/entries/${String(route.params.id)}/history/${String(route.params.revision)}`,
-    { fatal: true },
+  const request = computed(
+    () =>
+      `/api/pages/entries/${String(route.params.id)}/history/${String(route.params.revision)}` as `/api/pages/${string}`,
   )
+  const { data, refresh } = await useHikariApiData<VersionPageData>(request, { fatal: true })
   useCreatorPage({
     title: () =>
       data.value

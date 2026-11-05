@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { IconButton, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Undo2 } from '@lucide/vue'
   import type { ComponentPublicInstance } from 'vue'
-  import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
-  import { hintsOn } from '~/features/wiki/hints'
   import type { PropertyDefinition, ValueDraft } from '~/features/wiki/editor/draft'
   import {
     extrasSet,
@@ -26,14 +25,17 @@
     down: boolean
     open?: QualifierKind[]
     repeated?: boolean
+    table?: boolean
+    card?: boolean
+    ratio?: number
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
-  const hints = editor.root ? useEntryHints(editor.root) : null
-  const hinted = computed(() =>
-    props.item.id > 0 && hints?.data.value
-      ? hintsOn(hints.data.value.items, props.item.id).length
-      : 0,
+  const moved = computed(() =>
+    props.item.moved === null
+      ? null
+      : (editor.members.value.find(member => member.id === props.item.moved)?.entry?.label ??
+        '未命名'),
   )
   const root = useTemplateRef<ComponentPublicInstance>('root')
   onMounted(() =>
@@ -67,13 +69,12 @@
       ? (editor.draft.value.rated[media.id] ?? { sexual: media.sexual, violence: media.violence })
       : { sexual: null, violence: null }
   })
-  const tone = computed(() =>
-    props.item.state === 'added'
-      ? 'border-success bg-success-soft'
-      : props.item.state === 'same'
-        ? 'border-transparent'
-        : 'border-accent',
-  )
+  const tone = computed(() => {
+    if (props.item.state === 'same') return props.card ? 'border-line' : 'border-transparent'
+    if (props.item.state === 'added' || props.item.state === 'moved_in') return 'border-success'
+    if (inactive.value) return 'border-danger'
+    return 'border-accent'
+  })
 
   const relocatable = computed(() => {
     const type = editor.members.value.find(member => member.id === props.entry)?.type
@@ -87,18 +88,78 @@
     if (props.item.state === 'added') editor.revert(props.item.id)
     else editor.remove(props.item.id)
   }
+
+  const menu = computed(() => ({
+    label: props.label,
+    added: props.item.state === 'added',
+    definition: props.definition,
+    value: value.value,
+    shown: shown.value,
+    extras: extras.value,
+    up: props.up,
+    down: props.down,
+    relocatable: relocatable.value,
+  }))
+  const actions = {
+    qualify: (kind: QualifierKind) => shown.value.push(kind),
+    extra: (kind: ExtraKind) => extras.value.push(kind),
+    unknown: (on: boolean) => patch({ value_kind: on ? 'UNKNOWN' : 'VALUE' }),
+    move: (step: -1 | 1) =>
+      editor.order(props.entry, props.definition.property, props.item.id, step),
+    relocate: () =>
+      navigateTo({
+        query: {
+          ...route.query,
+          move: `${props.entry}|${props.definition.property}|${props.item.id}`,
+        },
+      }),
+    remove,
+  }
 </script>
 
 <template>
-  <Stack ref="root" gap="xs" :class="cn('rounded-sm border-l-2 py-1 pl-3', tone)">
-    <Inline gap="sm" align="start" :wrap="false">
+  <Stack
+    ref="root"
+    gap="xs"
+    :class="
+      cn(
+        card
+          ? 'rounded-md border p-2'
+          : table
+            ? 'border-b border-l-2 border-b-line px-3 py-2.5 last:border-b-0'
+            : '-ml-3 border-l-2 pl-2.5',
+        tone,
+      )
+    "
+  >
+    <Inline v-if="inactive" gap="sm" align="center" :wrap="false" class="min-h-9">
+      <Text size="sm" tone="muted" class="min-w-0 flex-1 truncate line-through">
+        {{ valueText({ ...item.value, property: definition.property }) || '空' }}
+      </Text>
+      <Text v-if="item.state === 'moved_out' && moved" size="xs" tone="muted" class="shrink-0">
+        移到「{{ moved }}」
+      </Text>
+      <IconButton
+        label="恢复"
+        variant="ghost"
+        tone="neutral"
+        size="sm"
+        @click="editor.revert(item.id)"
+      >
+        <Undo2 />
+      </IconButton>
+    </Inline>
+    <Inline v-else gap="xs" :align="long ? 'start' : 'center'" :wrap="false">
       <Stack class="min-w-0 flex-1">
-        <Text v-if="inactive" size="sm" tone="muted" class="py-2 line-through">
-          {{ valueText({ ...item.value, property: definition.property }) || '空' }}
-        </Text>
-        <Text v-else-if="value.value_kind === 'UNKNOWN'" size="sm" tone="muted" class="py-2">
-          存在，但值未知
-        </Text>
+        <Inline
+          v-if="value.value_kind === 'UNKNOWN'"
+          gap="sm"
+          align="center"
+          :wrap="false"
+          class="h-9 rounded-md border border-dashed border-line bg-subtle px-3"
+        >
+          <Text size="sm" tone="muted">未知</Text>
+        </Inline>
         <WikiFieldEntry
           v-else-if="shape === 'entry'"
           v-model="value"
@@ -121,31 +182,16 @@
           v-else-if="shape === 'image'"
           v-model="value"
           :label="label"
+          :card="card"
+          :ratio="ratio"
           :rating="rating"
           @rate="next => value.media && editor.rate(item.id, value.media.id, next)"
-        />
+        >
+          <template #menu><WikiFieldMenu v-bind="menu" v-on="actions" /></template>
+        </WikiFieldImage>
         <WikiFieldSimple v-else v-model="value" :definition="definition" :label="label" />
       </Stack>
-      <WikiFieldMenu
-        v-if="!inactive"
-        :definition="definition"
-        :value="value"
-        :shown="shown"
-        :extras="extras"
-        :up="up"
-        :down="down"
-        :relocatable="relocatable"
-        @qualify="kind => shown.push(kind)"
-        @extra="kind => extras.push(kind)"
-        @unknown="on => patch({ value_kind: on ? 'UNKNOWN' : 'VALUE' })"
-        @move="step => editor.order(entry, definition.property, item.id, step)"
-        @relocate="
-          navigateTo({
-            query: { ...route.query, move: `${entry}|${definition.property}|${item.id}` },
-          })
-        "
-        @remove="remove"
-      />
+      <WikiFieldMenu v-if="!card" v-bind="menu" v-on="actions" />
     </Inline>
     <WikiFieldExtras v-if="!inactive" v-model="value" v-model:extras="extras" />
     <WikiFieldQualifiers
@@ -156,18 +202,11 @@
     />
     <Text v-if="repeated && !inactive" size="xs" tone="warning">职责与名字都与另一行相同</Text>
     <WikiFieldChange
+      v-if="!inactive"
       :item="item"
       :long="long"
       :image="shape === 'image'"
       @revert="editor.revert(item.id)"
     />
-    <Link
-      v-if="hinted"
-      :as="NuxtLink"
-      :to="{ query: { ...route.query, side: 'hints', focus: String(item.id) } }"
-      class="self-start text-xs"
-    >
-      {{ hinted }} 条建议
-    </Link>
   </Stack>
 </template>

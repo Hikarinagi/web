@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Empty, Flex, Panel, ScrollArea, Stack } from '@hina-ui/vue'
+  import { Button, Empty, Flex, Heading, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { CHANGE_TITLES, changesRoute } from '~/features/wiki/changes'
   import { RELOAD_CHANGES, useChangesResults } from '~/features/wiki/composables/useChangesResults'
@@ -13,6 +13,7 @@
   const { displayed, state, pending, reload } = useChangesResults(props.initial)
   const { canAny } = useCreatorPermissions()
   provide(RELOAD_CHANGES, reload)
+  useRefreshOnSaved(reload)
 
   const current = computed(() => Number(route.params.id) || null)
   const selectable = computed(
@@ -42,48 +43,56 @@
 </script>
 
 <template>
-  <Flex gap="lg" align="start">
-    <Panel
-      :title="CHANGE_TITLES[state.f]"
-      :count="displayed.list.meta.total_items"
-      :padded="false"
-      :class="cn('w-96 shrink-0 max-md:w-full', current && 'max-md:hidden')"
-    >
-      <template #actions>
-        <Button v-if="selected.length" size="sm" variant="soft" :loading="marking" @click="mark">
-          将 {{ selected.length }} 条标记为已检查
-        </Button>
-      </template>
-      <Empty v-if="!displayed.list.items.length" title="没有修改" />
-      <Stack v-else gap="none" align="stretch" class="divide-y divide-line">
-        <WikiChangesItem
-          v-for="change in displayed.list.items"
-          :key="change.id"
-          :change="change"
-          :to="changesRoute(state, change.id)"
-          :active="change.id === current"
-          :selectable="selectable && !change.patrolled_at && !change.batch.imported"
-          :selected="selected.includes(change.id)"
-          @update:selected="on => pick(change.id, on)"
-        />
-      </Stack>
-      <Paginator
-        v-if="displayed.list.meta.total_pages > 1"
-        :meta="displayed.list.meta"
-        :loading="pending"
-        route="push"
-        align="center"
-        class="border-t border-line px-(--hn-panel-p) py-3"
-      />
-    </Panel>
-    <ScrollArea
+  <Flex gap="none" class="h-full min-h-0">
+    <Stack
+      gap="none"
       :class="
         cn(
-          'sticky top-0 h-[calc(100dvh-var(--hn-app-shell-header-h)-var(--spacing)*8)] min-w-0 flex-1 max-md:static max-md:h-auto',
-          !current && 'max-md:hidden',
+          'w-96 shrink-0 border-r border-line max-md:w-full max-md:border-r-0',
+          current && 'max-md:hidden',
         )
       "
     >
+      <Inline
+        gap="sm"
+        align="center"
+        justify="between"
+        :wrap="false"
+        class="h-14 shrink-0 border-b border-line px-4"
+      >
+        <Heading :level="2" size="xs">
+          {{ CHANGE_TITLES[state.f] }}
+          <Text as="span" size="xs" tone="muted">{{ displayed.list.meta.total_items }}</Text>
+        </Heading>
+        <Button v-if="selected.length" size="sm" variant="soft" :loading="marking" @click="mark">
+          将 {{ selected.length }} 条标记为已检查
+        </Button>
+      </Inline>
+      <Empty v-if="!displayed.list.items.length" title="没有修改" class="py-12" />
+      <ScrollArea v-else class="min-h-0 flex-1">
+        <Stack gap="none">
+          <WikiChangesItem
+            v-for="change in displayed.list.items"
+            :key="change.id"
+            :change="change"
+            :to="changesRoute(state, change.id)"
+            :active="change.id === current"
+            :selectable="selectable && !change.patrolled_at && !change.batch.imported"
+            :selected="selected.includes(change.id)"
+            @update:selected="on => pick(change.id, on)"
+          />
+          <Paginator
+            v-if="displayed.list.meta.total_pages > 1"
+            :meta="displayed.list.meta"
+            :loading="pending"
+            route="push"
+            align="center"
+            class="px-4 py-3"
+          />
+        </Stack>
+      </ScrollArea>
+    </Stack>
+    <ScrollArea :class="cn('min-w-0 flex-1', !current && 'max-md:hidden')">
       <slot />
     </ScrollArea>
   </Flex>

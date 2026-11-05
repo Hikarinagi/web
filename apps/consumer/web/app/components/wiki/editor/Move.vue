@@ -31,8 +31,9 @@
       .filter(member => member.id !== owner && member.type === type)
       .map(member => ({ value: member.id, label: member.entry?.label || '未命名' }))
   })
+  const active = usePageActive()
   const open = computed({
-    get: () => Boolean(item.value && options.value.length),
+    get: () => active.value && Boolean(item.value && options.value.length),
     set: next => {
       if (next) return
       const { move: _move, ...query } = route.query

@@ -1,5 +1,19 @@
 <script setup lang="ts">
-  import { Button, Empty, Inline, Panel, SearchInput, Stack } from '@hina-ui/vue'
+  import {
+    Affix,
+    Button,
+    Card,
+    Heading,
+    Inline,
+    SearchInput,
+    Stack,
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+    Text,
+  } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
   import { useEditorParts } from '~/features/wiki/composables/useEditorParts'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
@@ -9,59 +23,106 @@
 
   const props = defineProps<{ work: EditableEntry }>()
   const editor = inject(ENTRY_EDITOR)!
+  const route = useRoute()
+  const router = useRouter()
   const parts = useEditorParts(editor, () => ({
     id: props.work.id,
     type: props.work.type,
     label: props.work.label,
   }))
-  const filter = ref('')
-
-  const names = (id: number) =>
+  const filter = computed({
+    get: () => (typeof route.query.q === 'string' ? route.query.q : ''),
+    set: value => {
+      const { q: _q, ...query } = route.query
+      void router.replace({ query: value ? { ...query, q: value } : query })
+    },
+  })
+  const field = (property: 'LABEL' | 'CREDIT') =>
+    editor.definitions.value.get('APPEARANCE')?.properties.find(item => item.property === property)
+  const texts = (id: number, property: 'LABEL' | 'CREDIT') =>
     editor
-      .property(id, 'LABEL')
-      .values.map(item => item.value.text ?? '')
-      .filter(Boolean)
-  const voices = (id: number) =>
-    editor
-      .property(id, 'CREDIT')
-      .values.map(item => item.value.text ?? item.value.target?.label ?? '')
+      .property(id, property)
+      .values.filter(item => item.state !== 'removed' && item.state !== 'moved_out')
+      .map(item => item.value.text ?? item.value.target?.label ?? '')
       .filter(Boolean)
   const rows = computed(() =>
-    parts.entriesOf('APPEARANCE').map(item => ({ id: item.id, names: names(item.id) })),
+    parts.entriesOf('APPEARANCE').map(item => ({ id: item.id, names: texts(item.id, 'LABEL') })),
   )
   const shown = computed(() => {
     const keyword = filter.value.trim()
     return keyword
       ? rows.value.filter(row =>
-          [...row.names, ...voices(row.id)].some(text => text.includes(keyword)),
+          [...row.names, ...texts(row.id, 'CREDIT')].some(text => text.includes(keyword)),
         )
       : rows.value
   })
-  const twinOf = (row: (typeof rows.value)[number]) =>
-    rows.value.find(
-      other => other.id !== row.id && other.names.some(name => row.names.includes(name)),
-    )?.id ?? null
+  const twinsOf = (row: (typeof rows.value)[number]) =>
+    rows.value
+      .filter(other => other.id !== row.id && other.names.some(name => row.names.includes(name)))
+      .map(other => other.id)
 </script>
 
 <template>
   <Stack gap="md">
-    <Inline gap="sm" align="center" :wrap="false" class="sticky top-0 z-10 bg-canvas py-1">
-      <SearchInput v-model="filter" placeholder="按名字或配音筛选" class="min-w-0 flex-1" />
-      <Button size="sm" class="shrink-0" @click="parts.cast()">
-        <template #icon><Plus /></template>
-        添加出场角色
-      </Button>
-    </Inline>
-    <Panel title="出场角色" :count="rows.length" :padded="false">
-      <Empty v-if="!shown.length" :title="rows.length ? '没有符合的出场角色' : '还没有出场角色'" />
-      <Stack v-else gap="none" align="stretch" class="divide-y divide-line">
-        <WikiWorkCastRow
-          v-for="row in shown"
-          :key="row.id"
-          :appearance="row.id"
-          :twin="twinOf(row)"
+    <Affix :offset="56" class="z-10">
+      <Inline gap="md" align="center" class="bg-canvas py-2">
+        <Heading :level="2" size="xs" class="shrink-0">出场角色 {{ rows.length }}</Heading>
+        <SearchInput
+          v-model="filter"
+          aria-label="筛选出场角色"
+          placeholder="按名字或配音筛选"
+          class="min-w-0 flex-1 max-md:order-last max-md:basis-full"
         />
+        <Button
+          size="sm"
+          variant="outline"
+          tone="neutral"
+          class="shrink-0 max-md:ml-auto"
+          @click="parts.cast()"
+        >
+          <template #icon><Plus /></template>
+          添加出场角色
+        </Button>
+      </Inline>
+    </Affix>
+    <Text v-if="filter && !shown.length" size="sm" tone="muted">无符合条件的出场角色</Text>
+    <template v-else>
+      <Card :padded="false" class="overflow-hidden max-md:hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                名字
+                <WikiFieldRule
+                  v-if="field('LABEL')?.clauses.length"
+                  label="名字"
+                  :clauses="field('LABEL')!.clauses"
+                />
+              </TableHead>
+              <TableHead>
+                配音
+                <WikiFieldRule
+                  v-if="field('CREDIT')?.clauses.length"
+                  label="配音"
+                  :clauses="field('CREDIT')!.clauses"
+                />
+              </TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <WikiWorkCastRow
+              v-for="row in shown"
+              :key="row.id"
+              :appearance="row.id"
+              :twins="twinsOf(row)"
+            />
+          </TableBody>
+        </Table>
+      </Card>
+      <Stack gap="sm" class="md:hidden">
+        <WikiWorkCastCard v-for="row in shown" :key="row.id" :appearance="row.id" />
       </Stack>
-    </Panel>
+    </template>
   </Stack>
 </template>

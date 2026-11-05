@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Empty, Panel, Stack, Text } from '@hina-ui/vue'
+  import { Button, Empty, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { reviewOf, type ReviewGroup } from '~/features/wiki/editor/review'
 
@@ -29,20 +29,31 @@
 </script>
 
 <template>
-  <Empty v-if="!groups.length" title="没有修改" />
-  <Stack v-else gap="md">
-    <Panel v-for="group in groups" :key="group.id" :title="titleOf(group)" :level="3">
-      <template v-if="group.created" #actions>
-        <Button variant="ghost" tone="neutral" size="sm" @click="editor.uncreate(group.id)">
+  <Empty v-if="!groups.length" title="暂无修改" />
+  <Stack v-else gap="lg">
+    <Stack v-for="group in groups" :key="group.id" gap="sm">
+      <Inline gap="sm" align="baseline" justify="between">
+        <Heading :level="3" size="xs" lang="ja">{{ titleOf(group) }}</Heading>
+        <Button
+          v-if="group.created"
+          size="xs"
+          variant="ghost"
+          tone="neutral"
+          @click="editor.uncreate(group.id)"
+        >
           取消新建
         </Button>
-      </template>
-      <Stack gap="none" align="stretch" class="divide-y divide-line">
-        <Text v-if="editor.draft.value.detached.includes(group.id)" size="sm" class="py-2">
+      </Inline>
+      <Stack gap="none" class="rounded-md border border-line">
+        <Text
+          v-if="editor.draft.value.detached.includes(group.id)"
+          size="sm"
+          class="border-b border-line px-4 py-3 last:border-b-0"
+        >
           移出其他作品中的出场
         </Text>
         <WikiSaveRow v-for="row in group.rows" :key="row.id" :row="row" />
       </Stack>
-    </Panel>
+    </Stack>
   </Stack>
 </template>

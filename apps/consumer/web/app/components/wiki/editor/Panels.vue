@@ -16,10 +16,11 @@
   const route = useRoute()
   const { canAny } = useCreatorPermissions()
   const patrol = computed(() => canAny(WIKI_PERMISSIONS.PATROL))
+  const active = usePageActive()
 
   const opened = (panel: EditorPanel) =>
     computed({
-      get: () => props.panel === panel && patrol.value,
+      get: () => active.value && props.panel === panel && patrol.value,
       set: next => {
         if (!next) void navigateTo({ path: props.base, query: route.query })
       },
@@ -27,7 +28,7 @@
   const protecting = opened('protect')
   const deleting = opened('delete')
   const dismissing = computed({
-    get: () => props.panel === 'dismiss' && props.suggestion !== null,
+    get: () => active.value && props.panel === 'dismiss' && props.suggestion !== null,
     set: next => {
       if (!next) void navigateTo({ path: props.base, query: route.query })
     },
@@ -48,4 +49,5 @@
   <WikiEditorDelete v-model:open="deleting" :entry="entry" @done="emit('changed')" />
   <WikiEditorDismiss v-model:open="dismissing" :entry="entry.id" :suggestion="suggestion" />
   <WikiEditorMove />
+  <WikiEditorPicks :entry="entry" :panel="panel" :base="base" />
 </template>

@@ -1,26 +1,38 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
-  import type { ValueDraft } from '~/features/wiki/editor/draft'
+  import { Button, Page } from '@hina-ui/vue'
+  import { ArrowLeft } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { MergePickPageData } from '~~/server/api/pages/entries/[id]/merge.get'
 
   defineOptions({ name: 'WikiMergePick' })
 
   const props = defineProps<{ data: MergePickPageData }>()
-  const target = ref<ValueDraft['target']>(null)
-
-  watch(target, picked => {
-    if (picked && picked.id !== props.data.entry.id)
-      void navigateTo(`/entries/${props.data.entry.id}/merge/${picked.id}`)
-  })
+  const { typeName } = useWikiDefinitions()
+  const active = usePageActive()
+  const edit = computed(() => `/entries/${props.data.entry.id}/edit`)
 </script>
 
 <template>
-  <Panel :title="`把重复的条目并入「${data.entry.label}」`">
-    <WikiFieldTarget
-      v-model="target"
-      :types="[data.entry.type]"
-      label="重复的条目"
-      placeholder="按名字查找重复的条目"
-    />
-  </Panel>
+  <Page size="lg" class="max-md:py-4">
+    <WikiPageHead
+      :eyebrow="`${typeName(data.entry.type)}：${data.entry.label || '未命名'}`"
+      title="与重复的条目合并"
+    >
+      <template #actions>
+        <Button :as="NuxtLink" :to="edit" variant="outline" tone="neutral" size="sm">
+          <template #icon><ArrowLeft /></template>
+          返回编辑
+        </Button>
+      </template>
+    </WikiPageHead>
+  </Page>
+  <WikiEditorPick
+    :open="active"
+    title="选择重复的条目"
+    :types="[data.entry.type]"
+    :exclude="[data.entry.id]"
+    confirm="下一步"
+    @close="navigateTo(edit)"
+    @pick="item => navigateTo(`/entries/${data.entry.id}/merge/${item.id}`)"
+  />
 </template>

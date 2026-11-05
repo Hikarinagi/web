@@ -22,6 +22,24 @@ export function qualifiersSet(value: ValueDraft): QualifierKind[] {
   ]
 }
 
+export function mediaDraft(media: {
+  id: number
+  src: string
+  width?: number | null
+  height?: number | null
+  thumb_hash?: string | null
+}): NonNullable<ValueDraft['media']> {
+  return {
+    id: media.id,
+    src: media.src,
+    width: media.width ?? null,
+    height: media.height ?? null,
+    thumb_hash: media.thumb_hash ?? null,
+    sexual: null,
+    violence: null,
+  }
+}
+
 export const SEXUAL_LEVELS = ['安全', '暗示', '露骨'] as const
 export const VIOLENCE_LEVELS = ['无', '暴力', '血腥'] as const
 

@@ -113,6 +113,31 @@ export function emptyValue(): ValueDraft {
   }
 }
 
+export function entryState(
+  draft: EditorDraft,
+  owner: (statement: number) => number | undefined,
+  id: number,
+): 'created' | 'changed' | null {
+  if (draft.created.some(entry => entry.id === id)) return 'created'
+  const touched = [draft.changed, draft.removed, draft.moved, draft.positions]
+    .flatMap(record => Object.keys(record).map(Number))
+    .concat(draft.restored)
+  return draft.added.some(item => item.entry === id) ||
+    draft.detached.includes(id) ||
+    touched.some(statement => owner(statement) === id)
+    ? 'changed'
+    : null
+}
+
+export function isBlank(value: ValueDraft): boolean {
+  return (
+    value.value_kind === 'VALUE' &&
+    [value.text, value.code, value.date, value.amount, value.number].every(blank) &&
+    !value.target &&
+    !value.media
+  )
+}
+
 export function valueOf(statement: Omit<EntryStatement, 'editor'>): ValueDraft {
   const value = emptyValue()
   for (const field of [...VALUE_FIELDS, ...QUALIFIER_FIELDS])

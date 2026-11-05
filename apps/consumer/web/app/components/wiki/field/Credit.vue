@@ -18,14 +18,14 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center" class="min-w-0">
+  <Inline gap="md" align="center" :wrap="false" class="min-w-0 max-md:flex-wrap">
     <Select
       v-if="roles.length > 1"
       :model-value="model.code"
       :options="roles"
       aria-label="职责"
       placeholder="职责"
-      class="w-40 shrink-0"
+      class="w-48 shrink-0 max-md:w-auto max-md:flex-1"
       @update:model-value="value => (model = { ...model, code: value ? String(value) : null })"
     />
     <WikiFieldName v-model="name" :label="label" class="min-w-0 flex-1" />

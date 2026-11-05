@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Inline, Stack } from '@hina-ui/vue'
+  import { Button, Page, PageBody, ScrollArea, Stack } from '@hina-ui/vue'
   import { tabKey } from '~/features/creator/tabs'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditResult } from '~/features/wiki/composables/useSaveFlow'
@@ -9,6 +9,7 @@
 
   const props = defineProps<{ definitions: EntryDefinition[] }>()
   const route = useRoute()
+  const { typeName } = useWikiDefinitions()
   const editor = useEntryEditor({
     key: () => tabKey(route.path),
     title: () => '新建条目',
@@ -40,13 +41,23 @@
 </script>
 
 <template>
-  <Stack v-if="created && definition" gap="lg">
-    <Inline justify="end">
-      <Button variant="ghost" tone="neutral" size="sm" @click="editor.discard()">重新查找</Button>
-    </Inline>
-    <WikiEditorForm :entry="created" :definition="definition" />
-    <WikiEditorSaveBar />
+  <Stack gap="none" class="h-full min-h-0">
+    <ScrollArea class="min-h-0 flex-1">
+      <Page :size="created && definition ? 'lg' : 'md'" class="max-md:py-4">
+        <WikiPageHead :title="created ? `新建${typeName(created.type)}` : '新建条目'">
+          <template v-if="created" #actions>
+            <Button variant="outline" tone="neutral" size="sm" @click="editor.discard()">
+              重新查找
+            </Button>
+          </template>
+        </WikiPageHead>
+        <PageBody>
+          <WikiEditorForm v-if="created && definition" :entry="created" :definition="definition" />
+          <WikiNewLookup v-else @create="create" />
+        </PageBody>
+      </Page>
+    </ScrollArea>
+    <WikiEditorSaveBar v-if="created && definition" />
   </Stack>
-  <WikiNewLookup v-else @create="create" />
   <WikiSaveDrawer @saved="saved" />
 </template>

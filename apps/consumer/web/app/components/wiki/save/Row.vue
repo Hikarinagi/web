@@ -51,7 +51,12 @@
 </script>
 
 <template>
-  <Inline gap="md" align="start" :wrap="false" class="py-2">
+  <Inline
+    gap="md"
+    align="start"
+    :wrap="false"
+    class="border-b border-line px-4 py-3 last:border-b-0"
+  >
     <Text size="sm" tone="muted" class="w-24 shrink-0">{{ row.label }}</Text>
     <Stack gap="xs" class="min-w-0 flex-1">
       <WikiDiffImages
@@ -78,6 +83,8 @@
         @update:model-value="choose"
       />
     </Stack>
-    <Button variant="link" size="sm" class="shrink-0" @click="editor.revert(row.id)">撤回</Button>
+    <Button variant="link" size="sm" class="shrink-0" @click="editor.revert(row.id)">
+      {{ row.state === 'removed' ? '恢复' : '撤回' }}
+    </Button>
   </Inline>
 </template>

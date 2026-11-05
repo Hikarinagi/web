@@ -11,6 +11,7 @@
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const values = reactive({ reason: '' })
   const submitting = ref(false)
+  const bus = useWikiSavedBus()
   const restoring = computed(() => props.entry.deleted)
 
   watch(open, next => {
@@ -32,6 +33,7 @@
           note: values.reason.trim(),
         },
       })
+      bus.emit(result.entries)
       toast.success(restoring.value ? '已恢复条目' : '已删除条目', {
         action: {
           label: '查看本次修改',

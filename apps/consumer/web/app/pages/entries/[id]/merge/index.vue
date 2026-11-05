@@ -6,6 +6,7 @@
     middleware: ['auth', 'wiki-editor-content-limit'],
     floatingToolbar: false,
     title: '合并',
+    fill: true,
   })
 
   const route = useRoute()

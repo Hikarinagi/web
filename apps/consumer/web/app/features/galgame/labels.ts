@@ -80,6 +80,15 @@ export const CURRENCY_SYMBOL: Record<string, string> = {
   KRW: '₩',
 }
 
+export const CURRENCY_NAMES: Record<string, string> = {
+  JPY: '日元',
+  CNY: '人民币',
+  USD: '美元',
+  TWD: '新台币',
+  HKD: '港币',
+  KRW: '韩元',
+}
+
 export function langLabel(code: string | null | undefined): string {
   return (code && LANGUAGE_LABELS[code as LanguageCode]) || code || ''
 }

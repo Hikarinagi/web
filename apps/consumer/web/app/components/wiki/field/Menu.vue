@@ -1,12 +1,13 @@
 <script setup lang="ts">
-  import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@hina-ui/vue'
-  import { ArrowDown, ArrowUp, Ellipsis, Trash2 } from '@lucide/vue'
+  import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, IconButton } from '@hina-ui/vue'
+  import { Ellipsis } from '@lucide/vue'
   import type { PropertyDefinition, ValueDraft } from '~/features/wiki/editor/draft'
   import type { ExtraKind, QualifierKind } from '~/features/wiki/editor/inputs'
 
   defineOptions({ name: 'WikiFieldMenu' })
 
   const props = defineProps<{
+    label: string
     definition: PropertyDefinition
     value: ValueDraft
     shown: QualifierKind[]
@@ -14,6 +15,8 @@
     up: boolean
     down: boolean
     relocatable?: boolean
+    fixed?: boolean
+    added?: boolean
   }>()
   const emit = defineEmits<{
     qualify: [kind: QualifierKind]
@@ -44,8 +47,14 @@
 </script>
 
 <template>
-  <DropdownMenu label="更多" align="end">
-    <IconButton label="更多" variant="ghost" tone="neutral" size="sm">
+  <DropdownMenu align="end">
+    <IconButton
+      :label="`${label}的更多操作`"
+      variant="ghost"
+      tone="neutral"
+      size="sm"
+      class="shrink-0"
+    >
       <Ellipsis />
     </IconButton>
     <template #content>
@@ -63,26 +72,22 @@
         v-if="definition.shape !== 'image'"
         @select="emit('unknown', value.value_kind !== 'UNKNOWN')"
       >
-        {{ value.value_kind === 'UNKNOWN' ? '填写值' : '记为未知' }}
+        {{ value.value_kind === 'UNKNOWN' ? '取消未知' : '记为未知' }}
       </DropdownMenuItem>
-      <template v-if="multiple">
-        <DropdownMenuItem :disabled="!up" @select="emit('move', -1)">
-          <template #icon><ArrowUp /></template>
-          上移
+      <template v-if="multiple && !fixed && (up || down)">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem :disabled="!up" @select="emit('move', -1)">上移</DropdownMenuItem>
+        <DropdownMenuItem :disabled="!down" @select="emit('move', 1)">下移</DropdownMenuItem>
+      </template>
+      <template v-if="!fixed">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem v-if="relocatable" @select="emit('relocate')">
+          移到另一个条目
         </DropdownMenuItem>
-        <DropdownMenuItem :disabled="!down" @select="emit('move', 1)">
-          <template #icon><ArrowDown /></template>
-          下移
+        <DropdownMenuItem @select="emit('remove')">
+          {{ added ? '取消添加' : '删除' }}
         </DropdownMenuItem>
       </template>
-      <DropdownMenuItem v-if="relocatable" @select="emit('relocate')">
-        移到另一个条目
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem tone="danger" @select="emit('remove')">
-        <template #icon><Trash2 /></template>
-        删除
-      </DropdownMenuItem>
     </template>
   </DropdownMenu>
 </template>

@@ -6,6 +6,7 @@
     middleware: ['auth', 'wiki-editor-content-limit'],
     floatingToolbar: false,
     title: '两个版本的对照',
+    fill: true,
   })
 
   const route = useRoute()

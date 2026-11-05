@@ -7,11 +7,12 @@
   defineOptions({ name: 'WikiEditorEntryCard' })
 
   defineProps<{
-    to: string
+    to: string | { path: string; query: Record<string, unknown> }
     active: boolean
-    created: boolean
+    state: 'created' | 'changed' | null
     title: string
     facts: string
+    empty?: string
     cover: ValueDraft['media']
   }>()
 </script>
@@ -22,13 +23,7 @@
     :to="to"
     :padded="false"
     :aria-current="active ? 'true' : undefined"
-    :class="
-      cn(
-        'hn-state-layer hn-interactive p-3',
-        active && 'ring-2 ring-accent',
-        created && 'bg-success-soft',
-      )
-    "
+    :class="cn('hn-state-layer hn-interactive p-3', active && 'ring-2 ring-accent')"
   >
     <Inline gap="md" align="center" :wrap="false">
       <AspectRatio :ratio="3 / 4" class="w-10 shrink-0 overflow-hidden rounded-sm bg-inset">
@@ -41,10 +36,13 @@
           image-class="size-full object-cover"
         />
       </AspectRatio>
-      <Stack gap="none" class="min-w-0">
+      <Stack gap="none" class="min-w-0 flex-1">
         <Text size="sm" weight="medium" lang="ja" truncate>{{ title }}</Text>
-        <Text size="xs" tone="muted" truncate>{{ facts || (created ? '新建' : '') }}</Text>
+        <Text size="xs" tone="muted" truncate>{{ facts || empty }}</Text>
       </Stack>
+      <Text v-if="state" size="xs" class="shrink-0 text-accent-text">
+        {{ state === 'created' ? '新建' : '有修改' }}
+      </Text>
     </Inline>
   </Card>
 </template>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { Combobox, Stack, Text } from '@hina-ui/vue'
+  import { Autocomplete, IconButton, Stack, Text } from '@hina-ui/vue'
+  import { ArrowUpRight, Link2 } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
   import { describeFound, type WikiSearchItem } from '~/features/wiki/entries'
 
@@ -12,16 +14,19 @@
   const target = defineModel<Target | null>({ required: true })
   const { typeName } = useWikiDefinitions()
 
-  const search = ref('')
+  const text = ref(target.value?.label ?? '')
+  watch(target, next => {
+    if (next) text.value = next.label
+  })
   const found = shallowRef<WikiSearchItem[]>([])
   const loading = ref(false)
   let sequence = 0
 
   watchDebounced(
-    search,
-    async text => {
+    text,
+    async value => {
       const seq = ++sequence
-      const keyword = text.trim()
+      const keyword = value.trim()
       if (!keyword || keyword === target.value?.label) return
       loading.value = true
       try {
@@ -46,38 +51,47 @@
       hint: describeFound(item, typeName(item.type)),
     })),
   )
-  const selected = computed(() =>
-    target.value ? { value: target.value.id, label: target.value.label, hint: '' } : null,
-  )
 
-  function pick(value: string | number | null | undefined) {
-    if (value === null || value === undefined) {
-      target.value = null
-      return
-    }
-    const item = found.value.find(entry => entry.id === Number(value))
+  function input(value: string) {
+    text.value = value
+    if (target.value && value !== target.value.label) target.value = null
+  }
+
+  function pick(id: string | number) {
+    const item = found.value.find(entry => entry.id === Number(id))
     if (item) target.value = { id: item.id, type: item.type, label: item.label }
   }
 </script>
 
 <template>
-  <Combobox
-    v-model:search="search"
-    :model-value="target?.id ?? null"
+  <Autocomplete
+    :model-value="text"
     :options="options"
-    :selected-option="selected"
     :loading="loading"
     :aria-label="label"
-    :placeholder="placeholder ?? '按名字查找'"
-    ignore-filter
-    clearable
-    @update:model-value="pick"
+    :placeholder="placeholder ?? '输入名称查找条目'"
+    :invalid="Boolean(text.trim()) && !target"
+    @update:model-value="input"
+    @select="selection => pick(selection.option.value)"
   >
+    <template v-if="target" #leading><Link2 class="size-4 text-accent-text" /></template>
+    <template v-if="target" #trailing>
+      <IconButton
+        :as="NuxtLink"
+        :to="`/entries/${target.id}/edit`"
+        :label="`打开「${target.label}」`"
+        variant="ghost"
+        tone="neutral"
+        size="xs"
+      >
+        <ArrowUpRight />
+      </IconButton>
+    </template>
     <template #option="{ option }">
       <Stack gap="none" class="min-w-0">
         <Text as="span" size="sm" lang="ja" truncate>{{ option.label }}</Text>
         <Text v-if="option.hint" as="span" size="xs" tone="muted" truncate>{{ option.hint }}</Text>
       </Stack>
     </template>
-  </Combobox>
+  </Autocomplete>
 </template>

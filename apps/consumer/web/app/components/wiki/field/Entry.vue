@@ -18,6 +18,13 @@
       props.definition.property === 'GAME_RELATION' ||
       props.definition.property === 'SERIES_RELATION',
   )
+  const placeholder = computed(() =>
+    props.definition.property === 'INCLUDED_GAME' || props.definition.property === 'INCLUDED_VOLUME'
+      ? '版本类型'
+      : related.value
+        ? '关系'
+        : '种类',
+  )
   const codes = computed(() =>
     (props.definition.codes ?? []).map(value => ({
       value,
@@ -29,29 +36,29 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center" class="min-w-0">
+  <Inline gap="sm" align="center" :wrap="false" class="min-w-0 max-md:flex-wrap">
+    <WikiFieldTarget
+      v-model="target"
+      :types="definition.targets"
+      :label="label"
+      class="min-w-0 flex-1 max-md:basis-full"
+    />
     <Select
       v-if="codes.length"
       :model-value="model.code"
       :options="codes"
       :clearable="definition.optional_code"
-      aria-label="种类"
-      placeholder="种类"
-      class="w-40 shrink-0"
+      :aria-label="placeholder"
+      :placeholder="placeholder"
+      class="w-36 shrink-0 max-md:flex-1"
       @update:model-value="value => patch({ code: value ? String(value) : null })"
-    />
-    <WikiFieldTarget
-      v-model="target"
-      :types="definition.targets"
-      :label="label"
-      class="min-w-0 flex-1"
     />
     <Input
       v-if="definition.note"
       :model-value="model.text ?? ''"
       aria-label="附注"
       placeholder="附注"
-      class="w-40 shrink-0"
+      class="w-40 shrink-0 max-md:flex-1"
       @update:model-value="value => patch({ text: String(value) || null })"
     />
   </Inline>

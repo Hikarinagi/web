@@ -15,6 +15,29 @@ const LINKS: PropertyGroup = {
 
 export const HIDDEN_PROPERTIES: readonly Property[] = ['CHARACTER', 'LABEL_NUMBER']
 
+export const WIDE_PROPERTIES: readonly Property[] = [
+  'INCLUDED_GAME',
+  'INCLUDED_VOLUME',
+  'SERIES',
+  'TITLE',
+  'RELEASE_STATUS',
+  'PUBLICATION_STATUS',
+  'PRICE',
+  'PLATFORM',
+  'LANGUAGE',
+  'CHANNEL_CODE',
+  'BONUS',
+  'SPECIFICATION',
+  'INTRO',
+  'EXTERNAL_LINK',
+]
+
+export const FIELD_LABELS: Partial<Record<EntryType, Partial<Record<Property, string>>>> = {
+  GAME: { CREDIT: '译者' },
+}
+
+export const PANEL_PROPERTIES: readonly Property[] = ['CREDIT', 'COVER', 'IMAGE', 'SAMPLE_IMAGE']
+
 export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
   GAME: [
     {
@@ -23,24 +46,24 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
     },
     { title: '介绍', properties: ['GENRE_TEXT', 'ORIGINAL_INTRO', 'CHINESE_INTRO'] },
     LINKS,
+    { title: '非官方汉化', properties: ['CREDIT'] },
   ],
   PRODUCT: [
     {
       title: '发行',
       properties: [
-        'TITLE',
         'INCLUDED_GAME',
+        'TITLE',
         'RELEASE_DATE',
+        'AGE_RATING',
         'RELEASE_STATUS',
         'PRICE',
-        'AGE_RATING',
-        'JAN',
-        'PRODUCT_CODE',
-        'CHANNEL_CODE',
       ],
     },
-    { title: '规格', properties: ['PLATFORM', 'LANGUAGE', 'SPECIFICATION', 'BONUS', 'COVER'] },
+    { title: '规格', properties: ['PLATFORM', 'LANGUAGE', 'SPECIFICATION', 'BONUS'] },
+    { title: '编号', properties: ['JAN', 'PRODUCT_CODE', 'CHANNEL_CODE'] },
     { title: '制作信息', properties: ['CREDIT'] },
+    { title: '封面', properties: ['COVER'] },
   ],
   SERIES: [
     {
@@ -59,28 +82,17 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
     { title: '介绍', properties: ['ORIGINAL_INTRO', 'CHINESE_INTRO'] },
     LINKS,
   ],
-  VOLUME: [{ title: '卷', properties: ['SERIES', 'TITLE', 'VOLUME_NUMBER', 'ORDER', 'INTRO'] }],
+  VOLUME: [{ title: '卷', properties: ['TITLE', 'VOLUME_NUMBER', 'ORDER', 'INTRO', 'SERIES'] }],
   BOOK: [
     {
       title: '出版版本',
-      properties: [
-        'INCLUDED_VOLUME',
-        'TITLE',
-        'READING',
-        'ISBN',
-        'JAN',
-        'BOOK_FORMAT',
-        'RELEASE_DATE',
-        'RELEASE_STATUS',
-        'PRICE',
-        'PAGE_COUNT',
-        'TRIM_SIZE',
-        'AGE_RATING',
-        'BONUS',
-        'COVER',
-      ],
+      properties: ['INCLUDED_VOLUME', 'TITLE', 'READING', 'BOOK_FORMAT', 'ISBN', 'JAN'],
     },
+    { title: '发售', properties: ['RELEASE_DATE', 'AGE_RATING', 'RELEASE_STATUS', 'PRICE'] },
+    { title: '规格', properties: ['PAGE_COUNT', 'TRIM_SIZE', 'BONUS'] },
+    { title: '链接', properties: ['EXTERNAL_LINK'] },
     { title: '作者与制作信息', properties: ['CREDIT'] },
+    { title: '封面', properties: ['COVER'] },
   ],
   PERSON: [{ title: '基本资料', properties: ['NAME', 'GENDER', 'INTRO', 'MEMBER'] }, LINKS],
   ORGANIZATION: [
@@ -106,7 +118,6 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
       title: '介绍与资料',
       properties: [
         'OFFICIAL_INTRO',
-        'IMAGE',
         'GENDER',
         'AGE',
         'BIRTHDAY',
@@ -115,10 +126,10 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
         'MEASUREMENTS',
         'BLOOD_TYPE',
         'SITE_GROUP',
-        'APPEARANCE_RELATION',
       ],
     },
     LINKS,
+    { title: '图片', properties: ['IMAGE'] },
   ],
 }
 

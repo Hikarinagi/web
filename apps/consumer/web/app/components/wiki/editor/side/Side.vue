@@ -4,9 +4,11 @@
 
   defineOptions({ name: 'WikiEditorSide' })
 
-  defineProps<{ entry: number; definitions: EntryDefinition[]; base: string }>()
+  const props = defineProps<{ entry: number; definitions: EntryDefinition[]; base: string }>()
   const emit = defineEmits<{ changed: [] }>()
   const route = useRoute()
+  const hints = useEntryHints(props.entry)
+  const count = computed(() => hints.data.value?.items.length ?? 0)
   const router = useRouter()
   const side = computed(() =>
     route.query.side === 'hints' || route.query.side === 'refs' ? route.query.side : 'history',
@@ -22,9 +24,9 @@
 
 <template>
   <Tabs :model-value="side" variant="soft" size="sm" @update:model-value="choose">
-    <TabsList label="右栏">
+    <TabsList label="修改记录、建议与相关条目">
       <TabsTrigger value="history">修改记录</TabsTrigger>
-      <TabsTrigger value="hints">建议</TabsTrigger>
+      <TabsTrigger value="hints">建议{{ count ? ` ${count}` : '' }}</TabsTrigger>
       <TabsTrigger value="refs">相关条目</TabsTrigger>
     </TabsList>
     <TabsContent value="history" class="pt-4">

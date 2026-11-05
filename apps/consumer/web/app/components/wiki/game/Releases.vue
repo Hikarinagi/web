@@ -11,11 +11,11 @@
     Stack,
     Text,
   } from '@hina-ui/vue'
-  import { Copy, Plus } from '@lucide/vue'
+  import { ChevronDown, Plus } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import { useEditorParts } from '~/features/wiki/composables/useEditorParts'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
-  import type { EditableEntry } from '~/features/wiki/editor/draft'
+  import { entryState, type EditableEntry } from '~/features/wiki/editor/draft'
   import { codeLabel, dateText } from '~/features/wiki/values'
 
   defineOptions({ name: 'WikiGameReleases' })
@@ -27,9 +27,20 @@
     type: props.game.type,
     label: props.game.label,
   }))
+  const route = useRoute()
   const base = computed(() => `/entries/${props.game.id}/edit/releases`)
   const releases = computed(() => parts.entriesOf('PRODUCT'))
-  const current = computed(() => releases.value.find(item => item.id === props.selected) ?? null)
+  const current = computed(
+    () => releases.value.find(item => item.id === props.selected) ?? releases.value[0] ?? null,
+  )
+  const stateOf = (id: number) =>
+    entryState(editor.draft.value, statement => editor.statements.value.get(statement)?.entry, id)
+  const link = (id: number) => ({ path: `${base.value}/${id}`, query: route.query })
+
+  function drop(id: number) {
+    editor.uncreate(id)
+    void navigateTo({ path: base.value, query: route.query })
+  }
   const definition = computed(() => editor.definitions.value.get('PRODUCT'))
   const titleOf = (id: number) => parts.first(id, 'TITLE')?.text || '未命名的发行版本'
   const factsOf = (id: number) => {
@@ -59,52 +70,61 @@
 
 <template>
   <Stack gap="lg">
-    <Inline gap="sm" align="center" justify="between">
-      <Text size="sm" tone="muted">{{ releases.length }} 个发行版本</Text>
-      <Inline gap="sm">
-        <DropdownMenu v-if="releases.length" label="复制已有的发行版本" align="end">
-          <Button variant="outline" tone="neutral" size="sm">
-            <template #icon><Copy /></template>
-            复制已有的发行版本
+    <Stack gap="sm">
+      <Inline gap="sm" align="center" justify="between">
+        <Text size="sm" tone="muted">共 {{ releases.length }} 个发行版本</Text>
+        <Inline gap="sm">
+          <DropdownMenu v-if="releases.length" align="end">
+            <Button size="sm" variant="ghost" tone="neutral">
+              复制已有的发行版本
+              <template #trailing><ChevronDown /></template>
+            </Button>
+            <template #content>
+              <DropdownMenuItem v-for="item in releases" :key="item.id" @select="copy(item.id)">
+                {{ titleOf(item.id) }}
+              </DropdownMenuItem>
+            </template>
+          </DropdownMenu>
+          <Button size="sm" variant="outline" tone="neutral" @click="add">
+            <template #icon><Plus /></template>
+            新建发行版本
           </Button>
-          <template #content>
-            <DropdownMenuItem v-for="item in releases" :key="item.id" @select="copy(item.id)">
-              {{ titleOf(item.id) }}
-            </DropdownMenuItem>
-          </template>
-        </DropdownMenu>
-        <Button size="sm" @click="add">
-          <template #icon><Plus /></template>
-          新建发行版本
-        </Button>
+        </Inline>
       </Inline>
-    </Inline>
-    <Empty v-if="!releases.length" title="还没有发行版本" />
-    <SimpleGrid v-else min="16rem" gap="sm">
-      <WikiEditorEntryCard
-        v-for="item in releases"
-        :key="item.id"
-        :to="`${base}/${item.id}`"
-        :active="item.id === selected"
-        :created="item.id < 0"
-        :title="titleOf(item.id)"
-        :facts="factsOf(item.id)"
-        :cover="parts.first(item.id, 'COVER')?.media ?? null"
-      />
-    </SimpleGrid>
+      <SimpleGrid v-if="releases.length" min="15rem" gap="sm">
+        <WikiEditorEntryCard
+          v-for="item in releases"
+          :key="item.id"
+          :to="link(item.id)"
+          :active="item.id === current?.id"
+          :state="stateOf(item.id)"
+          :title="titleOf(item.id)"
+          :facts="factsOf(item.id)"
+          empty="暂无发售日"
+          :cover="parts.first(item.id, 'COVER')?.media ?? null"
+        />
+      </SimpleGrid>
+    </Stack>
     <Stack v-if="current && definition" gap="lg">
-      <Inline gap="md" align="baseline" justify="between">
-        <Heading :level="2" size="sm" lang="ja">{{ titleOf(current.id) }}</Heading>
-        <Link
-          v-if="current.id > 0"
-          :as="NuxtLink"
-          :to="`/entries/${current.id}/history`"
-          class="text-sm"
+      <Inline gap="md" align="center" justify="between" :wrap="false">
+        <Heading :level="2" size="sm" lang="ja" class="min-w-0 truncate">
+          {{ titleOf(current.id) }}
+        </Heading>
+        <Button
+          v-if="current.id < 0"
+          size="sm"
+          variant="ghost"
+          tone="neutral"
+          @click="drop(current.id)"
         >
-          这个版本的修改记录
+          取消新建
+        </Button>
+        <Link v-else :as="NuxtLink" :to="`/entries/${current.id}/history`" class="shrink-0 text-sm">
+          此版本的修改记录
         </Link>
       </Inline>
-      <WikiEditorForm :entry="current" :definition="definition" />
+      <WikiEditorForm :entry="current" :definition="definition" :columns="2" />
     </Stack>
+    <Empty v-else title="暂无发行版本" />
   </Stack>
 </template>

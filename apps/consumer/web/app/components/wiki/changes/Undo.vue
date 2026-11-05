@@ -16,6 +16,7 @@
 
   const plan = shallowRef<ApiData<'/api/v3/wiki/edits/{id}/revert', 'get'> | null>(null)
   const submitting = ref(false)
+  const bus = useWikiSavedBus()
   const parts = computed(() =>
     shownEntries(props.edit.entries.map(part => ({ ...part, type: part.entry.type }))).filter(
       part =>
@@ -50,6 +51,7 @@
         path: { id: props.edit.id },
         body: props.entry ? { entry_id: props.entry } : {},
       })
+      if ('entries' in result) bus.emit(result.entries)
       toast.success(
         result.kept.length
           ? `已撤销，${result.kept.length} 处此后已有新的修改，保持不变`

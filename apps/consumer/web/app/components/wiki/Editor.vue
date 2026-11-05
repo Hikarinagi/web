@@ -63,15 +63,30 @@
     () => path.value.panel === 'preview' && props.entry.resource?.kind === 'galgame',
   )
   const definition = computed(() => editor.definitions.value.get(props.entry.type))
+  const imageOf = (entry: EditableEntry) =>
+    entry.statements.find(
+      item =>
+        (item.property === 'COVER' || item.property === 'IMAGE') &&
+        item.status !== 'DEPRECATED' &&
+        item.media,
+    )?.media ?? null
   const image = computed(
     () =>
-      props.entry.statements.find(
-        item =>
-          (item.property === 'COVER' || item.property === 'IMAGE') &&
-          item.status !== 'DEPRECATED' &&
-          item.media,
-      )?.media ?? null,
+      imageOf(props.entry) ??
+      props.parts
+        .filter(part => part.type === 'PRODUCT' || part.type === 'BOOK')
+        .map(imageOf)
+        .find(Boolean) ??
+      null,
   )
+
+  function undone(edit: number) {
+    emit('saved')
+    void navigateTo({
+      path: base.value,
+      query: { ...route.query, saved: String(edit), undone: '1' },
+    })
+  }
 
   useEventListener('beforeunload', event => {
     if (editor.count.value) event.preventDefault()
@@ -89,13 +104,15 @@
 
 <template>
   <WikiEditorPreview v-if="previewing" :galgame="entry.resource!.id" :base="base" />
-  <WikiEditorFrame v-else>
-    <template #header>
+  <WikiEditorFrame v-else :title="entry.label || '未命名'">
+    <template #header="{ stacked }">
       <WikiEditorHeader
         :entry="entry"
         :type="definition?.label ?? ''"
         :owner="owner"
         :image="image"
+        :stacked="stacked"
+        :base="base"
       />
     </template>
     <template v-if="tabs.length && path.part" #tabs>
@@ -114,8 +131,15 @@
       :base="base"
       @changed="emit('saved')"
     />
+    <WikiEditorNotices :base="base" />
     <Stack gap="lg" :inert="readonly || undefined">
-      <WikiEditorBody v-if="definition" :entry="entry" :definition="definition" :path="path" />
+      <WikiEditorBody
+        v-if="definition"
+        :entry="entry"
+        :definition="definition"
+        :path="path"
+        :base="base"
+      />
     </Stack>
     <template #side>
       <WikiEditorSide
@@ -128,4 +152,5 @@
     <template v-if="!readonly" #footer><WikiEditorSaveBar /></template>
   </WikiEditorFrame>
   <WikiSaveDrawer @saved="emit('saved')" />
+  <WikiEditorUndo :edit="path.edit" :base="base" @done="undone" />
 </template>

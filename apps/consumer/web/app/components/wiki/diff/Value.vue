@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <Stack gap="xs" class="min-w-0">
+  <Stack gap="xs" class="min-w-0 wrap-anywhere">
     <WikiDiffImages
       v-if="images"
       :before="before?.media ?? null"

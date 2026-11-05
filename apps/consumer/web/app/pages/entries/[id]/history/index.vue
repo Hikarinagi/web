@@ -6,6 +6,7 @@
     middleware: ['auth', 'wiki-editor-content-limit'],
     floatingToolbar: false,
     title: '修改记录',
+    fill: true,
   })
 
   const route = useRoute()
@@ -13,7 +14,10 @@
     const page = Number(route.query.page) > 1 ? `?page=${String(route.query.page)}` : ''
     return `/api/pages/entries/${String(route.params.id)}/history${page}` as `/api/pages/${string}`
   })
-  const { data, pending } = await useHikariApiData<HistoryPageData>(request, { fatal: true })
+  const { data, pending, refresh } = await useHikariApiData<HistoryPageData>(request, {
+    fatal: true,
+  })
+  useRefreshOnSaved(refresh)
   useCreatorPage({
     title: () => (data.value ? `${data.value.entry.label || '未命名'}的修改记录` : undefined),
     crumbs: () =>

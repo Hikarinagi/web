@@ -1,17 +1,19 @@
 <script setup lang="ts">
   import {
+    Container,
+    Empty,
     Flex,
     Heading,
     Link,
     Prose,
     ScrollArea,
     SearchInput,
+    Select,
     Stack,
     Text,
-    Empty,
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { rulePath, sectionName } from '~/features/wiki/rules'
+  import { rulePath, sectionName, type RuleSection } from '~/features/wiki/rules'
   import { cn } from '~/utils/cn'
   import type { RulesPageData } from '~~/server/api/pages/create/wiki/rules.get'
 
@@ -38,6 +40,24 @@
         )
       : []
   })
+  const current = computed(() =>
+    props.clause
+      ? props.book.sections.find(
+          section => section.id === props.clause || section.clauses.includes(props.clause!),
+        )?.id
+      : undefined,
+  )
+  const chapters = computed(() =>
+    props.book.sections
+      .filter(section => section.level === 2)
+      .map(section => ({ value: section.id, label: sectionName(section) })),
+  )
+  const target = (section: RuleSection) => rulePath(section.clauses[0] ?? section.id)
+
+  function jump(value: unknown) {
+    const section = props.book.sections.find(item => item.id === value)
+    if (section) void router.push(target(section))
+  }
 
   function follow(event: MouseEvent) {
     const link = (event.target as HTMLElement | null)?.closest('a')
@@ -49,56 +69,77 @@
 </script>
 
 <template>
-  <Flex gap="lg" align="start">
-    <Stack
-      gap="sm"
-      class="sticky top-0 h-[calc(100dvh-var(--hn-app-shell-header-h)-var(--spacing)*20)] w-64 shrink-0 max-lg:hidden"
-    >
-      <SearchInput v-model="search" placeholder="查找条文" />
-      <ScrollArea class="min-h-0 flex-1">
-        <Stack gap="xs" class="pr-2">
+  <Flex gap="none" class="h-full min-h-0">
+    <ScrollArea class="w-72 shrink-0 border-r border-line bg-surface max-lg:hidden">
+      <Stack gap="md" class="p-4">
+        <SearchInput v-model="search" placeholder="查找条文" />
+        <Stack gap="none">
           <Link
             v-for="section in book.sections"
             :key="section.id"
             :as="NuxtLink"
-            :to="section.clauses[0] ? rulePath(section.clauses[0]) : rulePath(section.id)"
+            :to="target(section)"
             tone="neutral"
-            :class="cn('text-sm', section.level === 3 && 'ps-4 text-muted')"
+            :class="
+              cn(
+                'block truncate rounded-sm py-1 text-sm',
+                section.level === 3 ? 'ps-4' : 'font-medium',
+                section.id === current && 'text-accent-text',
+              )
+            "
           >
             {{ sectionName(section) }}
           </Link>
         </Stack>
-      </ScrollArea>
-    </Stack>
-    <Stack gap="lg" class="min-w-0 flex-1" @click="follow">
-      <Stack gap="xs">
-        <Heading :level="2" size="md">{{ book.title }}</Heading>
-        <Text size="sm" tone="muted">{{ book.edition }}</Text>
       </Stack>
-      <SearchInput v-model="search" placeholder="查找条文" class="lg:hidden" />
-      <template v-if="query.trim()">
-        <Empty v-if="!found.length" :title="`没有找到「${query.trim()}」`" />
-        <WikiRulesClause
-          v-for="item in found"
-          :key="item.id"
-          :clause="item"
-          :active="item.id === clause"
-        />
-      </template>
-      <template v-else>
-        <Stack v-for="section in book.sections" :key="section.id" gap="sm">
-          <Heading :id="`clause-${section.id}`" :level="section.level" size="sm">
-            {{ sectionName(section) }}
-          </Heading>
-          <Prose v-if="section.intro" as-child><div v-html="section.intro" /></Prose>
-          <WikiRulesClause
-            v-for="id in section.clauses"
-            :key="id"
-            :clause="clauses.get(id)!"
-            :active="id === clause"
-          />
+    </ScrollArea>
+    <ScrollArea class="min-w-0 flex-1">
+      <Container size="md" class="py-8 max-md:py-4">
+        <Stack gap="lg" @click="follow">
+          <Stack gap="xs">
+            <Heading :level="2" size="md">{{ book.title }}</Heading>
+            <Text size="sm" tone="muted">{{ book.edition }}</Text>
+          </Stack>
+          <Stack gap="sm" class="lg:hidden">
+            <SearchInput v-model="search" placeholder="查找条文" />
+            <Select
+              :model-value="current ?? null"
+              :options="chapters"
+              placeholder="选择章节"
+              aria-label="选择章节"
+              @update:model-value="jump"
+            />
+          </Stack>
+          <template v-if="query.trim()">
+            <Empty v-if="!found.length" :title="`未找到「${query.trim()}」`" />
+            <WikiRulesClause
+              v-for="item in found"
+              :key="item.id"
+              :clause="item"
+              :active="item.id === clause"
+            />
+          </template>
+          <template v-else>
+            <Stack v-for="section in book.sections" :key="section.id" gap="sm">
+              <Heading
+                :id="`clause-${section.id}`"
+                :level="section.level"
+                :size="section.level === 2 ? 'sm' : 'xs'"
+                class="scroll-mt-4"
+              >
+                {{ sectionName(section) }}
+              </Heading>
+              <Prose v-if="section.intro" as-child><div v-html="section.intro" /></Prose>
+              <WikiRulesClause
+                v-for="id in section.clauses"
+                :key="id"
+                :clause="clauses.get(id)!"
+                :active="id === clause"
+              />
+            </Stack>
+          </template>
         </Stack>
-      </template>
-    </Stack>
+      </Container>
+    </ScrollArea>
   </Flex>
 </template>

@@ -1,21 +1,24 @@
 <script setup lang="ts">
-  import { FileUpload, Inline, Select, Stack } from '@hina-ui/vue'
+  import { AspectRatio, FileUpload, Inline, Select, Stack, Text } from '@hina-ui/vue'
   import { uploadImage } from '~/components/media-library/lib/upload'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
-  import { SEXUAL_LEVELS, VIOLENCE_LEVELS } from '~/features/wiki/editor/inputs'
+  import { mediaDraft, SEXUAL_LEVELS, VIOLENCE_LEVELS } from '~/features/wiki/editor/inputs'
 
   defineOptions({ name: 'WikiFieldImage' })
 
   const props = defineProps<{
     label: string
     rating: { sexual: number | null; violence: number | null }
+    card?: boolean
+    ratio?: number
   }>()
   const emit = defineEmits<{ rate: [rating: { sexual: number; violence: number }] }>()
   const model = defineModel<ValueDraft>({ required: true })
 
   const uploading = ref(false)
-  const levels = (names: readonly string[]) =>
-    names.map((label, value) => ({ value, label: `${value} 级：${label}` }))
+  const levels = (list: readonly string[]) =>
+    list.map((label, value) => ({ value, label: `${value} 级：${label}` }))
+  const names = (list: readonly string[]) => list.map((label, value) => ({ value, label }))
 
   async function upload(files: File | File[] | null) {
     const file = Array.isArray(files) ? files[0] : files
@@ -23,19 +26,7 @@
     uploading.value = true
     try {
       const media = await uploadImage(file)
-      if (media)
-        model.value = {
-          ...model.value,
-          media: {
-            id: media.id,
-            src: media.src,
-            width: media.width ?? null,
-            height: media.height ?? null,
-            thumb_hash: media.thumb_hash ?? null,
-            sexual: null,
-            violence: null,
-          },
-        }
+      if (media) model.value = { ...model.value, media: mediaDraft(media) }
     } finally {
       uploading.value = false
     }
@@ -52,7 +43,43 @@
 </script>
 
 <template>
-  <Inline gap="md" align="start">
+  <Stack v-if="card" gap="sm">
+    <AspectRatio :ratio="ratio ?? 3 / 4" class="overflow-hidden rounded-sm bg-inset">
+      <HikariImage
+        v-if="model.media"
+        :src="model.media"
+        :alt="label"
+        preset="small"
+        preview
+        class="size-full"
+        image-class="size-full object-cover"
+      />
+    </AspectRatio>
+    <Inline gap="xs" align="end" :wrap="false">
+      <Stack gap="none" class="min-w-0 flex-1">
+        <Text size="xs" tone="muted">性分级</Text>
+        <Select
+          :model-value="rating.sexual"
+          :options="names(SEXUAL_LEVELS)"
+          size="sm"
+          aria-label="性分级"
+          @update:model-value="value => rate('sexual', value)"
+        />
+      </Stack>
+      <Stack gap="none" class="min-w-0 flex-1">
+        <Text size="xs" tone="muted">暴力分级</Text>
+        <Select
+          :model-value="rating.violence"
+          :options="names(VIOLENCE_LEVELS)"
+          size="sm"
+          aria-label="暴力分级"
+          @update:model-value="value => rate('violence', value)"
+        />
+      </Stack>
+      <slot name="menu" />
+    </Inline>
+  </Stack>
+  <Inline v-else gap="md" align="start">
     <HikariImage
       v-if="model.media"
       :src="model.media"

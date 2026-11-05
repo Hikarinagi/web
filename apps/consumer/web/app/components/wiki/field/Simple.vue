@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Inline, Input, NumberInput, Select, Switch, Textarea } from '@hina-ui/vue'
-  import { CURRENCY_SYMBOL, LANGUAGE_LABELS } from '~/features/galgame/labels'
+  import { Inline, Input, NumberInput, Select, Textarea } from '@hina-ui/vue'
+  import { CURRENCY_NAMES, LANGUAGE_LABELS } from '~/features/galgame/labels'
   import type { PropertyDefinition, ValueDraft } from '~/features/wiki/editor/draft'
   import { dateInput, parseDate } from '~/features/wiki/editor/inputs'
   import { codeLabel, LONG_PROPERTIES } from '~/features/wiki/values'
@@ -35,7 +35,11 @@
           label: codeLabel(props.definition.property, value),
         })),
   )
-  const currencies = Object.keys(CURRENCY_SYMBOL).map(value => ({ value, label: value }))
+  const currencies = Object.entries(CURRENCY_NAMES).map(([value, label]) => ({ value, label }))
+  const taxes = [
+    { value: 'yes', label: '含税' },
+    { value: 'no', label: '不含税' },
+  ]
   const lang = computed(() => (props.definition.shape === 'verbatim' ? 'ja' : undefined))
 </script>
 
@@ -61,27 +65,31 @@
     @update:model-value="value => patch({ number: Number.isFinite(value) ? value : null })"
   />
   <Inline v-else-if="definition.shape === 'money'" gap="sm" align="center" :wrap="false">
-    <Input
-      :model-value="model.amount ?? ''"
-      inputmode="decimal"
+    <NumberInput
+      :model-value="model.amount ? Number(model.amount) : null"
+      :min="0"
       :aria-label="label"
-      class="min-w-0 flex-1"
-      @update:model-value="value => patch({ amount: String(value) || null })"
+      class="w-40 min-w-0"
+      @update:model-value="
+        value => patch({ amount: value === null || value === undefined ? null : String(value) })
+      "
     />
     <Select
       :model-value="model.currency"
       :options="currencies"
       aria-label="币种"
+      placeholder="币种"
       class="w-28 shrink-0"
       @update:model-value="value => patch({ currency: value ? String(value) : null })"
     />
-    <Switch
-      :model-value="model.tax_included === true"
-      class="shrink-0"
-      @update:model-value="value => patch({ tax_included: value })"
-    >
-      含税
-    </Switch>
+    <Select
+      :model-value="model.tax_included === false ? 'no' : model.tax_included ? 'yes' : null"
+      :options="taxes"
+      aria-label="是否含税"
+      placeholder="是否含税"
+      class="w-28 shrink-0"
+      @update:model-value="value => patch({ tax_included: value ? value === 'yes' : null })"
+    />
   </Inline>
   <Textarea v-else-if="long" v-model="text" :aria-label="label" :lang="lang" :min-rows="3" />
   <Input v-else v-model="text" :aria-label="label" :lang="lang" />

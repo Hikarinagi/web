@@ -66,12 +66,12 @@
       gap="md"
       align="start"
       :wrap="false"
-      class="px-(--hn-panel-p) py-3"
+      class="px-(--hn-panel-p) py-3 max-sm:flex-col max-sm:gap-2"
     >
-      <Text size="sm" tone="muted" class="w-28 shrink-0">{{
+      <Text size="sm" tone="muted" class="w-28 shrink-0 max-sm:w-auto">{{
         names[group.property] ?? group.property
       }}</Text>
-      <Stack gap="sm" class="min-w-0 flex-1">
+      <Stack gap="sm" class="min-w-0 flex-1 max-sm:w-full">
         <WikiDiffValue
           v-for="row in group.rows"
           :key="row.key"

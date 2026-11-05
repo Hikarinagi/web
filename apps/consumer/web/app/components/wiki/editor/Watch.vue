@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Button } from '@hina-ui/vue'
-  import { Eye, EyeOff } from '@lucide/vue'
+  import { IconButton } from '@hina-ui/vue'
+  import { Bell, BellRing } from '@lucide/vue'
 
   defineOptions({ name: 'WikiEditorWatch' })
 
@@ -29,18 +29,17 @@
 </script>
 
 <template>
-  <Button
-    variant="outline"
-    tone="neutral"
+  <IconButton
+    :label="data?.watched ? '取消关注' : '关注此条目'"
+    :variant="data?.watched ? 'soft' : 'outline'"
+    :tone="data?.watched ? 'accent' : 'neutral'"
     size="sm"
     :loading="busy"
     :disabled="!data"
+    class="shrink-0"
     @click="toggle"
   >
-    <template #icon>
-      <EyeOff v-if="data?.watched" />
-      <Eye v-else />
-    </template>
-    {{ data?.watched ? '取消关注' : '关注' }}
-  </Button>
+    <BellRing v-if="data?.watched" />
+    <Bell v-else />
+  </IconButton>
 </template>

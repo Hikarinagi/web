@@ -1,7 +1,7 @@
 import { GAME_PARTS, SERIES_PARTS, type EditorPart } from './parts'
 import type { EditableEntry } from './draft'
 
-const PANELS = ['protect', 'delete', 'dismiss', 'preview'] as const
+const PANELS = ['protect', 'delete', 'dismiss', 'preview', 'undo', 'relation', 'same'] as const
 export type EditorPanel = (typeof PANELS)[number]
 
 export function partsOf(type: EditableEntry['type']): readonly EditorPart[] {
@@ -10,12 +10,20 @@ export function partsOf(type: EditableEntry['type']): readonly EditorPart[] {
   return []
 }
 
-export function editorPath(type: EditableEntry['type'], path: string[]) {
+function panelOf(path: string[]) {
   const last = path.at(-1)
-  const dismissing = last === 'dismiss' && path.at(-3) === 'suggestions'
-  const panel = dismissing ? 'dismiss' : (PANELS.find(item => item === last) ?? null)
-  const segments = dismissing ? path.slice(0, -3) : panel ? path.slice(0, -1) : path
-  const suggestion = dismissing ? Number(path.at(-2)) : null
+  const id = Number(last)
+  if (last === 'dismiss' && path.at(-3) === 'suggestions' && Number.isInteger(Number(path.at(-2))))
+    return { panel: 'dismiss' as const, param: Number(path.at(-2)), size: 3 }
+  if (path.at(-2) === 'undo' && Number.isInteger(id))
+    return { panel: 'undo' as const, param: id, size: 2 }
+  const panel = PANELS.find(item => item === last && item !== 'dismiss' && item !== 'undo')
+  return panel ? { panel, param: null, size: 1 } : { panel: null, param: null, size: 0 }
+}
+
+export function editorPath(type: EditableEntry['type'], path: string[]) {
+  const { panel, param, size } = panelOf(path)
+  const segments = size ? path.slice(0, -size) : path
   const parts = partsOf(type)
   const part = parts.find(item => item.key === segments[0])?.key ?? parts[0]?.key ?? null
   const selection = (part && segments[0] === part ? segments.slice(1) : [])
@@ -24,8 +32,9 @@ export function editorPath(type: EditableEntry['type'], path: string[]) {
   return {
     part,
     selection,
-    panel: panel === 'dismiss' && !Number.isInteger(suggestion) ? null : panel,
-    suggestion: Number.isInteger(suggestion) ? suggestion : null,
+    panel,
+    suggestion: panel === 'dismiss' ? param : null,
+    edit: panel === 'undo' ? param : null,
     segments,
   }
 }

@@ -13,6 +13,9 @@
   )
   const total = computed(() => items.value.reduce((sum, item) => sum + item.count, 0))
   const dropping = ref<string | null>(null)
+  onDeactivated(() => {
+    dropping.value = null
+  })
   const open = computed({
     get: () => dropping.value !== null,
     set: next => {

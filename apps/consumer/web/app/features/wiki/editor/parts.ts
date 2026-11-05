@@ -29,9 +29,9 @@ const RELATIONS: readonly Property[] = ['GAME_RELATION', 'SERIES_RELATION', 'ADA
 export function partOf(owner: EntryType, type: EntryType, property: Property): string {
   if (type === 'APPEARANCE') return 'cast'
   if (owner === 'GAME') {
-    if (type === 'PRODUCT') return property === 'COVER' ? 'images' : 'releases'
+    if (type === 'PRODUCT') return 'releases'
     if (property === 'SAMPLE_IMAGE') return 'images'
-    if (RELATIONS.includes(property) || property === 'CREDIT') return 'relations'
+    if (RELATIONS.includes(property)) return 'relations'
     return 'basic'
   }
   if (type === 'VOLUME' || type === 'BOOK') return 'volumes'
@@ -41,8 +41,7 @@ export function partOf(owner: EntryType, type: EntryType, property: Property): s
 }
 
 export const ELSEWHERE: Partial<Record<EntryType, readonly Property[]>> = {
-  GAME: ['SAMPLE_IMAGE', 'GAME_RELATION', 'ADAPTATION', 'CREDIT'],
-  PRODUCT: ['COVER'],
+  GAME: ['SAMPLE_IMAGE', 'GAME_RELATION', 'ADAPTATION'],
   SERIES: ['SERIES_RELATION', 'ADAPTATION', 'CREDIT'],
   APPEARANCE: ['APPEARANCE_RELATION'],
 }

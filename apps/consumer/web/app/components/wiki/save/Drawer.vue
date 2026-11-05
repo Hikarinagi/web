@@ -6,9 +6,10 @@
     Form,
     FormField,
     Inline,
+    Input,
     Link,
     Stack,
-    Textarea,
+    Text,
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
@@ -26,8 +27,12 @@
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const conflicting = ref(false)
 
+  const active = usePageActive()
+  onDeactivated(() => {
+    conflicting.value = false
+  })
   const open = computed({
-    get: () => route.query.save === '1',
+    get: () => active.value && route.query.save === '1',
     set: next => {
       const { save: _save, ...query } = route.query
       void router.replace({ query: next ? { ...query, save: '1' } : query })
@@ -83,11 +88,16 @@
   <Drawer v-model:open="open" title="保存修改" size="lg" :locked="flow.saving.value">
     <template #content>
       <Stack gap="lg">
+        <Inline gap="sm" align="center" justify="between">
+          <Text size="sm" tone="muted">共 {{ editor.count.value }} 处</Text>
+          <Link v-if="preview" :as="NuxtLink" :to="preview" class="text-sm">预览游戏页</Link>
+        </Inline>
         <WikiSaveProblems :problems="problems" :check="flow.check.value" />
         <WikiSaveChanges />
-        <Link v-if="preview" :as="NuxtLink" :to="preview" class="self-start text-sm">
-          预览游戏页
-        </Link>
+      </Stack>
+    </template>
+    <template #footer>
+      <Stack gap="sm" class="w-full">
         <Form
           ref="form"
           :values="values"
@@ -95,37 +105,37 @@
           :disabled="flow.saving.value"
           @submit="submit"
         >
-          <FormField name="note" label="编辑说明">
-            <Textarea
-              :model-value="values.note"
-              :min-rows="2"
-              @update:model-value="value => editor.note(String(value))"
-            />
-          </FormField>
-          <FormField name="url" label="依据">
-            <template #label>
-              <Inline gap="xs" align="center" as="span">
-                依据
-                <WikiFieldRule label="依据" :clauses="['A.13.8', 'A.2.1.6']" />
-              </Inline>
-            </template>
-            <WikiSaveBasis />
-          </FormField>
+          <Stack gap="sm">
+            <FormField name="note">
+              <Input
+                :model-value="values.note"
+                placeholder="编辑说明"
+                aria-label="编辑说明"
+                @update:model-value="value => editor.note(String(value))"
+              />
+            </FormField>
+            <FormField name="url"><WikiSaveBasis /></FormField>
+          </Stack>
         </Form>
+        <Inline gap="sm" align="center" :wrap="false">
+          <Checkbox v-model="flow.watching.value" class="me-auto">关注修改过的条目</Checkbox>
+          <Button
+            variant="ghost"
+            tone="neutral"
+            :disabled="flow.saving.value"
+            @click="open = false"
+          >
+            继续编辑
+          </Button>
+          <Button
+            :loading="flow.saving.value || flow.checking.value"
+            :disabled="blocked"
+            @click="form?.submit()"
+          >
+            保存
+          </Button>
+        </Inline>
       </Stack>
-    </template>
-    <template #footer>
-      <Checkbox v-model="flow.watching.value" class="me-auto">关注修改过的条目</Checkbox>
-      <Button variant="ghost" tone="neutral" :disabled="flow.saving.value" @click="open = false">
-        取消
-      </Button>
-      <Button
-        :loading="flow.saving.value || flow.checking.value"
-        :disabled="blocked"
-        @click="form?.submit()"
-      >
-        保存
-      </Button>
     </template>
   </Drawer>
   <WikiSaveConflict

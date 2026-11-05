@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { tabKey } from '~/features/creator/tabs'
   import { partsOf } from '~/features/wiki/editor/route'
   import type { EditorPageData } from '~~/server/api/pages/entries/[id]/edit.get'
 
@@ -18,8 +19,16 @@
   )
   if (data.value?.redirect) await navigateTo(data.value.redirect, { replace: true })
 
+  const drafts = useWikiDraftsStore()
+  useRefreshOnSaved(
+    () => (drafts.count(tabKey(route.path)) ? undefined : refresh()),
+    () =>
+      data.value?.entry ? [data.value.entry.id, ...data.value.parts.map(part => part.id)] : null,
+  )
+
   useCreatorPage({
     title: () => (data.value?.entry ? data.value.entry.label || '未命名' : undefined),
+    kind: () => data.value?.entry?.type,
     crumbs: () => {
       const entry = data.value?.entry
       if (!entry) return undefined

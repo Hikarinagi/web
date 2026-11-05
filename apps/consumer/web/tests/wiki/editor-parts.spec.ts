@@ -7,10 +7,11 @@ describe('partOf', () => {
   it('puts each value of a game tab under the part that shows it', () => {
     expect(partOf('GAME', 'GAME', 'TITLE')).toBe('basic')
     expect(partOf('GAME', 'GAME', 'SAMPLE_IMAGE')).toBe('images')
-    expect(partOf('GAME', 'PRODUCT', 'COVER')).toBe('images')
+    expect(partOf('GAME', 'PRODUCT', 'COVER')).toBe('releases')
     expect(partOf('GAME', 'PRODUCT', 'PRICE')).toBe('releases')
     expect(partOf('GAME', 'APPEARANCE', 'LABEL')).toBe('cast')
-    expect(partOf('GAME', 'GAME', 'CREDIT')).toBe('relations')
+    expect(partOf('GAME', 'GAME', 'CREDIT')).toBe('basic')
+    expect(partOf('GAME', 'GAME', 'GAME_RELATION')).toBe('relations')
     expect(partOf('SERIES', 'BOOK', 'ISBN')).toBe('volumes')
     expect(partOf('SERIES', 'SERIES', 'CREDIT')).toBe('credits')
   })
@@ -34,8 +35,7 @@ describe('changedParts', () => {
     ] as const)
     expect(changedParts('GAME', draft, statements, id => types.get(id as 1 | 2))).toEqual({
       basic: 1,
-      releases: 1,
-      images: 1,
+      releases: 2,
     })
   })
 })
@@ -78,6 +78,7 @@ describe('editorPath', () => {
       selection: [61022],
       panel: 'dismiss',
       suggestion: 9,
+      edit: null,
       segments: ['releases', '61022'],
     })
     expect(editorPath('PERSON', ['suggestions', '9', 'dismiss'])).toMatchObject({
@@ -86,5 +87,15 @@ describe('editorPath', () => {
       segments: [],
     })
     expect(editorPath('GAME', ['dismiss'])).toMatchObject({ panel: null, suggestion: null })
+  })
+
+  it('reads the edit being undone and keeps the part under it', () => {
+    expect(editorPath('GAME', ['cast', 'undo', '535'])).toMatchObject({
+      part: 'cast',
+      panel: 'undo',
+      edit: 535,
+      segments: ['cast'],
+    })
+    expect(editorPath('GAME', ['undo'])).toMatchObject({ panel: null, edit: null })
   })
 })

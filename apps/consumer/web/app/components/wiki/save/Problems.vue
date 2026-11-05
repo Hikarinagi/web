@@ -70,7 +70,7 @@
 </script>
 
 <template>
-  <Alert :open="all.length > 0" tone="danger" title="这些问题要先改好才能保存">
+  <Alert :open="all.length > 0" tone="danger" title="以下问题需要先处理">
     <Stack gap="xs">
       <Inline v-for="(problem, index) in all" :key="index" gap="sm" align="center" :wrap="false">
         <Text as="span" size="sm" class="min-w-0 flex-1">

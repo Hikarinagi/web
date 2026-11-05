@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import {
-    Button,
-    Card,
+    Affix,
+    Container,
     Drawer,
     ScrollArea,
     Splitter,
@@ -9,57 +9,72 @@
     SplitterPanel,
     Stack,
   } from '@hina-ui/vue'
-  import { PanelRight } from '@lucide/vue'
   import { useMediaQuery } from '@vueuse/core'
+  import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'WikiEditorFrame' })
 
+  defineProps<{ title: string }>()
+  const route = useRoute()
+  const router = useRouter()
   const mounted = useMounted()
   const wide = useMediaQuery('(min-width: 1280px)')
   const narrow = computed(() => mounted.value && !wide.value)
-  const drawer = ref(false)
+  const active = usePageActive()
+  const side = computed({
+    get: () => active.value && narrow.value && Boolean(route.query.side),
+    set: next => {
+      if (next) return
+      const { side: _side, focus: _focus, ...query } = route.query
+      void router.replace({ query })
+    },
+  })
 </script>
 
 <template>
-  <Stack v-if="narrow" gap="md" class="min-h-0 flex-1">
-    <Card>
-      <Stack gap="sm">
-        <slot name="header" />
-        <Drawer v-model:open="drawer" title="修改记录、建议与相关条目">
-          <Button variant="outline" tone="neutral" size="sm" class="self-start">
-            <template #icon><PanelRight /></template>
-            修改记录、建议与相关条目
-          </Button>
-          <template #content><slot name="side" /></template>
-        </Drawer>
-      </Stack>
-    </Card>
-    <slot name="tabs" />
-    <ScrollArea class="min-h-0 flex-1">
-      <Stack gap="lg"><slot /></Stack>
-    </ScrollArea>
-    <slot name="footer" />
-  </Stack>
-  <Splitter v-else auto-save-id="wiki-editor" class="min-h-0 flex-1">
-    <SplitterPanel :default-size="74">
-      <Stack gap="md" class="h-full min-h-0 pr-3">
-        <slot name="tabs" />
+  <Splitter v-if="!narrow" auto-save-id="wiki-editor" class="h-full min-h-0">
+    <SplitterPanel :default-size="74" :min-size="50">
+      <Stack gap="none" class="h-full min-h-0">
         <ScrollArea class="min-h-0 flex-1">
-          <Stack gap="lg"><slot /></Stack>
+          <Affix v-if="$slots.tabs" v-slot="{ affixed }" class="z-20">
+            <Container size="lg" :class="cn('bg-canvas pt-3', affixed && 'border-b border-line')">
+              <slot name="tabs" />
+            </Container>
+          </Affix>
+          <Container size="lg" class="py-6">
+            <Stack gap="lg"><slot /></Stack>
+          </Container>
         </ScrollArea>
         <slot name="footer" />
       </Stack>
     </SplitterPanel>
     <SplitterHandle label="调整右栏宽度" />
     <SplitterPanel :default-size="26" :min-size="22" :max-size="50">
-      <Card :padded="false" class="ml-3 h-full overflow-hidden">
-        <Stack gap="none" class="h-full min-h-0">
-          <Stack class="border-b border-line p-4"><slot name="header" /></Stack>
-          <ScrollArea class="min-h-0 flex-1">
-            <Stack class="p-4"><slot name="side" /></Stack>
-          </ScrollArea>
-        </Stack>
-      </Card>
+      <ScrollArea class="h-full border-s border-line bg-surface">
+        <Affix v-slot="{ affixed }" class="z-20">
+          <Stack :class="cn('bg-surface p-4', affixed && 'border-b border-line')">
+            <slot name="header" :stacked="true" />
+          </Stack>
+        </Affix>
+        <Stack class="p-4 pt-0"><slot name="side" /></Stack>
+      </ScrollArea>
     </SplitterPanel>
   </Splitter>
+  <Stack v-else gap="none" class="h-full min-h-0">
+    <ScrollArea class="min-h-0 flex-1">
+      <Container size="lg" class="pt-4"><slot name="header" :stacked="false" /></Container>
+      <Affix v-if="$slots.tabs" v-slot="{ affixed }" class="z-20">
+        <Container size="lg" :class="cn('bg-canvas pt-3', affixed && 'border-b border-line')">
+          <slot name="tabs" />
+        </Container>
+      </Affix>
+      <Container size="lg" class="py-6">
+        <Stack gap="lg"><slot /></Stack>
+      </Container>
+    </ScrollArea>
+    <slot name="footer" />
+    <Drawer v-model:open="side" :title="title" size="md">
+      <template #content><slot name="side" /></template>
+    </Drawer>
+  </Stack>
 </template>

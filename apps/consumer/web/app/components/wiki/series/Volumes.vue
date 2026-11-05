@@ -1,15 +1,17 @@
 <script setup lang="ts">
-  import { Button, Empty, Heading, Inline, SimpleGrid, Stack, Text } from '@hina-ui/vue'
+  import { AspectRatio, Button, Card, Empty, Inline, SimpleGrid, Stack, Text } from '@hina-ui/vue'
   import { Plus } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import { useEditorParts } from '~/features/wiki/composables/useEditorParts'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
-  import type { EditableEntry } from '~/features/wiki/editor/draft'
-  import { dateText } from '~/features/wiki/values'
+  import { entryState, type EditableEntry } from '~/features/wiki/editor/draft'
+  import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'WikiSeriesVolumes' })
 
   const props = defineProps<{ series: EditableEntry; volume: number | null; book: number | null }>()
   const editor = inject(ENTRY_EDITOR)!
+  const route = useRoute()
   const parts = useEditorParts(editor, () => ({
     id: props.series.id,
     type: props.series.type,
@@ -17,91 +19,90 @@
   }))
   const base = computed(() => `/entries/${props.series.id}/edit/volumes`)
   const volumes = computed(() => parts.entriesOf('VOLUME'))
+  const current = computed(
+    () => volumes.value.find(item => item.id === props.volume) ?? volumes.value[0] ?? null,
+  )
   const booksOf = (volume: number) =>
     parts
       .entriesOf('BOOK')
       .filter(book => parts.first(book.id, 'INCLUDED_VOLUME')?.target?.id === volume)
-  const current = computed(() => volumes.value.find(item => item.id === props.volume) ?? null)
-  const books = computed(() => (current.value ? booksOf(current.value.id) : []))
-  const chosen = computed(() => books.value.find(item => item.id === props.book) ?? null)
-  const titleOf = (id: number, fallback: string) => parts.first(id, 'TITLE')?.text || fallback
   const coverOf = (volume: number) =>
     booksOf(volume)
       .map(book => parts.first(book.id, 'COVER')?.media ?? null)
       .find(Boolean) ?? null
-  const definition = (type: 'VOLUME' | 'BOOK') => editor.definitions.value.get(type)
-  const releasedOf = (book: number) => {
-    const date = parts.first(book, 'RELEASE_DATE')
-    return date?.date ? dateText(date.date, date.date_precision) : ''
-  }
+  const owner = (statement: number) => editor.statements.value.get(statement)?.entry
+  const touched = (volume: number) =>
+    [volume, ...booksOf(volume).map(book => book.id)].some(id =>
+      entryState(editor.draft.value, owner, id),
+    )
 
   function addVolume() {
     const id = parts.create('VOLUME', [
       ['SERIES', { target: { id: props.series.id, type: 'SERIES', label: props.series.label } }],
       ['TITLE', {}],
     ])
-    void navigateTo(`${base.value}/${id}`)
-  }
-
-  function addBook(volume: number) {
-    const id = parts.create('BOOK', [
-      ['INCLUDED_VOLUME', { target: { id: volume, type: 'VOLUME', label: titleOf(volume, '') } }],
-      ['TITLE', { text: titleOf(volume, '') }],
-    ])
-    void navigateTo(`${base.value}/${volume}/${id}`)
+    void navigateTo({ path: `${base.value}/${id}`, query: route.query })
   }
 </script>
 
 <template>
   <Stack gap="lg">
-    <Inline gap="sm" align="center" justify="between">
-      <Text size="sm" tone="muted">{{ volumes.length }} 卷</Text>
-      <Button size="sm" @click="addVolume">
-        <template #icon><Plus /></template>
-        新建卷
-      </Button>
-    </Inline>
-    <Empty v-if="!volumes.length" title="还没有卷" />
-    <SimpleGrid v-else min="14rem" gap="sm">
-      <WikiEditorEntryCard
-        v-for="item in volumes"
-        :key="item.id"
-        :to="`${base}/${item.id}`"
-        :active="item.id === volume"
-        :created="item.id < 0"
-        :title="titleOf(item.id, '未命名的卷')"
-        :facts="parts.first(item.id, 'VOLUME_NUMBER')?.text ?? ''"
-        :cover="coverOf(item.id)"
-      />
-    </SimpleGrid>
-    <Stack v-if="current && definition('VOLUME')" gap="lg">
-      <Heading :level="2" size="sm" lang="ja">{{ titleOf(current.id, '未命名的卷') }}</Heading>
-      <WikiEditorForm :entry="current" :definition="definition('VOLUME')!" />
+    <Stack gap="sm">
       <Inline gap="sm" align="center" justify="between">
-        <Text size="sm" tone="muted">{{ books.length }} 个出版版本</Text>
-        <Button variant="outline" tone="neutral" size="sm" @click="addBook(current.id)">
+        <Text size="sm" tone="muted">共 {{ volumes.length }} 卷</Text>
+        <Button size="sm" variant="outline" tone="neutral" @click="addVolume">
           <template #icon><Plus /></template>
-          新建出版版本
+          新建卷
         </Button>
       </Inline>
-      <SimpleGrid v-if="books.length" min="14rem" gap="sm">
-        <WikiEditorEntryCard
-          v-for="item in books"
+      <SimpleGrid v-if="volumes.length" min="6.5rem" gap="sm">
+        <Card
+          v-for="item in volumes"
           :key="item.id"
-          :to="`${base}/${current.id}/${item.id}`"
-          :active="item.id === book"
-          :created="item.id < 0"
-          :title="titleOf(item.id, '未命名的出版版本')"
-          :facts="releasedOf(item.id)"
-          :cover="parts.first(item.id, 'COVER')?.media ?? null"
-        />
+          :as="NuxtLink"
+          :to="{ path: `${base}/${item.id}`, query: route.query }"
+          :padded="false"
+          :aria-current="item.id === current?.id ? 'true' : undefined"
+          :class="
+            cn(
+              'hn-state-layer hn-interactive overflow-hidden',
+              item.id === current?.id && 'ring-2 ring-accent',
+            )
+          "
+        >
+          <AspectRatio :ratio="3 / 4" class="bg-inset">
+            <HikariImage
+              v-if="coverOf(item.id)"
+              :src="coverOf(item.id)"
+              alt=""
+              preset="small"
+              class="size-full"
+              image-class="size-full object-cover"
+            />
+          </AspectRatio>
+          <Stack gap="none" class="px-2 py-1.5">
+            <Inline gap="xs" align="baseline" :wrap="false" class="min-w-0">
+              <Text size="xs" weight="medium" class="shrink-0">
+                {{ parts.first(item.id, 'VOLUME_NUMBER')?.text || '暂无卷次' }}
+              </Text>
+              <Text v-if="touched(item.id)" size="xs" class="shrink-0 text-accent-text">
+                有修改
+              </Text>
+            </Inline>
+            <Text size="xs" tone="muted" lang="ja" truncate>
+              {{ parts.first(item.id, 'TITLE')?.text || '新的卷' }}
+            </Text>
+          </Stack>
+        </Card>
       </SimpleGrid>
-      <Stack v-if="chosen && definition('BOOK')" gap="lg">
-        <Heading :level="3" size="xs" lang="ja">{{
-          titleOf(chosen.id, '未命名的出版版本')
-        }}</Heading>
-        <WikiEditorForm :entry="chosen" :definition="definition('BOOK')!" />
-      </Stack>
     </Stack>
+    <WikiSeriesVolume
+      v-if="current"
+      :key="current.id"
+      :series="series"
+      :volume="current"
+      :book="book"
+    />
+    <Empty v-else title="暂无卷" />
   </Stack>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import {
     Button,
+    Divider,
     Empty,
     Inline,
     Link,
@@ -70,26 +71,35 @@
 </script>
 
 <template>
-  <Panel title="先查找已有的条目">
+  <Panel title="查找已有的条目">
     <Stack gap="md">
       <SegmentedControl
         :model-value="type"
         :options="KINDS"
         size="sm"
+        aria-label="条目类型"
         class="self-start"
         @update:model-value="pick"
       />
-      <SearchInput v-model="name" placeholder="名字" />
-      <Empty v-if="searched && !found.length" :title="`没有找到「${name.trim()}」`" />
-      <Stack v-else-if="found.length" gap="sm">
-        <Inline v-for="item in found" :key="item.id" gap="sm" align="baseline" :wrap="false">
-          <Link :as="NuxtLink" :to="`/entries/${item.id}/edit`" lang="ja" class="text-sm">
-            {{ item.label }}
-          </Link>
-          <Text as="span" size="xs" tone="muted" truncate>
-            {{ describeFound(item, typeName(item.type)) }}
-          </Text>
-        </Inline>
+      <SearchInput v-model="name" placeholder="名字或标题" />
+      <Empty v-if="searched && !found.length" :title="`未找到「${name.trim()}」`" />
+      <Stack v-else-if="found.length" gap="none">
+        <template v-for="(item, index) in found" :key="item.id">
+          <Divider v-if="index" />
+          <Inline gap="sm" align="baseline" justify="between" :wrap="false" class="py-2.5">
+            <Link
+              :as="NuxtLink"
+              :to="`/entries/${item.id}/edit`"
+              lang="ja"
+              class="min-w-0 truncate text-sm"
+            >
+              {{ item.label }}
+            </Link>
+            <Text as="span" size="sm" tone="muted" class="max-w-1/2 shrink-0" truncate>
+              {{ describeFound(item, typeName(item.type)) }}
+            </Text>
+          </Inline>
+        </template>
       </Stack>
       <Button
         v-if="searched"

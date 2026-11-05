@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { RulesPageData } from '~~/server/api/pages/create/wiki/rules.get'
 
-  definePageMeta({ title: '编辑规范', key: () => '/create/wiki/rules' })
+  definePageMeta({ title: '编辑规范', key: () => '/create/wiki/rules', fill: true })
 
   const route = useRoute()
   const clause = computed(() =>

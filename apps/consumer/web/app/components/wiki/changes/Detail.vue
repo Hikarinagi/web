@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Card, Inline, Link, Stack, Tag, Text } from '@hina-ui/vue'
+  import { Button, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { ArrowLeft } from '@lucide/vue'
   import { NuxtLink } from '#components'
@@ -39,8 +39,9 @@
     path: `/create/wiki/changes/${edit.value.id}`,
     query: route.query,
   }))
+  const active = usePageActive()
   const undoOpen = computed({
-    get: () => route.params.panel === 'undo',
+    get: () => active.value && route.params.panel === 'undo',
     set: next => {
       if (!next) void router.replace(here.value)
     },
@@ -69,21 +70,16 @@
 </script>
 
 <template>
-  <Stack gap="lg">
-    <Button
-      :as="NuxtLink"
-      :to="back"
-      variant="ghost"
-      tone="neutral"
-      size="sm"
-      class="self-start md:hidden"
-    >
-      <template #icon><ArrowLeft /></template>
-      {{ backLabel }}
-    </Button>
-    <Card>
-      <Stack gap="sm">
-        <Inline gap="md" align="start" justify="between">
+  <Stack gap="none">
+    <Inline gap="none" align="center" class="h-12 border-b border-line px-2 md:hidden">
+      <Button :as="NuxtLink" :to="back" variant="ghost" tone="neutral" size="sm">
+        <template #icon><ArrowLeft /></template>
+        {{ backLabel }}
+      </Button>
+    </Inline>
+    <Stack gap="lg" class="p-6 max-md:p-4">
+      <Inline gap="md" align="start" justify="between">
+        <Stack gap="xs" class="min-w-0">
           <Inline gap="sm" align="center" :wrap="false" class="min-w-0">
             <Avatar :user="edit.editor" size="sm" />
             <UserName :user="edit.editor" class="text-sm" full />
@@ -91,47 +87,49 @@
               {{ revisionTime(edit.created_at) }}
             </Text>
           </Inline>
-          <Inline gap="sm" :wrap="false">
-            <Button
-              v-if="undoable"
-              :as="NuxtLink"
-              :to="{ ...here, path: `${here.path}/undo` }"
-              variant="outline"
-              tone="neutral"
-              size="sm"
-            >
-              撤销
-            </Button>
-            <Button
-              v-if="patrol && !edit.patrolled_at && !edit.batch.imported"
-              size="sm"
-              :loading="marking"
-              @click="mark"
-            >
-              标记已检查
-            </Button>
-          </Inline>
+          <Text v-if="edit.note" size="sm">{{ edit.note }}</Text>
+          <Text v-if="lines.length === 1" size="sm" tone="muted">{{ lines[0]?.text }}</Text>
+          <WikiBasis v-if="edit.basis" :basis="edit.basis" />
+          <Text v-if="edit.patrolled_at" size="sm" tone="success">
+            已检查，{{ revisionTime(edit.patrolled_at) }}
+          </Text>
+          <Text v-if="edit.reverted_at" size="sm" tone="muted">
+            已于 {{ revisionTime(edit.reverted_at) }} 撤销
+          </Text>
+          <Text v-if="edit.reverts_id" size="sm" tone="muted">
+            撤销了
+            <Link :as="NuxtLink" :to="`/create/wiki/changes/${edit.reverts_id}`">另一次修改</Link>
+          </Text>
+        </Stack>
+        <Inline gap="sm" :wrap="false">
+          <Button
+            v-if="undoable"
+            :as="NuxtLink"
+            :to="{ ...here, path: `${here.path}/undo` }"
+            variant="outline"
+            tone="neutral"
+            size="sm"
+          >
+            撤销
+          </Button>
+          <Button
+            v-if="patrol && !edit.patrolled_at && !edit.batch.imported"
+            size="sm"
+            :loading="marking"
+            @click="mark"
+          >
+            标记已检查
+          </Button>
         </Inline>
-        <Inline v-if="edit.reverted_at || edit.patrolled_at" gap="sm">
-          <Tag v-if="edit.reverted_at" size="sm" tone="neutral">已撤销</Tag>
-          <Tag v-if="edit.patrolled_at" size="sm" tone="success">已检查</Tag>
-        </Inline>
-        <Text v-if="edit.note" size="sm">{{ edit.note }}</Text>
-        <Text v-if="lines.length === 1" size="sm" tone="muted">{{ lines[0]?.text }}</Text>
-        <WikiBasis v-if="edit.basis" :basis="edit.basis" />
-        <Text v-if="edit.reverts_id" size="sm" tone="muted">
-          撤销了
-          <Link :as="NuxtLink" :to="`/create/wiki/changes/${edit.reverts_id}`">另一次修改</Link>
-        </Text>
-      </Stack>
-    </Card>
-    <WikiChangesPart
-      v-for="part in parts"
-      :key="part.entry.id"
-      :part="part"
-      :names="data.names"
-      :several="lines.length > 1"
-    />
+      </Inline>
+      <WikiChangesPart
+        v-for="part in parts"
+        :key="part.entry.id"
+        :part="part"
+        :names="data.names"
+        :several="lines.length > 1"
+      />
+    </Stack>
     <WikiChangesUndo v-model:open="undoOpen" :edit="edit" :names="data.names" @done="undone" />
   </Stack>
 </template>

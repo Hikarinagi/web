@@ -2,7 +2,7 @@
   import { CHANGE_TITLES, changesBff, readChangesQuery } from '~/features/wiki/changes'
   import type { ChangesPageData } from '~~/server/api/pages/create/wiki/changes.get'
 
-  definePageMeta({ title: '全部修改' })
+  definePageMeta({ title: '全部修改', fill: true })
 
   const route = useRoute()
   const { data } = await useHikariApiData<ChangesPageData>(

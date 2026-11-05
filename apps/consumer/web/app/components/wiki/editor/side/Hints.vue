@@ -1,15 +1,6 @@
 <script setup lang="ts">
-  import {
-    Button,
-    DescriptionDetails,
-    DescriptionList,
-    DescriptionTerm,
-    Empty,
-    Inline,
-    Skeleton,
-    Stack,
-    Text,
-  } from '@hina-ui/vue'
+  import { Button, Empty, Inline, Link, Skeleton, Stack, Text } from '@hina-ui/vue'
+  import { NuxtLink } from '#components'
   import { revisionTime } from '~/features/entry/time'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { HINT_KINDS, type WikiHint } from '~/features/wiki/hints'
@@ -27,74 +18,82 @@
     await refresh()
     emit('changed')
   })
-  const focus = computed(() => Number(route.query.focus))
-  const owner = (id: number) =>
-    id === props.entry ? null : (editor.entries.value.get(id)?.label ?? null)
-  const others = (hint: WikiHint) =>
-    hint.entries.filter(item => item.id !== props.entry).map(item => item.label || '未命名')
+  const focus = computed(() => (typeof route.query.focus === 'string' ? route.query.focus : ''))
+  const subject = (hint: WikiHint) => hint.proposal ?? hint.statement
+  const keyOf = (hint: WikiHint) => {
+    const value = subject(hint)
+    return value ? `${value.entry_id}|${value.property}` : `${hint.entries[0]?.id ?? ''}|`
+  }
+  const title = (hint: WikiHint) => {
+    const value = subject(hint)
+    if (!value) return hint.entries.map(item => item.label || '未命名').join('、')
+    const type = editor.entries.value.get(value.entry_id)?.type
+    const label =
+      (type &&
+        editor.definitions.value
+          .get(type)
+          ?.properties.find(item => item.property === value.property)?.label) ??
+      value.property
+    const owner =
+      value.entry_id === props.entry ? '' : `${editor.entries.value.get(value.entry_id)?.label}：`
+    return `${owner}${label}`
+  }
+  const before = (hint: WikiHint) =>
+    hint.proposal?.current
+      ? valueText(hint.proposal.current)
+      : hint.statement
+        ? valueText(hint.statement)
+        : ''
 </script>
 
 <template>
   <Stack v-if="!data && status !== 'success' && status !== 'error'" gap="md">
     <Skeleton v-for="index in 3" :key="index" class="h-14" />
   </Stack>
-  <Empty v-else-if="!data?.items.length" title="暂无建议" />
-  <Stack v-else gap="lg">
+  <Empty v-else-if="!data?.items.length" title="暂无待处理的建议" />
+  <Stack v-else gap="sm">
     <Stack
       v-for="hint in data.items"
       :key="hint.id"
-      gap="xs"
+      gap="sm"
       :class="
         cn(
-          'min-w-0 rounded-sm',
-          (hint.proposal?.current?.id ?? hint.statement?.id) === focus && 'bg-accent-soft p-2',
+          'min-w-0 rounded-md border border-line p-3',
+          focus.includes('|') && keyOf(hint).startsWith(focus) && 'ring-2 ring-accent',
         )
       "
     >
-      <Inline gap="sm" align="center" :wrap="false" class="min-w-0">
-        <Avatar :user="hint.created_by" size="sm" />
-        <UserName :user="hint.created_by" class="text-sm" />
-      </Inline>
-      <Text size="sm">{{ hint.problem || HINT_KINDS[hint.kind] }}</Text>
-      <Text v-if="hint.statement && !hint.proposal" size="sm" tone="muted">
-        {{ valueText(hint.statement) }}
-      </Text>
-      <Text v-if="others(hint).length" size="sm" tone="muted">{{ others(hint).join('、') }}</Text>
-      <DescriptionList v-if="hint.proposal" orientation="horizontal" class="min-w-0 text-sm">
-        <template v-if="owner(hint.proposal.entry_id)">
-          <DescriptionTerm>条目</DescriptionTerm>
-          <DescriptionDetails>{{ owner(hint.proposal.entry_id) }}</DescriptionDetails>
-        </template>
-        <DescriptionTerm>现值</DescriptionTerm>
-        <DescriptionDetails>
-          {{ hint.proposal.current ? valueText(hint.proposal.current) : '无' }}
-        </DescriptionDetails>
-        <DescriptionTerm>建议</DescriptionTerm>
-        <DescriptionDetails>{{ valueText(hint.proposal) }}</DescriptionDetails>
-      </DescriptionList>
-      <Inline gap="sm" align="center">
-        <Button
-          v-if="hint.suggestion"
-          size="sm"
-          :loading="accepting === hint.id"
-          :disabled="accepting !== null"
-          @click="accept(hint)"
-        >
-          采纳
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          tone="neutral"
-          @click="
-            navigateTo({ path: `${base}/suggestions/${hint.id}/dismiss`, query: route.query })
-          "
-        >
-          驳回
-        </Button>
-        <Text as="span" size="xs" tone="muted" class="ml-auto">
-          {{ revisionTime(hint.created_at) }}
-        </Text>
+      <Text size="xs" tone="muted" lang="ja">{{ title(hint) }}</Text>
+      <WikiDiffText v-if="hint.proposal" :before="before(hint)" :after="valueText(hint.proposal)" />
+      <Text v-else size="sm">{{ hint.problem || HINT_KINDS[hint.kind] }}</Text>
+      <Text v-if="hint.proposal && hint.problem" size="xs" tone="muted">{{ hint.problem }}</Text>
+      <Inline gap="sm" align="center" justify="between" :wrap="false">
+        <Stack gap="none" class="min-w-0">
+          <Inline gap="xs" align="center" :wrap="false" class="min-w-0">
+            <Avatar :user="hint.created_by" size="sm" />
+            <UserName :user="hint.created_by" class="text-xs" />
+          </Inline>
+          <Text size="xs" tone="muted">{{ revisionTime(hint.created_at) }}</Text>
+        </Stack>
+        <Inline gap="sm" align="center" :wrap="false" class="shrink-0">
+          <Link
+            :as="NuxtLink"
+            :to="{ path: `${base}/suggestions/${hint.id}/dismiss`, query: route.query }"
+            class="text-sm"
+          >
+            驳回
+          </Link>
+          <Button
+            v-if="hint.suggestion"
+            size="xs"
+            variant="soft"
+            :loading="accepting === hint.id"
+            :disabled="accepting !== null"
+            @click="accept(hint)"
+          >
+            采纳
+          </Button>
+        </Inline>
       </Inline>
     </Stack>
   </Stack>
