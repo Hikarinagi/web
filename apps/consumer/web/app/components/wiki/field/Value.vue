@@ -185,7 +185,7 @@
           :card="card"
           :ratio="ratio"
           :rating="rating"
-          @rate="next => value.media && editor.rate(item.id, value.media.id, next)"
+          @rate="next => value.media && editor.rate(item.id, value.media, next)"
         >
           <template #menu><WikiFieldMenu v-bind="menu" v-on="actions" /></template>
         </WikiFieldImage>

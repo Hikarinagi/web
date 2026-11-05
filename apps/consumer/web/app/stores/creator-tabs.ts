@@ -62,12 +62,13 @@ export const useCreatorTabsStore = defineStore('creator-tabs', () => {
   }
 
   function enter(fullPath: string, title: string) {
-    const wanted = tabPath(fullPath)
+    const resource = resourceKey(fullPath)
+    const same = (tab: CreatorTab) => resourceKey(currentPath(tab)) === resource
     const found =
-      (active.value && tabPath(currentPath(active.value)) === wanted ? active.value : null) ??
-      tabs.value.find(tab => tabPath(currentPath(tab)) === wanted)
+      (active.value && same(active.value) ? active.value : null) ?? tabs.value.find(same)
     if (found) {
-      found.history[found.index] = fullPath
+      if (tabPath(currentPath(found)) === tabPath(fullPath)) found.history[found.index] = fullPath
+      else push(found, fullPath, title)
       activeId.value = found.id
       enteredId.value = found.id
       return

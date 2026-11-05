@@ -10,6 +10,7 @@
   const props = defineProps<{ definitions: EntryDefinition[] }>()
   const route = useRoute()
   const { typeName } = useWikiDefinitions()
+  const nav = useTabNav()
   const editor = useEntryEditor({
     key: () => resourceKey(route.path),
     title: () => '新建条目',
@@ -36,7 +37,7 @@
 
   async function saved(result?: EditResult) {
     const id = result ? Math.max(...result.entries) : null
-    if (id) await navigateTo(`/entries/${id}/edit`)
+    if (id) await nav.finish(`/entries/${id}/edit`)
   }
 </script>
 

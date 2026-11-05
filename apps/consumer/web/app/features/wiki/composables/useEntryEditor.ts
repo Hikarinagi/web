@@ -1,6 +1,5 @@
 import type { InjectionKey, MaybeRefOrGetter } from 'vue'
 import {
-  changeCount,
   emptyDraft,
   operationsOf,
   sameValue,
@@ -11,6 +10,7 @@ import {
   type EntryDefinition,
   type ValueDraft,
 } from '~/features/wiki/editor/draft'
+import { reviewCount, reviewOf } from '~/features/wiki/editor/review'
 import { propertyOf } from '~/features/wiki/editor/working'
 
 type Property = EditableEntry['statements'][number]['property']
@@ -44,8 +44,58 @@ export function useEntryEditor(page: {
   const definitions = computed(
     () => new Map(toValue(page.definitions).map(definition => [definition.type, definition])),
   )
-  const count = computed(() => changeCount(draft.value))
+  const members = computed(() => [
+    ...[...entries.value.values()].map(entry => ({ id: entry.id, type: entry.type, entry })),
+    ...draft.value.created.map(item => ({ id: item.id, type: item.type, entry: null })),
+  ])
+  const count = computed(() =>
+    reviewCount(
+      reviewOf(draft.value, members.value, definitions.value, statements.value),
+      draft.value,
+    ),
+  )
   let next = -1
+  watch(count, shown => store.show(key.value, shown), { immediate: true })
+
+  watch(
+    [statements, () => store.read(key.value)],
+    ([known, stored]) => {
+      if (!stored || !known.size) return
+      const kept = new Set([...known.keys(), ...stored.added.map(item => item.id)])
+      const owners = new Set([...entries.value.keys(), ...stored.created.map(item => item.id)])
+      const media = new Set(
+        [
+          ...[...known.values()].map(item => item.statement.media?.id),
+          ...stored.added.map(item => item.value.media?.id),
+          ...Object.values(stored.changed).map(value => value.media?.id),
+        ].filter((id): id is number => id !== undefined),
+      )
+      const stale =
+        stored.added.some(item => !owners.has(item.entry)) ||
+        [stored.changed, stored.removed, stored.moved, stored.positions].some(map =>
+          Object.keys(map).some(id => !kept.has(Number(id))),
+        ) ||
+        stored.restored.some(id => !kept.has(id)) ||
+        Object.keys(stored.rated).some(id => !media.has(Number(id))) ||
+        stored.detached.some(id => !owners.has(id))
+      if (!stale) return
+      store.update(key.value, { title: toValue(page.title), path: route.fullPath }, current => {
+        const known = (map: Record<number, unknown>) =>
+          Object.fromEntries(Object.entries(map).filter(([id]) => kept.has(Number(id))))
+        current.added = current.added.filter(item => owners.has(item.entry))
+        current.changed = known(current.changed) as EditorDraft['changed']
+        current.removed = known(current.removed) as EditorDraft['removed']
+        current.moved = known(current.moved) as EditorDraft['moved']
+        current.positions = known(current.positions) as EditorDraft['positions']
+        current.restored = current.restored.filter(id => kept.has(id))
+        current.rated = Object.fromEntries(
+          Object.entries(current.rated).filter(([id]) => media.has(Number(id))),
+        )
+        current.detached = current.detached.filter(id => owners.has(id))
+      })
+    },
+    { immediate: true },
+  )
 
   function edit(entry: number, change: (draft: EditorDraft) => void) {
     store.update(key.value, { title: toValue(page.title), path: route.fullPath }, current => {
@@ -78,10 +128,7 @@ export function useEntryEditor(page: {
     statements,
     definitions,
     versions: computed(() => toValue(page.versions) ?? []),
-    members: computed(() => [
-      ...[...entries.value.values()].map(entry => ({ id: entry.id, type: entry.type, entry })),
-      ...draft.value.created.map(item => ({ id: item.id, type: item.type, entry: null })),
-    ]),
+    members,
     property(entry: number, property: Property) {
       return propertyOf(
         entries.value.get(entry) ?? null,
@@ -133,7 +180,13 @@ export function useEntryEditor(page: {
     revert(id: number) {
       const entry = ownerOf(id)
       if (entry === undefined) return
+      const media = [
+        statements.value.get(id)?.statement.media?.id,
+        draft.value.changed[id]?.media?.id,
+        draft.value.added.find(item => item.id === id)?.value.media?.id,
+      ]
       edit(entry, current => {
+        for (const item of media) if (item !== undefined) current.rated = omit(current.rated, item)
         current.changed = omit(current.changed, id)
         current.removed = omit(current.removed, id)
         current.moved = omit(current.moved, id)
@@ -144,7 +197,10 @@ export function useEntryEditor(page: {
     },
     restore(id: number) {
       const entry = ownerOf(id)
-      if (entry !== undefined) edit(entry, current => current.restored.push(id))
+      if (entry !== undefined)
+        edit(entry, current => {
+          if (!current.restored.includes(id)) current.restored.push(id)
+        })
     },
     move(id: number, target: number) {
       const entry = ownerOf(id)
@@ -166,12 +222,22 @@ export function useEntryEditor(page: {
       const other = list[index + step]
       if (index < 0 || !other) return
       ;[list[index], list[index + step]] = [other, list[index]!]
+      const original = list
+        .map(item => statements.value.get(item.id)!.statement)
+        .sort((a, b) => a.position - b.position || a.id - b.id)
+      const unchanged = original.every((statement, position) => list[position]?.id === statement.id)
       edit(entry, current => {
         list.forEach((item, position) => {
-          if (statements.value.get(item.id)?.statement.position === position)
-            current.positions = omit(current.positions, item.id)
+          if (unchanged) current.positions = omit(current.positions, item.id)
           else current.positions[item.id] = position
         })
+      })
+    },
+    unorder(ids: number[]) {
+      const entry = ids[0] === undefined ? undefined : ownerOf(ids[0])
+      if (entry === undefined) return
+      edit(entry, current => {
+        for (const id of ids) current.positions = omit(current.positions, id)
       })
     },
     uncreate(id: number) {
@@ -209,9 +275,18 @@ export function useEntryEditor(page: {
           : current.detached.filter(item => item !== entry)
       })
     },
-    rate(id: number, media: number, rating: { sexual: number; violence: number }) {
+    rate(
+      id: number,
+      media: NonNullable<ValueDraft['media']>,
+      rating: { sexual: number; violence: number },
+    ) {
       const entry = ownerOf(id)
-      if (entry !== undefined) edit(entry, current => (current.rated[media] = rating))
+      if (entry === undefined) return
+      edit(entry, current => {
+        if (rating.sexual === media.sexual && rating.violence === media.violence)
+          current.rated = omit(current.rated, media.id)
+        else current.rated[media.id] = rating
+      })
     },
     note(text: string) {
       store.update(key.value, { title: toValue(page.title), path: route.fullPath }, current => {

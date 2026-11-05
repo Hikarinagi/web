@@ -5,6 +5,7 @@ export interface StoredDraft extends EditorDraft {
   title: string
   path: string
   updated_at: string
+  shown?: number
 }
 
 export const useWikiDraftsStore = defineStore('wiki-drafts', () => {
@@ -40,8 +41,13 @@ export const useWikiDraftsStore = defineStore('wiki-drafts', () => {
 
   function count(key: string) {
     const draft = read(key)
-    return draft ? changeCount(draft) : 0
+    return draft ? (draft.shown ?? changeCount(draft)) : 0
   }
 
-  return { drafts: skipHydrate(drafts), read, update, discard, count }
+  function show(key: string, shown: number) {
+    const draft = drafts.value[key]
+    if (draft && draft.shown !== shown) drafts.value[key] = { ...draft, shown }
+  }
+
+  return { drafts: skipHydrate(drafts), read, update, discard, count, show }
 })

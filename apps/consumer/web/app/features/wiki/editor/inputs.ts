@@ -40,8 +40,7 @@ export function mediaDraft(media: {
   }
 }
 
-export const SEXUAL_LEVELS = ['安全', '暗示', '露骨'] as const
-export const VIOLENCE_LEVELS = ['无', '暴力', '血腥'] as const
+export const RATING_LEVELS = ['无', '轻度', '明显'] as const
 
 const pad = (value: number) => String(value).padStart(2, '0')
 

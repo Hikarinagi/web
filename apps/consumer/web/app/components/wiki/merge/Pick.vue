@@ -33,7 +33,7 @@
     :types="[data.entry.type]"
     :exclude="[data.entry.id]"
     confirm="下一步"
-    @close="nav.dismiss(edit, true)"
+    @close="nav.finish(edit)"
     @pick="item => navigateTo(`/entries/${data.entry.id}/merge/${item.id}`)"
   />
 </template>

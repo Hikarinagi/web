@@ -2,7 +2,7 @@
   import { AspectRatio, FileUpload, Inline, Select, Stack, Text } from '@hina-ui/vue'
   import { uploadImage } from '~/components/media-library/lib/upload'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
-  import { mediaDraft, SEXUAL_LEVELS, VIOLENCE_LEVELS } from '~/features/wiki/editor/inputs'
+  import { mediaDraft, RATING_LEVELS } from '~/features/wiki/editor/inputs'
 
   defineOptions({ name: 'WikiFieldImage' })
 
@@ -16,9 +16,7 @@
   const model = defineModel<ValueDraft>({ required: true })
 
   const uploading = ref(false)
-  const levels = (list: readonly string[]) =>
-    list.map((label, value) => ({ value, label: `${value} 级：${label}` }))
-  const names = (list: readonly string[]) => list.map((label, value) => ({ value, label }))
+  const levels = RATING_LEVELS.map((label, value) => ({ value, label }))
 
   async function upload(files: File | File[] | null) {
     const file = Array.isArray(files) ? files[0] : files
@@ -57,22 +55,24 @@
     </AspectRatio>
     <Inline gap="xs" align="end" :wrap="false">
       <Stack gap="none" class="min-w-0 flex-1">
-        <Text size="xs" tone="muted">性分级</Text>
+        <Text size="xs" tone="muted">成人内容</Text>
         <Select
           :model-value="rating.sexual"
-          :options="names(SEXUAL_LEVELS)"
+          :options="levels"
           size="sm"
-          aria-label="性分级"
+          placeholder="未分级"
+          aria-label="成人内容"
           @update:model-value="value => rate('sexual', value)"
         />
       </Stack>
       <Stack gap="none" class="min-w-0 flex-1">
-        <Text size="xs" tone="muted">暴力分级</Text>
+        <Text size="xs" tone="muted">血腥暴力</Text>
         <Select
           :model-value="rating.violence"
-          :options="names(VIOLENCE_LEVELS)"
+          :options="levels"
           size="sm"
-          aria-label="暴力分级"
+          placeholder="未分级"
+          aria-label="血腥暴力"
           @update:model-value="value => rate('violence', value)"
         />
       </Stack>
@@ -100,20 +100,22 @@
         {{ model.media ? '换一张' : '上传图片' }}
       </FileUpload>
       <Inline v-if="model.media" gap="sm" align="center">
+        <Text as="span" size="sm" tone="muted">成人内容</Text>
         <Select
           :model-value="rating.sexual"
-          :options="levels(SEXUAL_LEVELS)"
-          aria-label="性分级"
-          placeholder="性分级"
-          class="w-36"
+          :options="levels"
+          aria-label="成人内容"
+          placeholder="未分级"
+          class="w-28"
           @update:model-value="value => rate('sexual', value)"
         />
+        <Text as="span" size="sm" tone="muted">血腥暴力</Text>
         <Select
           :model-value="rating.violence"
-          :options="levels(VIOLENCE_LEVELS)"
-          aria-label="暴力分级"
-          placeholder="暴力分级"
-          class="w-36"
+          :options="levels"
+          aria-label="血腥暴力"
+          placeholder="未分级"
+          class="w-28"
           @update:model-value="value => rate('violence', value)"
         />
       </Inline>

@@ -52,12 +52,10 @@ export function useTabNav() {
     if (focus) return activate(tab)
   }
 
-  function openIn(resource: (tab: CreatorTab) => boolean, path: string) {
-    const fullPath = router.resolve(path).fullPath
-    const tab = store.tabs.find(resource)
-    if (!tab) return open(fullPath, true)
-    store.pending = { id: tab.id, push: true }
-    return visit(fullPath)
+  async function finish(path: string) {
+    const from = store.activeId
+    await router.push(path)
+    if (store.activeId !== from) store.close([from])
   }
 
   return {
@@ -68,6 +66,6 @@ export function useTabNav() {
     dismiss,
     activate,
     open,
-    openIn,
+    finish,
   }
 }

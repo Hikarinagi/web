@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Button, Inline, Stack, Text } from '@hina-ui/vue'
+  import { ChevronDown, ChevronRight } from '@lucide/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EntryStatement, PropertyDefinition } from '~/features/wiki/editor/draft'
   import { DEPRECATION_REASONS, qualifierText, valueText } from '~/features/wiki/values'
@@ -30,10 +31,11 @@
 
 <template>
   <Stack gap="xs">
-    <Button variant="link" size="sm" class="self-start" @click="toggle">
-      {{ open ? '收起已删除的值' : `已删除的值（${items.length}）` }}
+    <Button variant="ghost" tone="neutral" size="sm" class="self-start" @click="toggle">
+      <template #icon><ChevronDown v-if="open" /><ChevronRight v-else /></template>
+      已删除的值 {{ items.length }} 条
     </Button>
-    <Stack v-if="open" gap="xs">
+    <Stack v-if="open" gap="xs" class="border-l-2 border-line pl-3">
       <Inline v-for="item in items" :key="item.id" gap="sm" align="baseline" :wrap="false">
         <Text as="span" size="sm" tone="muted" class="min-w-0 line-through" truncate>
           {{ describe(item) || '空' }}

@@ -1,4 +1,5 @@
 import type { RouteLocationNormalized } from 'vue-router'
+import { currentPath, resourceKey } from '~/features/creator/tabs'
 
 export function useTabRouter() {
   if (import.meta.server) return
@@ -18,7 +19,16 @@ export function useTabRouter() {
   })
 
   const stopBefore = router.beforeEach((to, from) => {
-    if (popped === null) return
+    if (popped === null) {
+      if (store.pending || store.travel !== null || !creator(to) || !creator(from)) return
+      const resource = resourceKey(to.fullPath)
+      if (resource === resourceKey(from.fullPath)) return
+      const open = store.tabs.find(tab => resourceKey(currentPath(tab)) === resource)
+      store.pending = open
+        ? { id: open.id, push: true }
+        : { id: store.open(to.fullPath, title(to)).id, push: false }
+      return
+    }
     const delta = popped
     popped = null
     const tab = store.active

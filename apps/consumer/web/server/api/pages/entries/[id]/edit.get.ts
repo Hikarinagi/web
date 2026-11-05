@@ -2,6 +2,7 @@ import { createError, getRouterParam, type H3Event } from 'h3'
 import { MATCHING_CODES } from '~/features/wiki/codes'
 import type { EditableEntry } from '~/features/wiki/editor/draft'
 import type { ReferenceGroup } from '~/features/wiki/references'
+import { codeLabel, dateText } from '~/features/wiki/values'
 import { fetchBackendData } from '~~/server/utils/backend-api'
 import { definePageBffHandler } from '~~/server/utils/page-bff'
 
@@ -73,10 +74,32 @@ async function handler(event: H3Event) {
     owner?.type === 'GAME'
       ? references
           .filter(group => group.type === 'PRODUCT' && group.property === 'INCLUDED_GAME')
-          .flatMap(group => group.items.map(item => item.entry))
+          .flatMap(group =>
+            group.items.map(item => ({
+              ...item.entry,
+              label: item.entry.label || '未命名的发行版本',
+            })),
+          )
       : parts
           .filter(item => item.type === 'PRODUCT' || item.type === 'BOOK')
-          .map(item => ({ id: item.id, type: item.type, label: item.label }))
+          .map(item => {
+            const live = item.statements.filter(statement => statement.status !== 'DEPRECATED')
+            const date = live.find(statement => statement.property === 'RELEASE_DATE')
+            const facts = [
+              ...live.flatMap(statement =>
+                statement.property === 'PLATFORM' && statement.code
+                  ? [codeLabel('PLATFORM', statement.code)]
+                  : [],
+              ),
+              date?.date ? dateText(date.date, date.date_precision) : '',
+            ].filter(Boolean)
+            const fallback = item.type === 'PRODUCT' ? '未命名的发行版本' : '未命名的出版版本'
+            return {
+              id: item.id,
+              type: item.type,
+              label: item.label || facts.join('，') || fallback,
+            }
+          })
   return {
     redirect: null,
     entry: visible(entry),

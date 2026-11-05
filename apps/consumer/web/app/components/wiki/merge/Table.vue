@@ -28,6 +28,7 @@
   const { typeName } = useWikiDefinitions()
   const choices = ref<Record<string, 'kept' | 'merged'>>({})
   const bus = useWikiSavedBus()
+  const nav = useTabNav()
   const note = ref('')
   const submitting = ref(false)
   watch(
@@ -92,10 +93,7 @@
         },
       })
       bus.emit(result.entries)
-      await navigateTo({
-        path: `/entries/${props.data.kept.id}/edit`,
-        query: { saved: String(result.edit_id) },
-      })
+      await nav.finish(`/entries/${props.data.kept.id}/edit?saved=${result.edit_id}`)
     } finally {
       submitting.value = false
     }
