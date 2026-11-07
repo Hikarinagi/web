@@ -121,7 +121,29 @@
 </script>
 
 <template>
-  <Stack gap="none" class="min-h-screen bg-canvas transition-colors duration-700">
+  <Stack gap="none" class="relative isolate min-h-screen bg-canvas transition-colors duration-700">
+    <Stack
+      gap="none"
+      class="pointer-events-none absolute inset-x-0 top-0 -z-10 hidden h-(--ambient-height) mask-(--ambient-fade) opacity-(--tone-glow) transition-opacity duration-700 dark:flex"
+    >
+      <Transition
+        enter-active-class="transition-opacity duration-700"
+        enter-from-class="opacity-0"
+        leave-active-class="transition-opacity duration-700"
+        leave-to-class="opacity-0"
+      >
+        <Stack
+          :key="glow"
+          gap="none"
+          class="absolute inset-0 bg-cover bg-center"
+          :style="{ backgroundImage: glow ? `url(${glow})` : undefined }"
+        />
+      </Transition>
+    </Stack>
+    <Stack
+      gap="none"
+      class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-(--ambient-height) bg-(--tone-soft) mask-(--ambient-fade) dark:hidden"
+    />
     <Stack ref="stage" gap="none">
       <GalgameStage
         v-model:index="index"
@@ -143,16 +165,7 @@
       @go="go"
     />
 
-    <Stack gap="none" class="relative isolate">
-      <Stack
-        gap="none"
-        class="pointer-events-none absolute inset-x-0 top-0 -z-10 hidden h-(--ambient-height) mask-t-from-70% mask-b-from-10% bg-cover bg-center opacity-40 dark:flex"
-        :style="{ backgroundImage: glow ? `url(${glow})` : undefined }"
-      />
-      <Stack
-        gap="none"
-        class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-(--ambient-height) bg-linear-to-b from-(--tone-soft) to-transparent dark:hidden"
-      />
+    <Stack gap="none">
       <Stack
         gap="xl"
         class="mx-auto w-full max-w-(--entry-container) px-4 py-8 lg:grid lg:grid-cols-[var(--rail-left)_minmax(0,1fr)_var(--rail-right)] lg:items-start lg:gap-10 lg:px-6 lg:py-10"

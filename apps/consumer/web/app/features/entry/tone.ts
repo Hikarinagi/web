@@ -33,7 +33,9 @@ function toHsl([r, g, b]: [number, number, number]) {
 }
 
 export function stageTone(hash?: string | null) {
-  const [hue, saturation] = toHsl(averageColor(hash)) as [number, number]
+  const color = averageColor(hash)
+  const [hue, saturation] = toHsl(color) as [number, number]
+  const luminance = 0.2126 * color[0] + 0.7152 * color[1] + 0.0722 * color[2]
   const h = Math.round(hue)
   const s = Math.round(Math.min(Math.max(saturation * 1.4, 0.12), 0.42) * 100)
   return {
@@ -43,5 +45,6 @@ export function stageTone(hash?: string | null) {
     '--tone-soft': `hsl(${h} ${Math.max(s, 25)}% 92%)`,
     '--tone-paper': `hsl(${h} ${Math.min(Math.max(s, 18), 30)}% 97%)`,
     '--tone-ink': `hsl(${h} ${Math.max(s, 35)}% 70%)`,
+    '--tone-glow': Math.min(0.4, 40 / Math.max(luminance - 20, 1)).toFixed(2),
   }
 }

@@ -48,11 +48,11 @@
 
 <template>
   <Section
-    class="relative isolate overflow-hidden bg-(--stage-veil) text-fg [--hn-bg-subtle:var(--stage-control)] lg:h-(--stage-height)"
+    class="relative isolate overflow-hidden text-fg [--hn-bg-subtle:var(--stage-control)] lg:h-(--stage-height)"
   >
     <Stack
       gap="none"
-      class="relative mt-(--app-header-height) aspect-21/9 lg:absolute lg:inset-0 lg:-z-20 lg:mt-0 lg:aspect-auto"
+      class="relative mt-(--app-header-height) aspect-21/9 mask-(--stage-fade) lg:absolute lg:inset-0 lg:-z-20 lg:mt-0 lg:aspect-auto"
     >
       <Transition
         enter-active-class="transition-opacity duration-700"
@@ -72,7 +72,7 @@
       </Transition>
       <Stack
         gap="none"
-        class="pointer-events-none absolute inset-0 bg-linear-to-t from-(--stage-veil) via-(--stage-veil)/60 via-25% to-transparent to-50% lg:from-8% lg:via-(--stage-veil)/75 lg:via-35% lg:to-70%"
+        class="pointer-events-none absolute inset-0 bg-linear-to-t from-(--stage-veil)/80 to-transparent to-50% lg:via-(--stage-veil)/60 lg:via-35% lg:to-70%"
       />
       <Stack
         gap="none"

@@ -290,7 +290,46 @@ html.dark {
   --card-cast: 15rem;
   --card-review: 20rem;
   --tag-rows-height: 18rem;
-  --ambient-height: 40rem;
+  --ambient-height: calc(var(--stage-height) + 40rem);
+  --tone-glow: 0.4;
+  --stage-fade: linear-gradient(
+    to bottom,
+    #000 40%,
+    rgb(0 0 0 / 0.987) 44.9%,
+    rgb(0 0 0 / 0.951) 49.3%,
+    rgb(0 0 0 / 0.896) 53.5%,
+    rgb(0 0 0 / 0.825) 57.4%,
+    rgb(0 0 0 / 0.741) 61.2%,
+    rgb(0 0 0 / 0.648) 64.7%,
+    rgb(0 0 0 / 0.55) 68.3%,
+    rgb(0 0 0 / 0.45) 71.7%,
+    rgb(0 0 0 / 0.352) 75.3%,
+    rgb(0 0 0 / 0.259) 78.8%,
+    rgb(0 0 0 / 0.175) 82.6%,
+    rgb(0 0 0 / 0.104) 86.5%,
+    rgb(0 0 0 / 0.049) 90.7%,
+    rgb(0 0 0 / 0.013) 95.1%,
+    transparent 100%
+  );
+  --ambient-fade: linear-gradient(
+    to bottom,
+    #000 50%,
+    rgb(0 0 0 / 0.987) 54%,
+    rgb(0 0 0 / 0.951) 57.8%,
+    rgb(0 0 0 / 0.896) 61.3%,
+    rgb(0 0 0 / 0.825) 64.5%,
+    rgb(0 0 0 / 0.741) 67.7%,
+    rgb(0 0 0 / 0.648) 70.6%,
+    rgb(0 0 0 / 0.55) 73.6%,
+    rgb(0 0 0 / 0.45) 76.4%,
+    rgb(0 0 0 / 0.352) 79.4%,
+    rgb(0 0 0 / 0.259) 82.3%,
+    rgb(0 0 0 / 0.175) 85.5%,
+    rgb(0 0 0 / 0.104) 88.8%,
+    rgb(0 0 0 / 0.049) 92.3%,
+    rgb(0 0 0 / 0.013) 96%,
+    transparent 100%
+  );
   --stack-cover: 15rem;
   --stack-cover-sm: 7.5rem;
   --manga-banner: 16rem;
