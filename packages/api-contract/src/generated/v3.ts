@@ -17257,6 +17257,15 @@ export interface components {
         ChapterSourceRetryResultDto: {
             requeued: number;
         };
+        CharacterAppearanceProfileDto: {
+            age: string | null;
+            birthday: string | null;
+            blood_type: string | null;
+            gender: string | null;
+            height: string | null;
+            measurements: string | null;
+            weight: string | null;
+        };
         CharacterCardSummaryResDto: {
             id: number;
             image: components["schemas"]["MediaAssetDto"] | null;
@@ -17285,6 +17294,7 @@ export interface components {
             name: string;
             /** @description 最早公开出场作品所载的资料，照录原文 */
             profile: components["schemas"]["CharacterProfileDto"];
+            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -17302,25 +17312,38 @@ export interface components {
             galgame: components["schemas"]["GalgameSummaryDto"];
             /** @description 官网角色页的分组，照录 */
             group: string | null;
+            image: components["schemas"]["RatedMediaAssetDto"] | null;
+            intro: string | null;
             /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
             label: string | null;
+            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
+            trans_intro: string | null;
+            voices: components["schemas"]["CharacterVoiceDto"][];
         };
         CharacterLightNovelRelationDto: {
             /** @description 官网角色页的分组，照录 */
             group: string | null;
+            image: components["schemas"]["RatedMediaAssetDto"] | null;
+            intro: string | null;
             /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
             label: string | null;
             light_novel: components["schemas"]["LightNovelSummaryDto"];
+            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
+            trans_intro: string | null;
         };
         CharacterMangaRelationDto: {
             /** @description 官网角色页的分组，照录 */
             group: string | null;
+            image: components["schemas"]["RatedMediaAssetDto"] | null;
+            intro: string | null;
             /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
             label: string | null;
             manga: components["schemas"]["MangaSummaryDto"];
+            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
+            trans_intro: string | null;
         };
         CharacterPreviewDto: {
             id: number;
@@ -17337,6 +17360,11 @@ export interface components {
         };
         /** @enum {string} */
         CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
+        CharacterVoiceDto: {
+            person_id: number | null;
+            /** @description 这部作品署名的名字 */
+            text: string;
+        };
         CheckAiSearchProviderDto: {
             query?: string;
         };

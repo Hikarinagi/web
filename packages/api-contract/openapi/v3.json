@@ -10384,6 +10384,48 @@
         ],
         "type": "object"
       },
+      "CharacterAppearanceProfileDto": {
+        "properties": {
+          "age": {
+            "nullable": true,
+            "type": "string"
+          },
+          "birthday": {
+            "nullable": true,
+            "type": "string"
+          },
+          "blood_type": {
+            "nullable": true,
+            "type": "string"
+          },
+          "gender": {
+            "nullable": true,
+            "type": "string"
+          },
+          "height": {
+            "nullable": true,
+            "type": "string"
+          },
+          "measurements": {
+            "nullable": true,
+            "type": "string"
+          },
+          "weight": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "age",
+          "birthday",
+          "height",
+          "weight",
+          "measurements",
+          "gender",
+          "blood_type"
+        ],
+        "type": "object"
+      },
       "CharacterCardSummaryResDto": {
         "properties": {
           "id": {
@@ -10501,6 +10543,10 @@
             ],
             "description": "最早公开出场作品所载的资料，照录原文"
           },
+          "reading": {
+            "nullable": true,
+            "type": "string"
+          },
           "revised_at": {
             "format": "date-time",
             "nullable": true,
@@ -10543,6 +10589,7 @@
         "required": [
           "id",
           "name",
+          "reading",
           "trans_name",
           "en_name",
           "aliases",
@@ -10588,10 +10635,26 @@
             "nullable": true,
             "type": "string"
           },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "intro": {
+            "nullable": true,
+            "type": "string"
+          },
           "label": {
             "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
             "nullable": true,
             "type": "string"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/CharacterAppearanceProfileDto"
           },
           "role": {
             "allOf": [
@@ -10605,13 +10668,28 @@
               "PRIMARY": "主要角色",
               "SUPPORTING": "配角"
             }
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
+          },
+          "voices": {
+            "items": {
+              "$ref": "#/components/schemas/CharacterVoiceDto"
+            },
+            "type": "array"
           }
         },
         "required": [
           "group",
           "label",
           "role",
+          "image",
+          "intro",
+          "trans_intro",
+          "profile",
           "actors",
+          "voices",
           "galgame"
         ],
         "type": "object"
@@ -10623,6 +10701,19 @@
             "nullable": true,
             "type": "string"
           },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "intro": {
+            "nullable": true,
+            "type": "string"
+          },
           "label": {
             "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
             "nullable": true,
@@ -10630,6 +10721,9 @@
           },
           "light_novel": {
             "$ref": "#/components/schemas/LightNovelSummaryDto"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/CharacterAppearanceProfileDto"
           },
           "role": {
             "allOf": [
@@ -10643,12 +10737,20 @@
               "PRIMARY": "主要角色",
               "SUPPORTING": "配角"
             }
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "group",
           "label",
           "role",
+          "image",
+          "intro",
+          "trans_intro",
+          "profile",
           "light_novel"
         ],
         "type": "object"
@@ -10660,6 +10762,19 @@
             "nullable": true,
             "type": "string"
           },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "intro": {
+            "nullable": true,
+            "type": "string"
+          },
           "label": {
             "description": "这部作品名单中的名字；对角色最早出场的作品是剧透时为空",
             "nullable": true,
@@ -10667,6 +10782,9 @@
           },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/CharacterAppearanceProfileDto"
           },
           "role": {
             "allOf": [
@@ -10680,12 +10798,20 @@
               "PRIMARY": "主要角色",
               "SUPPORTING": "配角"
             }
+          },
+          "trans_intro": {
+            "nullable": true,
+            "type": "string"
           }
         },
         "required": [
           "group",
           "label",
           "role",
+          "image",
+          "intro",
+          "trans_intro",
+          "profile",
           "manga"
         ],
         "type": "object"
@@ -10766,6 +10892,23 @@
           "PRIMARY": "主要角色",
           "SUPPORTING": "配角"
         }
+      },
+      "CharacterVoiceDto": {
+        "properties": {
+          "person_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "text": {
+            "description": "这部作品署名的名字",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "person_id"
+        ],
+        "type": "object"
       },
       "CheckAiSearchProviderDto": {
         "properties": {

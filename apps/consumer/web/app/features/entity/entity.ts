@@ -1,7 +1,6 @@
 import type { components } from '@hikarinagi/api-contract/v3'
 import type { HikariImageMediaSource } from '~/utils/media/image'
 
-export const INLINE_RELATION_CAP = 12
 export const RELATION_LIST_PAGE_SIZE = 24
 
 export const ENTITY_FALLBACK_IMAGE = '/images/default-entity.webp'

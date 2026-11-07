@@ -285,6 +285,7 @@ html.dark {
   --stage-control: color-mix(in oklab, var(--stage-veil) 90%, var(--hn-fg-default));
   --rail-left: 15rem;
   --rail-right: 18rem;
+  --char-image: 20rem;
   --sticky-bar-height: 3.5rem;
   --sticky-top: calc(var(--app-header-height) + var(--sticky-bar-height) + 1.5rem);
   --card-cast: 15rem;

@@ -16,6 +16,7 @@
     resourceId: number
     external?: { label: string; href: string }[]
     views?: number
+    plain?: boolean
   }>()
 
   const editTo = computed(() => getRevisionEditPath(props.resourceType, props.resourceId))
@@ -23,7 +24,7 @@
 </script>
 
 <template>
-  <Stack gap="md" class="border-t border-line pt-5 text-sm">
+  <Stack gap="md" class="text-sm" :class="plain ? '' : 'border-t border-line pt-5'">
     <Inline v-if="contributors?.count" gap="sm" align="center" :wrap="false">
       <AvatarStack
         v-if="contributors.contributors.length"
