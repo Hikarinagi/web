@@ -22115,7 +22115,7 @@
           },
           "products": {
             "items": {
-              "$ref": "#/components/schemas/ProductSummaryDto"
+              "$ref": "#/components/schemas/ProductListingDto"
             },
             "type": "array"
           },
@@ -39460,6 +39460,12 @@
             "nullable": true,
             "type": "string"
           },
+          "languages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "platforms": {
             "items": {
               "type": "string"
@@ -39474,6 +39480,12 @@
             ],
             "nullable": true,
             "type": "object"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCreditDto"
+            },
+            "type": "array"
           },
           "release": {
             "allOf": [
@@ -39508,11 +39520,13 @@
           "release_status",
           "price",
           "age_rating",
+          "languages",
+          "publishers",
+          "stores",
           "cover",
           "games",
           "facts",
-          "credits",
-          "stores"
+          "credits"
         ],
         "type": "object"
       },
@@ -39528,6 +39542,90 @@
         "required": [
           "id",
           "title"
+        ],
+        "type": "object"
+      },
+      "ProductListingDto": {
+        "properties": {
+          "age_rating": {
+            "nullable": true,
+            "type": "string"
+          },
+          "collection": {
+            "description": "The product holds more than one game",
+            "type": "boolean"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "description": "Version type of the product for this game",
+            "nullable": true,
+            "type": "string"
+          },
+          "languages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "price": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PriceDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCreditDto"
+            },
+            "type": "array"
+          },
+          "release": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReleaseDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "release_status": {
+            "nullable": true,
+            "type": "string"
+          },
+          "stores": {
+            "items": {
+              "$ref": "#/components/schemas/StoreLinkDto"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "collection",
+          "platforms",
+          "release",
+          "release_status",
+          "price",
+          "age_rating",
+          "languages",
+          "publishers",
+          "stores"
         ],
         "type": "object"
       },
@@ -74739,7 +74837,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/ProductSummaryDto"
+                    "$ref": "#/components/schemas/ProductListingDto"
                   },
                   "type": "array"
                 }

@@ -19763,7 +19763,7 @@ export interface components {
             display: components["schemas"]["GameDisplayDto"];
             facts: components["schemas"]["FactDto"][];
             galgame: components["schemas"]["GalgameDetailDto"];
-            products: components["schemas"]["ProductSummaryDto"][];
+            products: components["schemas"]["ProductListingDto"][];
             relations: components["schemas"]["GalgameRelationDto"][];
         };
         GalgamePriceDto: {
@@ -24273,8 +24273,10 @@ export interface components {
             id: number;
             /** @description Version type of the product for this game */
             kind: string | null;
+            languages: string[];
             platforms: string[];
             price: components["schemas"]["PriceDto"] | null;
+            publishers: components["schemas"]["ProductCreditDto"][];
             release: components["schemas"]["ReleaseDto"] | null;
             release_status: string | null;
             stores: components["schemas"]["StoreLinkDto"][];
@@ -24282,6 +24284,22 @@ export interface components {
         };
         ProductGameDto: {
             id: number;
+            title: string;
+        };
+        ProductListingDto: {
+            age_rating: string | null;
+            /** @description The product holds more than one game */
+            collection: boolean;
+            id: number;
+            /** @description Version type of the product for this game */
+            kind: string | null;
+            languages: string[];
+            platforms: string[];
+            price: components["schemas"]["PriceDto"] | null;
+            publishers: components["schemas"]["ProductCreditDto"][];
+            release: components["schemas"]["ReleaseDto"] | null;
+            release_status: string | null;
+            stores: components["schemas"]["StoreLinkDto"][];
             title: string;
         };
         ProductRefDto: {
@@ -40495,7 +40513,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProductSummaryDto"][];
+                    "application/json": components["schemas"]["ProductListingDto"][];
                 };
             };
         };
