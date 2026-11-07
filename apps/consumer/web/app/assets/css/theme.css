@@ -289,6 +289,7 @@ html.dark {
   --sticky-top: calc(var(--app-header-height) + var(--sticky-bar-height) + 1.5rem);
   --card-cast: 15rem;
   --card-review: 20rem;
+  --tag-rows-height: 18rem;
   --ambient-height: 40rem;
   --stack-cover: 15rem;
   --stack-cover-sm: 7.5rem;

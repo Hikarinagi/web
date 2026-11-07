@@ -5941,6 +5941,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/tags/hidden": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTagController_listHidden"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/tags/merge": {
         parameters: {
             query?: never;
@@ -5965,6 +5981,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["AdminMergeController_previewTag"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/tags/pool": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTagController_listPool"];
         put?: never;
         post?: never;
         delete?: never;
@@ -6003,6 +6035,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/tags/{id}/pool": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminTagController_updatePool"];
         trace?: never;
     };
     "/api/v3/admin/wiki/tags/{id}/restore": {
@@ -25806,8 +25854,30 @@ export interface components {
         TagGalgameRelationDto: {
             galgame: components["schemas"]["GalgameSummaryDto"];
         };
+        TagHiddenGroupDto: {
+            examples: string[];
+            kind: components["schemas"]["TagKind"];
+            links: number;
+            tags: number;
+        };
+        /** @enum {string} */
+        TagKind: "CONTENT" | "FIELD" | "PERSONAL" | "OPINION" | "COMMENT" | "RATING";
         TagLightNovelRelationDto: {
             light_novel: components["schemas"]["LightNovelSummaryDto"];
+        };
+        TagPoolItemAdminDto: {
+            aliases: string[];
+            /** Format: date-time */
+            created_at: string;
+            galgames: number;
+            id: number;
+            kind: components["schemas"]["TagKind"];
+            light_novels: number;
+            mangas: number;
+            members: number;
+            name: string;
+            pool_state: components["schemas"]["TagPoolState"];
+            spoiler: boolean;
         };
         TagPoolItemDto: {
             alias: string | null;
@@ -25820,6 +25890,8 @@ export interface components {
             /** @description 不能作为标签的原因 */
             reject: string | null;
         };
+        /** @enum {string} */
+        TagPoolState: "CANDIDATE" | "POOL" | "HIDDEN";
         TagPreviewDto: {
             aliases: string[];
             description: string | null;
@@ -27311,6 +27383,13 @@ export interface components {
         };
         UpdateSourceLinkGroupsDto: {
             groups: string[];
+        };
+        UpdateTagPoolDto: {
+            aliases?: string[];
+            kind?: components["schemas"]["TagKind"];
+            name?: string;
+            pool_state?: components["schemas"]["TagPoolState"];
+            spoiler?: boolean;
         };
         UpdateTaskDto: {
             /** @description Share of the hourly model budget, by weight */
@@ -37910,6 +37989,25 @@ export interface operations {
             };
         };
     };
+    AdminTagController_listHidden: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagHiddenGroupDto"][];
+                };
+            };
+        };
+    };
     AdminMergeController_mergeTag: {
         parameters: {
             query?: never;
@@ -37955,6 +38053,36 @@ export interface operations {
             };
         };
     };
+    AdminTagController_listPool: {
+        parameters: {
+            query: {
+                state: components["schemas"]["TagPoolState"];
+                kind?: components["schemas"]["TagKind"];
+                media?: "galgame" | "light_novel" | "manga";
+                spoiler?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TagPoolItemAdminDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     AdminTagController_softDelete: {
         parameters: {
             query?: never;
@@ -37986,6 +38114,29 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminTagController_updatePool: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTagPoolDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {

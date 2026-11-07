@@ -45262,6 +45262,47 @@
         ],
         "type": "object"
       },
+      "TagHiddenGroupDto": {
+        "properties": {
+          "examples": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagKind"
+              }
+            ]
+          },
+          "links": {
+            "type": "number"
+          },
+          "tags": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "tags",
+          "links",
+          "examples"
+        ],
+        "type": "object"
+      },
+      "TagKind": {
+        "enum": [
+          "CONTENT",
+          "FIELD",
+          "PERSONAL",
+          "OPINION",
+          "COMMENT",
+          "RATING"
+        ],
+        "type": "string"
+      },
       "TagLightNovelRelationDto": {
         "properties": {
           "light_novel": {
@@ -45270,6 +45311,69 @@
         },
         "required": [
           "light_novel"
+        ],
+        "type": "object"
+      },
+      "TagPoolItemAdminDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "galgames": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagKind"
+              }
+            ]
+          },
+          "light_novels": {
+            "type": "number"
+          },
+          "mangas": {
+            "type": "number"
+          },
+          "members": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pool_state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagPoolState"
+              }
+            ]
+          },
+          "spoiler": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "aliases",
+          "kind",
+          "pool_state",
+          "spoiler",
+          "galgames",
+          "light_novels",
+          "mangas",
+          "members",
+          "created_at"
         ],
         "type": "object"
       },
@@ -45316,6 +45420,14 @@
           "reject"
         ],
         "type": "object"
+      },
+      "TagPoolState": {
+        "enum": [
+          "CANDIDATE",
+          "POOL",
+          "HIDDEN"
+        ],
+        "type": "string"
       },
       "TagPreviewDto": {
         "properties": {
@@ -51354,6 +51466,41 @@
         "required": [
           "groups"
         ],
+        "type": "object"
+      },
+      "UpdateTagPoolDto": {
+        "properties": {
+          "aliases": {
+            "items": {
+              "maxLength": 30,
+              "type": "string"
+            },
+            "maxItems": 30,
+            "type": "array"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagKind"
+              }
+            ]
+          },
+          "name": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string"
+          },
+          "pool_state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TagPoolState"
+              }
+            ]
+          },
+          "spoiler": {
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "UpdateTaskDto": {
@@ -69921,6 +70068,30 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/tags/hidden": {
+      "get": {
+        "operationId": "AdminTagController_listHidden",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TagHiddenGroupDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/tags/merge": {
       "post": {
         "operationId": "AdminMergeController_mergeTag",
@@ -69992,6 +70163,110 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/tags/pool": {
+      "get": {
+        "operationId": "AdminTagController_listPool",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "state",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TagPoolState"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TagKind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "media",
+            "required": false,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light_novel",
+                "manga"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "spoiler",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 30,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TagPoolItemAdminDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/tags/{id}": {
       "delete": {
         "operationId": "AdminTagController_softDelete",
@@ -70035,6 +70310,39 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/tags/{id}/pool": {
+      "patch": {
+        "operationId": "AdminTagController_updatePool",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTagPoolDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": ""

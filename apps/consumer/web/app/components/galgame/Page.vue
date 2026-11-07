@@ -66,6 +66,7 @@
       status: item.status ? GALGAME_STATUS_LABEL[item.status as GalgameRateStatus] : undefined,
       hours: item.time_to_finish_minutes ? Math.round(item.time_to_finish_minutes / 60) : undefined,
       likes: item.like_count,
+      liked: item.my_value === 1,
       date: item.created_at.slice(0, 10),
     })),
   )
@@ -192,11 +193,20 @@
               :reviews="reviews"
               :count="data.rate_stats.content_count"
               :to="`/galgames/${galgameId}/rates`"
+              like-kind="galgame_rate"
+              :work-id="galgameId"
               @write="rateOpen = true"
             />
           </Stack>
           <WorkLongReviews :articles="data.articles" />
-          <Stack gap="md"><GalgameProducts :products="data.products" /></Stack>
+          <Stack gap="md">
+            <GalgameProducts :products="data.products" />
+            <GalgameSteam
+              v-if="data.galgame.steam_apps.length"
+              :galgame-id="galgameId"
+              :app-ids="data.galgame.steam_apps.map(app => app.app_id)"
+            />
+          </Stack>
           <Stack gap="md"><GalgameCrew :credits="data.credits" /></Stack>
           <Stack gap="md"><GalgameRelations :relations="data.relations" /></Stack>
         </Stack>

@@ -9,8 +9,9 @@
     Stack,
     Text,
   } from '@hina-ui/vue'
-  import { PenLine, Star, ThumbsUp } from '@lucide/vue'
+  import { PenLine, Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
+  import type { LikeKind } from '~/features/interaction/useLike'
   import type { UserAvatarData } from '~/types/user'
   import type { NamedUser } from '~/utils/user'
 
@@ -23,11 +24,18 @@
     status?: string
     hours?: number
     likes: number
+    liked: boolean
     date: string
   }
 
   defineOptions({ name: 'EntryReviews' })
-  defineProps<{ reviews: EntryReview[]; count: number; to: string }>()
+  defineProps<{
+    reviews: EntryReview[]
+    count: number
+    to: string
+    likeKind: LikeKind
+    workId: number
+  }>()
   defineEmits<{ write: [] }>()
 
   const details = (review: EntryReview) =>
@@ -97,10 +105,13 @@
               {{ review.text }}
             </Text>
           </LineClamp>
-          <Inline gap="xs" align="center" class="text-muted">
-            <ThumbsUp class="size-3.5" />
-            <Text size="xs" tone="muted" class="tabular-nums">{{ review.likes }}</Text>
-          </Inline>
+          <EntryReviewLike
+            :kind="likeKind"
+            :rate-id="review.id"
+            :work-id="workId"
+            :likes="review.likes"
+            :liked="review.liked"
+          />
         </Stack>
       </Card>
     </Inline>

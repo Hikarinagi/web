@@ -38,6 +38,7 @@
         ? LIGHT_NOVEL_STATUS_LABEL[item.status as LightNovelRateStatus]
         : undefined,
       likes: item.like_count,
+      liked: item.my_value === 1,
       date: item.created_at.slice(0, 10),
     })),
   )
@@ -110,6 +111,8 @@
             :reviews="reviews"
             :count="data.rate_stats.content_count"
             :to="`/light-novels/${lightNovelId}/rates`"
+            like-kind="light_novel_rate"
+            :work-id="lightNovelId"
             @write="rateOpen = true"
           />
         </Stack>

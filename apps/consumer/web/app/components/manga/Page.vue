@@ -32,6 +32,7 @@
       rater: item.rater,
       status: item.status ? MANGA_STATUS_LABEL[item.status as MangaRateStatus] : undefined,
       likes: item.like_count,
+      liked: item.my_value === 1,
       date: item.created_at.slice(0, 10),
     })),
   )
@@ -103,6 +104,8 @@
             :reviews="reviews"
             :count="data.rate_stats.content_count"
             :to="`/mangas/${mangaId}/rates`"
+            like-kind="manga_rate"
+            :work-id="mangaId"
             @write="rateOpen = true"
           />
         </Stack>
