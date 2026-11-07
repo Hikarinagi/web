@@ -72,6 +72,7 @@
         :sub="subOf(item)"
         :cover="coverOf(item)"
         :ratio="ratio"
+        plain-sub
         @click="markRecommended(kind, item.id)"
       />
     </Grid>

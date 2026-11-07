@@ -16,5 +16,5 @@ export function recommendSub(item: {
   if (reason?.kind === 'TAG') return `同样是${reason.name}`
   if (reason?.role && ROLE_LABEL[reason.role])
     return `同一${ROLE_LABEL[reason.role]}：${reason.name}`
-  return item.maker ?? '看过这部的人也在看'
+  return item.maker ?? '看过的人也在看'
 }
