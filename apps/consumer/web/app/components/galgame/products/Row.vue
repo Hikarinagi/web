@@ -37,7 +37,12 @@
 </script>
 
 <template>
-  <Inline gap="md" align="center" :wrap="false" class="relative px-4 py-3 hover:bg-subtle">
+  <Inline
+    gap="md"
+    align="center"
+    :wrap="false"
+    class="relative px-4 py-3 transition-colors duration-(--hn-duration-fast) hover:bg-subtle"
+  >
     <Center class="size-10 shrink-0 rounded-lg bg-subtle text-muted">
       <component :is="icon" class="size-5" />
     </Center>

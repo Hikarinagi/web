@@ -30,7 +30,12 @@
     gap="sm"
     align="start"
     :wrap="false"
-    :class="cn('border-b border-line px-4 py-3', active ? 'bg-accent-soft' : 'hover:bg-subtle')"
+    :class="
+      cn(
+        'border-b border-line px-4 py-3 transition-colors duration-(--hn-duration-fast)',
+        active ? 'bg-accent-soft' : 'hover:bg-subtle',
+      )
+    "
   >
     <Checkbox v-if="selectable" v-model="selected" :aria-label="title" class="mt-0.5" />
     <Stack :as="NuxtLink" :to="to" gap="xs" class="min-w-0 flex-1">

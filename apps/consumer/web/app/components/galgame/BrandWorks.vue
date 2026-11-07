@@ -45,7 +45,10 @@
         align="center"
         :wrap="false"
         :class="
-          cn('-mx-2 rounded-md px-2 py-1.5', work.id === current ? 'bg-subtle' : 'hover:bg-subtle')
+          cn(
+            '-mx-2 rounded-md px-2 py-1.5 transition-colors duration-(--hn-duration-fast)',
+            work.id === current ? 'bg-subtle' : 'hover:bg-subtle',
+          )
         "
       >
         <HikariImage

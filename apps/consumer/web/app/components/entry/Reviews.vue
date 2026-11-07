@@ -97,7 +97,7 @@
               <Text size="sm" weight="semibold" class="tabular-nums">{{ review.score }}</Text>
             </Inline>
           </Inline>
-          <Spoiler v-if="review.spoiler" class="flex-1 text-sm leading-relaxed">
+          <Spoiler v-if="review.spoiler" force-fallback class="flex-1 text-sm leading-relaxed">
             {{ review.text }}
           </Spoiler>
           <LineClamp v-else :lines="3" expand-label="展开" collapse-label="收起" class="flex-1">

@@ -21,7 +21,7 @@
         gap="sm"
         align="center"
         :wrap="false"
-        class="-mx-2 rounded-md px-2 py-1.5 hover:bg-subtle"
+        class="-mx-2 rounded-md px-2 py-1.5 transition-colors duration-(--hn-duration-fast) hover:bg-subtle"
       >
         <HikariImage
           v-if="work.cover"

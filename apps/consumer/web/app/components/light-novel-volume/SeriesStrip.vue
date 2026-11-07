@@ -43,6 +43,7 @@
       >
         <Stack
           gap="xs"
+          class="transition-opacity duration-(--hn-duration-fast)"
           :class="volume.id === current ? 'w-28' : 'w-22 opacity-75 hover:opacity-100'"
         >
           <EntryBookCover
