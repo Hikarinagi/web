@@ -17,12 +17,16 @@
     return date.slice(0, 10) > today ? '未发售' : monthText(date)
   }
 
-  onMounted(async () => {
-    await nextTick()
-    area.value?.viewport
-      ?.querySelector<HTMLElement>('[data-current="true"]')
-      ?.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' })
-  })
+  watch(
+    () => area.value?.viewport,
+    viewport => {
+      const item = viewport?.querySelector<HTMLElement>('[data-current="true"]')
+      if (!viewport || !item) return
+      const offset = item.getBoundingClientRect().left - viewport.getBoundingClientRect().left
+      viewport.scrollLeft += offset - (viewport.clientWidth - item.offsetWidth) / 2
+    },
+    { flush: 'post' },
+  )
 </script>
 
 <template>

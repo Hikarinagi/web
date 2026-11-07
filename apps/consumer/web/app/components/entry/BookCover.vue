@@ -5,8 +5,14 @@
 
   defineOptions({ name: 'EntryBookCover' })
   withDefaults(
-    defineProps<{ media: HikariImageSource; alt: string; preload?: boolean; width?: number }>(),
-    { preload: false, width: 360 },
+    defineProps<{
+      media: HikariImageSource
+      alt: string
+      preload?: boolean
+      preview?: boolean
+      width?: number
+    }>(),
+    { preload: false, preview: false, width: 360 },
   )
 </script>
 
@@ -21,6 +27,7 @@
       :alt="alt"
       :ratio="7 / 10"
       :preload="preload"
+      :preview="preview"
       :processing="{ width, quality: 86, fit: 'cover', format: 'auto' }"
       class="w-full"
       image-class="object-cover"

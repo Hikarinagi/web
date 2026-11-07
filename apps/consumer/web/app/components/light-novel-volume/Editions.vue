@@ -18,7 +18,7 @@
 <template>
   <EntrySectionHead id="editions" title="出版版本" :count="1" />
   <Card :padded="false">
-    <Table>
+    <Table class="[&_td]:whitespace-nowrap [&_th]:whitespace-nowrap">
       <TableHeader>
         <TableRow>
           <TableHead>出版社</TableHead>

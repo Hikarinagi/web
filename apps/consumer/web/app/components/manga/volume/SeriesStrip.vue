@@ -1,85 +1,73 @@
 <script setup lang="ts">
-  import { AspectRatio, Flex, Link, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
-  import type { ComponentPublicInstance } from 'vue'
+  import { Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
+  import { monthText } from '~/features/entry/date'
   import { getMangaVolumeLabel, getMangaVolumeTitle } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaVolumeSeriesStrip' })
-  const props = defineProps<{
-    volume: MangaVolumePageData['volume']
+  defineProps<{
     volumes: MangaVolumePageData['volumes']
+    current: number
   }>()
 
-  const currentIndex = computed(() => props.volumes.findIndex(item => item.id === props.volume.id))
-  const positionText = computed(() =>
-    currentIndex.value >= 0 ? `第 ${currentIndex.value + 1} / ${props.volumes.length} 卷` : '',
-  )
+  const area = useTemplateRef<InstanceType<typeof ScrollArea>>('area')
+  const today = new Date().toISOString().slice(0, 10)
+  const dateLine = (date: string | null | undefined) => {
+    if (!date) return '发售日不详'
+    return date.slice(0, 10) > today ? '未发售' : monthText(date)
+  }
 
-  const currentRef = ref<HTMLElement | null>(null)
-  onMounted(() => {
-    currentRef.value?.scrollIntoView({ inline: 'center', block: 'nearest' })
-  })
+  watch(
+    () => area.value?.viewport,
+    viewport => {
+      const item = viewport?.querySelector<HTMLElement>('[data-current="true"]')
+      if (!viewport || !item) return
+      const offset = item.getBoundingClientRect().left - viewport.getBoundingClientRect().left
+      viewport.scrollLeft += offset - (viewport.clientWidth - item.offsetWidth) / 2
+    },
+    { flush: 'post' },
+  )
 </script>
 
 <template>
-  <WorkSection v-if="volumes.length > 1" title="本系列" :meta="positionText">
-    <template #action>
-      <NuxtLink v-slot="{ href, navigate }" :to="`/mangas/${volume.manga.id}`" custom>
-        <Link :href="href ?? undefined" class="text-sm font-medium" @click="navigate">
-          全部单行本
-        </Link>
-      </NuxtLink>
-    </template>
-    <ScrollRail class="-mx-6">
-      <Flex align="start" gap="none" class="min-w-max gap-3 px-6 pt-1 pb-3">
+  <EntrySectionHead id="series" title="同系列" :count="volumes.length" />
+  <ScrollArea ref="area" direction="horizontal" :wheel-redirect="false" class="-mx-4 lg:-mx-1">
+    <Inline gap="md" align="end" :wrap="false" class="w-max px-4 pt-1 pb-3 lg:px-1">
+      <NuxtLink
+        v-for="volume in volumes"
+        :key="volume.id"
+        :to="`/manga-volumes/${volume.id}`"
+        :data-current="volume.id === current"
+        :aria-current="volume.id === current ? 'page' : undefined"
+        class="block shrink-0 hn-interactive rounded-md"
+      >
         <Stack
-          v-for="item in volumes"
-          :key="item.id"
-          :ref="
-            item.id === volume.id
-              ? el => (currentRef = (el as ComponentPublicInstance | null)?.$el ?? null)
-              : undefined
-          "
-          gap="none"
-          class="w-20 shrink-0"
+          gap="xs"
+          :class="volume.id === current ? 'w-28' : 'w-22 opacity-75 hover:opacity-100'"
         >
-          <NuxtLink
-            :to="`/manga-volumes/${item.id}`"
-            class="group block hn-interactive rounded-md hn-press-none"
+          <EntryBookCover
+            :media="volume.cover"
+            :alt="`${getMangaVolumeTitle(volume)} 封面`"
+            :width="240"
+            :class="
+              volume.id === current
+                ? 'ring-2! ring-accent! ring-offset-2 ring-offset-(--hn-bg-canvas)'
+                : undefined
+            "
+          />
+          <Text
+            size="sm"
+            :weight="volume.id === current ? 'semibold' : 'normal'"
+            truncate
+            class="tabular-nums"
           >
-            <AspectRatio
-              :ratio="2 / 3"
-              class="overflow-hidden rounded-md bg-subtle ring-1"
-              :class="item.id === volume.id ? 'ring-2 ring-accent' : 'ring-line'"
-            >
-              <HikariImage
-                :src="item.cover"
-                :alt="getMangaVolumeTitle(item)"
-                class="size-full"
-                image-class="object-cover"
-                :processing="{ width: 160, quality: 82, fit: 'cover' }"
-              >
-                <template #empty><VisuallyHidden /></template>
-                <template #error><VisuallyHidden /></template>
-              </HikariImage>
-            </AspectRatio>
-            <Stack gap="none" class="mt-1.5">
-              <Text
-                size="xs"
-                truncate
-                class="text-center transition-colors"
-                :class="
-                  item.id === volume.id
-                    ? 'font-semibold text-accent-text'
-                    : 'text-muted group-hover:text-accent-text'
-                "
-              >
-                {{ getMangaVolumeLabel(item) || getMangaVolumeTitle(item) }}
-              </Text>
-            </Stack>
-          </NuxtLink>
+            {{ getMangaVolumeLabel(volume) || getMangaVolumeTitle(volume) }}
+          </Text>
+          <Text size="xs" tone="muted" class="tabular-nums">
+            {{ dateLine(volume.publication_date) }}
+          </Text>
         </Stack>
-      </Flex>
-    </ScrollRail>
-  </WorkSection>
+      </NuxtLink>
+    </Inline>
+  </ScrollArea>
 </template>

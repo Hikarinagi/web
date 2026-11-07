@@ -24,7 +24,7 @@
 
 <template>
   <Stack gap="md" class="border-t border-line pt-5 text-sm">
-    <Inline v-if="contributors" gap="sm" align="center" :wrap="false">
+    <Inline v-if="contributors?.count" gap="sm" align="center" :wrap="false">
       <AvatarStack
         v-if="contributors.contributors.length"
         :users="contributors.contributors"
