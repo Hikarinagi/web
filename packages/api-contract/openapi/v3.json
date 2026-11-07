@@ -312,7 +312,8 @@
               "openbd",
               "web",
               "wiki",
-              "wiki_game"
+              "wiki_game",
+              "wiki_agent"
             ],
             "type": "string"
           },
@@ -395,7 +396,8 @@
               "openbd",
               "web",
               "wiki",
-              "wiki_game"
+              "wiki_game",
+              "wiki_agent"
             ],
             "type": "string"
           },
@@ -7542,6 +7544,10 @@
           },
           "upstream_id": {
             "type": "string"
+          },
+          "vision": {
+            "description": "这条线路是否接受图片输入",
+            "type": "boolean"
           }
         },
         "required": [
@@ -7558,6 +7564,7 @@
           "peak",
           "dropped_params",
           "json_mode",
+          "vision",
           "priority",
           "status",
           "status_kind",
@@ -7903,7 +7910,8 @@
               "openbd",
               "web",
               "wiki",
-              "wiki_game"
+              "wiki_game",
+              "wiki_agent"
             ],
             "type": "string"
           },
@@ -14013,10 +14021,7 @@
               "game_judge",
               "constraint_check",
               "game_duplicate",
-              "lookup",
-              "org_lookup",
-              "person_lookup",
-              "book_lookup",
+              "agent",
               "volume_check",
               "image_rating"
             ],
@@ -48606,6 +48611,10 @@
           "upstream_id": {
             "maxLength": 200,
             "type": "string"
+          },
+          "vision": {
+            "description": "这条线路是否接受图片输入",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -52329,6 +52338,23 @@
           "RESTORE"
         ],
         "type": "string"
+      },
+      "WikiRulesDto": {
+        "properties": {
+          "appendix": {
+            "description": "附录 A 记录细则（Markdown）",
+            "type": "string"
+          },
+          "main": {
+            "description": "收录与编目规则正文（Markdown）",
+            "type": "string"
+          }
+        },
+        "required": [
+          "main",
+          "appendix"
+        ],
+        "type": "object"
       },
       "WikiSection": {
         "enum": [
@@ -69926,8 +69952,7 @@
                 "galgame_duplicate",
                 "galgame_duplicate_investigate",
                 "wiki_series_check",
-                "wiki_lookup",
-                "wiki_maintain"
+                "wiki_agent"
               ],
               "type": "string"
             }
@@ -96103,6 +96128,27 @@
         },
         "tags": [
           "WikiSource"
+        ]
+      }
+    },
+    "/api/v3/wiki/rules": {
+      "get": {
+        "operationId": "WikiRulesController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WikiRulesDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "WikiRules"
         ]
       }
     },

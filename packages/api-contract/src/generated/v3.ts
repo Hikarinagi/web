@@ -14259,6 +14259,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/wiki/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["WikiRulesController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/wiki/sources": {
         parameters: {
             query?: never;
@@ -14469,7 +14485,7 @@ export interface components {
             /** @description 提供给模型的描述 */
             description: string;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
             /** @description 由模型填写的参数 */
             input: {
                 [key: string]: unknown;
@@ -14491,7 +14507,7 @@ export interface components {
         };
         AdminAiToolDto: {
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
             key: string;
             label: string;
             scenes: components["schemas"]["AiToolSceneDto"][];
@@ -16248,6 +16264,8 @@ export interface components {
             status_kind: components["schemas"]["AiErrorKind"] | null;
             status_message: string | null;
             upstream_id: string;
+            /** @description 这条线路是否接受图片输入 */
+            vision: boolean;
         };
         AiRouteItemDto: {
             protocol: components["schemas"]["AiProtocol"];
@@ -16335,7 +16353,7 @@ export interface components {
             available: boolean;
             enabled: boolean;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game";
+            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
             key: string;
             label: string;
             required: boolean;
@@ -17816,7 +17834,7 @@ export interface components {
             description?: string;
             name: string;
             /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "lookup" | "org_lookup" | "person_lookup" | "book_lookup" | "volume_check" | "image_rating";
+            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
         };
         CreateTelegramScheduleDto: {
             chat_id: number;
@@ -26399,6 +26417,8 @@ export interface components {
             /** @enum {string} */
             status?: "ACTIVE" | "DISABLED";
             upstream_id?: string;
+            /** @description 这条线路是否接受图片输入 */
+            vision?: boolean;
         };
         UpdateAiSceneDto: {
             /** @description 用户可选的模型 */
@@ -27387,6 +27407,12 @@ export interface components {
         };
         /** @enum {string} */
         WikiLogAction: "LOCK" | "UNLOCK" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
+        WikiRulesDto: {
+            /** @description 附录 A 记录细则（Markdown） */
+            appendix: string;
+            /** @description 收录与编目规则正文（Markdown） */
+            main: string;
+        };
         /** @enum {string} */
         WikiSection: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
         WikiSettingsDto: {
@@ -37883,7 +37909,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_lookup" | "wiki_maintain";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_agent";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -52622,6 +52648,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ResourceEntryDto"];
+                };
+            };
+        };
+    };
+    WikiRulesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiRulesDto"];
                 };
             };
         };

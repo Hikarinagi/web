@@ -38,7 +38,10 @@ describe('parseRules', () => {
 
   it('reads every clause of the published rules', () => {
     const read = (name: string) =>
-      readFileSync(join(process.cwd(), 'server/assets/rules', name), 'utf8')
+      readFileSync(
+        join(process.cwd(), '../../../services/api/src/modules/wiki/rules', name),
+        'utf8',
+      )
     const rules = parseRules([read('main.md'), read('appendix.md')], markdown => markdown)
     expect(rules.edition).toMatch(/^第 \d+ 版/)
     const ids = new Set(rules.clauses.map(item => item.id))
