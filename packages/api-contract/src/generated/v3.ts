@@ -11329,6 +11329,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/producers/{id}/collaborators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_getCollaborators"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/producers/{id}/contributors": {
         parameters: {
             query?: never;
@@ -24177,6 +24193,14 @@ export interface components {
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
         };
+        ProducerCollaboratorDto: {
+            /** @description Their most frequent roles here */
+            codes: string[];
+            /** @description Works the person has with this organization */
+            count: number;
+            name: string;
+            person_id: number;
+        };
         ProducerDetailDto: {
             aliases: string[];
             bangumi_id: string | null;
@@ -24215,20 +24239,27 @@ export interface components {
             codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
             note: string;
+            people: components["schemas"]["WorkPersonDto"][];
+            rating: components["schemas"]["WorkRatingDto"];
         };
         ProducerLightNovelRelationDto: {
             /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
             codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
+            rating: components["schemas"]["WorkRatingDto"];
             relation: string;
+            volume_count: number;
         };
         ProducerMangaRelationDto: {
             /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
             codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
             note: string;
+            people: components["schemas"]["WorkPersonDto"][];
+            rating: components["schemas"]["WorkRatingDto"];
             role: components["schemas"]["MangaProducerRole"];
+            volume_count: number;
         };
         ProducerPreviewDto: {
             id: number;
@@ -27483,6 +27514,11 @@ export interface components {
             /** @enum {string} */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
+        };
+        WorkPersonDto: {
+            code: string;
+            name: string;
+            person_id: number;
         };
         WorkRatingDto: {
             average: number | null;
@@ -47235,6 +47271,27 @@ export interface operations {
             };
         };
     };
+    ProducerController_getCollaborators: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProducerCollaboratorDto"][];
+                };
+            };
+        };
+    };
     ProducerController_getContributors: {
         parameters: {
             query?: never;
@@ -47318,6 +47375,8 @@ export interface operations {
             query: {
                 sort?: "recent" | "views" | "publication";
                 role?: components["schemas"]["MangaProducerRole"];
+                /** @description Publication status of the series */
+                status?: string;
                 page: number;
                 page_size: number;
             };

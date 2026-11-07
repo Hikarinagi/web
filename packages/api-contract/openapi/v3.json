@@ -39057,6 +39057,34 @@
         ],
         "type": "object"
       },
+      "ProducerCollaboratorDto": {
+        "properties": {
+          "codes": {
+            "description": "Their most frequent roles here",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "count": {
+            "description": "Works the person has with this organization",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "person_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "person_id",
+          "name",
+          "count",
+          "codes"
+        ],
+        "type": "object"
+      },
       "ProducerDetailDto": {
         "properties": {
           "aliases": {
@@ -39219,12 +39247,23 @@
           },
           "note": {
             "type": "string"
+          },
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/WorkPersonDto"
+            },
+            "type": "array"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
           }
         },
         "required": [
           "codes",
           "note",
-          "galgame"
+          "galgame",
+          "rating",
+          "people"
         ],
         "type": "object"
       },
@@ -39244,15 +39283,23 @@
             "nullable": true,
             "type": "string"
           },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "relation": {
             "type": "string"
+          },
+          "volume_count": {
+            "type": "number"
           }
         },
         "required": [
           "codes",
           "relation",
           "note",
-          "light_novel"
+          "light_novel",
+          "rating",
+          "volume_count"
         ],
         "type": "object"
       },
@@ -39271,6 +39318,15 @@
           "note": {
             "type": "string"
           },
+          "people": {
+            "items": {
+              "$ref": "#/components/schemas/WorkPersonDto"
+            },
+            "type": "array"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "role": {
             "allOf": [
               {
@@ -39282,13 +39338,19 @@
               "MAGAZINE": "连载杂志",
               "PUBLISHER": "出版社"
             }
+          },
+          "volume_count": {
+            "type": "number"
           }
         },
         "required": [
           "codes",
           "role",
           "note",
-          "manga"
+          "manga",
+          "rating",
+          "people",
+          "volume_count"
         ],
         "type": "object"
       },
@@ -52653,6 +52715,25 @@
           "average_rate",
           "rated_count",
           "nsfw"
+        ],
+        "type": "object"
+      },
+      "WorkPersonDto": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "person_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "person_id",
+          "name"
         ],
         "type": "object"
       },
@@ -86456,6 +86537,39 @@
         ]
       }
     },
+    "/api/v3/producers/{id}/collaborators": {
+      "get": {
+        "operationId": "ProducerController_getCollaborators",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProducerCollaboratorDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
     "/api/v3/producers/{id}/contributors": {
       "get": {
         "operationId": "ProducerController_getContributors",
@@ -86687,6 +86801,15 @@
             "required": false,
             "schema": {
               "$ref": "#/components/schemas/MangaProducerRole"
+            }
+          },
+          {
+            "description": "Publication status of the series",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           },
           {
