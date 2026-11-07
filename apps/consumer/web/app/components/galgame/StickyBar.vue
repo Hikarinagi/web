@@ -32,7 +32,7 @@
     <Stack
       v-if="shown"
       gap="none"
-      class="fixed inset-x-0 top-(--app-header-height) z-30 hidden border-b border-line bg-surface/90 backdrop-blur-md lg:flex"
+      class="fixed inset-x-0 top-(--app-header-height) z-30 hn-scrollbar-safe hidden border-b border-line bg-surface/90 backdrop-blur-md lg:flex"
     >
       <Inline
         gap="lg"
