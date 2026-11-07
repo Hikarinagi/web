@@ -23312,11 +23312,15 @@
       },
       "GalgameTagRelationDto": {
         "properties": {
+          "likes": {
+            "type": "number"
+          },
           "tag": {
             "$ref": "#/components/schemas/TagPreviewDto"
           }
         },
         "required": [
+          "likes",
           "tag"
         ],
         "type": "object"
@@ -25314,11 +25318,15 @@
       },
       "LightNovelTagRelationDto": {
         "properties": {
+          "likes": {
+            "type": "number"
+          },
           "tag": {
             "$ref": "#/components/schemas/TagPreviewDto"
           }
         },
         "required": [
+          "likes",
           "tag"
         ],
         "type": "object"
@@ -40400,6 +40408,19 @@
         ],
         "type": "object"
       },
+      "ProposeWorkTagDto": {
+        "properties": {
+          "name": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "ProtectEntryDto": {
         "properties": {
           "reason": {
@@ -43922,6 +43943,25 @@
         ],
         "type": "object"
       },
+      "SimilarTagDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "works": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "works"
+        ],
+        "type": "object"
+      },
       "SiteConfigDto": {
         "properties": {
           "feature_flags": {
@@ -45233,6 +45273,50 @@
         ],
         "type": "object"
       },
+      "TagPoolItemDto": {
+        "properties": {
+          "alias": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "works": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "alias",
+          "works"
+        ],
+        "type": "object"
+      },
+      "TagPoolSearchDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TagPoolItemDto"
+            },
+            "type": "array"
+          },
+          "reject": {
+            "description": "不能作为标签的原因",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "items",
+          "reject"
+        ],
+        "type": "object"
+      },
       "TagPreviewDto": {
         "properties": {
           "aliases": {
@@ -45250,13 +45334,17 @@
           },
           "name": {
             "type": "string"
+          },
+          "spoiler": {
+            "type": "boolean"
           }
         },
         "required": [
           "id",
           "name",
           "aliases",
-          "description"
+          "description",
+          "spoiler"
         ],
         "type": "object"
       },
@@ -52477,6 +52565,23 @@
           "MAIN": "正篇"
         }
       },
+      "VoteWorkTagDto": {
+        "properties": {
+          "value": {
+            "description": "1 符合，-1 不符合，0 撤销",
+            "enum": [
+              1,
+              -1,
+              0
+            ],
+            "type": "number"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
+      },
       "WatchStateDto": {
         "properties": {
           "watched": {
@@ -52750,6 +52855,64 @@
         "required": [
           "average",
           "count"
+        ],
+        "type": "object"
+      },
+      "WorkTagVoteDto": {
+        "properties": {
+          "tag": {
+            "$ref": "#/components/schemas/WorkTagVoteTagDto"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "value",
+          "tag"
+        ],
+        "type": "object"
+      },
+      "WorkTagVoteResultDto": {
+        "properties": {
+          "tag_id": {
+            "type": "number"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "tag_id",
+          "value"
+        ],
+        "type": "object"
+      },
+      "WorkTagVoteTagDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pool_state": {
+            "enum": [
+              "CANDIDATE",
+              "POOL",
+              "HIDDEN"
+            ],
+            "type": "string"
+          },
+          "spoiler": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "pool_state",
+          "spoiler"
         ],
         "type": "object"
       },
@@ -75521,6 +75684,158 @@
         "tags": [
           "Galgame"
         ]
+      },
+      "post": {
+        "operationId": "GalgameTagController_propose",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposeWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "GalgameTag"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/tags/mine": {
+      "get": {
+        "operationId": "GalgameTagController_getMine",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkTagVoteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "GalgameTag"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/tags/similar": {
+      "get": {
+        "operationId": "GalgameTagController_getSimilar",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SimilarTagDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "GalgameTag"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/tags/{tag_id}/vote": {
+      "put": {
+        "operationId": "GalgameTagController_vote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "tag_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "GalgameTag"
+        ]
       }
     },
     "/api/v3/galgames/{id}/views": {
@@ -78243,6 +78558,158 @@
         },
         "tags": [
           "LightNovel"
+        ]
+      },
+      "post": {
+        "operationId": "LightNovelTagController_propose",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposeWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelTag"
+        ]
+      }
+    },
+    "/api/v3/light-novels/{id}/tags/mine": {
+      "get": {
+        "operationId": "LightNovelTagController_getMine",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkTagVoteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelTag"
+        ]
+      }
+    },
+    "/api/v3/light-novels/{id}/tags/similar": {
+      "get": {
+        "operationId": "LightNovelTagController_getSimilar",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SimilarTagDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelTag"
+        ]
+      }
+    },
+    "/api/v3/light-novels/{id}/tags/{tag_id}/vote": {
+      "put": {
+        "operationId": "LightNovelTagController_vote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "tag_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelTag"
         ]
       }
     },
@@ -81366,6 +81833,158 @@
         },
         "tags": [
           "Manga"
+        ]
+      },
+      "post": {
+        "operationId": "MangaTagController_propose",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposeWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaTag"
+        ]
+      }
+    },
+    "/api/v3/mangas/{id}/tags/mine": {
+      "get": {
+        "operationId": "MangaTagController_getMine",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WorkTagVoteDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaTag"
+        ]
+      }
+    },
+    "/api/v3/mangas/{id}/tags/similar": {
+      "get": {
+        "operationId": "MangaTagController_getSimilar",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SimilarTagDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaTag"
+        ]
+      }
+    },
+    "/api/v3/mangas/{id}/tags/{tag_id}/vote": {
+      "put": {
+        "operationId": "MangaTagController_vote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "tag_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteWorkTagDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkTagVoteResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaTag"
         ]
       }
     },
@@ -89272,6 +89891,38 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TagDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Tag"
+        ]
+      }
+    },
+    "/api/v3/tags/pool": {
+      "get": {
+        "operationId": "TagController_searchPool",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 30,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagPoolSearchDto"
                 }
               }
             },

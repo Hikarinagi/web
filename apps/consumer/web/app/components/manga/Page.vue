@@ -42,11 +42,10 @@
       image: item.character.image,
     })),
   )
-  const tags = computed(() =>
-    props.data.tags.map(item => ({
-      id: item.tag.id,
-      name: item.tag.name,
-      to: tagRoute(item.tag.id),
+  const cast = computed(() =>
+    props.data.characters.map(item => ({
+      name: item.character.trans_name || item.character.name,
+      names: [item.character.name, item.character.trans_name ?? ''],
     })),
   )
   const external = computed(() =>
@@ -116,7 +115,14 @@
           :volumes="data.volumes"
         />
         <MangaEditionList v-if="data.manga.editions?.length" :editions="data.manga.editions" />
-        <EntryTags :tags="tags" />
+        <EntryTags
+          resource="mangas"
+          :work-id="mangaId"
+          :tags="data.tags"
+          :tag-route="tagRoute"
+          :cast="cast"
+          cast-section="characters"
+        />
         <EntryMeta
           :contributors="data.contributors"
           resource-type="manga"

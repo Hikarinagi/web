@@ -48,11 +48,10 @@
           : [],
     ),
   )
-  const tags = computed(() =>
-    props.data.tags.map(item => ({
-      id: item.tag.id,
-      name: item.tag.name,
-      to: tagRoute(item.tag.id),
+  const cast = computed(() =>
+    props.data.characters.map(item => ({
+      name: item.appearance?.label || item.character.trans_name || item.character.name,
+      names: [item.character.name, item.character.trans_name ?? ''],
     })),
   )
 
@@ -159,7 +158,14 @@
       >
         <Stack as="aside" gap="xl" class="order-last lg:order-first">
           <GalgameFacts :data="data" :website="website" :languages="languages" />
-          <EntryTags :tags="tags" />
+          <EntryTags
+            resource="galgames"
+            :work-id="galgameId"
+            :tags="data.tags"
+            :tag-route="tagRoute"
+            :cast="cast"
+            cast-section="cast"
+          />
           <GalgameBrandWorks
             v-if="data.brand_works"
             :works="data.brand_works"

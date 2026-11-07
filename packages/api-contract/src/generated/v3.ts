@@ -7630,6 +7630,54 @@ export interface paths {
         };
         get: operations["GalgameController_getTags"];
         put?: never;
+        post: operations["GalgameTagController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameTagController_getMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameTagController_getSimilar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/{tag_id}/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["GalgameTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -8734,6 +8782,54 @@ export interface paths {
         };
         get: operations["LightNovelController_getTags"];
         put?: never;
+        post: operations["LightNovelTagController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelTagController_getMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelTagController_getSimilar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/{tag_id}/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["LightNovelTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -9742,6 +9838,54 @@ export interface paths {
         };
         get: operations["MangaController_getTags"];
         put?: never;
+        post: operations["MangaTagController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaTagController_getMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaTagController_getSimilar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/{tag_id}/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MangaTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -12297,6 +12441,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["TagController_getByName"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/tags/pool": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TagController_searchPool"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20061,6 +20221,7 @@ export interface components {
             role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER" | null;
         };
         GalgameTagRelationDto: {
+            likes: number;
             tag: components["schemas"]["TagPreviewDto"];
         };
         GameCreditsDto: {
@@ -20589,6 +20750,7 @@ export interface components {
             producer: components["schemas"]["LightNovelSummaryProducerDto"];
         };
         LightNovelTagRelationDto: {
+            likes: number;
             tag: components["schemas"]["TagPreviewDto"];
         };
         LightNovelVolumeCardSummaryResDto: {
@@ -24451,6 +24613,9 @@ export interface components {
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
         };
+        ProposeWorkTagDto: {
+            name: string;
+        };
         ProtectEntryDto: {
             reason: string;
             until?: string | null;
@@ -25362,6 +25527,11 @@ export interface components {
             name: string;
             use_count: number;
         };
+        SimilarTagDto: {
+            id: number;
+            name: string;
+            works: number;
+        };
         SiteConfigDto: {
             feature_flags: components["schemas"]["FeatureFlagsDto"];
         };
@@ -25639,11 +25809,23 @@ export interface components {
         TagLightNovelRelationDto: {
             light_novel: components["schemas"]["LightNovelSummaryDto"];
         };
+        TagPoolItemDto: {
+            alias: string | null;
+            id: number;
+            name: string;
+            works: number;
+        };
+        TagPoolSearchDto: {
+            items: components["schemas"]["TagPoolItemDto"][];
+            /** @description 不能作为标签的原因 */
+            reject: string | null;
+        };
         TagPreviewDto: {
             aliases: string[];
             description: string | null;
             id: number;
             name: string;
+            spoiler: boolean;
         };
         TaskBatchDto: {
             /** Format: date-time */
@@ -27452,6 +27634,13 @@ export interface components {
          * @enum {string}
          */
         VolumeType: "MAIN" | "EXTRA";
+        VoteWorkTagDto: {
+            /**
+             * @description 1 符合，-1 不符合，0 撤销
+             * @enum {number}
+             */
+            value: 1 | -1 | 0;
+        };
         WatchStateDto: {
             watched: boolean;
         };
@@ -27523,6 +27712,21 @@ export interface components {
         WorkRatingDto: {
             average: number | null;
             count: number;
+        };
+        WorkTagVoteDto: {
+            tag: components["schemas"]["WorkTagVoteTagDto"];
+            value: number;
+        };
+        WorkTagVoteResultDto: {
+            tag_id: number;
+            value: number;
+        };
+        WorkTagVoteTagDto: {
+            id: number;
+            name: string;
+            /** @enum {string} */
+            pool_state: "CANDIDATE" | "POOL" | "HIDDEN";
+            spoiler: boolean;
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
@@ -40863,6 +41067,99 @@ export interface operations {
             };
         };
     };
+    GalgameTagController_propose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProposeWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                };
+            };
+        };
+    };
+    GalgameTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    GalgameTagController_getSimilar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarTagDto"][];
+                };
+            };
+        };
+    };
+    GalgameTagController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                tag_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoteWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                };
+            };
+        };
+    };
     GalgameController_recordView: {
         parameters: {
             query?: never;
@@ -42511,6 +42808,99 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelTagRelationDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTagController_propose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProposeWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                };
+            };
+        };
+    };
+    LightNovelTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTagController_getSimilar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarTagDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTagController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                tag_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoteWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
                 };
             };
         };
@@ -44306,6 +44696,99 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaTagRelationDto"][];
+                };
+            };
+        };
+    };
+    MangaTagController_propose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProposeWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                };
+            };
+        };
+    };
+    MangaTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    MangaTagController_getSimilar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarTagDto"][];
+                };
+            };
+        };
+    };
+    MangaTagController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                tag_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoteWorkTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
                 };
             };
         };
@@ -48850,6 +49333,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TagDetailDto"];
+                };
+            };
+        };
+    };
+    TagController_searchPool: {
+        parameters: {
+            query: {
+                q: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagPoolSearchDto"];
                 };
             };
         };

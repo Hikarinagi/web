@@ -48,11 +48,10 @@
       image: item.character.image,
     })),
   )
-  const tags = computed(() =>
-    props.data.tags.map(item => ({
-      id: item.tag.id,
-      name: item.tag.name,
-      to: tagRoute(item.tag.id),
+  const cast = computed(() =>
+    props.data.characters.map(item => ({
+      name: item.character.trans_name || item.character.name,
+      names: [item.character.name, item.character.trans_name ?? ''],
     })),
   )
   const works = (list: LightNovelPageData['author_works']) =>
@@ -123,7 +122,14 @@
           :people="data.people"
           :producers="data.producers"
         />
-        <EntryTags :tags="tags" />
+        <EntryTags
+          resource="light-novels"
+          :work-id="lightNovelId"
+          :tags="data.tags"
+          :tag-route="tagRoute"
+          :cast="cast"
+          cast-section="characters"
+        />
         <EntryRailWorks title="作者的其他作品" :works="works(data.author_works)" />
         <EntryRailWorks title="插画的其他作品" :works="works(data.illustrator_works)" />
         <EntryMeta
