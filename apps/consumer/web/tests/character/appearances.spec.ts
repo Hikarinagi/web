@@ -3,6 +3,7 @@ import {
   appearancesOf,
   defaultAppearance,
   galgameCast,
+  namesOf,
   profileRows,
   viewOf,
   voiceSummary,
@@ -120,6 +121,40 @@ describe('viewOf', () => {
       intro: 'zh',
       original: false,
     })
+  })
+})
+
+describe('namesOf', () => {
+  it('drops spellings of the name itself and takes the matching kana as the reading', () => {
+    expect(
+      namesOf({
+        name: '朝武 芳乃',
+        reading: null,
+        aliases: ['朝武  芳乃', '朝武芳乃', 'Tomotake Yoshino', 'ともたけ よしの'],
+      }),
+    ).toEqual({ reading: 'ともたけ よしの', aliases: ['Tomotake Yoshino'] })
+  })
+
+  it('keeps a kana nickname as an alias', () => {
+    expect(
+      namesOf({
+        name: '芳乃 さくら',
+        reading: null,
+        aliases: ['芳乃樱', 'さくらんぼ', 'よしの さくら'],
+      }),
+    ).toEqual({ reading: 'よしの さくら', aliases: ['芳乃樱', 'さくらんぼ'] })
+  })
+
+  it('does not guess when several kana names could be the reading', () => {
+    expect(
+      namesOf({ name: '朝武芳乃', reading: null, aliases: ['ともたけよしの', 'よしのん'] }),
+    ).toEqual({ reading: null, aliases: ['ともたけよしの', 'よしのん'] })
+  })
+
+  it('prefers a recorded reading', () => {
+    expect(namesOf({ name: '朝武芳乃', reading: 'ともたけよしの', aliases: [] }).reading).toBe(
+      'ともたけよしの',
+    )
   })
 })
 

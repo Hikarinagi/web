@@ -101,6 +101,20 @@ export const defaultAppearance = (list: Appearance[]) =>
 
 export const yearOf = (date: string | null) => (date ? date.slice(0, 4) : '年份不详')
 
+const KANA = /^[\p{Script=Hiragana}\p{Script=Katakana}ー・\s]+$/u
+const compact = (text: string) => text.replace(/\s/g, '')
+const words = (text: string) => text.trim().split(/\s+/).length
+
+export function namesOf(character: Pick<CharacterDetail, 'name' | 'reading' | 'aliases'>) {
+  const aliases = character.aliases.filter(alias => compact(alias) !== compact(character.name))
+  const kana = aliases.filter(
+    alias =>
+      KANA.test(alias) && !KANA.test(character.name) && words(alias) === words(character.name),
+  )
+  const reading = character.reading ?? (kana.length === 1 ? (kana[0] ?? null) : null)
+  return { reading, aliases: aliases.filter(alias => alias !== reading) }
+}
+
 export function viewOf(character: CharacterDetail, list: Appearance[], work: Appearance | null) {
   const base: Profile = {
     ...character.profile,

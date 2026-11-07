@@ -65,7 +65,13 @@
             preload
             :width="480"
             class="w-(--volume-cover-sm) shrink-0 shadow-2xl lg:w-(--volume-cover)"
-          />
+          >
+            <NsfwControl
+              :images="[cover]"
+              :nsfw="lightNovel.nsfw"
+              class="absolute bottom-2 left-3"
+            />
+          </EntryBookCover>
         </Transition>
         <Inline gap="xs" align="center" justify="center" :wrap="false" class="w-full">
           <IconButton

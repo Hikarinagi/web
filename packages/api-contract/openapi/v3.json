@@ -27127,7 +27127,7 @@
           "cover": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/MediaAssetDto"
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
             "description": "卷取单行本条目封面",
@@ -31075,7 +31075,7 @@
           "cover": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/MediaAssetDto"
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
             "nullable": true,
@@ -31228,7 +31228,7 @@
           "cover": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/MediaAssetDto"
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
             "nullable": true,

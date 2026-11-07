@@ -30,5 +30,6 @@
         image-class="object-contain object-bottom"
       />
     </Transition>
+    <slot />
   </Stack>
 </template>

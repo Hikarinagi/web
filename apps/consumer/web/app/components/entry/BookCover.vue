@@ -48,5 +48,6 @@
       gap="none"
       class="pointer-events-none absolute inset-y-0 left-0 w-2 bg-linear-to-r from-black/30 via-white/15 to-transparent"
     />
+    <slot />
   </Stack>
 </template>

@@ -92,7 +92,13 @@
           preload
           :width="480"
           class="absolute! inset-x-0 bottom-0 shadow-2xl ring-4! ring-(--hn-bg-canvas)!"
-        />
+        >
+          <NsfwControl
+            :images="[cover, ...volumes.map(volume => volume.cover)]"
+            :nsfw="manga.nsfw"
+            class="absolute bottom-2 left-3"
+          />
+        </EntryBookCover>
       </Stack>
 
       <Stack gap="sm" class="min-w-0 self-end [grid-area:title] lg:self-start lg:pt-2">

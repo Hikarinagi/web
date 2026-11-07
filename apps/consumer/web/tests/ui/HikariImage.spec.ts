@@ -1,7 +1,7 @@
 import { Image } from '@hina-ui/vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { toValue } from 'vue'
+import { ref, toValue } from 'vue'
 import HikariImage from '../../app/components/ui/HikariImage.vue'
 import type { HikariImageSource } from '../../app/utils/media/image'
 
@@ -9,9 +9,12 @@ const HASH = '3OcRJYB4d3h/iIeHeEh3eIhw+j3A'
 
 describe('HikariImage', () => {
   let limit: 'show' | 'blur' | 'block'
+  const revealed = ref<string[]>([])
 
   beforeEach(() => {
     limit = 'show'
+    revealed.value = []
+    vi.stubGlobal('useNsfwReveal', () => ({ revealed }))
     vi.stubGlobal('useRuntimeConfig', () => ({
       public: { cdnHost: 'https://cdn.example.com', imageProcessorHost: 'https://img.example.com' },
     }))
@@ -46,6 +49,22 @@ describe('HikariImage', () => {
     expect(props.src).toMatch(/^data:image\/png;base64,/)
     expect(props.thumbhash).toBeUndefined()
     expect(props.lazy).toBe(false)
+  })
+
+  it('shows the real image once the reader reveals it', () => {
+    limit = 'blur'
+    revealed.value = ['media/a.webp']
+    const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: 2 })
+    expect(props.src).toContain('media/a.webp')
+    expect(props.src).not.toMatch(/^data:image/)
+    expect(props.thumbhash).toBe(HASH)
+  })
+
+  it('keeps blurring images the reader has not revealed', () => {
+    limit = 'blur'
+    revealed.value = ['media/other.webp']
+    const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: 2 })
+    expect(props.src).toMatch(/^data:image\/png;base64,/)
   })
 
   it('shows the thumb hash for a blurred outside link the processor cannot blur', () => {

@@ -72,6 +72,11 @@ export function imageSourceSafety(source: HikariImageSource): HikariImageSafety 
   }
 }
 
+export function imageSourceNsfw(source: HikariImageSource): boolean {
+  const safety = imageSourceSafety(source)
+  return safety.nsfw || safety.sexual > 0 || safety.violence > 0
+}
+
 export function imageSourceSize(source: HikariImageSource): HikariImageSize | undefined {
   if (typeof source === 'string' || source == null) return undefined
 

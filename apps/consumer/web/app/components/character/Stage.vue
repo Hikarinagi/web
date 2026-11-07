@@ -3,6 +3,7 @@
   import { NuxtLink } from '#components'
   import type { CharacterPageData } from '~~/server/api/pages/characters/[id].get'
   import {
+    namesOf,
     voiceSummary,
     yearOf,
     type Appearance,
@@ -22,6 +23,7 @@
   }>()
   const selected = defineModel<string>({ required: true })
 
+  const names = computed(() => namesOf(props.character))
   const voices = computed(() => voiceSummary(props.appearances))
   const single = computed(() => props.appearances.length === 1)
   const options = computed(() =>
@@ -44,7 +46,12 @@
           :nsfw="view.nsfw"
           :alt="character.name"
           class="mx-auto w-60 shrink-0 lg:mx-0 lg:w-(--char-image)"
-        />
+        >
+          <NsfwControl
+            :images="[view.image, ...appearances.flatMap(item => [item.image, item.cover])]"
+            class="absolute bottom-2 left-2"
+          />
+        </CharacterPortrait>
         <Stack gap="md" class="min-w-0 flex-1 self-start">
           <Inline v-if="work" gap="sm" align="center" :wrap="false" class="min-w-0">
             <NuxtLink
@@ -87,14 +94,14 @@
           </Inline>
 
           <Stack gap="xs">
-            <Text v-if="character.reading" size="sm" tone="muted" lang="ja" class="tracking-wider">
-              {{ character.reading }}
+            <Text v-if="names.reading" size="sm" tone="muted" lang="ja" class="tracking-wider">
+              {{ names.reading }}
             </Text>
             <Heading :level="1" lang="ja" class="text-4xl leading-tight font-semibold lg:text-5xl">
               {{ character.name }}
             </Heading>
-            <Text v-if="character.aliases.length" size="sm" tone="muted" lang="ja">
-              {{ character.aliases.join('、') }}
+            <Text v-if="names.aliases.length" size="sm" tone="muted" lang="ja">
+              {{ names.aliases.join('、') }}
             </Text>
           </Stack>
 

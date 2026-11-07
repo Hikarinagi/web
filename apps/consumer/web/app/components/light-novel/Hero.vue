@@ -87,6 +87,7 @@
         :volumes="volumes"
         :fallback="cover"
         :title="title"
+        :nsfw="lightNovel.nsfw"
         class="self-end [grid-area:cover] lg:self-start"
       />
 

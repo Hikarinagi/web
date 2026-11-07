@@ -8,6 +8,7 @@
     volumes: LightNovelPageData['volumes']
     fallback: LightNovelPageData['light_novel']['covers'][number]['media'] | null
     title: string
+    nsfw: boolean
   }>()
 
   const covers = computed(() => {
@@ -17,6 +18,7 @@
   const front = computed(() => covers.value.at(-1) ?? null)
   const middle = computed(() => (covers.value.length > 1 ? covers.value.at(-2) : null))
   const back = computed(() => (covers.value.length > 2 ? covers.value[0] : null))
+  const allCovers = computed(() => [props.fallback, ...props.volumes.map(getLightNovelVolumeCover)])
 </script>
 
 <template>
@@ -36,6 +38,8 @@
       alt=""
       class="absolute! inset-0 translate-x-1.5 -translate-y-1.5 brightness-90 lg:translate-x-2 lg:-translate-y-2"
     />
-    <EntryBookCover :media="front" :alt="`${title} 封面`" preload class="shadow-2xl" />
+    <EntryBookCover :media="front" :alt="`${title} 封面`" preload class="shadow-2xl">
+      <NsfwControl :images="allCovers" :nsfw="nsfw" class="absolute bottom-2 left-3" />
+    </EntryBookCover>
   </Stack>
 </template>

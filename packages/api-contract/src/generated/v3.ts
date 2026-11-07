@@ -21296,7 +21296,7 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             /** @description 卷取单行本条目封面 */
-            cover: components["schemas"]["MediaAssetDto"] | null;
+            cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /**
              * Format: date-time
              * @description 加入作品的时间
@@ -22293,7 +22293,7 @@ export interface components {
         MangaVolumeDetailDto: {
             bangumi_book_id: number | null;
             chapter_count: number | null;
-            cover: components["schemas"]["MediaAssetDto"] | null;
+            cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
             editions: components["schemas"]["MangaEditionDto"][] | null;
@@ -22327,7 +22327,7 @@ export interface components {
             volume_number: number | null;
         };
         MangaVolumeRelationDto: {
-            cover: components["schemas"]["MediaAssetDto"] | null;
+            cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             isbn: string | null;
             name: string | null;

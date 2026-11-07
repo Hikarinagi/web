@@ -162,24 +162,30 @@
           />
         </Stack>
 
-        <Card
-          v-if="cover"
-          as="button"
-          type="button"
-          :padded="false"
-          aria-label="查看封面"
-          class="hidden shrink-0 cursor-zoom-in overflow-hidden rounded-lg border-0 shadow-2xl ring-1 ring-fg/15 lg:block"
-          @click="$emit('cover')"
-        >
-          <HikariImage
-            :src="cover"
-            :alt="`${title} 封面`"
-            :ratio="layout.ratio"
-            :processing="layout.processing"
-            preload
-            class="w-(--stage-cover-width)"
+        <Stack v-if="cover" gap="none" class="relative hidden shrink-0 lg:flex">
+          <Card
+            as="button"
+            type="button"
+            :padded="false"
+            aria-label="查看封面"
+            class="cursor-zoom-in overflow-hidden rounded-lg border-0 shadow-2xl ring-1 ring-fg/15"
+            @click="$emit('cover')"
+          >
+            <HikariImage
+              :src="cover"
+              :alt="`${title} 封面`"
+              :ratio="layout.ratio"
+              :processing="layout.processing"
+              preload
+              class="w-(--stage-cover-width)"
+            />
+          </Card>
+          <NsfwControl
+            :images="[cover, ...images]"
+            :nsfw="data.galgame.nsfw"
+            class="absolute bottom-2 left-2"
           />
-        </Card>
+        </Stack>
         <WorkCoverAdd
           v-else
           resource="galgame"
@@ -226,5 +232,13 @@
         </Inline>
       </ScrollRail>
     </Stack>
+
+    <NsfwControl
+      :images="[cover, ...images]"
+      :nsfw="data.galgame.nsfw"
+      :class="
+        cn('absolute top-[calc(var(--app-header-height)+0.75rem)] right-3', cover && 'lg:hidden')
+      "
+    />
   </Section>
 </template>
