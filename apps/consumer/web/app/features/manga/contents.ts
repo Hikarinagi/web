@@ -24,6 +24,9 @@ export type ContentsCell =
 
 export const CONTENTS_RANGE_SIZE = 100
 export const CONTENTS_NEW_MS = 7 * 24 * 60 * 60 * 1000
+const CONTENTS_RECENT_MS = 45 * 24 * 60 * 60 * 1000
+const CONTENTS_RECENT_COUNT = 4
+const CONTENTS_BULK_DAY = 10
 
 export function contentsUnits(items: ContentsItem[]): ContentsUnits {
   const units: ContentsUnits = { chapter: [], volume: [], extra: [] }
@@ -135,6 +138,23 @@ export function contentsStatus(units: ContentsUnits, finished: boolean): string 
       : `全 ${last.volume_number ?? units.volume.length} 卷`
   }
   return `更新至 ${mangaChapterLabel({ ...last, ordinal: 1 })}`
+}
+
+export function recentChapters(chapters: ContentsItem[]) {
+  const perDay = new Map<string, number>()
+  for (const item of chapters) {
+    const day = item.created_at.slice(0, 10)
+    perDay.set(day, (perDay.get(day) ?? 0) + 1)
+  }
+  const dated = chapters.filter(
+    item => (perDay.get(item.created_at.slice(0, 10)) ?? 0) < CONTENTS_BULK_DAY,
+  )
+  if (!dated.length) return []
+  const latest = Math.max(...dated.map(item => Date.parse(item.created_at)))
+  return dated
+    .filter(item => latest - Date.parse(item.created_at) < CONTENTS_RECENT_MS)
+    .slice(-CONTENTS_RECENT_COUNT)
+    .reverse()
 }
 
 export function isNewItem(item: ContentsItem, readIds: ReadonlySet<number>, now = Date.now()) {

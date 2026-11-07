@@ -275,6 +275,48 @@ html.dark {
   --editor-status-info-border: var(--color-hikari-blue-500);
 }
 
+:root {
+  --entry-container: 82.5rem;
+  --stage-height: min(calc(100svh - 2.5rem), 46rem);
+  --stage-top-shade: 10rem;
+  --stage-cover-width: 15rem;
+  --stage-thumb-width: 7.5rem;
+  --stage-veil: var(--tone-soft);
+  --rail-left: 15rem;
+  --rail-right: 18rem;
+  --sticky-bar-height: 3.5rem;
+  --sticky-top: calc(var(--app-header-height) + var(--sticky-bar-height) + 1.5rem);
+  --card-cast: 15rem;
+  --card-review: 20rem;
+  --ambient-height: 40rem;
+  --stack-cover: 15rem;
+  --stack-cover-sm: 7.5rem;
+  --manga-banner: 16rem;
+  --manga-banner-sm: 9rem;
+  --manga-strip-cover: calc(var(--manga-banner-sm) * 7 / 11);
+  --manga-strip-cover-lg: calc(var(--manga-banner) * 7 / 11);
+  --manga-cover: 15rem;
+  --manga-cover-sm: 7rem;
+  --volume-cover: 15rem;
+  --volume-cover-sm: 11rem;
+}
+
+html.dark {
+  --stage-veil: var(--tone-deep);
+}
+
+html[data-page-tone].dark {
+  --hn-bg-canvas: var(--tone-deep);
+  --hn-surface: var(--tone-deep-2);
+  --hn-bg-subtle: color-mix(in oklab, var(--tone-deep-2) 88%, white);
+  --hn-bg-inset: color-mix(in oklab, var(--tone-deep-2) 80%, white);
+  --hn-border: var(--tone-line);
+}
+
+html[data-page-tone='paper']:not(.dark) {
+  --hn-bg-canvas: var(--tone-paper);
+}
+
 .bprogress {
   position: fixed;
   inset: 0;

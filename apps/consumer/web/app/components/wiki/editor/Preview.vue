@@ -68,6 +68,7 @@
         v-if="data"
         :data="data"
         :galgame-id="galgame"
+        embedded
         inert
         class="[--app-header-height:0px]"
       />

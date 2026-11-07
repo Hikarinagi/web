@@ -20678,6 +20678,7 @@ export interface components {
         LightNovelVolumeRelationDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
             id: number;
+            isbn: string | null;
             name: string;
             name_cn: string | null;
             online_reading_available: boolean;
@@ -20687,6 +20688,7 @@ export interface components {
              * @enum {string|null}
              */
             online_reading_translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
+            pages: number | null;
             /** Format: date-time */
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
@@ -23839,6 +23841,7 @@ export interface components {
         PersonCharacterGalgameDto: {
             id: number;
             origin_title: string;
+            rating: components["schemas"]["WorkRatingDto"];
             /** Format: date-time */
             release_date: string | null;
             trans_title: string | null;
@@ -23876,6 +23879,7 @@ export interface components {
             /** @description 在这部作品中的职责，取值为新的职责编码 */
             codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
+            rating: components["schemas"]["WorkRatingDto"];
             roles: string[];
         };
         PersonLightNovelRelationDto: {
@@ -23883,12 +23887,14 @@ export interface components {
             codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
+            rating: components["schemas"]["WorkRatingDto"];
             relation: string;
         };
         PersonMangaRelationDto: {
             /** @description 在这部作品中的职责，取值为新的职责编码 */
             codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
+            rating: components["schemas"]["WorkRatingDto"];
             roles: components["schemas"]["MangaStaffRole"][];
         };
         PersonPreviewDto: {
@@ -27477,6 +27483,10 @@ export interface components {
             /** @enum {string} */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
+        };
+        WorkRatingDto: {
+            average: number | null;
+            count: number;
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */

@@ -25750,6 +25750,10 @@
           "id": {
             "type": "number"
           },
+          "isbn": {
+            "nullable": true,
+            "type": "string"
+          },
           "name": {
             "type": "string"
           },
@@ -25772,6 +25776,10 @@
             ],
             "nullable": true,
             "type": "string"
+          },
+          "pages": {
+            "nullable": true,
+            "type": "number"
           },
           "publication_date": {
             "format": "date-time",
@@ -25816,6 +25824,8 @@
           "publication_date",
           "publication_date_precision",
           "relation",
+          "isbn",
+          "pages",
           "online_reading_available",
           "online_reading_is_collection",
           "online_reading_translation"
@@ -37559,6 +37569,9 @@
           "origin_title": {
             "type": "string"
           },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "release_date": {
             "format": "date-time",
             "nullable": true,
@@ -37573,7 +37586,8 @@
           "id",
           "origin_title",
           "trans_title",
-          "release_date"
+          "release_date",
+          "rating"
         ],
         "type": "object"
       },
@@ -37715,6 +37729,9 @@
           "galgame": {
             "$ref": "#/components/schemas/GalgameSummaryDto"
           },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "roles": {
             "items": {
               "type": "string"
@@ -37725,7 +37742,8 @@
         "required": [
           "codes",
           "roles",
-          "galgame"
+          "galgame",
+          "rating"
         ],
         "type": "object"
       },
@@ -37745,6 +37763,9 @@
             "nullable": true,
             "type": "string"
           },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "relation": {
             "type": "string"
           }
@@ -37753,7 +37774,8 @@
           "codes",
           "relation",
           "note",
-          "light_novel"
+          "light_novel",
+          "rating"
         ],
         "type": "object"
       },
@@ -37769,6 +37791,9 @@
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
           },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
           "roles": {
             "items": {
               "$ref": "#/components/schemas/MangaStaffRole"
@@ -37779,7 +37804,8 @@
         "required": [
           "codes",
           "roles",
-          "manga"
+          "manga",
+          "rating"
         ],
         "type": "object"
       },
@@ -52627,6 +52653,22 @@
           "average_rate",
           "rated_count",
           "nsfw"
+        ],
+        "type": "object"
+      },
+      "WorkRatingDto": {
+        "properties": {
+          "average": {
+            "nullable": true,
+            "type": "number"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "average",
+          "count"
         ],
         "type": "object"
       },

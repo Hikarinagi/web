@@ -47,6 +47,19 @@ async function handler(event: H3Event) {
     }).catch(() => null),
   ])
 
+  const worksOf = (relation: 'author' | 'illustrator') => {
+    const person = people.find(item => item.relation === relation)?.person
+    if (!person) return null
+    return fetchBackendData(event, '/api/v3/people/{id}/light-novels', {
+      path: { id: person.id },
+      query: { page: 1, page_size: 6, sort: 'recent', relation },
+    }).catch(() => null)
+  }
+  const [author_works, illustrator_works] = await Promise.all([
+    worksOf('author'),
+    worksOf('illustrator'),
+  ])
+
   return {
     light_novel,
     volumes,
@@ -62,6 +75,8 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
+    author_works,
+    illustrator_works,
   }
 }
 

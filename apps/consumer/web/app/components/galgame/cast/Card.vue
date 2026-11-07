@@ -1,15 +1,5 @@
 <script setup lang="ts">
-  import {
-    Card,
-    Inline,
-    Link,
-    Ripple,
-    Spoiler,
-    Stack,
-    Tag,
-    Text,
-    VisuallyHidden,
-  } from '@hina-ui/vue'
+  import { Card, Inline, Link, Ripple, Spoiler, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
@@ -23,6 +13,7 @@
     () =>
       props.item.appearance?.label || props.item.character.trans_name || props.item.character.name,
   )
+  const image = computed(() => props.item.appearance?.image ?? props.item.character.image)
   const voices = computed(() =>
     props.item.appearance?.voices.length
       ? props.item.appearance.voices.map(voice => ({
@@ -43,82 +34,65 @@
 <template>
   <Card
     :padded="false"
-    class="flex min-h-20 items-center gap-3 rounded-xl px-3.5 py-3"
     :class="concealed ? undefined : 'hn-state-layer hn-interactive hn-press-lg'"
   >
     <Ripple v-if="!concealed" />
-    <HikariImage
-      v-if="!concealed"
-      :src="item.character.image"
-      :alt="name"
-      class="size-14 shrink-0 rounded-full"
-      image-class="object-cover object-top"
-      :processing="{ gravity: 'face' }"
-      preset="thumbnail"
-      :fallback-src="ENTITY_FALLBACK_IMAGE"
-    >
-      <template #error><VisuallyHidden /></template>
-    </HikariImage>
-    <Avatar v-else class="size-14! shrink-0" />
-
-    <Stack gap="xs" class="min-w-0 flex-1">
-      <Tag v-if="item.appearance?.hidden" tone="warning" class="self-start">含剧透</Tag>
-      <Spoiler v-if="concealed" v-model:hidden="concealed" class="text-sm font-bold">
-        {{ name }}
-      </Spoiler>
-      <NuxtLink v-else v-slot="{ href, navigate }" :to="`/characters/${item.character.id}`" custom>
+    <Inline gap="md" align="center" :wrap="false" class="p-2">
+      <HikariImage
+        v-if="!concealed"
+        :src="image"
+        :alt="name"
+        :ratio="1"
+        class="w-14 shrink-0 rounded-md bg-white"
+        image-class="object-cover object-top"
+        preset="thumbnail"
+        :fallback-src="ENTITY_FALLBACK_IMAGE"
+      />
+      <Avatar v-else class="size-14! shrink-0" />
+      <Stack gap="none" class="min-w-0">
+        <Tag v-if="item.appearance?.hidden" tone="warning" class="self-start">含剧透</Tag>
+        <Spoiler v-if="concealed" v-model:hidden="concealed" class="text-sm font-medium">
+          {{ name }}
+        </Spoiler>
         <Link
-          :href="href ?? undefined"
+          v-else
+          :as="NuxtLink"
+          :to="`/characters/${item.character.id}`"
           tone="neutral"
           :underline="false"
-          class="truncate text-sm font-bold after:absolute after:inset-0"
+          class="truncate font-medium after:absolute after:inset-0"
           lang="ja"
-          @click="navigate"
         >
           {{ name }}
         </Link>
-      </NuxtLink>
-      <Inline
-        v-if="voices.length && !concealed"
-        gap="xs"
-        align="start"
-        :wrap="false"
-        class="relative z-10"
-      >
-        <Text as="span" size="xs" tone="faint" class="shrink-0">CV</Text>
-        <Stack gap="none" class="min-w-0">
-          <Text
-            v-for="(voice, index) in voices"
-            :key="index"
-            as="span"
-            size="xs"
-            tone="muted"
-            truncate
-          >
-            <NuxtLink
+        <Text
+          v-if="voices.length && !concealed"
+          size="sm"
+          tone="muted"
+          truncate
+          class="relative z-10"
+        >
+          CV
+          <template v-for="(voice, index) in voices" :key="index">
+            <Link
               v-if="voice.personId"
-              v-slot="{ href, navigate }"
+              :as="NuxtLink"
               :to="`/people/${voice.personId}`"
-              custom
+              tone="neutral"
+              :underline="false"
+              class="text-muted hover:text-fg"
+              lang="ja"
             >
-              <Link
-                :href="href ?? undefined"
-                tone="neutral"
-                :underline="false"
-                class="hover:text-accent-text"
-                lang="ja"
-                @click="navigate"
-              >
-                {{ voice.name }}
-              </Link>
-            </NuxtLink>
+              {{ voice.name }}
+            </Link>
             <template v-else>{{ voice.name }}</template>
-            <Text v-if="voice.version" as="span" tone="faint" class="ms-1">{{
-              voice.version
-            }}</Text>
-          </Text>
-        </Stack>
-      </Inline>
-    </Stack>
+            <Text v-if="voice.version" as="span" size="xs" tone="faint" class="ms-1">
+              {{ voice.version }}
+            </Text>
+          </template>
+        </Text>
+        <Text v-else-if="!concealed" size="sm" tone="faint">声优未登记</Text>
+      </Stack>
+    </Inline>
   </Card>
 </template>

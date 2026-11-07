@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { Empty, Stack } from '@hina-ui/vue'
+  import { Card, Divider, Empty } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameProducts' })
-  defineProps<{ galgameId: number; products: GalgamePageData['products'] }>()
+  defineProps<{ products: GalgamePageData['products'] }>()
 
   const route = useRoute()
   const router = useRouter()
@@ -11,22 +11,13 @@
 </script>
 
 <template>
-  <WorkSection title="发行版本" :meta="products.length ? `${products.length} 个` : undefined">
-    <template #action>
-      <WorkEditButton resource-type="galgame" :resource-id="galgameId" />
+  <EntrySectionHead id="releases" title="发行版本" :count="products.length" />
+  <Card v-if="products.length" :padded="false">
+    <template v-for="(product, index) in products" :key="product.id">
+      <Divider v-if="index > 0" />
+      <GalgameProductsRow :product="product" @select="select(product.id)" />
     </template>
-    <Empty v-if="!products.length" title="尚未记录发行版本" />
-    <template v-else>
-      <GalgameProductsTable :products="products" class="hidden md:block" @select="select" />
-      <Stack gap="sm" class="md:hidden">
-        <GalgameProductsCard
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-          @select="select(product.id)"
-        />
-      </Stack>
-    </template>
-    <GalgameProductsDrawer />
-  </WorkSection>
+  </Card>
+  <Card v-else><Empty title="尚未记录发行版本" size="sm" /></Card>
+  <GalgameProductsDrawer />
 </template>

@@ -45,6 +45,14 @@ async function handler(event: H3Event) {
     }).catch(() => null),
   ])
 
+  const brandId = display.brands.find(brand => brand.producer_id)?.producer_id
+  const brandWorks = brandId
+    ? await fetchBackendData(event, '/api/v3/producers/{id}/galgames', {
+        path: { id: brandId },
+        query: { page: 1, page_size: 100, sort: 'publication' },
+      }).catch(() => null)
+    : null
+
   return {
     galgame,
     display,
@@ -60,6 +68,7 @@ async function handler(event: H3Event) {
     articles,
     my_rate,
     favorite,
+    brand_works: brandId && brandWorks ? { id: brandId, list: brandWorks } : null,
   }
 }
 
