@@ -22806,6 +22806,82 @@
         ],
         "type": "object"
       },
+      "GalgameRecommendItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RecommendReasonDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "reason"
+        ],
+        "type": "object"
+      },
       "GalgameRecommendModuleDto": {
         "properties": {
           "intro": {
@@ -22859,6 +22935,25 @@
           "intro",
           "tag",
           "items"
+        ],
+        "type": "object"
+      },
+      "GalgameRecommendPageDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameRecommendItemDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
         ],
         "type": "object"
       },
@@ -24882,6 +24977,140 @@
           "volume_number",
           "name",
           "name_cn"
+        ],
+        "type": "object"
+      },
+      "LightNovelRecommendItemDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryPersonDto"
+              }
+            ],
+            "description": "作者",
+            "nullable": true,
+            "type": "object"
+          },
+          "bunko": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+              }
+            ],
+            "description": "所属文库",
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "轻小说 ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "enum": [
+              "SERIALIZING",
+              "FINISHED",
+              "PAUSED",
+              "ABANDONED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "首卷出版日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "description": "出版方",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RecommendReasonDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "novel_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "author",
+          "bunko",
+          "publishers",
+          "maker",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "LightNovelRecommendPageDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelRecommendItemDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
         ],
         "type": "object"
       },
@@ -29532,6 +29761,121 @@
           "attempts",
           "error",
           "updated_at"
+        ],
+        "type": "object"
+      },
+      "MangaRecommendItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/MangaCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "漫画 ID",
+            "type": "number"
+          },
+          "latest_chapter_at": {
+            "description": "最新一话的更新时间",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "开始连载日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RecommendReasonDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ],
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "serial_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "latest_chapter_at",
+          "maker",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "MangaRecommendPageDto": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MangaRecommendItemDto"
+            },
+            "type": "array"
+          },
+          "next_cursor": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
         ],
         "type": "object"
       },
@@ -41833,6 +42177,89 @@
         ],
         "type": "object"
       },
+      "RecommendPolicyDto": {
+        "properties": {
+          "cold_heat": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "galgame": {
+            "$ref": "#/components/schemas/RecommendWeightsResDto"
+          },
+          "light_novel": {
+            "$ref": "#/components/schemas/RecommendWeightsResDto"
+          },
+          "maker_cap": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "number"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/RecommendWeightsResDto"
+          },
+          "rollout_percent": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "rollout_percent",
+          "maker_cap",
+          "cold_heat",
+          "galgame",
+          "light_novel",
+          "manga"
+        ],
+        "type": "object"
+      },
+      "RecommendReasonDto": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "CREDIT",
+              "TAG"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "role",
+          "name"
+        ],
+        "type": "object"
+      },
+      "RecommendWeightsResDto": {
+        "properties": {
+          "like": {
+            "type": "number"
+          },
+          "maker": {
+            "type": "number"
+          },
+          "tag": {
+            "type": "number"
+          },
+          "view": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "view",
+          "like",
+          "maker",
+          "tag"
+        ],
+        "type": "object"
+      },
       "RecomputeListingDto": {
         "properties": {
           "dry_run": {
@@ -51409,6 +51836,74 @@
         ],
         "type": "object"
       },
+      "UpdateRecommendPolicyDto": {
+        "properties": {
+          "cold_heat": {
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "galgame": {
+            "$ref": "#/components/schemas/UpdateRecommendWeightsDto"
+          },
+          "light_novel": {
+            "$ref": "#/components/schemas/UpdateRecommendWeightsDto"
+          },
+          "maker_cap": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "number"
+          },
+          "manga": {
+            "$ref": "#/components/schemas/UpdateRecommendWeightsDto"
+          },
+          "rollout_percent": {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "rollout_percent",
+          "maker_cap",
+          "cold_heat",
+          "galgame",
+          "light_novel",
+          "manga"
+        ],
+        "type": "object"
+      },
+      "UpdateRecommendWeightsDto": {
+        "properties": {
+          "like": {
+            "maximum": 10,
+            "minimum": 0,
+            "type": "number"
+          },
+          "maker": {
+            "maximum": 10,
+            "minimum": 0,
+            "type": "number"
+          },
+          "tag": {
+            "maximum": 10,
+            "minimum": 0,
+            "type": "number"
+          },
+          "view": {
+            "maximum": 10,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "view",
+          "like",
+          "maker",
+          "tag"
+        ],
+        "type": "object"
+      },
       "UpdateReleaseNoteDto": {
         "properties": {
           "is_published": {
@@ -53061,6 +53556,17 @@
           "pool_state",
           "spoiler"
         ],
+        "type": "object"
+      },
+      "WorkViewDto": {
+        "properties": {
+          "from_recommend": {
+            "type": "boolean"
+          },
+          "visitor": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "WorkbenchAiPolicyInputDto": {
@@ -63114,6 +63620,56 @@
         },
         "tags": [
           "admin/reader"
+        ]
+      }
+    },
+    "/api/v3/admin/recommend/policy": {
+      "get": {
+        "operationId": "AdminRecommendController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendPolicyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/recommend"
+        ]
+      },
+      "put": {
+        "operationId": "AdminRecommendController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRecommendPolicyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendPolicyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/recommend"
         ]
       }
     },
@@ -75854,6 +76410,81 @@
         ]
       }
     },
+    "/api/v3/galgames/{id}/recommendations": {
+      "get": {
+        "operationId": "RecommendController_galgames",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "visitor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "本次会话最近看过的作品，由近到远",
+            "in": "query",
+            "name": "recent",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "type": "array"
+            }
+          },
+          {
+            "description": "当前页已显示的作品",
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 60,
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRecommendPageDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "recommend"
+        ]
+      }
+    },
     "/api/v3/galgames/{id}/relations": {
       "get": {
         "operationId": "GalgameController_getRelations",
@@ -76159,6 +76790,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkViewDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": ""
@@ -78803,6 +79444,81 @@
         ]
       }
     },
+    "/api/v3/light-novels/{id}/recommendations": {
+      "get": {
+        "operationId": "RecommendController_lightNovels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "visitor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "本次会话最近看过的作品，由近到远",
+            "in": "query",
+            "name": "recent",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "type": "array"
+            }
+          },
+          {
+            "description": "当前页已显示的作品",
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 60,
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRecommendPageDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "recommend"
+        ]
+      }
+    },
     "/api/v3/light-novels/{id}/relations": {
       "get": {
         "operationId": "LightNovelController_getRelations",
@@ -79034,6 +79750,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkViewDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": ""
@@ -82078,6 +82804,81 @@
         ]
       }
     },
+    "/api/v3/mangas/{id}/recommendations": {
+      "get": {
+        "operationId": "RecommendController_mangas",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "visitor",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "本次会话最近看过的作品，由近到远",
+            "in": "query",
+            "name": "recent",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 2,
+              "type": "array"
+            }
+          },
+          {
+            "description": "当前页已显示的作品",
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "maxItems": 60,
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRecommendPageDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "recommend"
+        ]
+      }
+    },
     "/api/v3/mangas/{id}/relations": {
       "get": {
         "operationId": "MangaController_getRelations",
@@ -82309,6 +83110,16 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkViewDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": ""

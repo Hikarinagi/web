@@ -66,6 +66,11 @@
         cover: topVotedMedia(work.covers),
         year: work.publication_date?.slice(0, 4),
       }))
+  const shownWorks = computed(() => [
+    ...props.data.relations.map(item => item.target_light_novel.id),
+    ...works(props.data.author_works).map(work => work.id),
+    ...works(props.data.illustrator_works).map(work => work.id),
+  ])
   const external = computed(() =>
     props.data.light_novel.bangumi_book_id
       ? [
@@ -144,6 +149,8 @@
         />
       </Stack>
     </Stack>
+
+    <LightNovelRecommend :work-id="lightNovelId" :exclude="shownWorks" />
 
     <LightNovelRateDialog
       v-model:visible="rateOpen"

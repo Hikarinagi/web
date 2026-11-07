@@ -3269,6 +3269,22 @@ export interface paths {
         patch: operations["AdminRenderReportController_update"];
         trace?: never;
     };
+    "/api/v3/admin/recommend/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminRecommendController_get"];
+        put: operations["AdminRecommendController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/release/notes": {
         parameters: {
             query?: never;
@@ -7621,6 +7637,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RecommendController_galgames"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/relations": {
         parameters: {
             query?: never;
@@ -8805,6 +8837,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novels/{id}/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RecommendController_lightNovels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novels/{id}/relations": {
         parameters: {
             query?: never;
@@ -9855,6 +9903,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["MangaRateController_vote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/recommendations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RecommendController_mangas"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -20168,6 +20232,29 @@ export interface components {
             modules: components["schemas"]["GalgameRecommendModuleDto"][];
             next_cursor: number | null;
         };
+        GalgameRecommendItemDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            maker: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            reason: components["schemas"]["RecommendReasonDto"] | null;
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
         GalgameRecommendModuleDto: {
             intro: string | null;
             items: components["schemas"]["GalgameSummaryDto"][];
@@ -20177,6 +20264,10 @@ export interface components {
             /** @enum {string} */
             reason: "DISCOVERY" | "PLAYING" | "COMPLETED" | "SCENARIO" | "VISUAL" | "MUSIC" | "SPOTLIGHT" | "TAG";
             tag: components["schemas"]["TagPreviewDto"] | null;
+        };
+        GalgameRecommendPageDto: {
+            items: components["schemas"]["GalgameRecommendItemDto"][];
+            next_cursor: number | null;
         };
         GalgameRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
@@ -20685,6 +20776,43 @@ export interface components {
             name: string | null;
             name_cn: string | null;
             volume_number: number | null;
+        };
+        LightNovelRecommendItemDto: {
+            /** @description 作者 */
+            author: components["schemas"]["LightNovelSummaryPersonDto"] | null;
+            /** @description 所属文库 */
+            bunko: components["schemas"]["LightNovelSummaryProducerDto"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["LightNovelCoverRelationDto"][];
+            /** @description 轻小说 ID */
+            id: number;
+            maker: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /**
+             * @description 连载状态，系列没有记录出版状态时为空
+             * @enum {string|null}
+             */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /**
+             * Format: date-time
+             * @description 首卷出版日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            /** @description 出版方 */
+            publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
+            reason: components["schemas"]["RecommendReasonDto"] | null;
+        };
+        LightNovelRecommendPageDto: {
+            items: components["schemas"]["LightNovelRecommendItemDto"][];
+            next_cursor: number | null;
         };
         LightNovelRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
@@ -21835,6 +21963,39 @@ export interface components {
             source_key: string;
             /** Format: date-time */
             updated_at: string;
+        };
+        MangaRecommendItemDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["MangaCoverRelationDto"][];
+            /** @description 漫画 ID */
+            id: number;
+            /**
+             * Format: date-time
+             * @description 最新一话的更新时间
+             */
+            latest_chapter_at: string | null;
+            maker: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /**
+             * Format: date-time
+             * @description 开始连载日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            reason: components["schemas"]["RecommendReasonDto"] | null;
+            /** @description 连载状态，系列没有记录出版状态时为空 */
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+        };
+        MangaRecommendPageDto: {
+            items: components["schemas"]["MangaRecommendItemDto"][];
+            next_cursor: number | null;
         };
         MangaRediscoverSettingDto: {
             active_days: number;
@@ -25041,6 +25202,26 @@ export interface components {
             set_name: string;
             src: components["schemas"]["MediaAssetDto"] | null;
         };
+        RecommendPolicyDto: {
+            cold_heat: number;
+            galgame: components["schemas"]["RecommendWeightsResDto"];
+            light_novel: components["schemas"]["RecommendWeightsResDto"];
+            maker_cap: number;
+            manga: components["schemas"]["RecommendWeightsResDto"];
+            rollout_percent: number;
+        };
+        RecommendReasonDto: {
+            /** @enum {string} */
+            kind: "CREDIT" | "TAG";
+            name: string;
+            role: string | null;
+        };
+        RecommendWeightsResDto: {
+            like: number;
+            maker: number;
+            tag: number;
+            view: number;
+        };
         RecomputeListingDto: {
             /** @description 只出预览记录，不改条目 */
             dry_run?: boolean;
@@ -27370,6 +27551,20 @@ export interface components {
             percentage: number;
             position: components["schemas"]["ReadingPositionDto"];
         };
+        UpdateRecommendPolicyDto: {
+            cold_heat: number;
+            galgame: components["schemas"]["UpdateRecommendWeightsDto"];
+            light_novel: components["schemas"]["UpdateRecommendWeightsDto"];
+            maker_cap: number;
+            manga: components["schemas"]["UpdateRecommendWeightsDto"];
+            rollout_percent: number;
+        };
+        UpdateRecommendWeightsDto: {
+            like: number;
+            maker: number;
+            tag: number;
+            view: number;
+        };
         UpdateReleaseNoteDto: {
             is_published?: boolean;
             released_at?: string;
@@ -27806,6 +28001,10 @@ export interface components {
             /** @enum {string} */
             pool_state: "CANDIDATE" | "POOL" | "HIDDEN";
             spoiler: boolean;
+        };
+        WorkViewDto: {
+            from_recommend?: boolean;
+            visitor?: string;
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
@@ -33836,6 +34035,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminRenderReportDetailDto"];
+                };
+            };
+        };
+    };
+    AdminRecommendController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendPolicyDto"];
+                };
+            };
+        };
+    };
+    AdminRecommendController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRecommendPolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecommendPolicyDto"];
                 };
             };
         };
@@ -41132,6 +41373,34 @@ export interface operations {
             };
         };
     };
+    RecommendController_galgames: {
+        parameters: {
+            query?: {
+                cursor?: number;
+                visitor?: string;
+                /** @description 本次会话最近看过的作品，由近到远 */
+                recent?: number[];
+                /** @description 当前页已显示的作品 */
+                exclude?: number[];
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameRecommendPageDto"];
+                };
+            };
+        };
+    };
     GalgameController_getRelations: {
         parameters: {
             query?: never;
@@ -41320,7 +41589,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkViewDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -42921,6 +43194,34 @@ export interface operations {
             };
         };
     };
+    RecommendController_lightNovels: {
+        parameters: {
+            query?: {
+                cursor?: number;
+                visitor?: string;
+                /** @description 本次会话最近看过的作品，由近到远 */
+                recent?: number[];
+                /** @description 当前页已显示的作品 */
+                exclude?: number[];
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelRecommendPageDto"];
+                };
+            };
+        };
+    };
     LightNovelController_getRelations: {
         parameters: {
             query?: never;
@@ -43065,7 +43366,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkViewDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -44809,6 +45114,34 @@ export interface operations {
             };
         };
     };
+    RecommendController_mangas: {
+        parameters: {
+            query?: {
+                cursor?: number;
+                visitor?: string;
+                /** @description 本次会话最近看过的作品，由近到远 */
+                recent?: number[];
+                /** @description 当前页已显示的作品 */
+                exclude?: number[];
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRecommendPageDto"];
+                };
+            };
+        };
+    };
     MangaController_getRelations: {
         parameters: {
             query?: never;
@@ -44953,7 +45286,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WorkViewDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {

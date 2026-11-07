@@ -6,6 +6,7 @@
   import { blurUrl } from '~/features/entry/tone'
   import { useActiveSection } from '~/features/entry/useActiveSection'
   import { usePageTone } from '~/features/entry/usePageTone'
+  import { nearbyBrandWorks } from '~/features/galgame/brand'
   import { tagRoute } from '~/features/galgame/explore'
   import { langLabel } from '~/features/galgame/labels'
   import { GALGAME_STATUS_LABEL, type GalgameRateStatus } from '~/features/galgame/rate'
@@ -71,6 +72,13 @@
     })),
   )
 
+  const recommendShown = ref(false)
+  const shownWorks = computed(() => [
+    ...props.data.relations.map(item => item.target_galgame.id),
+    ...(props.data.brand_works
+      ? nearbyBrandWorks(props.data.brand_works, props.galgameId).map(work => work.id)
+      : []),
+  ])
   const sections = computed(() =>
     [
       { id: 'intro', label: '简介', shown: true },
@@ -83,6 +91,7 @@
         shown: props.data.credits.groups.length > 0 || props.data.credits.translators.length > 0,
       },
       { id: 'related', label: '相关', shown: props.data.relations.length > 0 },
+      { id: 'recommend', label: '推荐', shown: recommendShown.value },
     ].filter(section => section.shown),
   )
   const { active, go } = useActiveSection(() => sections.value.map(section => section.id))
@@ -229,6 +238,13 @@
         </Stack>
       </Stack>
     </Stack>
+
+    <GalgameRecommend
+      v-if="!embedded"
+      v-model:shown="recommendShown"
+      :work-id="galgameId"
+      :exclude="shownWorks"
+    />
 
     <GalgameRateDialog
       v-model:visible="rateOpen"

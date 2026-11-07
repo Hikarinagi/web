@@ -136,6 +136,8 @@
       </Stack>
     </Stack>
 
+    <MangaRecommend :work-id="mangaId" :exclude="data.relations.map(item => item.manga.id)" />
+
     <MangaRateDialog
       v-model:visible="rateOpen"
       :rate="rateCtl.rate.value"

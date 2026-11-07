@@ -5,9 +5,12 @@ export function useActiveSection(ids: MaybeRefOrGetter<string[]>) {
   const targets = shallowRef<HTMLElement[]>([])
   const seen = new Map<string, number>()
 
-  onMounted(() => {
+  function collect() {
     targets.value = toValue(ids).flatMap(id => document.getElementById(id) ?? [])
-  })
+  }
+
+  onMounted(collect)
+  watch(() => toValue(ids), collect, { flush: 'post' })
 
   useIntersectionObserver(
     targets,

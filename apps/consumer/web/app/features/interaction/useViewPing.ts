@@ -1,5 +1,18 @@
+import {
+  pushRecent,
+  takeRecommended,
+  visitorId,
+  type RecommendKind,
+} from '~/features/recommend/session'
+
 export type ViewPingKind =
   'galgame' | 'light_novel' | 'light_novel_volume' | 'manga' | 'manga_volume' | 'post' | 'article'
+
+function workView(kind: RecommendKind, id: number) {
+  const body = { visitor: visitorId(), from_recommend: takeRecommended(kind, id) }
+  pushRecent(kind, id)
+  return body
+}
 
 export function useViewPing(kind: ViewPingKind, id: number) {
   onMounted(() => {
@@ -15,13 +28,14 @@ async function ping(kind: ViewPingKind, id: number) {
         await hikariRequest<'/api/v3/galgames/{id}/views', 'post'>('/api/v3/galgames/{id}/views', {
           method: 'post',
           path: { id },
+          body: workView(kind, id),
           toast: false,
         })
         break
       case 'light_novel':
         await hikariRequest<'/api/v3/light-novels/{id}/views', 'post'>(
           '/api/v3/light-novels/{id}/views',
-          { method: 'post', path: { id }, toast: false },
+          { method: 'post', path: { id }, body: workView(kind, id), toast: false },
         )
         break
       case 'light_novel_volume':
@@ -34,6 +48,7 @@ async function ping(kind: ViewPingKind, id: number) {
         await hikariRequest<'/api/v3/mangas/{id}/views', 'post'>('/api/v3/mangas/{id}/views', {
           method: 'post',
           path: { id },
+          body: workView(kind, id),
           toast: false,
         })
         break

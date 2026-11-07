@@ -4,6 +4,7 @@
 
   definePageMeta({
     container: 'full',
+    footer: false,
   })
 
   const route = useRoute()

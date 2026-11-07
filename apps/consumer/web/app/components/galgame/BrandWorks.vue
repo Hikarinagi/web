@@ -2,6 +2,7 @@
   import { Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
+  import { nearbyBrandWorks } from '~/features/galgame/brand'
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'GalgameBrandWorks' })
@@ -10,23 +11,14 @@
     current: number
   }>()
 
-  const VISIBLE = 7
-  const nearby = computed(() => {
-    const items = [...props.works.list.items].sort((a, b) =>
-      (b.galgame.release_date ?? '').localeCompare(a.galgame.release_date ?? ''),
-    )
-    const at = Math.max(
-      items.findIndex(item => item.galgame.id === props.current),
-      0,
-    )
-    const start = Math.min(Math.max(at - 3, 0), Math.max(items.length - VISIBLE, 0))
-    return items.slice(start, start + VISIBLE).map(({ galgame }) => ({
+  const nearby = computed(() =>
+    nearbyBrandWorks(props.works, props.current).map(galgame => ({
       id: galgame.id,
       title: galgame.trans_title || galgame.origin_title,
       year: galgame.release_date?.slice(0, 4) ?? '',
       cover: topVotedMedia(galgame.covers),
-    }))
-  })
+    })),
+  )
 </script>
 
 <template>
