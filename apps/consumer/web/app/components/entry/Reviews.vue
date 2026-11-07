@@ -48,62 +48,63 @@
       </Inline>
     </template>
   </EntrySectionHead>
-  <Inline
-    v-if="reviews.length"
-    gap="sm"
-    align="stretch"
-    :wrap="false"
-    class="-mx-4 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0"
-  >
-    <Card
-      v-for="review in reviews.slice(0, 4)"
-      :key="review.id"
-      class="w-(--card-review) shrink-0 md:w-auto"
+  <ScrollRail v-if="reviews.length" class="-mx-4 -my-1 md:-mx-1">
+    <Inline
+      gap="sm"
+      align="stretch"
+      :wrap="false"
+      class="w-max px-4 py-1 md:grid md:w-full md:grid-cols-2 md:px-1"
     >
-      <Stack gap="sm" class="h-full">
-        <Inline gap="sm" align="center" :wrap="false">
-          <Avatar :user="review.rater" card size="sm" />
-          <Stack gap="none" class="min-w-0 flex-1">
-            <UserName :user="review.rater" class="truncate text-sm font-medium" />
-            <Inline gap="sm" align="center" :wrap="false">
-              <Text
-                v-for="part in details(review)"
-                :key="part"
-                as="span"
-                size="xs"
-                tone="muted"
-                class="tabular-nums"
-              >
-                {{ part }}
-              </Text>
+      <Card
+        v-for="review in reviews.slice(0, 4)"
+        :key="review.id"
+        class="w-(--card-review) shrink-0 md:w-auto"
+      >
+        <Stack gap="sm" class="h-full">
+          <Inline gap="sm" align="center" :wrap="false">
+            <Avatar :user="review.rater" card size="sm" />
+            <Stack gap="none" class="min-w-0 flex-1">
+              <UserName :user="review.rater" class="truncate text-sm font-medium" />
+              <Inline gap="sm" align="center" :wrap="false">
+                <Text
+                  v-for="part in details(review)"
+                  :key="part"
+                  as="span"
+                  size="xs"
+                  tone="muted"
+                  class="tabular-nums"
+                >
+                  {{ part }}
+                </Text>
+              </Inline>
+            </Stack>
+            <Inline
+              v-if="review.score !== null"
+              gap="xs"
+              align="center"
+              :wrap="false"
+              class="rounded-full bg-subtle px-2 py-0.5"
+            >
+              <Star class="size-3.5 fill-current text-warning" />
+              <Text size="sm" weight="semibold" class="tabular-nums">{{ review.score }}</Text>
             </Inline>
-          </Stack>
-          <Inline
-            v-if="review.score !== null"
-            gap="xs"
-            align="center"
-            :wrap="false"
-            class="rounded-full bg-subtle px-2 py-0.5"
-          >
-            <Star class="size-3.5 fill-current text-warning" />
-            <Text size="sm" weight="semibold" class="tabular-nums">{{ review.score }}</Text>
           </Inline>
-        </Inline>
-        <Spoiler v-if="review.spoiler" class="flex-1 text-sm leading-relaxed">
-          {{ review.text }}
-        </Spoiler>
-        <LineClamp v-else :lines="3" expand-label="展开" collapse-label="收起" class="flex-1">
-          <Text size="sm" class="leading-relaxed wrap-anywhere whitespace-pre-line">
+          <Spoiler v-if="review.spoiler" class="flex-1 text-sm leading-relaxed">
             {{ review.text }}
-          </Text>
-        </LineClamp>
-        <Inline gap="xs" align="center" class="text-muted">
-          <ThumbsUp class="size-3.5" />
-          <Text size="xs" tone="muted" class="tabular-nums">{{ review.likes }}</Text>
-        </Inline>
-      </Stack>
-    </Card>
-  </Inline>
+          </Spoiler>
+          <LineClamp v-else :lines="3" expand-label="展开" collapse-label="收起" class="flex-1">
+            <Text size="sm" class="leading-relaxed wrap-anywhere whitespace-pre-line">
+              {{ review.text }}
+            </Text>
+          </LineClamp>
+          <Inline gap="xs" align="center" class="text-muted">
+            <ThumbsUp class="size-3.5" />
+            <Text size="xs" tone="muted" class="tabular-nums">{{ review.likes }}</Text>
+          </Inline>
+        </Stack>
+      </Card>
+    </Inline>
+  </ScrollRail>
   <Card v-else>
     <Empty title="暂无短评" size="sm">
       <template #actions>

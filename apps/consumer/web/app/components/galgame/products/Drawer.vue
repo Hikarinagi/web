@@ -2,6 +2,7 @@
   import { Drawer, Sheet, Skeleton, Stack } from '@hina-ui/vue'
   import { useMediaQuery } from '@vueuse/core'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import { titleText } from '~/features/entry/labels'
 
   defineOptions({ name: 'GalgameProductsDrawer' })
 
@@ -45,7 +46,7 @@
   <component
     :is="narrow ? Sheet : Drawer"
     v-model:open="open"
-    title="发行版本详情"
+    :title="detail ? titleText(detail.title) : '发行版本'"
     v-bind="narrow ? {} : { size: 'lg' }"
   >
     <template #content>

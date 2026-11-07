@@ -2,6 +2,7 @@
   import { Lightbox, Stack, type LightboxItem } from '@hina-ui/vue'
   import { resolveImageUrl } from '@hikarinagi/config'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
+  import { gameRating } from '~/features/entry/rating'
   import { blurUrl } from '~/features/entry/tone'
   import { useActiveSection } from '~/features/entry/useActiveSection'
   import { usePageTone } from '~/features/entry/usePageTone'
@@ -10,7 +11,6 @@
   import { GALGAME_STATUS_LABEL, type GalgameRateStatus } from '~/features/galgame/rate'
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
   import { getGalgameCover } from '~/utils/media/galgame'
-  import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { EntryReview } from '~/components/entry/Reviews.vue'
 
   defineOptions({ name: 'GalgamePage' })
@@ -56,30 +56,7 @@
     })),
   )
 
-  const rating = computed<EntryRating>(() => {
-    const stats = props.data.rate_stats
-    const scores = stats.dimension_averages
-    return {
-      average: stats.average,
-      rated: stats.rated_count,
-      distribution: stats.distribution,
-      dimensions: [
-        { label: '剧情', value: scores.scenario },
-        { label: '角色', value: scores.character },
-        { label: '画面', value: scores.visual },
-        { label: '音乐', value: scores.music },
-        { label: '演出', value: scores.direction },
-        { label: '系统', value: scores.system },
-      ],
-      statuses: [
-        { label: '想玩', count: stats.status_counts.plan },
-        { label: '在玩', count: stats.status_counts.going },
-        { label: '玩过', count: stats.status_counts.completed },
-        { label: '搁置', count: stats.status_counts.on_hold },
-        { label: '弃坑', count: stats.status_counts.dropped },
-      ],
-    }
-  })
+  const rating = computed(() => gameRating(props.data.rate_stats))
   const reviews = computed<EntryReview[]>(() =>
     props.data.top_rates.items.map(item => ({
       id: item.id,
@@ -192,7 +169,6 @@
             :contributors="data.contributors"
             resource-type="galgame"
             :resource-id="galgameId"
-            :updated-at="data.galgame.revised_at ?? data.galgame.created_at"
             :external="external"
             :views="data.galgame.views"
           />
@@ -201,7 +177,7 @@
           <Stack gap="md"
             ><GalgameIntro :galgame="data.galgame" :intros="data.display.intros"
           /></Stack>
-          <Stack gap="md" class="lg:hidden"><EntryRatingCard :rating="rating" /></Stack>
+          <Stack gap="md" class="lg:hidden"><EntryRatingCard :rating="rating" plain /></Stack>
           <Stack v-if="data.characters.length" gap="md">
             <GalgameCast :characters="data.characters" />
           </Stack>
@@ -218,8 +194,8 @@
           <Stack gap="md"><GalgameCrew :credits="data.credits" /></Stack>
           <Stack gap="md"><GalgameRelations :relations="data.relations" /></Stack>
         </Stack>
-        <Stack gap="md" class="hidden lg:sticky lg:top-(--sticky-top) lg:flex">
-          <EntryRatingCard :rating="rating" />
+        <Stack gap="lg" class="hidden lg:sticky lg:top-(--sticky-top) lg:flex">
+          <EntryRatingCard :rating="rating" plain />
           <GalgameResources :galgame-id="galgameId" :count="data.galgame.download_resource_count" />
         </Stack>
       </Stack>

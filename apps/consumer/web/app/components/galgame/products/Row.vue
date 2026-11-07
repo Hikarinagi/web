@@ -24,7 +24,7 @@
   const details = computed(() =>
     [
       props.product.platforms.map(platformLabel).join('、'),
-      props.product.release?.text,
+      props.product.release?.text ?? '发售日不详',
       props.product.languages.map(langLabel).join('、'),
       props.product.publishers.map(credit => credit.text).join('、'),
     ].filter(Boolean),

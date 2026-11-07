@@ -68,7 +68,6 @@
       v-if="latest"
       :src="latest"
       alt=""
-      :lazy="false"
       :skeleton="false"
       :processing="{ width: 480, quality: 60, fit: 'cover', format: 'auto' }"
       class="absolute! inset-0 -z-20 size-full scale-125 blur-3xl"
@@ -82,7 +81,7 @@
 
     <Stack
       gap="none"
-      class="mx-auto grid w-full max-w-(--entry-container) grid-cols-[auto_minmax(0,1fr)] gap-x-5 gap-y-6 px-4 pt-[calc(var(--app-header-height)+1.5rem)] pb-10 [grid-template-areas:'cover_title'_'body_body'_'rating_rating'] lg:grid-cols-[auto_minmax(0,1fr)_var(--rail-right)] lg:gap-x-10 lg:gap-y-5 lg:px-6 lg:pt-[calc(var(--app-header-height)+3rem)] lg:pb-14 lg:[grid-template-areas:'cover_title_rating'_'cover_body_rating']"
+      class="mx-auto grid w-full max-w-(--entry-container) grid-cols-[auto_minmax(0,1fr)] gap-x-5 gap-y-6 px-4 pt-[calc(var(--app-header-height)+1.5rem)] pb-10 [grid-template-areas:'cover_title'_'body_body'_'rating_rating'] lg:grid-cols-[auto_minmax(0,1fr)_var(--rail-right)] lg:gap-x-10 lg:gap-y-5 lg:px-6 lg:pt-[calc(var(--app-header-height)+3rem)] lg:pb-16 lg:[grid-template-areas:'cover_title_rating'_'cover_body_rating']"
     >
       <LightNovelHeroCoverStack
         :volumes="volumes"

@@ -28,16 +28,14 @@
       v-if="back"
       :media="back"
       alt=""
-      :lazy="false"
       class="absolute! inset-0 translate-x-3 -translate-y-3 brightness-75 lg:translate-x-4 lg:-translate-y-4"
     />
     <EntryBookCover
       v-if="middle"
       :media="middle"
       alt=""
-      :lazy="false"
       class="absolute! inset-0 translate-x-1.5 -translate-y-1.5 brightness-90 lg:translate-x-2 lg:-translate-y-2"
     />
-    <EntryBookCover :media="front" :alt="`${title} 封面`" :lazy="false" class="shadow-2xl" />
+    <EntryBookCover :media="front" :alt="`${title} 封面`" preload class="shadow-2xl" />
   </Stack>
 </template>

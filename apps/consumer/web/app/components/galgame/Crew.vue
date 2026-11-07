@@ -2,7 +2,7 @@
   import { Button as HnButton, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { creditRoleLabel, titleText } from '~/features/entry/labels'
+  import { creditGroupLabel, sharedSongKind, titleText } from '~/features/entry/labels'
 
   defineOptions({ name: 'GalgameCrew' })
   const props = defineProps<{ credits: GalgamePageData['credits'] }>()
@@ -45,9 +45,16 @@
         :wrap="false"
         class="break-inside-avoid sm:pb-2.5"
       >
-        <Text size="sm" tone="muted" class="w-20 shrink-0">{{ creditRoleLabel(group.code) }}</Text>
+        <Text size="sm" tone="muted" class="w-20 shrink-0">
+          {{ creditGroupLabel(group.code, group.credits) }}
+        </Text>
         <Inline gap="none" class="min-w-0 gap-x-3 text-sm">
-          <GalgameCrewName v-for="(credit, index) in group.credits" :key="index" :credit="credit" />
+          <GalgameCrewName
+            v-for="(credit, index) in group.credits"
+            :key="index"
+            :credit="credit"
+            :plain="Boolean(sharedSongKind(group.credits))"
+          />
         </Inline>
       </Inline>
       <Inline

@@ -61,7 +61,6 @@
           :key="volume.id"
           :src="volume.cover"
           alt=""
-          :lazy="false"
           :ratio="7 / 11"
           :processing="{ width: 320, quality: 72, fit: 'cover', format: 'auto' }"
           class="w-(--manga-strip-cover) shrink-0 lg:w-(--manga-strip-cover-lg)"
@@ -90,7 +89,7 @@
         <EntryBookCover
           :media="front"
           :alt="`${title} 封面`"
-          :lazy="false"
+          preload
           :width="480"
           class="absolute! inset-x-0 bottom-0 shadow-2xl ring-4! ring-(--hn-bg-canvas)!"
         />

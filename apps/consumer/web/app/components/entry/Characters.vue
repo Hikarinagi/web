@@ -36,6 +36,7 @@
         :src="member.image"
         :alt="member.name"
         :ratio="3 / 4"
+        :processing="{ gravity: 'face' }"
         preset="thumbnail"
         :fallback-src="ENTITY_FALLBACK_IMAGE"
         class="w-full rounded-md bg-subtle"

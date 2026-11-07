@@ -5,8 +5,8 @@
 
   defineOptions({ name: 'EntryBookCover' })
   withDefaults(
-    defineProps<{ media: HikariImageSource; alt: string; lazy?: boolean; width?: number }>(),
-    { lazy: true, width: 360 },
+    defineProps<{ media: HikariImageSource; alt: string; preload?: boolean; width?: number }>(),
+    { preload: false, width: 360 },
   )
 </script>
 
@@ -20,7 +20,7 @@
       :src="media"
       :alt="alt"
       :ratio="7 / 10"
-      :lazy="lazy"
+      :preload="preload"
       :processing="{ width, quality: 86, fit: 'cover', format: 'auto' }"
       class="w-full"
       image-class="object-cover"

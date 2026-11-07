@@ -12,7 +12,9 @@
 
   const VISIBLE = 7
   const nearby = computed(() => {
-    const items = props.works.list.items
+    const items = [...props.works.list.items].sort((a, b) =>
+      (b.galgame.release_date ?? '').localeCompare(a.galgame.release_date ?? ''),
+    )
     const at = Math.max(
       items.findIndex(item => item.galgame.id === props.current),
       0,

@@ -45,6 +45,7 @@
         :ratio="1"
         class="w-14 shrink-0 rounded-md bg-white"
         image-class="object-cover object-top"
+        :processing="{ gravity: 'face' }"
         preset="thumbnail"
         :fallback-src="ENTITY_FALLBACK_IMAGE"
       />

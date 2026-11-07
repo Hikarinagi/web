@@ -70,6 +70,16 @@ export function creditRoleLabel(code: string): string {
   return CREDIT_ROLE_LABELS[code] ?? code
 }
 
+export function sharedSongKind(credits: { song_kind?: string | null }[]): string | null {
+  const [kind, ...rest] = new Set(credits.map(credit => credit.song_kind))
+  return kind && !rest.length ? (SONG_KIND_LABELS[kind] ?? null) : null
+}
+
+export function creditGroupLabel(code: string, credits: { song_kind?: string | null }[]): string {
+  const kind = sharedSongKind(credits)
+  return kind ? creditRoleLabel(code).replace('歌曲', kind) : creditRoleLabel(code)
+}
+
 export function versionKindLabel(code: string | null): string | null {
   return code
     ? (GALGAME_EDITION_KIND_CN[code as keyof typeof GALGAME_EDITION_KIND_CN] ?? code)

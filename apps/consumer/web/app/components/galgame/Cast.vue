@@ -24,16 +24,18 @@
       </HnButton>
     </template>
   </EntrySectionHead>
-  <Inline
-    gap="sm"
-    :wrap="false"
-    class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 xl:grid-cols-3"
-  >
-    <GalgameCastCard
-      v-for="(item, index) in characters"
-      :key="`${item.role}-${item.character.id}`"
-      :item="item"
-      :class="cn('w-(--card-cast) shrink-0 sm:w-auto', !all && index >= COLLAPSED && 'sm:hidden')"
-    />
-  </Inline>
+  <ScrollRail class="-mx-4 -my-1 sm:-mx-1">
+    <Inline
+      gap="sm"
+      :wrap="false"
+      class="w-max px-4 py-1 sm:grid sm:w-full sm:grid-cols-2 sm:px-1 xl:grid-cols-3"
+    >
+      <GalgameCastCard
+        v-for="(item, index) in characters"
+        :key="`${item.role}-${item.character.id}`"
+        :item="item"
+        :class="cn('w-(--card-cast) shrink-0 sm:w-auto', !all && index >= COLLAPSED && 'sm:hidden')"
+      />
+    </Inline>
+  </ScrollRail>
 </template>

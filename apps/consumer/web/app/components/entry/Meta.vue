@@ -1,39 +1,56 @@
 <script setup lang="ts">
   import { Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { History, PencilLine } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { components } from '@hikarinagi/api-contract/v3'
-  import type { RevisionResourceSlug } from '~/features/revision/resources'
+  import {
+    getRevisionEditPath,
+    getRevisionHistoryPath,
+    type RevisionResourceSlug,
+  } from '~/features/revision/resources'
 
   defineOptions({ name: 'EntryMeta' })
   const props = defineProps<{
     contributors: { contributors: components['schemas']['UserRefDto'][]; count: number } | null
     resourceType: RevisionResourceSlug
     resourceId: number
-    updatedAt?: string | null
     external?: { label: string; href: string }[]
     views?: number
   }>()
 
-  const revised = computed(() => (props.updatedAt ? timeFromNow(props.updatedAt) : ''))
+  const editTo = computed(() => getRevisionEditPath(props.resourceType, props.resourceId))
+  const historyTo = computed(() => getRevisionHistoryPath(props.resourceType, props.resourceId))
 </script>
 
 <template>
   <Stack gap="md" class="border-t border-line pt-5 text-sm">
-    <Stack v-if="contributors" gap="sm">
+    <Inline v-if="contributors" gap="sm" align="center" :wrap="false">
       <AvatarStack
         v-if="contributors.contributors.length"
         :users="contributors.contributors"
         :total="contributors.count"
         :max="5"
-        size="md"
+        size="sm"
         card
       />
-      <Text size="sm" tone="muted">
-        {{ contributors.count }} 位同好参与编辑<template v-if="revised"
-          >，{{ revised }}修订</template
-        >
-      </Text>
-    </Stack>
-    <RevisionLinks :resource-type="resourceType" :resource-id="resourceId" />
+      <Text size="sm" tone="muted">{{ contributors.count }} 位同好参与编辑</Text>
+    </Inline>
+    <Inline gap="md">
+      <Link
+        :as="NuxtLink"
+        :to="editTo"
+        target="_blank"
+        tone="neutral"
+        class="inline-flex items-center gap-1"
+      >
+        <PencilLine class="size-3.5" />
+        编辑条目
+      </Link>
+      <Link :as="NuxtLink" :to="historyTo" tone="neutral" class="inline-flex items-center gap-1">
+        <History class="size-3.5" />
+        修订历史
+      </Link>
+    </Inline>
     <Inline gap="md" align="center">
       <Link
         v-for="item in external"

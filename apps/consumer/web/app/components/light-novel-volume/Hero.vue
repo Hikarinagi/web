@@ -62,7 +62,7 @@
           <EntryBookCover
             :media="cover"
             :alt="`${title} 封面`"
-            :lazy="false"
+            preload
             :width="480"
             class="w-(--volume-cover-sm) shrink-0 shadow-2xl lg:w-(--volume-cover)"
           />

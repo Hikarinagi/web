@@ -47,7 +47,6 @@
             :src="cover"
             alt=""
             :ratio="5 / 7"
-            :lazy="false"
             preset="thumbnail"
             class="w-7 shrink-0 rounded-sm"
           />

@@ -104,7 +104,6 @@
           :contributors="data.contributors"
           resource-type="light-novel-volume"
           :resource-id="volumeId"
-          :updated-at="data.volume.revised_at ?? data.volume.created_at"
           :external="external"
           :views="data.volume.views"
         />

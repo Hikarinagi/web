@@ -12,6 +12,7 @@
       song?: string | null
       song_kind?: string | null
     }
+    plain?: boolean
   }>()
 
   const to = computed(() =>
@@ -33,6 +34,6 @@
     </Link>
     <Text v-else as="span" size="sm" lang="ja">{{ credit.text }}</Text>
     <Text v-if="credit.song" as="span" size="xs" tone="muted" lang="ja">{{ credit.song }}</Text>
-    <Text v-if="kind" as="span" size="xs" tone="muted">{{ kind }}</Text>
+    <Text v-if="kind && !plain" as="span" size="xs" tone="muted">{{ kind }}</Text>
   </Inline>
 </template>

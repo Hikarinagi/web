@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
-  import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { EntryReview } from '~/components/entry/Reviews.vue'
+  import { entryRating } from '~/features/entry/rating'
   import { usePageTone } from '~/features/entry/usePageTone'
   import { tagRoute } from '~/features/light-novel/explore'
   import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
@@ -26,22 +26,7 @@
   })
   usePageTone(hash, { paper: true })
 
-  const rating = computed<EntryRating>(() => {
-    const stats = props.data.rate_stats
-    return {
-      average: stats.average,
-      rated: stats.rated_count,
-      distribution: stats.distribution,
-      dimensions: [],
-      statuses: [
-        { label: '想读', count: stats.status_counts.plan },
-        { label: '在读', count: stats.status_counts.going },
-        { label: '读过', count: stats.status_counts.completed },
-        { label: '搁置', count: stats.status_counts.on_hold },
-        { label: '弃坑', count: stats.status_counts.dropped },
-      ],
-    }
-  })
+  const rating = computed(() => entryRating(props.data.rate_stats, ['想读', '在读', '读过']))
   const reviews = computed<EntryReview[]>(() =>
     props.data.top_rates.items.map(item => ({
       id: item.id,
@@ -145,7 +130,6 @@
           :contributors="data.contributors"
           resource-type="light-novel"
           :resource-id="lightNovelId"
-          :updated-at="data.light_novel.revised_at ?? data.light_novel.created_at"
           :external="external"
           :views="data.light_novel.views"
         />

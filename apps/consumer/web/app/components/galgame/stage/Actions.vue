@@ -83,11 +83,18 @@
         type="galgame"
         :initial-favorited="favorited"
         variant="icon"
+        soft
+        tone="neutral"
         size="md"
         :picker-title="pickerTitle"
       />
-      <ShareButton :to="`/galgames/${galgameId}`" tooltip="分享" size="md" />
-      <WorkEditButton resource-type="galgame" :resource-id="galgameId" />
+      <ShareButton
+        :to="`/galgames/${galgameId}`"
+        tooltip="分享"
+        size="md"
+        variant="soft"
+        tone="neutral"
+      />
       <HnButton
         v-if="website"
         as="a"

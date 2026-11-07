@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { LineClamp, Stack, Text } from '@hina-ui/vue'
-  import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { EntryReview } from '~/components/entry/Reviews.vue'
+  import { entryRating } from '~/features/entry/rating'
   import { usePageTone } from '~/features/entry/usePageTone'
   import { tagRoute } from '~/features/manga/explore'
   import { MANGA_STATUS_LABEL, type MangaRateStatus } from '~/features/manga/rate'
@@ -22,22 +22,7 @@
   usePageTone(hash, { paper: true })
 
   const summary = computed(() => props.data.manga.summary_cn || props.data.manga.summary || '')
-  const rating = computed<EntryRating>(() => {
-    const stats = props.data.rate_stats
-    return {
-      average: stats.average,
-      rated: stats.rated_count,
-      distribution: stats.distribution,
-      dimensions: [],
-      statuses: [
-        { label: '想看', count: stats.status_counts.plan },
-        { label: '在看', count: stats.status_counts.going },
-        { label: '看过', count: stats.status_counts.completed },
-        { label: '搁置', count: stats.status_counts.on_hold },
-        { label: '弃坑', count: stats.status_counts.dropped },
-      ],
-    }
-  })
+  const rating = computed(() => entryRating(props.data.rate_stats, ['想看', '在看', '看过']))
   const reviews = computed<EntryReview[]>(() =>
     props.data.top_rates.items.map(item => ({
       id: item.id,
@@ -136,7 +121,6 @@
           :contributors="data.contributors"
           resource-type="manga"
           :resource-id="mangaId"
-          :updated-at="data.manga.revised_at ?? data.manga.created_at"
           :external="external"
           :views="data.manga.views"
         />

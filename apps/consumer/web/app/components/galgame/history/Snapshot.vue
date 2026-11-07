@@ -35,7 +35,14 @@
       <Text v-if="snapshot.game.original_title" size="lg" tone="muted" lang="ja">
         {{ snapshot.game.original_title }}
       </Text>
-      <GalgameHeroMeta :display="snapshot.game" />
+      <Inline gap="none" class="gap-x-6 gap-y-1">
+        <Text v-if="snapshot.game.release" size="sm" tone="muted" class="tabular-nums">
+          {{ snapshot.game.release.text ?? '未定' }}
+        </Text>
+        <Text v-if="snapshot.game.brands.length" size="sm" tone="muted" lang="ja">
+          {{ snapshot.game.brands.map(brand => brand.text).join('、') }}
+        </Text>
+      </Inline>
     </Stack>
     <WorkSection title="发行版本" :meta="`${snapshot.products.length} 个`">
       <GalgameProductsTable :products="snapshot.products" :interactive="false" />

@@ -8,7 +8,7 @@
     Stack,
   } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { CREDIT_ROLE_LABELS, creditRoleLabel } from '~/features/entry/labels'
+  import { CREDIT_ROLE_LABELS, creditGroupLabel, sharedSongKind } from '~/features/entry/labels'
 
   defineOptions({ name: 'GalgameProductsCredits' })
   const props = defineProps<{
@@ -25,14 +25,22 @@
 </script>
 
 <template>
-  <Stack gap="sm" class="border-t border-line pt-5">
+  <Stack gap="sm">
     <Heading :level="4" size="sm">制作信息</Heading>
-    <DescriptionList orientation="horizontal" class="text-sm">
+    <DescriptionList
+      orientation="horizontal"
+      class="gap-x-4 gap-y-2 text-sm [&_dd]:text-fg [&_dt]:w-20 [&_dt]:font-normal [&_dt]:text-muted"
+    >
       <template v-for="[code, items] in groups" :key="code">
-        <DescriptionTerm>{{ creditRoleLabel(code) }}</DescriptionTerm>
+        <DescriptionTerm>{{ creditGroupLabel(code, items) }}</DescriptionTerm>
         <DescriptionDetails>
-          <Inline gap="none" wrap class="gap-x-3 gap-y-1">
-            <GalgameCrewName v-for="(credit, index) in items" :key="index" :credit="credit" />
+          <Inline gap="none" class="gap-x-3">
+            <GalgameCrewName
+              v-for="(credit, index) in items"
+              :key="index"
+              :credit="credit"
+              :plain="Boolean(sharedSongKind(items))"
+            />
           </Inline>
         </DescriptionDetails>
       </template>

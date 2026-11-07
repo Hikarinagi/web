@@ -282,6 +282,7 @@ html.dark {
   --stage-cover-width: 15rem;
   --stage-thumb-width: 7.5rem;
   --stage-veil: var(--tone-soft);
+  --stage-control: color-mix(in oklab, var(--stage-veil) 90%, var(--hn-fg-default));
   --rail-left: 15rem;
   --rail-right: 18rem;
   --sticky-bar-height: 3.5rem;

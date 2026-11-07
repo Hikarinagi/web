@@ -47,7 +47,9 @@
 </script>
 
 <template>
-  <Section class="relative isolate overflow-hidden bg-(--stage-veil) text-fg lg:h-(--stage-height)">
+  <Section
+    class="relative isolate overflow-hidden bg-(--stage-veil) text-fg [--hn-bg-subtle:var(--stage-control)] lg:h-(--stage-height)"
+  >
     <Stack
       gap="none"
       class="relative mt-(--app-header-height) aspect-21/9 lg:absolute lg:inset-0 lg:-z-20 lg:mt-0 lg:aspect-auto"
@@ -62,7 +64,6 @@
           :key="backdrop?.src ?? 'none'"
           :src="backdrop"
           :alt="`${title} 的游戏画面`"
-          :lazy="false"
           :preload="{ fetchPriority: 'high' }"
           :processing="backdropProcessing"
           class="absolute inset-0 size-full"
@@ -85,7 +86,12 @@
 
     <Stack
       gap="lg"
-      class="relative mx-auto -mt-8 w-full max-w-(--entry-container) px-4 pb-6 lg:mt-0 lg:h-full lg:justify-end lg:px-6 lg:pt-(--app-header-height)"
+      :class="
+        cn(
+          'relative mx-auto -mt-8 w-full max-w-(--entry-container) px-4 pb-6 lg:mt-0 lg:h-full lg:justify-end lg:px-6 lg:pt-(--app-header-height)',
+          !images.length && 'lg:pb-16',
+        )
+      "
     >
       <Inline align="end" justify="between" gap="xl" :wrap="false">
         <Stack gap="md" class="min-w-0 flex-1 lg:gap-5">
@@ -170,7 +176,7 @@
             :alt="`${title} 封面`"
             :ratio="layout.ratio"
             :processing="layout.processing"
-            :lazy="false"
+            preload
             class="w-(--stage-cover-width)"
           />
         </Card>
@@ -182,47 +188,43 @@
         />
       </Inline>
 
-      <Inline
-        v-if="images.length"
-        gap="sm"
-        align="center"
-        :wrap="false"
-        class="-mx-4 overflow-x-auto px-4 py-1 lg:-mx-1 lg:px-1"
-      >
-        <Card
-          v-for="(image, i) in images"
-          :key="image.id"
-          as="button"
-          type="button"
-          :padded="false"
-          :aria-label="`第 ${i + 1} 张画面`"
-          :aria-pressed="i === index"
-          :class="
-            cn(
-              'shrink-0 overflow-hidden rounded-md border-0 ring-2 ring-offset-2 ring-offset-(--stage-veil) transition',
-              i === index ? 'ring-fg/80' : 'opacity-55 ring-transparent hover:opacity-100',
-            )
-          "
-          @click="index = i"
-        >
-          <HikariImage
-            :src="image"
-            alt=""
-            :ratio="16 / 9"
-            :processing="thumbProcessing"
-            class="w-(--stage-thumb-width)"
-          />
-        </Card>
-        <Button
-          variant="ghost"
-          tone="neutral"
-          size="sm"
-          class="shrink-0"
-          @click="$emit('gallery', index)"
-        >
-          查看全部 {{ images.length }} 张
-        </Button>
-      </Inline>
+      <ScrollRail v-if="images.length" class="-mx-4 lg:-mx-1">
+        <Inline gap="sm" align="center" :wrap="false" class="w-max px-4 py-1 lg:px-1">
+          <Card
+            v-for="(image, i) in images"
+            :key="image.id"
+            as="button"
+            type="button"
+            :padded="false"
+            :aria-label="`第 ${i + 1} 张画面`"
+            :aria-pressed="i === index"
+            :class="
+              cn(
+                'shrink-0 overflow-hidden rounded-md border-0 shadow-none ring-2 ring-offset-2 ring-offset-(--stage-veil) transition',
+                i === index ? 'ring-fg/80' : 'opacity-55 ring-transparent hover:opacity-100',
+              )
+            "
+            @click="index = i"
+          >
+            <HikariImage
+              :src="image"
+              alt=""
+              :ratio="16 / 9"
+              :processing="thumbProcessing"
+              class="w-(--stage-thumb-width)"
+            />
+          </Card>
+          <Button
+            variant="ghost"
+            tone="neutral"
+            size="sm"
+            class="shrink-0"
+            @click="$emit('gallery', index)"
+          >
+            查看全部 {{ images.length }} 张
+          </Button>
+        </Inline>
+      </ScrollRail>
     </Stack>
   </Section>
 </template>
