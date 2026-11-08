@@ -24413,10 +24413,18 @@ export interface components {
             trans_name: string | null;
         };
         PersonStatsDto: {
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 参与与配音的作品中最早的日期
+             */
             first_date: string | null;
-            /** Format: date-time */
+            /**
+             * Format: date-time
+             * @description 参与与配音的作品中最晚的日期
+             */
             last_date: string | null;
+            /** @description 各媒介的作品数 */
+            media: components["schemas"]["WorkMediaCountDto"];
             /** @description 各项职责的作品数 */
             roles: components["schemas"]["CreditCountDto"][];
             /** @description 配音的角色数 */
@@ -28160,6 +28168,11 @@ export interface components {
             count: number;
             /** @enum {string} */
             kind: "galgame" | "light_novel" | "manga";
+        };
+        WorkMediaCountDto: {
+            galgame: number;
+            light_novel: number;
+            manga: number;
         };
         WorkPersonDto: {
             code: string;

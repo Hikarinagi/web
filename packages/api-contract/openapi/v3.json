@@ -38410,14 +38410,24 @@
       "PersonStatsDto": {
         "properties": {
           "first_date": {
+            "description": "参与与配音的作品中最早的日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
           },
           "last_date": {
+            "description": "参与与配音的作品中最晚的日期",
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "media": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkMediaCountDto"
+              }
+            ],
+            "description": "各媒介的作品数"
           },
           "roles": {
             "description": "各项职责的作品数",
@@ -38437,6 +38447,7 @@
         },
         "required": [
           "works",
+          "media",
           "voices",
           "roles",
           "first_date",
@@ -53915,6 +53926,25 @@
           "kind",
           "code",
           "count"
+        ],
+        "type": "object"
+      },
+      "WorkMediaCountDto": {
+        "properties": {
+          "galgame": {
+            "type": "number"
+          },
+          "light_novel": {
+            "type": "number"
+          },
+          "manga": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "galgame",
+          "light_novel",
+          "manga"
         ],
         "type": "object"
       },
