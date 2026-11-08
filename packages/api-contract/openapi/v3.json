@@ -40091,6 +40091,13 @@
       },
       "ProducerStatsDto": {
         "properties": {
+          "codes": {
+            "description": "各媒介下每项职责的作品数",
+            "items": {
+              "$ref": "#/components/schemas/WorkGroupDto"
+            },
+            "type": "array"
+          },
           "first_date": {
             "format": "date-time",
             "nullable": true,
@@ -40129,6 +40136,7 @@
         "required": [
           "works",
           "groups",
+          "codes",
           "years",
           "first_date",
           "last_date",
@@ -89401,6 +89409,15 @@
             "required": false,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "description": "只列出已发售或日期不详的作品",
+            "in": "query",
+            "name": "released",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           },
           {

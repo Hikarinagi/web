@@ -24806,6 +24806,8 @@ export interface components {
          */
         ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
         ProducerStatsDto: {
+            /** @description 各媒介下每项职责的作品数 */
+            codes: components["schemas"]["WorkGroupDto"][];
             /** Format: date-time */
             first_date: string | null;
             groups: components["schemas"]["WorkGroupDto"][];
@@ -48704,6 +48706,8 @@ export interface operations {
                 from?: string;
                 /** @description 日期不晚于此日 */
                 to?: string;
+                /** @description 只列出已发售或日期不详的作品 */
+                released?: boolean;
                 sort?: "recent" | "oldest" | "rating" | "views";
                 page: number;
                 page_size: number;
