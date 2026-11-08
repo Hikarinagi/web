@@ -6,16 +6,16 @@
   defineOptions({ name: 'CharacterPortrait' })
   const props = defineProps<{ image: HikariImageSource; nsfw: boolean; alt: string }>()
 
-  const frame = useTemplateRef('frame')
-  const { width } = useElementSize(frame)
   const size = computed(() => imageSourceSize(props.image))
   const ratio = computed(() => (size.value ? size.value.width / size.value.height : 5 / 6))
-  const zoomable = computed(() => width.value > 0 && (size.value?.width ?? 0) > width.value)
+  const zoomable = computed(() => {
+    const shown = 320 * Math.min(1, (ratio.value * 6) / 5)
+    return (size.value?.width ?? 0) > shown
+  })
 </script>
 
 <template>
   <Stack
-    ref="frame"
     gap="none"
     class="relative aspect-5/6 dark:isolate dark:overflow-hidden dark:rounded-xl dark:bg-neutral-100 dark:brightness-90"
   >
