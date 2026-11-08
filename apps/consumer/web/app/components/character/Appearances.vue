@@ -138,7 +138,7 @@
         </Stack>
         <IconButton
           v-if="item.key !== selected"
-          label="显示这一作"
+          label="切换至此作品"
           variant="ghost"
           tone="neutral"
           size="sm"

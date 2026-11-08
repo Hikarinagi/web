@@ -53,7 +53,7 @@
     />
     <Stack gap="xl" class="mx-auto w-full max-w-(--entry-container) px-4 py-8 lg:px-6 lg:py-10">
       <CharacterAppearances
-        v-if="list.length > 1"
+        v-if="list.length"
         :character="data.character"
         :appearances="list"
         :selected="selected"

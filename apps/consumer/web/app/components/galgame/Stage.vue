@@ -13,6 +13,8 @@
     title: string
     website?: string
     languages: string[]
+    zoomable: boolean
+    viewable: number
   }>()
   const index = defineModel<number>('index', { required: true })
   defineEmits<{ gallery: [index: number]; cover: []; rate: [] }>()
@@ -168,7 +170,8 @@
             type="button"
             :padded="false"
             aria-label="查看封面"
-            class="cursor-zoom-in overflow-hidden rounded-lg border-0 shadow-2xl ring-1 ring-fg/15"
+            :disabled="!zoomable"
+            class="overflow-hidden rounded-lg border-0 shadow-2xl ring-1 ring-fg/15 enabled:cursor-zoom-in"
             @click="$emit('cover')"
           >
             <HikariImage
@@ -221,6 +224,7 @@
             />
           </Card>
           <Button
+            v-if="viewable"
             variant="ghost"
             tone="neutral"
             size="sm"

@@ -25,9 +25,9 @@
       :to="getRevisionEditPath('character', characterId)"
       target="_blank"
       tone="neutral"
-      class="inline-flex items-center gap-1 text-xs text-muted"
+      class="inline-flex items-center gap-1 text-sm text-muted"
     >
-      <PencilLine class="size-3" />
+      <PencilLine class="size-3.5" />
       补充资料
     </Link>
   </Inline>

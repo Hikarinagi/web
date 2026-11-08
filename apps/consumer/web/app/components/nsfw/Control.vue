@@ -25,7 +25,7 @@
 </script>
 
 <template>
-  <DropdownMenu v-if="shown" label="图片显示" align="start">
+  <DropdownMenu v-if="shown" :key="String(masked)" label="图片显示" align="start">
     <Button v-if="masked" v-bind="$attrs" variant="soft" tone="neutral" size="sm">
       <template #icon><EyeOff /></template>
       已模糊

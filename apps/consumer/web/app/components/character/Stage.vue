@@ -48,7 +48,8 @@
           class="mx-auto w-60 shrink-0 lg:mx-0 lg:w-(--char-image)"
         >
           <NsfwControl
-            :images="[view.image, ...appearances.flatMap(item => [item.image, item.cover])]"
+            :images="[view.image, work?.cover]"
+            :nsfw="view.nsfw"
             class="absolute bottom-2 left-2"
           />
         </CharacterPortrait>
@@ -74,7 +75,7 @@
               v-model="selected"
               :options="options"
               size="sm"
-              aria-label="显示哪一作"
+              aria-label="选择作品"
               class="max-w-80 min-w-0"
             />
             <Inline v-else gap="sm" align="baseline" :wrap="false" class="min-w-0">

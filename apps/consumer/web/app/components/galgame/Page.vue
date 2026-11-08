@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Lightbox, Stack, type LightboxItem } from '@hina-ui/vue'
-  import { resolveImageUrl } from '@hikarinagi/config'
+  import { Lightbox, Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { gameRating } from '~/features/entry/rating'
   import { blurUrl } from '~/features/entry/tone'
@@ -11,13 +10,13 @@
   import { langLabel } from '~/features/galgame/labels'
   import { GALGAME_STATUS_LABEL, type GalgameRateStatus } from '~/features/galgame/rate'
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
+  import { useGallery } from '~/features/galgame/useGallery'
   import { getGalgameCover } from '~/utils/media/galgame'
   import type { EntryReview } from '~/components/entry/Reviews.vue'
 
   defineOptions({ name: 'GalgamePage' })
   const props = defineProps<{ data: GalgamePageData; galgameId: number; embedded?: boolean }>()
 
-  const config = useRuntimeConfig()
   const title = computed(() => props.data.display.title || `Galgame #${props.data.galgame.id}`)
   const images = computed(() => props.data.galgame.images.filter(image => image.src.trim()))
   const cover = computed(() => getGalgameCover(props.data.galgame))
@@ -103,30 +102,9 @@
   const rateCtl = useGalgameRate(props.galgameId, props.data.my_rate)
   const rateOpen = ref(false)
 
-  const galleryLoaded = ref(false)
-  const galleryOpen = ref(false)
-  const galleryAt = ref(0)
-  const url = (src: string) =>
-    resolveImageUrl(src, {
-      cdnHost: config.public.cdnHost,
-      imageProcessorHost: config.public.imageProcessorHost,
-      processing: false,
-    })
-  const galleryItems = computed<LightboxItem[]>(() => [
-    ...images.value.map(image => ({
-      id: String(image.id),
-      src: url(image.src),
-      alt: title.value,
-    })),
-    ...(cover.value
-      ? [{ id: 'cover', src: url(cover.value.src), alt: `${title.value} 封面` }]
-      : []),
-  ])
-  function gallery(at: number) {
-    galleryAt.value = at
-    galleryLoaded.value = true
-    galleryOpen.value = true
-  }
+  const gallery = reactive(
+    useGallery(() => ({ images: images.value, cover: cover.value, title: title.value })),
+  )
 </script>
 
 <template>
@@ -160,8 +138,10 @@
         :title="title"
         :website="website"
         :languages="languages"
-        @gallery="gallery"
-        @cover="gallery(images.length)"
+        :zoomable="gallery.viewable(cover)"
+        :viewable="gallery.items.length"
+        @gallery="gallery.show"
+        @cover="gallery.show(images.length)"
         @rate="rateOpen = true"
       />
     </Stack>
@@ -255,10 +235,10 @@
       :remove="rateCtl.remove"
     />
     <Lightbox
-      v-if="galleryLoaded"
-      v-model:open="galleryOpen"
-      v-model:index="galleryAt"
-      :items="galleryItems"
+      v-if="gallery.loaded"
+      v-model:open="gallery.open"
+      v-model:index="gallery.at"
+      :items="gallery.items"
     />
   </Stack>
 </template>
