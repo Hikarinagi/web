@@ -14257,6 +14257,21 @@
         ],
         "type": "object"
       },
+      "CreditCountDto": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "code",
+          "count"
+        ],
+        "type": "object"
+      },
       "CreditGroupDto": {
         "properties": {
           "code": {
@@ -17955,6 +17970,64 @@
         "required": [
           "code",
           "url"
+        ],
+        "type": "object"
+      },
+      "EntityWorkDto": {
+        "properties": {
+          "codes": {
+            "description": "在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "galgame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "kind": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          },
+          "light_novel": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "manga": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          }
+        },
+        "required": [
+          "kind",
+          "codes",
+          "rating",
+          "galgame",
+          "light_novel",
+          "manga"
         ],
         "type": "object"
       },
@@ -38334,6 +38407,43 @@
         ],
         "type": "object"
       },
+      "PersonStatsDto": {
+        "properties": {
+          "first_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "last_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "roles": {
+            "description": "各项职责的作品数",
+            "items": {
+              "$ref": "#/components/schemas/CreditCountDto"
+            },
+            "type": "array"
+          },
+          "voices": {
+            "description": "配音的角色数",
+            "type": "number"
+          },
+          "works": {
+            "description": "参与的作品数，跨游戏、轻小说与漫画",
+            "type": "number"
+          }
+        },
+        "required": [
+          "works",
+          "voices",
+          "roles",
+          "first_date",
+          "last_date"
+        ],
+        "type": "object"
+      },
       "PlatformSettingsDto": {
         "properties": {
           "emoji_max_file_bytes": {
@@ -39762,6 +39872,61 @@
         ],
         "type": "object"
       },
+      "ProducerLabelDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "first_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "文库的组织编号；漫画与未标文库的轻小说为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          },
+          "last_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "own": {
+            "description": "文库是否为这家组织的下属组织",
+            "type": "boolean"
+          },
+          "recent": {
+            "description": "最近出版的 5 部",
+            "items": {
+              "$ref": "#/components/schemas/EntityWorkDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "name",
+          "own",
+          "count",
+          "first_date",
+          "last_date",
+          "recent"
+        ],
+        "type": "object"
+      },
       "ProducerLightNovelRelationDto": {
         "properties": {
           "codes": {
@@ -39913,6 +40078,53 @@
           "PUBLISHER": "发行商"
         }
       },
+      "ProducerStatsDto": {
+        "properties": {
+          "first_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/WorkGroupDto"
+            },
+            "type": "array"
+          },
+          "last_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "rating": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkRatingDto"
+              }
+            ],
+            "description": "按评分人数加权的平均分与评分总数"
+          },
+          "works": {
+            "type": "number"
+          },
+          "years": {
+            "description": "各分组每年的作品数",
+            "items": {
+              "$ref": "#/components/schemas/WorkYearDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "works",
+          "groups",
+          "years",
+          "first_date",
+          "last_date",
+          "rating"
+        ],
+        "type": "object"
+      },
       "ProducerSummaryDto": {
         "properties": {
           "id": {
@@ -39953,6 +40165,78 @@
           "INDIVIDUAL": "个人",
           "MAGAZINE": "杂志"
         }
+      },
+      "ProducerWorkDto": {
+        "properties": {
+          "codes": {
+            "description": "在这部作品中的职责，取值为新的职责编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "galgame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "kind": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          },
+          "light_novel": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "manga": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSummaryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "people": {
+            "description": "游戏与漫画的主要制作人员",
+            "items": {
+              "$ref": "#/components/schemas/WorkPersonDto"
+            },
+            "type": "array"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "volume_count": {
+            "description": "轻小说与漫画的卷数",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "codes",
+          "rating",
+          "galgame",
+          "light_novel",
+          "manga",
+          "people",
+          "volume_count"
+        ],
+        "type": "object"
       },
       "ProductCreditDto": {
         "properties": {
@@ -53608,6 +53892,32 @@
         ],
         "type": "object"
       },
+      "WorkGroupDto": {
+        "properties": {
+          "code": {
+            "description": "游戏按职责分组，书不分",
+            "nullable": true,
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "code",
+          "count"
+        ],
+        "type": "object"
+      },
       "WorkPersonDto": {
         "properties": {
           "code": {
@@ -53710,6 +54020,36 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "WorkYearDto": {
+        "properties": {
+          "code": {
+            "description": "游戏按职责分组，书不分",
+            "nullable": true,
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "galgame",
+              "light_novel",
+              "manga"
+            ],
+            "type": "string"
+          },
+          "year": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "code",
+          "count",
+          "year"
+        ],
         "type": "object"
       },
       "WorkbenchAiPolicyInputDto": {
@@ -87069,7 +87409,9 @@
             "required": false,
             "schema": {
               "enum": [
-                "recent"
+                "recent",
+                "oldest",
+                "popular"
               ],
               "type": "string"
             }
@@ -87400,6 +87742,124 @@
                     "items": {
                       "items": {
                         "$ref": "#/components/schemas/PersonMangaRelationDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Person"
+        ]
+      }
+    },
+    "/api/v3/people/{id}/stats": {
+      "get": {
+        "operationId": "PersonController_getStats",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonStatsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Person"
+        ]
+      }
+    },
+    "/api/v3/people/{id}/works": {
+      "get": {
+        "operationId": "PersonController_getWorks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "只列出担任这项职责的作品，取值为职责编码",
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "enum": [
+                "recent",
+                "oldest",
+                "popular"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/EntityWorkDto"
                       },
                       "type": "array"
                     },
@@ -88560,6 +89020,39 @@
         ]
       }
     },
+    "/api/v3/producers/{id}/labels": {
+      "get": {
+        "operationId": "ProducerController_getLabels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProducerLabelDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
     "/api/v3/producers/{id}/light-novels": {
       "get": {
         "operationId": "ProducerController_getLightNovels",
@@ -88769,6 +89262,174 @@
                     "$ref": "#/components/schemas/ProducerRelationDto"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
+    "/api/v3/producers/{id}/stats": {
+      "get": {
+        "operationId": "ProducerController_getStats",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerStatsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
+    "/api/v3/producers/{id}/works": {
+      "get": {
+        "operationId": "ProducerController_getWorks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "enum": [
+                "galgame",
+                "light_novel",
+                "manga"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "只列出这家组织担任这项职责的作品，取值为职责编码",
+            "in": "query",
+            "name": "code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "系列的连载状态",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "只列出这一年发售或开始连载的作品",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "日期不早于此日",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "日期不晚于此日",
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "enum": [
+                "recent",
+                "oldest",
+                "rating",
+                "views"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/ProducerWorkDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },

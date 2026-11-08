@@ -11297,6 +11297,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/people/{id}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonController_getStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/people/{id}/works": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonController_getWorks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/permission-groups": {
         parameters: {
             query?: never;
@@ -11633,6 +11665,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/producers/{id}/labels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_getLabels"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/producers/{id}/light-novels": {
         parameters: {
             query?: never;
@@ -11673,6 +11721,38 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ProducerController_getRelations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/producers/{id}/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_getStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/producers/{id}/works": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_getWorks"];
         put?: never;
         post?: never;
         delete?: never;
@@ -18172,6 +18252,10 @@ export interface components {
             /** @description 团队名称 */
             name: string;
         };
+        CreditCountDto: {
+            code: string;
+            count: number;
+        };
         CreditGroupDto: {
             code: string;
             credits: components["schemas"]["ProductCreditDto"][];
@@ -19079,6 +19163,16 @@ export interface components {
             /** @description 网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT */
             code: string;
             url: string;
+        };
+        EntityWorkDto: {
+            /** @description 在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
+            galgame: components["schemas"]["GalgameSummaryDto"] | null;
+            /** @enum {string} */
+            kind: "galgame" | "light_novel" | "manga";
+            light_novel: components["schemas"]["LightNovelSummaryDto"] | null;
+            manga: components["schemas"]["MangaSummaryDto"] | null;
+            rating: components["schemas"]["WorkRatingDto"];
         };
         EntryChangeDto: {
             id: number;
@@ -24318,6 +24412,18 @@ export interface components {
             name: string;
             trans_name: string | null;
         };
+        PersonStatsDto: {
+            /** Format: date-time */
+            first_date: string | null;
+            /** Format: date-time */
+            last_date: string | null;
+            /** @description 各项职责的作品数 */
+            roles: components["schemas"]["CreditCountDto"][];
+            /** @description 配音的角色数 */
+            voices: number;
+            /** @description 参与的作品数，跨游戏、轻小说与漫画 */
+            works: number;
+        };
         PlatformSettingsDto: {
             emoji_max_file_bytes: number;
             epub_bundle_image_threshold: number;
@@ -24641,6 +24747,22 @@ export interface components {
             people: components["schemas"]["WorkPersonDto"][];
             rating: components["schemas"]["WorkRatingDto"];
         };
+        ProducerLabelDto: {
+            count: number;
+            /** Format: date-time */
+            first_date: string | null;
+            /** @description 文库的组织编号；漫画与未标文库的轻小说为空 */
+            id: number | null;
+            /** @enum {string} */
+            kind: "light_novel" | "manga";
+            /** Format: date-time */
+            last_date: string | null;
+            name: string | null;
+            /** @description 文库是否为这家组织的下属组织 */
+            own: boolean;
+            /** @description 最近出版的 5 部 */
+            recent: components["schemas"]["EntityWorkDto"][];
+        };
         ProducerLightNovelRelationDto: {
             /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
             codes: string[];
@@ -24675,6 +24797,18 @@ export interface components {
          * @enum {string}
          */
         ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
+        ProducerStatsDto: {
+            /** Format: date-time */
+            first_date: string | null;
+            groups: components["schemas"]["WorkGroupDto"][];
+            /** Format: date-time */
+            last_date: string | null;
+            /** @description 按评分人数加权的平均分与评分总数 */
+            rating: components["schemas"]["WorkRatingDto"];
+            works: number;
+            /** @description 各分组每年的作品数 */
+            years: components["schemas"]["WorkYearDto"][];
+        };
         ProducerSummaryDto: {
             id: number;
             logo: components["schemas"]["MediaAssetDto"] | null;
@@ -24685,6 +24819,20 @@ export interface components {
          * @enum {string}
          */
         ProducerType: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
+        ProducerWorkDto: {
+            /** @description 在这部作品中的职责，取值为新的职责编码 */
+            codes: string[];
+            galgame: components["schemas"]["GalgameSummaryDto"] | null;
+            /** @enum {string} */
+            kind: "galgame" | "light_novel" | "manga";
+            light_novel: components["schemas"]["LightNovelSummaryDto"] | null;
+            manga: components["schemas"]["MangaSummaryDto"] | null;
+            /** @description 游戏与漫画的主要制作人员 */
+            people: components["schemas"]["WorkPersonDto"][];
+            rating: components["schemas"]["WorkRatingDto"];
+            /** @description 轻小说与漫画的卷数 */
+            volume_count: number | null;
+        };
         ProductCreditDto: {
             code: string;
             person_id: number | null;
@@ -28006,6 +28154,13 @@ export interface components {
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
         };
+        WorkGroupDto: {
+            /** @description 游戏按职责分组，书不分 */
+            code: string | null;
+            count: number;
+            /** @enum {string} */
+            kind: "galgame" | "light_novel" | "manga";
+        };
         WorkPersonDto: {
             code: string;
             name: string;
@@ -28033,6 +28188,14 @@ export interface components {
         WorkViewDto: {
             from_recommend?: boolean;
             visitor?: string;
+        };
+        WorkYearDto: {
+            /** @description 游戏按职责分组，书不分 */
+            code: string | null;
+            count: number;
+            /** @enum {string} */
+            kind: "galgame" | "light_novel" | "manga";
+            year: number;
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
@@ -47536,7 +47699,7 @@ export interface operations {
     PersonController_getCharacters: {
         parameters: {
             query: {
-                sort?: "recent";
+                sort?: "recent" | "oldest" | "popular";
                 page: number;
                 page_size: number;
             };
@@ -47663,6 +47826,57 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["PersonMangaRelationDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    PersonController_getStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonStatsDto"];
+                };
+            };
+        };
+    };
+    PersonController_getWorks: {
+        parameters: {
+            query: {
+                /** @description 只列出担任这项职责的作品，取值为职责编码 */
+                code?: string;
+                sort?: "recent" | "oldest" | "popular";
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityWorkDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -48340,6 +48554,27 @@ export interface operations {
             };
         };
     };
+    ProducerController_getLabels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProducerLabelDto"][];
+                };
+            };
+        };
+    };
     ProducerController_getLightNovels: {
         parameters: {
             query: {
@@ -48417,6 +48652,66 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProducerRelationDto"][];
+                };
+            };
+        };
+    };
+    ProducerController_getStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProducerStatsDto"];
+                };
+            };
+        };
+    };
+    ProducerController_getWorks: {
+        parameters: {
+            query: {
+                kind?: "galgame" | "light_novel" | "manga";
+                /** @description 只列出这家组织担任这项职责的作品，取值为职责编码 */
+                code?: string;
+                /** @description 系列的连载状态 */
+                status?: string;
+                /** @description 只列出这一年发售或开始连载的作品 */
+                year?: number;
+                /** @description 日期不早于此日 */
+                from?: string;
+                /** @description 日期不晚于此日 */
+                to?: string;
+                sort?: "recent" | "oldest" | "rating" | "views";
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["ProducerWorkDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
