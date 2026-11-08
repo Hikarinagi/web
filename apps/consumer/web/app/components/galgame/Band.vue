@@ -19,21 +19,23 @@
 </script>
 
 <template>
-  <Section class="relative isolate overflow-hidden">
-    <HikariImage
-      v-if="banner"
-      :src="banner"
-      alt=""
-      :skeleton="false"
-      :processing="{ width: 480, quality: 60, fit: 'cover', format: 'auto' }"
-      class="absolute! inset-0 -z-20 size-full scale-125 blur-3xl"
-      image-class="object-cover"
-    />
-    <Stack gap="none" class="absolute inset-0 -z-10 bg-(--hn-bg-canvas)/75" />
-    <Stack
-      gap="none"
-      class="absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-b from-transparent to-(--hn-bg-canvas)"
-    />
+  <Section class="relative isolate">
+    <Stack gap="none" aria-hidden="true" class="absolute inset-0 -z-10 overflow-hidden">
+      <HikariImage
+        v-if="banner"
+        :src="banner"
+        alt=""
+        :skeleton="false"
+        :processing="{ width: 480, quality: 60, fit: 'cover', format: 'auto' }"
+        class="absolute! inset-0 size-full scale-125 blur-3xl"
+        image-class="object-cover"
+      />
+      <Stack gap="none" class="absolute inset-0 bg-(--hn-bg-canvas)/75" />
+      <Stack
+        gap="none"
+        class="absolute inset-x-0 bottom-0 h-24 bg-linear-to-b from-transparent to-(--hn-bg-canvas)"
+      />
+    </Stack>
     <Inline
       gap="lg"
       align="end"
