@@ -19,10 +19,11 @@
   }>()
   const shown = defineModel<boolean>('shown', { default: false })
 
-  const items = ref([]) as Ref<T[]>
-  const cursor = ref<number | null>(0)
-  const loading = ref(false)
-  const failed = ref(false)
+  const key = `recommend:${props.resource}:${props.workId}`
+  const items = useState<T[]>(`${key}:items`, () => [])
+  const cursor = useState<number | null>(`${key}:cursor`, () => 0)
+  const loading = useState(`${key}:loading`, () => false)
+  const failed = useState(`${key}:failed`, () => false)
 
   async function load() {
     if (loading.value || cursor.value === null) return
@@ -53,7 +54,10 @@
     }
   }
 
-  onMounted(load)
+  onMounted(() => {
+    shown.value = items.value.length > 0
+    if (!items.value.length) void load()
+  })
 </script>
 
 <template>
