@@ -24813,6 +24813,8 @@ export interface components {
             groups: components["schemas"]["WorkGroupDto"][];
             /** Format: date-time */
             last_date: string | null;
+            /** @description 各媒介的作品数 */
+            media: components["schemas"]["WorkMediaCountDto"];
             /** @description 按评分人数加权的平均分与评分总数 */
             rating: components["schemas"]["WorkRatingDto"];
             works: number;

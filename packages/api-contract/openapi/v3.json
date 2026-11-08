@@ -40114,6 +40114,14 @@
             "nullable": true,
             "type": "string"
           },
+          "media": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WorkMediaCountDto"
+              }
+            ],
+            "description": "各媒介的作品数"
+          },
           "rating": {
             "allOf": [
               {
@@ -40135,6 +40143,7 @@
         },
         "required": [
           "works",
+          "media",
           "groups",
           "codes",
           "years",
