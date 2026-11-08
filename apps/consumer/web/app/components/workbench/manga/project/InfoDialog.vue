@@ -24,9 +24,9 @@
     defineProps<{
       project: Pick<
         BackendMangaProject,
-        'id' | 'mode' | 'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_id'
+        'id' | 'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_id'
       > & { series: { id: number } }
-      purpose?: 'edit' | 'approve' | 'correct'
+      purpose?: 'edit' | 'approve'
     }>(),
     { purpose: 'edit' },
   )
@@ -47,7 +47,7 @@
     volume_id: null,
   })
   const wholeVolume = computed(() => values.scope === 'VOLUME')
-  const { chapters, volumes, claims, published, loading } = useMangaTargets(() =>
+  const { chapters, volumes, claims, loading } = useMangaTargets(() =>
     visible.value ? props.project.series.id : null,
   )
   const choices = computed(() =>
@@ -56,9 +56,6 @@
           volumes.value,
           chapters.value,
           claims.value.filter(claim => claim.id !== props.project.id),
-          props.purpose === 'correct'
-            ? { published: published.value, upload: props.project.mode === 'UPLOAD' }
-            : {},
         ).filter(option => typeof option.value === 'number')
       : volumes.value.map(volume => ({
           value: volume.id,
@@ -96,12 +93,6 @@
           path: { project_id: props.project.id },
           body,
         })
-      } else if (props.purpose === 'correct') {
-        await hikariRequest('/api/v3/manga-projects/{project_id}/placement', {
-          method: 'put',
-          path: { project_id: props.project.id },
-          body,
-        })
       } else {
         await hikariRequest('/api/v3/manga-projects/{project_id}', {
           method: 'patch',
@@ -122,7 +113,7 @@
 <template>
   <Dialog
     v-model:open="visible"
-    :title="purpose === 'edit' ? (wholeVolume ? '编辑卷信息' : '编辑话信息') : '修正归类'"
+    :title="purpose === 'approve' ? '修正归类' : wholeVolume ? '编辑卷信息' : '编辑话信息'"
     size="sm"
     :locked="submitting"
   >

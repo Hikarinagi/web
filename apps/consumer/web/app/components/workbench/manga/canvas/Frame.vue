@@ -28,7 +28,6 @@
     BackendMangaProject,
     BackendMangaRegion,
     BackendMangaTask,
-    MangaNoteRect,
   } from '~/features/workbench/manga/manga'
   import type { TypesetRegion } from '~/features/workbench/manga/render'
 
@@ -47,7 +46,6 @@
     saving: boolean
     dirty: boolean
     stale: boolean
-    mark?: MangaNoteRect | null
   }>()
   const layer = defineModel<Layer>('layer', { required: true })
   const emit = defineEmits<{
@@ -150,7 +148,6 @@
         :zoom="zoom"
         :editable="editable"
         :typeset="typeset"
-        :mark="mark"
         class="h-full"
         @select="emit('select', $event)"
         @create="emit('create', $event)"

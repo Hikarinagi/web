@@ -3,7 +3,7 @@
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
   import { getMangaVolumeTitle } from '~/utils/media/manga'
 
-  defineOptions({ name: 'MangaVolumeContribute', inheritAttrs: false })
+  defineOptions({ name: 'MangaVolumeContribute' })
   const props = withDefaults(
     defineProps<{ volume: MangaVolumePageData['volume']; size?: 'sm' | 'md' | 'lg' }>(),
     { size: 'md' },
@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <Button v-bind="$attrs" login-required :size="size" @click="open = true">
+  <Button login-required :size="size" @click="open = true">
     <template #icon><BookUp /></template>
     投稿本卷
   </Button>

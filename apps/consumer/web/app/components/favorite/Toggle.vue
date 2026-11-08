@@ -11,7 +11,6 @@
       id: number
       initialFavorited?: boolean
       variant?: 'icon' | 'bar'
-      soft?: boolean
       pickerTitle?: string
     }>(),
     { initialFavorited: false, variant: 'icon', pickerTitle: undefined },
@@ -26,7 +25,6 @@
     login-required
     v-if="variant === 'icon'"
     v-bind="$attrs"
-    :variant="soft ? 'soft' : undefined"
     :label="favorited ? '已收藏' : '收藏'"
     side="bottom"
     @click="overlay?.open($event)"

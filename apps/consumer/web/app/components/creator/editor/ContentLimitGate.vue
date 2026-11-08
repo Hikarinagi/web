@@ -12,14 +12,14 @@
 
   const auth = useAuthStore()
   const submitting = ref(false)
-  const nav = usePageNav()
+  const router = useRouter()
 
   const canEnter = computed(() => !!auth.user && auth.user.content_limit !== NEVER_SHOW_NSFW)
 
   watch(
-    () => canEnter.value && nav.current(),
-    go => {
-      if (go) void nav.replace(props.redirectTo)
+    canEnter,
+    allowed => {
+      if (allowed) void navigateTo(props.redirectTo, { replace: true })
     },
     { immediate: true },
   )
@@ -36,13 +36,14 @@
       })
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
+      await navigateTo(props.redirectTo, { replace: true })
     } finally {
       submitting.value = false
     }
   }
 
   function back() {
-    void nav.back('/create/wiki')
+    void router.back()
   }
 </script>
 

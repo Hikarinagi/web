@@ -1,13 +1,13 @@
 import type { PeoplePageData } from '~~/server/api/pages/people/[id].get'
-import { breadcrumbNode } from './shared'
+import { breadcrumbNode, relationCount } from './shared'
 import { zhText } from '~/utils/seo'
 
 export function personSeo(data: PeoplePageData) {
   const p = data.person
   const name = p.trans_name || p.name
-  const gWorks = data.stats.media.galgame
-  const cvChars = data.stats.voices
-  const l = data.stats.media.light_novel
+  const gWorks = relationCount(data.galgames)
+  const cvChars = relationCount(data.characters)
+  const l = relationCount(data.light_novels)
   const hasG = gWorks > 0 || cvChars > 0
   const scope = hasG && l ? 'Galgame・轻小说' : hasG ? 'Galgame' : l ? '轻小说' : ''
   const title = scope ? `${name} 参与的 ${scope} 一览` : `${name} 作品一览`

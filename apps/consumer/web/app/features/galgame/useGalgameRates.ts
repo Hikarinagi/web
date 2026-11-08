@@ -5,18 +5,17 @@ type SpoilerFilter = 'only' | 'hide'
 const PAGE_SIZE = 20
 
 export function useGalgameRates(galgameId: number, initial: GalgameRateList) {
-  const key = `galgame-rates:${galgameId}`
-  const items = useState<GalgameRateList['items']>(`${key}:items`, () => initial.items)
-  const page = useState(`${key}:page`, () => initial.meta.page)
-  const totalPages = useState(`${key}:total-pages`, () => initial.meta.total_pages)
-  const total = useState(`${key}:total`, () => initial.meta.total_items)
-  const pending = useState(`${key}:pending`, () => false)
+  const items = ref<GalgameRateList['items']>(initial.items)
+  const page = ref(initial.meta.page)
+  const totalPages = ref(initial.meta.total_pages)
+  const total = ref(initial.meta.total_items)
+  const pending = ref(false)
 
-  const sort = useState<RateSort>(`${key}:sort`, () => 'hot')
-  const status = useState<GalgameRateStatus | null>(`${key}:status`, () => null)
-  const score = useState<number | null>(`${key}:score`, () => null)
-  const spoiler = useState<SpoilerFilter | null>(`${key}:spoiler`, () => null)
-  const hasDimensions = useState(`${key}:dimensions`, () => false)
+  const sort = ref<RateSort>('hot')
+  const status = ref<GalgameRateStatus | null>(null)
+  const score = ref<number | null>(null)
+  const spoiler = ref<SpoilerFilter | null>(null)
+  const hasDimensions = ref(false)
 
   const hasMore = computed(() => page.value < totalPages.value)
   const filtered = computed(

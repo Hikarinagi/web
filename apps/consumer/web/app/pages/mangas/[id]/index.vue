@@ -1,10 +1,10 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { mangaSeo } from '~/features/seo/manga'
   import { useViewPing } from '~/features/interaction/useViewPing'
 
   definePageMeta({
     container: 'full',
-    footer: false,
   })
 
   const route = useRoute()
@@ -30,11 +30,54 @@
 </script>
 
 <template>
-  <MangaPage
-    v-if="data"
-    :data="data"
-    :manga-id="mangaId"
-    class="-mt-(--app-header-height)"
-    @refresh="refresh"
-  />
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
+    <MangaHero
+      :manga="data.manga"
+      :chapters="data.chapters"
+      :volumes="data.volumes"
+      :people="data.people"
+      :producers="data.producers"
+      :my-rate="data.my_rate"
+      :progress="data.progress"
+      :favorited="data.favorite?.favorited ?? false"
+    />
+
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-5 py-8 sm:px-6 md:py-12">
+      <MangaContentsStrip
+        :manga-id="data.manga.id"
+        :chapters="data.chapters"
+        :progress="data.progress"
+        :finished="data.manga.serial_status === 'FINISHED'"
+        :latest-chapter-at="data.manga.latest_chapter_at"
+        class="md:hidden"
+      />
+      <MangaContentsPanel
+        :manga-id="data.manga.id"
+        :chapters="data.chapters"
+        :progress="data.progress"
+        :finished="data.manga.serial_status === 'FINISHED'"
+        :latest-chapter-at="data.manga.latest_chapter_at"
+        class="max-md:hidden"
+        @refresh="refresh"
+      />
+
+      <MangaRatesSummary
+        :stats="data.rate_stats"
+        :top-rates="data.top_rates"
+        :manga="data.manga"
+        :my-rate="data.my_rate"
+      />
+
+      <MangaAbout
+        :manga="data.manga"
+        :tags="data.tags"
+        :people="data.people"
+        :producers="data.producers"
+        :volumes="data.volumes"
+        :contributors="data.contributors"
+      />
+
+      <MangaCharacters :characters="data.characters" />
+    </Stack>
+  </Stack>
 </template>

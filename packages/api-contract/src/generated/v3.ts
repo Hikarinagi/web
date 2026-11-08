@@ -4,22 +4,6 @@
  */
 
 export interface paths {
-    "/api/v3/admin/ai/budget": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminAiBudgetController_overview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminAiBudgetController_update"];
-        trace?: never;
-    };
     "/api/v3/admin/ai/catalog": {
         parameters: {
             query?: never;
@@ -350,22 +334,6 @@ export interface paths {
         get: operations["AdminAiProviderController_getModels"];
         put?: never;
         post: operations["AdminAiProviderController_add"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/ai/providers/{id}/quota": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminAiProviderController_getQuota"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -805,6 +773,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/catalog/items/{id}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCatalogController_candidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/catalog/items/{id}/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminCatalogController_link"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/catalog/listing/manga/{id}": {
         parameters: {
             query?: never;
@@ -837,22 +837,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/listing/policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingPolicy"];
-        put: operations["AdminCatalogController_updateListingPolicy"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/catalog/listing/recompute": {
         parameters: {
             query?: never;
@@ -863,38 +847,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminCatalogController_recompute"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/listing/runs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingRuns"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/listing/runs/{id}/items": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_listingItems"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -917,96 +869,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/rules": {
+    "/api/v3/admin/catalog/review": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCatalogController_rules"];
+        get: operations["AdminCatalogController_pending"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_addLabel"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_previewLabels"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/labels/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["AdminCatalogController_removeLabel"];
-        options?: never;
-        head?: never;
-        patch: operations["AdminCatalogController_updateLabel"];
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/official-pages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminCatalogController_officialPages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/rules/policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminCatalogController_updatePolicy"];
-        post?: never;
+        post: operations["AdminCatalogController_review"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1022,7 +894,7 @@ export interface paths {
         };
         get: operations["AdminCatalogController_listRuns"];
         put?: never;
-        post?: never;
+        post: operations["AdminCatalogController_trigger"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1061,15 +933,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/sources": {
+    "/api/v3/admin/catalog/settings": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCatalogController_sources"];
-        put?: never;
+        get: operations["AdminCatalogController_settings"];
+        put: operations["AdminCatalogController_updateSettings"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1077,32 +949,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/catalog/sources/{key}": {
+    "/api/v3/admin/catalog/trace/{externalId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["AdminCatalogController_trace"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminCatalogController_updateSource"];
-        trace?: never;
-    };
-    "/api/v3/admin/catalog/sources/{key}/runs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminCatalogController_trigger"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2949,6 +2805,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/novel/series/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminNovelSeriesController_updateStatus"];
+        trace?: never;
+    };
     "/api/v3/admin/novel/volumes": {
         parameters: {
             query?: never;
@@ -3269,22 +3141,6 @@ export interface paths {
         patch: operations["AdminRenderReportController_update"];
         trace?: never;
     };
-    "/api/v3/admin/recommend/policy": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminRecommendController_get"];
-        put: operations["AdminRecommendController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/release/notes": {
         parameters: {
             query?: never;
@@ -3397,214 +3253,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/telegram/conversations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramConversationsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/conversations/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramConversationsController_detail"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramGroupsController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups/{chat_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminTelegramGroupsController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/groups/{chat_id}/leave": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramGroupsController_leave"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/notifications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_notifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSettingsController_overview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/persona": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSettingsController_persona"];
-        put: operations["AdminTelegramSettingsController_savePersona"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/persona/test": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramSettingsController_test"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_list"];
-        put?: never;
-        post: operations["AdminTelegramSchedulesController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTelegramSchedulesController_preview"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminTelegramSchedulesController_update"];
-        post?: never;
-        delete: operations["AdminTelegramSchedulesController_remove"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/telegram/schedules/{id}/send": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["AdminTelegramSchedulesController_send"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/telegram/settings": {
         parameters: {
             query?: never;
@@ -3614,6 +3262,22 @@ export interface paths {
         };
         get: operations["AdminTelegramSettingsController_get"];
         put: operations["AdminTelegramSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/telegram/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTelegramSettingsController_getStatus"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -5605,22 +5269,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/users/{id}/profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminUserController_updateProfile"];
-        trace?: never;
-    };
     "/api/v3/admin/users/{id}/role": {
         parameters: {
             query?: never;
@@ -5669,23 +5317,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/bots": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminBotController_getList"];
-        put?: never;
-        post: operations["AdminBotController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/bots/{id}/suspension": {
+    "/api/v3/admin/wiki/change-requests/{id}/merge": {
         parameters: {
             query?: never;
             header?: never;
@@ -5694,21 +5326,53 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminBotController_suspend"];
-        delete: operations["AdminBotController_resume"];
+        post: operations["AdminChangeRequestController_merge"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/entries": {
+    "/api/v3/admin/wiki/change-requests/{id}/reject": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminEntryController_getList"];
+        get?: never;
+        put?: never;
+        post: operations["AdminChangeRequestController_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/change-requests/{id}/reopen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminChangeRequestController_reopen"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/characters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminCharacterController_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5717,14 +5381,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/entries/counts": {
+    "/api/v3/admin/wiki/characters/merge": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminEntryController_getCounts"];
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeCharacter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/characters/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewCharacter"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5733,39 +5413,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/entries/deleted": {
+    "/api/v3/admin/wiki/characters/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminEntryController_getDeleted"];
+        get?: never;
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["AdminCharacterController_softDelete"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/entries/protected": {
+    "/api/v3/admin/wiki/characters/{id}/hard": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminEntryController_getProtected"];
+        get?: never;
         put?: never;
         post?: never;
+        delete: operations["AdminCharacterController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/characters/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminCharacterController_restore"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/entries/{id}/flags": {
+    "/api/v3/admin/wiki/characters/{id}/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -5778,17 +5474,17 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch: operations["AdminEntryController_setFlags"];
+        patch: operations["AdminCharacterController_setStatus"];
         trace?: never;
     };
-    "/api/v3/admin/wiki/logs": {
+    "/api/v3/admin/wiki/duplicates": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminLogController_getList"];
+        get: operations["AdminDuplicateController_getList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5797,14 +5493,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/logs/actors": {
+    "/api/v3/admin/wiki/duplicates/bangumi-moves": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminLogController_getActors"];
+        get: operations["AdminDuplicateController_bangumiMoves"];
+        put?: never;
+        post: operations["AdminDuplicateController_adoptBangumiMove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/duplicates/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDuplicateController_getCounts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5813,7 +5525,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/merges": {
+    "/api/v3/admin/wiki/duplicates/{id}/dismiss": {
         parameters: {
             query?: never;
             header?: never;
@@ -5822,21 +5534,21 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AdminCandidateController_merge"];
+        post: operations["AdminDuplicateController_dismiss"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/merges/candidates": {
+    "/api/v3/admin/wiki/galgames": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCandidateController_getList"];
+        get: operations["AdminGalgameController_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5845,14 +5557,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/merges/counts": {
+    "/api/v3/admin/wiki/galgames/merge": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminCandidateController_getCounts"];
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeGalgame"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/galgames/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewGalgame"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5861,14 +5589,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/overview": {
+    "/api/v3/admin/wiki/galgames/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminWikiOverviewController_get"];
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminGalgameController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/galgames/{id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminGalgameController_setFlags"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/galgames/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminGalgameController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/galgames/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminGalgameController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/galgames/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminGalgameController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLightNovelVolumeController_list"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5877,20 +5685,708 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/programs": {
+    "/api/v3/admin/wiki/light-novel-volumes/merge": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminTaskController_getPrograms"];
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeLightNovelVolume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewLightNovelVolume"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminLightNovelVolumeController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/{id}/curation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminLightNovelVolumeController_setCuration"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminLightNovelVolumeController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLightNovelVolumeController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novel-volumes/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminLightNovelVolumeController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLightNovelController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeLightNovel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewLightNovel"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminLightNovelController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/{id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminLightNovelController_setFlags"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminLightNovelController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLightNovelController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/light-novels/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminLightNovelController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaVolumeController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeMangaVolume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewMangaVolume"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaVolumeController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaVolumeController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaVolumeController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/manga-volumes/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaVolumeController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMangaController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeManga"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewManga"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaController_setFlags"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminMangaController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMangaController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/mangas/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminMangaController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminPersonController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergePerson"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewPerson"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminPersonController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminPersonController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminPersonController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/people/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminPersonController_setStatus"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminProducerController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminMergeController_mergeProducer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/merge/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminMergeController_previewProducer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminProducerController_softDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/{id}/hard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminProducerController_hardDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminProducerController_restore"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/producers/{id}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminProducerController_setStatus"];
         trace?: never;
     };
     "/api/v3/admin/wiki/revisions/{id}/switch": {
@@ -5903,22 +6399,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["AdminRevisionController_switchTo"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/settings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminSettingsController_get"];
-        put: operations["AdminSettingsController_update"];
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -5949,22 +6429,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["AdminTagController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/tags/hidden": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTagController_listHidden"];
         put?: never;
         post?: never;
         delete?: never;
@@ -6005,22 +6469,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/tags/pool": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTagController_listPool"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/admin/wiki/tags/{id}": {
         parameters: {
             query?: never;
@@ -6053,22 +6501,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/tags/{id}/pool": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminTagController_updatePool"];
-        trace?: never;
-    };
     "/api/v3/admin/wiki/tags/{id}/restore": {
         parameters: {
             query?: never;
@@ -6099,54 +6531,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["AdminTagController_setStatus"];
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/tasks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTaskController_getList"];
-        put?: never;
-        post: operations["AdminTaskController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/tasks/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["AdminTaskController_getById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminTaskController_update"];
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/tasks/{id}/activation": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["AdminTaskController_enable"];
-        post?: never;
-        delete: operations["AdminTaskController_stop"];
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/api/v3/ai/models": {
@@ -6325,16 +6709,176 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/change-requests/{id}/sources": {
+    "/api/v3/change-requests": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ChangeRequestSourceController_sources"];
+        get: operations["ChangeRequestController_list"];
+        put?: never;
+        post: operations["ChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestController_submitBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/batches/{batch_id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestController_reviewBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ChangeRequestController_getById"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ChangeRequestController_update"];
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestCheckController_rerun"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestController_close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestCheckController_correct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/duplicates/{candidate_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestDuplicateController_dismiss"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/merge-into": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestDuplicateController_mergeInto"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/merge-into/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ChangeRequestDuplicateController_preview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/change-requests/{id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChangeRequestController_review"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6367,6 +6911,22 @@ export interface paths {
         get: operations["CharacterController_getById"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/characters/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CharacterChangeRequestController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6543,6 +7103,102 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["CommentController_vote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ContributionActivityController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/duplicate-checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DuplicateController_check"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/lookups/{resource_type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DuplicateController_find"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/schemas/{resource_type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EditorSchemaController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/snapshots/{resource_type}/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EditorSnapshotController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/contribution/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ContributionStatsController_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -6789,6 +7445,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/entity-import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["EntityImportController_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/entity-search": {
         parameters: {
             query?: never;
@@ -6797,6 +7469,134 @@ export interface paths {
             cookie?: never;
         };
         get: operations["EntityEditorSearchController_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/cover-media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ExternalSourceController_coverMedia"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/entity-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_entityDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/galgame-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_galgameDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/light-novel-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_lnDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/light-novel-volume-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_volumeDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/manga-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_mangaDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/manga-volume-draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_mangaVolumeDraft"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/external-source/{source}/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExternalSourceController_search"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7109,6 +7909,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgame-import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GalgameImportController_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames": {
         parameters: {
             query?: never;
@@ -7237,22 +8053,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/steam/sales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameSteamPriceController_sales"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}": {
         parameters: {
             query?: never;
@@ -7301,6 +8101,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GalgameChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/characters": {
         parameters: {
             query?: never;
@@ -7309,22 +8125,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["GalgameController_getCharacters"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/comparison": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_compare"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7349,33 +8149,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/credits": {
+    "/api/v3/galgames/{id}/covers/vote": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["GalgameEntryController_getCredits"];
-        put?: never;
+        get: operations["CurrentUserGalgameCoverVoteController_getMine"];
+        put: operations["CurrentUserGalgameCoverVoteController_vote"];
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/display": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_getDisplay"];
-        put?: never;
-        post?: never;
-        delete?: never;
+        delete: operations["CurrentUserGalgameCoverVoteController_retract"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7389,54 +8173,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["GalgameDownloadController_getList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/facts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_getFacts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_getHistory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/history/{revision}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_getSnapshot"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7477,22 +8213,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/previews": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["GalgameEntryController_preview"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}/producers": {
         parameters: {
             query?: never;
@@ -7501,22 +8221,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["GalgameController_getProducers"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameEntryController_getProducts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -7637,22 +8341,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/recommendations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["RecommendController_galgames"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}/relations": {
         parameters: {
             query?: never;
@@ -7685,22 +8373,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/galgames/{id}/steam/prices": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameSteamPriceController_prices"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/galgames/{id}/tags": {
         parameters: {
             query?: never;
@@ -7710,54 +8382,6 @@ export interface paths {
         };
         get: operations["GalgameController_getTags"];
         put?: never;
-        post: operations["GalgameTagController_propose"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/tags/mine": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameTagController_getMine"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/tags/similar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["GalgameTagController_getSimilar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/galgames/{id}/tags/{tag_id}/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["GalgameTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -7829,6 +8453,198 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/internal/catalog/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalCatalogController_changes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/characters/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getCharacterMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/characters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getCharacter"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InternalGalgamesController_getBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/ids": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_listIds"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_lookup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_getMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_searchIds"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/galgames/{id}/detail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalGalgamesController_getDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/producers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_listProducers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/producers/mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getProducerMapping"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/internal/producers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InternalEntitiesController_getProducer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/internal/releases": {
         parameters: {
             query?: never;
@@ -7861,38 +8677,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/internal/telegram/accounts/{telegram_id}/unlink": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_unlink"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/actions/{id}/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_confirm"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/internal/telegram/chat": {
         parameters: {
             query?: never;
@@ -7902,23 +8686,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["TelegramChatController_reply"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/chat/stream": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramChatController_stream"];
+        post: operations["TelegramInternalController_reply"];
         delete?: never;
         options?: never;
         head?: never;
@@ -7935,166 +8703,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_checkIn"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/groups/left": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_left"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/groups/seen": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramInternalController_seen"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/inline": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_inline"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/me/{telegram_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_me"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/notifications/{telegram_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_notifications"];
-        put: operations["TelegramContentController_updateNotifications"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/outbox/claim": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_claim"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/outbox/{id}/result": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["TelegramContentController_result"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/releases": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_releases"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/sales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_sales"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_search"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -8127,22 +8735,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["TelegramInternalController_reportStatus"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/internal/telegram/today": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramContentController_today"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -8245,6 +8837,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novel-import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LnImportController_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novel-volumes": {
         parameters: {
             query?: never;
@@ -8341,6 +8949,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novel-volumes/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LightNovelVolumeChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novel-volumes/{id}/contributors": {
         parameters: {
             query?: never;
@@ -8352,6 +8976,38 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novel-volumes/{id}/covers/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CurrentUserLightNovelVolumeCoverVoteController_getMine"];
+        put: operations["CurrentUserLightNovelVolumeCoverVoteController_vote"];
+        post?: never;
+        delete: operations["CurrentUserLightNovelVolumeCoverVoteController_retract"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novel-volumes/{id}/epub": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LightNovelVolumeController_uploadEpub"];
+        delete: operations["LightNovelVolumeController_deleteEpub"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8645,6 +9301,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novels/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LightNovelChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novels/{id}/characters": {
         parameters: {
             query?: never;
@@ -8672,6 +9344,22 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/covers/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CurrentUserLightNovelCoverVoteController_getMine"];
+        put: operations["CurrentUserLightNovelCoverVoteController_vote"];
+        post?: never;
+        delete: operations["CurrentUserLightNovelCoverVoteController_retract"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8837,22 +9525,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/light-novels/{id}/recommendations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["RecommendController_lightNovels"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/light-novels/{id}/relations": {
         parameters: {
             query?: never;
@@ -8878,54 +9550,6 @@ export interface paths {
         };
         get: operations["LightNovelController_getTags"];
         put?: never;
-        post: operations["LightNovelTagController_propose"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/light-novels/{id}/tags/mine": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["LightNovelTagController_getMine"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/light-novels/{id}/tags/similar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["LightNovelTagController_getSimilar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/light-novels/{id}/tags/{tag_id}/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["LightNovelTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -9093,22 +9717,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-project-pages/{page_id}/notes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["MangaPageController_createNote"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-project-pages/{page_id}/regions": {
         parameters: {
             query?: never;
@@ -9189,38 +9797,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-projects/{project_id}/baseline-pages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaProjectController_getBaselinePages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/manga-projects/{project_id}/check": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaProjectController_getCheck"];
-        put?: never;
-        post: operations["MangaProjectController_rerunCheck"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-projects/{project_id}/labelplus": {
         parameters: {
             query?: never;
@@ -9294,22 +9870,6 @@ export interface paths {
         };
         get?: never;
         put: operations["MangaProjectPageController_reorder"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/manga-projects/{project_id}/placement": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["MangaProjectController_correct"];
         post?: never;
         delete?: never;
         options?: never;
@@ -9557,6 +10117,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-volumes/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaVolumeChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-volumes/{id}/contributors": {
         parameters: {
             query?: never;
@@ -9711,6 +10287,22 @@ export interface paths {
         get: operations["MangaController_getCard"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaChangeRequestController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -9909,22 +10501,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/mangas/{id}/recommendations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["RecommendController_mangas"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/mangas/{id}/relations": {
         parameters: {
             query?: never;
@@ -9950,54 +10526,6 @@ export interface paths {
         };
         get: operations["MangaController_getTags"];
         put?: never;
-        post: operations["MangaTagController_propose"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/mangas/{id}/tags/mine": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaTagController_getMine"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/mangas/{id}/tags/similar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaTagController_getSimilar"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/mangas/{id}/tags/{tag_id}/vote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["MangaTagController_vote"];
         post?: never;
         delete?: never;
         options?: never;
@@ -10597,38 +11125,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/og/cards/{type}/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["OgController_card"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/og/defaults": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["OgController_defaults"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/open/catalog/changes": {
         parameters: {
             query?: never;
@@ -11217,6 +11713,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/people/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PersonChangeRequestController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/people/{id}/characters": {
         parameters: {
             query?: never;
@@ -11289,38 +11801,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["PersonController_getMangas"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/people/{id}/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PersonController_getStats"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/people/{id}/works": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["PersonController_getWorks"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11617,16 +12097,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/producers/{id}/collaborators": {
+    "/api/v3/producers/{id}/change-requests": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["ProducerController_getCollaborators"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["ProducerChangeRequestController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -11657,22 +12137,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ProducerController_getGalgames"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/producers/{id}/labels": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProducerController_getLabels"];
         put?: never;
         post?: never;
         delete?: never;
@@ -11721,54 +12185,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ProducerController_getRelations"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/producers/{id}/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProducerController_getStats"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/producers/{id}/works": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProducerController_getWorks"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/products/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProductController_getById"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12305,6 +12721,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/revisions/{id}/rollback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["RevisionController_rollback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/search": {
         parameters: {
             query?: never;
@@ -12641,22 +13073,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/tags/pool": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TagController_searchPool"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/tags/{id}": {
         parameters: {
             query?: never;
@@ -12667,6 +13083,22 @@ export interface paths {
         get: operations["TagController_getById"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/tags/{id}/change-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TagChangeRequestController_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -12697,22 +13129,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["TagController_getLightNovels"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/telegram/covers/{type}/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TelegramCoverController_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -13939,54 +14355,6 @@ export interface paths {
         patch: operations["UserController_changeUsername"];
         trace?: never;
     };
-    "/api/v3/user/me/wiki/edits": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiMeController_getEdits"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/wiki/watches": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiMeController_getWatches"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/user/me/wiki/watchlist": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiMeController_getWatchlist"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/user/{id}": {
         parameters: {
             query?: never;
@@ -14259,7 +14627,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/wiki/batches/{id}/revert": {
+    "/api/v3/wiki/duplicate-verdicts": {
         parameters: {
             query?: never;
             header?: never;
@@ -14268,487 +14636,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["WikiPatrolController_revertBatch"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/changes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiPatrolController_getChanges"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/definitions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiDefinitionController_getList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEditController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/checks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEditController_check"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/patrols": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEditController_patrol"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEditController_getById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/edits/{id}/revert": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEditController_previewRevert"];
-        put?: never;
-        post: operations["WikiEditController_revert"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/drafts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiSourceController_draft"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/lookups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiSourceController_lookup"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/comparison": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_compare"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/merge-preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_previewMerge"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/parts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getParts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/protection": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["WikiEntryController_protect"];
-        post?: never;
-        delete: operations["WikiEntryController_unprotect"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/references": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getReferences"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/restoration": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEntryController_restore"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/revisions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getRevisions"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/revisions/{number}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getRevision"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/rollback": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiEntryController_rollback"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/entries/{id}/watch": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiEntryController_getWatch"];
-        put: operations["WikiEntryController_watch"];
-        post?: never;
-        delete: operations["WikiEntryController_unwatch"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/resources/{kind}/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiSourceController_getResource"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/rules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiRulesController_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/sources": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiSourceController_resolve"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/sources/images": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiSourceController_image"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/todos": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiTodoController_getList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/todos/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["WikiTodoController_getById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/todos/{id}/acceptance": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiTodoController_accept"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/todos/{id}/dismissal": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiTodoController_dismiss"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/wiki/users/{id}/revert": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["WikiPatrolController_revertEditor"];
+        post: operations["DuplicateController_verdict"];
         delete?: never;
         options?: never;
         head?: never;
@@ -14775,8 +14663,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        AcceptTodoDto: {
-            edit?: components["schemas"]["SubmitEditDto"];
+        ActivityChangeRequestDto: {
+            id: number;
+            /** @enum {string} */
+            status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+            summary: string;
         };
         AddAiModelRouteDto: {
             /** @description 每百万 token 美元 */
@@ -14853,7 +14744,7 @@ export interface components {
             /** @description 提供给模型的描述 */
             description: string;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             /** @description 由模型填写的参数 */
             input: {
                 [key: string]: unknown;
@@ -14875,7 +14766,7 @@ export interface components {
         };
         AdminAiToolDto: {
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             scenes: components["schemas"]["AiToolSceneDto"][];
@@ -14925,19 +14816,6 @@ export interface components {
             type: "AVATAR_FRAME" | "BADGE";
             /** Format: date-time */
             updated_at: string;
-        };
-        AdminEntryDto: {
-            /** @description Site flags of games and series */
-            flags: components["schemas"]["EntryFlagsDto"] | null;
-            id: number;
-            label: string;
-            protection: components["schemas"]["EntryProtection"] | null;
-            /** @description The reader page */
-            resource: components["schemas"]["EntryResourceDto"] | null;
-            revision: number;
-            /** @description The Chinese title when it differs */
-            subtitle: string | null;
-            type: components["schemas"]["EntryType"];
         };
         AdminFeedCarouselItemDto: {
             /** Format: date-time */
@@ -15144,6 +15022,13 @@ export interface components {
             from: number;
             to: number;
         };
+        AdminMangaLayoutRelatedDto: {
+            cover: string | null;
+            id: number;
+            name: string;
+            name_cn: string | null;
+            relation: components["schemas"]["MangaRelationType"];
+        };
         AdminMangaLayoutResultDto: {
             counts: components["schemas"]["AdminMangaLayoutCountsDto"];
             rows: components["schemas"]["AdminMangaLayoutRowDto"][];
@@ -15211,10 +15096,9 @@ export interface components {
             other_names: string[];
             /** Format: date */
             publication_date: string | null;
-            /** @description 出版状态编码 */
-            publication_status: string | null;
             readers: number;
-            related: components["schemas"]["AdminMangaSummaryDto"][];
+            related: components["schemas"]["AdminMangaLayoutRelatedDto"][];
+            serial_status: components["schemas"]["MangaSerialStatus"];
             shared: components["schemas"]["AdminMangaSummaryDto"][];
             summary: string | null;
             volumes: components["schemas"]["AdminMangaLayoutVolumeDto"][];
@@ -15229,9 +15113,8 @@ export interface components {
             other_names: string[];
             /** Format: date */
             publication_date: string | null;
-            /** @description 出版状态编码 */
-            publication_status: string | null;
             readers: number;
+            serial_status: components["schemas"]["MangaSerialStatus"];
             staff: components["schemas"]["AdminMangaStaffMarkDto"][];
             uploads: number;
         };
@@ -15323,7 +15206,7 @@ export interface components {
         };
         AdminMangaSourceReleaseDto: {
             manga_id: number;
-            name: string | null;
+            name: string;
             readers: number;
             removed: number;
         };
@@ -15375,19 +15258,17 @@ export interface components {
             name_cn: string | null;
             /** Format: date */
             publication_date: string | null;
-            /** @description 出版状态编码 */
-            publication_status: string | null;
             readers: number;
+            serial_status: components["schemas"]["MangaSerialStatus"];
             staff: components["schemas"]["AdminMangaStaffMarkDto"][];
         };
         AdminMangaStaffMarkDto: {
             ai_names: string[];
             art: boolean;
-            /** @description 制作信息编码 */
-            code: string;
             credited: boolean;
             name: string;
             person_id: number;
+            role: components["schemas"]["MangaStaffRole"];
         };
         AdminMangaSummaryDto: {
             cover: string | null;
@@ -15443,9 +15324,8 @@ export interface components {
             nsfw: boolean;
             origin_country: string | null;
             primary_source_key: string | null;
-            /** @description 出版状态编码 */
-            publication_status: string | null;
             recent_errors: components["schemas"]["AdminMangaWorkErrorDto"][];
+            serial_status: components["schemas"]["MangaSerialStatus"];
             views: number;
         };
         AdminMangaWorkErrorDto: {
@@ -15472,8 +15352,7 @@ export interface components {
             name_cn: string | null;
             origin_country: string | null;
             pending_count: number;
-            /** @description 出版状态编码 */
-            publication_status: string | null;
+            serial_status: components["schemas"]["MangaSerialStatus"];
             /** Format: date-time */
             updated_at: string;
         };
@@ -15619,7 +15498,7 @@ export interface components {
             matched_by: "TITLE" | "AUTHOR" | "ISBN" | "NUMBER" | "COVER" | "LLM" | "MANUAL";
             next_attempt_at: string | null;
             report: components["schemas"]["NovelVolumeBuildReportDto"] | null;
-            series_id: number | null;
+            series_id: number;
             series_name: string | null;
             source_key: string;
             source_volume_id: string;
@@ -15891,26 +15770,6 @@ export interface components {
             status: "ACTIVE" | "NEXT" | "RETIRED";
             use: string;
         };
-        AdminTelegramGroupDto: {
-            /** Format: date-time */
-            added_at: string;
-            chat_enabled: boolean;
-            chat_id: number;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            replies_today: number;
-            spend_today: number;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
         AdminUploadResultDto: {
             /** @description 对应 MediaAsset id；持久化为媒体 FK 时使用（不入个人媒体库） */
             id: number;
@@ -15920,7 +15779,6 @@ export interface components {
         AdminUserDetailDto: {
             /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
-            bio: string | null;
             /** Format: date-time */
             created_at: string;
             /** @description 当前佩戴的徽章 */
@@ -15929,7 +15787,6 @@ export interface components {
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
             /** @description 用户 ID */
             id: number;
-            is_bot: boolean;
             moderation_counts: components["schemas"]["ModerationCountDto"][];
             /** @description 用户名 */
             name: string;
@@ -15944,7 +15801,6 @@ export interface components {
              * @enum {string}
              */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
-            signature: string | null;
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
         };
@@ -15970,6 +15826,10 @@ export interface components {
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
+        };
+        AdoptBangumiMoveDto: {
+            id: number;
+            resource_type: components["schemas"]["ContributionResourceType"];
         };
         AiAddResultDto: {
             /** @description 新建的线路 */
@@ -16007,45 +15867,6 @@ export interface components {
             requests: number;
             /** @description 按模型汇总时为备用顺序中的渠道名称 */
             routes: string[];
-        };
-        AiBudgetAccountDto: {
-            /** @enum {string|null} */
-            binding: "five_hour" | "week" | "month" | null;
-            /** @description 现在每小时可用，美元 */
-            hourly: number | null;
-            provider: components["schemas"]["AiBudgetProviderDto"];
-            /** Format: date-time */
-            recovers_at: string | null;
-            /** @enum {string} */
-            status: "ok" | "exhausted" | "unlimited";
-        };
-        AiBudgetDto: {
-            accounts: components["schemas"]["AiBudgetAccountDto"][];
-            /** @description 各渠道现在每小时可用之和，美元 */
-            capacity: number;
-            /** @description 是否有渠道登记了额度上限 */
-            configured: boolean;
-            /**
-             * Format: date-time
-             * @description 下一次进入或离开高峰的时刻
-             */
-            next_switch: string | null;
-            peak: boolean;
-            /** @description 线上功能每小时预留，美元 */
-            reserve: number;
-            today: components["schemas"]["AiBudgetTodayDto"];
-            /** @description 每小时分给维基机器人，美元 */
-            wiki: number;
-        };
-        AiBudgetProviderDto: {
-            id: number;
-            name: string;
-        };
-        AiBudgetTodayDto: {
-            /** @description 不由维基任务发起的调用，美元 */
-            online: number;
-            /** @description 维基任务发起的调用，美元 */
-            wiki: number;
         };
         AiCatalogModelDto: {
             canonical_id: string;
@@ -16297,22 +16118,6 @@ export interface components {
             /** @description 紧邻的上一周期 */
             previous: components["schemas"]["AiMetricsDto"];
         };
-        AiPeakHoursDto: {
-            /** @description 星期，0 为周日，按 UTC */
-            days: number[];
-            /** @description 开始时刻 HH:MM，UTC */
-            from: string;
-            /** @description 结束时刻 HH:MM，UTC */
-            to: string;
-        };
-        AiPeakHoursInputDto: {
-            /** @description 星期，0 为周日，按 UTC */
-            days: number[];
-            /** @description 开始时刻 HH:MM，UTC */
-            from: string;
-            /** @description 结束时刻 HH:MM，UTC，可为 24:00 */
-            to: string;
-        };
         AiPlaygroundDto: {
             /** @description 与请求中的目标一一对应 */
             results: components["schemas"]["AiPlaygroundResultDto"][];
@@ -16350,8 +16155,6 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             enabled: boolean;
-            /** @description 每 5 小时的额度上限，美元 */
-            five_hour_limit: number | null;
             /** @description 该类型的渠道只能使用的协议 */
             fixed_protocol: components["schemas"]["AiProtocol"] | null;
             /** @description 每次请求附带的请求头 */
@@ -16362,13 +16165,6 @@ export interface components {
             kind: components["schemas"]["AiProviderKind"];
             /** Format: date-time */
             last_used_at: string | null;
-            /** @description 每月的额度上限，美元 */
-            monthly_limit: number | null;
-            /**
-             * Format: date-time
-             * @description 服务商显示的某一次每月重置时间
-             */
-            monthly_reset_at: string | null;
             name: string;
             price_multiplier: number;
             route_counts: components["schemas"]["AiRouteCountsDto"];
@@ -16378,13 +16174,6 @@ export interface components {
             suspended_kinds: components["schemas"]["AiErrorKind"][];
             /** @description 该渠道上的上游模型 ID */
             upstream_ids: string[];
-            /** @description 每周的额度上限，美元 */
-            weekly_limit: number | null;
-            /**
-             * Format: date-time
-             * @description 服务商显示的某一次每周重置时间
-             */
-            weekly_reset_at: string | null;
         };
         AiProviderDto: {
             base_url: string | null;
@@ -16392,8 +16181,6 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             enabled: boolean;
-            /** @description 每 5 小时的额度上限，美元 */
-            five_hour_limit: number | null;
             /** @description 该类型的渠道只能使用的协议 */
             fixed_protocol: components["schemas"]["AiProtocol"] | null;
             /** @description 每次请求附带的请求头 */
@@ -16404,13 +16191,6 @@ export interface components {
             kind: components["schemas"]["AiProviderKind"];
             /** Format: date-time */
             last_used_at: string | null;
-            /** @description 每月的额度上限，美元 */
-            monthly_limit: number | null;
-            /**
-             * Format: date-time
-             * @description 服务商显示的某一次每月重置时间
-             */
-            monthly_reset_at: string | null;
             name: string;
             price_multiplier: number;
             route_counts: components["schemas"]["AiRouteCountsDto"];
@@ -16419,13 +16199,6 @@ export interface components {
             suspended_kinds: components["schemas"]["AiErrorKind"][];
             /** @description 该渠道上的上游模型 ID */
             upstream_ids: string[];
-            /** @description 每周的额度上限，美元 */
-            weekly_limit: number | null;
-            /**
-             * Format: date-time
-             * @description 服务商显示的某一次每周重置时间
-             */
-            weekly_reset_at: string | null;
         };
         AiProviderHeaderDto: {
             name: string;
@@ -16441,40 +16214,6 @@ export interface components {
             id: number;
             kind: components["schemas"]["AiProviderKind"];
             name: string;
-        };
-        AiQuotaDto: {
-            /** @enum {string|null} */
-            binding: "five_hour" | "week" | "month" | null;
-            /** @description 现在每小时可用，美元 */
-            hourly: number | null;
-            /** Format: date-time */
-            recovers_at: string | null;
-            /** @description 用量是否来自服务商回报 */
-            reported: boolean;
-            /** @enum {string} */
-            status: "ok" | "exhausted" | "unlimited";
-            /**
-             * Format: date-time
-             * @description 服务商回复额度用完的时间
-             */
-            suspended_at: string | null;
-            windows: components["schemas"]["AiQuotaUsageDto"][];
-        };
-        AiQuotaUsageDto: {
-            /**
-             * Format: date-time
-             * @description 滚动计算时最早一笔移出的时间
-             */
-            frees_at: string | null;
-            limit: number;
-            /**
-             * Format: date-time
-             * @description 按登记的重置时间算出的下次重置
-             */
-            resets_at: string | null;
-            used: number;
-            /** @enum {string} */
-            window: "five_hour" | "week" | "month";
         };
         AiRateDto: {
             credits: number;
@@ -16519,10 +16258,6 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
-            /** @description Telegram 会话 ID */
-            telegram_chat_id: number | null;
-            /** @description Telegram 用户 ID */
-            telegram_user_id: number | null;
             tool_calls: components["schemas"]["AiToolCallDto"][];
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
@@ -16550,10 +16285,6 @@ export interface components {
             scene: string | null;
             scene_label: string | null;
             source: components["schemas"]["AiRequestSource"];
-            /** @description Telegram 会话 ID */
-            telegram_chat_id: number | null;
-            /** @description Telegram 用户 ID */
-            telegram_user_id: number | null;
             upstream_id: string;
             user: components["schemas"]["AiUserRefDto"] | null;
         };
@@ -16618,8 +16349,6 @@ export interface components {
             /** @description 渠道的上游模型清单中是否仍有此模型，尚未同步清单时为空 */
             offered: boolean | null;
             output_price: number;
-            /** @description 高峰时段与高峰单价 */
-            peak: components["schemas"]["AiRoutePeakDto"] | null;
             price_manual: boolean;
             priority: number;
             protocol: components["schemas"]["AiProtocol"];
@@ -16632,8 +16361,6 @@ export interface components {
             status_kind: components["schemas"]["AiErrorKind"] | null;
             status_message: string | null;
             upstream_id: string;
-            /** @description 这条线路是否接受图片输入 */
-            vision: boolean;
         };
         AiRouteItemDto: {
             protocol: components["schemas"]["AiProtocol"];
@@ -16651,30 +16378,6 @@ export interface components {
         AiRouteOrderDto: {
             /** @description 此模型全部线路的 ID，按备用顺序 */
             ids: number[];
-        };
-        AiRoutePeakDto: {
-            cache_read_price: number | null;
-            hours: components["schemas"]["AiPeakHoursDto"][];
-            /** @description 每百万 token 美元 */
-            input_price: number;
-            /**
-             * Format: date-time
-             * @description 下一次进入或离开高峰的时刻
-             */
-            next_switch: string | null;
-            /** @description 现在是否在高峰时段 */
-            now: boolean;
-            /** @description 每百万 token 美元 */
-            output_price: number;
-        };
-        AiRoutePeakInputDto: {
-            /** @description 每百万 token 美元 */
-            cache_read_price?: number | null;
-            hours: components["schemas"]["AiPeakHoursInputDto"][];
-            /** @description 每百万 token 美元 */
-            input_price: number;
-            /** @description 每百万 token 美元 */
-            output_price: number;
         };
         /** @enum {string} */
         AiRouteStatus: "ACTIVE" | "DISABLED" | "SUSPENDED";
@@ -16721,7 +16424,7 @@ export interface components {
             available: boolean;
             enabled: boolean;
             /** @enum {string} */
-            group: "site" | "member" | "bangumi" | "vndb" | "openbd" | "web" | "wiki" | "wiki_game" | "wiki_agent";
+            group: "site" | "bangumi" | "vndb" | "openbd" | "web";
             key: string;
             label: string;
             required: boolean;
@@ -16776,7 +16479,7 @@ export interface components {
         /** @enum {string} */
         AiSearchProviderStatus: "OK" | "UNAVAILABLE";
         /** @enum {string} */
-        AiSearchService: "EXA" | "BRAVE" | "TAVILY" | "LINKUP" | "CLOUDFLARE" | "SEARXNG";
+        AiSearchService: "EXA" | "BRAVE" | "TAVILY" | "LINKUP" | "CLOUDFLARE";
         AiSearchServiceDto: {
             credentials: components["schemas"]["AiSearchCredentialFieldDto"][];
             label: string;
@@ -17023,19 +16726,6 @@ export interface components {
             target_id: number;
             target_type: string;
         };
-        AppearanceDto: {
-            /** @description Character this appearance belongs to */
-            character_id: number | null;
-            /** @description Group title on the official site */
-            group: string | null;
-            /** @description Only the work itself records this appearance */
-            hidden: boolean;
-            id: number;
-            image: components["schemas"]["ScoredMediaAssetDto"] | null;
-            /** @description Name on the cast list */
-            label: string;
-            voices: components["schemas"]["VoiceDto"][];
-        };
         ApproveMangaProjectDto: {
             chapter_name?: string | null;
             chapter_number?: string | null;
@@ -17203,31 +16893,6 @@ export interface components {
              */
             token_expires_at: string | null;
         };
-        BaseRevisionDto: {
-            entry_id: number;
-            revision: number;
-        };
-        BotCreatedDto: {
-            id: number;
-        };
-        BotItemDto: {
-            /** Format: date-time */
-            disabled_at: string | null;
-            disabled_by: components["schemas"]["UserRefDto"] | null;
-            disabled_reason: string | null;
-            /** @description Edits in the last 24 hours */
-            edits: number;
-            id: number;
-            /** Format: date-time */
-            last_edit_at: string | null;
-            /** @description Applied edits counted for reverts, at most the stop window */
-            recent: number;
-            /** @description Reverted edits among the recent ones */
-            reverted: number;
-            tasks: number;
-            tasks_enabled: number;
-            user: components["schemas"]["UserRefDto"];
-        };
         BulkAdjustPointDto: {
             /** @enum {string} */
             action: "ADD" | "SUBTRACT";
@@ -17244,15 +16909,6 @@ export interface components {
             failed_ids: number[];
             succeeded: number;
         };
-        CandidateEntryDto: {
-            id: number;
-            label: string;
-            /** @description Entries whose statements point at this one */
-            references: number;
-            type: components["schemas"]["EntryType"];
-            /** @description Names of a few of those entries */
-            works: string[];
-        };
         CatalogEventDto: {
             fields: string[];
             label: string;
@@ -17264,6 +16920,26 @@ export interface components {
          * @enum {string}
          */
         CatalogEventKind: "UPSERT" | "DELETE" | "MERGE";
+        CatalogItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
+            /** Format: date-time */
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_id: number;
+            title: string;
+        };
         CatalogListingPolicyDto: {
             origins: string[];
             unknown_listed: boolean;
@@ -17281,6 +16957,27 @@ export interface components {
             /** @description 未删除的条目数 */
             total: number;
         };
+        CatalogOverviewDto: {
+            light_novel: components["schemas"]["CatalogOverviewNovelDto"];
+            manga: components["schemas"]["CatalogOverviewMangaDto"];
+            pending_review: number;
+            recent_runs: components["schemas"]["CatalogRunItemDto"][];
+        };
+        CatalogOverviewMangaDto: {
+            hidden: number;
+            listed: number;
+            origin_unknown: number;
+            override_hidden: number;
+            override_shown: number;
+            /** @description 已发布、已上架且有章节的作品数 */
+            readable: number;
+            total: number;
+        };
+        CatalogOverviewNovelDto: {
+            pending: number;
+            total: number;
+            volumes: number;
+        };
         CatalogRecomputeResultDto: {
             changed: number;
             dry_run: boolean;
@@ -17290,6 +16987,61 @@ export interface components {
             to_hidden: number;
             to_listed: number;
         };
+        CatalogReviewResultDto: {
+            /** @description 因通过复核而发布的条目数 */
+            published: number;
+            updated: number;
+        };
+        CatalogRunDecisionCountDto: {
+            count: number;
+            decision: components["schemas"]["CatalogSyncDecision"];
+        };
+        CatalogRunDetailDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            config: {
+                [key: string]: unknown;
+            } | null;
+            created: number;
+            decisions: components["schemas"]["CatalogRunDecisionCountDto"][];
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
+        CatalogRunItemDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            candidates: number;
+            changed: number;
+            created: number;
+            dry_run: boolean;
+            dump_version: string | null;
+            error_message: string | null;
+            failed: number;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            operation: components["schemas"]["CatalogSyncOperation"];
+            rejected: number;
+            /** Format: date-time */
+            started_at: string;
+            status: components["schemas"]["CatalogSyncStatus"];
+            trigger: components["schemas"]["CatalogSyncTrigger"];
+            volumes_created: number;
+        };
         CatalogScalarDto: {
             field: string;
             label: string;
@@ -17297,33 +17049,180 @@ export interface components {
         /** @enum {string} */
         CatalogSyncDecision: "CREATED" | "VOLUMES_ADDED" | "SKIPPED_EXISTING" | "REJECTED_NO_ISBN" | "REJECTED_LOOKUP" | "REJECTED_NO_LABEL" | "REJECTED_LABEL" | "LISTED" | "HIDDEN" | "FAILED" | "SERIES_LINKED" | "HELD_DUPLICATE";
         /** @enum {string} */
+        CatalogSyncKind: "MANGA" | "LIGHT_NOVEL";
+        /** @enum {string} */
+        CatalogSyncOperation: "IMPORT" | "LISTING";
+        /** @enum {string} */
+        CatalogSyncReview: "PENDING" | "APPROVED" | "REJECTED";
+        CatalogSyncSettingsDto: {
+            auto_publish: boolean;
+            batch_limit: number;
+            enabled: boolean;
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            listing: components["schemas"]["CatalogListingPolicyDto"];
+            ln_label_count: number;
+            ln_label_min: number;
+            schedule: string;
+            since_months: number;
+        };
+        /** @enum {string} */
         CatalogSyncStatus: "RUNNING" | "SUCCEEDED" | "FAILED";
         /** @enum {string} */
         CatalogSyncTrigger: "CRON" | "MANUAL";
-        ChangeRequestSourceDto: {
-            excluded: boolean;
-            outcome: components["schemas"]["DiscoveryOutcome"] | null;
-            reasons: components["schemas"]["DiscoveryReasonDto"][];
-            records: components["schemas"]["ChangeRequestSourceRecordDto"][];
-            section: components["schemas"]["DiscoverySection"];
-            work_id: number;
-        };
-        ChangeRequestSourceFieldDto: {
-            /** @enum {string} */
-            field: "title" | "volume" | "label" | "author" | "staff" | "publisher" | "brand" | "date" | "isbn" | "jan" | "ndc" | "platforms" | "price" | "cover" | "homepage";
-            value: string;
-        };
-        ChangeRequestSourceRecordDto: {
-            /** @description 该记录提供的字段及其值 */
-            fields: components["schemas"]["ChangeRequestSourceFieldDto"][];
-            first_hand: boolean;
+        CatalogTraceEntryDto: {
             /** Format: date-time */
-            first_seen_at: string;
+            created_at: string;
+            decision: components["schemas"]["CatalogSyncDecision"];
+            evidence: {
+                [key: string]: unknown;
+            } | null;
+            external_id: number;
+            id: number;
+            kind: components["schemas"]["CatalogSyncKind"];
+            note: string | null;
+            operation: components["schemas"]["CatalogSyncOperation"];
+            resource_id: number | null;
+            review: components["schemas"]["CatalogSyncReview"];
             /** Format: date-time */
-            last_seen_at: string;
-            source: components["schemas"]["DiscoverySourceKey"];
+            reviewed_at: string | null;
+            reviewer: components["schemas"]["UserRefDto"] | null;
+            run_dump_version: string | null;
+            run_id: number;
+            /** Format: date-time */
+            run_started_at: string;
             title: string;
-            url: string | null;
+        };
+        CatalogTriggerResultDto: {
+            run_id: number;
+            started: boolean;
+        };
+        ChangeRequestBatchItemDto: {
+            change_request_id?: number;
+            changeset: {
+                [key: string]: unknown;
+            }[];
+            resource_id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        ChangeRequestBatchReviewItemDto: {
+            id: number;
+            /** @enum {string} */
+            status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+        };
+        ChangeRequestBatchReviewResultDto: {
+            batch_id: string;
+            results: components["schemas"]["ChangeRequestBatchReviewItemDto"][];
+        };
+        ChangeRequestBatchSubmitItemDto: {
+            id: number;
+            resource_id: number | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+        };
+        ChangeRequestBatchSubmitResultDto: {
+            batch_id: string;
+            items: components["schemas"]["ChangeRequestBatchSubmitItemDto"][];
+        };
+        ChangeRequestCheckDto: {
+            /** Format: date-time */
+            created_at: string;
+            disputed: boolean;
+            /** Format: date-time */
+            finished_at: string | null;
+            id: number;
+            /** @enum {string} */
+            status: "QUEUED" | "RUNNING" | "DONE" | "FAILED" | "TIMED_OUT";
+            verification: components["schemas"]["CheckVerificationDto"] | null;
+        };
+        ChangeRequestCheckRootDto: {
+            change_request_id: number;
+            title: string;
+        };
+        ChangeRequestDetailDto: {
+            author: components["schemas"]["UserRefDto"];
+            base_revision_id: number | null;
+            batch_id: string | null;
+            check: components["schemas"]["ChangeRequestCheckDto"] | null;
+            /** @description 与同批作品一并核对时，作品的变更请求 */
+            check_root: components["schemas"]["ChangeRequestCheckRootDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
+            duplicates: components["schemas"]["DuplicateCandidateDto"][];
+            events: components["schemas"]["ChangeRequestEventItemDto"][];
+            id: number;
+            /** Format: date-time */
+            merged_at: string | null;
+            merged_by: components["schemas"]["UserRefDto"] | null;
+            merged_revision: components["schemas"]["ChangeRequestMergedRevisionDto"] | null;
+            payload: {
+                [key: string]: unknown;
+            }[];
+            resource: components["schemas"]["ResourceHeadDto"] | null;
+            resource_id: number | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+            summary: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        ChangeRequestDuplicateCandidateRefDto: {
+            id: number;
+            /** @enum {string} */
+            level: "on_site" | "likely" | "author_work" | "similar";
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        ChangeRequestDuplicateCheckDto: {
+            author_works_checked: boolean;
+            candidates: components["schemas"]["ChangeRequestDuplicateCandidateRefDto"][];
+            checked_at: string;
+            dismissed: number[];
+        };
+        ChangeRequestEventItemDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            body: string | null;
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            payload: {
+                [key: string]: unknown;
+            }[] | null;
+            /** @enum {string} */
+            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED" | "MERGED_INTO" | "AUTO_MERGE_FAILED";
+        };
+        ChangeRequestMergedRevisionDto: {
+            id: number;
+            version: number;
+        };
+        ChangeRequestSummaryDto: {
+            author: components["schemas"]["UserRefDto"];
+            base_revision_id: number | null;
+            batch_id: string | null;
+            check: components["schemas"]["ChangeRequestCheckDto"] | null;
+            /** @description 与同批作品一并核对时，作品的变更请求 */
+            check_root: components["schemas"]["ChangeRequestCheckRootDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            duplicate_check: components["schemas"]["ChangeRequestDuplicateCheckDto"] | null;
+            id: number;
+            /** Format: date-time */
+            merged_at: string | null;
+            resource: components["schemas"]["ResourceHeadDto"] | null;
+            resource_id: number | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            status: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+            summary: string;
+            /** Format: date-time */
+            updated_at: string;
         };
         ChangeUsernameDto: {
             username: string;
@@ -17336,15 +17235,6 @@ export interface components {
         };
         ChapterSourceRetryResultDto: {
             requeued: number;
-        };
-        CharacterAppearanceProfileDto: {
-            age: string | null;
-            birthday: string | null;
-            blood_type: string | null;
-            gender: string | null;
-            height: string | null;
-            measurements: string | null;
-            weight: string | null;
         };
         CharacterCardSummaryResDto: {
             id: number;
@@ -17372,9 +17262,6 @@ export interface components {
             intro: string;
             labels: components["schemas"]["EntityLabelDto"][];
             name: string;
-            /** @description 最早公开出场作品所载的资料，照录原文 */
-            profile: components["schemas"]["CharacterProfileDto"];
-            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -17390,40 +17277,15 @@ export interface components {
         CharacterGalgameRelationDto: {
             actors: components["schemas"]["PersonPreviewDto"][];
             galgame: components["schemas"]["GalgameSummaryDto"];
-            /** @description 官网角色页的分组，照录 */
-            group: string | null;
-            image: components["schemas"]["RatedMediaAssetDto"] | null;
-            intro: string | null;
-            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
-            label: string | null;
-            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
-            trans_intro: string | null;
-            voices: components["schemas"]["CharacterVoiceDto"][];
         };
         CharacterLightNovelRelationDto: {
-            /** @description 官网角色页的分组，照录 */
-            group: string | null;
-            image: components["schemas"]["RatedMediaAssetDto"] | null;
-            intro: string | null;
-            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
-            label: string | null;
             light_novel: components["schemas"]["LightNovelSummaryDto"];
-            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
-            trans_intro: string | null;
         };
         CharacterMangaRelationDto: {
-            /** @description 官网角色页的分组，照录 */
-            group: string | null;
-            image: components["schemas"]["RatedMediaAssetDto"] | null;
-            intro: string | null;
-            /** @description 这部作品名单中的名字；对角色最早出场的作品是剧透时为空 */
-            label: string | null;
             manga: components["schemas"]["MangaSummaryDto"];
-            profile: components["schemas"]["CharacterAppearanceProfileDto"];
             role: components["schemas"]["CharacterRole"];
-            trans_intro: string | null;
         };
         CharacterPreviewDto: {
             id: number;
@@ -17431,22 +17293,73 @@ export interface components {
             name: string;
             trans_name: string | null;
         };
-        CharacterProfileDto: {
-            age: string | null;
-            birthday: string | null;
-            height: string | null;
-            measurements: string | null;
-            weight: string | null;
-        };
         /** @enum {string} */
         CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
-        CharacterVoiceDto: {
-            person_id: number | null;
-            /** @description 这部作品署名的名字 */
-            text: string;
-        };
         CheckAiSearchProviderDto: {
             query?: string;
+        };
+        CheckEntityDto: {
+            change_request_id: number;
+            evidence?: components["schemas"]["CheckEvidenceDto"][];
+            existing_id: number | null;
+            existing_name: string | null;
+            fields: string[];
+            name: string;
+            reason: string;
+            /**
+             * @description program 表示按外部编号直接认定，未经模型
+             * @enum {string}
+             */
+            resolved_by?: "program" | "model";
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 保留新建时，核对给出的原名与外部编号 */
+            values?: components["schemas"]["CheckFieldDto"][];
+            verified: boolean;
+        };
+        CheckEvidenceDto: {
+            author?: string;
+            bangumi_id?: number;
+            date?: string | null;
+            entry_id?: number;
+            /** @description 名称键相同的站内条目名称 */
+            existing?: string;
+            isbn?: string;
+            /** @enum {string} */
+            kind: "author" | "entry" | "bangumi_detail" | "isbn" | "vndb_title" | "external_owned" | "credited" | "name_key" | "release" | "external_record";
+            label?: string | null;
+            name?: string;
+            /** @description 外部编号 */
+            ref?: string;
+            /** @enum {string} */
+            resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            source?: "bangumi" | "vndb" | "openbd";
+            title?: string;
+            verified: boolean;
+            vndb_id?: string;
+            /** @description 署名所在的作品 */
+            work?: string;
+        };
+        CheckFieldDto: {
+            display: string;
+            /**
+             * @description 条目编辑器中的字段名
+             * @enum {string}
+             */
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn" | "origin_title" | "trans_title" | "producers" | "release_date" | "bangumi_game_id" | "vndb_id" | "bangumi_subject_id" | "volume_number" | "trans_name" | "bangumi_id";
+            source: components["schemas"]["CheckSourceDto"] | null;
+            submitted: (string | number) | null;
+            submitted_display: string | null;
+            value: string | number;
+            verified: boolean;
+        };
+        CheckIdentityDto: {
+            id: number | null;
+            /** @enum {string} */
+            kind: "site" | "pending" | "new" | "unknown";
+            title: string | null;
+            verified: boolean;
         };
         CheckInConfigDto: {
             daily_point_max: number;
@@ -17502,38 +17415,22 @@ export interface components {
             points: number;
             streak: number;
         };
-        CheckedCitationDto: {
-            position: number;
+        CheckSourceDto: {
             /** @enum {string} */
-            role: "SUPPORT" | "CONTRADICT" | "LINK";
-            /** @enum {string} */
-            verification: "UNCHECKED" | "PASSED" | "EXCERPT_NOT_FOUND" | "SOURCE_NOT_ALLOWED" | "VALUE_MISMATCH" | "UNREACHABLE" | "UNCONFIRMED_MATCH";
-        };
-        CheckedStatementDto: {
-            citations: components["schemas"]["CheckedCitationDto"][];
-            entry_id: number;
-            /** @description Whether the value is a public record of every work it concerns (A.9.5.5) */
-            is_public: boolean;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            statement_id: number;
-            /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
-        };
-        CitationSummaryDto: {
-            accessed_at: string | null;
-            excerpt: string | null;
-            /** @description Sources an imported value came from, such as VNDB, BANGUMI or V2 */
-            imported_from: string[];
-            /** @enum {string} */
-            kind: "first_hand" | "clue";
-            /** @description Member who entered the value */
-            member: components["schemas"]["UserRefDto"] | null;
-            /** @description Record source name or page host */
-            source: string | null;
-            /** @description Title of the cited record */
+            kind: "bangumi" | "openbd" | "vndb" | "page" | "request";
+            /** @description Bangumi 编号、VNDB 编号或 ISBN */
+            ref: string | null;
             title: string | null;
             url: string | null;
+        };
+        CheckVerificationDto: {
+            entities: components["schemas"]["CheckEntityDto"][];
+            evidence: components["schemas"]["CheckEvidenceDto"][];
+            fields: components["schemas"]["CheckFieldDto"][];
+            identity: components["schemas"]["CheckIdentityDto"];
+            mismatches: number;
+            sources: components["schemas"]["CheckSourceDto"][];
+            summary: string;
         };
         CommentAttachmentInputDto: {
             media_asset_id: number;
@@ -17645,55 +17542,6 @@ export interface components {
             /** @enum {number} */
             my_value: -1 | 0 | 1;
         };
-        ComparedStatementDto: {
-            amount: string | null;
-            archive_url: string | null;
-            citations: components["schemas"]["StatementCitationDto"][];
-            code: string | null;
-            currency: string | null;
-            date: string | null;
-            /** @enum {string|null} */
-            date_precision: "YEAR" | "MONTH" | "DAY" | null;
-            deprecation_note: string | null;
-            /** @enum {string|null} */
-            deprecation_reason: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED" | null;
-            id: number;
-            is_public: boolean;
-            language: string | null;
-            media: components["schemas"]["ScoredMediaAssetDto"] | null;
-            number: number | null;
-            original: string | null;
-            part: string | null;
-            period_from: string | null;
-            /** @enum {string|null} */
-            period_from_precision: "YEAR" | "MONTH" | "DAY" | null;
-            period_to: string | null;
-            /** @enum {string|null} */
-            period_to_precision: "YEAR" | "MONTH" | "DAY" | null;
-            position: number;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            reading: string | null;
-            role: string | null;
-            song: string | null;
-            song_kind: string | null;
-            /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
-            target: components["schemas"]["EntryRefDto"] | null;
-            tax_included: boolean | null;
-            text: string | null;
-            /** @enum {string} */
-            value_kind: "VALUE" | "UNKNOWN";
-            versions: components["schemas"]["EntryRefDto"][];
-        };
-        ComparedValueDto: {
-            citations: components["schemas"]["CitationSummaryDto"][];
-            code: string | null;
-            release: components["schemas"]["ReleaseDto"] | null;
-            /** @description Entry the value links to */
-            target_id: number | null;
-            text: string;
-        };
         ConditionCatalogDto: {
             aggs: components["schemas"]["CatalogOptionDto"][];
             cmps: components["schemas"]["CatalogOptionDto"][];
@@ -17789,11 +17637,48 @@ export interface components {
             author: components["schemas"]["UserRefDto"] | null;
             excerpt: string;
         };
+        ContributionActivityItemDto: {
+            actor: components["schemas"]["UserRefDto"] | null;
+            body: string | null;
+            change_request: components["schemas"]["ActivityChangeRequestDto"];
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            resource: components["schemas"]["ResourceHeadDto"] | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @enum {string} */
+            type: "CREATED" | "UPDATED" | "COMMENTED" | "REJECTED" | "APPROVED" | "AUTO_MERGED" | "CLOSED" | "MERGED_INTO" | "AUTO_MERGE_FAILED";
+        };
         /**
          * @description 发生变更的资源类型
          * @enum {string}
          */
         ContributionResourceType: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        ContributionStatsDayDto: {
+            count: number;
+            /** @example 2026-05-21 */
+            date: string;
+        };
+        ContributionStatsDto: {
+            days: components["schemas"]["ContributionStatsDayDto"][];
+            range: components["schemas"]["ContributionStatsRangeDto"];
+            totals: components["schemas"]["ContributionStatsTotalsDto"];
+        };
+        ContributionStatsRangeDto: {
+            count: number;
+            /** @example 2026-05-21 */
+            end: string;
+            /** @example 2025-05-22 */
+            start: string;
+        };
+        ContributionStatsTotalsDto: {
+            authored: number;
+            closed: number;
+            merged: number;
+            pending: number;
+            rejected: number;
+        };
         ContributorsDto: {
             contributors: components["schemas"]["UserRefDto"][];
             count: number;
@@ -17810,6 +17695,10 @@ export interface components {
             /** Format: date-time */
             sent_at: string;
         };
+        CorrectChangeRequestDto: {
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
+        };
         CountByStatusDto: {
             count: number;
             status: string;
@@ -17817,6 +17706,24 @@ export interface components {
         CountByTypeDto: {
             count: number;
             target_type: string;
+        };
+        CoverMediaDto: {
+            url: string;
+        };
+        CoverMediaResultDto: {
+            id: number;
+            src: string;
+        };
+        CoverTallyDto: {
+            media_id: number;
+            votes: number;
+        };
+        CoverVoteDto: {
+            media_id: number;
+        };
+        CoverVoteStateDto: {
+            covers: components["schemas"]["CoverTallyDto"][];
+            my_media_id: number | null;
         };
         CreateAiModelDto: {
             /** @description 模型目录中的规范 ID */
@@ -17873,10 +17780,11 @@ export interface components {
             /** @enum {string} */
             visible?: "PUBLIC" | "PRIVATE";
         };
-        CreateBotDto: {
-            avatar_id?: number;
-            nickname: string;
-            username: string;
+        CreateChangeRequestDto: {
+            changeset: {
+                [key: string]: unknown;
+            }[];
+            summary: string;
         };
         CreateCommentDto: {
             attachments?: components["schemas"]["CommentAttachmentInputDto"][];
@@ -17935,12 +17843,6 @@ export interface components {
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
-        CreateDiscoveryLabelDto: {
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            name: string;
-            /** @description 出版条漫译本的文库 */
-            translated_webtoon?: boolean;
-        };
         CreateDownloadTaskDto: {
             /**
              * @description 轻小说只能是 EPUB
@@ -17955,23 +17857,6 @@ export interface components {
             max_cards: number;
             /** @description 漫画或轻小说的 ID */
             series_id: number;
-        };
-        CreateEntryDraftDto: {
-            /** @description ISBN, JAN or URL the entry is created from */
-            input: string;
-            /** @enum {string} */
-            medium?: "LIGHT_NOVEL" | "MANGA";
-            /**
-             * @description Where the new entry goes; omitted, the rules decide
-             * @enum {string}
-             */
-            placement?: "new_series" | "series" | "volume" | "new_game" | "version" | "addon" | "page";
-            /** @description Series, volume or game the new book or product goes under */
-            target?: number;
-            /** @description Name as the page prints it */
-            title?: string;
-            /** @enum {string} */
-            type?: "GAME" | "PERSON" | "ORGANIZATION";
         };
         CreateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
@@ -18004,11 +17889,6 @@ export interface components {
         };
         CreateMangaNoteDto: {
             content: string;
-        };
-        CreateMangaPageNoteDto: {
-            content: string;
-            /** @description 圈出的区域，按页面宽高归一化；省略时批注整页 */
-            rect?: components["schemas"]["MangaNoteRectInputDto"];
         };
         CreateMangaPageTasksDto: {
             /** @description 仅对 DETECT 生效：完成后自动继续机翻与擦除原文 */
@@ -18055,6 +17935,8 @@ export interface components {
              */
             target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
             team_id?: number | null;
+            /** @description 随投稿新建单行本条目的变更请求；条目与项目一起审核 */
+            volume_change_request_id?: number;
             /** @description 单行本条目；整卷投稿必选，单话可选填所属单行本 */
             volume_id?: number | null;
         };
@@ -18218,28 +18100,24 @@ export interface components {
             };
             note?: string | null;
         };
+        CreateResourceChangeRequestDto: {
+            author_works_checked?: boolean;
+            changeset: {
+                [key: string]: unknown;
+            }[];
+            duplicate_dismissals?: number[];
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            summary: string;
+            /** @description 新建角色所在的作品 */
+            works?: components["schemas"]["DuplicateWorkRefDto"][];
+        };
         CreateSigningKeyDto: {
             /**
              * @default RS256
              * @enum {string}
              */
             alg: "RS256";
-        };
-        CreateTaskDto: {
-            bot_id: number;
-            description?: string;
-            name: string;
-            /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
-        };
-        CreateTelegramScheduleDto: {
-            chat_id: number;
-            enabled: boolean;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            /** @description 北京时间 HH:mm */
-            time: string;
-            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
-            weekdays: number[];
         };
         CreateTopicDto: {
             name: string;
@@ -18252,14 +18130,6 @@ export interface components {
             /** @description 团队名称 */
             name: string;
         };
-        CreditCountDto: {
-            code: string;
-            count: number;
-        };
-        CreditGroupDto: {
-            code: string;
-            credits: components["schemas"]["ProductCreditDto"][];
-        };
         CursorMetaDto: {
             has_more: boolean;
             limit: number;
@@ -18271,11 +18141,6 @@ export interface components {
             day: string;
             status: string;
         };
-        /**
-         * @description 发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日
-         * @enum {string}
-         */
-        DatePrecision: "YEAR" | "MONTH" | "DAY";
         DecorationConditionPresetRefDto: {
             id: number;
             name: string;
@@ -18294,20 +18159,6 @@ export interface components {
             /** @enum {string} */
             type: "AVATAR_FRAME" | "BADGE";
             unlock_description: string | null;
-        };
-        DeletedChangeDto: {
-            after: boolean;
-            before: boolean;
-        };
-        DeletedEntryDto: {
-            /** Format: date-time */
-            deleted_at: string;
-            deleted_by: components["schemas"]["UserRefDto"] | null;
-            id: number;
-            label: string;
-            reason: string;
-            revision: number;
-            type: components["schemas"]["EntryType"];
         };
         DeveloperAppCreatedDto: {
             /**
@@ -18439,218 +18290,10 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "PERSON" | "CHARACTER" | "LIGHT_NOVEL" | "MANGA" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "MANGA" | "LIGHT_NOVEL" | "CHARACTER" | "PRODUCER" | "PERSON" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
-        };
-        DiscoveryCountersDto: {
-            date_changes: number;
-            doubtful: number;
-            failed: number;
-            new: number;
-            new_volumes: number;
-            on_site: number;
-            out_of_scope: number;
-            read: number;
-            /** @description 当天变更记录过多而跳过的日期 */
-            skipped_days: string[];
-            waiting: number;
-        };
-        DiscoveryDateChangeDto: {
-            from: string | null;
-            partial: string | null;
-            to: string | null;
-        };
-        DiscoveryEditionDto: {
-            date: string | null;
-            /** @enum {string} */
-            edition: "package" | "download" | "limited" | "trial" | "other";
-            partial: string | null;
-            /** @description 页面原文 */
-            quote: string;
-        };
-        DiscoveryLabelCountDto: {
-            count: number;
-            name: string;
-        };
-        DiscoveryLabelDto: {
-            /** Format: date-time */
-            created_at: string;
-            id: number;
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            name: string;
-            translated_webtoon: boolean;
-        };
-        /** @enum {string} */
-        DiscoveryLabelKind: "LIGHT_NOVEL" | "COMICS";
-        DiscoveryLabelPreviewDto: {
-            /** @description 按改动后的名单，上一次 JPRO 运行会多收的记录数 */
-            admitted: number;
-            /** @description 按改动后的名单，上一次 JPRO 运行会少收的记录数 */
-            dropped: number;
-            run_id: number | null;
-        };
-        DiscoveryOfficialPageDto: {
-            editions: components["schemas"]["DiscoveryEditionDto"][];
-            galgame: components["schemas"]["DiscoveryPageGalgameDto"] | null;
-            id: number;
-            /** Format: date-time */
-            last_read_at: string | null;
-            /** @description 页面上写日期的那句话 */
-            says: string | null;
-            status: components["schemas"]["DiscoveryPageStatus"];
-            url: string;
-        };
-        /** @enum {string} */
-        DiscoveryOutcome: "NEW" | "DOUBTFUL" | "ON_SITE" | "OUT_OF_SCOPE" | "WAITING";
-        DiscoveryOutcomeCountDto: {
-            count: number;
-            outcome: components["schemas"]["DiscoveryOutcome"];
-            section: components["schemas"]["DiscoverySection"];
-        };
-        DiscoveryOverviewDto: {
-            sections: components["schemas"]["DiscoverySectionStatDto"][];
-            sources: components["schemas"]["DiscoverySourceDto"][];
-        };
-        DiscoveryPageGalgameDto: {
-            id: number;
-            origin_title: string;
-            trans_title: string | null;
-        };
-        /** @enum {string} */
-        DiscoveryPageStatus: "OK" | "NO_DATE" | "UNREADABLE";
-        DiscoveryPolicyDto: {
-            steam_languages: string[];
-        };
-        DiscoveryReasonDto: {
-            code: string;
-            params: {
-                [key: string]: unknown;
-            } | null;
-            /** @description 给人看的原因 */
-            text: string;
-        };
-        DiscoveryRulesDto: {
-            comics_labels: components["schemas"]["DiscoveryLabelDto"][];
-            light_novel_labels: components["schemas"]["DiscoveryLabelDto"][];
-            policy: components["schemas"]["DiscoveryPolicyDto"];
-            /** @description 近 30 天 JPRO 被拒文库及次数 */
-            turned_away: components["schemas"]["DiscoveryLabelCountDto"][];
-        };
-        DiscoveryRunBriefDto: {
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-        };
-        DiscoveryRunDetailDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            counters: components["schemas"]["DiscoveryCountersDto"];
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            outcomes: components["schemas"]["DiscoveryOutcomeCountDto"][];
-            /** Format: date-time */
-            since: string | null;
-            source: components["schemas"]["DiscoverySourceKey"];
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-            trigger: components["schemas"]["DiscoveryTrigger"];
-            /** @description 被拒文库及次数 */
-            turned_away: components["schemas"]["DiscoveryLabelCountDto"][];
-            /** Format: date-time */
-            until: string | null;
-        };
-        DiscoveryRunDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            counters: components["schemas"]["DiscoveryCountersDto"];
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** Format: date-time */
-            since: string | null;
-            source: components["schemas"]["DiscoverySourceKey"];
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["DiscoveryRunStatus"];
-            trigger: components["schemas"]["DiscoveryTrigger"];
-            /** Format: date-time */
-            until: string | null;
-        };
-        DiscoveryRunItemDto: {
-            change_request_id: number | null;
-            date_change: components["schemas"]["DiscoveryDateChangeDto"] | null;
-            id: number;
-            maker: string | null;
-            outcome: components["schemas"]["DiscoveryOutcome"];
-            reasons: components["schemas"]["DiscoveryReasonDto"][];
-            release_date: string | null;
-            resource_id: number | null;
-            resource_type: components["schemas"]["ContributionResourceType"] | null;
-            section: components["schemas"]["DiscoverySection"];
-            title: string;
-            work_id: number | null;
-        };
-        /** @enum {string} */
-        DiscoveryRunStatus: "QUEUED" | "RUNNING" | "SUCCEEDED" | "FAILED";
-        /** @enum {string} */
-        DiscoverySection: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
-        DiscoverySectionStatDto: {
-            /** @description 近 7 天新增的条目 */
-            added_7d: number;
-            /** @description 近 7 天跟随的改期 */
-            date_changes_7d: number;
-            /** @description 书音提交、仍在审核中的请求 */
-            in_review: number;
-            section: components["schemas"]["DiscoverySection"];
-            /** @description 未来 30 天内发售、站内已有的条目 */
-            upcoming_30d: number;
-        };
-        DiscoverySourceDto: {
-            /** @description 所需的密钥已配置 */
-            configured: boolean;
-            enabled: boolean;
-            /** @description 近 7 天失败的运行数 */
-            errors_7d: number;
-            first_hand: boolean;
-            key: components["schemas"]["DiscoverySourceKey"];
-            last_run: components["schemas"]["DiscoveryRunBriefDto"] | null;
-            /** Format: date-time */
-            last_success_at: string | null;
-            look_back_days: number;
-            needs_permission: boolean;
-            permission_note: string | null;
-            /** Format: date-time */
-            permitted_at: string | null;
-            permitter: components["schemas"]["UserRefDto"] | null;
-            /** @description 该来源保存的来源记录数 */
-            records: number;
-            /** @description 已有可用的采集实现 */
-            runnable: boolean;
-            schedule: string;
-            sections: components["schemas"]["DiscoverySection"][];
-        };
-        /** @enum {string} */
-        DiscoverySourceKey: "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "STEAM" | "DLSITE" | "JPRO" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
-        /** @enum {string} */
-        DiscoveryTrigger: "CRON" | "MANUAL" | "ANCHOR";
-        DiscoveryTriggerResultDto: {
-            run_id: number;
-            /** @description 为 false 时同一来源已有进行中的运行 */
-            started: boolean;
-        };
-        DismissTodoDto: {
-            reason: string;
         };
         DownloadCardsDto: {
             available: number;
@@ -18813,88 +18456,121 @@ export interface components {
             updated_at: string;
             view_count: number;
         };
-        EditBasisDto: {
-            media: components["schemas"]["ScoredMediaAssetDto"][];
-            url: string | null;
-        };
-        EditBasisInputDto: {
-            media?: number[];
-            url?: string | null;
-        };
-        EditBatchRefDto: {
-            id: number;
-            /** @description Imported from the old site; cannot be reverted */
-            imported: boolean;
-            /** Format: date-time */
-            reverted_at: string | null;
-            task: components["schemas"]["EditBatchTaskDto"] | null;
-        };
-        EditBatchTaskDto: {
+        DuplicateAuthorDto: {
             id: number;
             name: string;
         };
-        EditCheckDto: {
-            conflicts: components["schemas"]["EditConflictDto"][];
-            locked: number[];
-            /** @description A character the edit creates without any appearance pointing to it */
-            orphan: number | null;
-            statements: components["schemas"]["CheckedStatementDto"][];
-            /** @description Summary the edit will be saved with */
-            summary: string;
-            violations: components["schemas"]["EditViolationDto"][];
-        };
-        EditCitationDto: {
-            archive_url?: string | null;
-            excerpt?: string | null;
-            location?: string | null;
-            media?: number[];
-            /** @enum {string} */
-            method: "RECORD" | "EXCERPT" | "SCREENSHOT" | "MEMBER" | "IMPORT" | "DOWNSTREAM";
-            record_key?: string | null;
-            /** @enum {string} */
-            role?: "SUPPORT" | "CONTRADICT" | "LINK";
-            /** @enum {string|null} */
-            subject?: "PACKAGE" | "MANUAL" | "CREDITS" | "CONTENT" | null;
-            url?: string | null;
-            version?: number | null;
-            version_ref?: string;
-        };
-        EditConflictDto: {
-            entry_id: number;
-            statements: number[];
-        };
-        EditDetailDto: {
-            /** Format: date-time */
-            applied_at: string | null;
-            basis: components["schemas"]["EditBasisDto"] | null;
-            batch: components["schemas"]["EditBatchRefDto"];
-            clause: string | null;
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            /** @description One page of the entries the edit touched */
-            entries: components["schemas"]["EditEntryDto"][];
-            /** @description Entries the edit touched */
-            entry_count: number;
+        DuplicateCandidateDto: {
+            author: string | null;
+            bangumi_id: string | null;
+            /** @description 漫画、单行本为单话数；单话为页数 */
+            chapters: number | null;
+            cover: string | null;
+            created_at: string | null;
             id: number;
-            note: string | null;
-            operations: Record<string, never>[];
-            /** Format: date-time */
-            patrolled_at: string | null;
-            /** Format: date-time */
-            reverted_at: string | null;
-            reverts_id: number | null;
-            summary: string;
+            label: string | null;
+            /** @enum {string} */
+            level: "on_site" | "likely" | "author_work" | "similar";
+            reasons: components["schemas"]["DuplicateReasonDto"][];
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 卷、单行本与单话所属的作品 */
+            series_id: number | null;
+            subtitle: string | null;
+            title: string;
+            vndb_id: string | null;
+            volumes: number | null;
+            /** @description 角色登场的作品 */
+            works: string[];
+            year: string | null;
         };
-        EditEntryDto: {
-            base_revision: number;
-            /** @description The entry before and after the edit */
-            comparison: components["schemas"]["RevisionComparisonDto"] | null;
-            entry: components["schemas"]["EntryRefDto"];
-            /** Format: date-time */
-            reverted_at: string | null;
-            revision: number | null;
-            summary: string | null;
+        DuplicateCheckDto: {
+            changeset: {
+                [key: string]: unknown;
+            }[];
+            exclude_id?: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 新建角色所在的作品 */
+            works?: components["schemas"]["DuplicateWorkRefDto"][];
+        };
+        DuplicateCheckResultDto: {
+            candidates: components["schemas"]["DuplicateCandidateDto"][];
+        };
+        DuplicateExternalItemDto: {
+            aliases?: string[];
+            authors?: string[];
+            cover: string | null;
+            existing_id: number | null;
+            external_id: string;
+            /** @enum {string} */
+            source: "bangumi" | "vndb";
+            subtitle: string | null;
+            title: string;
+            year: string | null;
+        };
+        DuplicateLookupDto: {
+            /** @description 作者名唯一对应的站内人物（Galgame 为厂商） */
+            author: components["schemas"]["DuplicateAuthorDto"] | null;
+            external: components["schemas"]["DuplicateExternalItemDto"][];
+            site: components["schemas"]["DuplicateCandidateDto"][];
+        };
+        DuplicateReasonDto: {
+            alias?: boolean;
+            bangumi_id?: number;
+            chapter_type?: string;
+            distance?: number;
+            field?: string;
+            form_differs?: boolean;
+            /** @description Bangumi 上已被合并的编号 */
+            from_id?: number;
+            id?: number;
+            isbn?: string;
+            /** @enum {string} */
+            kind: "external_id" | "name" | "similar_name" | "bangumi_name" | "bangumi_merged" | "author" | "cover" | "isbn" | "volume_number" | "same_work" | "chapter_key";
+            label?: string;
+            name?: string;
+            number?: string;
+            person_id?: number;
+            /** @enum {string} */
+            resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            score?: number;
+            /** @description Bangumi 合并后的编号 */
+            to_id?: number;
+            value?: string;
+            volume_number?: number;
+        };
+        DuplicateSummaryDto: {
+            author: string | null;
+            bangumi_id: string | null;
+            /** @description 漫画、单行本为单话数；单话为页数 */
+            chapters: number | null;
+            cover: string | null;
+            created_at: string | null;
+            id: number;
+            label: string | null;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            /** @description 卷、单行本与单话所属的作品 */
+            series_id: number | null;
+            subtitle: string | null;
+            title: string;
+            vndb_id: string | null;
+            volumes: number | null;
+            /** @description 角色登场的作品 */
+            works: string[];
+            year: string | null;
+        };
+        DuplicateVerdictDto: {
+            a_id: number;
+            b_id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        DuplicateWorkRefDto: {
+            id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
         EditMangaChapterDto: {
             chapter_number?: string | null;
@@ -18905,134 +18581,35 @@ export interface components {
             title?: string | null;
             volume_id?: number | null;
         };
-        EditOperationDto: {
-            citations?: components["schemas"]["EditCitationDto"][];
-            entry?: number;
-            entry_ref?: string;
-            from?: number;
-            into?: number;
-            media?: number;
-            note?: string;
-            /** @enum {string} */
-            op: "create_entry" | "add" | "modify" | "cite" | "deprecate" | "restore" | "rate" | "move" | "merge" | "split" | "delete_entry" | "restore_entry" | "detach";
-            position?: number;
-            /** @enum {string} */
-            property?: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            qualifiers?: components["schemas"]["EditQualifiersDto"];
-            /** @enum {string} */
-            reason?: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE";
-            ref?: string;
-            sexual?: number;
-            statement?: number;
-            statements?: number[];
-            target?: number;
-            target_ref?: string;
-            /** @enum {string} */
-            type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-            value?: components["schemas"]["EditValueDto"];
-            violence?: number;
-        };
-        EditPartDto: {
-            id: number;
-            label: string;
-            /**
-             * Format: date-time
-             * @description When the part of the edit on this entry was undone
-             */
-            reverted_at: string | null;
-            /** @description The revision the edit made of this entry */
-            revision: number | null;
-            /** @description What the edit changed on this entry; empty when the edit summary covers it */
-            summary: string | null;
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
-        EditQualifiersDto: {
-            language?: string | null;
-            part?: string | null;
-            period_from?: string | null;
-            /** @enum {string|null} */
-            period_from_precision?: "YEAR" | "MONTH" | "DAY" | null;
-            period_to?: string | null;
-            /** @enum {string|null} */
-            period_to_precision?: "YEAR" | "MONTH" | "DAY" | null;
-            version_refs?: string[];
-            versions?: number[];
-        };
-        EditResultDto: {
-            edit_id: number;
-            entries: number[];
-        };
-        EditSummaryDto: {
-            /** Format: date-time */
-            applied_at: string | null;
-            basis: components["schemas"]["EditBasisDto"] | null;
-            batch: components["schemas"]["EditBatchRefDto"];
-            clause: string | null;
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            /** @description The first entries the edit touched, and those within the entry asked for */
-            entries: components["schemas"]["EditPartDto"][];
-            /** @description Entries the edit touched */
-            entry_count: number;
-            id: number;
-            note: string | null;
-            /** Format: date-time */
-            patrolled_at: string | null;
-            /** Format: date-time */
-            reverted_at: string | null;
-            summary: string;
-        };
-        EditValueDto: {
-            amount?: string | null;
-            archive_url?: string | null;
-            code?: string | null;
-            currency?: string | null;
-            date?: string | null;
-            /** @enum {string|null} */
-            date_precision?: "YEAR" | "MONTH" | "DAY" | null;
-            media_id?: number | null;
-            number?: number | null;
-            original?: string | null;
-            reading?: string | null;
-            role?: string | null;
-            /** @description Song title */
-            song?: string | null;
-            /** @description THEME or INSERT */
-            song_kind?: string | null;
-            target?: number | null;
-            target_ref?: string;
-            tax_included?: boolean | null;
-            text?: string | null;
-            /** @enum {string} */
-            value_kind?: "VALUE" | "UNKNOWN";
-        };
-        EditViolationDto: {
-            entry_id: number;
-            other_entry_id?: number;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            /** @enum {string} */
-            reason: "required" | "single" | "period_overlap" | "duplicate" | "incomplete" | "relation_pair" | "version_scope";
-        };
-        EditableEntryDto: {
-            deleted: boolean;
-            id: number;
-            label: string;
-            protection: components["schemas"]["EntryProtectionDto"] | null;
-            redirect_id: number | null;
-            /** @description Site page the entry is shown on */
-            resource: components["schemas"]["EntryResourceDto"] | null;
-            revision: number;
-            statements: components["schemas"]["StatementDto"][];
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
         EditorDocumentDto: {
             content?: components["schemas"]["EditorNodeDto"][];
             /** @enum {string} */
             type: "doc";
+        };
+        EditorFieldDto: {
+            attributes?: components["schemas"]["EditorRelationAttributeDto"][];
+            enum_name?: string;
+            enum_values?: string[];
+            field: string;
+            help?: string;
+            /** @enum {string} */
+            kind: "scalar" | "relation";
+            max?: number;
+            max_length?: number;
+            min?: number;
+            min_length?: number;
+            nullable?: boolean;
+            pattern?: string;
+            pattern_message?: string;
+            ref_attributes?: components["schemas"]["EditorRelationRefAttributeDto"][];
+            ref_target?: string;
+            required?: boolean;
+            row_identity?: boolean;
+            scope: string;
+            target?: string;
+            unique_attributes?: string[];
+            /** @enum {string} */
+            value_type?: "string" | "string[]" | "int" | "float" | "boolean" | "date" | "media" | "object" | "object[]" | "enum" | "enum[]" | "ref";
         };
         EditorMarkDto: {
             attrs?: {
@@ -19048,6 +18625,54 @@ export interface components {
             marks?: components["schemas"]["EditorMarkDto"][];
             text?: string;
             type: string;
+        };
+        EditorRelationAttributeDto: {
+            enum_name?: string;
+            enum_values?: string[];
+            help?: string;
+            name: string;
+            /** @enum {string} */
+            value_type: "string" | "int" | "float" | "boolean" | "enum";
+        };
+        EditorRelationRefAttributeDto: {
+            help?: string;
+            multiple: boolean;
+            name: string;
+            ref_target: string;
+        };
+        EditorRelationRefValueDto: {
+            cover: string | null;
+            id: number;
+            name: string;
+        };
+        EditorRelationRowDto: {
+            attributes: {
+                [key: string]: unknown;
+            };
+            ref_attributes?: {
+                [key: string]: components["schemas"]["EditorRelationRefValueDto"][];
+            };
+            relation_id?: number;
+            target: components["schemas"]["EntityRefSummaryDto"];
+            target_id: number;
+        };
+        EditorSchemaDto: {
+            fields: components["schemas"]["EditorFieldDto"][];
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+        };
+        EditorSnapshotDto: {
+            /** @description Resolved entity summary for each FK ref scalar field declared in the registry. Key = field name. Value = { name, cover } when the snapshot has a non-null id pointing at an existing entity, null otherwise. */
+            refs: {
+                [key: string]: unknown;
+            };
+            resource: components["schemas"]["ResourceHeadDto"];
+            resource_id: number;
+            /** @enum {string} */
+            resource_type: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+            snapshot: {
+                [key: string]: unknown;
+            };
         };
         EmojiReplaceImageReqDto: {
             /** Format: binary */
@@ -19111,11 +18736,6 @@ export interface components {
         EmojiUsageReqDto: {
             emoji_id: number;
         };
-        EnableTaskDto: {
-            reason: string;
-            /** @description Edits allowed before the task stops on its own; null for no limit */
-            trial_limit?: number | null;
-        };
         EngineStatusDto: {
             active: boolean;
             docs: number;
@@ -19124,10 +18744,47 @@ export interface components {
             maintains_index: boolean;
             reachable: boolean;
         };
+        EntityDraftDto: {
+            cover: string | null;
+            draft: {
+                [key: string]: unknown;
+            };
+            existing_id: number | null;
+            field_sources: {
+                [key: string]: string;
+            };
+            sources_match: boolean | null;
+        };
+        EntityImportDto: {
+            /** @description bangumi 人物/角色/公司条目数字 id */
+            bangumi_id?: string;
+            /** @enum {string} */
+            type: "person" | "character" | "producer";
+            /** @description vndb id,如 s123 / c123 / p123 */
+            vndb_id?: string;
+        };
+        EntityImportResultDto: {
+            cover: string | null;
+            id: number;
+            name: string;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+        };
         EntityLabelDto: {
             key: string;
             order: number;
             value: string;
+        };
+        EntityMappingItemDto: {
+            bangumi_id: string | null;
+            id: number;
+            vndb_id: string | null;
+        };
+        EntityRefSummaryDto: {
+            cover: string | null;
+            height?: number | null;
+            name: string;
+            width?: number | null;
         };
         EntitySummariesResDto: {
             articles: components["schemas"]["ArticleCardSummaryResDto"][];
@@ -19159,141 +18816,6 @@ export interface components {
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
-        EntityWebsiteDto: {
-            /** @description 网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT */
-            code: string;
-            url: string;
-        };
-        EntityWorkDto: {
-            /** @description 在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
-            galgame: components["schemas"]["GalgameSummaryDto"] | null;
-            /** @enum {string} */
-            kind: "galgame" | "light_novel" | "manga";
-            light_novel: components["schemas"]["LightNovelSummaryDto"] | null;
-            manga: components["schemas"]["MangaSummaryDto"] | null;
-            rating: components["schemas"]["WorkRatingDto"];
-        };
-        EntryChangeDto: {
-            id: number;
-            properties: components["schemas"]["PropertyValuesChangeDto"][];
-            title: string;
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
-        EntryDefinitionDto: {
-            /** @description Name of the entry type */
-            label: string;
-            properties: components["schemas"]["PropertyDefinitionDto"][];
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
-        EntryDraftDto: {
-            clause: string;
-            medium: string | null;
-            /** @description Operations that create the entry; empty until the medium of a new series is set */
-            operations: components["schemas"]["EditOperationDto"][];
-            /** @enum {string} */
-            placement: "new_series" | "series" | "volume" | "new_game" | "version" | "addon" | "page";
-            target: components["schemas"]["EntryRefDto"] | null;
-        };
-        EntryFlagsDto: {
-            /** @description Only for manga */
-            audience: components["schemas"]["MangaAudience"] | null;
-            /** @description Whether the entry is a manga with an audience */
-            manga: boolean;
-            nsfw: boolean;
-            otome: boolean;
-        };
-        EntryLookupDto: {
-            matches: components["schemas"]["EntryRefDto"][];
-            similar: components["schemas"]["EntryRefDto"][];
-            source: components["schemas"]["SourceDto"] | null;
-        };
-        EntryMergeMovedDto: {
-            count: number;
-            /** @description Legacy table whose rows move to the entry kept */
-            table: string;
-        };
-        EntryMergePreviewDto: {
-            /** @description Comments moved to the entry kept */
-            comments: number;
-            /** @description Properties where both entries hold different sourced values, or include different entries */
-            conflicts: ("TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK")[];
-            moved: components["schemas"]["EntryMergeMovedDto"][];
-            /** @description Operations of the merge: the repeated values deprecated, then the merge */
-            operations: components["schemas"]["EditOperationDto"][];
-        };
-        /** @enum {string} */
-        EntryProperty: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-        /** @enum {string} */
-        EntryProtection: "LOCKED";
-        EntryProtectionDto: {
-            /** @description When the entry was protected */
-            at: string | null;
-            /** @description Who protected the entry */
-            by: components["schemas"]["UserRefDto"] | null;
-            /** @description Reason given when the entry was protected */
-            reason: string | null;
-            until: string | null;
-        };
-        EntryRefDto: {
-            id: number;
-            label: string;
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
-        EntryReferenceDto: {
-            code: string | null;
-            /** @description Names credited on an appearance, in order */
-            credits: string[];
-            entry: components["schemas"]["EntryRefDto"];
-            /** @description Game a release belongs to */
-            owner: components["schemas"]["EntryRefDto"] | null;
-            /** @description Role as printed on a credit */
-            role: string | null;
-            /** @description The statement has a source other than an import */
-            sourced: boolean;
-            statement_id: number;
-            /** @description Works of an appearance listed under another entry than its work */
-            works: string[];
-        };
-        EntryReferenceGroupDto: {
-            /** @description The first 100 references */
-            items: components["schemas"]["EntryReferenceDto"][];
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            total: number;
-            /**
-             * @description Type of the entries holding the statements
-             * @enum {string}
-             */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-        };
-        EntryResourceDto: {
-            id: number;
-            /** @enum {string} */
-            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "manga_volume" | "character" | "person" | "producer" | "product";
-        };
-        EntrySearchItemDto: {
-            chinese_title: string | null;
-            id: number;
-            label: string;
-            /** @description The work or volume a release, appearance, volume or book belongs to */
-            owner: components["schemas"]["EntryRefDto"] | null;
-            /** @enum {string} */
-            type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-            /** @description Up to two works a person or organization is credited on */
-            works: components["schemas"]["EntryRefDto"][];
-        };
-        EntrySectionCountDto: {
-            count: number;
-            /** @enum {string} */
-            section: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
-            types: components["schemas"]["TypeCountDto"][];
-        };
-        /** @enum {string} */
-        EntryType: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
         EpubBulkDto: {
             /**
              * @description curate 标记已校订；uncurate 取消校订；remove 下架并删除文件
@@ -19324,7 +18846,6 @@ export interface components {
         EpubDuplicateVolumeDto: {
             id: number;
             name: string | null;
-            name_cn: string | null;
             series: components["schemas"]["EpubResourceSeriesDto"];
             volume_number: number | null;
         };
@@ -19428,6 +18949,7 @@ export interface components {
             volume_id: number;
         };
         EpubResourceDetailDto: {
+            bangumi_book_id: number | null;
             /** @description 当前 EPUB 的 15 分钟临时下载地址 */
             download_url: string | null;
             epub_curated: boolean;
@@ -19445,6 +18967,7 @@ export interface components {
             online_reading_available: boolean;
             pending_report_count: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
+            series_id: number;
             /** @description 引用同一个文件的其他分卷，非空通常意味着合集误挂或错卷 */
             shared_volumes: components["schemas"]["EpubResourceSharedVolumeDto"][];
             /** Format: date-time */
@@ -19454,6 +18977,7 @@ export interface components {
             volume_number: number | null;
         };
         EpubResourceItemDto: {
+            bangumi_book_id: number | null;
             epub_curated: boolean;
             epub_is_collection: boolean;
             /** @enum {string} */
@@ -19465,6 +18989,7 @@ export interface components {
             online_reading_available: boolean;
             pending_report_count: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
+            series_id: number;
             /** Format: date-time */
             updated_at: string;
             volume_number: number | null;
@@ -19489,7 +19014,7 @@ export interface components {
             status: "PENDING" | "RUNNING" | "PASSED" | "REJECTED" | "NEEDS_HUMAN" | "FAILED";
         };
         EpubResourceSeriesDto: {
-            id: number | null;
+            id: number;
             name: string;
             name_cn: string | null;
         };
@@ -19584,19 +19109,15 @@ export interface components {
             /** @description 装扮相对头像的缩放比例 */
             scale: number;
         };
-        FactDto: {
-            /** @description Name of the property */
-            label: string;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            values: components["schemas"]["FactValueDto"][];
-        };
-        FactValueDto: {
-            code: string | null;
-            release: components["schemas"]["ReleaseDto"] | null;
-            /** @description Entry the value links to */
-            target_id: number | null;
-            text: string;
+        ExternalSearchItemDto: {
+            aliases?: string[];
+            authors?: string[];
+            cover: string | null;
+            existing_id: number | null;
+            external_id: string;
+            subtitle: string | null;
+            title: string;
+            year: string | null;
         };
         FavoriteCollectionDto: {
             /** @description 收藏夹简介 */
@@ -19939,6 +19460,26 @@ export interface components {
             review: number;
             translation: number;
         };
+        ForceRejectDto: {
+            note?: string;
+        };
+        GalgameAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            locked: boolean;
+            nsfw: boolean;
+            origin_title: string;
+            otome: boolean;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            trans_title: string | null;
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
+        };
         GalgameCardSummaryResDto: {
             id: number;
             nsfw: boolean;
@@ -19950,7 +19491,6 @@ export interface components {
         };
         GalgameCharacterRelationDto: {
             actors: components["schemas"]["PersonPreviewDto"][];
-            appearance: components["schemas"]["AppearanceDto"] | null;
             character: components["schemas"]["CharacterPreviewDto"];
             role: components["schemas"]["CharacterRole"];
         };
@@ -19980,8 +19520,6 @@ export interface components {
         };
         GalgameDetailDto: {
             adv_type: string | null;
-            /** @enum {string|null} */
-            age_rating: "ALL_AGES" | "R15" | "R18" | null;
             aliases: string[];
             bangumi_game_id: number | null;
             covers: components["schemas"]["GalgameDetailCoverDto"][];
@@ -19991,12 +19529,9 @@ export interface components {
             dev_status: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED" | null;
             /** @description 可下载资源数，由 shionlib 同步而来 */
             download_resource_count: number;
-            editions: components["schemas"]["GalgameEditionDto"][];
             en_intro: string | null;
             en_title: string | null;
             engine: string | null;
-            /** @description Wiki entry of the game */
-            entry_id: number | null;
             external_links: components["schemas"]["GalgameExternalLinkDto"][];
             homepage: string | null;
             id: number;
@@ -20009,19 +19544,14 @@ export interface components {
             prices: components["schemas"]["GalgamePriceDto"][];
             /** Format: date-time */
             release_date: string | null;
-            /** @description 发售日的精度；只到年或月的发售日，release_date 是当年 1 月 1 日或当月 1 日 */
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
             release_date_tbd: boolean;
             release_date_tbd_note: string;
-            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED */
-            release_status: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** @description Steam 应用，首条为主商店页 */
             steam_apps: components["schemas"]["GalgameSteamAppDto"][];
-            title_reading: string | null;
             trans_intro: string | null;
             trans_title: string | null;
             /** Format: date-time */
@@ -20083,22 +19613,22 @@ export interface components {
             /** @description 是否已开始同步；已有同步在进行时为 false */
             started: boolean;
         };
-        GalgameEditionDto: {
-            /** @enum {string|null} */
-            age_rating: "ALL_AGES" | "R15" | "R18" | null;
-            currency: string | null;
-            jan: string | null;
-            /** @enum {string|null} */
-            kind: "REGULAR" | "LIMITED" | "DOWNLOAD" | "BUDGET" | "PORT" | "ENHANCED" | "BUNDLE" | "ADDON" | "BONUS" | "FREE" | "SUBSCRIPTION" | "OTHER" | null;
-            platform: string | null;
-            price: number | null;
-            product_code: string | null;
-            /** Format: date-time */
-            release_date: string | null;
-            /** @enum {string|null} */
-            release_status: "PLANNED" | "RELEASED" | "DELAYED" | "CANCELLED" | null;
-            tax_included: boolean | null;
-            title: string;
+        GalgameDraftDto: {
+            characters: components["schemas"]["ResolvedCharacterDto"][];
+            cover: string | null;
+            draft: {
+                [key: string]: unknown;
+            };
+            existing_id: number | null;
+            field_sources: {
+                [key: string]: string;
+            };
+            producers: components["schemas"]["ResolvedProducerDto"][];
+            relations: components["schemas"]["ResolvedRelationDto"][];
+            screenshots: components["schemas"]["ScreenshotDto"][];
+            sources_match: boolean | null;
+            staff: components["schemas"]["ResolvedStaffDto"][];
+            tags: components["schemas"]["ResolvedTagDto"][];
         };
         GalgameExternalLinkDto: {
             /** @description 链接显示名称 */
@@ -20127,6 +19657,24 @@ export interface components {
         GalgameHistogramMonthBucketDto: {
             count: number;
             month: number;
+        };
+        GalgameImportDto: {
+            /** @description bangumi 游戏条目数字 id */
+            bangumi_id?: string;
+            confirm?: boolean;
+            /** @description vndb vn id,如 v2002 */
+            vndb_id?: string;
+        };
+        GalgameImportResultDto: {
+            batch_id: string | null;
+            change_request_id: number | null;
+            existing_id: number | null;
+            sources_match: boolean | null;
+        };
+        GalgameMappingItemDto: {
+            bangumi_game_id: number | null;
+            id: number;
+            vndb_id: number | null;
         };
         GalgameMonthlyReleaseDto: {
             current_month: boolean;
@@ -20167,24 +19715,19 @@ export interface components {
             name: string;
             popularity: number;
         };
-        GalgamePreviewDto: {
-            characters: components["schemas"]["GalgameCharacterRelationDto"][];
-            credits: components["schemas"]["GameCreditsDto"];
-            display: components["schemas"]["GameDisplayDto"];
-            facts: components["schemas"]["FactDto"][];
-            galgame: components["schemas"]["GalgameDetailDto"];
-            products: components["schemas"]["ProductListingDto"][];
-            relations: components["schemas"]["GalgameRelationDto"][];
-        };
         GalgamePriceDto: {
             amount: number | null;
             currency: string | null;
             tax_included: boolean | null;
             version: string | null;
         };
+        GalgamePriceRowDto: {
+            amount?: number | null;
+            currency?: string | null;
+            tax_included?: boolean | null;
+            version?: string | null;
+        };
         GalgameProducerRelationDto: {
-            /** @description 新的职责编码 */
-            code: string;
             note: string;
             producer: components["schemas"]["ProducerPreviewDto"];
             /** @enum {string|null} */
@@ -20354,29 +19897,6 @@ export interface components {
             modules: components["schemas"]["GalgameRecommendModuleDto"][];
             next_cursor: number | null;
         };
-        GalgameRecommendItemDto: {
-            /** @description 封面列表，按得票数由高到低排序 */
-            covers: components["schemas"]["GalgameCoverRelationDto"][];
-            /** @description Galgame ID */
-            id: number;
-            maker: string | null;
-            /** @description 是否为NSFW 内容 */
-            nsfw: boolean;
-            /** @description 原名 */
-            origin_title: string;
-            /** @description 相关厂商 */
-            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
-            reason: components["schemas"]["RecommendReasonDto"] | null;
-            /**
-             * Format: date-time
-             * @description 发行日期
-             */
-            release_date: string | null;
-            /** @description 发行日期的精度 */
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 译名 */
-            trans_title: string | null;
-        };
         GalgameRecommendModuleDto: {
             intro: string | null;
             items: components["schemas"]["GalgameSummaryDto"][];
@@ -20386,10 +19906,6 @@ export interface components {
             /** @enum {string} */
             reason: "DISCOVERY" | "PLAYING" | "COMPLETED" | "SCENARIO" | "VISUAL" | "MUSIC" | "SPOTLIGHT" | "TAG";
             tag: components["schemas"]["TagPreviewDto"] | null;
-        };
-        GalgameRecommendPageDto: {
-            items: components["schemas"]["GalgameRecommendItemDto"][];
-            next_cursor: number | null;
         };
         GalgameRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
@@ -20410,10 +19926,8 @@ export interface components {
             like_count: number;
         };
         GalgameRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             /** @enum {string} */
-            relation: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION" | "REMAKE" | "ORIGINAL" | "FAN_DISC" | "MAIN_GAME" | "SAME_SERIES";
+            relation: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION";
             target_galgame: components["schemas"]["GalgameRelationTargetDto"];
         };
         GalgameRelationTargetDto: {
@@ -20423,17 +19937,14 @@ export interface components {
             origin_title: string;
             /** Format: date-time */
             release_date: string | null;
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
             trans_title: string | null;
         };
         /**
          * @description 当前条目相对目标作品的关系类型
          * @enum {string}
          */
-        GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION" | "REMAKE" | "ORIGINAL" | "FAN_DISC" | "MAIN_GAME" | "SAME_SERIES";
+        GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION";
         GalgameStaffRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             person: components["schemas"]["PersonPreviewDto"];
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
@@ -20459,8 +19970,6 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
-            /** @description 发行日期的精度 */
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 译名 */
             trans_title: string | null;
         };
@@ -20482,34 +19991,7 @@ export interface components {
             role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER" | null;
         };
         GalgameTagRelationDto: {
-            likes: number;
             tag: components["schemas"]["TagPreviewDto"];
-        };
-        GameCreditsDto: {
-            /** @description Organizations first, then people by role */
-            groups: components["schemas"]["CreditGroupDto"][];
-            /** @description The first release the credits come from */
-            product: components["schemas"]["ProductRefDto"] | null;
-            /** @description Unofficial translators */
-            translators: components["schemas"]["ProductCreditDto"][];
-        };
-        GameDisplayDto: {
-            brands: components["schemas"]["ProductCreditDto"][];
-            intros: components["schemas"]["FactDto"][];
-            /** @description Original title when the title differs */
-            original_title: string | null;
-            platforms: string[];
-            release: components["schemas"]["GameReleaseDto"] | null;
-            title: string;
-        };
-        GameReleaseDto: {
-            date: string | null;
-            /** @description The first release is not out yet */
-            planned: boolean;
-            /** @enum {string|null} */
-            precision: "YEAR" | "MONTH" | "DAY" | null;
-            /** @description Null while the date is not announced */
-            text: string | null;
         };
         GrantDecorationDto: {
             user_id: number;
@@ -20528,51 +20010,6 @@ export interface components {
             sinks: components["schemas"]["PointSinksDto"];
             today: components["schemas"]["PointFlowDto"];
             week: components["schemas"]["PointFlowDto"];
-        };
-        HistoryComparisonDto: {
-            entries: components["schemas"]["EntryChangeDto"][];
-            from: components["schemas"]["HistoryRevisionDto"];
-            to: components["schemas"]["HistoryRevisionDto"];
-        };
-        HistoryEditDto: {
-            /** Format: date-time */
-            created_at: string;
-            /** @description Entries the edit changed */
-            entries: components["schemas"]["ProductRefDto"][];
-            id: number;
-            summary: string;
-        };
-        HistoryRevisionDto: {
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            revision: number;
-            summary: string;
-        };
-        HistoryRowDto: {
-            /** @description Batch of the folded edits; null for a revision of the old site */
-            batch_id: number | null;
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            /** @description Edits of one batch folded into the row */
-            edits: components["schemas"]["HistoryEditDto"][];
-            /** @description Imported from the old site; cannot be reverted */
-            imported: boolean;
-            note: string | null;
-            reverted: boolean;
-            /** @description Revision to view or compare; null for a revision of the old site */
-            revision: number | null;
-            summary: string;
-        };
-        HistorySnapshotDto: {
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            game: components["schemas"]["GameDisplayDto"];
-            products: components["schemas"]["ProductSummaryDto"][];
-            revision: number;
-            summary: string;
         };
         IdentitySessionDto: {
             /** Format: date-time */
@@ -20650,18 +20087,60 @@ export interface components {
         InstantResponseDto: {
             groups: components["schemas"]["InstantGroupDto"][];
         };
+        InternalCatalogChangesDto: {
+            /** @description 本页之后是否还有更多事件 */
+            has_more: boolean;
+            /** @description 按序号升序排列的变更事件 */
+            items: components["schemas"]["InternalCatalogEventDto"][];
+            /** @description 当前最新事件序号；首次同步时可先记录该值再做全量 */
+            latest_id: number;
+        };
+        InternalCatalogEventDto: {
+            /**
+             * Format: date-time
+             * @description 事件发生时间
+             */
+            created_at: string;
+            /** @description 事件序号，单调递增，可作为增量游标 */
+            id: number;
+            /** @description upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id */
+            kind: components["schemas"]["CatalogEventKind"];
+            /** @description merge 事件的目标资源 ID */
+            merged_to_id: number | null;
+            /** @description 发生变更的资源 ID */
+            resource_id: number;
+            /** @description 发生变更的资源类型 */
+            resource_type: components["schemas"]["ContributionResourceType"];
+        };
+        InternalGalgameBatchDto: {
+            ids: number[];
+        };
+        InternalProducerListItemDto: {
+            aliases: string[];
+            id: number;
+            logo: components["schemas"]["MediaAssetDto"] | null;
+            name: string;
+            works_count: number;
+        };
         InternalReleaseNoteDto: {
             created: boolean;
             id: number;
         };
-        KeptValueDto: {
-            entry_id: number;
-            /** @description The value changed since; empty when the entry itself changed since */
-            statement_id: number | null;
-        };
-        LabelChangeDto: {
-            after: string;
-            before: string;
+        LightNovelAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            locked: boolean;
+            name: string;
+            nsfw: boolean;
+            otome: boolean;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
         };
         LightNovelBunkoDto: {
             id: number;
@@ -20700,31 +20179,22 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             download_times: number;
-            /** @description 条目 ID */
-            entry_id: number;
             id: number;
             name: string;
             name_cn: string | null;
-            /** @enum {string|null} */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
+            /** @enum {string} */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
             nsfw: boolean;
             other_names: string[];
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
             read_times: number;
-            /** @description 标题读音 */
-            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             summary: string | null;
             summary_cn: string | null;
-            /** @description 英文简介 */
-            summary_en: string | null;
             total_volumes: number;
             /** Format: date-time */
             updated_at: string;
@@ -20737,20 +20207,14 @@ export interface components {
             title: string;
         };
         LightNovelPeopleRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             note: string | null;
             person: components["schemas"]["PersonPreviewDto"];
-            /** @description 由 code 反推：author、illustrator，其余职责为 other */
             relation: string;
         };
         LightNovelProducerRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             note: string | null;
             producer: components["schemas"]["ProducerPreviewDto"];
-            /** @description 由 code 反推：bunko、publisher，对不上的为空 */
-            relation: string | null;
+            relation: string;
         };
         LightNovelProgressEntryDto: {
             current_chapter_title: string | null;
@@ -20899,43 +20363,6 @@ export interface components {
             name_cn: string | null;
             volume_number: number | null;
         };
-        LightNovelRecommendItemDto: {
-            /** @description 作者 */
-            author: components["schemas"]["LightNovelSummaryPersonDto"] | null;
-            /** @description 所属文库 */
-            bunko: components["schemas"]["LightNovelSummaryProducerDto"] | null;
-            /** @description 封面列表，按得票数由高到低排序 */
-            covers: components["schemas"]["LightNovelCoverRelationDto"][];
-            /** @description 轻小说 ID */
-            id: number;
-            maker: string | null;
-            /** @description 原名 */
-            name: string;
-            /** @description 中文名 */
-            name_cn: string | null;
-            /**
-             * @description 连载状态，系列没有记录出版状态时为空
-             * @enum {string|null}
-             */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
-            /** @description 是否为NSFW 内容 */
-            nsfw: boolean;
-            /**
-             * Format: date-time
-             * @description 首卷出版日期
-             */
-            publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
-            /** @description 出版方 */
-            publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
-            reason: components["schemas"]["RecommendReasonDto"] | null;
-        };
-        LightNovelRecommendPageDto: {
-            items: components["schemas"]["LightNovelRecommendItemDto"][];
-            next_cursor: number | null;
-        };
         LightNovelRelatedArticleDto: {
             creator: components["schemas"]["UserRefDto"] | null;
             excerpt: string | null;
@@ -20955,10 +20382,8 @@ export interface components {
             like_count: number;
         };
         LightNovelRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             /** @enum {string} */
-            relation: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER" | "SETTING_BOOK" | "SETTING_SOURCE" | "ANTHOLOGY" | "ANTHOLOGY_SOURCE";
+            relation: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER";
             target_light_novel: components["schemas"]["LightNovelRelationTargetDto"];
         };
         LightNovelRelationTargetDto: {
@@ -21012,10 +20437,10 @@ export interface components {
             /** @description 中文名 */
             name_cn: string | null;
             /**
-             * @description 连载状态，系列没有记录出版状态时为空
-             * @enum {string|null}
+             * @description 连载状态
+             * @enum {string}
              */
-            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
             /**
@@ -21023,9 +20448,6 @@ export interface components {
              * @description 首卷出版日期
              */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
             /** @description 出版方 */
             publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
         };
@@ -21048,7 +20470,6 @@ export interface components {
             producer: components["schemas"]["LightNovelSummaryProducerDto"];
         };
         LightNovelTagRelationDto: {
-            likes: number;
             tag: components["schemas"]["TagPreviewDto"];
         };
         LightNovelVolumeCardSummaryResDto: {
@@ -21072,8 +20493,6 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             download_times: number;
-            /** @description 条目 ID */
-            entry_id: number;
             /** @description 当前电子书由用户投稿并通过审核时为投稿者，其他来源为空 */
             epub_provider: components["schemas"]["UserRefDto"] | null;
             id: number;
@@ -21092,7 +20511,6 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             read_times: number;
             relation: string;
             /** Format: date-time */
@@ -21132,7 +20550,6 @@ export interface components {
             name_cn: string | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
             volume_label: string | null;
             volume_number: number | null;
@@ -21154,7 +20571,6 @@ export interface components {
         LightNovelVolumeRelationDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
             id: number;
-            isbn: string | null;
             name: string;
             name_cn: string | null;
             online_reading_available: boolean;
@@ -21164,10 +20580,8 @@ export interface components {
              * @enum {string|null}
              */
             online_reading_translation: "HUMAN" | "MACHINE_EDITED" | "MACHINE" | null;
-            pages: number | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             relation: string;
             volume_label: string | null;
             volume_number: number | null;
@@ -21181,7 +20595,6 @@ export interface components {
             name_cn: string | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
             volume_label: string | null;
             volume_number: number | null;
@@ -21204,7 +20617,6 @@ export interface components {
             projects: components["schemas"]["LightNovelVolumeWantedProjectDto"][];
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 读完上一卷的读者人数 */
             readers: number;
             series: components["schemas"]["LightNovelVolumeSummarySeriesDto"];
@@ -21218,53 +20630,34 @@ export interface components {
             mode: "ENTRY" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
         };
-        ListingItemDto: {
-            decision: components["schemas"]["CatalogSyncDecision"];
-            evidence: {
+        LinkCatalogItemDto: {
+            /** @description 认定为哪个站内条目；传 null 表示不是重复，下次同步照常创建 */
+            resource_id: number | null;
+        };
+        LnDraftDto: {
+            author: components["schemas"]["ResolvedEntityDto"] | null;
+            characters: components["schemas"]["ResolvedEntityDto"][];
+            cover: string | null;
+            draft: {
                 [key: string]: unknown;
-            } | null;
-            id: number;
-            manga_id: number;
-            title: string;
+            };
+            existing_id: number | null;
+            field_sources: {
+                [key: string]: string;
+            };
+            illustrators: components["schemas"]["ResolvedEntityDto"][];
+            publishers: components["schemas"]["ResolvedEntityDto"][];
+            relations: components["schemas"]["ResolvedRelationDto"][];
+            sources_match: boolean | null;
         };
-        ListingRunDto: {
-            actor: components["schemas"]["UserRefDto"] | null;
-            changed: number;
-            dry_run: boolean;
-            error_message: string | null;
-            /** Format: date-time */
-            finished_at: string | null;
-            id: number;
-            /** @description 扫描的条目数 */
-            scanned: number;
-            /** Format: date-time */
-            started_at: string;
-            status: components["schemas"]["CatalogSyncStatus"];
-            trigger: components["schemas"]["CatalogSyncTrigger"];
+        LnImportDto: {
+            /** @description bangumi 书籍条目数字 id */
+            bangumi_id: string;
         };
-        LogEntryDto: {
-            id: number;
-            label: string;
-            type: components["schemas"]["EntryType"];
-        };
-        LogItemDto: {
-            action: components["schemas"]["WikiLogAction"];
-            actor: components["schemas"]["UserRefDto"];
-            /** Format: date-time */
-            created_at: string;
-            data: {
-                [key: string]: unknown;
-            } | null;
-            entry: components["schemas"]["LogEntryDto"] | null;
-            id: number;
-            reason: string;
-            task: components["schemas"]["LogTaskDto"] | null;
-            /** @description The account acted on */
-            user: components["schemas"]["UserRefDto"] | null;
-        };
-        LogTaskDto: {
-            id: number;
-            name: string;
+        LnImportResultDto: {
+            batch_id: string | null;
+            change_request_id: number | null;
+            existing_id: number | null;
         };
         MakeUpCardItemDto: {
             created_at: string;
@@ -21323,6 +20716,23 @@ export interface components {
             updated_at: string;
             view_count: number;
         };
+        MangaAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            locked: boolean;
+            name: string;
+            name_cn: string | null;
+            nsfw: boolean;
+            otome: boolean;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
+        };
         /**
          * @description 受众分类
          * @enum {string}
@@ -21331,15 +20741,6 @@ export interface components {
         MangaBacklogDto: {
             failed_chapters: number;
             pending_links: number;
-        };
-        MangaBaselinePageDto: {
-            byte_size: number | null;
-            height: number | null;
-            id: number;
-            page_number: number;
-            /** @description 图片的限时访问地址 */
-            url: string;
-            width: number | null;
         };
         MangaCardSummaryResDto: {
             author_name: string | null;
@@ -21390,7 +20791,7 @@ export interface components {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
             /** @description 卷取单行本条目封面 */
-            cover: components["schemas"]["RatedMediaAssetDto"] | null;
+            cover: components["schemas"]["MediaAssetDto"] | null;
             /**
              * Format: date-time
              * @description 加入作品的时间
@@ -21450,48 +20851,6 @@ export interface components {
             character: components["schemas"]["CharacterPreviewDto"];
             role: components["schemas"]["CharacterRole"];
         };
-        MangaCheckBaselinePageDto: {
-            byte_size: number | null;
-            height: number | null;
-            page_id: number;
-            width: number | null;
-        };
-        MangaCheckPageDto: {
-            byte_size: number | null;
-            /** @description 疑似与之重复的页面 */
-            duplicate_of: number[];
-            /** @description 疑似重复、可能空白、尺寸异常 */
-            flags: ("duplicate" | "blank" | "size")[];
-            height: number;
-            /** @description 对应的现有版本页面在 baseline 中的序号，从 0 开始；没有对应时为 null */
-            match: number | null;
-            page_id: number;
-            width: number;
-        };
-        MangaCheckResultDto: {
-            /** @description 现有版本的页面；不是替换投稿时为 null */
-            baseline: components["schemas"]["MangaCheckBaselinePageDto"][] | null;
-            /** @description 按页序排列 */
-            pages: components["schemas"]["MangaCheckPageDto"][];
-            summary: components["schemas"]["MangaCheckSummaryDto"];
-        };
-        MangaCheckSummaryDto: {
-            /** @description 每页的平均字节数 */
-            average_bytes: number | null;
-            baseline_average_bytes: number | null;
-            baseline_height: number | null;
-            baseline_page_count: number | null;
-            baseline_width: number | null;
-            /** @description 带有标记或在现有版本中没有对应页的页数 */
-            flagged: number;
-            /** @description 页面高度的中位数 */
-            height: number;
-            /** @description 与现有版本一一对应的页数 */
-            matched: number | null;
-            page_count: number;
-            /** @description 页面宽度的中位数 */
-            width: number;
-        };
         MangaContributorsDto: {
             contributors: components["schemas"]["UserRefDto"][];
             count: number;
@@ -21531,8 +20890,6 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             editions: components["schemas"]["MangaEditionDto"][] | null;
-            /** @description 条目 ID */
-            entry_id: number;
             homepage: string | null;
             id: number;
             isbn: string | null;
@@ -21548,24 +20905,17 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** Format: date-time */
             publication_end_date: string | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
             read_times: number;
-            /** @description 标题读音 */
-            reading: string | null;
             reading_mode: components["schemas"]["MangaReadingMode"];
             /** Format: date-time */
             revised_at: string | null;
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            serial_status: components["schemas"]["MangaSerialStatus"];
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             summary: string | null;
             summary_cn: string | null;
-            /** @description 英文简介 */
-            summary_en: string | null;
             /** Format: date-time */
             updated_at: string;
             views: number;
@@ -21648,11 +20998,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             id: number;
-            page_id: number;
-            /** @description 批注圈出的区域 */
-            rect: components["schemas"]["MangaNoteRectDto"] | null;
-            /** @description 批注所在的文本框 */
-            region_id: string | null;
+            region: components["schemas"]["MangaNoteRegionDto"];
+            region_id: string;
             /**
              * Format: date-time
              * @description 批注标记为已处理的时间
@@ -21660,21 +21007,8 @@ export interface components {
             resolved_at: string | null;
             user: components["schemas"]["UserRefDto"];
         };
-        MangaNoteRectDto: {
-            /** @description 高度，按页面高度归一化 */
-            h: number;
-            /** @description 宽度，按页面宽度归一化 */
-            w: number;
-            /** @description 左边缘，按页面宽度归一化到 0 至 1 */
-            x: number;
-            /** @description 上边缘，按页面高度归一化到 0 至 1 */
-            y: number;
-        };
-        MangaNoteRectInputDto: {
-            h: number;
-            w: number;
-            x: number;
-            y: number;
+        MangaNoteRegionDto: {
+            page_id: number;
         };
         MangaNotifySettingDto: {
             enabled: boolean;
@@ -21703,15 +21037,12 @@ export interface components {
             queues: components["schemas"]["MangaQueueStatusDto"][];
         };
         MangaProducerRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             note: string;
             producer: components["schemas"]["ProducerPreviewDto"];
-            /** @description 由 code 反推，对不上旧角色的为空 */
-            role: components["schemas"]["MangaProducerRole"] | null;
+            role: components["schemas"]["MangaProducerRole"];
         };
         /**
-         * @description 承担的角色，由 code 反推，对不上旧角色的为空
+         * @description 承担的角色
          * @enum {string}
          */
         MangaProducerRole: "PUBLISHER" | "MAGAZINE" | "LABEL";
@@ -21745,25 +21076,6 @@ export interface components {
             volume_id: number | null;
             volume_number: number | null;
         };
-        MangaProjectCheckDto: {
-            error: string | null;
-            result: components["schemas"]["MangaCheckResultDto"] | null;
-            status: components["schemas"]["MangaProjectCheckStatus"];
-            /**
-             * Format: date-time
-             * @description 检查对应的投稿轮次
-             */
-            submitted_at: string;
-            /** Format: date-time */
-            updated_at: string;
-        };
-        /** @enum {string} */
-        MangaProjectCheckStatus: "PENDING" | "READY" | "FAILED";
-        MangaProjectCheckSummaryDto: {
-            /** @description 带有标记的页数，检查完成前为 null */
-            flagged: number | null;
-            status: components["schemas"]["MangaProjectCheckStatus"];
-        };
         MangaProjectDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -21785,8 +21097,6 @@ export interface components {
             page_count: number;
             /** Format: date-time */
             published_at: string | null;
-            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
-            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -21810,19 +21120,6 @@ export interface components {
             volume_number: number | null;
             withdrawn_count: number;
         };
-        MangaProjectInfoDto: {
-            chapter_name?: string | null;
-            chapter_number?: string | null;
-            /** @enum {string} */
-            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /**
-             * @description 只有尚未对应到章节的项目可以改
-             * @enum {string}
-             */
-            scope?: "CHAPTER" | "VOLUME";
-            /** @description 单行本条目 */
-            volume_id?: number | null;
-        };
         MangaProjectListEntryDto: {
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
@@ -21831,8 +21128,6 @@ export interface components {
             chapter_number: string | null;
             /** @enum {string} */
             chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /** @description 最新一轮投稿的检查 */
-            check: components["schemas"]["MangaProjectCheckSummaryDto"] | null;
             /** Format: date-time */
             created_at: string;
             id: number;
@@ -21846,8 +21141,6 @@ export interface components {
             /** @description 前几页的图片地址 */
             preview: string[];
             progress: components["schemas"]["MangaProjectProgressDto"];
-            /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
-            replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
              * @description 一话或整卷
              * @enum {string}
@@ -21877,8 +21170,6 @@ export interface components {
         MangaProjectPageDto: {
             /** @description 选定译文由机翻修改而来的文本框数 */
             assisted_count: number;
-            /** @description 发布时使用的图片的字节数 */
-            byte_size: number | null;
             cleaned_image: components["schemas"]["MediaAssetDto"] | null;
             /** @description 清理图的限时访问地址 */
             cleaned_url: string | null;
@@ -21904,10 +21195,6 @@ export interface components {
             pages: number;
             /** @description 已有成品图的页数 */
             rendered: number;
-        };
-        MangaProjectReplacesDto: {
-            /** @description 现有版本的页数 */
-            page_count: number;
         };
         MangaProjectReviewDto: {
             confidence: number | null;
@@ -22065,7 +21352,7 @@ export interface components {
             name_cn: string | null;
             nsfw: boolean;
             reading_mode: components["schemas"]["MangaReadingMode"];
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            serial_status: components["schemas"]["MangaSerialStatus"];
         };
         /**
          * @description 阅读方向
@@ -22085,39 +21372,6 @@ export interface components {
             source_key: string;
             /** Format: date-time */
             updated_at: string;
-        };
-        MangaRecommendItemDto: {
-            /** @description 封面列表，按得票数由高到低排序 */
-            covers: components["schemas"]["MangaCoverRelationDto"][];
-            /** @description 漫画 ID */
-            id: number;
-            /**
-             * Format: date-time
-             * @description 最新一话的更新时间
-             */
-            latest_chapter_at: string | null;
-            maker: string | null;
-            /** @description 原名 */
-            name: string;
-            /** @description 中文名 */
-            name_cn: string | null;
-            /** @description 是否为NSFW 内容 */
-            nsfw: boolean;
-            /**
-             * Format: date-time
-             * @description 开始连载日期
-             */
-            publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
-            reason: components["schemas"]["RecommendReasonDto"] | null;
-            /** @description 连载状态，系列没有记录出版状态时为空 */
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
-        };
-        MangaRecommendPageDto: {
-            items: components["schemas"]["MangaRecommendItemDto"][];
-            next_cursor: number | null;
         };
         MangaRediscoverSettingDto: {
             active_days: number;
@@ -22206,15 +21460,13 @@ export interface components {
             like_count: number;
         };
         MangaRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             manga: components["schemas"]["MangaSummaryDto"];
             relation: components["schemas"]["MangaRelationType"];
         };
         /** @enum {string} */
-        MangaRelationType: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER" | "SETTING_BOOK" | "SETTING_SOURCE" | "ANTHOLOGY" | "ANTHOLOGY_SOURCE";
+        MangaRelationType: "SERIES" | "PREQUEL" | "SEQUEL" | "SIDE_STORY" | "MAIN_STORY" | "SAME_UNIVERSE" | "DIFFERENT_UNIVERSE" | "VARIANT" | "DIFFERENT_ADAPTATION" | "CHARACTER" | "COLLABORATION" | "OTHER";
         /**
-         * @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空
+         * @description 连载状态
          * @enum {string}
          */
         MangaSerialStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
@@ -22235,7 +21487,7 @@ export interface components {
             /** Format: date-time */
             last_read: string;
             manga_id: number;
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            serial_status: components["schemas"]["MangaSerialStatus"];
             title: string;
             /** @description 当前项所在单位的项数 */
             total_chapters: number;
@@ -22279,15 +21531,12 @@ export interface components {
             languages?: string[];
         };
         MangaStaffRelationDto: {
-            /** @description 新的职责或关系编码 */
-            code: string;
             note: string;
             person: components["schemas"]["PersonPreviewDto"];
-            /** @description 由 code 反推，对不上旧职位的为空 */
-            role: components["schemas"]["MangaStaffRole"] | null;
+            role: components["schemas"]["MangaStaffRole"];
         };
         /**
-         * @description 担任的职位，由 code 反推，对不上旧职位的为空
+         * @description 担任的职位
          * @enum {string}
          */
         MangaStaffRole: "AUTHOR" | "ART" | "ORIGINAL_CREATOR" | "SCRIPT" | "ILLUSTRATION" | "CHARACTER_DESIGN";
@@ -22337,11 +21586,8 @@ export interface components {
              * @description 开始连载日期
              */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 新的出版状态编码 */
-            publication_status: string | null;
-            /** @description 连载状态，系列没有记录出版状态时为空 */
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            /** @description 连载状态 */
+            serial_status: components["schemas"]["MangaSerialStatus"];
         };
         MangaSweeperSettingDto: {
             backpressure_max: number;
@@ -22384,15 +21630,28 @@ export interface components {
             batch_size: number;
             enabled: boolean;
         };
+        MangaVolumeAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
+            volume_number: number | null;
+        };
         MangaVolumeDetailDto: {
             bangumi_book_id: number | null;
             chapter_count: number | null;
-            cover: components["schemas"]["RatedMediaAssetDto"] | null;
+            cover: components["schemas"]["MediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
             editions: components["schemas"]["MangaEditionDto"][] | null;
-            /** @description 条目 ID */
-            entry_id: number;
             id: number;
             isbn: string | null;
             manga: components["schemas"]["MangaSummaryDto"];
@@ -22404,7 +21663,6 @@ export interface components {
             price_currency: string | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             publisher: string | null;
             read_times: number;
             /** Format: date-time */
@@ -22421,7 +21679,7 @@ export interface components {
             volume_number: number | null;
         };
         MangaVolumeRelationDto: {
-            cover: components["schemas"]["RatedMediaAssetDto"] | null;
+            cover: components["schemas"]["MediaAssetDto"] | null;
             id: number;
             isbn: string | null;
             name: string | null;
@@ -22429,7 +21687,6 @@ export interface components {
             page_count: number | null;
             /** Format: date-time */
             publication_date: string | null;
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             sort_key: number;
             volume_number: number | null;
         };
@@ -22493,6 +21750,7 @@ export interface components {
         MediaGcBackfillResultDto: {
             articles: components["schemas"]["MediaGcBackfillCountDto"];
             posts: components["schemas"]["MediaGcBackfillCountDto"];
+            revisions: components["schemas"]["MediaGcBackfillCountDto"];
         };
         MediaGcFailureDto: {
             error: string;
@@ -22599,42 +21857,11 @@ export interface components {
             id: number;
             name: string;
         };
-        MergeBatchDto: {
-            pairs: components["schemas"]["MergePairDto"][];
-            reason: string;
-        };
-        MergeBatchResultDto: {
-            batch_id: number;
-            failed: components["schemas"]["MergeFailureDto"][];
-            /** @description Items whose pair was merged */
-            merged: number[];
-        };
-        MergeCandidateDto: {
-            /** Format: date-time */
-            created_at: string;
-            entries: components["schemas"]["CandidateEntryDto"][];
-            evidence: {
-                [key: string]: unknown;
-            };
-            /** @description The item to improve that proposes the pair */
-            id: number;
-            problem: string;
-            /** @enum {string} */
-            source: "bot" | "legacy";
-        };
-        MergeCountsDto: {
-            sections: components["schemas"]["SectionCountDto"][];
-            total: number;
-        };
         MergeDto: {
             canonical_id: number;
             /** @description Per-field override of the default merge policy. Fields left out keep the default: string arrays are unioned, every other type is only filled in where the canonical side is empty. */
             field_choices?: components["schemas"]["MergeFieldChoiceDto"][];
             loser_id: number;
-        };
-        MergeFailureDto: {
-            code: string;
-            todo_id: number;
         };
         MergeFieldChoiceDto: {
             /** @description Editable field name, as declared by the resource registry. */
@@ -22674,6 +21901,15 @@ export interface components {
             /** @enum {string} */
             value_type: "string" | "string[]" | "int" | "float" | "boolean" | "date" | "media" | "object" | "object[]";
         };
+        MergeIntoDto: {
+            body?: string;
+            /** @description Use existing records instead of people or labels created in the same batch. */
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            field_choices?: components["schemas"]["MergeFieldChoiceDto"][];
+            target_id: number;
+            /** @description Use the submitted original title as the existing entry’s Chinese title. */
+            title_as_chinese?: boolean;
+        };
         MergeMangaChapterDto: {
             into: number;
         };
@@ -22686,13 +21922,6 @@ export interface components {
              */
             key: "covers" | "images" | "volumes" | "chapters" | "characters" | "staff" | "producers" | "works" | "voices" | "tagged" | "rates" | "favorites" | "progress" | "sources" | "projects";
         };
-        MergePairDto: {
-            /** @description The entry that stays */
-            keep: number;
-            /** @description The entry merged into the kept one */
-            merged: number;
-            todo_id: number;
-        };
         MergePreviewDto: {
             fields: components["schemas"]["MergeFieldPlanDto"][];
             moves: components["schemas"]["MergeMoveDto"][];
@@ -22702,8 +21931,6 @@ export interface components {
             canonical_id: number;
             /** @description The merged-away (deleted) resource id. */
             loser_id: number;
-            /** @description The record that undoes this merge, when this kind of merge can be undone. */
-            undo_id: number | null;
         };
         MessageHistoryDto: {
             /** @description 渲染本页 emoji 所需的集合 */
@@ -22725,7 +21952,7 @@ export interface components {
             created_before?: string;
             reasons?: string[];
             /** @enum {string} */
-            status?: "FAILED" | "REJECTED" | "PASSED" | "PENDING" | "RUNNING" | "NEEDS_HUMAN";
+            status?: "FAILED" | "REJECTED" | "PENDING" | "RUNNING" | "PASSED" | "NEEDS_HUMAN";
             target_type?: string;
         };
         ModerationBulkDto: {
@@ -23159,21 +22386,30 @@ export interface components {
             available_count: number;
             download_times: number;
             id: number;
-            /** @description 缺 EPUB 的分卷，按卷的排列顺序 */
+            /** @description 缺 EPUB 的分卷，按卷号升序 */
             missing_volumes: components["schemas"]["NovelSeriesMissingVolumeDto"][];
             name: string;
             name_cn: string | null;
             /** @description 该系列下待处理的 EPUB 举报数 */
             pending_report_count: number;
             read_times: number;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             views: number;
-            /** @description 分卷总数 */
+            /** @description 已发布的分卷总数 */
             volume_count: number;
         };
         NovelSeriesMissingVolumeDto: {
             id: number;
             name: string | null;
             volume_number: number | null;
+        };
+        NovelSeriesStatusDto: {
+            /**
+             * @description 系列发布状态
+             * @enum {string}
+             */
+            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
         NovelSourceDashboardDto: {
             links_pending: number;
@@ -23240,7 +22476,7 @@ export interface components {
         };
         NovelSourceRecentErrorDto: {
             error: string;
-            series_id: number | null;
+            series_id: number;
             source_key: string;
             updated_at: string;
             volume_name: string | null;
@@ -23263,7 +22499,7 @@ export interface components {
             unreachable_cooldown_ms: number;
         };
         /**
-         * @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空
+         * @description 连载状态
          * @enum {string}
          */
         NovelStatus: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED";
@@ -23354,6 +22590,8 @@ export interface components {
             /** @description 最近 10 条纠错复核 */
             reviews: components["schemas"]["NovelVolumeReviewDto"][];
             series: components["schemas"]["EpubResourceSeriesDto"];
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** Format: date-time */
             updated_at: string;
             /** @description 详情页浏览次数 */
@@ -23367,6 +22605,11 @@ export interface components {
             epub_curated?: boolean;
             /** @description 文件是否是合集而非单卷 */
             epub_is_collection?: boolean;
+            /**
+             * @description 发布状态
+             * @enum {string}
+             */
+            status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
         };
         NovelVolumeItemDto: {
             /** @description EPUB 下载次数 */
@@ -23384,6 +22627,8 @@ export interface components {
             /** @description 在线阅读次数 */
             read_times: number;
             series: components["schemas"]["EpubResourceSeriesDto"];
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             /** Format: date-time */
             updated_at: string;
             /** @description 详情页浏览次数 */
@@ -23430,39 +22675,6 @@ export interface components {
             review: number;
             throttled: number;
         };
-        OgAuthorDto: {
-            avatar: string | null;
-            name: string;
-            nickname: string | null;
-        };
-        OgCardDto: {
-            author: components["schemas"]["OgAuthorDto"] | null;
-            banner: string | null;
-            cover: components["schemas"]["OgImageDto"] | null;
-            covers: components["schemas"]["OgImageDto"][];
-            date: string | null;
-            meta: string[];
-            stats: components["schemas"]["OgStatsDto"] | null;
-            subtitle: string | null;
-            title: string;
-            /** @enum {string} */
-            variant: "work" | "profile" | "content" | "user" | "collection";
-        };
-        OgDefaultsDto: {
-            avatars: string[];
-            covers: string[];
-            members: number;
-        };
-        OgImageDto: {
-            blur: boolean;
-            height: number | null;
-            src: string;
-            width: number | null;
-        };
-        OgStatsDto: {
-            followers: number;
-            following: number;
-        };
         OpenCatalogChangesDto: {
             /** @description 本页之后是否还有更多事件 */
             has_more: boolean;
@@ -23488,69 +22700,11 @@ export interface components {
             /** @description 发生变更的资源类型 */
             resource_type: components["schemas"]["ContributionResourceType"];
         };
-        OpenCharacterAppearanceDto: {
-            /** @description 只在作品内记录、没有公开记录；名字可能是剧透，是否显示由调用方决定 */
-            hidden: boolean;
-            /** @description 出场角色 ID */
-            id: number;
-            /** @description 该作中的名字 */
-            label: string;
-            /** @description 该作中的全部名字 */
-            names: components["schemas"]["OpenCharacterAppearanceNameDto"][];
-            /** @description 与其他出场角色的关系 */
-            relations: components["schemas"]["OpenCharacterAppearanceRelationDto"][];
-            /** @description 未公开记录的来源；公开记录为空数组 */
-            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
-            /** @description 作品 */
-            work: components["schemas"]["OpenCharacterAppearanceWorkDto"] | null;
-        };
-        OpenCharacterAppearanceNameDto: {
-            /** @description 不是该作的公开记录；名字可能是剧透，是否显示由调用方决定 */
-            hidden: boolean;
-            /** @description 适用于作品的哪一部分 */
-            part: string | null;
-            /** @description 读音 */
-            reading: string | null;
-            /** @description 未公开记录的来源；公开记录为空数组 */
-            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
-            /** @description 名字 */
-            text: string;
-        };
-        OpenCharacterAppearanceRelationDto: {
-            /** @description 另一个出场角色的 ID */
-            appearance: number;
-            /** @description 关系：SAME_PERSON 为同一人物 */
-            code: string;
-            /** @description 不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定 */
-            hidden: boolean;
-            /** @description 另一个出场角色的名字 */
-            label: string;
-            /** @description 适用于作品的哪一部分 */
-            part: string | null;
-            /** @description 未公开记录的来源；公开记录为空数组 */
-            sources: components["schemas"]["OpenCharacterAppearanceSourceDto"][];
-        };
-        OpenCharacterAppearanceSourceDto: {
-            /** @description 在作品中的位置 */
-            location: string | null;
-            /** @description 来源类型，作品内截图为 SCREENSHOT */
-            method: string;
-            /** @description 所依的发行版本或出版版本的条目 ID */
-            version_entry_id: number | null;
-        };
-        OpenCharacterAppearanceWorkDto: {
-            /** @description 作品 ID */
-            id: number;
-            /** @description 作品类型：GAME、LIGHT_NOVEL、MANGA */
-            kind: string;
-        };
         OpenCharacterDetailDto: {
             /** @description 年龄 */
             age: number | null;
             /** @description 别名列表 */
             aliases: string[];
-            /** @description 各作品中的出场角色，含只在作品内记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里 */
-            appearances: components["schemas"]["OpenCharacterAppearanceDto"][];
             /** @description 生日日 */
             birthday_day: number | null;
             /** @description 生日月份 */
@@ -23570,8 +22724,8 @@ export interface components {
             en_intro: string | null;
             /** @description 英文名或罗马字 */
             en_name: string | null;
-            /** @description 外部数据源 ID */
-            external_source: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 性别 */
             gender: string | null;
             /** @description 身高，单位厘米 */
@@ -23705,12 +22859,12 @@ export interface components {
             en_intro: string | null;
             /** @description 官方英文标题 */
             en_title: string | null;
-            /** @description 游戏引擎；收录规则不单独记录引擎，恒为空，引擎照录在发行版本的规格与运行环境中 */
+            /** @description 游戏引擎 */
             engine: string | null;
             /** @description 官网、商店页等外部链接 */
             external_links: components["schemas"]["OpenGalgameExternalLinkDto"][];
-            /** @description 外部数据源 ID */
-            external_source: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 官方网站 */
             homepage: string | null;
             /** @description Galgame ID */
@@ -23736,14 +22890,10 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
-            /** @description 发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日 */
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 发行日期是否待定 */
             release_date_tbd: boolean;
             /** @description 发行日期待定时的补充说明 */
             release_date_tbd_note: string;
-            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED；dev_status 由它反推 */
-            release_status: string | null;
             /**
              * Format: date-time
              * @description 最近一次修订通过审核的时间
@@ -23770,10 +22920,8 @@ export interface components {
             country: string;
             /** @description 英文简介 */
             en_intro: string | null;
-            /** @description 成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM） */
+            /** @description 成立日期 */
             established: string | null;
-            /** @description 成立日期的精度 */
-            established_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -23784,15 +22932,13 @@ export interface components {
             name: string;
             /** @description 该作品下的厂商备注 */
             note: string;
-            /** @description 组织类型编码 */
-            organization_type: string | null;
             /** @description 简介译文 */
             trans_intro: string | null;
             /**
-             * @description 厂商类型，由 organization_type 反推；没有记录类型时为空
-             * @enum {string|null}
+             * @description 厂商类型
+             * @enum {string}
              */
-            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL" | null;
+            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
             /** @description 官方网站 */
             website: string | null;
         };
@@ -23815,13 +22961,11 @@ export interface components {
             version: string | null;
         };
         OpenGalgameProducerDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 角色备注 */
             note: string;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 厂商承担的角色，由 code 反推，对不上旧角色的为空 */
+            /** @description 厂商承担的角色 */
             role: components["schemas"]["ProducerRole"] | null;
         };
         OpenGalgameRelationDto: {
@@ -23844,17 +22988,13 @@ export interface components {
              * @description 发行日期
              */
             release_date: string | null;
-            /** @description 发行日期的精度 */
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 译名 */
             trans_title: string | null;
         };
         OpenGalgameStaffDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位，由 code 反推，对不上旧职位的为空 */
+            /** @description 担任的职位 */
             role: components["schemas"]["GalgameStaffRole"] | null;
         };
         OpenGalgameSteamAppDto: {
@@ -23875,8 +23015,8 @@ export interface components {
             name: string;
             /** @description 中文名 */
             name_cn: string | null;
-            /** @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空 */
-            novel_status: components["schemas"]["NovelStatus"] | null;
+            /** @description 连载状态 */
+            novel_status: components["schemas"]["NovelStatus"];
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
             /** @description 别名列表 */
@@ -23886,10 +23026,6 @@ export interface components {
              * @description 首卷出版日期
              */
             publication_date: string | null;
-            /** @description 首卷出版日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日 */
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 出版状态编码：ONGOING、COMPLETED、HIATUS */
-            publication_status: string | null;
             /** @description 评分统计 */
             rating: components["schemas"]["OpenRatingDto"];
             /**
@@ -23912,24 +23048,20 @@ export interface components {
             updated_at: string;
         };
         OpenLightNovelPersonDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 职位备注 */
             note: string | null;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位：author、illustrator，其余职责为 other */
+            /** @description 担任的职位 */
             relation: string;
         };
         OpenLightNovelProducerDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 角色备注 */
             note: string | null;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 承担的角色：bunko、publisher，对不上的为空 */
-            relation: string | null;
+            /** @description 承担的角色 */
+            relation: string;
         };
         OpenLightNovelVolumeDto: {
             /** @description 封面列表，按得票数由高到低排序 */
@@ -23945,8 +23077,6 @@ export interface components {
              * @description 出版日期
              */
             publication_date: string | null;
-            /** @description 出版日期的精度 */
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 与所属作品的关联说明 */
             relation: string;
             /** @description 卷号的展示文本 */
@@ -24000,15 +23130,11 @@ export interface components {
              * @description 开始连载日期
              */
             publication_date: string | null;
-            /** @description 开始日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日 */
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /**
              * Format: date-time
              * @description 完结日期
              */
             publication_end_date: string | null;
-            /** @description 出版状态编码：ONGOING、COMPLETED、HIATUS */
-            publication_status: string | null;
             /** @description 评分统计 */
             rating: components["schemas"]["OpenRatingDto"];
             /** @description 阅读方向 */
@@ -24018,8 +23144,8 @@ export interface components {
              * @description 最近一次修订通过审核的时间
              */
             revised_at: string | null;
-            /** @description 连载状态，由 publication_status 反推；系列没有记录出版状态时为空 */
-            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            /** @description 连载状态 */
+            serial_status: components["schemas"]["MangaSerialStatus"];
             /** @description 原文简介 */
             summary: string | null;
             /** @description 简介译文 */
@@ -24041,24 +23167,20 @@ export interface components {
             label: string;
         };
         OpenMangaProducerDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 角色备注 */
             note: string;
             /** @description 厂商信息 */
             producer: components["schemas"]["OpenEntityRefDto"];
-            /** @description 承担的角色，由 code 反推，对不上旧角色的为空 */
-            role: components["schemas"]["MangaProducerRole"] | null;
+            /** @description 承担的角色 */
+            role: components["schemas"]["MangaProducerRole"];
         };
         OpenMangaStaffDto: {
-            /** @description 职责编码 */
-            code: string;
             /** @description 职位备注 */
             note: string;
             /** @description 人物信息 */
             person: components["schemas"]["OpenEntityRefDto"];
-            /** @description 担任的职位，由 code 反推，对不上旧职位的为空 */
-            role: components["schemas"]["MangaStaffRole"] | null;
+            /** @description 担任的职位 */
+            role: components["schemas"]["MangaStaffRole"];
         };
         OpenMangaVolumeDto: {
             /** @description 分卷封面 */
@@ -24078,8 +23200,6 @@ export interface components {
              * @description 出版日期
              */
             publication_date: string | null;
-            /** @description 出版日期的精度 */
-            publication_date_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 卷号 */
             volume_number: number | null;
         };
@@ -24150,12 +23270,10 @@ export interface components {
             created_at: string;
             /** @description 英文简介 */
             en_intro: string | null;
-            /** @description 成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM） */
+            /** @description 成立日期 */
             established: string | null;
-            /** @description 成立日期的精度 */
-            established_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 外部数据源 ID */
-            external_source: components["schemas"]["OpenExternalSourceDto"];
+            /** @description 外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段 */
+            external_source?: components["schemas"]["OpenExternalSourceDto"];
             /** @description 厂商 ID */
             id: number;
             /** @description 原文简介 */
@@ -24166,8 +23284,6 @@ export interface components {
             logo: components["schemas"]["OpenMediaDto"] | null;
             /** @description 厂商名 */
             name: string;
-            /** @description 组织类型编码：COMPANY、BRAND、LABEL、MAGAZINE、PLATFORM、CIRCLE、TRANSLATION_GROUP */
-            organization_type: string | null;
             /**
              * Format: date-time
              * @description 最近一次修订通过审核的时间
@@ -24176,10 +23292,10 @@ export interface components {
             /** @description 简介译文 */
             trans_intro: string | null;
             /**
-             * @description 厂商类型，由 organization_type 反推；没有记录类型时为空
-             * @enum {string|null}
+             * @description 厂商类型
+             * @enum {string}
              */
-            type: "COMPANY" | "MAGAZINE" | "DOUJIN" | "INDIVIDUAL" | null;
+            type: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
             /**
              * Format: date-time
              * @description 条目最后更新时间
@@ -24255,27 +23371,6 @@ export interface components {
             /** @enum {string} */
             type: "galgame" | "light_novel" | "manga";
         };
-        OverviewDto: {
-            edits: components["schemas"]["OverviewEditsDto"];
-            entries: components["schemas"]["TypeCountDto"][];
-            task_edits: components["schemas"]["TaskEditsDto"][];
-            tasks: components["schemas"]["OverviewTasksDto"];
-            todos: components["schemas"]["TodoCountDto"][];
-        };
-        OverviewEditsDto: {
-            today: number;
-            today_bots: number;
-            unpatrolled: number;
-            week: number;
-            week_bots: number;
-        };
-        OverviewTasksDto: {
-            auto_stopped: number;
-            enabled: number;
-            stopped: number;
-            total: number;
-            trial: number;
-        };
         OwnedDecorationDto: {
             /** Format: date-time */
             acquired_at: string;
@@ -24313,9 +23408,6 @@ export interface components {
             /** @description 总页数 */
             total_pages: number;
         };
-        PatrolEditsDto: {
-            edit_ids: number[];
-        };
         PermissionCatalogDto: {
             permissions: components["schemas"]["PermissionCatalogEntryDto"][];
         };
@@ -24350,7 +23442,6 @@ export interface components {
         PersonCharacterGalgameDto: {
             id: number;
             origin_title: string;
-            rating: components["schemas"]["WorkRatingDto"];
             /** Format: date-time */
             release_date: string | null;
             trans_title: string | null;
@@ -24370,8 +23461,6 @@ export interface components {
             intro: string;
             labels: components["schemas"]["EntityLabelDto"][];
             name: string;
-            /** @description 名字的读音 */
-            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
@@ -24381,29 +23470,18 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             vndb_id: string | null;
-            /** @description 本人的官网与官方账号 */
-            websites: components["schemas"]["EntityWebsiteDto"][];
         };
         PersonGalgameRelationDto: {
-            /** @description 在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
-            rating: components["schemas"]["WorkRatingDto"];
             roles: string[];
         };
         PersonLightNovelRelationDto: {
-            /** @description 在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
-            rating: components["schemas"]["WorkRatingDto"];
             relation: string;
         };
         PersonMangaRelationDto: {
-            /** @description 在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
-            rating: components["schemas"]["WorkRatingDto"];
             roles: components["schemas"]["MangaStaffRole"][];
         };
         PersonPreviewDto: {
@@ -24411,26 +23489,6 @@ export interface components {
             image: components["schemas"]["MediaAssetDto"] | null;
             name: string;
             trans_name: string | null;
-        };
-        PersonStatsDto: {
-            /**
-             * Format: date-time
-             * @description 参与与配音的作品中最早的日期
-             */
-            first_date: string | null;
-            /**
-             * Format: date-time
-             * @description 参与与配音的作品中最晚的日期
-             */
-            last_date: string | null;
-            /** @description 各媒介的作品数 */
-            media: components["schemas"]["WorkMediaCountDto"];
-            /** @description 各项职责的作品数 */
-            roles: components["schemas"]["CreditCountDto"][];
-            /** @description 配音的角色数 */
-            voices: number;
-            /** @description 参与的作品数，跨游戏、轻小说与漫画 */
-            works: number;
         };
         PlatformSettingsDto: {
             emoji_max_file_bytes: number;
@@ -24622,40 +23680,17 @@ export interface components {
             /** @enum {string} */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
         };
-        PrefillValueDto: {
-            /** @enum {string} */
-            entry_type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            qualifiers: {
-                [key: string]: unknown;
-            } | null;
-            value: {
-                [key: string]: unknown;
-            };
-        };
         PreviewArticleDto: {
             client_schema_version: number;
             content_json: {
                 [key: string]: unknown;
             };
         };
-        PreviewDiscoveryLabelsDto: {
-            add?: string[];
-            kind: components["schemas"]["DiscoveryLabelKind"];
-            remove?: number[];
-        };
         PreviewPostDto: {
             client_schema_version: number;
             content_json: {
                 [key: string]: unknown;
             };
-        };
-        PriceDto: {
-            amount: string;
-            currency: string;
-            tax_included: boolean | null;
-            text: string;
         };
         PrivateMessageAttachmentInputDto: {
             media_asset_id: number;
@@ -24706,14 +23741,6 @@ export interface components {
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
         };
-        ProducerCollaboratorDto: {
-            /** @description Their most frequent roles here */
-            codes: string[];
-            /** @description Works the person has with this organization */
-            count: number;
-            name: string;
-            person_id: number;
-        };
         ProducerDetailDto: {
             aliases: string[];
             bangumi_id: string | null;
@@ -24721,74 +23748,36 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             en_intro: string | null;
-            /** @description 成立日期，按 established_precision 截到年或月 */
             established: string | null;
-            established_precision: components["schemas"]["DatePrecision"] | null;
             id: number;
             intro: string | null;
             labels: components["schemas"]["EntityLabelDto"][];
-            /** @description 所在地，照录 */
-            location: string | null;
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
-            /** @description 组织类型，取值为新的类型编码 */
-            organization_type: string | null;
-            /** @description 名称的读音 */
-            reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             trans_intro: string | null;
-            /** @description 由 organization_type 反推，没有记录类型时为空 */
-            type: components["schemas"]["ProducerType"] | null;
+            type: components["schemas"]["ProducerType"];
             /** Format: date-time */
             updated_at: string;
             vndb_id: string | null;
             website: string | null;
         };
         ProducerGalgameRelationDto: {
-            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             galgame: components["schemas"]["GalgameSummaryDto"];
             note: string;
-            people: components["schemas"]["WorkPersonDto"][];
-            rating: components["schemas"]["WorkRatingDto"];
-        };
-        ProducerLabelDto: {
-            count: number;
-            /** Format: date-time */
-            first_date: string | null;
-            /** @description 文库的组织编号；漫画与未标文库的轻小说为空 */
-            id: number | null;
-            /** @enum {string} */
-            kind: "light_novel" | "manga";
-            /** Format: date-time */
-            last_date: string | null;
-            name: string | null;
-            /** @description 文库是否为这家组织的下属组织 */
-            own: boolean;
-            /** @description 最近出版的 5 部 */
-            recent: components["schemas"]["EntityWorkDto"][];
         };
         ProducerLightNovelRelationDto: {
-            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             light_novel: components["schemas"]["LightNovelSummaryDto"];
             note: string | null;
-            rating: components["schemas"]["WorkRatingDto"];
             relation: string;
-            volume_count: number;
         };
         ProducerMangaRelationDto: {
-            /** @description 这家组织在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
             manga: components["schemas"]["MangaSummaryDto"];
             note: string;
-            people: components["schemas"]["WorkPersonDto"][];
-            rating: components["schemas"]["WorkRatingDto"];
             role: components["schemas"]["MangaProducerRole"];
-            volume_count: number;
         };
         ProducerPreviewDto: {
             id: number;
@@ -24801,146 +23790,17 @@ export interface components {
             target_producer: components["schemas"]["ProducerSummaryDto"];
         };
         /**
-         * @description 厂商承担的角色，由 code 反推，对不上旧角色的为空
+         * @description 厂商承担的角色
          * @enum {string}
          */
         ProducerRole: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
-        ProducerStatsDto: {
-            /** @description 各媒介下每项职责的作品数 */
-            codes: components["schemas"]["WorkGroupDto"][];
-            /** Format: date-time */
-            first_date: string | null;
-            groups: components["schemas"]["WorkGroupDto"][];
-            /** Format: date-time */
-            last_date: string | null;
-            /** @description 各媒介的作品数 */
-            media: components["schemas"]["WorkMediaCountDto"];
-            /** @description 按评分人数加权的平均分与评分总数 */
-            rating: components["schemas"]["WorkRatingDto"];
-            works: number;
-            /** @description 各分组每年的作品数 */
-            years: components["schemas"]["WorkYearDto"][];
-        };
         ProducerSummaryDto: {
             id: number;
             logo: components["schemas"]["MediaAssetDto"] | null;
             name: string;
         };
-        /**
-         * @description 由 organization_type 反推，没有记录类型时为空
-         * @enum {string}
-         */
+        /** @enum {string} */
         ProducerType: "COMPANY" | "DOUJIN" | "INDIVIDUAL" | "MAGAZINE";
-        ProducerWorkDto: {
-            /** @description 在这部作品中的职责，取值为新的职责编码 */
-            codes: string[];
-            galgame: components["schemas"]["GalgameSummaryDto"] | null;
-            /** @enum {string} */
-            kind: "galgame" | "light_novel" | "manga";
-            light_novel: components["schemas"]["LightNovelSummaryDto"] | null;
-            manga: components["schemas"]["MangaSummaryDto"] | null;
-            /** @description 游戏与漫画的主要制作人员 */
-            people: components["schemas"]["WorkPersonDto"][];
-            rating: components["schemas"]["WorkRatingDto"];
-            /** @description 轻小说与漫画的卷数 */
-            volume_count: number | null;
-        };
-        ProductCreditDto: {
-            code: string;
-            person_id: number | null;
-            producer_id: number | null;
-            /** @description Role as printed */
-            role: string | null;
-            /** @description Song title, for song credits */
-            song: string | null;
-            /** @description THEME or INSERT, for song credits */
-            song_kind: string | null;
-            /** @description Name as printed */
-            text: string;
-        };
-        ProductDetailDto: {
-            age_rating: string | null;
-            /** @description The product holds more than one game */
-            collection: boolean;
-            cover: components["schemas"]["ScoredMediaAssetDto"] | null;
-            credits: components["schemas"]["ProductCreditDto"][];
-            facts: components["schemas"]["FactDto"][];
-            games: components["schemas"]["ProductGameDto"][];
-            id: number;
-            /** @description Version type of the product for this game */
-            kind: string | null;
-            languages: string[];
-            platforms: string[];
-            price: components["schemas"]["PriceDto"] | null;
-            publishers: components["schemas"]["ProductCreditDto"][];
-            release: components["schemas"]["ReleaseDto"] | null;
-            release_status: string | null;
-            stores: components["schemas"]["StoreLinkDto"][];
-            title: string;
-        };
-        ProductGameDto: {
-            id: number;
-            title: string;
-        };
-        ProductListingDto: {
-            age_rating: string | null;
-            /** @description The product holds more than one game */
-            collection: boolean;
-            id: number;
-            /** @description Version type of the product for this game */
-            kind: string | null;
-            languages: string[];
-            platforms: string[];
-            price: components["schemas"]["PriceDto"] | null;
-            publishers: components["schemas"]["ProductCreditDto"][];
-            release: components["schemas"]["ReleaseDto"] | null;
-            release_status: string | null;
-            stores: components["schemas"]["StoreLinkDto"][];
-            title: string;
-        };
-        ProductRefDto: {
-            id: number;
-            title: string;
-        };
-        ProductSummaryDto: {
-            age_rating: string | null;
-            /** @description The product holds more than one game */
-            collection: boolean;
-            id: number;
-            /** @description Version type of the product for this game */
-            kind: string | null;
-            platforms: string[];
-            price: components["schemas"]["PriceDto"] | null;
-            release: components["schemas"]["ReleaseDto"] | null;
-            release_status: string | null;
-            title: string;
-        };
-        ProgramDto: {
-            /** @description Calls a model and spends from the budget */
-            budgeted: boolean;
-            creates: components["schemas"]["EntryType"][];
-            description: string;
-            key: string;
-            label: string;
-            merges: boolean;
-            params: components["schemas"]["ProgramParamDto"][];
-            properties: components["schemas"]["TaskPropertiesDto"][];
-            rate: number;
-            schedule: string;
-        };
-        ProgramListDto: {
-            items: components["schemas"]["ProgramDto"][];
-            /** @description Properties a wiki bot may write, by entry type */
-            writable: components["schemas"]["TaskPropertiesDto"][];
-        };
-        ProgramParamDto: {
-            default: number;
-            key: string;
-            max: number;
-            min: number;
-            /** @enum {string} */
-            unit: "items" | "series" | "chars" | "days" | "hours" | "minutes";
-        };
         PromoBannerDto: {
             id: number;
             image: components["schemas"]["MediaAssetDto"];
@@ -24964,75 +23824,9 @@ export interface components {
             /** @description 传 null 清除校对稿 */
             text: string | null;
         };
-        PropertyChangeDto: {
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            statements: components["schemas"]["StatementChangeDto"][];
-        };
-        PropertyDefinitionDto: {
-            archive: boolean;
-            /** @enum {string} */
-            cardinality: "single" | "multiple" | "single_per_period";
-            /** @description Clauses of the cataloging rules that govern this property */
-            clauses: string[];
-            codes: string[] | null;
-            /** @description Name of the property */
-            label: string;
-            machine_translation: boolean;
-            move_only: boolean;
-            note: boolean;
-            optional_code: boolean;
-            /** @description A value without a source is still a valid value of this property */
-            optional_source: boolean;
-            original: boolean;
-            /** @description Photos of the package or of the credits in the work can support it */
-            package_image: boolean;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            public_only: boolean;
-            qualifiers: string[];
-            reading: boolean;
-            required: boolean;
-            /** @enum {string} */
-            shape: "verbatim" | "text" | "date" | "money" | "integer" | "code" | "language" | "entry" | "image" | "url" | "identifier" | "credit";
-            sources: number[];
-            structural: boolean;
-            targets: ("GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE")[];
-            unique: string | null;
-            unique_codes: string[] | null;
-            /** @description Screenshots of the work content, with the version and location, can support it */
-            work_content: boolean;
-        };
-        PropertyValuesChangeDto: {
-            after: components["schemas"]["ComparedValueDto"][];
-            before: components["schemas"]["ComparedValueDto"][];
-            label: string;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-        };
-        ProposeWorkTagDto: {
-            name: string;
-        };
-        ProtectEntryDto: {
-            reason: string;
-            until?: string | null;
-        };
-        ProtectedEntryDto: {
-            id: number;
-            label: string;
-            /** Format: date-time */
-            protected_at: string | null;
-            protected_by: components["schemas"]["UserRefDto"] | null;
-            /** Format: date-time */
-            protected_until: string | null;
-            protection: components["schemas"]["EntryProtection"];
-            reason: string;
-            type: components["schemas"]["EntryType"];
-        };
         ProvisionUserDto: {
             /** Format: email */
             email: string;
-            is_bot?: boolean;
             nickname?: string;
             sub: number;
             username: string;
@@ -25390,33 +24184,9 @@ export interface components {
             set_name: string;
             src: components["schemas"]["MediaAssetDto"] | null;
         };
-        RecommendPolicyDto: {
-            cold_heat: number;
-            galgame: components["schemas"]["RecommendWeightsResDto"];
-            light_novel: components["schemas"]["RecommendWeightsResDto"];
-            maker_cap: number;
-            manga: components["schemas"]["RecommendWeightsResDto"];
-            rollout_percent: number;
-        };
-        RecommendReasonDto: {
-            /** @enum {string} */
-            kind: "CREDIT" | "TAG";
-            name: string;
-            role: string | null;
-        };
-        RecommendWeightsResDto: {
-            like: number;
-            maker: number;
-            tag: number;
-            view: number;
-        };
         RecomputeListingDto: {
             /** @description 只出预览记录，不改条目 */
             dry_run?: boolean;
-        };
-        RedirectChangeDto: {
-            after: number | null;
-            before: number | null;
         };
         ReferencedRefsDto: {
             article_ids?: number[];
@@ -25460,12 +24230,6 @@ export interface components {
         RejectSourceCreditDto: {
             name: string;
             person_id: number;
-        };
-        ReleaseDto: {
-            date: string;
-            /** @enum {string} */
-            precision: "YEAR" | "MONTH" | "DAY";
-            text: string;
         };
         ReleaseNoteDto: {
             /** Format: date-time */
@@ -25577,54 +24341,95 @@ export interface components {
             /** @description 批注是否已处理 */
             resolved: boolean;
         };
-        ResolveSourceDto: {
-            input: string;
+        ResolvedCharacterDto: {
+            actors: components["schemas"]["ResolvedEntityDto"][];
+            cover: string | null;
+            duplicate_ids: number[];
+            external: components["schemas"]["SourceIdsDto"];
+            matched_id: number | null;
+            name: string;
+            role: components["schemas"]["CharacterRole"];
+            source_names: string[];
+            /** @enum {string|null} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
         };
-        ResourceEntryDto: {
-            /** @description Entry the site page is projected from */
-            entry_id: number;
+        ResolvedEntityDto: {
+            cover: string | null;
+            duplicate_ids: number[];
+            external: components["schemas"]["SourceIdsDto"];
+            matched_id: number | null;
+            name: string;
+            source_names: string[];
+            /** @enum {string|null} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
+        };
+        ResolvedProducerDto: {
+            cover: string | null;
+            duplicate_ids: number[];
+            external: components["schemas"]["SourceIdsDto"];
+            matched_id: number | null;
+            name: string;
+            /** @enum {string} */
+            role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER";
+            source_names: string[];
+            /** @enum {string|null} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
+        };
+        ResolvedRelationDto: {
+            cover: string | null;
+            matched_id: number;
+            name: string;
+            relation: string;
+            /** @enum {string} */
+            source: "bangumi" | "vndb";
+        };
+        ResolvedStaffDto: {
+            cover: string | null;
+            duplicate_ids: number[];
+            external: components["schemas"]["SourceIdsDto"];
+            matched_id: number | null;
+            name: string;
+            role: components["schemas"]["GalgameStaffRole"];
+            source_names: string[];
+            /** @enum {string|null} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT" | null;
+        };
+        ResolvedTagDto: {
+            matched_id: number | null;
+            name: string;
         };
         ResourceHeadDto: {
             cover: string | null;
             title: string;
         };
-        RestoreRevisionDto: {
-            note?: string;
-            number: number;
+        ReviewCatalogItemsDto: {
+            /** @description 对当前筛选下所有待复核明细生效 */
+            all_matching?: boolean;
+            decision?: components["schemas"]["CatalogSyncDecision"];
+            /** @description 显式勾选的明细，与 all_matching 二选一 */
+            item_ids?: number[];
+            /** @description 按标题模糊匹配 */
+            keyword?: string;
+            review: components["schemas"]["CatalogSyncReview"];
         };
-        RevertEditDto: {
-            /** @description Undo only the part of the edit on this entry */
-            entry_id?: number;
-            note?: string;
+        ReviewChangeRequestBatchDto: {
+            body?: string;
+            change_request_ids?: number[];
+            /** @enum {string} */
+            decision: "REJECT" | "APPROVE";
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
-        RevertEditorDto: {
-            limit: number;
-            note?: string;
-            since: string;
+        ReviewChangeRequestDto: {
+            body?: string;
+            /** @enum {string} */
+            decision: "COMMENT" | "REJECT" | "APPROVE";
+            entity_choices?: components["schemas"]["ReviewEntityChoiceDto"][];
+            overrides?: components["schemas"]["ReviewOverrideDto"][];
         };
-        RevertFailureDto: {
-            code: string;
-            edit_id: number;
-        };
-        RevertNoteDto: {
-            note?: string;
-        };
-        RevertOutcomeDto: {
-            failed: components["schemas"]["RevertFailureDto"][];
-            remaining: number;
-            reverted: components["schemas"]["RevertResultDto"][];
-        };
-        RevertPreviewDto: {
-            /** @description Nothing of the edit is left to undo */
-            empty: boolean;
-            /** @description Values that changed after the edit and will be left as they are */
-            kept: components["schemas"]["KeptValueDto"][];
-        };
-        RevertResultDto: {
-            edit_id: number;
-            entries: number[];
-            /** @description Values that changed after the edit, left as they are */
-            kept: components["schemas"]["KeptValueDto"][];
+        ReviewEntityChoiceDto: {
+            change_request_id: number;
+            use_id: number;
         };
         ReviewGroupApplicationDto: {
             /** Format: date-time */
@@ -25658,24 +24463,10 @@ export interface components {
             id: number;
             name: string;
         };
-        RevisionComparisonDto: {
-            deleted: components["schemas"]["DeletedChangeDto"] | null;
-            entries: components["schemas"]["EntryRefDto"][];
-            from: number;
-            /**
-             * Format: date-time
-             * @description When the earlier revision was made
-             */
-            from_at: string | null;
-            label: components["schemas"]["LabelChangeDto"] | null;
-            properties: components["schemas"]["PropertyChangeDto"][];
-            redirect_id: components["schemas"]["RedirectChangeDto"] | null;
-            to: number;
-            /**
-             * Format: date-time
-             * @description When the later revision was made
-             */
-            to_at: string | null;
+        ReviewOverrideDto: {
+            /** @enum {string} */
+            field: "name" | "name_cn" | "bunko_id" | "publication_date" | "bangumi_book_id" | "isbn" | "origin_title" | "trans_title" | "producers" | "release_date" | "bangumi_game_id" | "vndb_id" | "bangumi_subject_id" | "volume_number" | "trans_name" | "bangumi_id";
+            value: string | number;
         };
         RevisionDetailDto: {
             change_request_id: number | null;
@@ -25702,43 +24493,6 @@ export interface components {
             /** @enum {string} */
             source: "NATIVE" | "LEGACY" | "IMPORT";
         };
-        RevisionEditDto: {
-            basis: components["schemas"]["EditBasisDto"] | null;
-            batch: components["schemas"]["EditBatchRefDto"];
-            editor: components["schemas"]["UserRefDto"];
-            /**
-             * Format: date-time
-             * @description When the part of the edit on this entry was undone
-             */
-            entry_reverted_at: string | null;
-            id: number;
-            note: string | null;
-            /** Format: date-time */
-            patrolled_at: string | null;
-            /** Format: date-time */
-            reverted_at: string | null;
-            reverts_id: number | null;
-            summary: string;
-        };
-        RevisionItemDto: {
-            /** Format: date-time */
-            created_at: string;
-            edit: components["schemas"]["RevisionEditDto"];
-            number: number;
-        };
-        RevisionSnapshotDto: {
-            basis: components["schemas"]["EditBasisDto"] | null;
-            /** @description The entry at this revision, every value given as added to an empty entry */
-            content: components["schemas"]["RevisionComparisonDto"];
-            /** Format: date-time */
-            created_at: string;
-            edit_id: number;
-            editor: components["schemas"]["UserRefDto"];
-            /** @description The revision the entry is at now */
-            latest: number;
-            note: string | null;
-            number: number;
-        };
         RevisionSummaryDto: {
             change_request_id: number | null;
             /** Format: date-time */
@@ -25761,10 +24515,6 @@ export interface components {
             revision_id: number;
             /** @description The new monotonic version number of the resource. */
             version: number;
-        };
-        RollbackEditsDto: {
-            editor_id: number;
-            note?: string;
         };
         RunAiPlaygroundDto: {
             max_output_tokens?: number;
@@ -25810,21 +24560,10 @@ export interface components {
         SaveNovelTranslationDto: {
             text: string;
         };
-        ScoredMediaAssetDto: {
-            /** @description 图片高度，单位像素 */
-            height: number | null;
-            /** @description 媒体资源 ID */
-            id: number;
-            /** @description 色情内容分级，0 为安全，未分级时为空 */
-            sexual: number | null;
-            /** @description 图片地址，开放接口返回可直接访问的完整 URL */
-            src: string;
-            /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
-            thumb_hash: string | null;
-            /** @description 暴力内容分级，0 为安全，未分级时为空 */
-            violence: number | null;
-            /** @description 图片宽度，单位像素 */
-            width: number | null;
+        ScreenshotDto: {
+            sexual: number;
+            url: string;
+            violence: number;
         };
         SearchCoverDto: {
             /** @description 图片高度，单位像素 */
@@ -25863,11 +24602,6 @@ export interface components {
             /** @enum {string} */
             default_engine: "pg_trgm" | "manticore" | "opensearch";
             engines: components["schemas"]["EngineStatusDto"][];
-        };
-        SectionCountDto: {
-            count: number;
-            /** @enum {string} */
-            section: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
         };
         SectionDto: {
             color: string | null;
@@ -25944,11 +24678,6 @@ export interface components {
             name: string;
             use_count: number;
         };
-        SimilarTagDto: {
-            id: number;
-            name: string;
-            works: number;
-        };
         SiteConfigDto: {
             feature_flags: components["schemas"]["FeatureFlagsDto"];
         };
@@ -25956,34 +24685,9 @@ export interface components {
             id: number;
             lastmod: string;
         };
-        SourceDto: {
-            classes: string[];
-            existing: components["schemas"]["EntryRefDto"][];
-            /** @description Images on the page at the URL */
-            images: components["schemas"]["SourceImageDto"][];
-            key: string;
-            /** @enum {string} */
-            kind: "isbn" | "jan" | "url";
-            record_key: string | null;
-            title: string | null;
-            url: string | null;
-            values: components["schemas"]["PrefillValueDto"][];
-        };
-        SourceImageDto: {
-            alt: string;
-            url: string;
-        };
-        SourceImageInputDto: {
-            /**
-             * Format: uri
-             * @description Address of the image as the page gives it
-             */
-            image: string;
-            /**
-             * Format: uri
-             * @description Page the image is on
-             */
-            url: string;
+        SourceIdsDto: {
+            bangumi_id?: string;
+            vndb_id?: string;
         };
         SourceLayoutChoicesDto: {
             formats: components["schemas"]["SourceLayoutFormatChoiceDto"][];
@@ -26018,115 +24722,9 @@ export interface components {
             group: string;
             manga_id: number;
         };
-        StatementChangeDto: {
-            after: components["schemas"]["ComparedStatementDto"] | null;
-            before: components["schemas"]["ComparedStatementDto"] | null;
-        };
-        StatementCitationDto: {
-            accessed_at: string | null;
-            archive_url: string | null;
-            excerpt: string | null;
-            location: string | null;
-            media: components["schemas"]["ScoredMediaAssetDto"][];
-            /** @enum {string} */
-            method: "RECORD" | "EXCERPT" | "SCREENSHOT" | "MEMBER" | "IMPORT" | "DOWNSTREAM";
-            origin: string | null;
-            record_key: string | null;
-            /** @enum {string} */
-            role: "SUPPORT" | "CONTRADICT" | "LINK";
-            /** @description Record source name or page host */
-            source: string | null;
-            /** @enum {string|null} */
-            subject: "PACKAGE" | "MANUAL" | "CREDITS" | "CONTENT" | null;
-            url: string | null;
-            /** @enum {string} */
-            verification: "UNCHECKED" | "PASSED" | "EXCERPT_NOT_FOUND" | "SOURCE_NOT_ALLOWED" | "VALUE_MISMATCH" | "UNREACHABLE" | "UNCONFIRMED_MATCH";
-            verified_at: string | null;
-            version: components["schemas"]["EntryRefDto"] | null;
-        };
-        StatementDto: {
-            amount: string | null;
-            archive_url: string | null;
-            citations: components["schemas"]["StatementCitationDto"][];
-            code: string | null;
-            currency: string | null;
-            date: string | null;
-            /** @enum {string|null} */
-            date_precision: "YEAR" | "MONTH" | "DAY" | null;
-            deprecation_note: string | null;
-            /** @enum {string|null} */
-            deprecation_reason: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED" | null;
-            editor: components["schemas"]["UserRefDto"];
-            id: number;
-            is_public: boolean;
-            language: string | null;
-            media: components["schemas"]["ScoredMediaAssetDto"] | null;
-            number: number | null;
-            original: string | null;
-            part: string | null;
-            period_from: string | null;
-            /** @enum {string|null} */
-            period_from_precision: "YEAR" | "MONTH" | "DAY" | null;
-            period_to: string | null;
-            /** @enum {string|null} */
-            period_to_precision: "YEAR" | "MONTH" | "DAY" | null;
-            position: number;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            reading: string | null;
-            role: string | null;
-            song: string | null;
-            song_kind: string | null;
-            /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
-            target: components["schemas"]["EntryRefDto"] | null;
-            tax_included: boolean | null;
-            text: string | null;
-            /** @enum {string} */
-            value_kind: "VALUE" | "UNKNOWN";
-            versions: components["schemas"]["EntryRefDto"][];
-        };
-        SteamPriceDto: {
-            app_id: number;
-            /** @description 中国区价格的币种 */
-            currency: string | null;
-            /** Format: date-time */
-            discount_ends_at: string | null;
-            discount_percent: number;
-            /** Format: date-time */
-            discount_started_at: string | null;
-            /** Format: date-time */
-            fetched_at: string | null;
-            /** @description 现价（分） */
-            final_cents: number | null;
-            /** @description 原价（分） */
-            initial_cents: number | null;
-            /** @description 在中国区可购买 */
-            purchasable: boolean;
-        };
-        SteamSaleDto: {
-            galgame: components["schemas"]["SteamSaleGalgameDto"];
-            price: components["schemas"]["SteamPriceDto"];
-        };
-        SteamSaleGalgameDto: {
-            id: number;
-            nsfw: boolean;
-            origin_title: string;
-            trans_title: string | null;
-        };
-        StoreLinkDto: {
-            /** @description Sales channel, such as STEAM or DLSITE */
-            channel: string;
-            /** @description Product number on the channel */
-            code: string;
-            /** @description Store page of the product */
-            url: string | null;
-        };
-        SubmitEditDto: {
-            base: components["schemas"]["BaseRevisionDto"][];
-            basis?: components["schemas"]["EditBasisInputDto"];
-            note?: string;
-            operations: components["schemas"]["EditOperationDto"][];
+        SubmitChangeRequestBatchDto: {
+            items: components["schemas"]["ChangeRequestBatchItemDto"][];
+            summary: string;
         };
         SubmitReviewGroupApplicationDto: {
             homepage?: string;
@@ -26147,9 +24745,6 @@ export interface components {
         };
         SuggestionItemDto: {
             keyword: string;
-        };
-        SuspendBotDto: {
-            reason: string;
         };
         SwitchSourceLinkDto: {
             notes?: string;
@@ -26223,191 +24818,14 @@ export interface components {
         TagGalgameRelationDto: {
             galgame: components["schemas"]["GalgameSummaryDto"];
         };
-        TagHiddenGroupDto: {
-            examples: string[];
-            kind: components["schemas"]["TagKind"];
-            links: number;
-            tags: number;
-        };
-        /** @enum {string} */
-        TagKind: "CONTENT" | "FIELD" | "PERSONAL" | "OPINION" | "COMMENT" | "RATING";
         TagLightNovelRelationDto: {
             light_novel: components["schemas"]["LightNovelSummaryDto"];
         };
-        TagPoolItemAdminDto: {
-            aliases: string[];
-            /** Format: date-time */
-            created_at: string;
-            galgames: number;
-            id: number;
-            kind: components["schemas"]["TagKind"];
-            light_novels: number;
-            mangas: number;
-            members: number;
-            name: string;
-            pool_state: components["schemas"]["TagPoolState"];
-            spoiler: boolean;
-        };
-        TagPoolItemDto: {
-            alias: string | null;
-            id: number;
-            name: string;
-            works: number;
-        };
-        TagPoolSearchDto: {
-            items: components["schemas"]["TagPoolItemDto"][];
-            /** @description 不能作为标签的原因 */
-            reject: string | null;
-        };
-        /** @enum {string} */
-        TagPoolState: "CANDIDATE" | "POOL" | "HIDDEN";
         TagPreviewDto: {
             aliases: string[];
             description: string | null;
             id: number;
             name: string;
-            spoiler: boolean;
-        };
-        TaskBatchDto: {
-            /** Format: date-time */
-            created_at: string;
-            edits: number;
-            entry: components["schemas"]["TaskBatchEntryDto"] | null;
-            id: number;
-            summary: string;
-        };
-        TaskBatchEntryDto: {
-            id: number;
-            label: string;
-        };
-        TaskBotDto: {
-            disabled: boolean;
-            id: number;
-            user: components["schemas"]["UserRefDto"];
-        };
-        TaskBudgetDto: {
-            /** @description Average USD of the recent entries */
-            average: number | null;
-            /** @description USD per hour for this task now; null when no channel has a limit */
-            hourly: number | null;
-            /** @description Entries maintained today, Beijing time */
-            items_today: number;
-            /** @description Entries due for maintenance */
-            pending: number | null;
-            /** @description USD spent today, Beijing time */
-            spent_today: number;
-            /** @enum {string|null} */
-            state: "waiting" | "peak" | null;
-            /** @description Sum of the weights of the tasks running now */
-            weights: number;
-        };
-        TaskChangeDto: {
-            action: components["schemas"]["WikiLogAction"];
-            actor: components["schemas"]["UserRefDto"];
-            /** Format: date-time */
-            created_at: string;
-            data: {
-                [key: string]: unknown;
-            } | null;
-            id: number;
-            reason: string;
-        };
-        TaskCreatedDto: {
-            id: number;
-        };
-        TaskDetailDto: {
-            batches: components["schemas"]["TaskBatchDto"][];
-            bot: components["schemas"]["TaskBotDto"];
-            /** @description Null for programs that do not call a model */
-            budget: components["schemas"]["TaskBudgetDto"] | null;
-            budget_weight: number;
-            changes: components["schemas"]["TaskChangeDto"][];
-            creates: components["schemas"]["EntryType"][];
-            deferrable: boolean;
-            description: string;
-            enabled: boolean;
-            /** Format: date-time */
-            enabled_at: string | null;
-            enabled_by: components["schemas"]["UserRefDto"] | null;
-            id: number;
-            /** Format: date-time */
-            last_edit_at: string | null;
-            merges: boolean;
-            name: string;
-            params: {
-                [key: string]: number;
-            };
-            program: string;
-            properties: components["schemas"]["TaskPropertiesDto"][];
-            /** @description Edits allowed per rate window */
-            rate: number;
-            /** @description Applied edits counted for reverts, at most the stop window */
-            recent: number;
-            /** @description Reverted edits among the recent ones */
-            reverted: number;
-            /** @description Six-field cron expression in Asia/Shanghai */
-            schedule: string;
-            stopped_reason: components["schemas"]["WikiTaskStop"] | null;
-            trial_limit: number | null;
-            /** @description Edits made since the task was enabled */
-            trial_used: number;
-            /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
-            unverified: number;
-            /** @description Open constraint violations raised after the recent edits on the entries those edits touched */
-            violations: number;
-            writes: components["schemas"]["TaskWriteDto"][];
-        };
-        TaskEditsDto: {
-            /** @description Edits in the last 24 hours */
-            edits: number;
-            id: number;
-            name: string;
-        };
-        TaskItemDto: {
-            bot: components["schemas"]["TaskBotDto"];
-            /** @description Null for programs that do not call a model */
-            budget: components["schemas"]["TaskBudgetDto"] | null;
-            budget_weight: number;
-            creates: components["schemas"]["EntryType"][];
-            deferrable: boolean;
-            description: string;
-            enabled: boolean;
-            /** Format: date-time */
-            enabled_at: string | null;
-            enabled_by: components["schemas"]["UserRefDto"] | null;
-            id: number;
-            /** Format: date-time */
-            last_edit_at: string | null;
-            merges: boolean;
-            name: string;
-            program: string;
-            properties: components["schemas"]["TaskPropertiesDto"][];
-            /** @description Edits allowed per rate window */
-            rate: number;
-            /** @description Applied edits counted for reverts, at most the stop window */
-            recent: number;
-            /** @description Reverted edits among the recent ones */
-            reverted: number;
-            /** @description Six-field cron expression in Asia/Shanghai */
-            schedule: string;
-            stopped_reason: components["schemas"]["WikiTaskStop"] | null;
-            trial_limit: number | null;
-            /** @description Edits made since the task was enabled */
-            trial_used: number;
-            /** @description Statements last written by the recent edits that failed citation verification and stayed unsourced */
-            unverified: number;
-            /** @description Open constraint violations raised after the recent edits on the entries those edits touched */
-            violations: number;
-        };
-        TaskPropertiesDto: {
-            properties: components["schemas"]["EntryProperty"][];
-            type: components["schemas"]["EntryType"];
-        };
-        TaskWriteDto: {
-            /** @description Statements this task wrote in the last 30 days */
-            count: number;
-            property: components["schemas"]["EntryProperty"];
-            type: components["schemas"]["EntryType"];
         };
         TelegramAccountDto: {
             /** Format: date-time */
@@ -26417,11 +24835,10 @@ export interface components {
             telegram_username: string | null;
             user: components["schemas"]["UserRefDto"];
         };
-        TelegramActionConfirmDto: {
-            telegram_id: number;
-        };
         TelegramBotStatusDto: {
             bot_username: string | null;
+            chat_usage: components["schemas"]["TelegramChatUsageDto"];
+            group_id: string | null;
             /** Format: date-time */
             last_seen_at: string | null;
             online: boolean;
@@ -26430,58 +24847,41 @@ export interface components {
             started_at: string | null;
             /** @enum {string|null} */
             state: "running" | "idle" | null;
-            version: string | null;
-        };
-        TelegramCardButtonDto: {
-            text: string;
-            url: string;
-        };
-        TelegramCardDto: {
-            buttons: components["schemas"]["TelegramCardButtonDto"][];
-            /** @description Telegram HTML */
-            caption: string;
-            cover: string | null;
-            id: number;
-            /** @description 富消息 HTML */
-            rich: string;
-            title: string;
-            /** @enum {string} */
-            type: "galgame" | "light_novel" | "manga";
         };
         TelegramChatDto: {
-            addressed: boolean;
-            chat_id: number;
-            chat_title?: string;
-            fresh?: boolean;
-            images?: components["schemas"]["TelegramChatImageDto"][];
-            /** @enum {string} */
-            kind: "group" | "private" | "guest";
+            chat_id: string;
+            is_private: boolean;
             messages: components["schemas"]["TelegramChatMessageDto"][];
             telegram_id: number;
-            telegram_name: string;
-        };
-        TelegramChatImageDto: {
-            /** Format: base64 */
-            data: string;
-            /** @enum {string} */
-            source: "message" | "reply";
         };
         TelegramChatInputDto: {
+            context_window: number;
+            daily_message_budget: number;
+            daily_token_budget: number;
             enabled: boolean;
-            guest_mode: boolean;
-            private: components["schemas"]["TelegramPrivateChatInputDto"];
+            persona: components["schemas"]["TelegramChatPersonaInputDto"];
             reply_max_chars: number;
+            /** @description bot 名字/昵称/别名，群内出现即触发(@提及与回复 bot 始终触发，与此无关) */
+            trigger_keywords: string[];
+            user_cooldown_seconds: number;
         };
-        /** @enum {string} */
-        TelegramChatKind: "GROUP" | "PRIVATE" | "GUEST";
         TelegramChatMessageDto: {
-            from_id: number;
-            image?: boolean;
-            message_id: number;
             name: string;
-            reply_to?: components["schemas"]["TelegramQuotedMessageDto"];
             self: boolean;
             text: string;
+        };
+        TelegramChatPersonaInputDto: {
+            guardrails: string;
+            role_core: string;
+            style_anchor: string;
+            world_knowledge: string;
+        };
+        TelegramChatUsageDto: {
+            /** @description 统计日期 (UTC, YYYY-MM-DD) */
+            date: string;
+            messages: number;
+            tokens: number;
+            tool_calls: number;
         };
         TelegramCheckInDto: {
             telegram_id: number;
@@ -26491,96 +24891,22 @@ export interface components {
             telegram_id: number;
             telegram_username?: string;
         };
-        TelegramContextMessageDto: {
-            content: string;
-            /** @enum {string} */
-            role: "user" | "assistant";
-        };
-        TelegramConversationDetailDto: {
-            chat_id: number;
-            chat_kind: components["schemas"]["TelegramChatKind"];
-            chat_title: string | null;
-            cost_usd: number;
-            id: number;
-            /** Format: date-time */
-            last_at: string;
-            last_status: components["schemas"]["TelegramTurnStatus"];
-            /** Format: date-time */
-            started_at: string;
-            telegram_name: string;
-            telegram_user_id: number;
-            tool_calls: number;
-            turn_list: components["schemas"]["TelegramTurnDto"][];
-            turns: number;
-            user: components["schemas"]["UserRefDto"] | null;
-        };
-        TelegramConversationDto: {
-            chat_id: number;
-            chat_kind: components["schemas"]["TelegramChatKind"];
-            chat_title: string | null;
-            cost_usd: number;
-            id: number;
-            /** Format: date-time */
-            last_at: string;
-            last_status: components["schemas"]["TelegramTurnStatus"];
-            /** Format: date-time */
-            started_at: string;
-            telegram_name: string;
-            telegram_user_id: number;
-            tool_calls: number;
-            turns: number;
-            user: components["schemas"]["UserRefDto"] | null;
-        };
-        TelegramDeletedDto: {
-            deleted: boolean;
-        };
-        TelegramGroupDto: {
-            /** Format: date-time */
-            added_at: string;
-            chat_enabled: boolean;
-            chat_id: number;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
-        TelegramGroupLeftDto: {
-            chat_id: number;
-        };
-        TelegramGroupSeenDto: {
-            chat_id: number;
-            title: string;
-        };
-        /** @enum {string} */
-        TelegramGroupStatus: "PENDING" | "ENABLED" | "LEFT";
         TelegramIssueCodeDto: {
             telegram_id: number;
             telegram_username?: string;
             user: string;
         };
         TelegramJoinGateInputDto: {
+            enabled: boolean;
             pending_ttl_hours: number;
             require_avatar: boolean;
             require_binding: boolean;
             require_username: boolean;
         };
-        TelegramLeftDto: {
-            left: boolean;
-        };
         TelegramMessagesInputDto: {
-            ai_unavailable: string;
             already_linked: string;
             bind_success: string;
             bind_success_joined: string;
-            budget_exhausted: string;
             cancel_reset: string;
             checkin_already: string;
             checkin_milestone: string;
@@ -26593,9 +24919,7 @@ export interface components {
             code_sent: string;
             dm_fallback: string;
             generic_error: string;
-            guest_link_required: string;
             identifier_prompt: string;
-            image_declined: string;
             join_guide: string;
             join_profile_incomplete: string;
             join_service_unavailable: string;
@@ -26606,158 +24930,16 @@ export interface components {
             too_frequent: string;
             user_not_found: string;
         };
-        TelegramNotificationUpdateDto: {
-            galgame_plans?: boolean;
-            interactions?: boolean;
-            system?: boolean;
-            updates?: boolean;
-        };
-        TelegramNotificationsInputDto: {
-            galgame_plans: boolean;
-            interactions: boolean;
-            merge_minutes: number;
-            merge_threshold: number;
-            system: boolean;
-            updates: boolean;
-        };
-        /** @enum {string} */
-        TelegramNotifyCategory: "UPDATES" | "GALGAME_PLANS" | "INTERACTIONS" | "SYSTEM";
-        TelegramNotifyCategoryStatsDto: {
-            allowed: boolean;
-            category: components["schemas"]["TelegramNotifyCategory"];
-            failed_today: number;
-            sent_today: number;
-            subscribed: number;
-        };
-        TelegramNotifyStatsDto: {
-            categories: components["schemas"]["TelegramNotifyCategoryStatsDto"][];
-            merge_minutes: number;
-            merge_threshold: number;
-        };
-        TelegramOutboxClaimDto: {
-            limit: number;
-        };
-        TelegramOutboxResultDto: {
-            blocked?: boolean;
-            error?: string;
-            ok: boolean;
-        };
-        TelegramOverviewChannelDto: {
-            daily_budget_usd: number | null;
-            enabled: boolean;
-            kind: components["schemas"]["TelegramChatKind"];
-            replies_today: number;
-            spend_today: number;
-        };
-        TelegramOverviewDto: {
-            channels: components["schemas"]["TelegramOverviewChannelDto"][];
-            groups: components["schemas"]["TelegramOverviewGroupDto"][];
-            status: components["schemas"]["TelegramBotStatusDto"];
-            today: components["schemas"]["TelegramUsageDto"];
-            trend: components["schemas"]["TelegramTrendDto"][];
-        };
-        TelegramOverviewGroupDto: {
-            chat_id: number;
-            daily_budget_usd: number | null;
-            replies_today: number;
-            schedules: number;
-            spend_today: number;
-            status: components["schemas"]["TelegramGroupStatus"];
-            title: string;
-        };
-        TelegramPersonaDto: {
-            defaults: components["schemas"]["TelegramPersonaInputDto"];
-            persona: components["schemas"]["TelegramPersonaInputDto"];
-        };
-        TelegramPersonaInputDto: {
-            guardrails: string;
-            role_core: string;
-            style_anchor: string;
-            world_knowledge: string;
-        };
-        TelegramPersonaTestDto: {
-            /** @description 群聊试聊时消息是否 @ 或回复了书音；为 false 时按只提到触发词处理，默认 true */
-            addressed?: boolean;
-            /** @description 群聊试聊所在的群组；省略时使用通用群名 */
-            chat_id?: number;
-            messages: components["schemas"]["TelegramTestMessageDto"][];
-            persona: components["schemas"]["TelegramPersonaInputDto"];
-            /** @description 以该站内账号的身份私聊；省略则在群聊中试聊 */
-            user_id?: number;
-        };
-        TelegramPollDto: {
-            correct: number;
-            explanation: string;
-            options: string[];
-            question: string;
-        };
-        TelegramPostDto: {
-            buttons?: {
-                data?: string;
-                text: string;
-                url?: string;
-            }[][];
-            /** @description 内容为空，到点时跳过定时发送 */
-            empty?: boolean;
-            /** @description Telegram HTML */
-            parts: string[];
-            photo?: string | null;
-            poll?: components["schemas"]["TelegramPollDto"];
-        };
-        TelegramPrivateChatInputDto: {
-            context_messages: number;
-            daily_budget_usd: number | null;
-            enabled: boolean;
-            images_enabled: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-        };
-        TelegramQueuedDto: {
-            queued: boolean;
-        };
-        TelegramQuotedMessageDto: {
-            from_id: number;
-            image?: boolean;
-            name: string;
-            self: boolean;
-            text: string;
-        };
-        TelegramScheduleDto: {
-            chat_id: number;
-            enabled: boolean;
-            id: number;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            last_error: string | null;
-            /** Format: date-time */
-            last_sent_at: string | null;
-            time: string;
-            weekdays: number[];
-        };
-        /** @enum {string} */
-        TelegramScheduleKind: "TODAY_UPDATES" | "WEEK_RELEASES" | "STEAM_SALES" | "DAILY_QUIZ";
-        TelegramScheduleListItemDto: {
-            chat_id: number;
-            enabled: boolean;
-            group_status: components["schemas"]["TelegramGroupStatus"];
-            group_title: string;
-            id: number;
-            kind: components["schemas"]["TelegramScheduleKind"];
-            last_error: string | null;
-            /** Format: date-time */
-            last_sent_at: string | null;
-            time: string;
-            weekdays: number[];
-        };
         TelegramSettingsDto: {
             bot_token_hint: string;
             bot_token_set: boolean;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
+            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             message_defaults: components["schemas"]["TelegramMessagesInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
-            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -26768,84 +24950,9 @@ export interface components {
             started_at: string;
             /** @enum {string} */
             state: "running" | "idle";
-            version?: string;
-        };
-        TelegramTestMessageDto: {
-            self: boolean;
-            text: string;
-        };
-        TelegramTestReplyDto: {
-            cards: components["schemas"]["TelegramCardDto"][];
-            input_tokens: number;
-            model: string | null;
-            output_tokens: number;
-            /** @description Telegram HTML，按 4096 字符分段 */
-            parts: string[];
-            reply: string;
-            status: components["schemas"]["TelegramTurnStatus"];
-            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
-        };
-        TelegramToolCountDto: {
-            count: number;
-            label: string;
-            tool_key: string;
-        };
-        TelegramTrendDto: {
-            /** @description 北京时间日期 YYYY-MM-DD */
-            date: string;
-            replies: number;
-            spend_usd: number;
-        };
-        TelegramTurnCardDto: {
-            cover: string | null;
-            id: number;
-            title: string | null;
-            /** @enum {string} */
-            type: "galgame" | "light_novel" | "manga";
-        };
-        TelegramTurnDto: {
-            cards: components["schemas"]["TelegramTurnCardDto"][];
-            context: components["schemas"]["TelegramContextMessageDto"][] | null;
-            cost_usd: number;
-            /** Format: date-time */
-            created_at: string;
-            duration_ms: number;
-            id: number;
-            images: number;
-            images_declined: number;
-            input_tokens: number;
-            message: string | null;
-            model: string | null;
-            output_tokens: number;
-            reply: string | null;
-            /** @description AI 请求记录 ID */
-            request_id: string | null;
-            status: components["schemas"]["TelegramTurnStatus"];
-            tool_calls: components["schemas"]["TelegramTurnToolDto"][];
-        };
-        /** @enum {string} */
-        TelegramTurnStatus: "REPLIED" | "SKIPPED" | "FAILED" | "BUDGET" | "LIMITED" | "IMAGE_DECLINED" | "STOPPED";
-        TelegramTurnToolDto: {
-            duration_ms: number;
-            input: {
-                [key: string]: unknown;
-            } | null;
-            label: string;
-            output: {
-                [key: string]: unknown;
-            } | null;
-            status: components["schemas"]["AiToolCallStatus"];
-            tool_key: string;
         };
         TelegramUnlinkResultDto: {
             unlinked: boolean;
-        };
-        TelegramUsageDto: {
-            failures: number;
-            replies: number;
-            spend_usd: number;
-            tool_calls: number;
-            tools: components["schemas"]["TelegramToolCountDto"][];
         };
         TelegramVerificationInputDto: {
             code_ttl_seconds: number;
@@ -26864,73 +24971,6 @@ export interface components {
             provider_id?: number;
             query: string;
             service: components["schemas"]["AiSearchService"];
-        };
-        TodoCountDto: {
-            count: number;
-            kind: components["schemas"]["WikiTodoKind"];
-        };
-        TodoDto: {
-            /** Format: date-time */
-            created_at: string;
-            created_by: components["schemas"]["UserRefDto"];
-            entries: components["schemas"]["EntryRefDto"][];
-            evidence: {
-                [key: string]: unknown;
-            };
-            id: number;
-            /** @enum {string} */
-            kind: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
-            problem: string;
-            /** @description The single value the suggestion would add or write over an existing one */
-            proposal: components["schemas"]["TodoProposalDto"] | null;
-            resolution: string | null;
-            /** Format: date-time */
-            resolved_at: string | null;
-            /** @description The value a to-do about a single value refers to */
-            statement: components["schemas"]["TodoStatementDto"] | null;
-            /** @enum {string} */
-            status: "OPEN" | "DONE" | "REJECTED";
-            suggestion: {
-                [key: string]: unknown;
-            } | null;
-        };
-        TodoProposalDto: {
-            amount: string | null;
-            code: string | null;
-            currency: string | null;
-            /** @description The value the suggestion replaces; null when it adds a value */
-            current: components["schemas"]["TodoStatementDto"] | null;
-            date: string | null;
-            /** @enum {string|null} */
-            date_precision: "YEAR" | "MONTH" | "DAY" | null;
-            entry_id: number;
-            number: number | null;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            role: string | null;
-            song: string | null;
-            target: components["schemas"]["EntryRefDto"] | null;
-            tax_included: boolean | null;
-            text: string | null;
-        };
-        TodoStatementDto: {
-            amount: string | null;
-            code: string | null;
-            currency: string | null;
-            date: string | null;
-            /** @enum {string|null} */
-            date_precision: "YEAR" | "MONTH" | "DAY" | null;
-            entry_id: number;
-            id: number;
-            number: number | null;
-            /** @enum {string} */
-            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
-            /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
-            target: components["schemas"]["EntryRefDto"] | null;
-            text: string | null;
-            /** @enum {string} */
-            value_kind: "VALUE" | "UNKNOWN";
         };
         TopReporterDto: {
             count: number;
@@ -26961,6 +25001,19 @@ export interface components {
         TopicRelationDto: {
             /** @description 话题信息 */
             topic: components["schemas"]["TopicRefDto"];
+        };
+        TranslatableEntityAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            id: number;
+            name: string;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            trans_name: string | null;
+            /** Format: date-time */
+            updated_at: string;
         };
         TranslationTeamDto: {
             avatar: components["schemas"]["MediaAssetDto"] | null;
@@ -27005,9 +25058,11 @@ export interface components {
         TrendingResponseDto: {
             items: components["schemas"]["TrendingItemDto"][];
         };
-        TypeCountDto: {
-            count: number;
-            type: components["schemas"]["EntryType"];
+        TriggerCatalogSyncDto: {
+            dry_run?: boolean;
+            kind: components["schemas"]["CatalogSyncKind"];
+            /** @description 本轮最多处理多少条，0 表示不限 */
+            limit?: number;
         };
         UgcBacklogDto: {
             failed: number;
@@ -27042,10 +25097,6 @@ export interface components {
             system: number;
             total: number;
         };
-        UpdateAiBudgetDto: {
-            /** @description 线上功能每小时预留，美元 */
-            reserve: number;
-        };
         UpdateAiModelDto: {
             /** @description 空值取消关联模型目录 */
             canonical_id?: string | null;
@@ -27063,40 +25114,24 @@ export interface components {
             /** @description 模型目录中的服务商 */
             catalog_provider_id?: string | null;
             enabled?: boolean;
-            /** @description 每 5 小时的额度上限，美元 */
-            five_hour_limit?: number | null;
             /** @description 每次请求附带的请求头 */
             headers?: components["schemas"]["AiProviderHeaderItemDto"][];
             kind?: components["schemas"]["AiProviderKind"];
-            /** @description 每月的额度上限，美元 */
-            monthly_limit?: number | null;
-            /** @description 服务商显示的每月重置时间 */
-            monthly_reset_at?: string | null;
             name?: string;
             /** @default 1 */
             price_multiplier: number;
-            /** @description 每周的额度上限，美元 */
-            weekly_limit?: number | null;
-            /** @description 服务商显示的每周重置时间 */
-            weekly_reset_at?: string | null;
         };
         UpdateAiRouteDto: {
-            /** @description 每百万 token 美元 */
-            cache_read_price?: number | null;
             /** @description 每百万 token 美元 */
             input_price?: number;
             /** @description 每百万 token 美元 */
             output_price?: number;
-            /** @description 为空时没有高峰价 */
-            peak?: components["schemas"]["AiRoutePeakInputDto"] | null;
             /** @description 关闭时跟随模型目录的价格 */
             price_manual?: boolean;
             protocol?: components["schemas"]["AiProtocol"];
             /** @enum {string} */
             status?: "ACTIVE" | "DISABLED";
             upstream_id?: string;
-            /** @description 这条线路是否接受图片输入 */
-            vision?: boolean;
         };
         UpdateAiSceneDto: {
             /** @description 用户可选的模型 */
@@ -27183,6 +25218,24 @@ export interface components {
             client_id: string;
             client_secret: string;
         };
+        UpdateCatalogSettingsDto: {
+            /** @description 新建条目直接发布，否则留待复核 */
+            auto_publish: boolean;
+            /** @description 单次最多创建多少条，0 表示不限 */
+            batch_limit: number;
+            enabled: boolean;
+            /** @description 同步明细保留天数 */
+            item_keep_days: number;
+            kinds: components["schemas"]["CatalogSyncKind"][];
+            /** @description 产地未知的漫画是否上架 */
+            origin_unknown_listed: boolean;
+            /** @description 收录的漫画产地 */
+            origins: string[];
+            /** @description cron 表达式，保存后立即重排 */
+            schedule: string;
+            /** @description 只处理最近多少个月出版的条目 */
+            since_months: number;
+        };
         UpdateCheckInSettingsDto: {
             check_in_daily_point_max?: number;
             check_in_daily_point_min?: number;
@@ -27256,24 +25309,6 @@ export interface components {
              */
             token_endpoint_auth_method?: "client_secret_basic" | "client_secret_post";
         };
-        UpdateDiscoveryLabelDto: {
-            translated_webtoon: boolean;
-        };
-        UpdateDiscoveryPolicyDto: {
-            /** @description 收录的 Steam 原始语言 */
-            steam_languages?: string[];
-        };
-        UpdateDiscoverySourceDto: {
-            enabled?: boolean;
-            /** @description 首次运行的回溯天数 */
-            look_back_days?: number;
-            /** @description 许可的说明或凭据位置 */
-            permission_note?: string | null;
-            /** @description 已取得来源方许可 */
-            permitted?: boolean;
-            /** @description cron 表达式，含秒字段 */
-            schedule?: string;
-        };
         UpdateDownloadPolicyDto: {
             card_price: number;
             daily_bytes_limit: number;
@@ -27283,11 +25318,6 @@ export interface components {
             memory_fallback_max_bytes: number;
             novel_band_size: number;
             parallel_connections: number;
-        };
-        UpdateEntryFlagsDto: {
-            audience?: components["schemas"]["MangaAudience"] | null;
-            nsfw?: boolean;
-            otome?: boolean;
         };
         UpdateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
@@ -27335,8 +25365,6 @@ export interface components {
             /** Format: email */
             email?: string;
             is_verified?: boolean;
-            /** @description 改变账号状态的理由，状态改变时记入维基日志 */
-            reason?: string;
             /** @enum {string} */
             status?: "ACTIVE" | "INACTIVE" | "BANNED";
         };
@@ -27379,12 +25407,6 @@ export interface components {
             verification_code_resend_cooldown_seconds?: number;
             verification_code_ttl_seconds?: number;
             verification_ticket_ttl_seconds?: number;
-        };
-        UpdateListingPolicyDto: {
-            /** @description 上架的产地 */
-            origins: string[];
-            /** @description 产地未知的作品是否上架 */
-            unknown_listed: boolean;
         };
         UpdateMangaChapterDto: {
             chapter_number?: string | null;
@@ -27739,20 +25761,6 @@ export interface components {
             percentage: number;
             position: components["schemas"]["ReadingPositionDto"];
         };
-        UpdateRecommendPolicyDto: {
-            cold_heat: number;
-            galgame: components["schemas"]["UpdateRecommendWeightsDto"];
-            light_novel: components["schemas"]["UpdateRecommendWeightsDto"];
-            maker_cap: number;
-            manga: components["schemas"]["UpdateRecommendWeightsDto"];
-            rollout_percent: number;
-        };
-        UpdateRecommendWeightsDto: {
-            like: number;
-            maker: number;
-            tag: number;
-            view: number;
-        };
         UpdateReleaseNoteDto: {
             is_published?: boolean;
             released_at?: string;
@@ -27767,66 +25775,15 @@ export interface components {
         UpdateSourceLinkGroupsDto: {
             groups: string[];
         };
-        UpdateTagPoolDto: {
-            aliases?: string[];
-            kind?: components["schemas"]["TagKind"];
-            name?: string;
-            pool_state?: components["schemas"]["TagPoolState"];
-            spoiler?: boolean;
-        };
-        UpdateTaskDto: {
-            /** @description Share of the hourly model budget, by weight */
-            budget_weight?: number;
-            creates?: components["schemas"]["EntryType"][];
-            /** @description Does not run during peak hours */
-            deferrable?: boolean;
-            description?: string;
-            merges?: boolean;
-            name?: string;
-            /** @description Program parameters by key */
-            params?: {
-                [key: string]: number;
-            };
-            /** @description Writable properties by entry type */
-            properties?: {
-                [key: string]: string[];
-            };
-            /** @description Edits allowed per rate window */
-            rate?: number;
-            /** @description Six-field cron expression in Asia/Shanghai, seconds first */
-            schedule?: string;
-        };
-        UpdateTelegramGroupDto: {
-            chat_enabled: boolean;
-            context_messages: number;
-            daily_budget_usd: number | null;
-            daily_reply_limit: number | null;
-            images_enabled: boolean;
-            join_gate: boolean;
-            member_cooldown_seconds: number;
-            member_daily_limit: number | null;
-            /** @enum {string} */
-            status: "PENDING" | "ENABLED";
-            trigger_keywords: string[];
-            welcome_enabled: boolean;
-            welcome_text: string;
-        };
-        UpdateTelegramScheduleDto: {
-            enabled: boolean;
-            /** @description 北京时间 HH:mm */
-            time: string;
-            /** @description 1 为星期一，7 为星期日；空数组表示每天 */
-            weekdays: number[];
-        };
         UpdateTelegramSettingsDto: {
             /** @description 仅在轮换时传入，省略则保持现值 */
             bot_token?: string;
             chat: components["schemas"]["TelegramChatInputDto"];
             check_in_enabled: boolean;
             enabled: boolean;
+            group_id: string | null;
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
-            notifications: components["schemas"]["TelegramNotificationsInputDto"];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -27842,20 +25799,17 @@ export interface components {
             /** @enum {string} */
             role: "ADMIN" | "MEMBER";
         };
-        UpdateWikiSettingsDto: {
-            bot_structural_edits_per_window?: number | null;
-            member_edits_per_window?: number | null;
-            new_member_days?: number | null;
-            new_member_edits?: number | null;
-            new_member_edits_per_window?: number | null;
-            new_member_moves_per_window?: number | null;
-            rate_window_seconds?: number | null;
-            task_stop_reverts?: number | null;
-            task_stop_window?: number | null;
+        UpdateVolumeCurationDto: {
+            epub_curated: boolean;
         };
         UpdateWikiStatusDto: {
             /** @enum {string} */
             status: "REJECTED" | "PENDING" | "PUBLISHED" | "DRAFT";
+        };
+        UpdateWorkFlagsDto: {
+            locked?: boolean;
+            nsfw?: boolean;
+            otome?: boolean;
         };
         UpdateWorkbenchPolicyDto: {
             ai: components["schemas"]["WorkbenchAiPolicyInputDto"];
@@ -28007,12 +25961,6 @@ export interface components {
             is_system: boolean;
             name: string;
         };
-        UserProfileDto: {
-            avatar_id?: number | null;
-            bio?: string | null;
-            nickname?: string;
-            signature?: string | null;
-        };
         UserRefDto: {
             /** @description 头像 */
             avatar: components["schemas"]["MediaAssetDto"] | null;
@@ -28079,78 +26027,56 @@ export interface components {
             system_message_count: number;
             total_count: number;
         };
-        VersionRefDto: {
+        VolumeAdminItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            epub_curated: boolean;
             id: number;
-            platforms: string[];
-            title: string;
-        };
-        VoiceDto: {
-            person_id: number | null;
-            /** @description Name as printed */
-            text: string;
-            /** @description Products the voice applies to; empty for every version */
-            versions: components["schemas"]["VersionRefDto"][];
+            name: string | null;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
+            /** Format: date-time */
+            updated_at: string;
+            views: number;
         };
         /**
          * @description 分卷类型
          * @enum {string}
          */
         VolumeType: "MAIN" | "EXTRA";
-        VoteWorkTagDto: {
-            /**
-             * @description 1 符合，-1 不符合，0 撤销
-             * @enum {number}
-             */
-            value: 1 | -1 | 0;
+        WikiBangumiMoveDto: {
+            entry: components["schemas"]["DuplicateSummaryDto"];
+            /** @description Bangumi 上已被合并的编号，条目当前持有 */
+            from_id: number;
+            /** @description Bangumi 合并后的编号，站内没有条目持有 */
+            to_id: number;
         };
-        WatchStateDto: {
-            watched: boolean;
+        WikiDuplicateCountDto: {
+            count: number;
+            resource_type: components["schemas"]["ContributionResourceType"];
         };
-        WatchedEntryDto: {
-            entry: components["schemas"]["EntryRefDto"];
+        WikiDuplicateDto: {
             /** Format: date-time */
-            watched_at: string;
+            found_at: string;
+            /** @description 编号较大的条目 */
+            high: components["schemas"]["DuplicateSummaryDto"];
+            id: number;
+            /** @description 编号较小的条目 */
+            low: components["schemas"]["DuplicateSummaryDto"];
+            reasons: components["schemas"]["DuplicateReasonDto"][];
+            resource_type: components["schemas"]["ContributionResourceType"];
+            source: components["schemas"]["WikiDuplicateSource"];
         };
         /** @enum {string} */
-        WikiLogAction: "LOCK" | "UNLOCK" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
-        WikiRulesDto: {
-            /** @description 附录 A 记录细则（Markdown） */
-            appendix: string;
-            /** @description 收录与编目规则正文（Markdown） */
-            main: string;
-        };
-        /** @enum {string} */
-        WikiSection: "GAME" | "LIGHT_NOVEL" | "MANGA" | "PERSON" | "ORGANIZATION" | "CHARACTER";
-        WikiSettingsDto: {
-            /** @description Structural edits a task may write in one window */
-            bot_structural_edits_per_window: number;
-            /** @description Edits any other member may submit in one window */
-            member_edits_per_window: number;
-            /** @description Days since registration during which a member counts as new */
-            new_member_days: number;
-            /** @description Applied edits below which a member counts as new */
-            new_member_edits: number;
-            /** @description Edits a new member may submit in one window */
-            new_member_edits_per_window: number;
-            /** @description Moves, merges and splits a new member may submit in one window */
-            new_member_moves_per_window: number;
-            /** @description Length of the rate window in seconds */
-            rate_window_seconds: number;
-            /** @description Reverted or corrected edits within the window above which a task stops */
-            task_stop_reverts: number;
-            /** @description Recent edits of a task counted for the automatic stop */
-            task_stop_window: number;
-        };
+        WikiDuplicateSource: "CONTRIBUTION" | "CATALOG" | "IMPORT" | "INGEST" | "LIBRARY";
         WikiSnapshotDto: {
             /** @description Full editable snapshot of the resource in contribution-registry shape. */
             snapshot: {
                 [key: string]: unknown;
             };
         };
-        /** @enum {string} */
-        WikiTaskStop: "MANUAL" | "TRIAL" | "AUTO";
-        /** @enum {string} */
-        WikiTodoKind: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
         WorkCardDto: {
             aliases: string[];
             average_rate: number | null;
@@ -28165,54 +26091,6 @@ export interface components {
             /** @enum {string} */
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
-        };
-        WorkGroupDto: {
-            /** @description 游戏按职责分组，书不分 */
-            code: string | null;
-            count: number;
-            /** @enum {string} */
-            kind: "galgame" | "light_novel" | "manga";
-        };
-        WorkMediaCountDto: {
-            galgame: number;
-            light_novel: number;
-            manga: number;
-        };
-        WorkPersonDto: {
-            code: string;
-            name: string;
-            person_id: number;
-        };
-        WorkRatingDto: {
-            average: number | null;
-            count: number;
-        };
-        WorkTagVoteDto: {
-            tag: components["schemas"]["WorkTagVoteTagDto"];
-            value: number;
-        };
-        WorkTagVoteResultDto: {
-            tag_id: number;
-            value: number;
-        };
-        WorkTagVoteTagDto: {
-            id: number;
-            name: string;
-            /** @enum {string} */
-            pool_state: "CANDIDATE" | "POOL" | "HIDDEN";
-            spoiler: boolean;
-        };
-        WorkViewDto: {
-            from_recommend?: boolean;
-            visitor?: string;
-        };
-        WorkYearDto: {
-            /** @description 游戏按职责分组，书不分 */
-            code: string | null;
-            count: number;
-            /** @enum {string} */
-            kind: "galgame" | "light_novel" | "manga";
-            year: number;
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
@@ -28243,48 +26121,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AdminAiBudgetController_overview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AiBudgetDto"];
-                };
-            };
-        };
-    };
-    AdminAiBudgetController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateAiBudgetDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AiBudgetDto"];
-                };
-            };
-        };
-    };
     AdminAiCatalogController_status: {
         parameters: {
             query?: never;
@@ -28941,27 +26777,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AiAddResultDto"];
-                };
-            };
-        };
-    };
-    AdminAiProviderController_getQuota: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AiQuotaDto"];
                 };
             };
         };
@@ -29697,6 +27512,52 @@ export interface operations {
             };
         };
     };
+    AdminCatalogController_candidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateCandidateDto"][];
+                };
+            };
+        };
+    };
+    AdminCatalogController_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkCatalogItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"];
+                };
+            };
+        };
+    };
     AdminCatalogController_setListing: {
         parameters: {
             query?: never;
@@ -29741,48 +27602,6 @@ export interface operations {
             };
         };
     };
-    AdminCatalogController_listingPolicy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CatalogListingPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_updateListingPolicy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateListingPolicyDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CatalogListingPolicyDto"];
-                };
-            };
-        };
-    };
     AdminCatalogController_recompute: {
         parameters: {
             query?: never;
@@ -29806,60 +27625,6 @@ export interface operations {
             };
         };
     };
-    AdminCatalogController_listingRuns: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["ListingRunDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminCatalogController_listingItems: {
-        parameters: {
-            query: {
-                /** @description 按标题模糊匹配 */
-                keyword?: string;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["ListingItemDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     AdminCatalogController_overview: {
         parameters: {
             query?: never;
@@ -29874,125 +27639,17 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryOverviewDto"];
+                    "application/json": components["schemas"]["CatalogOverviewDto"];
                 };
             };
         };
     };
-    AdminCatalogController_rules: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryRulesDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_addLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateDiscoveryLabelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_previewLabels: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PreviewDiscoveryLabelsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelPreviewDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_removeLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminCatalogController_updateLabel: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateDiscoveryLabelDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DiscoveryLabelDto"];
-                };
-            };
-        };
-    };
-    AdminCatalogController_officialPages: {
+    AdminCatalogController_pending: {
         parameters: {
             query: {
-                status?: components["schemas"]["DiscoveryPageStatus"];
-                /** @description 按地址或游戏标题模糊匹配 */
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
+                /** @description 按标题模糊匹配 */
                 keyword?: string;
                 page: number;
                 page_size: number;
@@ -30009,14 +27666,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryOfficialPageDto"][];
+                        items: components["schemas"]["CatalogItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminCatalogController_updatePolicy: {
+    AdminCatalogController_review: {
         parameters: {
             query?: never;
             header?: never;
@@ -30025,7 +27682,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateDiscoveryPolicyDto"];
+                "application/json": components["schemas"]["ReviewCatalogItemsDto"];
             };
         };
         responses: {
@@ -30034,7 +27691,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryPolicyDto"];
+                    "application/json": components["schemas"]["CatalogReviewResultDto"];
                 };
             };
         };
@@ -30042,8 +27699,9 @@ export interface operations {
     AdminCatalogController_listRuns: {
         parameters: {
             query: {
-                source?: components["schemas"]["DiscoverySourceKey"];
-                status?: components["schemas"]["DiscoveryRunStatus"];
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+                status?: components["schemas"]["CatalogSyncStatus"];
                 page: number;
                 page_size: number;
             };
@@ -30059,9 +27717,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryRunDto"][];
+                        items: components["schemas"]["CatalogRunItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    AdminCatalogController_trigger: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerCatalogSyncDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogTriggerResultDto"];
                 };
             };
         };
@@ -30082,7 +27763,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryRunDetailDto"];
+                    "application/json": components["schemas"]["CatalogRunDetailDto"];
                 };
             };
         };
@@ -30090,8 +27771,8 @@ export interface operations {
     AdminCatalogController_listItems: {
         parameters: {
             query: {
-                outcome?: components["schemas"]["DiscoveryOutcome"];
-                section?: components["schemas"]["DiscoverySection"];
+                decision?: components["schemas"]["CatalogSyncDecision"];
+                review?: components["schemas"]["CatalogSyncReview"];
                 /** @description 按标题模糊匹配 */
                 keyword?: string;
                 page: number;
@@ -30111,14 +27792,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DiscoveryRunItemDto"][];
+                        items: components["schemas"]["CatalogItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminCatalogController_sources: {
+    AdminCatalogController_settings: {
         parameters: {
             query?: never;
             header?: never;
@@ -30132,23 +27813,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoverySourceDto"][];
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
                 };
             };
         };
     };
-    AdminCatalogController_updateSource: {
+    AdminCatalogController_updateSettings: {
         parameters: {
             query?: never;
             header?: never;
-            path: {
-                key: "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
-            };
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateDiscoverySourceDto"];
+                "application/json": components["schemas"]["UpdateCatalogSettingsDto"];
             };
         };
         responses: {
@@ -30157,17 +27836,20 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoverySourceDto"];
+                    "application/json": components["schemas"]["CatalogSyncSettingsDto"];
                 };
             };
         };
     };
-    AdminCatalogController_trigger: {
+    AdminCatalogController_trace: {
         parameters: {
-            query?: never;
+            query?: {
+                kind?: components["schemas"]["CatalogSyncKind"];
+                operation?: components["schemas"]["CatalogSyncOperation"];
+            };
             header?: never;
             path: {
-                key: "JPRO" | "STEAM" | "MOEPEDIA" | "OFFICIAL_PAGE" | "BRAND_LIST" | "DLSITE" | "PUBLISHER" | "VNDB" | "BANGUMI" | "OPENBD" | "NDL";
+                externalId: number;
             };
             cookie?: never;
         };
@@ -30178,7 +27860,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DiscoveryTriggerResultDto"];
+                    "application/json": components["schemas"]["CatalogTraceEntryDto"][];
                 };
             };
         };
@@ -33428,6 +31110,7 @@ export interface operations {
             query: {
                 /** @description 系列名或系列 ID */
                 q?: string;
+                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
                 /** @description 只看还有分卷缺 EPUB 的系列 */
                 incomplete?: boolean;
                 page: number;
@@ -33452,11 +31135,37 @@ export interface operations {
             };
         };
     };
+    AdminNovelSeriesController_updateStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NovelSeriesStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NovelSeriesItemDto"];
+                };
+            };
+        };
+    };
     AdminNovelVolumeController_list: {
         parameters: {
             query: {
                 /** @description 卷名、系列名或分卷 ID */
                 q?: string;
+                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
                 /** @description 只看已校订 / 未校订 */
                 curated?: boolean;
                 /** @description 只看被标记为合集的分卷 */
@@ -34247,48 +31956,6 @@ export interface operations {
             };
         };
     };
-    AdminRecommendController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RecommendPolicyDto"];
-                };
-            };
-        };
-    };
-    AdminRecommendController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateRecommendPolicyDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RecommendPolicyDto"];
-                };
-            };
-        };
-    };
     AdminReleaseNotesController_list: {
         parameters: {
             query?: {
@@ -34466,358 +32133,6 @@ export interface operations {
             };
         };
     };
-    AdminTelegramConversationsController_list: {
-        parameters: {
-            query: {
-                kind?: components["schemas"]["TelegramChatKind"];
-                chat_id?: number;
-                /** @description Telegram 名称、站内账号名或 Telegram ID */
-                search?: string;
-                /** @description 最近多少天，默认 7 */
-                days?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["TelegramConversationDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    AdminTelegramConversationsController_detail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramConversationDetailDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminTelegramGroupDto"][];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                chat_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTelegramGroupDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramGroupDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramGroupsController_leave: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                chat_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramLeftDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_notifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramNotifyStatsDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_overview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramOverviewDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_persona: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPersonaDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_savePersona: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramPersonaInputDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPersonaDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSettingsController_test: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramPersonaTestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramTestReplyDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_list: {
-        parameters: {
-            query?: {
-                chat_id?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleListItemDto"][];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTelegramScheduleDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_preview: {
-        parameters: {
-            query: {
-                kind: components["schemas"]["TelegramScheduleKind"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramPostDto"] | null;
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTelegramScheduleDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramScheduleDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramDeletedDto"];
-                };
-            };
-        };
-    };
-    AdminTelegramSchedulesController_send: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramQueuedDto"];
-                };
-            };
-        };
-    };
     AdminTelegramSettingsController_get: {
         parameters: {
             query?: never;
@@ -34856,6 +32171,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TelegramSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminTelegramSettingsController_getStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TelegramBotStatusDto"];
                 };
             };
         };
@@ -37843,31 +35177,6 @@ export interface operations {
             };
         };
     };
-    AdminUserController_updateProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UserProfileDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminUserDetailDto"];
-                };
-            };
-        };
-    };
     AdminUserController_setRole: {
         parameters: {
             query?: never;
@@ -37937,11 +35246,13 @@ export interface operations {
             };
         };
     };
-    AdminBotController_getList: {
+    AdminChangeRequestController_merge: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: number;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -37951,35 +35262,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BotItemDto"][];
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
     };
-    AdminBotController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateBotDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BotCreatedDto"];
-                };
-            };
-        };
-    };
-    AdminBotController_suspend: {
+    AdminChangeRequestController_reject: {
         parameters: {
             query?: never;
             header?: never;
@@ -37990,19 +35278,21 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SuspendBotDto"];
+                "application/json": components["schemas"]["ForceRejectDto"];
             };
         };
         responses: {
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
             };
         };
     };
-    AdminBotController_resume: {
+    AdminChangeRequestController_reopen: {
         parameters: {
             query?: never;
             header?: never;
@@ -38013,20 +35303,24 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
             };
         };
     };
-    AdminEntryController_getList: {
+    AdminCharacterController_list: {
         parameters: {
             query: {
-                section?: components["schemas"]["WikiSection"];
-                type?: components["schemas"]["EntryType"];
-                /** @description Entry name or number */
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
                 q?: string;
                 page: number;
                 page_size: number;
@@ -38043,14 +35337,214 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["AdminEntryDto"][];
+                        items: components["schemas"]["TranslatableEntityAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminEntryController_getCounts: {
+    AdminMergeController_mergeCharacter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewCharacter: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminCharacterController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminCharacterController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminCharacterController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminCharacterController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminDuplicateController_getList: {
+        parameters: {
+            query: {
+                resource_type?: components["schemas"]["ContributionResourceType"];
+                source?: components["schemas"]["WikiDuplicateSource"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["WikiDuplicateDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminDuplicateController_bangumiMoves: {
+        parameters: {
+            query: {
+                resource_type: components["schemas"]["ContributionResourceType"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WikiBangumiMoveDto"][];
+                };
+            };
+        };
+    };
+    AdminDuplicateController_adoptBangumiMove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdoptBangumiMoveDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminDuplicateController_getCounts: {
         parameters: {
             query?: never;
             header?: never;
@@ -38064,15 +35558,38 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EntrySectionCountDto"][];
+                    "application/json": components["schemas"]["WikiDuplicateCountDto"][];
                 };
             };
         };
     };
-    AdminEntryController_getDeleted: {
+    AdminDuplicateController_dismiss: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminGalgameController_list: {
         parameters: {
             query: {
-                /** @description Entry name or number */
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
                 q?: string;
                 page: number;
                 page_size: number;
@@ -38089,18 +35606,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["DeletedEntryDto"][];
+                        items: components["schemas"]["GalgameAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminEntryController_getProtected: {
+    AdminMergeController_mergeGalgame: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewGalgame: {
         parameters: {
             query: {
-                page: number;
-                page_size: number;
+                canonical_id: number;
+                loser_id: number;
             };
             header?: never;
             path?: never;
@@ -38113,15 +35653,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        items: components["schemas"]["ProtectedEntryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
+                    "application/json": components["schemas"]["MergePreviewDto"];
                 };
             };
         };
     };
-    AdminEntryController_setFlags: {
+    AdminGalgameController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminGalgameController_setFlags: {
         parameters: {
             query?: never;
             header?: never;
@@ -38132,11 +35690,32 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateEntryFlagsDto"];
+                "application/json": components["schemas"]["UpdateWorkFlagsDto"];
             };
         };
         responses: {
-            204: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminGalgameController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -38144,13 +35723,61 @@ export interface operations {
             };
         };
     };
-    AdminLogController_getList: {
+    AdminGalgameController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminGalgameController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelVolumeController_list: {
         parameters: {
             query: {
-                action?: components["schemas"]["WikiLogAction"];
-                /** @description Entry name or number */
-                entry?: string;
-                actor_id?: number;
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
                 page: number;
                 page_size: number;
             };
@@ -38166,33 +35793,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["LogItemDto"][];
+                        items: components["schemas"]["VolumeAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminLogController_getActors: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserRefDto"][];
-                };
-            };
-        };
-    };
-    AdminCandidateController_merge: {
+    AdminMergeController_mergeLightNovelVolume: {
         parameters: {
             query?: never;
             header?: never;
@@ -38201,25 +35809,162 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["MergeBatchDto"];
+                "application/json": components["schemas"]["MergeDto"];
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MergeBatchResultDto"];
+                    "application/json": components["schemas"]["MergeResultDto"];
                 };
             };
         };
     };
-    AdminCandidateController_getList: {
+    AdminMergeController_previewLightNovelVolume: {
         parameters: {
             query: {
-                section?: components["schemas"]["WikiSection"];
-                source?: "bot" | "legacy";
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelVolumeController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelVolumeController_setCuration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateVolumeCurationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelVolumeController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLightNovelVolumeController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelVolumeController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
                 page: number;
                 page_size: number;
             };
@@ -38235,35 +35980,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["MergeCandidateDto"][];
+                        items: components["schemas"]["LightNovelAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
             };
         };
     };
-    AdminCandidateController_getCounts: {
+    AdminMergeController_mergeLightNovel: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
         responses: {
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MergeCountsDto"];
+                    "application/json": components["schemas"]["MergeResultDto"];
                 };
             };
         };
     };
-    AdminWikiOverviewController_get: {
+    AdminMergeController_previewLightNovel: {
         parameters: {
-            query?: never;
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -38275,14 +36027,134 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OverviewDto"];
+                    "application/json": components["schemas"]["MergePreviewDto"];
                 };
             };
         };
     };
-    AdminTaskController_getPrograms: {
+    AdminLightNovelController_softDelete: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelController_setFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLightNovelController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminLightNovelController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -38294,7 +36166,652 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProgramListDto"];
+                    "application/json": {
+                        items: components["schemas"]["MangaVolumeAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeMangaVolume: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewMangaVolume: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminMangaVolumeController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaVolumeController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MangaAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeManga: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewManga: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_setFlags: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWorkFlagsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminMangaController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminMangaController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminPersonController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TranslatableEntityAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergePerson: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewPerson: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminPersonController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminPersonController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminPersonController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminPersonController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranslatableEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminProducerController_list: {
+        parameters: {
+            query: {
+                status?: components["schemas"]["PublishStatus"];
+                deleted: boolean;
+                locked?: boolean;
+                otome?: boolean;
+                nsfw?: boolean;
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["NamedEntityAdminItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminMergeController_mergeProducer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergeResultDto"];
+                };
+            };
+        };
+    };
+    AdminMergeController_previewProducer: {
+        parameters: {
+            query: {
+                canonical_id: number;
+                loser_id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    AdminProducerController_softDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminProducerController_hardDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminProducerController_restore: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminProducerController_setStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateWikiStatusDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
                 };
             };
         };
@@ -38316,48 +36833,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RevisionSwitchResultDto"];
-                };
-            };
-        };
-    };
-    AdminSettingsController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WikiSettingsDto"];
-                };
-            };
-        };
-    };
-    AdminSettingsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateWikiSettingsDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WikiSettingsDto"];
                 };
             };
         };
@@ -38438,25 +36913,6 @@ export interface operations {
             };
         };
     };
-    AdminTagController_listHidden: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TagHiddenGroupDto"][];
-                };
-            };
-        };
-    };
     AdminMergeController_mergeTag: {
         parameters: {
             query?: never;
@@ -38502,36 +36958,6 @@ export interface operations {
             };
         };
     };
-    AdminTagController_listPool: {
-        parameters: {
-            query: {
-                state: components["schemas"]["TagPoolState"];
-                kind?: components["schemas"]["TagKind"];
-                media?: "galgame" | "light_novel" | "manga";
-                spoiler?: boolean;
-                q?: string;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["TagPoolItemAdminDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     AdminTagController_softDelete: {
         parameters: {
             query?: never;
@@ -38563,29 +36989,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminTagController_updatePool: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTagPoolDto"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -38641,143 +37044,11 @@ export interface operations {
             };
         };
     };
-    AdminTaskController_getList: {
-        parameters: {
-            query?: {
-                bot_id?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TaskItemDto"][];
-                };
-            };
-        };
-    };
-    AdminTaskController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateTaskDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TaskCreatedDto"];
-                };
-            };
-        };
-    };
-    AdminTaskController_getById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TaskDetailDto"];
-                };
-            };
-        };
-    };
-    AdminTaskController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTaskDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminTaskController_enable: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EnableTaskDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminTaskController_stop: {
-        parameters: {
-            query: {
-                reason: string;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     AiModelController_getList: {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_agent";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "entry_check";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
@@ -39092,7 +37363,111 @@ export interface operations {
             };
         };
     };
-    ChangeRequestSourceController_sources: {
+    ChangeRequestController_list: {
+        parameters: {
+            query: {
+                resource_type?: "GALGAME" | "LIGHT_NOVEL" | "LIGHT_NOVEL_VOLUME" | "MANGA" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "PERSON" | "PRODUCER" | "CHARACTER" | "TAG";
+                status?: "PENDING" | "MERGED" | "REJECTED" | "CLOSED";
+                /** @description 同一次导入的 CR 批次 id,用于捆绑审核分组 */
+                batch_id?: string;
+                /** @description disputed：核对结果与请求不一致（不传 status 时含近期已合并的）；running：核对排队或进行中 */
+                check?: "disputed" | "running";
+                resource_id?: number;
+                author_id?: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["ChangeRequestSummaryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    ChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateResourceChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_submitBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitChangeRequestBatchDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestBatchSubmitResultDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_reviewBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                batch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewChangeRequestBatchDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestBatchReviewResultDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_getById: {
         parameters: {
             query?: never;
             header?: never;
@@ -39108,7 +37483,194 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChangeRequestSourceDto"][];
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestCheckController_rerun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_close: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestCheckController_correct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectChangeRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_dismiss: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                candidate_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_mergeInto: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MergeIntoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestDuplicateController_preview: {
+        parameters: {
+            query: {
+                target_id: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MergePreviewDto"];
+                };
+            };
+        };
+    };
+    ChangeRequestController_review: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
@@ -39156,6 +37718,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CharacterDetailDto"];
+                };
+            };
+        };
+    };
+    CharacterChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
@@ -39489,6 +38076,145 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CommentVoteStateResDto"];
+                };
+            };
+        };
+    };
+    ContributionActivityController_list: {
+        parameters: {
+            query: {
+                actor_id?: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["ContributionActivityItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    DuplicateController_check: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DuplicateCheckDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateCheckResultDto"];
+                };
+            };
+        };
+    };
+    DuplicateController_find: {
+        parameters: {
+            query: {
+                author?: string;
+                /** @description 角色所属作品的名称 */
+                work?: string;
+                q: string;
+            };
+            header?: never;
+            path: {
+                resource_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateLookupDto"];
+                };
+            };
+        };
+    };
+    EditorSchemaController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                resource_type: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EditorSchemaDto"];
+                };
+            };
+        };
+    };
+    EditorSnapshotController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                resource_type: string;
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EditorSnapshotDto"];
+                };
+            };
+        };
+    };
+    ContributionStatsController_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContributionStatsDto"];
                 };
             };
         };
@@ -39879,6 +38605,29 @@ export interface operations {
             };
         };
     };
+    EntityImportController_import: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EntityImportDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityImportResultDto"];
+                };
+            };
+        };
+    };
     EntityEditorSearchController_search: {
         parameters: {
             query: {
@@ -39902,6 +38651,182 @@ export interface operations {
                         items: components["schemas"]["EntitySummaryDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    ExternalSourceController_coverMedia: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoverMediaDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverMediaResultDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_entityDraft: {
+        parameters: {
+            query: {
+                type: "person" | "character" | "producer";
+                bangumi_id?: string;
+                vndb_id?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_galgameDraft: {
+        parameters: {
+            query?: {
+                bangumi_id?: string;
+                vndb_id?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_lnDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LnDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_volumeDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_mangaDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_mangaVolumeDraft: {
+        parameters: {
+            query: {
+                bangumi_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityDraftDto"];
+                };
+            };
+        };
+    };
+    ExternalSourceController_search: {
+        parameters: {
+            query: {
+                type: "galgame" | "light-novel" | "light-novel-volume" | "manga" | "manga-volume" | "person" | "character" | "producer";
+                q: string;
+            };
+            header?: never;
+            path: {
+                source: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExternalSearchItemDto"][];
                 };
             };
         };
@@ -40766,6 +39691,29 @@ export interface operations {
             };
         };
     };
+    GalgameImportController_import: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GalgameImportDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameImportResultDto"];
+                };
+            };
+        };
+    };
     GalgameController_getList: {
         parameters: {
             query: {
@@ -40955,33 +39903,6 @@ export interface operations {
             };
         };
     };
-    GalgameSteamPriceController_sales: {
-        parameters: {
-            query: {
-                /** @description 最低折扣（百分比） */
-                min_discount?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["SteamSaleDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     GalgameController_getById: {
         parameters: {
             query?: never;
@@ -41051,6 +39972,31 @@ export interface operations {
             };
         };
     };
+    GalgameChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     GalgameController_getCharacters: {
         parameters: {
             query?: {
@@ -41070,31 +40016,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameCharacterRelationDto"][];
-                };
-            };
-        };
-    };
-    GalgameEntryController_compare: {
-        parameters: {
-            query: {
-                /** @description 0 compares the first revision with an empty entry */
-                from: number;
-                to: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HistoryComparisonDto"];
                 };
             };
         };
@@ -41120,7 +40041,7 @@ export interface operations {
             };
         };
     };
-    GalgameEntryController_getCredits: {
+    CurrentUserGalgameCoverVoteController_getMine: {
         parameters: {
             query?: never;
             header?: never;
@@ -41136,12 +40057,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GameCreditsDto"];
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };
     };
-    GalgameEntryController_getDisplay: {
+    CurrentUserGalgameCoverVoteController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoverVoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserGalgameCoverVoteController_retract: {
         parameters: {
             query?: never;
             header?: never;
@@ -41157,7 +40103,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GameDisplayDto"];
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };
@@ -41179,76 +40125,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameDownloadListDto"];
-                };
-            };
-        };
-    };
-    GalgameEntryController_getFacts: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FactDto"][];
-                };
-            };
-        };
-    };
-    GalgameEntryController_getHistory: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["HistoryRowDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    GalgameEntryController_getSnapshot: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                revision: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HistorySnapshotDto"];
                 };
             };
         };
@@ -41301,31 +40177,6 @@ export interface operations {
             };
         };
     };
-    GalgameEntryController_preview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SubmitEditDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GalgamePreviewDto"];
-                };
-            };
-        };
-    };
     GalgameController_getProducers: {
         parameters: {
             query?: never;
@@ -41343,27 +40194,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameProducerRelationDto"][];
-                };
-            };
-        };
-    };
-    GalgameEntryController_getProducts: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductListingDto"][];
                 };
             };
         };
@@ -41581,34 +40411,6 @@ export interface operations {
             };
         };
     };
-    RecommendController_galgames: {
-        parameters: {
-            query?: {
-                cursor?: number;
-                visitor?: string;
-                /** @description 本次会话最近看过的作品，由近到远 */
-                recent?: number[];
-                /** @description 当前页已显示的作品 */
-                exclude?: number[];
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GalgameRecommendPageDto"];
-                };
-            };
-        };
-    };
     GalgameController_getRelations: {
         parameters: {
             query?: never;
@@ -41653,27 +40455,6 @@ export interface operations {
             };
         };
     };
-    GalgameSteamPriceController_prices: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SteamPriceDto"][];
-                };
-            };
-        };
-    };
     GalgameController_getTags: {
         parameters: {
             query?: never;
@@ -41695,99 +40476,6 @@ export interface operations {
             };
         };
     };
-    GalgameTagController_propose: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProposeWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
-    GalgameTagController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
-                };
-            };
-        };
-    };
-    GalgameTagController_getSimilar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimilarTagDto"][];
-                };
-            };
-        };
-    };
-    GalgameTagController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                tag_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VoteWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
     GalgameController_recordView: {
         parameters: {
             query?: never;
@@ -41797,11 +40485,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WorkViewDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             204: {
                 headers: {
@@ -41876,6 +40560,304 @@ export interface operations {
             };
         };
     };
+    InternalCatalogController_changes: {
+        parameters: {
+            query?: {
+                /** @description 事件游标，返回 id 大于该值的事件；默认 0 */
+                since?: number;
+                /** @description 单次返回的最大事件数 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InternalCatalogChangesDto"];
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getCharacterMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getCharacter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InternalGalgamesController_getBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InternalGalgameBatchDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InternalGalgamesController_listIds: {
+        parameters: {
+            query: {
+                sort_field?: "release_date" | "title" | "views" | "revised_at" | "created_at";
+                sort_order?: "asc" | "desc";
+                search?: string;
+                year_start?: number;
+                year_end?: number;
+                /** @description Inclusive release lower bound in YYYY or YYYY-MM format. */
+                release_from?: string;
+                /** @description Inclusive release upper bound in YYYY or YYYY-MM format. */
+                release_to?: string;
+                /** @description Specific release years or months. OR semantics. Each item is YYYY or YYYY-MM. */
+                release_periods?: string[];
+                platforms?: string[];
+                origin_lang?: string[];
+                producer_ids?: number[];
+                /** @description Tag filter groups encoded as op.match.ids, e.g. include.and.1.2 or exclude.or.5.6. Groups are AND-combined. */
+                tag_groups?: string[];
+                staff_person_ids?: number[];
+                staff_role?: components["schemas"]["GalgameStaffRole"];
+                include_dev?: boolean;
+                /** @description 题材 genre key，多个之间 OR。例：romance,mystery */
+                genre?: string[];
+                /** @description 只看站内有下载资源的作品 */
+                downloadable?: boolean;
+                exclude_rated_covers?: boolean;
+                content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+                character_id?: number;
+                tags?: string[];
+                exclude_tags?: string[];
+                released_after?: string;
+                released_before?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InternalGalgamesController_lookup: {
+        parameters: {
+            query?: {
+                id?: number;
+                vndb_id?: number;
+                bangumi_game_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameMappingItemDto"] | null;
+                };
+            };
+        };
+    };
+    InternalGalgamesController_getMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["GalgameMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalGalgamesController_searchIds: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+                q: string;
+                content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InternalGalgamesController_getDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InternalEntitiesController_listProducers: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["InternalProducerListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getProducerMapping: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntityMappingItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    InternalEntitiesController_getProducer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     InternalReleasesController_create: {
         parameters: {
             query?: never;
@@ -41918,49 +40900,7 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_unlink: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_confirm: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramActionConfirmDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramChatController_reply: {
+    TelegramInternalController_reply: {
         parameters: {
             query?: never;
             header?: never;
@@ -41974,29 +40914,6 @@ export interface operations {
         };
         responses: {
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramChatController_stream: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramChatDto"];
-            };
-        };
-        responses: {
-            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -42025,235 +40942,6 @@ export interface operations {
             };
         };
     };
-    TelegramInternalController_left: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramGroupLeftDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramInternalController_seen: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramGroupSeenDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TelegramGroupDto"];
-                };
-            };
-        };
-    };
-    TelegramContentController_inline: {
-        parameters: {
-            query?: {
-                q?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>[];
-                };
-            };
-        };
-    };
-    TelegramContentController_me: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_notifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_updateNotifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                telegram_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramNotificationUpdateDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_claim: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramOutboxClaimDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_result: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TelegramOutboxResultDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    TelegramContentController_releases: {
-        parameters: {
-            query?: {
-                period?: "week" | "month" | "next_month" | "tba";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramContentController_sales: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
-        };
-    };
-    TelegramContentController_search: {
-        parameters: {
-            query?: {
-                q?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     TelegramInternalController_getSettings: {
         parameters: {
             query?: never;
@@ -42267,7 +40955,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -42289,25 +40979,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    TelegramContentController_today: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
             };
         };
     };
@@ -42433,6 +41104,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    LnImportController_import: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LnImportDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LnImportResultDto"];
                 };
             };
         };
@@ -42570,6 +41264,31 @@ export interface operations {
             };
         };
     };
+    LightNovelVolumeChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     LightNovelVolumeController_getContributors: {
         parameters: {
             query?: never;
@@ -42587,6 +41306,122 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelContributorsDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelVolumeCoverVoteController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelVolumeCoverVoteController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoverVoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelVolumeCoverVoteController_retract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    LightNovelVolumeController_uploadEpub: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelVolumeFileStateDto"];
+                };
+            };
+        };
+    };
+    LightNovelVolumeController_deleteEpub: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelVolumeFileStateDto"];
                 };
             };
         };
@@ -43072,6 +41907,31 @@ export interface operations {
             };
         };
     };
+    LightNovelChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     LightNovelController_getCharacters: {
         parameters: {
             query?: {
@@ -43112,6 +41972,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelContributorsDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelCoverVoteController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelCoverVoteController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoverVoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserLightNovelCoverVoteController_retract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };
@@ -43402,34 +42329,6 @@ export interface operations {
             };
         };
     };
-    RecommendController_lightNovels: {
-        parameters: {
-            query?: {
-                cursor?: number;
-                visitor?: string;
-                /** @description 本次会话最近看过的作品，由近到远 */
-                recent?: number[];
-                /** @description 当前页已显示的作品 */
-                exclude?: number[];
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LightNovelRecommendPageDto"];
-                };
-            };
-        };
-    };
     LightNovelController_getRelations: {
         parameters: {
             query?: never;
@@ -43472,99 +42371,6 @@ export interface operations {
             };
         };
     };
-    LightNovelTagController_propose: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProposeWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
-    LightNovelTagController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
-                };
-            };
-        };
-    };
-    LightNovelTagController_getSimilar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimilarTagDto"][];
-                };
-            };
-        };
-    };
-    LightNovelTagController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                tag_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VoteWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
     LightNovelController_recordView: {
         parameters: {
             query?: never;
@@ -43574,11 +42380,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WorkViewDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             204: {
                 headers: {
@@ -43813,31 +42615,6 @@ export interface operations {
             };
         };
     };
-    MangaPageController_createNote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                page_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateMangaPageNoteDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaNoteDto"];
-                };
-            };
-        };
-    };
     MangaPageController_getRegions: {
         parameters: {
             query?: never;
@@ -44026,69 +42803,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectDto"];
-                };
-            };
-        };
-    };
-    MangaProjectController_getBaselinePages: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaBaselinePageDto"][];
-                };
-            };
-        };
-    };
-    MangaProjectController_getCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectCheckDto"];
-                };
-            };
-        };
-    };
-    MangaProjectController_rerunCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectCheckDto"];
                 };
             };
         };
@@ -44304,31 +43018,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectPageDto"][];
-                };
-            };
-        };
-    };
-    MangaProjectController_correct: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MangaProjectInfoDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectDto"];
                 };
             };
         };
@@ -44754,6 +43443,31 @@ export interface operations {
             };
         };
     };
+    MangaVolumeChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     MangaVolumeController_getContributors: {
         parameters: {
             query?: never;
@@ -44990,6 +43704,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkCardDto"];
+                };
+            };
+        };
+    };
+    MangaChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
@@ -45322,34 +44061,6 @@ export interface operations {
             };
         };
     };
-    RecommendController_mangas: {
-        parameters: {
-            query?: {
-                cursor?: number;
-                visitor?: string;
-                /** @description 本次会话最近看过的作品，由近到远 */
-                recent?: number[];
-                /** @description 当前页已显示的作品 */
-                exclude?: number[];
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaRecommendPageDto"];
-                };
-            };
-        };
-    };
     MangaController_getRelations: {
         parameters: {
             query?: never;
@@ -45392,99 +44103,6 @@ export interface operations {
             };
         };
     };
-    MangaTagController_propose: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProposeWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
-    MangaTagController_getMine: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
-                };
-            };
-        };
-    };
-    MangaTagController_getSimilar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimilarTagDto"][];
-                };
-            };
-        };
-    };
-    MangaTagController_vote: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                tag_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VoteWorkTagDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
-                };
-            };
-        };
-    };
     MangaController_recordView: {
         parameters: {
             query?: never;
@@ -45494,11 +44112,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WorkViewDto"];
-            };
-        };
+        requestBody?: never;
         responses: {
             204: {
                 headers: {
@@ -46646,47 +45260,6 @@ export interface operations {
             };
         };
     };
-    OgController_card: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                type: "galgame" | "light-novel" | "light-novel-volume" | "manga" | "manga-volume" | "post" | "article" | "person" | "character" | "producer" | "user" | "collection";
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OgCardDto"];
-                };
-            };
-        };
-    };
-    OgController_defaults: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OgDefaultsDto"];
-                };
-            };
-        };
-    };
     "catalog.changes": {
         parameters: {
             query?: {
@@ -47713,10 +46286,35 @@ export interface operations {
             };
         };
     };
+    PersonChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     PersonController_getCharacters: {
         parameters: {
             query: {
-                sort?: "recent" | "oldest" | "popular";
+                sort?: "recent";
                 page: number;
                 page_size: number;
             };
@@ -47843,57 +46441,6 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["PersonMangaRelationDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    PersonController_getStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PersonStatsDto"];
-                };
-            };
-        };
-    };
-    PersonController_getWorks: {
-        parameters: {
-            query: {
-                /** @description 只列出担任这项职责的作品，取值为职责编码 */
-                code?: string;
-                sort?: "recent" | "oldest" | "popular";
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["EntityWorkDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -48501,7 +47048,7 @@ export interface operations {
             };
         };
     };
-    ProducerController_getCollaborators: {
+    ProducerChangeRequestController_create: {
         parameters: {
             query?: never;
             header?: never;
@@ -48510,14 +47057,18 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
         responses: {
-            200: {
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProducerCollaboratorDto"][];
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
@@ -48571,27 +47122,6 @@ export interface operations {
             };
         };
     };
-    ProducerController_getLabels: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProducerLabelDto"][];
-                };
-            };
-        };
-    };
     ProducerController_getLightNovels: {
         parameters: {
             query: {
@@ -48626,8 +47156,6 @@ export interface operations {
             query: {
                 sort?: "recent" | "views" | "publication";
                 role?: components["schemas"]["MangaProducerRole"];
-                /** @description Publication status of the series */
-                status?: string;
                 page: number;
                 page_size: number;
             };
@@ -48669,89 +47197,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProducerRelationDto"][];
-                };
-            };
-        };
-    };
-    ProducerController_getStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProducerStatsDto"];
-                };
-            };
-        };
-    };
-    ProducerController_getWorks: {
-        parameters: {
-            query: {
-                kind?: "galgame" | "light_novel" | "manga";
-                /** @description 只列出这家组织担任这项职责的作品，取值为职责编码 */
-                code?: string;
-                /** @description 系列的连载状态 */
-                status?: string;
-                /** @description 只列出这一年发售或开始连载的作品 */
-                year?: number;
-                /** @description 日期不早于此日 */
-                from?: string;
-                /** @description 日期不晚于此日 */
-                to?: string;
-                /** @description 只列出已发售或日期不详的作品 */
-                released?: boolean;
-                sort?: "recent" | "oldest" | "rating" | "views";
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["ProducerWorkDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    ProductController_getById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ProductDetailDto"];
                 };
             };
         };
@@ -49688,6 +48133,27 @@ export interface operations {
             };
         };
     };
+    RevisionController_rollback: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
+                };
+            };
+        };
+    };
     SearchController_search: {
         parameters: {
             query: {
@@ -50167,27 +48633,6 @@ export interface operations {
             };
         };
     };
-    TagController_searchPool: {
-        parameters: {
-            query: {
-                q: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TagPoolSearchDto"];
-                };
-            };
-        };
-    };
     TagController_getById: {
         parameters: {
             query?: never;
@@ -50205,6 +48650,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TagDetailDto"];
+                };
+            };
+        };
+    };
+    TagChangeRequestController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateChangeRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChangeRequestDetailDto"];
                 };
             };
         };
@@ -50261,28 +48731,6 @@ export interface operations {
                         items: components["schemas"]["TagLightNovelRelationDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
-                };
-            };
-        };
-    };
-    TelegramCoverController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                type: "galgame" | "light_novel" | "manga";
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "image/jpeg": string;
                 };
             };
         };
@@ -52885,97 +51333,6 @@ export interface operations {
             };
         };
     };
-    WikiMeController_getEdits: {
-        parameters: {
-            query: {
-                state?: "applied" | "reverted";
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["EditSummaryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    WikiMeController_getWatches: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["WatchedEntryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    WikiMeController_getWatchlist: {
-        parameters: {
-            query: {
-                unpatrolled?: boolean;
-                new_members?: boolean;
-                deletions?: boolean;
-                work_content?: boolean;
-                structural?: boolean;
-                bot?: boolean;
-                section?: components["schemas"]["WikiSection"];
-                entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-                entry_id?: number;
-                /** @description Edits on this entry or on its releases, appearances, volumes and the books of those volumes */
-                within?: number;
-                /** @description Only edits that change values, leaving out those that only touch sources */
-                content?: boolean;
-                editor_id?: number;
-                task_id?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["EditSummaryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
     UserController_getPublic: {
         parameters: {
             query?: never;
@@ -53442,91 +51799,7 @@ export interface operations {
             };
         };
     };
-    WikiPatrolController_revertBatch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RevertNoteDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevertOutcomeDto"];
-                };
-            };
-        };
-    };
-    WikiPatrolController_getChanges: {
-        parameters: {
-            query: {
-                unpatrolled?: boolean;
-                new_members?: boolean;
-                deletions?: boolean;
-                work_content?: boolean;
-                structural?: boolean;
-                bot?: boolean;
-                section?: components["schemas"]["WikiSection"];
-                entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-                entry_id?: number;
-                /** @description Edits on this entry or on its releases, appearances, volumes and the books of those volumes */
-                within?: number;
-                /** @description Only edits that change values, leaving out those that only touch sources */
-                content?: boolean;
-                editor_id?: number;
-                task_id?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["EditSummaryDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    WikiDefinitionController_getList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntryDefinitionDto"][];
-                };
-            };
-        };
-    };
-    WikiEditController_create: {
+    DuplicateController_verdict: {
         parameters: {
             query?: never;
             header?: never;
@@ -53535,53 +51808,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SubmitEditDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditResultDto"];
-                };
-            };
-        };
-    };
-    WikiEditController_check: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SubmitEditDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditCheckDto"];
-                };
-            };
-        };
-    };
-    WikiEditController_patrol: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PatrolEditsDto"];
+                "application/json": components["schemas"]["DuplicateVerdictDto"];
             };
         };
         responses: {
@@ -53590,677 +51817,6 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-        };
-    };
-    WikiEditController_getById: {
-        parameters: {
-            query: {
-                /** @description Give only the part of the edit on this entry */
-                entry_id?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditDetailDto"];
-                };
-            };
-        };
-    };
-    WikiEditController_previewRevert: {
-        parameters: {
-            query?: {
-                /** @description Undo only the part of the edit on this entry */
-                entry_id?: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevertPreviewDto"];
-                };
-            };
-        };
-    };
-    WikiEditController_revert: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RevertEditDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevertResultDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_getList: {
-        parameters: {
-            query: {
-                q: string;
-                types: ("GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE")[];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntrySearchItemDto"][];
-                };
-            };
-        };
-    };
-    WikiSourceController_draft: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateEntryDraftDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntryDraftDto"];
-                };
-            };
-        };
-    };
-    WikiSourceController_lookup: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResolveSourceDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntryLookupDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_getById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditableEntryDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_compare: {
-        parameters: {
-            query: {
-                /** @description 0 compares the first revision with an empty entry */
-                from: number;
-                to: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevisionComparisonDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_previewMerge: {
-        parameters: {
-            query: {
-                /** @description Entry the merged entry goes into */
-                into: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntryMergePreviewDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_getParts: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Entries edited together with this one: the releases and appearances of a game, the volumes, books and appearances of a series, the other appearances of the character of an appearance */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditableEntryDto"][];
-                };
-            };
-        };
-    };
-    WikiEntryController_protect: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ProtectEntryDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiEntryController_unprotect: {
-        parameters: {
-            query: {
-                reason: string;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiEntryController_getReferences: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EntryReferenceGroupDto"][];
-                };
-            };
-        };
-    };
-    WikiEntryController_restore: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RestoreRevisionDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditResultDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_getRevisions: {
-        parameters: {
-            query: {
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["RevisionItemDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    WikiEntryController_getRevision: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-                number: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevisionSnapshotDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_rollback: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RollbackEditsDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevertOutcomeDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_getWatch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WatchStateDto"];
-                };
-            };
-        };
-    };
-    WikiEntryController_watch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiEntryController_unwatch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiSourceController_getResource: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                kind: "galgame" | "person" | "producer" | "character" | "light_novel" | "manga" | "light_novel_volume" | "manga_volume";
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ResourceEntryDto"];
-                };
-            };
-        };
-    };
-    WikiRulesController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["WikiRulesDto"];
-                };
-            };
-        };
-    };
-    WikiSourceController_resolve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ResolveSourceDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SourceDto"];
-                };
-            };
-        };
-    };
-    WikiSourceController_image: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SourceImageInputDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MediaAssetDto"];
-                };
-            };
-        };
-    };
-    WikiTodoController_getList: {
-        parameters: {
-            query: {
-                kind?: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
-                status?: "OPEN" | "DONE" | "REJECTED";
-                section?: components["schemas"]["WikiSection"];
-                entry_type?: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
-                entry_id?: number;
-                /** @description An entry together with its products, appearances, volumes and books */
-                within?: number;
-                page: number;
-                page_size: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        items: components["schemas"]["TodoDto"][];
-                        meta: components["schemas"]["PageMetaDto"];
-                    };
-                };
-            };
-        };
-    };
-    WikiTodoController_getById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TodoDto"];
-                };
-            };
-        };
-    };
-    WikiTodoController_accept: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AcceptTodoDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EditResultDto"];
-                };
-            };
-        };
-    };
-    WikiTodoController_dismiss: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DismissTodoDto"];
-            };
-        };
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    WikiPatrolController_revertEditor: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RevertEditorDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["RevertOutcomeDto"];
-                };
             };
         };
     };

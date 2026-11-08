@@ -8,17 +8,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 const h3 = dirname(dirname(createRequire(fileURLToPath(import.meta.resolve('nuxt'))).resolve('h3')))
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    AutoImport({ imports: ['vue', '@vueuse/core'], dts: false }),
-    {
-      name: 'nuxt-env-flags',
-      transform: code =>
-        code.includes('import.meta.client') || code.includes('import.meta.server')
-          ? code.replaceAll('import.meta.client', 'true').replaceAll('import.meta.server', 'false')
-          : undefined,
-    },
-  ],
+  plugins: [vue(), AutoImport({ imports: ['vue', '@vueuse/core'], dts: false })],
   resolve: {
     alias: {
       h3,

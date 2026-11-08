@@ -14,9 +14,8 @@
       cover?: HikariImageSource
       overlay?: string
       ratio?: '2/3' | '3/4'
-      plainSub?: boolean
     }>(),
-    { cover: undefined, overlay: undefined, ratio: '2/3', plainSub: false },
+    { cover: undefined, overlay: undefined, ratio: '2/3' },
   )
 </script>
 
@@ -58,7 +57,7 @@
       >
         {{ title }}
       </Text>
-      <Text size="xs" tone="muted" truncate :class="plainSub ? '' : 'font-bold'">{{ sub }}</Text>
+      <Text size="xs" tone="muted" truncate class="font-bold">{{ sub }}</Text>
     </Stack>
   </NuxtLink>
 </template>

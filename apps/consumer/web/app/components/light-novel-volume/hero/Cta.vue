@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Inline } from '@hina-ui/vue'
-  import { ArrowRight, BookOpen, BookUp, Pencil, Star } from '@lucide/vue'
+  import { ArrowRight, BookUp, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { getLightNovelVolumeTitle } from '~/utils/media/light-novel'
   import { useLightNovelVolumeRate } from '~/features/light-novel-volume/useLightNovelVolumeRate'
@@ -14,10 +14,6 @@
   }>()
 
   const resume = computed(() => (props.progress?.percentage ?? 0) > 0)
-  const unreleased = computed(() => {
-    const date = props.volume.publication_date
-    return Boolean(date) && date!.slice(0, 10) > new Date().toISOString().slice(0, 10)
-  })
   const volumeTitle = computed(() => getLightNovelVolumeTitle(props.volume))
 
   const rateCtl = useLightNovelVolumeRate(props.volume.id, props.myRate)
@@ -30,20 +26,14 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <Button
-      v-if="volume.online_reading_available"
-      login-required
-      class="w-full sm:w-auto"
-      @click="read"
-    >
+  <Inline gap="sm" justify="center" class="lg:justify-start">
+    <Button v-if="volume.online_reading_available" login-required size="lg" @click="read">
       <template #icon>
-        <BookOpen aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
-      {{ resume ? '继续阅读' : '阅读本卷' }}
+      {{ resume ? '继续阅读' : '开始阅读' }}
     </Button>
-    <Button v-else-if="unreleased" class="w-full sm:w-auto" disabled>尚未发售</Button>
-    <Button v-else login-required class="w-full sm:w-auto" @click="contributeOpen = true">
+    <Button v-else login-required size="lg" @click="contributeOpen = true">
       <template #icon>
         <BookUp aria-hidden="true" />
       </template>
@@ -52,7 +42,8 @@
 
     <Button
       v-if="rateCtl.score.value != null"
-      variant="soft"
+      size="lg"
+      variant="outline"
       tone="neutral"
       @click="dialogOpen = true"
     >
@@ -64,12 +55,19 @@
         <Pencil class="text-muted" />
       </template>
     </Button>
-    <Button v-else login-required variant="soft" tone="neutral" @click="dialogOpen = true">
+    <Button
+      v-else
+      login-required
+      size="lg"
+      variant="outline"
+      tone="neutral"
+      @click="dialogOpen = true"
+    >
       写个评分
       <template #trailing><ArrowRight /></template>
     </Button>
 
-    <ShareButton :to="`/light-novel-volumes/${volume.id}`" tooltip="分享" size="md" />
+    <ShareButton :to="`/light-novel-volumes/${volume.id}`" tooltip="分享" size="lg" />
     <LightNovelVolumeDownloadAction
       v-if="volume.online_reading_available"
       :series-id="volume.series_id"
@@ -80,10 +78,10 @@
     <LightNovelVolumeEpubActions
       :volume-id="volume.id"
       :available="volume.online_reading_available"
-      size="md"
+      size="lg"
     />
 
-    <WorkEditButton resource-type="light-novel-volume" :resource-id="volume.id" />
+    <WorkEditButton resource-type="light-novel-volume" :resource-id="volume.id" size="lg" />
 
     <LightNovelVolumeContributeDialog
       v-if="!volume.online_reading_available"

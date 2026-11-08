@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { WorkbenchMangaProjectPageData } from '~~/server/api/pages/create/manga/[id].get'
 
-  definePageMeta({ layout: 'workbench', middleware: 'auth', floatingToolbar: false })
+  definePageMeta({ layout: 'workbench' })
 
   const route = useRoute()
   const { data, refresh } = await useHikariApiData<WorkbenchMangaProjectPageData>(

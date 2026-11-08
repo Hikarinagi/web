@@ -1,47 +1,28 @@
-import { getQuery, getRouterParam, type H3Event } from 'h3'
-import { readOrgQuery } from '~/features/org/results'
-import { orgMode } from '~/features/org/works'
+import { getRouterParam, type H3Event } from 'h3'
+import { INLINE_RELATION_CAP } from '~/features/entity/entity'
 import { fetchBackendData } from '../../../utils/backend-api'
-import { fetchOrgExtras, fetchOrgList } from '../../../utils/org-list'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
 async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
-  const query = readOrgQuery(getQuery(event))
+  const query = { page: 1, page_size: INLINE_RELATION_CAP, sort: 'recent' } as const
 
-  const producer = await fetchBackendData(event, '/api/v3/producers/{id}', { path: { id } })
-  const [stats, relations, contributors, collaborators, newest] = await Promise.all([
-    fetchBackendData(event, '/api/v3/producers/{id}/stats', { path: { id } }),
-    fetchBackendData(event, '/api/v3/producers/{id}/relations', { path: { id } }).catch(() => null),
-    fetchBackendData(event, '/api/v3/producers/{id}/contributors', { path: { id } }),
-    fetchBackendData(event, '/api/v3/producers/{id}/collaborators', { path: { id } }).catch(
+  const [producer, galgames, light_novels, mangas, relations, contributors] = await Promise.all([
+    fetchBackendData(event, '/api/v3/producers/{id}', { path: { id } }),
+    fetchBackendData(event, '/api/v3/producers/{id}/galgames', { path: { id }, query }).catch(
       () => null,
     ),
-    fetchBackendData(event, '/api/v3/producers/{id}/works', {
-      path: { id },
-      query: { released: true, sort: 'recent', page: 1, page_size: 1 },
-    }).catch(() => null),
-  ])
-  const mode = orgMode(producer.organization_type, stats)
-  const novels = stats.groups.some(group => group.kind === 'light_novel')
-  const state = { ...query, media: query.media ?? (novels ? 'novel' : 'manga') }
-  const [list, extras] = await Promise.all([
-    fetchOrgList(event, id, mode, state),
-    fetchOrgExtras(event, id, mode),
+    fetchBackendData(event, '/api/v3/producers/{id}/light-novels', { path: { id }, query }).catch(
+      () => null,
+    ),
+    fetchBackendData(event, '/api/v3/producers/{id}/mangas', { path: { id }, query }).catch(
+      () => null,
+    ),
+    fetchBackendData(event, '/api/v3/producers/{id}/relations', { path: { id } }).catch(() => null),
+    fetchBackendData(event, '/api/v3/producers/{id}/contributors', { path: { id } }),
   ])
 
-  return {
-    producer,
-    stats,
-    relations,
-    contributors,
-    collaborators,
-    newest: newest?.items[0] ?? null,
-    mode,
-    list,
-    extras,
-    state,
-  }
+  return { producer, galgames, light_novels, mangas, relations, contributors }
 }
 
 export type ProducerPageData = Awaited<ReturnType<typeof handler>>

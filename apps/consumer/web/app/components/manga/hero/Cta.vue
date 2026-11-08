@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { DropdownMenuItem, Inline, SplitButton } from '@hina-ui/vue'
-  import { ArrowRight, BookOpen, Pencil, RotateCcw, Sparkles, Star } from '@lucide/vue'
-  import { mangaChapterLabel } from '@hikarinagi/shared'
+  import { Inline } from '@hina-ui/vue'
+  import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
   import { useMangaRate } from '~/features/manga/useMangaRate'
@@ -27,11 +26,12 @@
 
   const pickerTitle = computed(() => `将「${props.title}」添加到收藏夹`)
 
-  const units = computed(() => contentsUnits(props.chapters))
-  const latest = computed(() => units.value.chapter.at(-1) ?? null)
-  const first = computed(() => units.value.chapter[0] ?? null)
   const target = computed(() =>
-    continueTarget(units.value, props.progress, new Set(props.progress?.read_chapter_ids ?? [])),
+    continueTarget(
+      contentsUnits(props.chapters),
+      props.progress,
+      new Set(props.progress?.read_chapter_ids ?? []),
+    ),
   )
 
   const rateCtl = useMangaRate(props.mangaId, props.myRate)
@@ -57,30 +57,16 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <SplitButton
-      v-if="target"
-      label="阅读"
-      menu-label="更多阅读选项"
-      align="start"
-      class="w-full sm:w-auto [&>*:first-child]:flex-1"
-      @click="read(target.id)"
-    >
-      <template #icon><BookOpen /></template>
-      {{ target.resume ? '继续阅读' : '开始阅读' }} {{ target.label }}
-      <template #content>
-        <DropdownMenuItem v-if="latest" @select="read(latest.id)">
-          <template #icon><Sparkles /></template>
-          阅读最新一话（{{ mangaChapterLabel(latest) }}）
-        </DropdownMenuItem>
-        <DropdownMenuItem v-if="target.resume && first" @select="read(first.id)">
-          <template #icon><RotateCcw /></template>
-          从{{ mangaChapterLabel(first) }}重新阅读
-        </DropdownMenuItem>
+  <Inline justify="center" class="lg:justify-start">
+    <Button v-if="target" size="lg" @click="read(target.id)">
+      <template #icon>
+        <Play aria-hidden="true" />
       </template>
-    </SplitButton>
+      {{ target.resume ? '继续阅读' : '开始阅读' }} {{ target.label }}
+    </Button>
 
     <WorkStatusMenu
+      size="lg"
       :tone="target ? 'neutral' : 'accent'"
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
@@ -91,7 +77,13 @@
       @privacy="rateCtl.setPrivacy"
     />
 
-    <Button v-if="rateMode === 'chip'" variant="soft" tone="neutral" @click="dialogOpen = true">
+    <Button
+      v-if="rateMode === 'chip'"
+      size="lg"
+      variant="outline"
+      tone="neutral"
+      @click="dialogOpen = true"
+    >
       <template #icon>
         <Star class="fill-current text-warning" />
       </template>
@@ -103,7 +95,8 @@
     <Button
       v-else-if="rateMode === 'prompt'"
       login-required
-      variant="soft"
+      size="lg"
+      variant="outline"
       tone="neutral"
       @click="dialogOpen = true"
     >
@@ -116,12 +109,12 @@
       type="manga"
       :initial-favorited="favorited"
       variant="icon"
-      size="md"
+      size="lg"
       :picker-title="pickerTitle"
     />
-    <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" size="md" />
+    <ShareButton :to="`/mangas/${mangaId}`" tooltip="分享" size="lg" />
     <MangaDownloadAction :id="mangaId" :title="title" :chapters="chapters" />
-    <WorkEditButton resource-type="manga" :resource-id="mangaId" />
+    <WorkEditButton resource-type="manga" :resource-id="mangaId" size="lg" />
 
     <MangaRateDialog
       v-model:visible="dialogOpen"

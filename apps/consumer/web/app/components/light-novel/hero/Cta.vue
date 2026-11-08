@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Inline } from '@hina-ui/vue'
-  import { ArrowRight, BookOpen, Pencil, Star } from '@lucide/vue'
+  import { ArrowRight, Pencil, Play, Star } from '@lucide/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
   import { useLightNovelRate } from '~/features/light-novel/useLightNovelRate'
@@ -31,9 +31,6 @@
     return [...pool].sort(compareVolumes)[0] ?? null
   })
   const canRead = computed(() => props.volumes.some(volume => volume.online_reading_available))
-  const startLabel = computed(() =>
-    startTarget.value ? (getLightNovelVolumeLabel(startTarget.value) ?? '第一卷') : '',
-  )
   const downloadable = computed(() =>
     [...props.volumes]
       .filter(volume => volume.online_reading_available)
@@ -107,32 +104,28 @@
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <Button v-if="continueInfo" class="w-full sm:w-auto" @click="continueOpen = true">
+  <Inline justify="center" class="lg:justify-start">
+    <Button v-if="continueInfo" size="lg" @click="continueOpen = true">
       <template #icon>
-        <BookOpen aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
-      继续阅读{{ continueInfo.volumeLabel }}
+      继续阅读
     </Button>
-    <Button
-      v-else-if="canRead && startTarget"
-      login-required
-      class="w-full sm:w-auto"
-      @click="readStart"
-    >
+    <Button v-else-if="canRead && startTarget" login-required size="lg" @click="readStart">
       <template #icon>
-        <BookOpen aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
-      从{{ startLabel }}开始阅读
+      开始阅读
     </Button>
-    <Button v-else class="w-full sm:w-auto" disabled>
+    <Button v-else size="lg" disabled>
       <template #icon>
-        <BookOpen aria-hidden="true" />
+        <Play aria-hidden="true" />
       </template>
       开始阅读
     </Button>
 
     <WorkStatusMenu
+      size="lg"
       tone="neutral"
       :status="rateCtl.status.value"
       :status-private="rateCtl.statusPrivate.value"
@@ -143,7 +136,13 @@
       @privacy="rateCtl.setPrivacy"
     />
 
-    <Button v-if="rateMode === 'chip'" variant="soft" tone="neutral" @click="dialogOpen = true">
+    <Button
+      v-if="rateMode === 'chip'"
+      size="lg"
+      variant="outline"
+      tone="neutral"
+      @click="dialogOpen = true"
+    >
       <template #icon>
         <Star class="fill-current text-warning" />
       </template>
@@ -155,7 +154,8 @@
     <Button
       v-else-if="rateMode === 'prompt'"
       login-required
-      variant="soft"
+      size="lg"
+      variant="outline"
       tone="neutral"
       @click="dialogOpen = true"
     >
@@ -168,17 +168,17 @@
       type="light_novel"
       :initial-favorited="favorited"
       variant="icon"
-      size="md"
+      size="lg"
       :picker-title="pickerTitle"
     />
-    <ShareButton :to="`/light-novels/${lightNovelId}`" tooltip="分享" size="md" />
+    <ShareButton :to="`/light-novels/${lightNovelId}`" tooltip="分享" size="lg" />
     <LightNovelVolumeDownloadAction
       v-if="canRead"
       :series-id="lightNovelId"
       :title="title"
       :volumes="downloadable"
     />
-    <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" />
+    <WorkEditButton resource-type="light-novel" :resource-id="lightNovelId" size="lg" />
 
     <LightNovelRateDialog
       v-model:visible="dialogOpen"

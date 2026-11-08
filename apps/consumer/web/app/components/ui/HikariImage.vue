@@ -12,7 +12,7 @@
   } from '~/utils/media/image'
   import {
     canProcessImage,
-    imageSourceNsfw,
+    imageSourceSafety,
     imageSourceSize,
     imageSourceSrc,
     imageSourceThumbHash,
@@ -81,16 +81,19 @@
   // 门禁判据集中在此：作品级 nsfw 或逐图分级(sexual/violence)任一命中即按 NSFW 处理。
   // content_limit 策略仍由 useNsfwPolicy 统一裁决(block / blur / 显示)。
   const { shouldBlockNsfw, shouldBlurNsfw } = useNsfwPolicy()
-  const { revealed } = useNsfwReveal()
   const sourceSrc = computed(() => imageSourceSrc(props.src))
+  const sourceSafety = computed(() => imageSourceSafety(props.src))
   const isNsfw = computed(
-    () => props.nsfw || props.sexual > 0 || props.violence > 0 || imageSourceNsfw(props.src),
+    () =>
+      props.nsfw ||
+      sourceSafety.value.nsfw ||
+      props.sexual > 0 ||
+      props.violence > 0 ||
+      sourceSafety.value.sexual > 0 ||
+      sourceSafety.value.violence > 0,
   )
   const blockNsfw = computed(() => shouldBlockNsfw(isNsfw))
-  const blurNsfw = computed(
-    () =>
-      !blockNsfw.value && shouldBlurNsfw(isNsfw) && !revealed.value.includes(sourceSrc.value ?? ''),
-  )
+  const blurNsfw = computed(() => !blockNsfw.value && shouldBlurNsfw(isNsfw))
   const thumbHash = computed(() => imageSourceThumbHash(props.src))
   const hashSrc = computed(() =>
     blurNsfw.value && thumbHash.value

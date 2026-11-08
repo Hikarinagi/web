@@ -8,7 +8,7 @@ import type {
 } from '@hikarinagi/api-contract/v3'
 import type { ApiResponse } from '@hikarinagi/shared'
 import type { TypedInternalResponse } from 'nitropack/types'
-import type { NuxtApp, UseFetchOptions } from 'nuxt/app'
+import type { UseFetchOptions } from 'nuxt/app'
 import type { MaybeRefOrGetter } from 'vue'
 import { toValue } from 'vue'
 
@@ -205,12 +205,6 @@ function useResolvedApiData<TData>(
   fatalData.clear = asyncData.clear
 
   return fatalData
-}
-
-export function reusePayload(key: string, nuxtApp: NuxtApp, { cause }: { cause: string }) {
-  return cause === 'refresh:manual' || cause === 'refresh:hook'
-    ? undefined
-    : nuxtApp.payload.data[key]
 }
 
 function isPageBffPath(url: string): url is `/api/pages/${string}` {

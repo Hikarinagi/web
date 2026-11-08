@@ -3,13 +3,7 @@
   import { NuxtLink } from '#components'
   import { ChevronLeft } from '@lucide/vue'
 
-  defineProps<{
-    back: string
-    title: string
-    subtitle?: string | null
-    kind: string
-    replaces?: boolean
-  }>()
+  defineProps<{ back: string; title: string; subtitle?: string | null; kind: string }>()
 </script>
 
 <template>
@@ -29,9 +23,6 @@
         {{ subtitle }}
       </Text>
       <Tag size="sm" variant="soft" tone="neutral" class="shrink-0 max-lg:hidden">{{ kind }}</Tag>
-      <Tag v-if="replaces" size="sm" variant="soft" tone="info" class="shrink-0 max-lg:hidden">
-        替换现有版本
-      </Tag>
     </Flex>
     <Inline gap="md" align="center" :wrap="false" class="shrink-0 max-md:gap-1">
       <Inline gap="md" align="center" :wrap="false" class="max-lg:hidden">

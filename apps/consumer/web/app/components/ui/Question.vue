@@ -31,9 +31,6 @@
   })
 
   const visible = ref(false)
-  onDeactivated(() => {
-    visible.value = false
-  })
   const tooltip = computed(() => {
     if (props.tooltip === false || props.tooltip === null) return null
     return (props.tooltip ?? props.title) || null

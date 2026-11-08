@@ -20,6 +20,7 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
+    my_cover_vote,
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/light-novels/{id}', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/volumes', { path: { id } }),
@@ -45,19 +46,9 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/reader/light-novels/{light_novel_id}/progress', {
       path: { light_novel_id: id },
     }).catch(() => null),
-  ])
-
-  const worksOf = (relation: 'author' | 'illustrator') => {
-    const person = people.find(item => item.relation === relation)?.person
-    if (!person) return null
-    return fetchBackendData(event, '/api/v3/people/{id}/light-novels', {
-      path: { id: person.id },
-      query: { page: 1, page_size: 6, sort: 'recent', relation },
-    }).catch(() => null)
-  }
-  const [author_works, illustrator_works] = await Promise.all([
-    worksOf('author'),
-    worksOf('illustrator'),
+    fetchBackendData(event, '/api/v3/light-novels/{id}/covers/vote', { path: { id } }).catch(
+      () => null,
+    ),
   ])
 
   return {
@@ -75,8 +66,7 @@ async function handler(event: H3Event) {
     my_rate,
     favorite,
     progress,
-    author_works,
-    illustrator_works,
+    my_cover_vote,
   }
 }
 

@@ -49,7 +49,7 @@
               as="a"
               :href="href"
               variant="outline"
-              class="transition-colors duration-(--hn-duration-fast) hover:text-accent-text"
+              class="hover:text-accent-text"
               @click="navigate"
             >
               <BookText />

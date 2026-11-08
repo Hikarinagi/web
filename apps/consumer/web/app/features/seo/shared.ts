@@ -19,3 +19,7 @@ export function ratingNode(stats: RateStats | null | undefined) {
 export function breadcrumbNode(items: { name: string; item: string }[]) {
   return defineBreadcrumb({ itemListElement: items })
 }
+
+export function relationCount(rel: { meta: { total_items: number } } | null | undefined) {
+  return rel?.meta.total_items ?? 0
+}

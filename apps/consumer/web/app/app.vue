@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { TooltipProvider } from '@hina-ui/vue'
   import { MotionConfig } from 'motion-v'
-  import type { RouteLocationNormalizedLoaded } from 'vue-router'
   import HikariProvider from './provider.vue'
   import { SITE_CONFIG } from '~/config/site'
   import { TRANSITION } from '~/lib/motion'
@@ -11,13 +10,6 @@
     description: SITE_CONFIG.description,
     appendSiteName: false,
   })
-
-  const route = useRoute()
-  const tabs = useCreatorTabsStore()
-  const creator = computed(() => route.meta.layout === 'creator')
-  const keepalive = computed(() => (creator.value ? { max: 12 } : { include: ['HomePage'] }))
-  const creatorKey = (page: RouteLocationNormalizedLoaded) =>
-    `${tabs.pageKey(page.path)}:${String(page.matched[0]?.name ?? '')}`
 
   useSchemaOrg([
     defineWebSite({
@@ -34,7 +26,7 @@
       <NuxtErrorBoundary>
         <ErrorRecoverableGuard>
           <NuxtLayout>
-            <NuxtPage :keepalive="keepalive" :page-key="creator ? creatorKey : undefined" />
+            <NuxtPage :keepalive="{ include: ['HomePage'] }" />
           </NuxtLayout>
         </ErrorRecoverableGuard>
         <template #error="{ error, clearError: reset }">

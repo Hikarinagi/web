@@ -106,14 +106,12 @@ export function yearOf(item: SeriesCardItem): number | null {
   return Number.isNaN(date.getTime()) ? null : date.getUTCFullYear()
 }
 
-export function statusText(status: LightNovelStatus | null): string {
-  return status ? (STATUS_TEXT[status] ?? '') : ''
+export function statusText(status: LightNovelStatus): string {
+  return STATUS_TEXT[status] ?? '连载中'
 }
 
 export function overlayText(item: LightNovelSummary): string | undefined {
-  return !item.novel_status || item.novel_status === 'SERIALIZING'
-    ? undefined
-    : statusText(item.novel_status)
+  return item.novel_status === 'SERIALIZING' ? undefined : statusText(item.novel_status)
 }
 
 export function subText(item: LightNovelSummary): string {

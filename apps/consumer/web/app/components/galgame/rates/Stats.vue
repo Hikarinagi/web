@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { gameRating } from '~/features/entry/rating'
   import type { GalgameRate, GalgameRateKeyword, GalgameRateStats } from '~/features/galgame/rate'
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
 
@@ -14,11 +13,29 @@
 
   const rateCtl = useGalgameRate(props.galgameId, props.myRate)
   const dialogOpen = ref(false)
-  const rating = computed(() => gameRating(props.stats))
+
+  const statuses = computed(() =>
+    [
+      { key: 'completed', label: '通关' },
+      { key: 'going', label: '在玩' },
+      { key: 'on_hold', label: '搁置' },
+      { key: 'dropped', label: '弃坑' },
+    ].map(row => ({ ...row, count: props.stats.status_counts[row.key as 'completed'] })),
+  )
+
+  const countLabel = computed(() => `${props.stats.rated_count} 人评分`)
 </script>
 
 <template>
-  <RateStatsPanel :rating="rating" :keywords="keywords">
+  <RateStatsPanel
+    title="安利墙"
+    :average="stats.average"
+    :rated-count="stats.rated_count"
+    :count-label="countLabel"
+    :distribution="stats.distribution"
+    :statuses="statuses"
+    :keywords="keywords"
+  >
     <template #action>
       <RateStatsMyRateButton :score="rateCtl.score.value" @click="dialogOpen = true" />
       <GalgameRateDialog

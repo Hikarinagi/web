@@ -1,12 +1,12 @@
 import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
-import { breadcrumbNode } from './shared'
+import { breadcrumbNode, relationCount } from './shared'
 import { zhText } from '~/utils/seo'
 
 export function producerSeo(data: ProducerPageData) {
   const p = data.producer
   const name = p.name
-  const g = data.stats.media.galgame
-  const l = data.stats.media.light_novel
+  const g = relationCount(data.galgames)
+  const l = relationCount(data.light_novels)
   const scope = g && l ? 'Galgame・轻小说' : g ? 'Galgame' : l ? '轻小说' : ''
   const title = scope ? `${name} ${scope} 厂商作品一览` : `${name} 厂商作品一览`
 

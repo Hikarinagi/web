@@ -168,18 +168,19 @@ export function titleOf(manga: MangaSummary): string {
   return manga.name_cn || manga.name
 }
 
-export function statusText(status: MangaSerialStatus | null): string {
-  return status ? SERIAL_STATUS_TEXT[status] : ''
+export function statusText(status: MangaSerialStatus): string {
+  return SERIAL_STATUS_TEXT[status]
 }
 
 export function overlayText(manga: MangaSummary): string | undefined {
-  return !manga.serial_status || manga.serial_status === 'SERIALIZING'
-    ? undefined
-    : statusText(manga.serial_status)
+  return manga.serial_status === 'SERIALIZING' ? undefined : statusText(manga.serial_status)
 }
 
 export function subText(manga: MangaSummary): string {
-  return [yearOf(manga), statusText(manga.serial_status)].filter(Boolean).join(' ')
+  const year = yearOf(manga)
+  const status = statusText(manga.serial_status)
+
+  return year ? `${year} · ${status}` : status
 }
 
 function yearOf(manga: MangaSummary): string | undefined {

@@ -4,10 +4,8 @@
   import type { WorkbenchReviewPageData } from '~~/server/api/pages/create/project-review.get'
 
   definePageMeta({
-    layout: 'creator',
-    floatingToolbar: false,
     title: '小说投稿审核',
-    middleware: ['auth', 'creator-permission'],
+    middleware: 'creator-permission',
     requiredPermission: WORKBENCH_PERMISSIONS.REVIEW_NOVEL,
   })
 
@@ -15,14 +13,14 @@
   const requestUrl = computed<`/api/pages/${string}`>(
     () => `/api/pages/create/project-review?page=${page.value}`,
   )
-  const { data, error, pending, refresh } = useHikariApiData<WorkbenchReviewPageData>(requestUrl)
-  useCreatorPage({ loading: () => pending.value && !data.value })
+  const { data, pending } = await useHikariApiData<WorkbenchReviewPageData>(requestUrl, {
+    fatal: true,
+  })
 </script>
 
 <template>
-  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
   <WorkbenchProjectTable
-    v-else-if="data"
+    v-if="data"
     v-model:page="page"
     purpose="review"
     title="待审核的小说投稿"

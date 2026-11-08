@@ -34,7 +34,7 @@
       :favorited="data.favorite?.favorited ?? false"
     />
 
-    <Stack gap="lg" class="mx-auto w-full max-w-(--entry-container) px-4 py-8 lg:px-6">
+    <Stack gap="lg" class="mx-auto w-full max-w-app px-6 py-10">
       <NuxtLink v-slot="{ href, navigate }" :to="`/mangas/${mangaId}`" custom>
         <Link
           :href="href ?? undefined"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Stack } from '@hina-ui/vue'
   import { lightNovelVolumeSeo } from '~/features/seo/light-novel-volume'
   import { useViewPing } from '~/features/interaction/useViewPing'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
@@ -17,6 +18,19 @@
   await redirectIfMerged(data)
   useNsfwDetailGate(() => data.value?.light_novel.nsfw)
   useViewPing('light_novel_volume', volumeId)
+
+  const currentIndex = computed(() => {
+    if (!data.value) return -1
+    return data.value.volumes.findIndex(volume => volume.id === data.value?.volume.id)
+  })
+  const previousVolume = computed(() =>
+    currentIndex.value > 0 ? data.value?.volumes[currentIndex.value - 1] : undefined,
+  )
+  const nextVolume = computed(() =>
+    data.value && currentIndex.value >= 0 && currentIndex.value < data.value.volumes.length - 1
+      ? data.value.volumes[currentIndex.value + 1]
+      : undefined,
+  )
 
   function applyProgresses(progresses: NonNullable<LightNovelVolumePageData['progresses']>) {
     if (!data.value) return
@@ -39,11 +53,27 @@
 </script>
 
 <template>
-  <LightNovelVolumePage
-    v-if="data"
-    :data="data"
-    :volume-id="volumeId"
-    class="-mt-(--app-header-height)"
-    @progress-change="applyProgresses"
-  />
+  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
+    <LightNovelVolumeHero
+      :volume="data.volume"
+      :light-novel="data.light_novel"
+      :progress="data.progress"
+      :my-rate="data.my_rate"
+      :my-cover-vote="data.my_cover_vote"
+      :preceding-count="currentIndex + 1"
+      @progress-change="applyProgresses"
+    />
+
+    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
+      <LightNovelVolumeSeriesNav :previous="previousVolume" :next="nextVolume" />
+
+      <LightNovelVolumeAbout :volume="data.volume" :contributors="data.contributors" />
+
+      <LightNovelVolumeSeriesVolumes
+        :volume="data.volume"
+        :volumes="data.volumes"
+        :progresses="data.progresses"
+      />
+    </Stack>
+  </Stack>
 </template>

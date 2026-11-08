@@ -34,35 +34,21 @@
     const chapterId = continuing.value ? props.progress!.chapter.id : start.value.id
     return `/mangas/${props.volume.series_id}/read/${chapterId}`
   })
-  const today = new Date().toISOString().slice(0, 10)
-  const upcoming = computed(() => (props.volume.publication_date?.slice(0, 10) ?? '') > today)
 </script>
 
 <template>
-  <Inline gap="sm" align="center">
-    <Button v-if="readPath" :as="NuxtLink" :to="readPath" class="w-full sm:w-auto">
+  <Inline gap="sm" justify="center" class="lg:justify-start">
+    <Button v-if="readPath" :as="NuxtLink" :to="readPath" size="lg">
       <template #icon><BookOpen /></template>
-      {{ continuing ? '继续阅读' : '阅读本卷' }}
+      {{ continuing ? '继续阅读' : '开始阅读' }}
     </Button>
-    <Button v-else-if="upcoming" disabled class="w-full sm:w-auto">
-      <template #icon><BookOpen /></template>
-      尚未发售
-    </Button>
-    <MangaVolumeContribute v-else :volume="volume" class="w-full sm:w-auto" />
+    <MangaVolumeContribute v-else :volume="volume" size="lg" />
+    <ShareButton :to="`/manga-volumes/${volume.id}`" tooltip="分享" size="lg" />
     <MangaDownloadAction
       :id="volume.series_id"
       :title="volume.manga.name_cn || volume.manga.name"
       :chapters="downloadable"
-      size="md"
-      variant="soft"
-      tone="neutral"
     />
-    <ShareButton
-      :to="`/manga-volumes/${volume.id}`"
-      tooltip="分享"
-      size="md"
-      variant="soft"
-      tone="neutral"
-    />
+    <WorkEditButton resource-type="manga-volume" :resource-id="volume.id" size="lg" />
   </Inline>
 </template>

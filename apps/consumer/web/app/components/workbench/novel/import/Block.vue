@@ -36,7 +36,7 @@
     <Inline
       gap="none"
       :wrap="false"
-      class="shrink-0 opacity-0 transition-opacity duration-(--hn-duration-fast) group-focus-within:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100"
+      class="shrink-0 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100"
     >
       <IconButton
         v-if="titleable"

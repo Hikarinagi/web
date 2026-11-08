@@ -28,10 +28,9 @@ export function getLightNovelVolumeTitle(
 export function getLightNovelVolumeLabel(
   volume: Pick<LightNovelVolume, 'volume_label' | 'volume_number'>,
 ) {
-  const label = volume.volume_label
-  if (label && !/^\d+(\.\d+)?$/.test(label)) return label
-  const number = label ?? volume.volume_number
-  return number != null ? `第 ${number} 卷` : null
+  return (
+    volume.volume_label || (volume.volume_number != null ? `第 ${volume.volume_number} 卷` : null)
+  )
 }
 
 export function getLightNovelVolumeCover(volume: LightNovelVolume): LightNovelVolumeCover | null {
