@@ -3,8 +3,6 @@
   import type { CharacterPageData } from '~~/server/api/pages/characters/[id].get'
   import { appearancesOf, defaultAppearance, viewOf } from '~/features/character/appearances'
   import { useCast } from '~/features/character/useCast'
-  import { usePageTone } from '~/features/entry/usePageTone'
-  import { imageSourceThumbHash } from '~/utils/media/image'
 
   defineOptions({ name: 'CharacterPage' })
   const props = defineProps<{ data: CharacterPageData }>()
@@ -14,11 +12,6 @@
   const work = computed(() => list.value.find(item => item.key === selected.value) ?? null)
   const view = computed(() => viewOf(props.data.character, list.value, work.value))
   const cast = useCast(props.data.cast, work)
-
-  usePageTone(
-    computed(() => imageSourceThumbHash(view.value.image) ?? null),
-    { paper: true },
-  )
 
   const external = computed(() => {
     const { vndb_id: vndb, bangumi_id: bangumi } = props.data.character
@@ -35,12 +28,7 @@
 </script>
 
 <template>
-  <Stack gap="none" class="relative isolate min-h-screen bg-canvas transition-colors duration-500">
-    <Stack
-      gap="none"
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-0 -z-10 max-h-(--ambient-height) bg-(--tone-soft) mask-(--ambient-fade) transition-colors duration-500 dark:bg-(--tone-deep-2)"
-    />
+  <Stack gap="none" class="min-h-screen bg-canvas">
     <CharacterStage
       v-model="selected"
       :character="data.character"

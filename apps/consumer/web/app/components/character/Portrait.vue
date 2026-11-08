@@ -17,7 +17,7 @@
   <Stack
     ref="frame"
     gap="none"
-    class="relative aspect-5/6 dark:isolate dark:overflow-hidden dark:rounded-xl dark:bg-(--tone-soft) dark:brightness-90"
+    class="relative aspect-5/6 dark:isolate dark:overflow-hidden dark:rounded-xl dark:bg-neutral-100 dark:brightness-90"
   >
     <Transition
       enter-active-class="transition-opacity duration-(--hn-duration-base) ease-(--hn-ease-enter)"
