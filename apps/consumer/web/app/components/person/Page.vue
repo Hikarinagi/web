@@ -1,9 +1,7 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import type { PeoplePageData } from '~~/server/api/pages/people/[id].get'
-  import { usePageTone } from '~/features/entry/usePageTone'
   import { knownWorks, personWorks, roleCounts, voiceRoles } from '~/features/person/works'
-  import { imageSourceThumbHash } from '~/utils/media/image'
 
   defineOptions({ name: 'PersonPage' })
   const props = defineProps<{ data: PeoplePageData }>()
@@ -16,10 +14,6 @@
   const workRoles = roles.value.filter(role => role.code !== 'VOICE')
   const tab = ref(
     voices.value.length ? 'VOICE' : workRoles.length > 1 ? 'ALL' : (roles.value[0]?.code ?? 'ALL'),
-  )
-  usePageTone(
-    computed(() => imageSourceThumbHash(known.value[0]?.image) ?? null),
-    { paper: true },
   )
 
   const external = computed(() => {

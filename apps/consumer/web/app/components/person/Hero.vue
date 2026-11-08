@@ -29,7 +29,7 @@
 </script>
 
 <template>
-  <Section class="bg-(--tone-soft) transition-colors duration-500 dark:bg-(--tone-deep-2)">
+  <Section class="border-b border-line bg-surface">
     <Stack
       gap="xl"
       class="mx-auto w-full max-w-(--entry-container) px-4 pt-[calc(var(--app-header-height)+1.5rem)] pb-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-14 lg:px-6 lg:pt-[calc(var(--app-header-height)+2.5rem)]"
