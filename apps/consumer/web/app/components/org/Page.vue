@@ -2,20 +2,25 @@
   import { Card, Divider, Stack } from '@hina-ui/vue'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
   import { creditRoleLabel } from '~/features/entry/labels'
+  import { useOrgList } from '~/features/org/composables/useOrgList'
+  import { orgGroups, orgWork, spanText } from '~/features/org/works'
   import { CODE_LABELS } from '~/features/wiki/codes'
-  import { orgGroups, orgMode, orgWorks } from '~/features/org/works'
 
   defineOptions({ name: 'OrgPage' })
   const props = defineProps<{ data: ProducerPageData }>()
 
-  const works = computed(() => orgWorks(props.data))
-  const mode = computed(() => orgMode(props.data))
-  const groups = computed(() => orgGroups(works.value, creditRoleLabel))
+  const groups = computed(() => orgGroups(props.data.stats, creditRoleLabel))
+  const newest = computed(() => (props.data.newest ? orgWork(props.data.newest) : null))
   const kind = computed(() => {
     const type = props.data.producer.organization_type
     return type ? (CODE_LABELS.ORGANIZATION_TYPE?.[type] ?? '') : ''
   })
-  const tab = ref('ALL')
+  const list = useOrgList(
+    props.data.producer.id,
+    props.data.mode,
+    { list: props.data.list, state: props.data.state },
+    props.data.stats.groups.some(group => group.kind === 'light_novel') ? 'novel' : 'manga',
+  )
 
   const external = computed(() => {
     const { vndb_id: vndb, bangumi_id: bangumi } = props.data.producer
@@ -25,9 +30,8 @@
     ]
   })
 
-  async function pick(code: string) {
-    tab.value = groups.value.length > 1 ? code : 'ALL'
-    await nextTick()
+  function pick(code: string) {
+    list.update({ tab: groups.value.length > 1 ? code : 'ALL', year: null })
     document.getElementById('works')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 </script>
@@ -36,7 +40,8 @@
   <Stack gap="none" class="min-h-screen bg-canvas pt-(--app-header-height)">
     <OrgHeader
       :producer="data.producer"
-      :works="works"
+      :newest="newest"
+      :score="data.stats.rating.average"
       :kind="kind"
       :groups="groups"
       @group="pick"
@@ -52,7 +57,11 @@
       >
         <Card class="w-full">
           <Stack gap="md">
-            <OrgFacts :producer="data.producer" :relations="data.relations" :works="works" />
+            <OrgFacts
+              :producer="data.producer"
+              :relations="data.relations"
+              :years="spanText(data.stats.first_date, data.stats.last_date)"
+            />
             <template v-if="data.collaborators?.length">
               <Divider />
               <OrgCollaborators :people="data.collaborators" />
@@ -66,17 +75,15 @@
           </Stack>
         </Card>
       </Stack>
-      <Stack gap="none" class="min-w-0 lg:order-1">
-        <OrgHistory v-if="mode === 'history'" v-model="tab" :works="works" :groups="groups" />
-        <OrgShelf v-else-if="mode === 'shelf'" v-model="tab" :works="works" :groups="groups" />
-        <OrgHub v-else-if="mode === 'hub'" :works="works" :relations="data.relations" />
-        <OrgSerials
-          v-else
-          :producer-id="data.producer.id"
-          :popular="works"
-          :total="data.mangas?.meta.total_items ?? 0"
-        />
-      </Stack>
+      <OrgWorks
+        :data="data"
+        :groups="groups"
+        :list="list.displayed.value"
+        :state="list.state.value"
+        :pending="list.pending.value"
+        class="min-w-0 lg:order-1"
+        @update="list.update"
+      />
     </Stack>
   </Stack>
 </template>

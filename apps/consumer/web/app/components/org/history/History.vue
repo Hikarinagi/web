@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {
-    Button as HnButton,
+    LoadingOverlay,
     SegmentedControl,
     SimpleGrid,
     Stack,
@@ -9,43 +9,45 @@
     TabsTrigger,
     Text,
   } from '@hina-ui/vue'
-  import { inGroup, sortWorks, type OrgWork } from '~/features/org/works'
+  import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import type { OrgListState, OrgSort } from '~/features/org/results'
+  import type { OrgWork } from '~/features/org/works'
 
   defineOptions({ name: 'OrgHistory' })
   const props = defineProps<{
-    works: OrgWork[]
     groups: { code: string; label: string; count: number }[]
+    total: number
+    works: OrgWork[]
+    meta: ProducerPageData['list']['meta']
+    state: OrgListState
+    pending: boolean
+    rated: boolean
   }>()
-  const tab = defineModel<string>({ required: true })
+  const emit = defineEmits<{ update: [partial: Partial<OrgListState>] }>()
 
-  const PAGE = 20
-  const sort = ref('new')
-  const all = ref(false)
   const tabs = computed(() =>
     props.groups.length > 1
-      ? [{ code: 'ALL', label: '全部作品', count: props.works.length }, ...props.groups]
+      ? [{ code: 'ALL', label: '全部作品', count: props.total }, ...props.groups]
       : [],
   )
   const sorts = computed(() => [
     { value: 'new', label: '最新' },
     { value: 'old', label: '最早' },
-    ...(props.works.some(work => work.rating.count > 0)
-      ? [{ value: 'rating', label: '评分' }]
-      : []),
+    ...(props.rated ? [{ value: 'rating', label: '评分' }] : []),
   ])
-  const listed = computed(() =>
-    sortWorks(
-      props.works.filter(work => inGroup(work, tab.value)),
-      sort.value,
-    ),
-  )
-  const shown = computed(() => (all.value ? listed.value : listed.value.slice(0, PAGE)))
-  watch([tab, sort], () => (all.value = false))
+  const tab = computed({
+    get: () => props.state.tab,
+    set: value => emit('update', { tab: value }),
+  })
+  const sort = computed({
+    get: () => props.state.sort,
+    set: (value: OrgSort) => emit('update', { sort: value }),
+  })
 </script>
 
 <template>
   <Stack gap="md">
-    <EntrySectionHead id="works" title="作品年表" :count="listed.length">
+    <EntrySectionHead id="works" title="作品年表" :count="meta.total_items">
       <template #actions>
         <SegmentedControl v-model="sort" :options="sorts" size="sm" aria-label="排序" />
       </template>
@@ -58,17 +60,19 @@
         </TabsTrigger>
       </TabsList>
     </Tabs>
-    <SimpleGrid min="22rem" gap="sm">
-      <OrgHistoryRow v-for="work in shown" :key="`${work.kind}${work.id}`" :work="work" />
-    </SimpleGrid>
-    <HnButton
-      v-if="listed.length > PAGE"
-      variant="soft"
-      tone="neutral"
-      class="self-center"
-      @click="all = !all"
-    >
-      {{ all ? '收起' : `显示全部 ${listed.length} 部` }}
-    </HnButton>
+    <Stack gap="lg" class="relative">
+      <SimpleGrid min="22rem" gap="sm">
+        <OrgHistoryRow v-for="work in works" :key="`${work.kind}${work.id}`" :work="work" />
+      </SimpleGrid>
+      <Paginator
+        v-if="meta.total_pages > 1"
+        :meta="meta"
+        :loading="pending"
+        route="push"
+        align="center"
+        scroll-target="#works"
+      />
+      <LoadingOverlay :visible="pending" />
+    </Stack>
   </Stack>
 </template>

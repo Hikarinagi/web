@@ -9,25 +9,9 @@
   } from '@hina-ui/vue'
   import type { PeoplePageData } from '~~/server/api/pages/people/[id].get'
   import { websiteLabel } from '~/features/person/site'
-  import type { PersonWork, VoiceRole } from '~/features/person/works'
 
   defineOptions({ name: 'PersonFacts' })
-  const props = defineProps<{
-    person: PeoplePageData['person']
-    works: PersonWork[]
-    voices: VoiceRole[]
-  }>()
-
-  const years = computed(() => {
-    const dates = [
-      ...props.works.map(work => work.date),
-      ...props.voices.flatMap(voice => voice.works.map(work => work.release_date)),
-    ]
-      .filter((date): date is string => Boolean(date))
-      .map(date => date.slice(0, 4))
-      .sort()
-    return dates.length ? `${dates[0]} 年至 ${dates.at(-1)} 年` : null
-  })
+  defineProps<{ person: PeoplePageData['person']; years: string | null }>()
 </script>
 
 <template>

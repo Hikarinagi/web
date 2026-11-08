@@ -1,10 +1,8 @@
-import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+import type { components } from '@hikarinagi/api-contract/v3'
 import { topVotedMedia } from '~/utils/media/image'
 
-type Cover = NonNullable<ReturnType<typeof topVotedMedia<ProducerGameCover>>>
-type ProducerGameCover = NonNullable<
-  NonNullable<ProducerPageData['galgames']>['items'][number]['galgame']['covers'][number]['media']
->
+type Schemas = components['schemas']
+type Cover = NonNullable<ReturnType<typeof topVotedMedia<{ src: string }>>>
 
 export type OrgWorkKind = 'game' | 'novel' | 'manga'
 export type OrgMode = 'history' | 'shelf' | 'hub' | 'serials'
@@ -33,104 +31,112 @@ export const KIND_PATHS: Record<OrgWorkKind, string> = {
 export const today = () => new Date().toISOString().slice(0, 10)
 const dayOf = (value: string | null | undefined) => value?.slice(0, 10) ?? null
 
-export function orgWorks(data: ProducerPageData): OrgWork[] {
-  const games = (data.galgames?.items ?? []).map(item => ({
-    kind: 'game' as const,
-    id: item.galgame.id,
-    title: item.galgame.trans_title || item.galgame.origin_title,
-    original: item.galgame.origin_title,
-    cover: topVotedMedia(item.galgame.covers),
-    date: dayOf(item.galgame.release_date),
-    roles: item.codes,
-    rating: item.rating,
-    volumes: null,
-    label: null,
-    people: item.people,
-    authors: '',
-  }))
-  const novels = (data.light_novels?.items ?? []).map(item => ({
-    kind: 'novel' as const,
-    id: item.light_novel.id,
-    title: item.light_novel.name_cn || item.light_novel.name,
-    original: item.light_novel.name,
-    cover: topVotedMedia(item.light_novel.covers),
-    date: dayOf(item.light_novel.publication_date),
-    roles: item.codes,
-    rating: item.rating,
-    volumes: item.volume_count,
-    label: item.light_novel.bunko,
-    people: [],
-    authors: item.light_novel.author?.name ?? '',
-  }))
-  const mangas = (data.mangas?.items ?? []).map(item => ({
-    kind: 'manga' as const,
-    id: item.manga.id,
-    title: item.manga.name_cn || item.manga.name,
-    original: item.manga.name,
-    cover: topVotedMedia(item.manga.covers),
-    date: dayOf(item.manga.publication_date),
-    roles: item.codes,
-    rating: item.rating,
-    volumes: item.volume_count,
-    label: null,
-    people: item.people,
-    authors: item.people.map(person => person.name).join('、'),
-  }))
-  return [...games, ...novels, ...mangas].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+export function orgWork(
+  item: Schemas['EntityWorkDto'] &
+    Partial<Pick<Schemas['ProducerWorkDto'], 'people' | 'volume_count'>>,
+): OrgWork | null {
+  const people = item.people ?? []
+  const volumes = item.volume_count ?? null
+  if (item.galgame)
+    return {
+      kind: 'game',
+      id: item.galgame.id,
+      title: item.galgame.trans_title || item.galgame.origin_title,
+      original: item.galgame.origin_title,
+      cover: topVotedMedia(item.galgame.covers),
+      date: dayOf(item.galgame.release_date),
+      roles: item.codes,
+      rating: item.rating,
+      volumes: null,
+      label: null,
+      people,
+      authors: '',
+    }
+  if (item.light_novel)
+    return {
+      kind: 'novel',
+      id: item.light_novel.id,
+      title: item.light_novel.name_cn || item.light_novel.name,
+      original: item.light_novel.name,
+      cover: topVotedMedia(item.light_novel.covers),
+      date: dayOf(item.light_novel.publication_date),
+      roles: item.codes,
+      rating: item.rating,
+      volumes,
+      label: item.light_novel.bunko,
+      people: [],
+      authors: item.light_novel.author?.name ?? '',
+    }
+  if (item.manga)
+    return {
+      kind: 'manga',
+      id: item.manga.id,
+      title: item.manga.name_cn || item.manga.name,
+      original: item.manga.name,
+      cover: topVotedMedia(item.manga.covers),
+      date: dayOf(item.manga.publication_date),
+      roles: item.codes,
+      rating: item.rating,
+      volumes,
+      label: null,
+      people,
+      authors: people.map(person => person.name).join('、'),
+    }
+  return null
 }
 
-export function orgMode(data: ProducerPageData): OrgMode {
-  const type = data.producer.organization_type
+export const orgWorks = (items: Parameters<typeof orgWork>[0][]) =>
+  items.flatMap(item => orgWork(item) ?? [])
+
+export function orgMode(type: string | null, stats: Schemas['ProducerStatsDto']): OrgMode {
   if (type === 'LABEL') return 'shelf'
   if (type === 'PLATFORM' || type === 'MAGAZINE') return 'serials'
   if (type === 'BRAND' || type === 'CIRCLE') return 'history'
-  const games = data.galgames?.meta.total_items ?? 0
-  const novels = data.light_novels?.items ?? []
-  const mangas = data.mangas?.items ?? []
-  if (type === 'COMPANY' && (novels.length || mangas.length) && !games) return 'hub'
-  if (games) return 'history'
-  if (mangas.some(item => item.codes.includes('MAGAZINE'))) return 'serials'
-  if (novels.some(item => item.codes.includes('LABEL'))) return 'shelf'
-  return novels.length || mangas.length ? 'hub' : 'history'
+  const count = (kind: string) =>
+    stats.groups.filter(group => group.kind === kind).reduce((sum, group) => sum + group.count, 0)
+  const has = (kind: string, code: string) =>
+    stats.codes.some(item => item.kind === kind && item.code === code)
+  const books = count('light_novel') + count('manga')
+  if (type === 'COMPANY' && books && !count('galgame')) return 'hub'
+  if (count('galgame')) return 'history'
+  if (has('manga', 'MAGAZINE')) return 'serials'
+  if (has('light_novel', 'LABEL')) return 'shelf'
+  return books ? 'hub' : 'history'
 }
 
-const groupOf = (work: OrgWork, label: (code: string) => string) =>
-  work.kind === 'game'
-    ? work.roles.map(role => ({ code: `game:${role}`, label: label(role) }))
-    : [{ code: work.kind, label: work.kind === 'novel' ? '轻小说' : '漫画' }]
+const groupCode = (group: { kind: string; code: string | null }) =>
+  group.kind === 'galgame' ? `game:${group.code}` : group.kind === 'light_novel' ? 'novel' : 'manga'
 
-export function orgGroups(works: OrgWork[], label: (code: string) => string) {
-  const counts = new Map<string, { code: string; label: string; count: number }>()
-  for (const work of works)
-    for (const group of groupOf(work, label)) {
-      const entry = counts.get(group.code) ?? { ...group, count: 0 }
-      entry.count++
-      counts.set(group.code, entry)
-    }
-  return [...counts.values()].sort((a, b) => b.count - a.count)
+export function orgGroups(stats: Schemas['ProducerStatsDto'], label: (code: string) => string) {
+  return stats.groups.map(group => ({
+    code: groupCode(group),
+    label:
+      group.kind === 'galgame'
+        ? label(group.code ?? '')
+        : group.kind === 'light_novel'
+          ? '轻小说'
+          : '漫画',
+    count: group.count,
+  }))
 }
 
-export const inGroup = (work: OrgWork, code: string) =>
-  code === 'ALL' ||
-  (work.kind === 'game' ? work.roles.some(role => `game:${role}` === code) : work.kind === code)
-
-export function sortWorks(works: OrgWork[], sort: string) {
-  if (sort === 'old') return [...works].reverse()
-  if (sort === 'rating')
-    return [...works].sort(
-      (a, b) =>
-        (b.rating.average ?? -1) - (a.rating.average ?? -1) || b.rating.count - a.rating.count,
-    )
-  return works
+export function groupQuery(code: string) {
+  if (code.startsWith('game:')) return { kind: 'galgame' as const, code: code.slice(5) }
+  if (code === 'novel') return { kind: 'light_novel' as const }
+  if (code === 'manga') return { kind: 'manga' as const }
+  return {}
 }
 
-export function averageRating(works: OrgWork[]) {
-  const rated = works.filter(work => work.rating.average !== null && work.rating.count > 0)
-  const count = rated.reduce((sum, work) => sum + work.rating.count, 0)
-  if (!count) return null
-  return (
-    rated.reduce((sum, work) => sum + (work.rating.average ?? 0) * work.rating.count, 0) / count
-  )
+export function yearBuckets(stats: Schemas['ProducerStatsDto'], tab: string) {
+  const counts = new Map<number, number>()
+  for (const bucket of stats.years)
+    if (tab === 'ALL' || groupCode(bucket) === tab)
+      counts.set(bucket.year, (counts.get(bucket.year) ?? 0) + bucket.count)
+  return [...counts].map(([year, count]) => ({ year, count })).sort((a, b) => a.year - b.year)
+}
+
+export function spanText(first: string | null, last: string | null) {
+  return first && last ? `${first.slice(0, 4)} 年至 ${last.slice(0, 4)} 年` : null
 }
 
 export function workMonth(date: string | null) {

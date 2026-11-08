@@ -1,18 +1,12 @@
 <script setup lang="ts">
   import { Inline, Link, Stack, Text } from '@hina-ui/vue'
-  import type { OrgWork } from '~/features/org/works'
 
   defineOptions({ name: 'OrgCatalogYears' })
-  const props = defineProps<{ works: OrgWork[] }>()
-  const year = defineModel<string | null>({ required: true })
+  const props = defineProps<{ buckets: { year: number; count: number }[] }>()
+  const year = defineModel<number | null>({ required: true })
 
   const bars = computed(() => {
-    const counts = new Map<number, number>()
-    for (const work of props.works) {
-      if (!work.date) continue
-      const value = Number(work.date.slice(0, 4))
-      counts.set(value, (counts.get(value) ?? 0) + 1)
-    }
+    const counts = new Map(props.buckets.map(bucket => [bucket.year, bucket.count]))
     const max = Math.max(0, ...counts.values())
     if (max < 2) return []
     const years = [...counts.keys()]
@@ -22,7 +16,7 @@
       const value = first + index
       const count = counts.get(value) ?? 0
       return {
-        year: String(value),
+        year: value,
         count,
         height: count ? Math.max(12, Math.round((count / max) * 100)) : 0,
       }

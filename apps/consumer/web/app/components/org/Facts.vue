@@ -3,13 +3,13 @@
   import { NuxtLink } from '#components'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
   import { producerRelationLabel } from '~/features/entity/labels'
-  import { establishedText, type OrgWork } from '~/features/org/works'
+  import { establishedText } from '~/features/org/works'
 
   defineOptions({ name: 'OrgFacts' })
   const props = defineProps<{
     producer: ProducerPageData['producer']
     relations: ProducerPageData['relations']
-    works: OrgWork[]
+    years: string | null
   }>()
 
   const groups = computed(() => {
@@ -23,13 +23,6 @@
   const established = computed(() =>
     establishedText(props.producer.established, props.producer.established_precision),
   )
-  const years = computed(() => {
-    const dates = props.works
-      .flatMap(work => work.date ?? [])
-      .map(date => date.slice(0, 4))
-      .sort()
-    return dates.length ? `${dates[0]} 年至 ${dates.at(-1)} 年` : null
-  })
   const host = computed(() =>
     props.producer.website?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
   )

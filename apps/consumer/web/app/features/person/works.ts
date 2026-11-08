@@ -1,7 +1,8 @@
-import type { PeoplePageData } from '~~/server/api/pages/people/[id].get'
+import type { components } from '@hikarinagi/api-contract/v3'
 import { creditRoleLabel } from '~/features/entry/labels'
 import { topVotedMedia } from '~/utils/media/image'
 
+type Schemas = components['schemas']
 type Media = NonNullable<ReturnType<typeof topVotedMedia<{ src: string }>>>
 
 export type WorkKind = 'game' | 'novel' | 'manga'
@@ -32,48 +33,60 @@ export const KIND_PATHS: Record<WorkKind, string> = {
 
 export const yearOf = (date: string | null | undefined) => date?.slice(0, 4) ?? '年份不详'
 
-export function personWorks(data: PeoplePageData): PersonWork[] {
-  const games = (data.galgames?.items ?? []).map(({ galgame, codes, rating }) => ({
-    kind: 'game' as const,
-    id: galgame.id,
-    title: galgame.trans_title || galgame.origin_title,
-    original: galgame.origin_title,
-    cover: topVotedMedia(galgame.covers),
-    date: galgame.release_date,
-    by:
-      galgame.producers.find(item => item.role === 'DEVELOPER')?.producer.name ??
-      galgame.producers[0]?.producer.name ??
-      null,
-    roles: codes,
-    rating,
-  }))
-  const novels = (data.light_novels?.items ?? []).map(({ light_novel, codes, rating }) => ({
-    kind: 'novel' as const,
-    id: light_novel.id,
-    title: light_novel.name_cn || light_novel.name,
-    original: light_novel.name,
-    cover: topVotedMedia(light_novel.covers),
-    date: light_novel.publication_date,
-    by: light_novel.publishers[0]?.producer.name ?? null,
-    roles: codes,
-    rating,
-  }))
-  const mangas = (data.mangas?.items ?? []).map(({ manga, codes, rating }) => ({
-    kind: 'manga' as const,
-    id: manga.id,
-    title: manga.name_cn || manga.name,
-    original: manga.name,
-    cover: topVotedMedia(manga.covers),
-    date: manga.publication_date,
-    by: null,
-    roles: codes,
-    rating,
-  }))
-  return [...games, ...novels, ...mangas].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''))
+export function personWork({
+  galgame,
+  light_novel,
+  manga,
+  codes,
+  rating,
+}: Schemas['EntityWorkDto']): PersonWork | null {
+  if (galgame)
+    return {
+      kind: 'game',
+      id: galgame.id,
+      title: galgame.trans_title || galgame.origin_title,
+      original: galgame.origin_title,
+      cover: topVotedMedia(galgame.covers),
+      date: galgame.release_date,
+      by:
+        galgame.producers.find(item => item.role === 'DEVELOPER')?.producer.name ??
+        galgame.producers[0]?.producer.name ??
+        null,
+      roles: codes,
+      rating,
+    }
+  if (light_novel)
+    return {
+      kind: 'novel',
+      id: light_novel.id,
+      title: light_novel.name_cn || light_novel.name,
+      original: light_novel.name,
+      cover: topVotedMedia(light_novel.covers),
+      date: light_novel.publication_date,
+      by: light_novel.publishers[0]?.producer.name ?? null,
+      roles: codes,
+      rating,
+    }
+  if (manga)
+    return {
+      kind: 'manga',
+      id: manga.id,
+      title: manga.name_cn || manga.name,
+      original: manga.name,
+      cover: topVotedMedia(manga.covers),
+      date: manga.publication_date,
+      by: null,
+      roles: codes,
+      rating,
+    }
+  return null
 }
 
-export function voiceRoles(data: PeoplePageData) {
-  return (data.characters?.items ?? []).map(({ character, galgames }) => ({
+export const personWorks = (items: Schemas['EntityWorkDto'][]) =>
+  items.flatMap(item => personWork(item) ?? [])
+
+export function voiceRoles(items: Schemas['PersonCharacterRelationDto'][]) {
+  return items.map(({ character, galgames }) => ({
     id: character.id,
     name: character.trans_name || character.name,
     image: character.image,
@@ -83,14 +96,16 @@ export function voiceRoles(data: PeoplePageData) {
 
 export type VoiceRole = ReturnType<typeof voiceRoles>[number]
 
-export function roleCounts(works: PersonWork[], voices: VoiceRole[]) {
-  const counts = new Map<string, number>()
-  if (voices.length) counts.set('VOICE', voices.length)
-  for (const work of works)
-    for (const role of work.roles) counts.set(role, (counts.get(role) ?? 0) + 1)
-  return [...counts]
-    .sort((a, b) => (a[0] === 'OTHER' ? 1 : b[0] === 'OTHER' ? -1 : b[1] - a[1]))
-    .map(([code, count]) => ({ code, label: creditRoleLabel(code), count }))
+export function roleCounts(stats: Schemas['PersonStatsDto']) {
+  return [...(stats.voices ? [{ code: 'VOICE', count: stats.voices }] : []), ...stats.roles]
+    .sort((a, b) => (a.code === 'OTHER' ? 1 : b.code === 'OTHER' ? -1 : b.count - a.count))
+    .map(({ code, count }) => ({ code, label: creditRoleLabel(code), count }))
+}
+
+export function workYears(stats: Schemas['PersonStatsDto']) {
+  const first = stats.first_date?.slice(0, 4)
+  const last = stats.last_date?.slice(0, 4)
+  return first && last ? `${first} 年至 ${last} 年` : null
 }
 
 export interface KnownItem {

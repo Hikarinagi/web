@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import { orgBff, readOrgQuery } from '~/features/org/results'
   import { producerSeo } from '~/features/seo/producer'
 
   definePageMeta({ container: 'full' })
@@ -6,7 +8,10 @@
   const route = useRoute()
   const id = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
 
-  const { data } = await useHikariApiData(`/api/pages/producers/${id}`, { fatal: true })
+  const { data } = await useHikariApiData<ProducerPageData>(orgBff(id, readOrgQuery(route.query)), {
+    fatal: true,
+    watch: false,
+  })
   await redirectIfMerged(data)
 
   const seo = computed(() => (data.value ? producerSeo(data.value) : null))

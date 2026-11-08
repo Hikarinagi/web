@@ -14,19 +14,18 @@
   import { ExternalLink, Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
-  import { KIND_PATHS, averageRating, today, workMonth, type OrgWork } from '~/features/org/works'
+  import { KIND_PATHS, workMonth, type OrgWork } from '~/features/org/works'
 
   defineOptions({ name: 'OrgHeader' })
   const props = defineProps<{
     producer: ProducerPageData['producer']
-    works: OrgWork[]
+    newest: OrgWork | null
+    score: number | null
     kind: string
     groups: { code: string; label: string; count: number }[]
   }>()
   defineEmits<{ group: [code: string] }>()
 
-  const newest = computed(() => props.works.find(work => work.date && work.date <= today()))
-  const score = computed(() => averageRating(props.works))
   const ratio = computed(() => {
     const logo = props.producer.logo
     return logo?.width && logo.height ? Math.min(Math.max(logo.width / logo.height, 1), 2.4) : 1

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import type { ApiData } from '@hikarinagi/api-contract/v3'
   import {
     Inline,
     Link,
-    Pagination,
+    LoadingOverlay,
     Stack,
     Table,
     TableBody,
@@ -18,55 +17,35 @@
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { monthText } from '~/features/entry/date'
+  import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import type { OrgListState } from '~/features/org/results'
   import type { OrgWork } from '~/features/org/works'
 
   defineOptions({ name: 'OrgSerials' })
-  const props = defineProps<{ producerId: number; popular: OrgWork[]; total: number }>()
+  const props = defineProps<{
+    popular: OrgWork[]
+    works: OrgWork[]
+    meta: ProducerPageData['list']['meta']
+    state: OrgListState
+    pending: boolean
+  }>()
+  const emit = defineEmits<{ update: [partial: Partial<OrgListState>] }>()
 
-  const PAGE = 40
-  const POPULAR = 8
-  const TABS = [
-    { value: 'ONGOING', label: '连载中' },
+  const tabs = [
+    { value: 'ALL', label: '全部' },
     { value: 'COMPLETED', label: '已完结' },
-    { value: '', label: '全部' },
   ]
-  const status = ref('ONGOING')
-  const page = ref(1)
-  watch(status, () => (page.value = 1))
-  const data = shallowRef<ApiData<'/api/v3/producers/{id}/mangas', 'get'> | null>(null)
-  const pending = ref(false)
-  let sequence = 0
-
-  async function load() {
-    const current = ++sequence
-    pending.value = true
-    const result = await hikariRequest<'/api/v3/producers/{id}/mangas', 'get'>(
-      '/api/v3/producers/{id}/mangas',
-      {
-        method: 'get',
-        path: { id: props.producerId },
-        query: {
-          page: page.value,
-          page_size: PAGE,
-          sort: 'recent',
-          ...(status.value ? { status: status.value } : {}),
-        },
-      },
-    ).catch(() => null)
-    if (current !== sequence) return
-    data.value = result
-    pending.value = false
-  }
-  onMounted(load)
-  watch([status, page], load)
-
-  const featured = computed(() => props.popular.filter(work => work.cover).slice(0, POPULAR))
+  const status = computed({
+    get: () => props.state.status,
+    set: value => emit('update', { status: value }),
+  })
+  const featured = computed(() => props.popular.filter(work => work.cover))
   const rows = computed(() =>
-    (data.value?.items ?? []).map(({ manga, people }) => ({
-      id: manga.id,
-      title: manga.name_cn || manga.name,
-      authors: people.map(person => person.name).join('、'),
-      period: manga.publication_date ? `${monthText(manga.publication_date)}起` : '日期不详',
+    props.works.map(work => ({
+      id: work.id,
+      title: work.title,
+      authors: work.authors,
+      period: work.date ? `${monthText(work.date)}起` : '日期不详',
     })),
   )
 </script>
@@ -92,15 +71,15 @@
       </ScrollRail>
     </Stack>
     <Stack gap="md">
-      <EntrySectionHead id="works" title="全部连载" :count="total" />
+      <EntrySectionHead id="works" title="全部连载" :count="meta.total_items" />
       <Tabs v-model="status">
         <TabsList label="按连载状态">
-          <TabsTrigger v-for="tab in TABS" :key="tab.value" :value="tab.value">
+          <TabsTrigger v-for="tab in tabs" :key="tab.value" :value="tab.value">
             {{ tab.label }}
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      <LoadingOverlay :loading="pending">
+      <Stack gap="lg" class="relative">
         <Table class="w-full">
           <TableHeader>
             <TableRow>
@@ -139,14 +118,16 @@
             </TableRow>
           </TableBody>
         </Table>
-      </LoadingOverlay>
-      <Pagination
-        v-if="(data?.meta.total_items ?? 0) > PAGE"
-        v-model="page"
-        :total="data?.meta.total_items ?? 0"
-        :page-size="PAGE"
-        class="self-center"
-      />
+        <Paginator
+          v-if="meta.total_pages > 1"
+          :meta="meta"
+          :loading="pending"
+          route="push"
+          align="center"
+          scroll-target="#works"
+        />
+        <LoadingOverlay :visible="pending" />
+      </Stack>
     </Stack>
   </Stack>
 </template>

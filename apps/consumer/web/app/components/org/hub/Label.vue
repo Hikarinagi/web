@@ -1,23 +1,17 @@
 <script setup lang="ts">
   import { Card, Inline, Link, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { KIND_PATHS, today, type OrgWork } from '~/features/org/works'
+  import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import { KIND_PATHS, orgWorks, spanText } from '~/features/org/works'
 
   defineOptions({ name: 'OrgHubLabel' })
-  const props = defineProps<{
-    label: { id: number | null; name: string; works: OrgWork[]; own: boolean }
-  }>()
+  const props = defineProps<{ label: ProducerPageData['extras']['labels'][number] }>()
 
-  const covers = computed(() =>
-    props.label.works.filter(work => work.cover && work.date && work.date <= today()).slice(0, 5),
+  const name = computed(
+    () => props.label.name ?? (props.label.kind === 'manga' ? '漫画' : '未标文库的轻小说'),
   )
-  const years = computed(() => {
-    const dates = props.label.works
-      .flatMap(work => work.date ?? [])
-      .map(date => date.slice(0, 4))
-      .sort()
-    return dates.length ? `${dates[0]} 年至 ${dates.at(-1)} 年` : null
-  })
+  const covers = computed(() => orgWorks(props.label.recent).filter(work => work.cover))
+  const years = computed(() => spanText(props.label.first_date, props.label.last_date))
 </script>
 
 <template>
@@ -33,12 +27,12 @@
             class="truncate font-semibold"
             lang="ja"
           >
-            {{ label.name }}
+            {{ name }}
           </Link>
-          <Text v-else weight="semibold" truncate>{{ label.name }}</Text>
+          <Text v-else weight="semibold" truncate>{{ name }}</Text>
           <Tag v-if="label.own" size="sm" tone="accent">旗下</Tag>
         </Inline>
-        <Text size="sm" class="shrink-0 tabular-nums">{{ label.works.length }} 部</Text>
+        <Text size="sm" class="shrink-0 tabular-nums">{{ label.count }} 部</Text>
       </Inline>
       <Inline gap="xs" :wrap="false">
         <NuxtLink
