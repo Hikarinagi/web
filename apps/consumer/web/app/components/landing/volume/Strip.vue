@@ -1,22 +1,21 @@
 <script setup lang="ts">
   import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { NuxtLink } from '#components'
   import { dayLabel, volumeLabel, weekdayLabel } from '~/features/landing/labels'
-  import { useAlignTo, type LandingDay } from '~/features/landing/stage'
+  import { useCentered, type LandingDay } from '~/features/landing/stage'
   import { novelWork } from '~/features/landing/works'
 
   type StageVolume = ApiData<'/api/v3/landing/light-novels', 'get'>['volumes'][number]
 
   defineOptions({ name: 'LandingVolumeStrip' })
-  const props = defineProps<{ days: LandingDay<StageVolume>[]; selected: number }>()
-  const emit = defineEmits<{
-    hover: [volume: StageVolume]
-    leave: []
-    tap: [event: MouseEvent, volume: StageVolume]
+  const props = defineProps<{
+    days: LandingDay<StageVolume>[]
+    selected: number
+    running: boolean
+    paused: boolean
   }>()
+  const emit = defineEmits<{ pick: [volume: StageVolume]; advance: [] }>()
 
-  const firstUpcoming = computed(() => props.days.findIndex(day => !day.past))
   const groups = computed(() =>
     props.days.map(day => ({
       ...day,
@@ -27,48 +26,72 @@
     })),
   )
   const track = useTemplateRef<{ viewport?: HTMLElement | null }>('track')
-  const marker = useTemplateRef<{ $el: HTMLElement }[]>('marker')
 
-  useAlignTo(
+  useCentered(
     () => track.value?.viewport,
-    () => marker.value?.[0]?.$el,
-    'x',
+    () => props.selected,
   )
 </script>
 
 <template>
-  <ScrollRail ref="track" class="-mx-4 lg:-mx-6" @mouseleave="emit('leave')">
-    <Inline gap="lg" :wrap="false" align="start" class="min-w-max px-4 pt-2 pb-3 lg:px-6">
-      <template v-for="(day, index) in groups" :key="day.date">
-        <Stack :ref="index === firstUpcoming ? 'marker' : undefined" gap="sm" class="shrink-0">
-          <Text
-            size="xs"
-            weight="semibold"
-            :tone="day.past ? 'muted' : undefined"
-            class="tabular-nums"
+  <ScrollRail ref="track" class="-mx-4 lg:-mx-6">
+    <Inline gap="lg" :wrap="false" align="start" class="min-w-max px-4 pt-2 pb-4 lg:px-6">
+      <Stack v-for="day in groups" :key="day.date" gap="sm" class="shrink-0">
+        <Text
+          size="xs"
+          weight="semibold"
+          :tone="day.past ? 'muted' : undefined"
+          class="tabular-nums"
+        >
+          {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
+        </Text>
+        <Inline gap="md" :wrap="false">
+          <Stack
+            v-for="{ volume, label } in day.entries"
+            :key="volume.id"
+            :data-stage-item="volume.id"
+            as="button"
+            type="button"
+            gap="none"
+            :aria-label="label"
+            :aria-pressed="volume.id === selected"
+            class="w-(--landing-strip-cover) hn-interactive rounded-md"
+            @click="emit('pick', volume)"
           >
-            {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
-          </Text>
-          <Inline gap="sm" :wrap="false">
-            <NuxtLink
-              v-for="{ volume, label } in day.entries"
-              :key="volume.id"
-              :to="`/light-novel-volumes/${volume.id}`"
-              :aria-label="label"
+            <Stack
+              gap="none"
               :class="
                 cn(
-                  'block w-(--landing-strip-cover) hn-interactive rounded-md',
-                  volume.id === selected && 'ring-2 ring-accent ring-offset-2 ring-offset-canvas',
+                  'relative transition-transform duration-300',
+                  volume.id === selected && 'scale-108',
                 )
               "
-              @mouseenter="emit('hover', volume)"
-              @click.capture="emit('tap', $event, volume)"
             >
               <EntryBookCover :media="volume.cover" :alt="label" :width="240" />
-            </NuxtLink>
-          </Inline>
-        </Stack>
-      </template>
+              <Transition
+                enter-active-class="transition-opacity duration-300"
+                enter-from-class="opacity-0"
+                leave-active-class="transition-opacity duration-300"
+                leave-to-class="opacity-0"
+              >
+                <Stack
+                  v-if="volume.id === selected"
+                  gap="none"
+                  class="pointer-events-none absolute -inset-1"
+                >
+                  <LandingPickRing
+                    :running="running"
+                    :paused="paused"
+                    :cycle="volume.id"
+                    round="var(--radius-xl)"
+                    @done="emit('advance')"
+                  />
+                </Stack>
+              </Transition>
+            </Stack>
+          </Stack>
+        </Inline>
+      </Stack>
     </Inline>
   </ScrollRail>
 </template>

@@ -123,6 +123,17 @@
 
   --animate-mobile-nav-in: mobile-nav-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-mobile-nav-out: mobile-nav-out 0.12s cubic-bezier(0.4, 0, 1, 1);
+  --animate-stage-ring: stage-ring 12s linear forwards;
+
+  @keyframes stage-ring {
+    0% {
+      stroke-dashoffset: 1;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
 
   @keyframes mobile-nav-in {
     0% {
@@ -296,7 +307,8 @@ html.dark {
   --landing-feature-cover: 13rem;
   --landing-feature-cover-sm: 8rem;
   --landing-feature-height: 19rem;
-  --landing-podium-thumb: 6rem;
+  --landing-rank-cover: 4.5rem;
+  --landing-text-fade: linear-gradient(to bottom, #000 calc(100% - 2lh), transparent);
   --landing-tile: 8.5rem;
   --landing-tile-lg: 10.5rem;
   --landing-card: 18rem;

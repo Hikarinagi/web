@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Section, Stack, VisuallyHidden } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { groupByDay, useStagePick } from '~/features/landing/stage'
+  import { groupByDay, useAutoplay, useStagePick } from '~/features/landing/stage'
 
   type StageVolume = ApiData<'/api/v3/landing/light-novels', 'get'>['volumes'][number]
 
@@ -14,11 +14,18 @@
     upcoming.find(volume => volume.intro && volume.series.bunko) ??
     upcoming[0] ??
     props.volumes.at(-1)
-  const { selected, hover, leave, tap } = useStagePick(initial!)
+  const { selected, pick } = useStagePick(initial!)
+  const stage = useTemplateRef<{ $el: HTMLElement }>('stage')
+  const { running, paused } = useAutoplay(() => stage.value?.$el)
+
+  function advance() {
+    const list = days.value.flatMap(day => day.items)
+    pick(list[(list.indexOf(selected.value) + 1) % list.length] ?? selected.value)
+  }
 </script>
 
 <template>
-  <Section class="relative isolate">
+  <Section ref="stage" class="relative isolate">
     <LandingBackdrop :id="selected.id" :hash="selected.cover?.thumb_hash" />
     <Stack
       gap="lg"
@@ -30,9 +37,10 @@
       <LandingVolumeStrip
         :days="days"
         :selected="selected.id"
-        @hover="hover"
-        @leave="leave"
-        @tap="(event, volume) => tap(event, volume, volume.id === selected.id)"
+        :running="running"
+        :paused="paused"
+        @pick="pick"
+        @advance="advance"
       />
     </Stack>
   </Section>

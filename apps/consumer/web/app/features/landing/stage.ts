@@ -39,30 +39,76 @@ export function useAlignTo(
   })
 }
 
+export function useReveal(
+  viewport: () => HTMLElement | null | undefined,
+  selected: () => number,
+  axis: 'x' | 'y',
+) {
+  watch(
+    selected,
+    id => {
+      const box = viewport()
+      const el = box?.querySelector<HTMLElement>(`[data-stage-item="${id}"]`)
+      if (!box || !el) return
+      const from = box.getBoundingClientRect()
+      const to = el.getBoundingClientRect()
+      const start = axis === 'x' ? to.left - from.left : to.top - from.top
+      const end = axis === 'x' ? to.right - from.right : to.bottom - from.bottom
+      const delta = start < 0 ? start - 16 : end > 0 ? end + 16 : 0
+      if (delta) box.scrollBy({ [axis === 'x' ? 'left' : 'top']: delta, behavior: 'smooth' })
+    },
+    { flush: 'post' },
+  )
+}
+
+export function useCentered(
+  viewport: () => HTMLElement | null | undefined,
+  selected: () => number,
+) {
+  function center(smooth: boolean) {
+    const box = viewport()
+    const el = box?.querySelector<HTMLElement>(`[data-stage-item="${selected()}"]`)
+    if (!box || !el) return
+    const from = box.getBoundingClientRect()
+    const to = el.getBoundingClientRect()
+    const delta = to.left + to.width / 2 - (from.left + from.width / 2)
+    box.scrollBy({ left: delta, behavior: smooth ? 'smooth' : 'instant' })
+  }
+  watch(
+    viewport,
+    box => box && requestAnimationFrame(() => requestAnimationFrame(() => center(false))),
+    {
+      immediate: true,
+      flush: 'post',
+    },
+  )
+  watch(selected, () => center(true), { flush: 'post' })
+}
+
+export function useAutoplay(stage: () => HTMLElement | null | undefined) {
+  const target = computed(() => stage() ?? null)
+  const hovered = useElementHover(target)
+  const active = useActiveElement()
+  const keyboard = computed(
+    () =>
+      !!active.value &&
+      !!target.value?.contains(active.value) &&
+      active.value.matches(':focus-visible'),
+  )
+  const visibility = useDocumentVisibility()
+  const motion = usePreferredReducedMotion()
+  return {
+    running: computed(() => motion.value !== 'reduce'),
+    paused: computed(() => hovered.value || keyboard.value || visibility.value !== 'visible'),
+  }
+}
+
 export function useStagePick<T>(initial: T) {
   const selected = shallowRef(initial)
-  let timer: ReturnType<typeof setTimeout> | undefined
 
   function pick(item: T) {
-    clearTimeout(timer)
     selected.value = item
   }
 
-  function hover(item: T) {
-    clearTimeout(timer)
-    timer = setTimeout(() => (selected.value = item), 120)
-  }
-
-  function leave() {
-    clearTimeout(timer)
-  }
-
-  function tap(event: MouseEvent, item: T, current: boolean) {
-    if ((event as PointerEvent).pointerType !== 'touch' || current) return
-    event.preventDefault()
-    pick(item)
-  }
-
-  onBeforeUnmount(leave)
-  return { selected, pick, hover, leave, tap }
+  return { selected, pick }
 }

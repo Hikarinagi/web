@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Inline, Progress, Ripple, Stack, Text } from '@hina-ui/vue'
+  import { Card, Grid, Inline, Progress, Ripple, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { LandingRatio, LandingWork } from '~/features/landing/works'
 
@@ -17,14 +17,17 @@
 
 <template>
   <ScrollRail class="-mx-4 -my-1 sm:mx-0">
-    <Inline gap="sm" :wrap="false" align="stretch" class="min-w-max px-4 py-1 sm:px-0">
+    <Grid
+      gap="sm"
+      class="w-max auto-cols-(--landing-card) grid-flow-col grid-cols-none px-4 py-1 sm:px-0 lg:w-full lg:auto-cols-auto lg:grid-flow-row lg:grid-cols-4"
+    >
       <Card
         v-for="item in items"
         :key="item.work.id"
         :as="NuxtLink"
         :to="item.to"
         :padded="false"
-        class="hn-state-layer w-(--landing-card) shrink-0 hn-interactive hn-press-lg"
+        class="hn-state-layer min-w-0 hn-interactive hn-press-lg"
       >
         <Ripple />
         <Inline gap="md" align="center" :wrap="false" class="p-2">
@@ -53,6 +56,6 @@
           </Stack>
         </Inline>
       </Card>
-    </Inline>
+    </Grid>
   </ScrollRail>
 </template>

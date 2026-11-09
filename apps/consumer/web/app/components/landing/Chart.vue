@@ -10,34 +10,40 @@
   }
 
   defineOptions({ name: 'LandingChart' })
-  const props = defineProps<{
-    rows: LandingChartRow[]
-    ratio: LandingRatio
-    start?: number
-    wide?: boolean
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      rows: LandingChartRow[]
+      ratio: LandingRatio
+      start?: number
+      columns?: 1 | 2 | 4
+    }>(),
+    { start: 1, columns: 2 },
+  )
 
-  const halves = computed(() => {
-    const cut = Math.ceil(props.rows.length / 2)
-    return [props.rows.slice(0, cut), props.rows.slice(cut)].map((rows, half) =>
-      rows.map((row, index) => ({ ...row, rank: (props.start ?? 1) + half * cut + index })),
-    )
-  })
+  const ranked = computed(() =>
+    props.rows.map((row, index) => ({ ...row, rank: props.start + index })),
+  )
+  const tracks = computed(() => ({
+    '--chart-rows-2': `repeat(${Math.ceil(props.rows.length / 2)}, auto)`,
+    '--chart-rows-4': `repeat(${Math.ceil(props.rows.length / 4)}, auto)`,
+  }))
 </script>
 
 <template>
-  <Grid v-if="wide" gap="none" class="gap-x-10 sm:grid-cols-2">
-    <Stack v-for="(half, index) in halves" :key="index" gap="none">
-      <LandingRow v-for="row in half" :key="row.work.id" v-bind="row" :ratio="ratio" />
-    </Stack>
-  </Grid>
-  <Stack v-else gap="none">
-    <LandingRow
-      v-for="(row, index) in rows"
-      :key="row.work.id"
-      v-bind="row"
-      :rank="(start ?? 1) + index"
-      :ratio="ratio"
-    />
+  <Stack v-if="columns === 1" gap="none">
+    <LandingRow v-for="row in ranked" :key="row.work.id" v-bind="row" :ratio="ratio" />
   </Stack>
+  <Grid
+    v-else
+    gap="none"
+    :style="tracks"
+    :class="
+      cn(
+        'gap-x-6 sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-(--chart-rows-2)',
+        columns === 4 && 'lg:grid-cols-4 lg:grid-rows-(--chart-rows-4)',
+      )
+    "
+  >
+    <LandingRow v-for="row in ranked" :key="row.work.id" v-bind="row" :ratio="ratio" />
+  </Grid>
 </template>

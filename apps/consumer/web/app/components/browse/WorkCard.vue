@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Stack, Tag, Text } from '@hina-ui/vue'
+  import { Card, Ripple, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { cn } from '~/utils/cn'
   import type { HikariImageSource } from '~/utils/media/image'
@@ -21,15 +21,14 @@
 </script>
 
 <template>
-  <NuxtLink :to="to" class="group flex min-w-0 flex-col gap-2">
+  <NuxtLink
+    :to="to"
+    class="hn-state-layer -m-2 flex min-w-0 hn-interactive flex-col gap-2 rounded-xl p-2 hn-press-lg"
+  >
+    <Ripple />
     <Card
       :padded="false"
-      :class="
-        cn(
-          'relative bg-subtle shadow-none transition-colors duration-150 ease-out group-hover:border-line-strong',
-          ratio === '3/4' ? 'aspect-3/4' : 'aspect-2/3',
-        )
-      "
+      :class="cn('relative bg-subtle shadow-none', ratio === '3/4' ? 'aspect-3/4' : 'aspect-2/3')"
     >
       <HikariImage
         v-if="cover"
@@ -50,14 +49,7 @@
       </Tag>
     </Card>
     <Stack gap="none" class="min-w-0 gap-1">
-      <Text
-        size="sm"
-        weight="semibold"
-        truncate
-        class="transition-colors duration-150 ease-out group-hover:text-accent-text"
-      >
-        {{ title }}
-      </Text>
+      <Text size="sm" weight="semibold" truncate>{{ title }}</Text>
       <Text
         v-if="sub !== undefined"
         size="xs"

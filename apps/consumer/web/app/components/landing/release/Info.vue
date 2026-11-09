@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Button, Heading, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { CalendarDays, JapaneseYen, MonitorSmartphone } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
@@ -35,7 +35,7 @@
   <Stack gap="xs" class="min-w-0 pt-2">
     <Text size="sm" tone="muted" truncate class="min-h-(--landing-line)">{{ work.sub }}</Text>
     <Heading :level="3" class="truncate text-2xl leading-tight font-bold lg:text-3xl">
-      {{ work.title }}
+      <Link :as="NuxtLink" :to="work.to" tone="neutral">{{ work.title }}</Link>
     </Heading>
     <Text size="sm" tone="muted" truncate class="min-h-(--landing-line)">{{ work.original }}</Text>
     <Inline gap="md" :wrap="false" class="mt-1 min-h-(--landing-line) min-w-0">

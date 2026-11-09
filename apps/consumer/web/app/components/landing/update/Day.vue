@@ -27,56 +27,63 @@
 <template>
   <Empty v-if="!lead" title="这一天没有更新" class="min-h-(--landing-feature-height)" />
   <Grid v-else gap="lg" class="lg:grid-cols-12 lg:gap-x-6">
-    <Stack gap="md" class="min-w-0 flex-row lg:col-span-3 lg:flex-col">
-      <Card
-        :padded="false"
-        class="w-(--landing-feature-cover-sm) shrink-0 overflow-hidden bg-subtle shadow-none sm:w-(--landing-feature-cover) lg:w-full"
-      >
-        <HikariImage
-          :src="lead.work.cover"
-          :alt="lead.work.title"
-          :ratio="7 / 10"
-          preload
-          :processing="{ width: 480, quality: 84, fit: 'cover' }"
-          class="w-full"
-          image-class="object-cover object-top"
-        />
-      </Card>
-      <Stack gap="sm" class="min-w-0">
-        <Stack gap="none" class="min-w-0 gap-0.5">
-          <Link
-            :as="NuxtLink"
-            :to="lead.work.to"
-            tone="neutral"
-            class="truncate text-lg font-semibold"
-          >
-            {{ lead.work.title }}
-          </Link>
-          <Inline gap="sm" align="baseline" :wrap="false" class="min-w-0">
-            <Text v-if="lead.chapter" size="sm" truncate class="text-accent-text tabular-nums">
-              {{ lead.chapter }}
-            </Text>
-            <Text size="sm" tone="muted" class="shrink-0 tabular-nums">{{ lead.time }}</Text>
-          </Inline>
-        </Stack>
-        <Text size="sm" class="line-clamp-3 min-h-(--landing-lines-3) leading-relaxed text-fg/80">
-          {{ lead.item.intro }}
-        </Text>
-        <Button
-          v-if="lead.item.chapter"
+    <Stack gap="none" class="min-w-0 lg:relative lg:col-span-3">
+      <Stack gap="md" class="min-w-0 flex-row lg:absolute lg:inset-0 lg:flex-col">
+        <Card
           :as="NuxtLink"
-          :to="`/mangas/${lead.item.id}/read/${lead.item.chapter.id}`"
-          class="self-start"
+          :to="lead.work.to"
+          :padded="false"
+          class="w-(--landing-feature-cover-sm) shrink-0 hn-interactive overflow-hidden bg-subtle shadow-none hn-press-lg sm:w-(--landing-feature-cover) lg:w-full"
         >
-          <template #icon><BookOpen /></template>
-          阅读{{ lead.chapter }}
-        </Button>
+          <HikariImage
+            :src="lead.work.cover"
+            :alt="lead.work.title"
+            :ratio="7 / 10"
+            preload
+            :processing="{ width: 480, quality: 84, fit: 'cover' }"
+            class="w-full"
+            image-class="object-cover object-top"
+          />
+        </Card>
+        <Stack gap="sm" class="min-w-0 lg:min-h-0 lg:flex-1">
+          <Stack gap="none" class="min-w-0 gap-0.5">
+            <Link
+              :as="NuxtLink"
+              :to="lead.work.to"
+              tone="neutral"
+              class="truncate text-lg font-semibold"
+            >
+              {{ lead.work.title }}
+            </Link>
+            <Inline gap="sm" align="baseline" :wrap="false" class="min-w-0">
+              <Text v-if="lead.chapter" size="sm" truncate class="text-accent-text tabular-nums">
+                {{ lead.chapter }}
+              </Text>
+              <Text size="sm" tone="muted" class="shrink-0 tabular-nums">{{ lead.time }}</Text>
+            </Inline>
+          </Stack>
+          <Text
+            size="sm"
+            class="line-clamp-3 min-h-(--landing-lines-3) leading-relaxed text-fg/80 lg:line-clamp-none lg:min-h-0 lg:flex-1 lg:overflow-hidden lg:mask-(--landing-text-fade)"
+          >
+            {{ lead.item.intro }}
+          </Text>
+          <Button
+            v-if="lead.item.chapter"
+            :as="NuxtLink"
+            :to="`/mangas/${lead.item.id}/read/${lead.item.chapter.id}`"
+            class="self-start"
+          >
+            <template #icon><BookOpen /></template>
+            阅读{{ lead.chapter }}
+          </Button>
+        </Stack>
       </Stack>
     </Stack>
-    <ScrollRail class="-mx-4 sm:mx-0 lg:col-span-9">
+    <ScrollRail class="-mx-4 -my-2 sm:-mx-2 lg:col-span-9">
       <Grid
         gap="none"
-        class="w-max auto-cols-max grid-flow-col gap-x-4 px-4 pb-2 sm:w-auto sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-4 sm:gap-y-7 sm:px-0 sm:pb-0 lg:grid-cols-5"
+        class="w-max auto-cols-(--landing-tile) grid-flow-col gap-x-4 px-4 py-2 sm:w-auto sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-4 sm:gap-y-6 sm:px-2 lg:grid-cols-5"
       >
         <BrowseWorkCard
           v-for="entry in rest"
@@ -85,7 +92,6 @@
           :title="entry.work.title"
           :cover="entry.work.cover"
           ratio="2/3"
-          class="w-(--landing-tile) sm:w-auto"
         >
           <template #meta>
             <Text v-if="entry.chapter" size="xs" truncate class="text-accent-text tabular-nums">

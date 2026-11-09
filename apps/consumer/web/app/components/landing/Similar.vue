@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline } from '@hina-ui/vue'
+  import { Grid } from '@hina-ui/vue'
   import type { LandingRatio, LandingWork } from '~/features/landing/works'
 
   defineOptions({ name: 'LandingSimilar' })
@@ -7,8 +7,16 @@
 </script>
 
 <template>
-  <ScrollRail class="-mx-4 lg:-mx-6">
-    <Inline gap="none" :wrap="false" align="stretch" class="min-w-max gap-4 px-4 pb-2 lg:px-6">
+  <ScrollRail class="-mx-4 -my-2 lg:-mx-2">
+    <Grid
+      gap="none"
+      :class="
+        cn(
+          'w-max grid-flow-col grid-cols-none gap-4 px-4 py-2 lg:w-full lg:auto-cols-auto lg:grid-flow-row lg:grid-cols-6 lg:gap-x-6 lg:gap-y-8 lg:px-2',
+          ratio === '3/4' ? 'auto-cols-(--landing-tile-lg)' : 'auto-cols-(--landing-tile)',
+        )
+      "
+    >
       <BrowseWorkCard
         v-for="work in works"
         :key="work.id"
@@ -18,8 +26,7 @@
         :cover="work.cover"
         :ratio="ratio"
         plain-sub
-        :class="ratio === '3/4' ? 'w-(--landing-tile-lg)' : 'w-(--landing-tile)'"
       />
-    </Inline>
+    </Grid>
   </ScrollRail>
 </template>

@@ -90,7 +90,7 @@
         <LandingSimilar :works="row.items.map(novelWork)" ratio="2/3" />
       </LandingSection>
       <LandingSection v-if="finished.length" title="已完结且全卷可读">
-        <LandingChart :rows="finished" ratio="2/3" wide />
+        <LandingChart :rows="finished" ratio="2/3" :columns="4" />
       </LandingSection>
       <LandingSection title="为你推荐">
         <LandingFeed

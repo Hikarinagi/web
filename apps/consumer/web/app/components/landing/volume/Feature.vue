@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, Grid, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Button, Grid, Heading, Inline, Link, Stack, Text } from '@hina-ui/vue'
   import { BookOpen } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
@@ -26,26 +26,31 @@
     gap="none"
     class="grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 sm:min-h-(--landing-feature-height) sm:grid-rows-[1fr_auto] sm:gap-x-8"
   >
-    <Grid
-      gap="none"
-      class="w-(--landing-feature-cover-sm) grid-cols-1 content-end sm:row-span-2 sm:w-(--landing-feature-cover)"
+    <NuxtLink
+      :to="`/light-novel-volumes/${volume.id}`"
+      class="hn-interactive self-end rounded-md hn-press-lg sm:row-span-2"
     >
-      <Transition
-        enter-active-class="transition-opacity duration-300"
-        enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-300"
-        leave-to-class="opacity-0"
+      <Grid
+        gap="none"
+        class="w-(--landing-feature-cover-sm) grid-cols-1 sm:w-(--landing-feature-cover)"
       >
-        <EntryBookCover
-          :key="volume.id"
-          :media="volume.cover"
-          :alt="`${series.title}${label} 封面`"
-          :width="480"
-          preload
-          class="col-start-1 row-start-1 shadow-2xl"
-        />
-      </Transition>
-    </Grid>
+        <Transition
+          enter-active-class="transition-opacity duration-300"
+          enter-from-class="opacity-0"
+          leave-active-class="transition-opacity duration-300"
+          leave-to-class="opacity-0"
+        >
+          <EntryBookCover
+            :key="volume.id"
+            :media="volume.cover"
+            :alt="`${series.title}${label} 封面`"
+            :width="480"
+            preload
+            class="col-start-1 row-start-1 shadow-2xl"
+          />
+        </Transition>
+      </Grid>
+    </NuxtLink>
     <Stack gap="sm" class="min-w-0 sm:self-end">
       <Text size="sm" tone="muted" truncate class="min-h-(--landing-line) tabular-nums">
         {{ headline }}
@@ -55,7 +60,7 @@
           :level="3"
           class="line-clamp-2 min-h-(--landing-lines-2) text-2xl leading-tight font-bold sm:block sm:min-h-0 sm:truncate lg:text-4xl"
         >
-          {{ series.title }}
+          <Link :as="NuxtLink" :to="series.to" tone="neutral">{{ series.title }}</Link>
         </Heading>
         <Text truncate class="min-h-(--landing-line) text-base text-fg/80 lg:text-lg">
           {{ label }}

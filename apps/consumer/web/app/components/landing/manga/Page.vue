@@ -103,7 +103,7 @@
         :class="charts.length > 1 ? 'lg:grid-cols-2 lg:gap-x-10' : ''"
       >
         <LandingSection v-for="chart in charts" :key="chart.title" :title="chart.title">
-          <LandingChart :rows="chart.rows" ratio="2/3" :wide="charts.length === 1" />
+          <LandingChart :rows="chart.rows" ratio="2/3" :columns="charts.length === 1 ? 4 : 2" />
         </LandingSection>
       </Grid>
       <LandingSection title="为你推荐">

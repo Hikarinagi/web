@@ -23,7 +23,7 @@
   }>()
 
   const { items, loading, failed, done, load } = useLandingFeed(props.path, props.initial)
-  const batch = computed(() => (props.kind === 'galgame' ? 18 : 24))
+  const batch = 24
   const entries = computed(() =>
     items.value.flatMap((item, index) => {
       const work =
@@ -33,7 +33,7 @@
             ? novelWork(item as NovelFeedItem)
             : mangaWork(item as MangaFeedItem)
       const card = { key: `work-${work.id}`, work, reason: reasonLabel(item.reason, props.kind) }
-      const ended = (index + 1) % batch.value === 0 ? (index + 1) / batch.value : 0
+      const ended = (index + 1) % batch === 0 ? (index + 1) / batch : 0
       const banner = bannerForPosition(ended, props.banners, 2)
       return banner ? [card, { key: `banner-${ended}`, banner }] : [card]
     }),
@@ -44,7 +44,7 @@
   <Stack gap="md">
     <Grid
       :cols="3"
-      :class="`grid-flow-row-dense gap-x-4 gap-y-7 sm:grid-cols-4 ${kind === 'galgame' ? 'lg:grid-cols-6' : 'lg:grid-cols-8'}`"
+      class="grid-flow-row-dense gap-x-4 gap-y-6 sm:grid-cols-4 lg:grid-cols-6 lg:gap-x-6 lg:gap-y-8"
     >
       <template v-for="entry in entries" :key="entry.key">
         <Stack v-if="'banner' in entry" gap="none" class="col-span-full">

@@ -8,7 +8,7 @@
 
 <template>
   <Inline gap="sm" align="center" :wrap="false">
-    <Tag tone="warning" size="sm" class="gap-1 tabular-nums">
+    <Tag tone="warning" size="sm" class="gap-1 text-warning tabular-nums">
       <Star class="size-3 fill-current" />
       {{ score.toFixed(1) }}
     </Tag>

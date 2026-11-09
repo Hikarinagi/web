@@ -2,7 +2,7 @@
   import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { dayLabel, weekdayLabel } from '~/features/landing/labels'
-  import { useAlignTo, type LandingDay } from '~/features/landing/stage'
+  import { useAlignTo, useReveal, type LandingDay } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
 
   type ScheduleItem = ApiData<'/api/v3/landing/galgames', 'get'>['schedule'][number]
@@ -24,6 +24,11 @@
   useAlignTo(
     () => track.value?.viewport,
     () => marker.value?.[0]?.$el,
+    'x',
+  )
+  useReveal(
+    () => track.value?.viewport,
+    () => props.selected,
     'x',
   )
 </script>
@@ -50,6 +55,7 @@
           <Stack
             v-for="{ item, work } in day.entries"
             :key="item.id"
+            :data-stage-item="item.id"
             as="button"
             type="button"
             gap="xs"

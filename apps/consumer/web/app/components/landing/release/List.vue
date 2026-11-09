@@ -1,20 +1,15 @@
 <script setup lang="ts">
-  import { Divider, Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
+  import { Divider, Inline, Ripple, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { NuxtLink } from '#components'
   import { dayLabel, weekdayLabel } from '~/features/landing/labels'
-  import { useAlignTo, type LandingDay } from '~/features/landing/stage'
+  import { useAlignTo, useReveal, type LandingDay } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
 
   type ScheduleItem = ApiData<'/api/v3/landing/galgames', 'get'>['schedule'][number]
 
   defineOptions({ name: 'LandingReleaseList' })
   const props = defineProps<{ days: LandingDay<ScheduleItem>[]; today: string; selected: number }>()
-  const emit = defineEmits<{
-    hover: [item: ScheduleItem]
-    leave: []
-    tap: [event: MouseEvent, item: ScheduleItem]
-  }>()
+  const emit = defineEmits<{ pick: [item: ScheduleItem] }>()
 
   const firstUpcoming = computed(() => props.days.findIndex(day => !day.past))
   const groups = computed(() =>
@@ -31,11 +26,16 @@
     () => marker.value?.[0]?.$el,
     'y',
   )
+  useReveal(
+    () => area.value?.viewport,
+    () => props.selected,
+    'y',
+  )
 </script>
 
 <template>
   <ScrollArea ref="area" class="absolute inset-0" auto-hide="leave">
-    <Stack gap="none" class="pb-3" @mouseleave="emit('leave')">
+    <Stack gap="none" class="pb-3">
       <template v-for="(day, index) in groups" :key="day.date">
         <Inline
           v-if="index === firstUpcoming"
@@ -55,27 +55,34 @@
           size="xs"
           weight="semibold"
           :tone="day.past ? 'muted' : undefined"
-          class="sticky top-0 z-10 bg-surface px-4 pt-3 pb-1.5 tabular-nums"
+          class="px-4 pt-3 pb-1.5 tabular-nums"
         >
           {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
         </Text>
         <Inline
           v-for="{ item, work } in day.entries"
           :key="item.id"
-          :as="NuxtLink"
-          :to="work.to"
+          :data-stage-item="item.id"
+          as="button"
+          type="button"
+          :aria-pressed="item.id === selected"
           gap="md"
           align="center"
           :wrap="false"
-          :class="
-            cn(
-              'hn-state-layer mx-2 hn-interactive rounded-lg px-2 py-1.5',
-              item.id === selected && 'bg-accent-soft',
-            )
-          "
-          @mouseenter="emit('hover', item)"
-          @click.capture="emit('tap', $event, item)"
+          class="hn-state-layer relative isolate mx-2 hn-interactive rounded-lg px-2 py-1.5 text-start"
+          @click="emit('pick', item)"
         >
+          <Ripple />
+          <Stack
+            gap="none"
+            aria-hidden="true"
+            :class="
+              cn(
+                'pointer-events-none absolute inset-0 -z-10 rounded-lg bg-accent-soft transition-opacity duration-300',
+                item.id === selected ? 'opacity-100' : 'opacity-0',
+              )
+            "
+          />
           <HikariImage
             :src="work.cover"
             :alt="work.title"
@@ -88,7 +95,12 @@
             <Text
               size="sm"
               weight="medium"
-              :class="cn('line-clamp-2 leading-snug', item.id === selected && 'text-accent-text')"
+              :class="
+                cn(
+                  'line-clamp-2 leading-snug transition-colors duration-300',
+                  item.id === selected && 'text-accent-text',
+                )
+              "
             >
               {{ work.title }}
             </Text>
