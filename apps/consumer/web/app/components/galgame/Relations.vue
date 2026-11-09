@@ -1,21 +1,20 @@
 <script setup lang="ts">
-  import { Grid } from '@hina-ui/vue'
+  import { Inline } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameRelations' })
-  const props = defineProps<{ relations: GalgamePageData['relations'] }>()
-
-  const hasContent = computed(() => props.relations.length > 0)
+  defineProps<{ relations: GalgamePageData['relations'] }>()
 </script>
 
 <template>
-  <WorkSection v-if="hasContent" title="相关作品" :meta="`${relations.length} 部`">
-    <Grid :cols="3" gap="none" class="gap-x-4 gap-y-5 sm:grid-cols-4 lg:grid-cols-6">
+  <template v-if="relations.length">
+    <EntrySectionHead id="related" title="相关作品" :count="relations.length" />
+    <Inline gap="sm">
       <GalgameRelationsCard
-        v-for="r in relations"
-        :key="`${r.relation}-${r.target_galgame.id}`"
-        :item="r"
+        v-for="item in relations"
+        :key="`${item.relation}-${item.target_galgame.id}`"
+        :item="item"
       />
-    </Grid>
-  </WorkSection>
+    </Inline>
+  </template>
 </template>

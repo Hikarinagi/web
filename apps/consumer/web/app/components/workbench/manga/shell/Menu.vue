@@ -74,6 +74,10 @@
         <template #icon><BookOpen /></template>
         在漫画页查看
       </DropdownMenuItem>
+      <DropdownMenuItem v-else-if="project.replaces" @select="emit('select', 'current')">
+        <template #icon><BookOpen /></template>
+        查看现有版本
+      </DropdownMenuItem>
       <template v-if="owner && editable">
         <DropdownMenuSeparator />
         <DropdownMenuItem tone="danger" @select="emit('select', 'archive')">

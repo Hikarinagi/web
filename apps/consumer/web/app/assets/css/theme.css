@@ -275,6 +275,102 @@ html.dark {
   --editor-status-info-border: var(--color-hikari-blue-500);
 }
 
+:root {
+  --entry-container: 82.5rem;
+  --stage-height: min(calc(100svh - 2.5rem), 46rem);
+  --stage-top-shade: 10rem;
+  --stage-cover-width: 15rem;
+  --stage-thumb-width: 7.5rem;
+  --stage-veil: var(--tone-soft);
+  --stage-control: color-mix(in oklab, var(--stage-veil) 90%, var(--hn-fg-default));
+  --rail-left: 15rem;
+  --rail-right: 18rem;
+  --char-image: 20rem;
+  --sticky-bar-height: 3.5rem;
+  --sticky-top: calc(var(--app-header-height) + var(--sticky-bar-height) + 1.5rem);
+  --card-cast: 15rem;
+  --card-review: 20rem;
+  --tag-rows-height: 18rem;
+  --landing-stage-top: calc(var(--app-header-height) + 1.5rem);
+  --landing-strip-cover: 6rem;
+  --landing-feature-cover: 13rem;
+  --landing-feature-cover-sm: 8rem;
+  --landing-feature-height: 19rem;
+  --landing-podium-thumb: 6rem;
+  --landing-tile: 8.5rem;
+  --landing-tile-lg: 10.5rem;
+  --landing-card: 18rem;
+  --landing-line: 1lh;
+  --landing-lines-2: 2lh;
+  --landing-lines-3: 3lh;
+  --ambient-height: calc(var(--stage-height) + 40rem);
+  --tone-glow: 0.4;
+  --stage-fade: linear-gradient(
+    to bottom,
+    #000 40%,
+    rgb(0 0 0 / 0.987) 44.9%,
+    rgb(0 0 0 / 0.951) 49.3%,
+    rgb(0 0 0 / 0.896) 53.5%,
+    rgb(0 0 0 / 0.825) 57.4%,
+    rgb(0 0 0 / 0.741) 61.2%,
+    rgb(0 0 0 / 0.648) 64.7%,
+    rgb(0 0 0 / 0.55) 68.3%,
+    rgb(0 0 0 / 0.45) 71.7%,
+    rgb(0 0 0 / 0.352) 75.3%,
+    rgb(0 0 0 / 0.259) 78.8%,
+    rgb(0 0 0 / 0.175) 82.6%,
+    rgb(0 0 0 / 0.104) 86.5%,
+    rgb(0 0 0 / 0.049) 90.7%,
+    rgb(0 0 0 / 0.013) 95.1%,
+    transparent 100%
+  );
+  --ambient-fade: linear-gradient(
+    to bottom,
+    #000 50%,
+    rgb(0 0 0 / 0.987) 54%,
+    rgb(0 0 0 / 0.951) 57.8%,
+    rgb(0 0 0 / 0.896) 61.3%,
+    rgb(0 0 0 / 0.825) 64.5%,
+    rgb(0 0 0 / 0.741) 67.7%,
+    rgb(0 0 0 / 0.648) 70.6%,
+    rgb(0 0 0 / 0.55) 73.6%,
+    rgb(0 0 0 / 0.45) 76.4%,
+    rgb(0 0 0 / 0.352) 79.4%,
+    rgb(0 0 0 / 0.259) 82.3%,
+    rgb(0 0 0 / 0.175) 85.5%,
+    rgb(0 0 0 / 0.104) 88.8%,
+    rgb(0 0 0 / 0.049) 92.3%,
+    rgb(0 0 0 / 0.013) 96%,
+    transparent 100%
+  );
+  --stack-cover: 15rem;
+  --stack-cover-sm: 7.5rem;
+  --manga-banner: 16rem;
+  --manga-banner-sm: 9rem;
+  --manga-strip-cover: calc(var(--manga-banner-sm) * 7 / 11);
+  --manga-strip-cover-lg: calc(var(--manga-banner) * 7 / 11);
+  --manga-cover: 15rem;
+  --manga-cover-sm: 7rem;
+  --volume-cover: 15rem;
+  --volume-cover-sm: 11rem;
+}
+
+html.dark {
+  --stage-veil: var(--tone-deep);
+}
+
+html[data-page-tone].dark {
+  --hn-bg-canvas: var(--tone-deep);
+  --hn-surface: var(--tone-deep-2);
+  --hn-bg-subtle: color-mix(in oklab, var(--tone-deep-2) 88%, white);
+  --hn-bg-inset: color-mix(in oklab, var(--tone-deep-2) 80%, white);
+  --hn-border: var(--tone-line);
+}
+
+html[data-page-tone='paper']:not(.dark) {
+  --hn-bg-canvas: var(--tone-paper);
+}
+
 .bprogress {
   position: fixed;
   inset: 0;
@@ -386,6 +482,20 @@ html.dark {
   .hikari-table-stack tbody td,
   .hikari-table-stack tbody th {
     height: auto;
+  }
+}
+
+@utility hikari-panel-table {
+  & thead th {
+    border-radius: 0 !important;
+  }
+
+  & :is(th, td):first-child {
+    padding-inline-start: var(--hn-panel-p);
+  }
+
+  & :is(th, td):last-child {
+    padding-inline-end: var(--hn-panel-p);
   }
 }
 

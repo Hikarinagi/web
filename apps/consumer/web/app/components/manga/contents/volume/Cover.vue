@@ -73,6 +73,7 @@
         :text="label"
         size="sm"
         weight="medium"
+        class="transition-colors duration-(--hn-duration-fast)"
         :class="current ? 'text-accent-text' : 'group-hover:text-accent-text'"
       />
       <Text size="xs" tone="muted" class="tabular-nums">

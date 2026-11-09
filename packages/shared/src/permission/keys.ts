@@ -1,8 +1,7 @@
 export const PERMISSION_WILDCARD = '*'
 
 export const WIKI_PERMISSIONS = {
-  REVIEW: 'wiki.review',
-  COMMIT: 'wiki.commit',
+  PATROL: 'wiki.patrol',
 } as const
 
 export const ACCESS_PERMISSIONS = {

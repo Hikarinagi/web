@@ -4,7 +4,12 @@
   import { FolderKanban, Plus } from '@lucide/vue'
   import type { WorkbenchHomePageData } from '~~/server/api/pages/create/projects.get'
 
-  definePageMeta({ title: '我的投稿' })
+  definePageMeta({
+    layout: 'creator',
+    middleware: 'auth',
+    floatingToolbar: false,
+    title: '我的投稿',
+  })
 
   const route = useRoute()
   const page = ref(1)
@@ -14,9 +19,8 @@
   const requestUrl = computed<`/api/pages/${string}`>(
     () => `/api/pages/create/projects?page=${page.value}&kind=${kind.value}`,
   )
-  const { data, pending } = await useHikariApiData<WorkbenchHomePageData>(requestUrl, {
-    fatal: true,
-  })
+  const { data, error, pending, refresh } = useHikariApiData<WorkbenchHomePageData>(requestUrl)
+  useCreatorPage({ loading: () => pending.value && !data.value })
 
   watch(kind, value => {
     page.value = 1
@@ -27,7 +31,8 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none">
+  <CreatorPageError v-if="error && !data" :error="error" @retry="refresh()" />
+  <Stack v-else-if="data" gap="none">
     <WorkbenchProjectTable
       v-if="kind === 'novel'"
       v-model:page="page"

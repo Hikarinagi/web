@@ -6,7 +6,7 @@
   import { useSelection } from '~/features/download/useSelection'
   import { MANGA_READING_UNIT_NOUN, mangaChapterLabel, mangaReadingUnit } from '@hikarinagi/shared'
 
-  defineOptions({ name: 'MangaDownloadAction' })
+  defineOptions({ name: 'MangaDownloadAction', inheritAttrs: false })
 
   const props = defineProps<{ id: number; title: string; chapters: MangaPageData['chapters'] }>()
   const FORMAT_OPTIONS = [
@@ -37,6 +37,7 @@
 <template>
   <DownloadTrigger
     v-if="chapters.length"
+    v-bind="$attrs"
     :loading="flow.creating.value"
     @click="flow.open.value = true"
   />

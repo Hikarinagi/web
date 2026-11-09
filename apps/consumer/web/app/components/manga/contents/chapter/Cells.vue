@@ -23,7 +23,7 @@
   const size = computed(() => (props.variant === 'sheet' ? 'lg' : 'md'))
   const layout = computed(() =>
     props.variant === 'page'
-      ? { is: SimpleGrid, attrs: { min: '6rem' } }
+      ? { is: SimpleGrid, attrs: { min: '5rem' } }
       : { is: Grid, attrs: { cols: 5 } },
   )
 

@@ -3,6 +3,7 @@ import type { EditorPresentation } from './types'
 export const lightNovelPresentation: EditorPresentation = {
   fields: {
     name: { label: '原名' },
+    name_reading: { label: '标题读音' },
     name_cn: { label: '中文名' },
     other_names: { label: '别名' },
     cover_id: { label: '封面' },
@@ -20,5 +21,6 @@ export const lightNovelPresentation: EditorPresentation = {
     tags: { label: '标签' },
     covers: { label: '封面' },
     source_relations: { label: '相关作品' },
+    manga_relations: { label: '相关漫画' },
   },
 }

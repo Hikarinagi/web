@@ -35,6 +35,8 @@
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
   }
 
+  defineExpose({ viewport })
+
   const ARROW_SLOT = cn(
     'pointer-events-none absolute top-1/2 z-10 hidden -translate-y-1/2',
     'opacity-0 transition-opacity duration-200 ease-out [@media(hover:hover)]:block',

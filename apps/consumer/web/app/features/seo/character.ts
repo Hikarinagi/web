@@ -16,7 +16,7 @@ export function characterSeo(data: CharacterPageData) {
 
   const workText = work ? `「${work}」的` : ''
   const cvText = cv ? `，CV ${cv}` : ''
-  const fallbackDesc = `${name} 是${workText}角色${cvText}。在 Hikarinagi 查看角色资料、CV与登场作品`
+  const fallbackDesc = `${name} 是${workText}角色${cvText}。在 Hikarinagi 查看角色资料、CV与出场作品`
 
   const alt = [c.trans_name && c.name !== c.trans_name ? c.name : '', ...(c.aliases ?? [])].filter(
     Boolean,
@@ -25,7 +25,7 @@ export function characterSeo(data: CharacterPageData) {
   if (alt.length) person.alternateName = alt
 
   return {
-    title: work ? `${name} 角色资料・出自「${work}」` : `${name} 角色资料・CV・登场作品`,
+    title: work ? `${name} 角色资料・出自「${work}」` : `${name} 角色资料・CV・出场作品`,
     headerTitle: name,
     description: [zhText(c.trans_intro), zhText(c.intro), fallbackDesc],
     schema: [

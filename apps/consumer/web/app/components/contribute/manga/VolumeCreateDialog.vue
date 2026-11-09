@@ -1,169 +1,110 @@
 <script setup lang="ts">
-  import { Button, Card, Dialog, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
-  import { X } from '@lucide/vue'
-  import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import {
+    Alert,
+    Button,
+    Dialog,
+    FormField,
+    Inline,
+    Input,
+    SegmentedControl,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
   import type { MangaTarget } from '~/features/contribute/manga-target'
-  import type { BackendChangeRequestDetail } from '~/features/creator/contribution'
-  import type { BackendEditorSchema } from '~/features/creator/editor'
+  import { useVolumeCreate } from '~/features/contribute/useVolumeCreate'
   import { getMangaVolumeLabel } from '~/utils/media/manga'
-  import VolumeCreateForm from './VolumeCreateForm.vue'
-
-  type SearchItem = ApiData<'/api/v3/external-source/{source}/search', 'get'>[number]
 
   const props = defineProps<{ series: MangaTarget; volumeNumber: number | null }>()
   const open = defineModel<boolean>('open', { required: true })
-  const emit = defineEmits<{
-    created: [volume: { id: number; label: string; change_request_id: number; pending: boolean }]
-    picked: [volumeId: number]
-  }>()
+  const emit = defineEmits<{ created: [volume: { id: number; label: string }] }>()
 
-  const form = useTemplateRef<InstanceType<typeof VolumeCreateForm>>('form')
-  const schema = shallowRef<BackendEditorSchema | null>(null)
-  const picked = ref<SearchItem | null>(null)
-  const prefill = shallowRef<Record<string, unknown> | null>(null)
-  const loading = ref(false)
-  const submitting = computed(() => form.value?.submitting ?? false)
+  const METHODS = [
+    { value: 'isbn', label: '通过 ISBN 新建' },
+    { value: 'manual', label: '手动填写' },
+  ]
+  const flow = useVolumeCreate(() => props.series)
+  const { method, isbn, number, title, draft, notice, loading, saving } = flow
+  const values = computed(() => {
+    const found = (property: string) =>
+      draft.value?.operations.find(
+        operation =>
+          operation.op === 'add' && operation.entry_ref === 'v' && operation.property === property,
+      )?.value?.text
+    return { number: found('VOLUME_NUMBER') ?? null, title: found('TITLE') ?? null }
+  })
+  const ready = computed(() =>
+    method.value === 'isbn' ? Boolean(draft.value?.operations.length) : Boolean(title.value.trim()),
+  )
 
-  watch(open, async next => {
+  watch(open, next => {
     if (!next) return
-    picked.value = null
-    prefill.value = null
-    if (!schema.value) {
-      loading.value = true
-      try {
-        schema.value = await hikariRequest('/api/v3/contribution/schemas/{resource_type}', {
-          path: { resource_type: 'manga-volume' },
-        })
-      } finally {
-        loading.value = false
-      }
-    }
+    flow.reset()
+    number.value = props.volumeNumber === null ? '' : String(props.volumeNumber)
   })
 
-  watch(picked, async item => {
-    if (!item) return
-    if (item.existing_id != null) {
-      emit('picked', item.existing_id)
-      open.value = false
-      return
-    }
-    loading.value = true
-    try {
-      const draft = await hikariRequest('/api/v3/external-source/manga-volume-draft', {
-        query: { bangumi_id: item.external_id },
-      })
-      const media = draft.cover
-        ? await hikariRequest('/api/v3/external-source/cover-media', {
-            method: 'post',
-            body: { url: draft.cover },
-            toast: false,
-          }).catch(() => null)
-        : null
-      prefill.value = {
-        ...draft.draft,
-        series_id: props.series.id,
-        volume_number: draft.draft.volume_number ?? props.volumeNumber,
-        ...(media
-          ? {
-              covers: [
-                {
-                  target_id: media.id,
-                  target: { name: '', cover: media.src },
-                  attributes: { sexual: 0, violence: 0 },
-                },
-              ],
-            }
-          : {}),
-      }
-    } finally {
-      loading.value = false
-    }
-  })
-
-  function manual() {
-    picked.value = null
-    prefill.value = { series_id: props.series.id, volume_number: props.volumeNumber }
-  }
-
-  function restart() {
-    picked.value = null
-    prefill.value = null
-  }
-
-  function onSubmitted(result: BackendChangeRequestDetail) {
-    if (result.resource_id == null) return
-    const values = prefill.value ?? {}
+  async function create() {
+    const id = await flow.create()
+    if (id === null) return
+    const shown =
+      method.value === 'isbn' ? values.value : { number: number.value, title: title.value }
     emit('created', {
-      id: result.resource_id,
+      id,
       label: getMangaVolumeLabel({
-        volume_number: typeof values.volume_number === 'number' ? values.volume_number : null,
-        name: typeof values.name === 'string' ? values.name : null,
-        name_cn: typeof values.name_cn === 'string' ? values.name_cn : null,
+        volume_number: shown.number ? Number(shown.number) || null : null,
+        name: shown.title,
+        name_cn: null,
       }),
-      change_request_id: result.id,
-      pending: result.status === 'PENDING',
     })
     open.value = false
   }
 </script>
 
 <template>
-  <Dialog v-model:open="open" title="新建单行本条目" size="md" :locked="submitting || loading">
+  <Dialog v-model:open="open" title="新建单行本条目" size="md" :locked="saving || loading">
     <template #content>
-      <Stack gap="md" class="relative">
-        <Text size="sm" tone="muted">{{ series.title }}</Text>
-        <template v-if="!prefill">
-          <CreatorEditorImportSourceSearch
-            v-model="picked"
-            source="bangumi"
-            label="从 Bangumi 查找"
-            type="manga-volume"
-            allow-existing
-            placeholder="ISBN、书名或 Bangumi 条目号"
+      <Stack gap="md">
+        <Inline gap="sm" align="center" justify="between">
+          <Text size="sm" tone="muted">{{ series.title }}</Text>
+          <SegmentedControl
+            :model-value="method"
+            :options="METHODS"
+            size="sm"
+            @update:model-value="value => (method = value === 'manual' ? 'manual' : 'isbn')"
           />
-          <Button variant="link" size="sm" class="self-start" @click="manual">手动填写</Button>
+        </Inline>
+        <template v-if="method === 'isbn'">
+          <Inline gap="sm" :wrap="false">
+            <Input
+              v-model="isbn"
+              placeholder="ISBN"
+              class="min-w-0 flex-1"
+              @keydown.enter="flow.read()"
+            />
+            <Button :loading="loading" :disabled="!isbn.trim()" @click="flow.read()">查找</Button>
+          </Inline>
+          <Alert :open="Boolean(notice)" tone="warning" :title="notice ?? undefined" />
+          <Stack v-if="draft" gap="xs" class="rounded-md bg-subtle p-3">
+            <Text as="span" size="sm" weight="medium" lang="ja">{{ values.title }}</Text>
+            <Text v-if="values.number" as="span" size="xs" tone="muted">
+              卷次：{{ values.number }}
+            </Text>
+          </Stack>
         </template>
         <template v-else>
-          <Card v-if="picked" :padded="false">
-            <Inline gap="sm" align="center" :wrap="false" class="p-2">
-              <HikariImage
-                :src="picked.cover ?? ''"
-                alt=""
-                preset="small"
-                class="h-14 w-10 shrink-0 rounded bg-subtle"
-                image-class="size-full object-cover"
-              >
-                <template #empty />
-                <template #error />
-              </HikariImage>
-              <Stack gap="none" class="min-w-0 flex-1">
-                <Text as="span" size="sm" weight="medium" truncate class="min-w-0">
-                  {{ picked.title }}
-                </Text>
-                <Text as="span" size="xs" tone="muted">Bangumi {{ picked.external_id }}</Text>
-              </Stack>
-              <IconButton label="换一个" variant="ghost" tone="neutral" size="sm" @click="restart">
-                <X />
-              </IconButton>
-            </Inline>
-          </Card>
-          <VolumeCreateForm
-            v-if="schema"
-            ref="form"
-            :key="picked?.external_id ?? 'manual'"
-            :schema="schema"
-            :prefill="prefill"
-            @submitted="onSubmitted"
-          />
+          <FormField name="number" label="卷次">
+            <Input v-model="number" lang="ja" class="max-w-40" />
+          </FormField>
+          <FormField name="title" label="书名" required>
+            <Input v-model="title" lang="ja" />
+          </FormField>
         </template>
-        <LoadingOverlay :visible="loading" size="sm" />
       </Stack>
     </template>
     <template #footer>
-      <Button variant="ghost" tone="neutral" :disabled="submitting" @click="open = false">
+      <Button variant="ghost" tone="neutral" :disabled="saving" @click="open = false">
         取消
       </Button>
-      <Button v-if="prefill" :loading="submitting" @click="form?.submit()">创建并选中</Button>
+      <Button :loading="saving" :disabled="!ready" @click="create()">创建并选中</Button>
     </template>
   </Dialog>
 </template>

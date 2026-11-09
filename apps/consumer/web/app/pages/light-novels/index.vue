@@ -1,10 +1,17 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import type { LightNovelsPageData } from '~~/server/api/pages/light-novels.get'
 
   defineOptions({ name: 'LightNovelsPage' })
-  definePageMeta({ container: 'full' })
+  definePageMeta({ container: 'full', footer: false })
 
-  const { data } = await useHikariApiData('/api/pages/light-novels', { fatal: true })
+  const auth = useAuthStore()
+  const { data, refresh } = await useHikariApiData<LightNovelsPageData>('/api/pages/light-novels', {
+    fatal: true,
+  })
+  watch(
+    () => auth.isAuthenticated,
+    () => refresh(),
+  )
 
   useHikariSeoMeta({
     title: '轻小说在线阅读',
@@ -14,53 +21,5 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" :class="data.hero ? '-mt-(--app-header-height)' : ''">
-    <LightNovelExploreHero v-if="data.hero" :hero="data.hero" />
-
-    <Stack gap="none" class="px-6 py-12">
-      <Stack gap="none" class="mx-auto w-full max-w-app gap-14">
-        <LightNovelExploreSeriesRail
-          title="现在就能读完"
-          meta="已完结的轻小说系列"
-          :to="'/light-novels/browse?status=finished&readable=1'"
-          :items="data.completed_readable.items"
-        />
-        <LightNovelExploreRanking :items="data.ranking.items" />
-        <LightNovelExploreSeriesRail
-          title="短篇速通"
-          meta="1–3 卷 · 一两天就读完一部"
-          :items="data.short_series.items"
-        />
-        <LightNovelExploreBunkoNav :bunko="data.stats.top_bunko" />
-        <LightNovelExploreSeriesRail
-          title="完结不挖坑"
-          meta="已完结，放心入坑"
-          to="/light-novels/browse?status=finished"
-          :items="data.completed.items"
-        />
-        <LightNovelExploreSeriesRail
-          title="即将发售"
-          meta="新作开载"
-          :items="data.upcoming.items"
-        />
-        <LightNovelExploreAuthorSpotlight
-          v-if="data.author_spotlight"
-          :spotlight="data.author_spotlight"
-        />
-        <LightNovelExploreBunkoPicks :picks="data.bunko_picks" />
-        <LightNovelExploreSeriesUniverse
-          v-if="data.series_spotlight"
-          :spotlight="data.series_spotlight"
-        />
-        <LightNovelExploreSeriesRail
-          title="最新收录"
-          meta="近期上架到书库"
-          to="/light-novels/browse?sort=created_at:desc"
-          :items="data.recent.items"
-        />
-
-        <LightNovelExploreInfiniteRails />
-      </Stack>
-    </Stack>
-  </Stack>
+  <LandingLightNovelPage v-if="data" :data="data" />
 </template>

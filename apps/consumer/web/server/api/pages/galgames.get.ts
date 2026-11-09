@@ -1,81 +1,20 @@
-import type { H3Event } from 'h3'
-import { GALGAME_EXPLORE_MOSAIC_SIZE, type GalgameHeroCover } from '~/features/galgame/explore'
+import { getCookie, type H3Event } from 'h3'
+import { VISITOR_COOKIE, VISITOR_PATTERN } from '#shared/utils/visitor'
 import { fetchBackendData } from '../../utils/backend-api'
 import { definePageBffHandler } from '../../utils/page-bff'
 
-const LAST_MONTH_SIZE = 24
-
 async function handler(event: H3Event) {
-  const now = new Date()
-  const previousMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1))
-  const previousYear = previousMonth.getUTCFullYear()
-  const previousMonthNumber = previousMonth.getUTCMonth() + 1
-  const previousMonthKey = `${previousYear}-${String(previousMonthNumber).padStart(2, '0')}`
-
-  const [catalog, heroCovers, release, lastMonth] = await Promise.all([
-    fetchBackendData(event, '/api/v3/galgames', {
-      query: {
-        page: 1,
-        page_size: 1,
-        sort_field: 'release_date',
-        sort_order: 'desc',
-      },
+  const visitor = getCookie(event, VISITOR_COOKIE)
+  const [landing, banners] = await Promise.all([
+    fetchBackendData(event, '/api/v3/landing/galgames', {
+      query: visitor && VISITOR_PATTERN.test(visitor) ? { visitor } : {},
     }),
-    fetchBackendData(event, '/api/v3/galgames/covers/hero'),
-    fetchBackendData(event, '/api/v3/galgames/releases/month'),
-    fetchBackendData(event, '/api/v3/galgames', {
-      query: {
-        page: 1,
-        page_size: LAST_MONTH_SIZE,
-        sort_field: 'release_date',
-        sort_order: 'desc',
-        release_from: previousMonthKey,
-        release_to: previousMonthKey,
-        origin_lang: ['ja', 'zh-Hans', 'zh-Hant'],
-        include_dev: true,
-      },
-    }),
+    fetchBackendData(event, '/api/v3/promotions/banners', {
+      query: { surface: 'GALGAME_FEED' },
+    }).catch(() => []),
   ])
-
-  const mosaicItems = shuffle(heroCovers).slice(0, GALGAME_EXPLORE_MOSAIC_SIZE).map(mosaicOf)
-
-  return {
-    total_items: catalog.meta.total_items,
-    mosaic: mosaicItems,
-    release,
-    last_month: {
-      year: previousYear,
-      month: previousMonthNumber,
-      current_month: false,
-      total_items: lastMonth.meta.total_items,
-      browse_to: `/galgames/browse?from=${previousMonthKey}&to=${previousMonthKey}&dev=1`,
-      items: lastMonth.items,
-    },
-  }
+  return { ...landing, banners }
 }
 
 export type GalgamesPageData = Awaited<ReturnType<typeof handler>>
 export default definePageBffHandler(handler)
-
-function mosaicOf(item: GalgameHeroCover) {
-  return {
-    id: item.id,
-    source: item.cover,
-    alt: item.title,
-    width: item.cover.width,
-    height: item.cover.height,
-  }
-}
-
-function shuffle<T>(items: T[]) {
-  const result = [...items]
-
-  for (let index = result.length - 1; index > 0; index -= 1) {
-    const target = Math.floor(Math.random() * (index + 1))
-    const current = result[index]
-    result[index] = result[target] as T
-    result[target] = current as T
-  }
-
-  return result
-}

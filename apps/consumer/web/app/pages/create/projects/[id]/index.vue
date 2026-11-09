@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { WorkbenchProjectPageData } from '~~/server/api/pages/create/projects/[id].get'
 
-  definePageMeta({ layout: 'workbench' })
+  definePageMeta({ layout: 'workbench', middleware: 'auth', floatingToolbar: false })
 
   const route = useRoute()
   const requestUrl = computed<`/api/pages/${string}`>(() => {

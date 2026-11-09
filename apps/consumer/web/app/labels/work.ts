@@ -27,6 +27,7 @@ const LIGHT_NOVEL_PERSON_RELATION_LABELS: Record<string, string> = {
 const LIGHT_NOVEL_PRODUCER_RELATION_LABELS: Record<string, string> = {
   bunko: '文库',
   publisher: '出版',
+  other: '其他',
 }
 
 export const NOVEL_RELATION_LABELS: Record<string, string> = {
@@ -42,6 +43,10 @@ export const NOVEL_RELATION_LABELS: Record<string, string> = {
   CHARACTER: '角色出演',
   COLLABORATION: '联动',
   OTHER: '相关',
+  SETTING_BOOK: '设定集',
+  SETTING_SOURCE: '原作',
+  ANTHOLOGY: '选集',
+  ANTHOLOGY_SOURCE: '原作',
 }
 
 export function getNovelStatusLabel(value: string) {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Stack } from '@hina-ui/vue'
+  import type { PeoplePageData } from '~~/server/api/pages/people/[id].get'
+  import { personBff, readPersonQuery } from '~/features/person/results'
   import { personSeo } from '~/features/seo/person'
 
   definePageMeta({ container: 'full' })
@@ -7,7 +8,10 @@
   const route = useRoute()
   const id = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
 
-  const { data } = await useHikariApiData(`/api/pages/people/${id}`, { fatal: true })
+  const { data } = await useHikariApiData<PeoplePageData>(
+    personBff(id, readPersonQuery(route.query)),
+    { fatal: true, watch: false },
+  )
   await redirectIfMerged(data)
 
   const seo = computed(() => (data.value ? personSeo(data.value) : null))
@@ -23,35 +27,5 @@
 </script>
 
 <template>
-  <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
-    <EntityHero kind="person" :entity="data.person" />
-
-    <Stack gap="none" class="mx-auto w-full max-w-app gap-10 px-6 py-12">
-      <EntityAbout kind="person" :entity="data.person" :contributors="data.contributors" />
-      <EntityWorkSection
-        title="参与作品"
-        :relation="data.galgames"
-        variant="person-galgame"
-        unit="Galgame"
-        :more-base="`/people/${id}/galgames`"
-      />
-      <EntityWorkSection
-        title="参与的轻小说"
-        :relation="data.light_novels"
-        variant="person-light-novel"
-        :more-base="`/people/${id}/light-novels`"
-      />
-      <EntityWorkSection
-        title="参与的漫画"
-        :relation="data.mangas"
-        variant="person-manga"
-        :more-base="`/people/${id}/mangas`"
-      />
-      <EntityVoiceSection
-        title="配音角色"
-        :relation="data.characters"
-        :more-base="`/people/${id}/characters`"
-      />
-    </Stack>
-  </Stack>
+  <PersonPage v-if="data" :data="data" class="-mt-(--app-header-height)" />
 </template>

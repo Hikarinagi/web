@@ -1,0 +1,58 @@
+<script setup lang="ts">
+  import { Card, Grid, Section, Stack, VisuallyHidden } from '@hina-ui/vue'
+  import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import { groupByDay, useStagePick } from '~/features/landing/stage'
+  import { galgameWork } from '~/features/landing/works'
+  import { topVotedMedia } from '~/utils/media/image'
+
+  type ScheduleItem = ApiData<'/api/v3/landing/galgames', 'get'>['schedule'][number]
+
+  defineOptions({ name: 'LandingReleaseStage' })
+  const props = defineProps<{ items: ScheduleItem[]; today: string }>()
+
+  const days = computed(() =>
+    groupByDay(props.items, item => item.release_date?.slice(0, 10), props.today),
+  )
+  const first = days.value.find(day => !day.past) ?? days.value.at(-1)
+  const { selected, pick, hover, leave, tap } = useStagePick(first!.items[0]!)
+  const shot = ref(0)
+  watch(selected, () => (shot.value = 0))
+
+  const title = computed(() => galgameWork(selected.value).title)
+  const hash = computed(() => {
+    const image = selected.value.images[shot.value] ?? selected.value.images[0]
+    return image?.thumb_hash ?? topVotedMedia(selected.value.covers)?.thumb_hash ?? null
+  })
+</script>
+
+<template>
+  <Section class="relative isolate">
+    <LandingBackdrop :id="`${selected.id}-${shot}`" :hash="hash" />
+    <Stack
+      gap="lg"
+      class="mx-auto w-full max-w-(--entry-container) px-4 pt-(--landing-stage-top) pb-12 lg:px-6"
+    >
+      <VisuallyHidden as="h2">发售日程</VisuallyHidden>
+      <Grid gap="lg" class="lg:grid-cols-12">
+        <Stack gap="md" class="min-w-0 lg:col-span-8">
+          <LandingReleaseGallery v-model:shot="shot" :item="selected" :title="title" />
+          <LandingReleaseInfo :item="selected" />
+        </Stack>
+        <LandingReleaseStrip :days="days" :selected="selected.id" class="lg:hidden" @pick="pick" />
+        <Card
+          :padded="false"
+          class="relative hidden overflow-hidden bg-surface/70 backdrop-blur-md lg:col-span-4 lg:block"
+        >
+          <LandingReleaseList
+            :days="days"
+            :today="today"
+            :selected="selected.id"
+            @hover="hover"
+            @leave="leave"
+            @tap="(event, item) => tap(event, item, item.id === selected.id)"
+          />
+        </Card>
+      </Grid>
+    </Stack>
+  </Section>
+</template>

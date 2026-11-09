@@ -3,10 +3,7 @@ import { readPageQuery } from '#shared/utils/query'
 import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
 
 export const GALGAME_BROWSE_PAGE_SIZE = 24
-export const GALGAME_EXPLORE_MOSAIC_SIZE = 36
-
 export type GalgameSummary = ApiData<'/api/v3/galgames', 'get'>['items'][number]
-export type GalgameHeroCover = ApiData<'/api/v3/galgames/covers/hero', 'get'>[number]
 export type GalgameHistogram = ApiData<'/api/v3/galgames/histogram', 'get'>
 export type GalgameSortField = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_field']>
 export type GalgameSortOrder = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_order']>

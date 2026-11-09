@@ -140,6 +140,15 @@
         ],
         "type": "object"
       },
+      "DatePrecision": {
+        "description": "发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日",
+        "enum": [
+          "YEAR",
+          "MONTH",
+          "DAY"
+        ],
+        "type": "string"
+      },
       "EquippedBadgeDto": {
         "properties": {
           "decoration": {
@@ -566,7 +575,12 @@
           "COLLECTED_WORK",
           "SAME_UNIVERSE",
           "DIFFERENT_ADAPTATION",
-          "EXPANSION"
+          "EXPANSION",
+          "REMAKE",
+          "ORIGINAL",
+          "FAN_DISC",
+          "MAIN_GAME",
+          "SAME_SERIES"
         ],
         "type": "string"
       },
@@ -677,6 +691,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -690,6 +713,7 @@
           "covers",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "producers"
         ],
         "type": "object"
@@ -928,13 +952,14 @@
             "type": "string"
           },
           "novel_status": {
-            "description": "连载状态",
+            "description": "连载状态，系列没有记录出版状态时为空",
             "enum": [
               "SERIALIZING",
               "FINISHED",
               "PAUSED",
               "ABANDONED"
             ],
+            "nullable": true,
             "type": "string",
             "x-enum-descriptions": {
               "ABANDONED": "休刊",
@@ -953,6 +978,19 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "publishers": {
             "description": "出版方",
             "items": {
@@ -968,7 +1006,9 @@
           "covers",
           "nsfw",
           "novel_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "author",
           "bunko",
           "publishers"
@@ -1068,7 +1108,7 @@
         "type": "object"
       },
       "MangaProducerRole": {
-        "description": "承担的角色",
+        "description": "承担的角色，由 code 反推，对不上旧角色的为空",
         "enum": [
           "PUBLISHER",
           "MAGAZINE",
@@ -1171,7 +1211,7 @@
         }
       },
       "MangaSerialStatus": {
-        "description": "连载状态",
+        "description": "连载状态，由 publication_status 反推；系列没有记录出版状态时为空",
         "enum": [
           "SERIALIZING",
           "FINISHED",
@@ -1187,7 +1227,7 @@
         }
       },
       "MangaStaffRole": {
-        "description": "担任的职位",
+        "description": "担任的职位，由 code 反推，对不上旧职位的为空",
         "enum": [
           "AUTHOR",
           "ART",
@@ -1244,13 +1284,27 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
           "serial_status": {
             "allOf": [
               {
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
             ],
-            "description": "连载状态",
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "nullable": true,
             "x-enum-descriptions": {
               "ABANDONED": "中止连载",
               "FINISHED": "已完结",
@@ -1266,7 +1320,9 @@
           "covers",
           "nsfw",
           "serial_status",
+          "publication_status",
           "publication_date",
+          "publication_date_precision",
           "latest_chapter_at"
         ],
         "type": "object"
@@ -1307,7 +1363,7 @@
         "type": "object"
       },
       "NovelStatus": {
-        "description": "连载状态",
+        "description": "连载状态，由 publication_status 反推；系列没有记录出版状态时为空",
         "enum": [
           "SERIALIZING",
           "FINISHED",
@@ -1394,6 +1450,182 @@
         ],
         "type": "object"
       },
+      "OpenCharacterAppearanceDto": {
+        "properties": {
+          "hidden": {
+            "description": "只在作品内记录、没有公开记录；名字可能是剧透，是否显示由调用方决定",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "出场角色 ID",
+            "type": "number"
+          },
+          "label": {
+            "description": "该作中的名字",
+            "type": "string"
+          },
+          "names": {
+            "description": "该作中的全部名字",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceNameDto"
+            },
+            "type": "array"
+          },
+          "relations": {
+            "description": "与其他出场角色的关系",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceRelationDto"
+            },
+            "type": "array"
+          },
+          "sources": {
+            "description": "未公开记录的来源；公开记录为空数组",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceSourceDto"
+            },
+            "type": "array"
+          },
+          "work": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OpenCharacterAppearanceWorkDto"
+              }
+            ],
+            "description": "作品",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "hidden",
+          "work",
+          "sources",
+          "names",
+          "relations"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceNameDto": {
+        "properties": {
+          "hidden": {
+            "description": "不是该作的公开记录；名字可能是剧透，是否显示由调用方决定",
+            "type": "boolean"
+          },
+          "part": {
+            "description": "适用于作品的哪一部分",
+            "nullable": true,
+            "type": "string"
+          },
+          "reading": {
+            "description": "读音",
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "未公开记录的来源；公开记录为空数组",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceSourceDto"
+            },
+            "type": "array"
+          },
+          "text": {
+            "description": "名字",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "reading",
+          "part",
+          "hidden",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceRelationDto": {
+        "properties": {
+          "appearance": {
+            "description": "另一个出场角色的 ID",
+            "type": "number"
+          },
+          "code": {
+            "description": "关系：SAME_PERSON 为同一人物",
+            "type": "string"
+          },
+          "hidden": {
+            "description": "不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定",
+            "type": "boolean"
+          },
+          "label": {
+            "description": "另一个出场角色的名字",
+            "type": "string"
+          },
+          "part": {
+            "description": "适用于作品的哪一部分",
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "未公开记录的来源；公开记录为空数组",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceSourceDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "appearance",
+          "label",
+          "code",
+          "part",
+          "hidden",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceSourceDto": {
+        "properties": {
+          "location": {
+            "description": "在作品中的位置",
+            "nullable": true,
+            "type": "string"
+          },
+          "method": {
+            "description": "来源类型，作品内截图为 SCREENSHOT",
+            "type": "string"
+          },
+          "version_entry_id": {
+            "description": "所依的发行版本或出版版本的条目 ID",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "method",
+          "location",
+          "version_entry_id"
+        ],
+        "type": "object"
+      },
+      "OpenCharacterAppearanceWorkDto": {
+        "properties": {
+          "id": {
+            "description": "作品 ID",
+            "type": "number"
+          },
+          "kind": {
+            "description": "作品类型：GAME、LIGHT_NOVEL、MANGA",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "id"
+        ],
+        "type": "object"
+      },
       "OpenCharacterDetailDto": {
         "properties": {
           "age": {
@@ -1405,6 +1637,13 @@
             "description": "别名列表",
             "items": {
               "type": "string"
+            },
+            "type": "array"
+          },
+          "appearances": {
+            "description": "各作品中的出场角色，含只在作品内记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里",
+            "items": {
+              "$ref": "#/components/schemas/OpenCharacterAppearanceDto"
             },
             "type": "array"
           },
@@ -1454,7 +1693,7 @@
                 "$ref": "#/components/schemas/OpenExternalSourceDto"
               }
             ],
-            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
+            "description": "外部数据源 ID"
           },
           "gender": {
             "description": "性别",
@@ -1556,7 +1795,9 @@
           "labels",
           "created_at",
           "updated_at",
-          "revised_at"
+          "revised_at",
+          "external_source",
+          "appearances"
         ],
         "type": "object"
       },
@@ -1863,7 +2104,7 @@
             "type": "string"
           },
           "engine": {
-            "description": "游戏引擎",
+            "description": "游戏引擎；收录规则不单独记录引擎，恒为空，引擎照录在发行版本的规格与运行环境中",
             "nullable": true,
             "type": "string"
           },
@@ -1880,7 +2121,7 @@
                 "$ref": "#/components/schemas/OpenExternalSourceDto"
               }
             ],
-            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
+            "description": "外部数据源 ID"
           },
           "homepage": {
             "description": "官方网站",
@@ -1944,12 +2185,26 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度；只到年或月的，release_date 是当年 1 月 1 日或当月 1 日",
+            "nullable": true
+          },
           "release_date_tbd": {
             "description": "发行日期是否待定",
             "type": "boolean"
           },
           "release_date_tbd_note": {
             "description": "发行日期待定时的补充说明",
+            "type": "string"
+          },
+          "release_status": {
+            "description": "发售状态编码：PLANNED、RELEASED、CANCELLED；dev_status 由它反推",
+            "nullable": true,
             "type": "string"
           },
           "revised_at": {
@@ -1997,6 +2252,7 @@
           "covers",
           "images",
           "release_date",
+          "release_date_precision",
           "release_date_tbd",
           "release_date_tbd_note",
           "origin_intro",
@@ -2008,6 +2264,7 @@
           "engine",
           "origin_lang",
           "dev_status",
+          "release_status",
           "developer",
           "prices",
           "external_links",
@@ -2017,7 +2274,8 @@
           "created_at",
           "updated_at",
           "revised_at",
-          "rating"
+          "rating",
+          "external_source"
         ],
         "type": "object"
       },
@@ -2040,9 +2298,18 @@
             "type": "string"
           },
           "established": {
-            "description": "成立日期",
+            "description": "成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM）",
             "nullable": true,
             "type": "string"
+          },
+          "established_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "成立日期的精度",
+            "nullable": true
           },
           "id": {
             "description": "厂商 ID",
@@ -2071,19 +2338,25 @@
             "description": "该作品下的厂商备注",
             "type": "string"
           },
+          "organization_type": {
+            "description": "组织类型编码",
+            "nullable": true,
+            "type": "string"
+          },
           "trans_intro": {
             "description": "简介译文",
             "nullable": true,
             "type": "string"
           },
           "type": {
-            "description": "厂商类型",
+            "description": "厂商类型，由 organization_type 反推；没有记录类型时为空",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
+            "nullable": true,
             "type": "string"
           },
           "website": {
@@ -2096,12 +2369,14 @@
           "id",
           "name",
           "type",
+          "organization_type",
           "aliases",
           "intro",
           "trans_intro",
           "en_intro",
           "country",
           "established",
+          "established_precision",
           "website",
           "logo",
           "note"
@@ -2163,6 +2438,10 @@
       },
       "OpenGalgameProducerDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "note": {
             "description": "角色备注",
             "type": "string"
@@ -2181,7 +2460,7 @@
                 "$ref": "#/components/schemas/ProducerRole"
               }
             ],
-            "description": "厂商承担的角色",
+            "description": "厂商承担的角色，由 code 反推，对不上旧角色的为空",
             "nullable": true,
             "x-enum-descriptions": {
               "DEVELOPER": "开发商",
@@ -2192,6 +2471,7 @@
         },
         "required": [
           "role",
+          "code",
           "note",
           "producer"
         ],
@@ -2249,6 +2529,15 @@
             "nullable": true,
             "type": "string"
           },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
           "trans_title": {
             "description": "译名",
             "nullable": true,
@@ -2261,12 +2550,17 @@
           "trans_title",
           "nsfw",
           "release_date",
+          "release_date_precision",
           "covers"
         ],
         "type": "object"
       },
       "OpenGalgameStaffDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "person": {
             "allOf": [
               {
@@ -2281,7 +2575,7 @@
                 "$ref": "#/components/schemas/GalgameStaffRole"
               }
             ],
-            "description": "担任的职位",
+            "description": "担任的职位，由 code 反推，对不上旧职位的为空",
             "nullable": true,
             "x-enum-descriptions": {
               "ANIMATION_DIRECTOR": "动画监督",
@@ -2322,6 +2616,7 @@
         },
         "required": [
           "role",
+          "code",
           "person"
         ],
         "type": "object"
@@ -2371,7 +2666,8 @@
                 "$ref": "#/components/schemas/NovelStatus"
               }
             ],
-            "description": "连载状态",
+            "description": "连载状态，由 publication_status 反推；系列没有记录出版状态时为空",
+            "nullable": true,
             "x-enum-descriptions": {
               "ABANDONED": "休刊",
               "FINISHED": "已完结",
@@ -2393,6 +2689,20 @@
           "publication_date": {
             "description": "首卷出版日期",
             "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "首卷出版日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日",
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "出版状态编码：ONGOING、COMPLETED、HIATUS",
             "nullable": true,
             "type": "string"
           },
@@ -2444,6 +2754,8 @@
           "other_names",
           "covers",
           "publication_date",
+          "publication_date_precision",
+          "publication_status",
           "novel_status",
           "total_volumes",
           "summary",
@@ -2459,6 +2771,10 @@
       },
       "OpenLightNovelPersonDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "note": {
             "description": "职位备注",
             "nullable": true,
@@ -2473,12 +2789,13 @@
             "description": "人物信息"
           },
           "relation": {
-            "description": "担任的职位",
+            "description": "担任的职位：author、illustrator，其余职责为 other",
             "type": "string"
           }
         },
         "required": [
           "relation",
+          "code",
           "note",
           "person"
         ],
@@ -2486,6 +2803,10 @@
       },
       "OpenLightNovelProducerDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "note": {
             "description": "角色备注",
             "nullable": true,
@@ -2500,12 +2821,14 @@
             "description": "厂商信息"
           },
           "relation": {
-            "description": "承担的角色",
+            "description": "承担的角色：bunko、publisher，对不上的为空",
+            "nullable": true,
             "type": "string"
           }
         },
         "required": [
           "relation",
+          "code",
           "note",
           "producer"
         ],
@@ -2539,6 +2862,15 @@
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
           },
           "relation": {
             "description": "与所属作品的关联说明",
@@ -2576,6 +2908,7 @@
           "name_cn",
           "covers",
           "publication_date",
+          "publication_date_precision",
           "relation"
         ],
         "type": "object"
@@ -2682,9 +3015,23 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "开始日期的精度；只到年或月的，publication_date 是当年 1 月 1 日或当月 1 日",
+            "nullable": true
+          },
           "publication_end_date": {
             "description": "完结日期",
             "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_status": {
+            "description": "出版状态编码：ONGOING、COMPLETED、HIATUS",
             "nullable": true,
             "type": "string"
           },
@@ -2721,7 +3068,8 @@
                 "$ref": "#/components/schemas/MangaSerialStatus"
               }
             ],
-            "description": "连载状态",
+            "description": "连载状态，由 publication_status 反推；系列没有记录出版状态时为空",
+            "nullable": true,
             "x-enum-descriptions": {
               "ABANDONED": "中止连载",
               "FINISHED": "已完结",
@@ -2764,6 +3112,8 @@
           "audience",
           "latest_chapter_at",
           "publication_date",
+          "publication_date_precision",
+          "publication_status",
           "publication_end_date",
           "homepage",
           "isbn",
@@ -2804,6 +3154,10 @@
       },
       "OpenMangaProducerDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "note": {
             "description": "角色备注",
             "type": "string"
@@ -2822,7 +3176,8 @@
                 "$ref": "#/components/schemas/MangaProducerRole"
               }
             ],
-            "description": "承担的角色",
+            "description": "承担的角色，由 code 反推，对不上旧角色的为空",
+            "nullable": true,
             "x-enum-descriptions": {
               "LABEL": "书系",
               "MAGAZINE": "连载杂志",
@@ -2832,6 +3187,7 @@
         },
         "required": [
           "role",
+          "code",
           "note",
           "producer"
         ],
@@ -2839,6 +3195,10 @@
       },
       "OpenMangaStaffDto": {
         "properties": {
+          "code": {
+            "description": "职责编码",
+            "type": "string"
+          },
           "note": {
             "description": "职位备注",
             "type": "string"
@@ -2857,7 +3217,8 @@
                 "$ref": "#/components/schemas/MangaStaffRole"
               }
             ],
-            "description": "担任的职位",
+            "description": "担任的职位，由 code 反推，对不上旧职位的为空",
+            "nullable": true,
             "x-enum-descriptions": {
               "ART": "作画",
               "AUTHOR": "作者",
@@ -2870,6 +3231,7 @@
         },
         "required": [
           "role",
+          "code",
           "note",
           "person"
         ],
@@ -2917,6 +3279,15 @@
             "nullable": true,
             "type": "string"
           },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "出版日期的精度",
+            "nullable": true
+          },
           "volume_number": {
             "description": "卷号",
             "nullable": true,
@@ -2931,6 +3302,7 @@
           "cover",
           "isbn",
           "publication_date",
+          "publication_date_precision",
           "page_count"
         ],
         "type": "object"
@@ -3085,9 +3457,18 @@
             "type": "string"
           },
           "established": {
-            "description": "成立日期",
+            "description": "成立日期，按 established_precision 截到年（YYYY）或月（YYYY-MM）",
             "nullable": true,
             "type": "string"
+          },
+          "established_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "成立日期的精度",
+            "nullable": true
           },
           "external_source": {
             "allOf": [
@@ -3095,7 +3476,7 @@
                 "$ref": "#/components/schemas/OpenExternalSourceDto"
               }
             ],
-            "description": "外部数据源 ID，仅 catalog:sync 客户端返回；无该 scope 时省略此字段"
+            "description": "外部数据源 ID"
           },
           "id": {
             "description": "厂商 ID",
@@ -3127,6 +3508,11 @@
             "description": "厂商名",
             "type": "string"
           },
+          "organization_type": {
+            "description": "组织类型编码：COMPANY、BRAND、LABEL、MAGAZINE、PLATFORM、CIRCLE、TRANSLATION_GROUP",
+            "nullable": true,
+            "type": "string"
+          },
           "revised_at": {
             "description": "最近一次修订通过审核的时间",
             "format": "date-time",
@@ -3139,13 +3525,14 @@
             "type": "string"
           },
           "type": {
-            "description": "厂商类型",
+            "description": "厂商类型，由 organization_type 反推；没有记录类型时为空",
             "enum": [
               "COMPANY",
+              "MAGAZINE",
               "DOUJIN",
-              "INDIVIDUAL",
-              "MAGAZINE"
+              "INDIVIDUAL"
             ],
+            "nullable": true,
             "type": "string"
           },
           "updated_at": {
@@ -3163,18 +3550,21 @@
           "id",
           "name",
           "type",
+          "organization_type",
           "aliases",
           "intro",
           "trans_intro",
           "en_intro",
           "country",
           "established",
+          "established_precision",
           "website",
           "logo",
           "labels",
           "created_at",
           "updated_at",
-          "revised_at"
+          "revised_at",
+          "external_source"
         ],
         "type": "object"
       },
@@ -3495,7 +3885,7 @@
         "type": "object"
       },
       "ProducerRole": {
-        "description": "厂商承担的角色",
+        "description": "厂商承担的角色，由 code 反推，对不上旧角色的为空",
         "enum": [
           "DEVELOPER",
           "PUBLISHER",
@@ -3810,9 +4200,9 @@
           "width",
           "thumb_hash",
           "height",
-          "nsfw",
           "sexual",
-          "violence"
+          "violence",
+          "nsfw"
         ],
         "type": "object"
       },

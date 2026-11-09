@@ -2,37 +2,9 @@ import type { EntityLabel } from './entity'
 
 const PLACEHOLDER_VALUES = new Set(['未知', '暂无', '暂無', '无', '-', ''])
 
-export interface EntityLabelView {
-  key: string
-  value: string
-  href: string | null
-}
-
-export function isPlaceholderValue(value: string | null | undefined): boolean {
-  return PLACEHOLDER_VALUES.has((value ?? '').trim())
-}
-
 export function labelValue(labels: EntityLabel[] | null | undefined, key: string): string | null {
   const value = labels?.find(label => label.key === key)?.value?.trim()
-  return value && !isPlaceholderValue(value) ? value : null
-}
-
-export function normalizeLabels(
-  labels: EntityLabel[] | null | undefined,
-  skipKeys: string[] = [],
-): EntityLabelView[] {
-  if (!labels?.length) return []
-  const skip = new Set(skipKeys)
-  return labels
-    .filter(label => !skip.has(label.key) && !isPlaceholderValue(label.value))
-    .map(label => {
-      const isUrl = /^https?:\/\//i.test(label.value)
-      return {
-        key: label.key,
-        value: isUrl ? label.value.replace(/^https?:\/\//i, '').replace(/\/+$/, '') : label.value,
-        href: isUrl ? label.value : null,
-      }
-    })
+  return value && !PLACEHOLDER_VALUES.has(value) ? value : null
 }
 
 export function workYear(date: string | null | undefined): number | null {

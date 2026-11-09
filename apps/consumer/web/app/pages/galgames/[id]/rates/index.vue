@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { Link, Stack } from '@hina-ui/vue'
-  import { ArrowLeft } from '@lucide/vue'
+  import { Stack } from '@hina-ui/vue'
   import { useGalgameRates } from '~/features/galgame/useGalgameRates'
 
-  definePageMeta({ container: 'full', scrollToTop: false })
+  definePageMeta({ container: 'full' })
 
   const route = useRoute()
   const galgameId = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
@@ -37,28 +36,9 @@
 
 <template>
   <Stack v-if="data" gap="none" class="-mt-(--app-header-height)">
-    <GalgameHero
-      :galgame="data.galgame"
-      :producers="data.producers"
-      :my-rate="data.my_rate"
-      :my-cover-vote="data.my_cover_vote"
-      :favorited="data.favorite?.favorited ?? false"
-    />
+    <GalgameBand :galgame="data.galgame" :title="galgameName" heading="全部评分" />
 
-    <Stack gap="lg" class="mx-auto w-full max-w-app px-6 py-10">
-      <NuxtLink v-slot="{ href, navigate }" :to="`/galgames/${galgameId}`" custom>
-        <Link
-          :href="href ?? undefined"
-          tone="neutral"
-          :underline="false"
-          class="inline-flex w-fit items-center gap-1.5 text-sm text-muted hover:text-fg"
-          @click="navigate"
-        >
-          <ArrowLeft class="size-3.5" />
-          返回《{{ galgameName }}》的详情页
-        </Link>
-      </NuxtLink>
-
+    <Stack gap="lg" class="mx-auto w-full max-w-(--entry-container) px-4 py-8 lg:px-6">
       <RateListLayout>
         <template #aside>
           <GalgameRatesStats

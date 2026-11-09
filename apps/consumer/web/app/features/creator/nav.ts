@@ -1,32 +1,30 @@
+import { WIKI_PERMISSIONS, WORKBENCH_PERMISSIONS, type PermissionCheck } from '@hikarinagi/shared'
 import {
-  ACCESS_PERMISSIONS,
-  COMMUNITY_PERMISSIONS,
-  WIKI_PERMISSIONS,
-  WORKBENCH_PERMISSIONS,
-  type PermissionCheck,
-} from '@hikarinagi/shared'
-import {
-  BadgeCheck,
   BookCheck,
   BookImage,
-  ClipboardCheck,
+  BookOpenText,
+  Eye,
   FilePlus,
   FolderKanban,
-  GitPullRequest,
-  Layers,
+  History,
   LayoutDashboard,
-  Shield,
-  SquarePen,
-  UserRoundPlus,
+  NotebookPen,
+  Search,
+  ShieldCheck,
+  Upload,
+  UserPen,
 } from '@lucide/vue'
 import type { Component } from 'vue'
 
 export interface CreatorNavItem {
   label: string
-  to: string
-  also?: string[]
   icon: Component
+  to?: string
+  filter?: string
+  also?: string[]
   permission?: PermissionCheck
+  find?: boolean
+  unchecked?: boolean
 }
 
 export interface CreatorNavGroup {
@@ -39,16 +37,29 @@ export const CREATOR_NAV: CreatorNavGroup[] = [
     items: [{ label: '概览', to: '/create', icon: LayoutDashboard }],
   },
   {
-    label: '条目编辑',
+    label: '维基',
     items: [
-      { label: '发起编辑', to: '/create/edit', icon: SquarePen },
-      { label: '我的变更请求', to: '/create/contributions', icon: GitPullRequest },
+      { label: '查找条目', icon: Search, find: true },
+      { label: '工作台', to: '/create/wiki', icon: NotebookPen },
+      { label: '新建条目', to: '/create/wiki/new', icon: FilePlus },
+      { label: '全部修改', to: '/create/wiki/changes', icon: History },
+      {
+        label: '未检查的修改',
+        to: '/create/wiki/changes',
+        filter: 'unchecked',
+        icon: ShieldCheck,
+        permission: WIKI_PERMISSIONS.PATROL,
+        unchecked: true,
+      },
+      { label: '我的修改', to: '/create/wiki/changes', filter: 'mine', icon: UserPen },
+      { label: '我关注的', to: '/create/wiki/changes', filter: 'watched', icon: Eye },
+      { label: '编辑规范', to: '/create/wiki/rules', icon: BookOpenText },
     ],
   },
   {
     label: '投稿',
     items: [
-      { label: '发起投稿', to: '/create/submit', icon: FilePlus },
+      { label: '发起投稿', to: '/create/submit', icon: Upload },
       {
         label: '我的投稿',
         to: '/create/projects',
@@ -61,12 +72,6 @@ export const CREATOR_NAV: CreatorNavGroup[] = [
     label: '审核',
     items: [
       {
-        label: '变更请求审核',
-        to: '/create/review',
-        icon: ClipboardCheck,
-        permission: WIKI_PERMISSIONS.REVIEW,
-      },
-      {
         label: '小说投稿审核',
         to: '/create/project-review',
         icon: BookCheck,
@@ -77,30 +82,6 @@ export const CREATOR_NAV: CreatorNavGroup[] = [
         to: '/create/manga-review',
         icon: BookImage,
         permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
-      },
-      { label: '加入审核组', to: '/create/membership', icon: UserRoundPlus },
-    ],
-  },
-  {
-    label: '管理',
-    items: [
-      {
-        label: '权限组',
-        to: '/create/governance/groups',
-        icon: Shield,
-        permission: ACCESS_PERMISSIONS.GROUP_MANAGE,
-      },
-      {
-        label: '审核组申请',
-        to: '/create/governance/applications',
-        icon: BadgeCheck,
-        permission: ACCESS_PERMISSIONS.GROUP_MANAGE,
-      },
-      {
-        label: '板块',
-        to: '/create/governance/sections',
-        icon: Layers,
-        permission: COMMUNITY_PERMISSIONS.SECTION_MANAGE,
       },
     ],
   },

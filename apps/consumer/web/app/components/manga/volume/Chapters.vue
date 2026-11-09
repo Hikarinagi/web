@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { Panel } from '@hina-ui/vue'
-  import { LibraryBig } from '@lucide/vue'
+  import { Stack, Text } from '@hina-ui/vue'
   import { mangaChapterLabel } from '@hikarinagi/shared'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
   import { useContents } from '~/features/manga/composables/useContents'
@@ -24,18 +23,22 @@
     progress: props.progress,
   }))
   const { units, readIds, currentId, currentPage, signedIn, unit, range } = contents
-  const description = computed(() => {
+  const span = computed(() => {
     const first = scoped.value[0]
     const last = scoped.value.at(-1)
-    if (!first || !last) return undefined
+    if (!first || !last) return ''
     if (first.id === last.id) return mangaChapterLabel(first)
     return `${mangaChapterLabel(first)} ～ ${mangaChapterLabel(last)}`
   })
 </script>
 
 <template>
-  <Panel v-if="scoped.length" title="本卷收录" :count="scoped.length" :description="description">
-    <template #icon><LibraryBig /></template>
+  <Stack v-if="scoped.length" gap="md">
+    <EntrySectionHead id="contents" title="本卷收录" :count="scoped.length">
+      <template #actions>
+        <Text size="sm" tone="muted" class="tabular-nums">{{ span }}</Text>
+      </template>
+    </EntrySectionHead>
     <MangaContentsBrowser
       v-model:unit="unit"
       v-model:range="range"
@@ -46,5 +49,5 @@
       :signed-in="signedIn"
       @select="contents.open"
     />
-  </Panel>
+  </Stack>
 </template>

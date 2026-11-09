@@ -10,12 +10,13 @@
     defineProps<{
       to: string
       title: string
-      sub: string
+      sub?: string
       cover?: HikariImageSource
       overlay?: string
       ratio?: '2/3' | '3/4'
+      plainSub?: boolean
     }>(),
-    { cover: undefined, overlay: undefined, ratio: '2/3' },
+    { sub: undefined, cover: undefined, overlay: undefined, ratio: '2/3', plainSub: false },
   )
 </script>
 
@@ -57,7 +58,16 @@
       >
         {{ title }}
       </Text>
-      <Text size="xs" tone="muted" truncate class="font-bold">{{ sub }}</Text>
+      <Text
+        v-if="sub !== undefined"
+        size="xs"
+        tone="muted"
+        truncate
+        :class="plainSub ? '' : 'font-bold'"
+      >
+        {{ sub }}
+      </Text>
+      <slot name="meta" />
     </Stack>
   </NuxtLink>
 </template>

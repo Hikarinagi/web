@@ -119,6 +119,7 @@
       </Inline>
 
       <Inline as="nav" gap="sm" align="center" :wrap="false" class="shrink-0">
+        <LayoutHeaderSectionLinks />
         <LayoutHeaderSearch />
         <ThemeToggle v-if="!auth.isAuthenticated" />
         <LayoutHeaderNotificationBell v-if="auth.isAuthenticated && auth.user" />

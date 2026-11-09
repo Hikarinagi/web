@@ -1,8 +1,11 @@
 <script setup lang="ts">
-  import { Flex, Heading, Link, Stack, Text, VisuallyHidden } from '@hina-ui/vue'
-  import { LibraryBig } from '@lucide/vue'
+  import { Heading, IconButton, Inline, Link, Section, Stack, Text } from '@hina-ui/vue'
+  import { ChevronLeft, ChevronRight } from '@lucide/vue'
+  import { NuxtLink } from '#components'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
-  import { topVotedMedia } from '~/utils/media/image'
+  import { dayText } from '~/features/entry/date'
+  import { mangaStaffRoleLabel } from '~/features/manga/labels'
+  import type { HikariImageSource } from '~/utils/media/image'
   import { getMangaVolumeTitle } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaVolumeHero' })
@@ -10,80 +13,149 @@
     volume: MangaVolumePageData['volume']
     volumes: MangaVolumePageData['volumes']
     chapters: MangaVolumePageData['chapters']
+    people: MangaVolumePageData['people']
+    producers: MangaVolumePageData['producers']
     progress: MangaVolumePageData['progress']
+    cover: HikariImageSource
+    index: number
+    previous?: MangaVolumePageData['volumes'][number]
+    next?: MangaVolumePageData['volumes'][number]
   }>()
 
   const title = computed(() => getMangaVolumeTitle(props.volume))
   const seriesTitle = computed(() => props.volume.manga.name_cn || props.volume.manga.name)
-  const originalName = computed(() =>
+  const original = computed(() =>
     props.volume.name_cn && props.volume.name && props.volume.name_cn !== props.volume.name
       ? props.volume.name
       : '',
   )
-  const cover = computed(() => props.volume.cover ?? topVotedMedia(props.volume.manga.covers))
-  const bannerProcessing = {
-    width: 1920,
-    height: 720,
-    fit: 'cover',
-    quality: 72,
-    blur: 36,
-  } as const
+  const credits = computed(() => [
+    ...props.people.map(item => ({
+      key: `${item.role}-${item.person.id}`,
+      to: `/people/${item.person.id}`,
+      name: item.person.name,
+      label: item.note || mangaStaffRoleLabel(item.role),
+    })),
+    ...props.producers
+      .filter(item => item.role === 'MAGAZINE')
+      .map(item => ({
+        key: `magazine-${item.producer.id}`,
+        to: `/producers/${item.producer.id}`,
+        name: item.producer.name,
+        label: '连载',
+      })),
+  ])
 </script>
 
 <template>
-  <Stack
-    as="section"
-    gap="none"
-    class="hikari-hero-veil-soft relative isolate overflow-hidden border-b border-line bg-surface"
-  >
-    <HikariImage
-      :src="cover"
-      alt=""
-      class="absolute inset-0 -z-20 size-full"
-      image-class="object-cover"
-      :processing="bannerProcessing"
+  <Section class="bg-(--tone-soft) transition-colors duration-500 dark:bg-(--tone-deep-2)">
+    <Stack
+      gap="xl"
+      class="mx-auto w-full max-w-(--entry-container) px-4 pt-[calc(var(--app-header-height)+1.5rem)] pb-10 lg:flex-row lg:items-center lg:gap-14 lg:px-6 lg:pt-[calc(var(--app-header-height)+3rem)] lg:pb-14"
     >
-      <template #empty><VisuallyHidden /></template>
-      <template #error><VisuallyHidden /></template>
-    </HikariImage>
-    <Stack gap="none" class="mx-auto w-full max-w-app px-5 pt-(--app-header-height) sm:px-6">
-      <Flex
-        direction="col"
-        gap="none"
-        class="gap-8 pt-8 pb-10 lg:flex-row lg:items-start lg:gap-8 lg:pt-10 lg:pb-12"
-      >
-        <MangaVolumeHeroCover :cover="cover" :title="title" />
+      <Stack gap="md" align="center" class="lg:items-start">
+        <Transition
+          appear
+          enter-active-class="transition-opacity duration-(--hn-duration-base) ease-(--hn-ease-enter)"
+          enter-from-class="opacity-0"
+        >
+          <EntryBookCover
+            :media="cover"
+            :alt="`${title} 封面`"
+            preload
+            preview
+            :width="480"
+            class="w-(--volume-cover-sm) shrink-0 shadow-2xl lg:w-(--volume-cover)"
+          >
+            <NsfwControl
+              :images="[cover]"
+              :nsfw="volume.manga.nsfw"
+              class="absolute bottom-2 left-3"
+            />
+          </EntryBookCover>
+        </Transition>
+        <Inline gap="xs" align="center" justify="center" :wrap="false" class="w-full">
+          <IconButton
+            :as="previous ? NuxtLink : undefined"
+            :to="previous ? `/manga-volumes/${previous.id}` : undefined"
+            label="上一卷"
+            size="sm"
+            variant="ghost"
+            tone="neutral"
+            :disabled="!previous"
+          >
+            <ChevronLeft />
+          </IconButton>
+          <Text size="sm" tone="muted" class="w-20 text-center tabular-nums">
+            {{ index + 1 }} / {{ volumes.length }}
+          </Text>
+          <IconButton
+            :as="next ? NuxtLink : undefined"
+            :to="next ? `/manga-volumes/${next.id}` : undefined"
+            label="下一卷"
+            size="sm"
+            variant="ghost"
+            tone="neutral"
+            :disabled="!next"
+          >
+            <ChevronRight />
+          </IconButton>
+        </Inline>
+      </Stack>
 
-        <Stack gap="none" class="w-full min-w-0 flex-1 gap-4 text-center lg:text-left">
-          <NuxtLink v-slot="{ href, navigate }" :to="`/mangas/${volume.manga.id}`" custom>
-            <Link
-              :href="href ?? undefined"
-              tone="neutral"
-              :underline="false"
-              class="inline-flex max-w-full items-center gap-1.5 text-sm text-muted hover:text-accent-text"
-              @click="navigate"
-            >
-              <LibraryBig class="size-4 shrink-0" aria-hidden="true" />
-              <Text as="span" size="sm" truncate class="text-inherit">{{ seriesTitle }}</Text>
-            </Link>
-          </NuxtLink>
-
-          <Stack gap="none" class="gap-3">
-            <Heading :level="1" class="text-3xl leading-tight md:text-4xl">{{ title }}</Heading>
-            <Text v-if="originalName" size="lg" tone="muted" class="leading-7">
-              {{ originalName }}
-            </Text>
-          </Stack>
-
-          <MangaVolumeHeroMeta :volume="volume" />
-          <MangaVolumeHeroCta
-            :volume="volume"
-            :volumes="volumes"
-            :chapters="chapters"
-            :progress="progress"
-          />
+      <Stack gap="lg" class="min-w-0 flex-1 lg:max-w-2xl">
+        <Stack gap="sm">
+          <Link
+            :as="NuxtLink"
+            :to="`/mangas/${volume.manga.id}`"
+            tone="neutral"
+            class="self-start text-sm font-medium text-muted"
+          >
+            {{ seriesTitle }}
+          </Link>
+          <Heading
+            :level="1"
+            lang="ja"
+            class="text-2xl leading-snug font-semibold text-balance [word-break:auto-phrase] lg:text-3xl"
+          >
+            {{ title }}
+          </Heading>
+          <Text v-if="original" tone="muted" lang="ja">{{ original }}</Text>
         </Stack>
-      </Flex>
+
+        <Stack gap="xs">
+          <Inline gap="none" class="gap-x-4 gap-y-1">
+            <Inline
+              v-for="credit in credits"
+              :key="credit.key"
+              gap="xs"
+              align="baseline"
+              :wrap="false"
+            >
+              <Link
+                :as="NuxtLink"
+                :to="credit.to"
+                tone="neutral"
+                class="text-sm font-medium"
+                lang="ja"
+              >
+                {{ credit.name }}
+              </Link>
+              <Text as="span" size="sm" tone="muted">{{ credit.label }}</Text>
+            </Inline>
+          </Inline>
+          <Text v-if="volume.publication_date" size="sm" tone="muted" class="tabular-nums">
+            {{ dayText(volume.publication_date) }}发售
+          </Text>
+        </Stack>
+
+        <MangaVolumeHeroCta
+          :volume="volume"
+          :volumes="volumes"
+          :chapters="chapters"
+          :progress="progress"
+        />
+      </Stack>
     </Stack>
-  </Stack>
+  </Section>
 </template>

@@ -1,8 +1,11 @@
 import { PERMISSION_WILDCARD, hasPermission, type PermissionCheck } from '@hikarinagi/shared'
 
 export function useCreatorPermissions() {
+  const auth = useAuthStore()
   const { data, pending, error, refresh } = useHikariApiData('/api/v3/user/me/permissions', {
-    key: 'creator-permissions',
+    key: computed(() => `creator-permissions:${auth.user?.id ?? 0}`),
+    dedupe: 'defer',
+    getCachedData: reusePayload,
   })
 
   const permissions = computed<string[]>(() => data.value?.permissions ?? [])

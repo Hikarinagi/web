@@ -1,8 +1,9 @@
-import type { components } from '@hikarinagi/api-contract/v3'
-import type { BackendEntitySummary } from '~/features/creator/editor'
+import type { ApiData, components } from '@hikarinagi/api-contract/v3'
 import { topVotedMedia } from '~/utils/media/image'
 
 export type ProducerType = components['schemas']['ProducerType']
+
+type BackendEntitySummary = ApiData<'/api/v3/tags', 'get'>['items'][number]
 
 export type EntityTarget =
   'tag' | 'person' | 'producer' | 'character' | 'galgame' | 'light_novel' | 'manga'
