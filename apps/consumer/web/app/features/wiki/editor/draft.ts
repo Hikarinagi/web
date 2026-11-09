@@ -63,6 +63,7 @@ export interface EditorDraft {
   positions: Record<number, number>
   rated: Record<number, { sexual: number; violence: number }>
   detached: number[]
+  borrowed?: number[]
   note: string
   basis: { url: string; media: NonNullable<ValueDraft['media']>[] }
 }
@@ -247,11 +248,14 @@ export function operationsOf(
     const after = draft.changed[statement.id] ?? valueOf(statement)
     const position = draft.positions[statement.id]
     const diff = changedFields(valueOf(statement), after)
-    const value = {
-      ...valueInput(after, diff.value),
-      ...(diff.target ? targetInput(after.target) : {}),
-      ...(diff.media ? { media_id: after.media?.id ?? null } : {}),
-    }
+    const value =
+      diff.value.length || diff.target || diff.media
+        ? {
+            ...valueInput(after, VALUE_FIELDS),
+            ...targetInput(after.target),
+            media_id: after.media?.id ?? null,
+          }
+        : {}
     const qualifiers = {
       ...qualifierInput(after, diff.qualifiers),
       ...(diff.versions ? versionsInput(after.versions) : {}),

@@ -73,10 +73,24 @@ export function reviewOf(
     .filter(group => group.created || group.rows.length || draft.detached.includes(group.id))
 }
 
-export function reviewCount(groups: ReviewGroup[], draft: EditorDraft): number {
-  return groups.reduce(
-    (sum, group) =>
-      sum + (group.created ? 1 : group.rows.length) + (draft.detached.includes(group.id) ? 1 : 0),
-    0,
+export function castOrderRows(groups: ReviewGroup[], root: EntryType | undefined): ReviewRow[] {
+  if (root !== 'GAME' && root !== 'SERIES') return []
+  return groups.flatMap(group =>
+    group.type === 'APPEARANCE' && !group.created
+      ? group.rows.filter(row => row.property === 'ORDER')
+      : [],
+  )
+}
+
+export function reviewCount(groups: ReviewGroup[], draft: EditorDraft, root?: EntryType): number {
+  const orders = castOrderRows(groups, root).length
+  return (
+    groups.reduce(
+      (sum, group) =>
+        sum + (group.created ? 1 : group.rows.length) + (draft.detached.includes(group.id) ? 1 : 0),
+      0,
+    ) -
+    orders +
+    (orders ? 1 : 0)
   )
 }

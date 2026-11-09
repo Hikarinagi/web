@@ -19384,6 +19384,12 @@ export interface components {
             entry: components["schemas"]["EntryRefDto"];
             /** @description Game a release belongs to */
             owner: components["schemas"]["EntryRefDto"] | null;
+            period_from: string | null;
+            /** @enum {string|null} */
+            period_from_precision: "YEAR" | "MONTH" | "DAY" | null;
+            period_to: string | null;
+            /** @enum {string|null} */
+            period_to_precision: "YEAR" | "MONTH" | "DAY" | null;
             /** @description Role as printed on a credit */
             role: string | null;
             /** @description The statement has a source other than an import */
@@ -19411,16 +19417,24 @@ export interface components {
         };
         EntrySearchItemDto: {
             chinese_title: string | null;
+            /** @description Cover of the game or series, or of the work an appearance belongs to */
+            cover: components["schemas"]["ScoredMediaAssetDto"] | null;
             id: number;
             label: string;
+            /** @description Up to two developers of the game or authors of the series, or of the work an appearance belongs to */
+            makers: string[];
             /** @description The other name of a person or organization the query was found in, when the label itself does not contain it */
             matched: string | null;
             /** @description The work or volume a release, appearance, volume or book belongs to */
             owner: components["schemas"]["EntryRefDto"] | null;
             /** @enum {string} */
             type: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
+            /** @description Credited voices of an appearance */
+            voices: string[];
             /** @description Up to two works a person or organization is credited on */
             works: components["schemas"]["EntryRefDto"][];
+            /** @description Release year of the game or start year of the series, or of the work an appearance belongs to */
+            year: number | null;
         };
         EntrySectionCountDto: {
             count: number;
@@ -54368,7 +54382,9 @@ export interface operations {
     WikiEntryController_getList: {
         parameters: {
             query: {
-                q: string;
+                q?: string;
+                /** @description Entries to list by id instead of searching, in the given order */
+                ids?: number[];
                 types: ("GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE")[];
             };
             header?: never;

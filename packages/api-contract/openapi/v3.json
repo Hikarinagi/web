@@ -18608,6 +18608,32 @@
             "nullable": true,
             "type": "object"
           },
+          "period_from": {
+            "nullable": true,
+            "type": "string"
+          },
+          "period_from_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "period_to": {
+            "nullable": true,
+            "type": "string"
+          },
+          "period_to_precision": {
+            "enum": [
+              "YEAR",
+              "MONTH",
+              "DAY"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "role": {
             "description": "Role as printed on a credit",
             "nullable": true,
@@ -18636,6 +18662,10 @@
           "owner",
           "sourced",
           "credits",
+          "period_from",
+          "period_from_precision",
+          "period_to",
+          "period_to_precision",
           "works"
         ],
         "type": "object"
@@ -18778,11 +18808,28 @@
             "nullable": true,
             "type": "string"
           },
+          "cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScoredMediaAssetDto"
+              }
+            ],
+            "description": "Cover of the game or series, or of the work an appearance belongs to",
+            "nullable": true,
+            "type": "object"
+          },
           "id": {
             "type": "number"
           },
           "label": {
             "type": "string"
+          },
+          "makers": {
+            "description": "Up to two developers of the game or authors of the series, or of the work an appearance belongs to",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "matched": {
             "description": "The other name of a person or organization the query was found in, when the label itself does not contain it",
@@ -18813,12 +18860,24 @@
             ],
             "type": "string"
           },
+          "voices": {
+            "description": "Credited voices of an appearance",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "works": {
             "description": "Up to two works a person or organization is credited on",
             "items": {
               "$ref": "#/components/schemas/EntryRefDto"
             },
             "type": "array"
+          },
+          "year": {
+            "description": "Release year of the game or start year of the series, or of the work an appearance belongs to",
+            "nullable": true,
+            "type": "number"
           }
         },
         "required": [
@@ -18828,7 +18887,11 @@
           "chinese_title",
           "matched",
           "owner",
-          "works"
+          "works",
+          "cover",
+          "year",
+          "makers",
+          "voices"
         ],
         "type": "object"
       },
@@ -100211,11 +100274,25 @@
           {
             "in": "query",
             "name": "q",
-            "required": true,
+            "required": false,
             "schema": {
               "maxLength": 100,
               "minLength": 1,
               "type": "string"
+            }
+          },
+          {
+            "description": "Entries to list by id instead of searching, in the given order",
+            "in": "query",
+            "name": "ids",
+            "required": false,
+            "schema": {
+              "items": {
+                "minimum": 1,
+                "type": "number"
+              },
+              "maxItems": 100,
+              "type": "array"
             }
           },
           {

@@ -29,6 +29,16 @@ export const FINDER_TYPES = [
   'ORGANIZATION',
 ] as const
 
+const foldName = (text: string) =>
+  text
+    .normalize('NFKC')
+    .replace(/[\s・･]/g, '')
+    .toLowerCase()
+
+export function sameName(a: string, b: string): boolean {
+  return foldName(a) === foldName(b)
+}
+
 export function describeFound(item: WikiSearchItem, typeName: string): string {
   if (item.owner) return `${typeName}，《${item.owner.label}》`
   if (item.works.length)

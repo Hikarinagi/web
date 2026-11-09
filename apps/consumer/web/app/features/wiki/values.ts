@@ -52,6 +52,11 @@ export function codeLabel(property: WikiProperty, code: string): string {
   return CODE_LABELS[property]?.[code] ?? code
 }
 
+export function relationLead(code: string | null, side: 'held' | 'given'): string {
+  if (code === 'SAME_SERIES') return '它与本作'
+  return side === 'given' ? '它是本作的' : '本作是它的'
+}
+
 export function relationPhrase(
   property: WikiProperty,
   code: string,
@@ -87,6 +92,10 @@ export function valueText(
       .join('，')
     return `${statement.text ?? statement.target?.label ?? ''}（${codeLabel('CREDIT', statement.code ?? '')}${song ? `：${song}` : ''}）`
   }
+  if (statement.property === 'GAME_RELATION' && statement.target && statement.code)
+    return statement.code === 'SAME_SERIES'
+      ? `与《${statement.target.label}》同系列`
+      : `是《${statement.target.label}》的${codeLabel('GAME_RELATION', statement.code)}`
   if (statement.target)
     return statement.code
       ? `${statement.target.label}（${codeLabel(statement.property, statement.code)}）`

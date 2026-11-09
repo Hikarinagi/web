@@ -30,16 +30,45 @@ export function useEntryEditor(page: {
   const route = useRoute()
   const key = computed(() => toValue(page.key))
   const draft = computed<EditorDraft>(() => store.read(key.value) ?? emptyDraft())
-  const entries = computed(() => new Map(toValue(page.entries).map(entry => [entry.id, entry])))
+  const extra = shallowRef<EditableEntry[]>([])
+  const all = computed(() => {
+    const base = toValue(page.entries)
+    const known = new Set(base.map(entry => entry.id))
+    return [...base, ...extra.value.filter(entry => !known.has(entry.id))]
+  })
+  const entries = computed(() => new Map(all.value.map(entry => [entry.id, entry])))
   const statements = computed(
     () =>
       new Map(
-        toValue(page.entries).flatMap(entry =>
+        all.value.flatMap(entry =>
           entry.statements.map(
             statement => [statement.id, { entry: entry.id, statement }] as const,
           ),
         ),
       ),
+  )
+  const loading = new Map<number, Promise<EditableEntry | null>>()
+  function load(id: number): Promise<EditableEntry | null> {
+    const known = entries.value.get(id)
+    if (known) return Promise.resolve(known)
+    const pending =
+      loading.get(id) ??
+      hikariRequest('/api/v3/wiki/entries/{id}', { path: { id } })
+        .then(entry => {
+          extra.value = [...extra.value, entry]
+          return entry
+        })
+        .catch(() => null)
+        .finally(() => loading.delete(id))
+    loading.set(id, pending)
+    return pending
+  }
+  watch(
+    () => draft.value.borrowed ?? [],
+    ids => {
+      for (const id of ids) void load(id)
+    },
+    { immediate: true },
   )
   const definitions = computed(
     () => new Map(toValue(page.definitions).map(definition => [definition.type, definition])),
@@ -52,6 +81,7 @@ export function useEntryEditor(page: {
     reviewCount(
       reviewOf(draft.value, members.value, definitions.value, statements.value),
       draft.value,
+      page.root === undefined ? undefined : entries.value.get(page.root)?.type,
     ),
   )
   let next = -1
@@ -61,6 +91,7 @@ export function useEntryEditor(page: {
     [statements, () => store.read(key.value)],
     ([known, stored]) => {
       if (!stored || !known.size) return
+      if ((stored.borrowed ?? []).some(id => !entries.value.has(id))) return
       const kept = new Set([...known.keys(), ...stored.added.map(item => item.id)])
       const owners = new Set([...entries.value.keys(), ...stored.created.map(item => item.id)])
       const media = new Set(
@@ -102,6 +133,8 @@ export function useEntryEditor(page: {
       const revision = entries.value.get(entry)?.revision
       if (revision !== undefined && current.base[entry] === undefined)
         current.base[entry] = revision
+      if (extra.value.some(item => item.id === entry) && !current.borrowed?.includes(entry))
+        current.borrowed = [...(current.borrowed ?? []), entry]
       change(current)
     })
   }
@@ -158,6 +191,7 @@ export function useEntryEditor(page: {
       edit(entry, current => current.added.push({ id, entry, property, value }))
       return id
     },
+    borrow: load,
     create(type: EditableEntry['type']) {
       const id = freshId()
       edit(id, current => current.created.push({ id, type }))

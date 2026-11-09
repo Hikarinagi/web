@@ -14,6 +14,12 @@
     props.definition.properties.find(item => item.property === 'CREDIT'),
   )
   const others = 'after:图片'
+  const basic = 'after:基本资料'
+  const LINKS = [
+    { title: '从属', noun: '组织', property: 'PARENT', side: 'held', panel: 'parent' },
+    { title: '下属组织', noun: '组织', property: 'PARENT', side: 'given', panel: 'child' },
+    { title: '成员', noun: '人物', property: 'MEMBER', side: 'held', panel: 'member' },
+  ] as const
 </script>
 
 <template>
@@ -48,6 +54,19 @@
   <WikiEditorForm v-else :entry="entry" :definition="definition">
     <template v-if="entry.type === 'APPEARANCE'" #[others]>
       <WikiAppearanceOthers :appearance="entry.id" :base="base" />
+    </template>
+    <template v-else-if="entry.type === 'ORGANIZATION'" #[basic]>
+      <WikiOrganizationLinks
+        v-for="link in LINKS"
+        :key="link.panel"
+        :entry="entry"
+        :title="link.title"
+        :noun="link.noun"
+        :property="link.property"
+        :side="link.side"
+        :panel="link.panel"
+        :base="base"
+      />
     </template>
   </WikiEditorForm>
 </template>

@@ -49,4 +49,5 @@
   <WikiEditorDismiss v-model:open="dismissing" :suggestion="suggestion" />
   <WikiEditorMove />
   <WikiEditorPicks :entry="entry" :panel="panel" />
+  <WikiOrganizationPicks :entry="entry" :panel="panel" />
 </template>

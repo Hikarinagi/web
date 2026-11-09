@@ -32,6 +32,16 @@ describe('valueText', () => {
       'Steam 1066300',
     )
   })
+
+  it('writes a game relation as what the holding game is to the other one', () => {
+    const target = { id: 539, type: 'GAME' as const, label: 'D.C. 〜ダ・カーポ〜' }
+    expect(valueText({ property: 'GAME_RELATION', code: 'SEQUEL', target })).toBe(
+      '是《D.C. 〜ダ・カーポ〜》的续作',
+    )
+    expect(valueText({ property: 'GAME_RELATION', code: 'SAME_SERIES', target })).toBe(
+      '与《D.C. 〜ダ・カーポ〜》同系列',
+    )
+  })
 })
 
 describe('relationPhrase', () => {

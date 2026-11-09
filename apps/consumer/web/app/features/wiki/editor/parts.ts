@@ -44,6 +44,7 @@ export const ELSEWHERE: Partial<Record<EntryType, readonly Property[]>> = {
   GAME: ['SAMPLE_IMAGE', 'GAME_RELATION', 'ADAPTATION'],
   SERIES: ['SERIES_RELATION', 'ADAPTATION', 'CREDIT'],
   APPEARANCE: ['APPEARANCE_RELATION'],
+  ORGANIZATION: ['PARENT', 'MEMBER'],
 }
 
 export function changedParts(
@@ -53,10 +54,16 @@ export function changedParts(
   typeOf: (entry: number) => EntryType | undefined,
 ): Record<string, number> {
   const counts: Record<string, number> = {}
+  let ordered = false
   const count = (entry: number, property: Property) => {
     const type = typeOf(entry)
     if (!type) return
+    if (draft.borrowed?.includes(entry) && !(type === owner && RELATIONS.includes(property))) return
     const part = partOf(owner, type, property)
+    if (type === 'APPEARANCE' && property === 'ORDER' && entry > 0 && owner !== 'APPEARANCE') {
+      if (ordered) return
+      ordered = true
+    }
     counts[part] = (counts[part] ?? 0) + 1
   }
   const existing = [

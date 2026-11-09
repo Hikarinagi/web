@@ -8,7 +8,6 @@
     SearchInput,
     Stack,
     Table,
-    TableBody,
     TableHead,
     TableHeader,
     TableRow,
@@ -17,6 +16,7 @@
   import { Plus } from '@lucide/vue'
   import { useEditorParts } from '~/features/wiki/composables/useEditorParts'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
+  import { castFacts, castGroups, placeCast, type CastGroup } from '~/features/wiki/editor/cast'
   import type { EditableEntry } from '~/features/wiki/editor/draft'
 
   defineOptions({ name: 'WikiWorkCast' })
@@ -30,14 +30,26 @@
     type: props.work.type,
     label: props.work.label,
   }))
+  const COLUMNS = [
+    { property: 'LABEL', label: '名字' },
+    { property: 'CREDIT', label: '配音' },
+    { property: 'CAST_ROLE', label: '定位' },
+  ] as const
+  const game = computed(() => props.work.type === 'GAME')
   const filter = computed({
     get: () => (typeof route.query.q === 'string' ? route.query.q : ''),
     set: value => {
       void nav.query({ q: value || null }, 'replace')
     },
   })
-  const field = (property: 'LABEL' | 'CREDIT') =>
+  const field = (property: 'LABEL' | 'CREDIT' | 'CAST_ROLE' | 'CAPTURABLE') =>
     editor.definitions.value.get('APPEARANCE')?.properties.find(item => item.property === property)
+  const clausesOf = (property: (typeof COLUMNS)[number]['property']) => [
+    ...new Set([
+      ...(field(property)?.clauses ?? []),
+      ...(property === 'CAST_ROLE' && game.value ? (field('CAPTURABLE')?.clauses ?? []) : []),
+    ]),
+  ]
   const texts = (id: number, property: 'LABEL' | 'CREDIT') =>
     editor
       .property(id, property)
@@ -47,18 +59,63 @@
   const rows = computed(() =>
     parts.entriesOf('APPEARANCE').map(item => ({ id: item.id, names: texts(item.id, 'LABEL') })),
   )
-  const shown = computed(() => {
-    const keyword = filter.value.trim()
-    return keyword
-      ? rows.value.filter(row =>
-          [...row.names, ...texts(row.id, 'CREDIT')].some(text => text.includes(keyword)),
-        )
-      : rows.value
-  })
-  const twinsOf = (row: (typeof rows.value)[number]) =>
-    rows.value
-      .filter(other => other.id !== row.id && other.names.some(name => row.names.includes(name)))
+  const groups = computed(() =>
+    castGroups(
+      rows.value.map(row => castFacts(editor, row.id)),
+      game.value,
+    ),
+  )
+  const keyword = computed(() => filter.value.trim())
+  const matches = (id: number) =>
+    !keyword.value ||
+    [...texts(id, 'LABEL'), ...texts(id, 'CREDIT')].some(text => text.includes(keyword.value))
+  const shown = computed(() =>
+    groups.value
+      .map(group => ({ ...group, ids: group.ids.filter(matches) }))
+      .filter(group => group.ids.length),
+  )
+  const twinsOf = (id: number) => {
+    const names = rows.value.find(row => row.id === id)?.names ?? []
+    return rows.value
+      .filter(other => other.id !== id && other.names.some(name => names.includes(name)))
       .map(other => other.id)
+  }
+
+  function reorder(key: CastGroup, ids: number[]) {
+    placeCast(
+      editor,
+      groups.value.flatMap(group => (group.key === key ? ids : group.ids)),
+    )
+  }
+
+  function step(key: CastGroup, id: number, delta: -1 | 1) {
+    const ids = [...(groups.value.find(group => group.key === key)?.ids ?? [])]
+    const from = ids.indexOf(id)
+    if (from < 0 || from + delta < 0 || from + delta >= ids.length) return
+    ids.splice(from + delta, 0, ids.splice(from, 1)[0]!)
+    reorder(key, ids)
+  }
+
+  const flashing = ref(new Set<number>())
+  const placed = computed(
+    () => new Map(groups.value.flatMap(group => group.ids.map(id => [id, group.key] as const))),
+  )
+  watch(placed, (next, prev) => {
+    for (const [id, key] of next) {
+      if (!prev.has(id) || prev.get(id) === key) continue
+      flashing.value = new Set([...flashing.value, id])
+      void nextTick(() =>
+        document
+          .querySelector(`[data-cast="${id}"]`)
+          ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }),
+      )
+      setTimeout(() => {
+        const rest = new Set(flashing.value)
+        rest.delete(id)
+        flashing.value = rest
+      }, 1200)
+    }
+  })
 </script>
 
 <template>
@@ -86,41 +143,52 @@
     </Affix>
     <Text v-if="filter && !shown.length" size="sm" tone="muted">无符合条件的出场角色</Text>
     <template v-else>
-      <Card :padded="false" class="overflow-hidden max-md:hidden">
+      <Card :padded="false" class="overflow-x-auto max-md:hidden">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>
-                名字
+              <TableHead class="w-16" />
+              <TableHead v-for="column in COLUMNS" :key="column.property">
+                {{ column.label }}
                 <WikiFieldRule
-                  v-if="field('LABEL')?.clauses.length"
-                  label="名字"
-                  :clauses="field('LABEL')!.clauses"
-                />
-              </TableHead>
-              <TableHead>
-                配音
-                <WikiFieldRule
-                  v-if="field('CREDIT')?.clauses.length"
-                  label="配音"
-                  :clauses="field('CREDIT')!.clauses"
+                  v-if="clausesOf(column.property).length"
+                  :label="column.label"
+                  :clauses="clausesOf(column.property)"
                 />
               </TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
-          <TableBody>
-            <WikiWorkCastRow
-              v-for="row in shown"
-              :key="row.id"
-              :appearance="row.id"
-              :twins="twinsOf(row)"
-            />
-          </TableBody>
+          <WikiWorkCastGroup
+            v-for="group in shown"
+            :key="group.key"
+            :title="group.title"
+            :ids="group.ids"
+            :sortable="!keyword"
+            :game="game"
+            :columns="5"
+            :flashing="flashing"
+            :twins-of="twinsOf"
+            @reorder="ids => reorder(group.key, ids)"
+          />
         </Table>
       </Card>
-      <Stack gap="sm" class="md:hidden">
-        <WikiWorkCastCard v-for="row in shown" :key="row.id" :appearance="row.id" />
+      <Stack gap="lg" class="md:hidden">
+        <Stack v-for="group in shown" :key="group.key" gap="sm">
+          <Text size="xs" weight="medium" tone="muted"
+            >{{ group.title }} {{ group.ids.length }}</Text
+          >
+          <WikiWorkCastCard
+            v-for="(id, index) in group.ids"
+            :key="id"
+            :appearance="id"
+            :game="game"
+            :first="index === 0 || Boolean(keyword)"
+            :last="index === group.ids.length - 1 || Boolean(keyword)"
+            :flash="flashing.has(id)"
+            @step="delta => step(group.key, id, delta)"
+          />
+        </Stack>
       </Stack>
     </template>
   </Stack>

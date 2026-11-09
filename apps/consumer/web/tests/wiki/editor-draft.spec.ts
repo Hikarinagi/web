@@ -30,16 +30,37 @@ const game = { id: 5, statements: [alias, old] }
 const index = new Map(game.statements.map(item => [item.id, { entry: 5, statement: item }]))
 
 describe('operationsOf', () => {
-  it('sends only the fields that changed, and clears an emptied field', () => {
+  it('sends the whole value when part of it changed, and only the qualifiers that changed', () => {
     const draft = emptyDraft()
     draft.changed[11] = { ...valueOf(alias), text: 'つりおつ', reading: '' }
-    expect(operationsOf(draft, index)).toEqual([
-      { op: 'modify', statement: 11, value: { text: 'つりおつ' } },
-    ])
+    const [modify] = operationsOf(draft, index)
+    expect(modify).toMatchObject({ op: 'modify', statement: 11 })
+    expect(modify!.value).toMatchObject({
+      text: 'つりおつ',
+      reading: null,
+      code: null,
+      target: null,
+      media_id: null,
+    })
+    expect(modify).not.toHaveProperty('qualifiers')
     draft.changed[11] = { ...valueOf(alias), part: '全年龄版' }
     expect(operationsOf(draft, index)).toEqual([
       { op: 'modify', statement: 11, qualifiers: { part: '全年龄版' } },
     ])
+  })
+
+  it('keeps the role and the person of a credit whose written name changed', () => {
+    const credit = statement({
+      id: 21,
+      property: 'CREDIT',
+      text: '夏野 こおり',
+      code: 'VOICE',
+      target: { id: 9, type: 'PERSON', label: '田口 宏子' },
+    })
+    const draft = emptyDraft()
+    draft.changed[21] = { ...valueOf(credit), text: '夏野こおり' }
+    const [modify] = operationsOf(draft, new Map([[21, { entry: 5, statement: credit }]]))
+    expect(modify!.value).toMatchObject({ text: '夏野こおり', code: 'VOICE', target: 9 })
   })
 
   it('creates a new entry by reference and points values at it', () => {

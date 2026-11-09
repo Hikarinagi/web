@@ -3,27 +3,21 @@
     Button,
     Empty,
     FormLayout,
-    IconButton,
-    Inline,
-    Link,
     Panel,
-    Select,
     Stack,
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
-    Text,
   } from '@hina-ui/vue'
-  import { Plus, Undo2, X } from '@lucide/vue'
+  import { Plus } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
+  import { useEntryCards } from '~/features/wiki/composables/useEntryCards'
+  import { useWorkRelations } from '~/features/wiki/composables/useWorkRelations'
   import type { EditableEntry } from '~/features/wiki/editor/draft'
-  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
-  import { codeLabel, relationPhrase } from '~/features/wiki/values'
-  import { cn } from '~/utils/cn'
+  import { codeLabel } from '~/features/wiki/values'
 
   defineOptions({ name: 'WikiWorkRelations' })
 
@@ -33,32 +27,27 @@
   const definition = computed(() => editor.definitions.value.get(props.work.type))
   const field = (property: string) =>
     definition.value?.properties.find(item => item.property === property)
-  const relation = computed(() => field('GAME_RELATION'))
-  const rows = computed(() =>
-    props.work.type === 'GAME' ? editor.property(props.work.id, 'GAME_RELATION').values : [],
-  )
+  const relation = computed(() => (props.work.type === 'GAME' ? field('GAME_RELATION') : undefined))
   const options = computed(() =>
     (relation.value?.codes ?? []).map(value => ({
       value,
       label: codeLabel('GAME_RELATION', value),
     })),
   )
-  const page = inject(ENTRY_PAGE)!
-  const incoming = computed(() =>
-    page.references.value
-      .filter(group => group.property === 'GAME_RELATION' && props.work.type === 'GAME')
-      .flatMap(group => group.items),
+  const relations = useWorkRelations(() => props.work)
+  const cards = useEntryCards(() => relations.rows.value.map(row => row.other.id), ['GAME'])
+  const rows = computed(() =>
+    [...relations.rows.value].sort(
+      (a, b) =>
+        (cards.value.get(a.other.id)?.year ?? 9999) - (cards.value.get(b.other.id)?.year ?? 9999) ||
+        a.other.id - b.other.id,
+    ),
   )
-  const live = computed(() => rows.value.filter(item => item.state !== 'removed').length)
-  const TONE: Record<string, string> = {
-    added: 'bg-success-soft',
-    changed: 'bg-accent-soft',
-    removed: 'bg-danger-soft',
-  }
+  const live = computed(() => rows.value.filter(row => row.state !== 'removed').length)
 </script>
 
 <template>
-  <Panel v-if="work.type === 'GAME' && relation" title="相关作品" :count="live + incoming.length">
+  <Panel v-if="relation" title="相关作品" :count="live">
     <template #actions>
       <WikiFieldRule v-if="relation.clauses.length" label="相关作品" :clauses="relation.clauses" />
       <Button
@@ -71,91 +60,27 @@
         添加相关作品
       </Button>
     </template>
-    <Empty v-if="!rows.length && !incoming.length" title="暂无相关作品" />
+    <Empty v-if="!rows.length" title="暂无相关作品" />
     <Table v-else>
       <TableHeader>
         <TableRow>
           <TableHead>作品</TableHead>
-          <TableHead>关系</TableHead>
-          <TableHead />
+          <TableHead class="max-sm:hidden">关系</TableHead>
+          <TableHead class="w-12" />
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="item in rows" :key="item.id" :class="TONE[item.state]">
-          <TableCell class="py-3">
-            <Link
-              v-if="item.value.target"
-              :as="NuxtLink"
-              :to="`/entries/${item.value.target.id}/edit`"
-              lang="ja"
-              :class="cn('text-sm', item.state === 'removed' && 'line-through')"
-            >
-              {{ item.value.target.label || '未命名' }}
-            </Link>
-          </TableCell>
-          <TableCell class="py-3">
-            <Inline gap="sm" align="center" :wrap="false">
-              <Text size="sm" tone="muted" class="shrink-0">它是本作的</Text>
-              <Text v-if="item.state === 'removed'" size="sm" class="line-through">
-                {{ options.find(option => option.value === item.value.code)?.label }}
-              </Text>
-              <Select
-                v-else
-                :model-value="item.value.code"
-                :options="options"
-                size="sm"
-                aria-label="关系"
-                class="w-28"
-                @update:model-value="
-                  value =>
-                    editor.set(item.id, { ...item.value, code: value ? String(value) : null })
-                "
-              />
-            </Inline>
-          </TableCell>
-          <TableCell class="py-3">
-            <Inline justify="end" :wrap="false">
-              <IconButton
-                v-if="item.state === 'removed' || item.state === 'changed'"
-                label="撤回"
-                variant="ghost"
-                tone="neutral"
-                size="sm"
-                @click="editor.revert(item.id)"
-              >
-                <Undo2 />
-              </IconButton>
-              <IconButton
-                v-if="item.state !== 'removed'"
-                :label="item.state === 'added' ? '取消添加' : '删除'"
-                variant="ghost"
-                tone="neutral"
-                size="sm"
-                @click="item.state === 'added' ? editor.revert(item.id) : editor.remove(item.id)"
-              >
-                <X />
-              </IconButton>
-            </Inline>
-          </TableCell>
-        </TableRow>
-        <TableRow v-for="item in incoming" :key="`in-${item.statement_id}`">
-          <TableCell class="py-3">
-            <Link
-              :as="NuxtLink"
-              :to="`/entries/${item.entry.id}/edit/relations`"
-              lang="ja"
-              class="text-sm"
-            >
-              {{ item.entry.label }}
-            </Link>
-          </TableCell>
-          <TableCell class="py-3">
-            <Text size="sm" tone="muted">
-              {{ item.code ? relationPhrase('GAME_RELATION', item.code, 'self') : '' }}
-            </Text>
-          </TableCell>
-          <TableCell />
-        </TableRow>
+        <WikiWorkRelationRow
+          v-for="row in rows"
+          :key="row.key"
+          :row="row"
+          :card="cards.get(row.other.id)"
+          :options="options"
+          @kind="code => relations.kind(row, code)"
+          @flip="relations.flip(row)"
+          @remove="relations.remove(row)"
+          @undo="relations.undo(row)"
+        />
       </TableBody>
     </Table>
   </Panel>

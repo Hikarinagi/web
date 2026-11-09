@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { Button, Empty, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
-  import { reviewOf, type ReviewGroup } from '~/features/wiki/editor/review'
+  import { castOrderRows, reviewOf, type ReviewGroup } from '~/features/wiki/editor/review'
 
   defineOptions({ name: 'WikiSaveChanges' })
 
   const editor = inject(ENTRY_EDITOR)!
-  const groups = computed(() =>
+  const all = computed(() =>
     reviewOf(
       editor.draft.value,
       editor.members.value,
@@ -14,6 +14,19 @@
       editor.statements.value,
     ),
   )
+  const work = computed(() =>
+    editor.root === null ? undefined : editor.entries.value.get(editor.root)?.type,
+  )
+  const orders = computed(() => castOrderRows(all.value, work.value))
+  const groups = computed(() => {
+    const merged = new Set(orders.value)
+    return all.value
+      .map(group => ({ ...group, rows: group.rows.filter(row => !merged.has(row)) }))
+      .filter(
+        group =>
+          group.created || group.rows.length || editor.draft.value.detached.includes(group.id),
+      )
+  })
   const nameOf = (group: ReviewGroup) => {
     const loaded = editor.entries.value.get(group.id)?.label
     if (loaded) return loaded
@@ -29,8 +42,9 @@
 </script>
 
 <template>
-  <Empty v-if="!groups.length" title="暂无修改" />
+  <Empty v-if="!groups.length && !orders.length" title="暂无修改" />
   <Stack v-else gap="lg">
+    <WikiSaveCastOrder v-if="orders.length" :rows="orders" :game="work === 'GAME'" />
     <Stack v-for="group in groups" :key="group.id" gap="sm">
       <Inline gap="sm" align="baseline" justify="between">
         <Heading :level="3" size="xs" lang="ja">{{ titleOf(group) }}</Heading>

@@ -2,7 +2,18 @@ import type { LocationQuery } from 'vue-router'
 import { GAME_PARTS, SERIES_PARTS, type EditorPart } from './parts'
 import type { EditableEntry } from './draft'
 
-const PANELS = ['protect', 'delete', 'dismiss', 'preview', 'undo', 'relation', 'same'] as const
+const PANELS = [
+  'protect',
+  'delete',
+  'dismiss',
+  'preview',
+  'undo',
+  'relation',
+  'same',
+  'parent',
+  'child',
+  'member',
+] as const
 export type EditorPanel = (typeof PANELS)[number]
 
 export function partsOf(type: EditableEntry['type']): readonly EditorPart[] {

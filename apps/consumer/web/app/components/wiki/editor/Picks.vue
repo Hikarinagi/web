@@ -1,10 +1,13 @@
 <script setup lang="ts">
-  import { FormField, Select } from '@hina-ui/vue'
+  import { IconButton, Inline, Select, Text } from '@hina-ui/vue'
+  import { ArrowLeftRight } from '@lucide/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
+  import { useWorkRelations } from '~/features/wiki/composables/useWorkRelations'
   import { emptyValue, type EditableEntry } from '~/features/wiki/editor/draft'
+  import type { RelationSide } from '~/features/wiki/editor/relations'
   import type { EditorPanel } from '~/features/wiki/editor/route'
   import type { WikiSearchItem } from '~/features/wiki/entries'
-  import { codeLabel } from '~/features/wiki/values'
+  import { codeLabel, relationLead } from '~/features/wiki/values'
 
   defineOptions({ name: 'WikiEditorPicks' })
 
@@ -13,6 +16,8 @@
   const nav = usePageNav()
   const active = usePageActive()
   const kind = ref<string | null>(null)
+  const side = ref<RelationSide>('given')
+  const relations = useWorkRelations(() => props.entry)
   const relating = computed(
     () => active.value && props.panel === 'relation' && props.entry.type === 'GAME',
   )
@@ -20,14 +25,21 @@
     () => active.value && props.panel === 'same' && props.entry.type === 'APPEARANCE',
   )
   watch(relating, next => {
-    if (next) kind.value = null
+    if (!next) return
+    kind.value = null
+    side.value = 'given'
   })
-  const targets = (property: 'GAME_RELATION' | 'APPEARANCE_RELATION') => [
-    props.entry.id,
+  const related = computed(() =>
+    relations.rows.value.filter(row => row.state !== 'removed').map(row => row.other.id),
+  )
+  const joined = computed(() => [
+    ...[...editor.entries.value.values()]
+      .filter(item => item.type === 'APPEARANCE' && item.id !== props.entry.id)
+      .map(item => item.id),
     ...editor
-      .property(props.entry.id, property)
+      .property(props.entry.id, 'APPEARANCE_RELATION')
       .values.flatMap(item => (item.value.target ? [item.value.target.id] : [])),
-  ]
+  ])
   const kinds = computed(() =>
     (
       editor.definitions.value
@@ -40,11 +52,17 @@
     void nav.close(['panel'])
   }
 
-  function add(property: 'GAME_RELATION' | 'APPEARANCE_RELATION', item: WikiSearchItem) {
-    editor.add(props.entry.id, property, {
+  async function relate(item: WikiSearchItem) {
+    if (!kind.value) return
+    await relations.add(item, kind.value, side.value)
+    close()
+  }
+
+  function join(item: WikiSearchItem) {
+    editor.add(props.entry.id, 'APPEARANCE_RELATION', {
       ...emptyValue(),
       target: { id: item.id, type: item.type, label: item.label },
-      code: property === 'GAME_RELATION' ? kind.value : 'SAME_PERSON',
+      code: 'SAME_PERSON',
     })
     close()
   }
@@ -55,24 +73,42 @@
     :open="relating"
     title="添加相关作品"
     :types="['GAME']"
-    :exclude="targets('GAME_RELATION')"
+    :exclude="[entry.id]"
+    :taken="related"
+    note="已有关系"
+    placeholder="作品名"
     confirm="添加"
     :ready="Boolean(kind)"
     create="GAME"
     @close="close"
-    @pick="item => add('GAME_RELATION', item)"
+    @pick="relate"
   >
-    <FormField name="kind" label="它是本作的">
-      <Select v-model="kind" :options="kinds" placeholder="请选择" />
-    </FormField>
+    <template #default="{ picked }">
+      <Inline v-if="picked" gap="sm" align="center" :wrap="false">
+        <Text size="sm" class="w-20 shrink-0">{{ relationLead(kind, side) }}</Text>
+        <Select v-model="kind" :options="kinds" placeholder="关系" aria-label="关系" class="w-28" />
+        <IconButton
+          label="对调"
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          :disabled="kind === 'SAME_SERIES'"
+          @click="side = side === 'held' ? 'given' : 'held'"
+        >
+          <ArrowLeftRight />
+        </IconButton>
+      </Inline>
+    </template>
   </WikiEditorPick>
   <WikiEditorPick
     :open="joining"
-    title="添加其他作品中的出场"
+    title="添加出场"
     :types="['APPEARANCE']"
-    :exclude="targets('APPEARANCE_RELATION')"
+    :exclude="[entry.id]"
+    :taken="joined"
+    placeholder="角色名"
     confirm="添加"
     @close="close"
-    @pick="item => add('APPEARANCE_RELATION', item)"
+    @pick="join"
   />
 </template>
