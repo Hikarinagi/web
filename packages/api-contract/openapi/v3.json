@@ -14256,6 +14256,7 @@
               "character_merge",
               "fourth_tier",
               "route_pages",
+              "import_fill",
               "identifier_merge",
               "game_intake",
               "book_judge",
@@ -18783,6 +18784,11 @@
           "label": {
             "type": "string"
           },
+          "matched": {
+            "description": "The other name of a person or organization the query was found in, when the label itself does not contain it",
+            "nullable": true,
+            "type": "string"
+          },
           "owner": {
             "allOf": [
               {
@@ -18820,6 +18826,7 @@
           "type",
           "label",
           "chinese_title",
+          "matched",
           "owner",
           "works"
         ],

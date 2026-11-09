@@ -18364,7 +18364,7 @@ export interface components {
             description?: string;
             name: string;
             /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
+            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
         };
         CreateTelegramScheduleDto: {
             chat_id: number;
@@ -19413,6 +19413,8 @@ export interface components {
             chinese_title: string | null;
             id: number;
             label: string;
+            /** @description The other name of a person or organization the query was found in, when the label itself does not contain it */
+            matched: string | null;
             /** @description The work or volume a release, appearance, volume or book belongs to */
             owner: components["schemas"]["EntryRefDto"] | null;
             /** @enum {string} */
