@@ -28,7 +28,7 @@
         :src="image"
         :alt="`${title} 的游戏画面`"
         :processing="{ width: 1280, quality: 84, fit: 'cover' }"
-        :lazy="false"
+        preload
         class="absolute inset-0 size-full"
         image-class="size-full object-cover"
       />

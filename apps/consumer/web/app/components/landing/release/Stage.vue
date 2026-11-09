@@ -41,7 +41,7 @@
         <LandingReleaseStrip :days="days" :selected="selected.id" class="lg:hidden" @pick="pick" />
         <Card
           :padded="false"
-          class="relative hidden overflow-hidden bg-surface/70 backdrop-blur-md lg:col-span-4 lg:block"
+          class="relative hidden overflow-hidden border-0 bg-surface shadow-xl ring-1 ring-fg/10 lg:col-span-4 lg:block"
         >
           <LandingReleaseList
             :days="days"

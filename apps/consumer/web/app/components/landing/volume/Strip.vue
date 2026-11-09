@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Divider, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
   import { dayLabel, volumeLabel, weekdayLabel } from '~/features/landing/labels'
@@ -9,7 +9,7 @@
   type StageVolume = ApiData<'/api/v3/landing/light-novels', 'get'>['volumes'][number]
 
   defineOptions({ name: 'LandingVolumeStrip' })
-  const props = defineProps<{ days: LandingDay<StageVolume>[]; today: string; selected: number }>()
+  const props = defineProps<{ days: LandingDay<StageVolume>[]; selected: number }>()
   const emit = defineEmits<{
     hover: [volume: StageVolume]
     leave: []
@@ -40,17 +40,7 @@
   <ScrollRail ref="track" class="-mx-4 lg:-mx-6" @mouseleave="emit('leave')">
     <Inline gap="lg" :wrap="false" align="start" class="min-w-max px-4 pt-2 pb-3 lg:px-6">
       <template v-for="(day, index) in groups" :key="day.date">
-        <Stack
-          v-if="index === firstUpcoming"
-          ref="marker"
-          gap="sm"
-          align="center"
-          class="shrink-0 self-stretch"
-        >
-          <Text size="xs" weight="semibold" class="text-accent-text">今天</Text>
-          <Divider orientation="vertical" class="flex-1 border-accent/40" />
-        </Stack>
-        <Stack gap="sm" class="shrink-0">
+        <Stack :ref="index === firstUpcoming ? 'marker' : undefined" gap="sm" class="shrink-0">
           <Text
             size="xs"
             weight="semibold"

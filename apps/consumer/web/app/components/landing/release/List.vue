@@ -55,7 +55,7 @@
           size="xs"
           weight="semibold"
           :tone="day.past ? 'muted' : undefined"
-          class="sticky top-0 z-10 bg-surface/92 px-4 pt-3 pb-1.5 tabular-nums backdrop-blur-sm"
+          class="sticky top-0 z-10 bg-surface px-4 pt-3 pb-1.5 tabular-nums"
         >
           {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
         </Text>

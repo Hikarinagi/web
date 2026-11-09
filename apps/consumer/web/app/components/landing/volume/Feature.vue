@@ -26,14 +26,14 @@
     gap="none"
     class="grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-3 sm:min-h-(--landing-feature-height) sm:grid-rows-[1fr_auto] sm:gap-x-8"
   >
-    <Stack
+    <Grid
       gap="none"
-      class="relative w-(--landing-feature-cover-sm) sm:row-span-2 sm:w-(--landing-feature-cover)"
+      class="w-(--landing-feature-cover-sm) grid-cols-1 content-end sm:row-span-2 sm:w-(--landing-feature-cover)"
     >
       <Transition
         enter-active-class="transition-opacity duration-300"
         enter-from-class="opacity-0"
-        leave-active-class="absolute inset-x-0 bottom-0 transition-opacity duration-300"
+        leave-active-class="transition-opacity duration-300"
         leave-to-class="opacity-0"
       >
         <EntryBookCover
@@ -42,10 +42,10 @@
           :alt="`${series.title}${label} 封面`"
           :width="480"
           preload
-          class="mt-auto shadow-2xl"
+          class="col-start-1 row-start-1 shadow-2xl"
         />
       </Transition>
-    </Stack>
+    </Grid>
     <Stack gap="sm" class="min-w-0 sm:self-end">
       <Text size="sm" tone="muted" truncate class="min-h-(--landing-line) tabular-nums">
         {{ headline }}

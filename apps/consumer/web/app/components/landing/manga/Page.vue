@@ -3,6 +3,7 @@
   import type { MangasPageData } from '~~/server/api/pages/mangas.get'
   import { chapterLabel, dayLabel, daysBetween, relativeDay } from '~/features/landing/labels'
   import { mangaWork } from '~/features/landing/works'
+  import { mangaSerialStatusLabel } from '~/features/manga/labels'
 
   defineOptions({ name: 'LandingMangaPage' })
   const props = defineProps<{ data: MangasPageData }>()
@@ -49,7 +50,11 @@
     ].filter(row => row.items.length),
   )
   const hot = computed(() =>
-    props.data.hot.map(item => ({ work: mangaWork(item), detail: chapterLabel(item.chapter) })),
+    props.data.hot.map(item => ({
+      work: mangaWork(item),
+      detail: chapterLabel(item.chapter),
+      status: mangaSerialStatusLabel(item.serial_status) || undefined,
+    })),
   )
   const charts = computed(() =>
     [

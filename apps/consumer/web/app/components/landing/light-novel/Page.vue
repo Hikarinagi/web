@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Stack, VisuallyHidden } from '@hina-ui/vue'
+  import { NOVEL_STATUS_CN } from '@hikarinagi/shared'
   import type { LightNovelsPageData } from '~~/server/api/pages/light-novels.get'
   import { dayLabel, volumeLabel } from '~/features/landing/labels'
   import { novelWork } from '~/features/landing/works'
@@ -46,7 +47,11 @@
     ].filter(row => row.items.length),
   )
   const hot = computed(() =>
-    props.data.hot.map(item => ({ work: novelWork(item), detail: `共 ${item.volume_count} 卷` })),
+    props.data.hot.map(item => ({
+      work: novelWork(item),
+      detail: `共 ${item.volume_count} 卷`,
+      status: item.novel_status ? NOVEL_STATUS_CN[item.novel_status] : undefined,
+    })),
   )
   const finished = computed(() =>
     props.data.finished.map(item => ({

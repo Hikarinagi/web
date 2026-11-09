@@ -29,7 +29,6 @@
       <LandingVolumeFeature :volume="selected" />
       <LandingVolumeStrip
         :days="days"
-        :today="today"
         :selected="selected.id"
         @hover="hover"
         @leave="leave"

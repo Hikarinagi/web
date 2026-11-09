@@ -36,7 +36,7 @@
           :src="lead.work.cover"
           :alt="lead.work.title"
           :ratio="7 / 10"
-          :lazy="false"
+          preload
           :processing="{ width: 480, quality: 84, fit: 'cover' }"
           class="w-full"
           image-class="object-cover object-top"
