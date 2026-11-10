@@ -12,12 +12,9 @@ async function handler(event: H3Event) {
       query: {
         page: state.page,
         page_size: state.page_size,
-        search: state.search,
         sort_field: state.sort_field,
         sort_order: state.sort_order,
-        release_from: state.release_from,
-        release_to: state.release_to,
-        release_periods: state.release_periods.length ? state.release_periods : undefined,
+        release_periods: state.years.length ? state.years.map(String) : undefined,
         platforms: state.platforms.length ? state.platforms : undefined,
         origin_lang: state.origin_lang.length ? state.origin_lang : undefined,
         producer_ids: state.producer_ids.length ? state.producer_ids : undefined,

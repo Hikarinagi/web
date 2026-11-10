@@ -1,24 +1,23 @@
 import type { ApiData, ApiQuery, components } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+import type { TagFilterGroup } from '~/features/browse/filter'
+import { normalizeTagGroups, readTagGroups, encodeTagGroup } from '~/features/browse/tag-groups'
+import { readYears, writeYears } from '~/features/browse/years'
 
-export const GALGAME_BROWSE_PAGE_SIZE = 24
+export const GALGAME_BROWSE_PAGE_SIZE = 40
 export type GalgameSummary = ApiData<'/api/v3/galgames', 'get'>['items'][number]
 export type GalgameHistogram = ApiData<'/api/v3/galgames/histogram', 'get'>
 export type GalgameSortField = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_field']>
 export type GalgameSortOrder = NonNullable<ApiQuery<'/api/v3/galgames', 'get'>['sort_order']>
-export type ReleaseFilterMode = 'range' | 'periods'
 export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export { encodeTagGroup, tagIdsOf } from '~/features/browse/tag-groups'
 
 export interface GalgameBrowseState {
   page: number
   page_size: number
-  search?: string
   sort_field: GalgameSortField
   sort_order: GalgameSortOrder
-  release_from?: string
-  release_to?: string
-  release_periods: string[]
+  years: number[]
   platforms: string[]
   origin_lang: string[]
   producer_ids: number[]
@@ -59,8 +58,6 @@ const SORT_FIELDS: GalgameSortField[] = [
   'created_at',
 ]
 const SORT_ORDERS: GalgameSortOrder[] = ['asc', 'desc']
-const RELEASE_BOUND_PATTERN = /^(\d{4})(?:-(0[1-9]|1[0-2]))?$/
-const TAG_GROUP_PATTERN = /^(include|exclude)\.(and|or)\.([1-9]\d*(?:\.[1-9]\d*)*)$/
 
 export function readBrowseQuery(query: Record<string, unknown>): GalgameBrowseState {
   const sort = readString(query.sort)
@@ -71,21 +68,26 @@ export function readBrowseQuery(query: Record<string, unknown>): GalgameBrowseSt
   const sort_order = SORT_ORDERS.includes(rawOrder as GalgameSortOrder)
     ? (rawOrder as GalgameSortOrder)
     : 'desc'
-  const [release_from, release_to] = orderReleaseBounds(
-    readReleaseBound(query.from),
-    readReleaseBound(query.to),
-  )
-  const release_periods = readReleasePeriods(query.periods)
+  const from = readYears(readString(query.from)?.slice(0, 4))[0]
+  const to = readYears(readString(query.to)?.slice(0, 4))[0]
+  const legacy = readStrings(query.periods)
+    .map(period => period.slice(0, 4))
+    .join(',')
 
   return {
     page: readPageQuery(query),
     page_size: GALGAME_BROWSE_PAGE_SIZE,
-    search: readString(query.search)?.trim() || undefined,
     sort_field,
     sort_order,
-    release_from: release_periods.length ? undefined : release_from,
-    release_to: release_periods.length ? undefined : release_to,
-    release_periods,
+    years: readYears(
+      [
+        readString(query.years),
+        legacy,
+        from || to ? `${from ?? 1900}-${to ?? new Date().getFullYear()}` : undefined,
+      ]
+        .filter(Boolean)
+        .join(','),
+    ),
     platforms: readStrings(query.platforms),
     origin_lang: readStrings(query.lang),
     producer_ids: readInts(query.producers),
@@ -116,21 +118,13 @@ export function sortValue(state: Pick<GalgameBrowseState, 'sort_field' | 'sort_o
   return `${state.sort_field}:${state.sort_order}`
 }
 
-export function encodeTagGroup(group: TagFilterGroup): string {
-  return `${group.op}.${group.match}.${group.tag_ids.join('.')}`
-}
-
-export function tagIdsOf(groups: TagFilterGroup[]): number[] {
-  return [
-    ...new Set(groups.flatMap(group => group.tag_ids.filter(id => Number.isInteger(id) && id > 0))),
-  ]
-}
-
-export function titleOf(galgame: GalgameSummary): string {
+export function titleOf(
+  galgame: Pick<GalgameSummary, 'id' | 'trans_title' | 'origin_title'>,
+): string {
   return galgame.trans_title || galgame.origin_title || `Galgame #${galgame.id}`
 }
 
-export function producerText(galgame: GalgameSummary): string {
+export function producerText(galgame: Pick<GalgameSummary, 'producers'>): string {
   const producers = galgame.producers
     .filter(row => !row.role || row.role === 'DEVELOPER')
     .map(row => row.producer.name)
@@ -138,29 +132,7 @@ export function producerText(galgame: GalgameSummary): string {
   return producers.length ? producers.slice(0, 2).join(' / ') : '厂商未收录'
 }
 
-export function releaseRangeLabel(from: string | undefined, to: string | undefined): string {
-  if (!from && !to) return '全部年代'
-  if (from && to) {
-    if (from === to) return releaseBoundLabel(from)
-    return `${releaseBoundLabel(from)} – ${releaseBoundLabel(to)}`
-  }
-  if (from) return `${releaseBoundLabel(from)} 起`
-
-  return `截至 ${releaseBoundLabel(to || '')}`
-}
-
-export function releasePeriodsLabel(periods: string[]): string {
-  if (!periods.length) return '未指定'
-
-  const labels = periods.slice(0, 3).map(releasePeriodLabel)
-  return periods.length > 3 ? `${labels.join('、')} +${periods.length - 3}` : labels.join('、')
-}
-
-export function releasePeriodLabel(value: string): string {
-  return releaseBoundLabel(value)
-}
-
-export function yearText(galgame: GalgameSummary): string {
+export function yearText(galgame: Pick<GalgameSummary, 'release_date'>): string {
   if (!galgame.release_date) return '发售日未定'
   const year = new Date(galgame.release_date).getFullYear()
   return Number.isFinite(year) ? String(year) : '发售日未定'
@@ -169,14 +141,9 @@ export function yearText(galgame: GalgameSummary): string {
 function buildPath(base: string, state: GalgameBrowseState): string {
   const query = new URLSearchParams()
   if (state.page > 1) query.set('page', String(state.page))
-  if (state.search) query.set('search', state.search)
   if (sortValue(state) !== 'release_date:desc') query.set('sort', sortValue(state))
-  if (state.release_periods.length) {
-    query.set('periods', state.release_periods.join(','))
-  } else {
-    if (state.release_from) query.set('from', state.release_from)
-    if (state.release_to) query.set('to', state.release_to)
-  }
+  const years = writeYears(state.years)
+  if (years) query.set('years', years)
   if (state.platforms.length) query.set('platforms', state.platforms.join(','))
   if (state.origin_lang.length) query.set('lang', state.origin_lang.join(','))
   if (state.producer_ids.length) query.set('producers', state.producer_ids.join(','))
@@ -206,85 +173,6 @@ function readInts(value: unknown): number[] {
   return readStrings(value)
     .map(Number)
     .filter(item => Number.isInteger(item))
-}
-
-function readReleaseBound(value: unknown): string | undefined {
-  const raw = readString(value)?.trim()
-  if (!raw) return undefined
-  const match = RELEASE_BOUND_PATTERN.exec(raw)
-  if (!match) return undefined
-
-  const year = Number(match[1])
-  return year >= 1900 && year <= 2200 ? raw : undefined
-}
-
-function readTagGroups(value: unknown): TagFilterGroup[] {
-  return normalizeTagGroups(
-    readStrings(value)
-      .map(decodeTagGroup)
-      .filter((group): group is TagFilterGroup => !!group),
-  )
-}
-
-function decodeTagGroup(value: string): TagFilterGroup | null {
-  const match = TAG_GROUP_PATTERN.exec(value)
-  if (!match || !match[1] || !match[2] || !match[3]) return null
-
-  return {
-    op: match[1] as TagFilterOp,
-    match: match[2] as TagMatchMode,
-    tag_ids: match[3].split('.').map(Number),
-  }
-}
-
-function normalizeTagGroups(groups: TagFilterGroup[]): TagFilterGroup[] {
-  const seen = new Set<string>()
-  const out: TagFilterGroup[] = []
-  for (const group of groups) {
-    const tag_ids = [...new Set(group.tag_ids.filter(id => Number.isInteger(id) && id > 0))]
-    if (!tag_ids.length) continue
-
-    const normalized: TagFilterGroup = {
-      op: group.op,
-      match: group.match,
-      tag_ids,
-    }
-    const key = encodeTagGroup(normalized)
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(normalized)
-  }
-  return out
-}
-
-function readReleasePeriods(value: unknown): string[] {
-  return [
-    ...new Set(
-      readStrings(value)
-        .map(readReleaseBound)
-        .filter((item): item is string => !!item),
-    ),
-  ].sort((a, b) => releaseStartKey(a).localeCompare(releaseStartKey(b)))
-}
-
-function orderReleaseBounds(
-  from: string | undefined,
-  to: string | undefined,
-): [string | undefined, string | undefined] {
-  if (!from || !to) return [from, to]
-
-  return releaseStartKey(from) <= releaseStartKey(to) ? [from, to] : [to, from]
-}
-
-function releaseStartKey(value: string): string {
-  return value.length === 4 ? `${value}-01` : value
-}
-
-function releaseBoundLabel(value: string): string {
-  const year = value.slice(0, 4)
-  if (value.length === 4) return `${year}年`
-
-  return `${year}年${Number(value.slice(5, 7))}月`
 }
 
 function readBool(value: unknown): boolean {

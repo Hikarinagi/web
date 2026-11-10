@@ -8,7 +8,7 @@
   } from '~/features/galgame/explore'
 
   defineOptions({ name: 'GalgamesBrowsePage' })
-  definePageMeta({ container: 'full', scrollToTop: true })
+  definePageMeta({ container: 'full', scrollToTop: true, middleware: 'browse-search' })
 
   const route = useRoute()
   const router = useRouter()
@@ -24,9 +24,9 @@
   }
 
   useHikariSeoMeta({
-    title: () => (state.value.search ? [`${state.value.search} · 图鉴`, '图鉴'] : '图鉴'),
-    description: () =>
-      '按发售日、更新时间、标签与关键词浏览 Galgame・视觉小说图鉴，找到你感兴趣的作品！',
+    title: 'Galgame 图鉴',
+    headerTitle: 'Galgame',
+    description: '按标签、发售年份、平台与品牌浏览 Galgame，找到你感兴趣的作品！',
   })
 </script>
 

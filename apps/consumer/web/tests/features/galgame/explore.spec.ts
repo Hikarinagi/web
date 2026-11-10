@@ -39,6 +39,15 @@ describe('galgame browse query', () => {
     expect(encodeTagGroup({ op: 'exclude', match: 'and', tag_ids: [5, 6] })).toBe('exclude.and.5.6')
   })
 
+  it('reads years from the address and from older period and range links', () => {
+    expect(readBrowseQuery({ years: '2010-2012,2022' }).years).toEqual([2010, 2011, 2012, 2022])
+    expect(readBrowseQuery({ periods: '2015-03,2016' }).years).toEqual([2015, 2016])
+    expect(readBrowseQuery({ from: '2018-04', to: '2019' }).years).toEqual([2018, 2019])
+    expect(browseRoute({ ...readBrowseQuery({}), years: [2010, 2011, 2022] })).toBe(
+      '/galgames/browse?years=2010-2011%2C2022',
+    )
+  })
+
   it('keeps popularity sorting selectable on the browse page', () => {
     expect(readBrowseQuery({ sort: 'views:desc' })).toMatchObject({
       sort_field: 'views',

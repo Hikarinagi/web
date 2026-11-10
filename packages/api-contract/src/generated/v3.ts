@@ -8661,6 +8661,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novels/histogram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelController_getHistogram"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novels/random": {
         parameters: {
             query?: never;
@@ -9725,6 +9741,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MangaController_getGenres"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/histogram": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaController_getHistogram"];
         put?: never;
         post?: never;
         delete?: never;
@@ -20341,6 +20373,36 @@ export interface components {
             /** @description 译名 */
             trans_title: string | null;
         };
+        GalgameListItemDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            /** @description 平台编码 */
+            platforms: string[];
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            rating: components["schemas"]["WorkRatingDto"];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 公开标签中赞同最多的三个，不含剧透标签与当前条件里包含的标签 */
+            tags: components["schemas"]["GalgameListTagDto"][];
+            /** @description 译名 */
+            trans_title: string | null;
+        };
+        GalgameListTagDto: {
+            id: number;
+            name: string;
+        };
         GalgameMetricItemDto: {
             /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["GalgameCoverRelationDto"][];
@@ -21139,6 +21201,47 @@ export interface components {
             publication_status: string | null;
             /** @description 出版方 */
             publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
+            volume_count: number;
+        };
+        LightNovelListItemDto: {
+            /** @description 作者 */
+            author: components["schemas"]["LightNovelSummaryPersonDto"] | null;
+            /** @description 所属文库 */
+            bunko: components["schemas"]["LightNovelSummaryProducerDto"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["LightNovelCoverRelationDto"][];
+            /** @description 轻小说 ID */
+            id: number;
+            /**
+             * Format: date-time
+             * @description 已发售的最新一卷的发售日
+             */
+            latest_volume_date: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /**
+             * @description 连载状态，系列没有记录出版状态时为空
+             * @enum {string|null}
+             */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /**
+             * Format: date-time
+             * @description 首卷出版日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            /** @description 出版方 */
+            publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
+            rating: components["schemas"]["WorkRatingDto"];
+            /** @description 是否有可在站内阅读的卷 */
+            readable: boolean;
+            /** @description 卷数 */
             volume_count: number;
         };
         LightNovelPeopleRelationDto: {
@@ -22140,6 +22243,49 @@ export interface components {
             batch_size: number;
             cooldown_days: number;
             enabled: boolean;
+        };
+        MangaListItemDto: {
+            /** @description 第一位作者 */
+            author: components["schemas"]["MangaListRefDto"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["MangaCoverRelationDto"][];
+            /** @description 漫画 ID */
+            id: number;
+            /** @description 第一个文库 */
+            label: components["schemas"]["MangaListRefDto"] | null;
+            /**
+             * Format: date-time
+             * @description 最新一话的更新时间
+             */
+            latest_chapter_at: string | null;
+            /**
+             * Format: date-time
+             * @description 已发售的最新一卷的发售日
+             */
+            latest_volume_date: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /**
+             * Format: date-time
+             * @description 开始连载日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            rating: components["schemas"]["WorkRatingDto"];
+            /** @description 连载状态，系列没有记录出版状态时为空 */
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            /** @description 卷数 */
+            volume_count: number;
+        };
+        MangaListRefDto: {
+            id: number;
+            name: string;
         };
         /** @enum {string} */
         MangaListing: "AUTO" | "SHOWN" | "HIDDEN";
@@ -28779,6 +28925,10 @@ export interface components {
             from_recommend?: boolean;
             visitor?: string;
         };
+        WorkYearBucketDto: {
+            count: number;
+            year: number;
+        };
         WorkYearDto: {
             /** @description 游戏按职责分组，书不分 */
             code: string | null;
@@ -28786,6 +28936,10 @@ export interface components {
             /** @enum {string} */
             kind: "galgame" | "light_novel" | "manga";
             year: number;
+        };
+        WorkYearHistogramDto: {
+            /** @description 按开始年份统计的作品数，年份升序 */
+            buckets: components["schemas"]["WorkYearBucketDto"][];
         };
         WorkbenchAiPolicyInputDto: {
             /** @description 每批送入模型的段落数 */
@@ -41380,7 +41534,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["GalgameSummaryDto"][];
+                        items: components["schemas"]["GalgameListItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -43552,6 +43706,8 @@ export interface operations {
                 publication_from?: string;
                 /** @description Inclusive publication upper bound in YYYY, YYYY-MM or YYYY-MM-DD. */
                 publication_to?: string;
+                /** @description 开始年份，多个之间 OR */
+                years?: number[];
                 /** @description Tag filter groups encoded as op.match.ids, e.g. include.and.1.2 or exclude.or.5.6. Groups are AND-combined. */
                 tag_groups?: string[];
                 /** @description 按文库(producer id)过滤 */
@@ -43571,7 +43727,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["LightNovelSummaryDto"][];
+                        items: components["schemas"]["LightNovelListItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -43672,6 +43828,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelHeroCoverDto"][];
+                };
+            };
+        };
+    };
+    LightNovelController_getHistogram: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkYearHistogramDto"];
                 };
             };
         };
@@ -45519,6 +45694,8 @@ export interface operations {
                 exclude_regions?: ("kr" | "western")[];
                 /** @description 按开始发行年代过滤 */
                 decade?: "2020s" | "2010s" | "2000s" | "earlier";
+                /** @description 开始年份，多个之间 OR */
+                years?: number[];
                 /** @description 按连载杂志(producer id)过滤 */
                 magazine_id?: number;
                 /** @description 按标签名过滤 */
@@ -45550,7 +45727,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["MangaSummaryDto"][];
+                        items: components["schemas"]["MangaListItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -45591,6 +45768,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaGenreDto"][];
+                };
+            };
+        };
+    };
+    MangaController_getHistogram: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkYearHistogramDto"];
                 };
             };
         };

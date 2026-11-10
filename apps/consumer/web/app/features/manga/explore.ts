@@ -1,28 +1,30 @@
-import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
+import type { ApiData, ApiQuery, components } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+import type { TagFilterGroup } from '~/features/browse/filter'
+import { encodeTagGroup, normalizeTagGroups, readTagGroups } from '~/features/browse/tag-groups'
+import { readYears, writeYears } from '~/features/browse/years'
 
-export const MANGA_BROWSE_PAGE_SIZE = 24
+export const MANGA_BROWSE_PAGE_SIZE = 40
 
-export type MangaSummary = ApiData<'/api/v3/mangas', 'get'>['items'][number]
+export type MangaSummary = components['schemas']['MangaSummaryDto']
+export type MangaListItem = ApiData<'/api/v3/mangas', 'get'>['items'][number]
 export type MangaSortField = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['sort_field']>
 export type MangaSortOrder = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['sort_order']>
 export type MangaRegion = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['region']>
-export type MangaDecade = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['decade']>
 export type MangaAudience = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['audience']>
 export type MangaSerialStatus = NonNullable<ApiQuery<'/api/v3/mangas', 'get'>['serial_status']>
 export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export { encodeTagGroup, tagIdsOf } from '~/features/browse/tag-groups'
 
 export interface MangaBrowseState {
   page: number
   page_size: number
-  search?: string
   sort_field: MangaSortField
   sort_order: MangaSortOrder
   region?: MangaRegion
   audience?: MangaAudience
   serial_status?: MangaSerialStatus
-  decade?: MangaDecade
+  years: number[]
   magazine_id?: number
   tag?: string
   tag_groups: TagFilterGroup[]
@@ -78,13 +80,6 @@ export const MANGA_STATUS_OPTIONS: { label: string; value: MangaSerialStatus }[]
   { label: '休刊', value: 'PAUSED' },
 ]
 
-export const MANGA_DECADE_OPTIONS: { label: string; value: MangaDecade }[] = [
-  { label: '2020 年代', value: '2020s' },
-  { label: '2010 年代', value: '2010s' },
-  { label: '2000 年代', value: '2000s' },
-  { label: '更早', value: 'earlier' },
-]
-
 const SORT_FIELDS: MangaSortField[] = [
   'latest_chapter_at',
   'created_at',
@@ -96,10 +91,14 @@ const SORT_FIELDS: MangaSortField[] = [
 ]
 const SORT_ORDERS: MangaSortOrder[] = ['asc', 'desc']
 const REGIONS: MangaRegion[] = ['jp', 'kr', 'cn', 'other']
-const DECADES: MangaDecade[] = ['2020s', '2010s', '2000s', 'earlier']
 const AUDIENCES: MangaAudience[] = ['SHONEN', 'SEINEN', 'SHOJO', 'JOSEI']
 const STATUS_FILTERS: MangaSerialStatus[] = ['SERIALIZING', 'FINISHED', 'PAUSED']
-const TAG_GROUP_PATTERN = /^(include|exclude)\.(and|or)\.([1-9]\d*(?:\.[1-9]\d*)*)$/
+const LEGACY_DECADES: Record<string, string> = {
+  '2020s': '2020-2029',
+  '2010s': '2010-2019',
+  '2000s': '2000-2009',
+  earlier: '1900-1999',
+}
 
 const SERIAL_STATUS_TEXT: Record<MangaSerialStatus, string> = {
   SERIALIZING: '连载中',
@@ -121,13 +120,16 @@ export function readBrowseQuery(query: Record<string, unknown>): MangaBrowseStat
   return {
     page: readPageQuery(query),
     page_size: MANGA_BROWSE_PAGE_SIZE,
-    search: readString(query.search)?.trim() || undefined,
     sort_field,
     sort_order,
     region: REGIONS.find(item => item === readString(query.region)),
     audience: AUDIENCES.find(item => item === readString(query.audience)?.toUpperCase()),
     serial_status: STATUS_FILTERS.find(item => item === readString(query.status)?.toUpperCase()),
-    decade: DECADES.find(item => item === readString(query.decade)),
+    years: readYears(
+      [readString(query.years), LEGACY_DECADES[readString(query.decade) ?? '']]
+        .filter(Boolean)
+        .join(','),
+    ),
     magazine_id: readInt(query.magazine_id),
     tag: readString(query.tag)?.trim() || undefined,
     tag_groups: readTagGroups(query.tag_groups),
@@ -150,21 +152,11 @@ export function tagRoute(tagId: number): string {
   })
 }
 
-export function encodeTagGroup(group: TagFilterGroup): string {
-  return `${group.op}.${group.match}.${group.tag_ids.join('.')}`
-}
-
-export function tagIdsOf(groups: TagFilterGroup[]): number[] {
-  return [
-    ...new Set(groups.flatMap(group => group.tag_ids.filter(id => Number.isInteger(id) && id > 0))),
-  ]
-}
-
 export function sortValue(state: Pick<MangaBrowseState, 'sort_field' | 'sort_order'>): string {
   return `${state.sort_field}:${state.sort_order}`
 }
 
-export function titleOf(manga: MangaSummary): string {
+export function titleOf(manga: Pick<MangaSummary, 'name' | 'name_cn'>): string {
   return manga.name_cn || manga.name
 }
 
@@ -172,32 +164,28 @@ export function statusText(status: MangaSerialStatus | null): string {
   return status ? SERIAL_STATUS_TEXT[status] : ''
 }
 
-export function overlayText(manga: MangaSummary): string | undefined {
+export function overlayText(manga: Pick<MangaSummary, 'serial_status'>): string | undefined {
   return !manga.serial_status || manga.serial_status === 'SERIALIZING'
     ? undefined
     : statusText(manga.serial_status)
 }
 
-export function subText(manga: MangaSummary): string {
-  return [yearOf(manga), statusText(manga.serial_status)].filter(Boolean).join(' ')
-}
-
-function yearOf(manga: MangaSummary): string | undefined {
-  if (!manga.publication_date) return undefined
-  const year = new Date(manga.publication_date).getFullYear()
-
-  return Number.isFinite(year) ? String(year) : undefined
+export function subText(manga: Pick<MangaSummary, 'publication_date' | 'serial_status'>): string {
+  const year = manga.publication_date ? new Date(manga.publication_date).getFullYear() : Number.NaN
+  return [Number.isFinite(year) ? String(year) : undefined, statusText(manga.serial_status)]
+    .filter(Boolean)
+    .join(' ')
 }
 
 function buildPath(base: string, state: MangaBrowseState): string {
   const query = new URLSearchParams()
   if (state.page > 1) query.set('page', String(state.page))
-  if (state.search) query.set('search', state.search)
   if (sortValue(state) !== 'latest_chapter_at:desc') query.set('sort', sortValue(state))
   if (state.region) query.set('region', state.region)
   if (state.audience) query.set('audience', state.audience.toLowerCase())
   if (state.serial_status) query.set('status', state.serial_status.toLowerCase())
-  if (state.decade) query.set('decade', state.decade)
+  const years = writeYears(state.years)
+  if (years) query.set('years', years)
   if (state.magazine_id) query.set('magazine_id', String(state.magazine_id))
   if (state.tag) query.set('tag', state.tag)
   if (state.genre.length) query.set('genre', state.genre.join(','))
@@ -224,43 +212,4 @@ function readStrings(value: unknown): string[] {
   if (value == null) return []
   const raw = Array.isArray(value) ? value : String(value).split(',')
   return raw.map(item => String(item).trim()).filter(Boolean)
-}
-
-function readTagGroups(value: unknown): TagFilterGroup[] {
-  return normalizeTagGroups(
-    readStrings(value)
-      .map(decodeTagGroup)
-      .filter((group): group is TagFilterGroup => !!group),
-  )
-}
-
-function decodeTagGroup(value: string): TagFilterGroup | null {
-  const match = TAG_GROUP_PATTERN.exec(value)
-  if (!match || !match[1] || !match[2] || !match[3]) return null
-
-  return {
-    op: match[1] as TagFilterOp,
-    match: match[2] as TagMatchMode,
-    tag_ids: match[3].split('.').map(Number),
-  }
-}
-
-function normalizeTagGroups(groups: TagFilterGroup[]): TagFilterGroup[] {
-  const seen = new Set<string>()
-  const out: TagFilterGroup[] = []
-  for (const group of groups) {
-    const tag_ids = [...new Set(group.tag_ids.filter(id => Number.isInteger(id) && id > 0))]
-    if (!tag_ids.length) continue
-
-    const normalized: TagFilterGroup = {
-      op: group.op,
-      match: group.match,
-      tag_ids,
-    }
-    const key = encodeTagGroup(normalized)
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(normalized)
-  }
-  return out
 }

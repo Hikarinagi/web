@@ -1,26 +1,27 @@
 import { NOVEL_STATUS_CN } from '@hikarinagi/shared'
 import type { ApiData, ApiQuery } from '@hikarinagi/api-contract/v3'
 import { readPageQuery } from '#shared/utils/query'
-import type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+import type { TagFilterGroup } from '~/features/browse/filter'
+import { encodeTagGroup, normalizeTagGroups, readTagGroups } from '~/features/browse/tag-groups'
+import { readYears, writeYears } from '~/features/browse/years'
 
-export const LIGHT_NOVEL_BROWSE_PAGE_SIZE = 24
+export const LIGHT_NOVEL_BROWSE_PAGE_SIZE = 40
 
 export type LightNovelSummary = ApiData<'/api/v3/light-novels', 'get'>['items'][number]
 export type LightNovelSortField = NonNullable<ApiQuery<'/api/v3/light-novels', 'get'>['sort_field']>
 export type LightNovelSortOrder = NonNullable<ApiQuery<'/api/v3/light-novels', 'get'>['sort_order']>
 export type LightNovelStatus = NonNullable<ApiQuery<'/api/v3/light-novels', 'get'>['novel_status']>
-export type LightNovelDecade = '2020s' | '2010s' | '2000s' | 'earlier'
 export type { TagFilterGroup, TagFilterOp, TagMatchMode } from '~/features/browse/filter'
+export { encodeTagGroup, tagIdsOf } from '~/features/browse/tag-groups'
 
 export interface LightNovelBrowseState {
   page: number
   page_size: number
-  search?: string
   sort_field: LightNovelSortField
   sort_order: LightNovelSortOrder
   novel_status?: LightNovelStatus
   readable: boolean
-  decade?: LightNovelDecade
+  years: number[]
   bunko_id?: number
   tag_groups: TagFilterGroup[]
 }
@@ -74,13 +75,6 @@ export const LIGHT_NOVEL_STATUS_OPTIONS: { label: string; value: LightNovelStatu
   { label: '休刊', value: 'PAUSED' },
 ]
 
-export const LIGHT_NOVEL_DECADE_OPTIONS: { label: string; value: LightNovelDecade }[] = [
-  { label: '2020 年代', value: '2020s' },
-  { label: '2010 年代', value: '2010s' },
-  { label: '2000 年代', value: '2000s' },
-  { label: '更早', value: 'earlier' },
-]
-
 const SORT_FIELDS: LightNovelSortField[] = [
   'publication_date',
   'revised_at',
@@ -91,8 +85,12 @@ const SORT_FIELDS: LightNovelSortField[] = [
 ]
 const SORT_ORDERS: LightNovelSortOrder[] = ['asc', 'desc']
 const STATUSES: LightNovelStatus[] = ['SERIALIZING', 'FINISHED', 'PAUSED', 'ABANDONED']
-const DECADES: LightNovelDecade[] = ['2020s', '2010s', '2000s', 'earlier']
-const TAG_GROUP_PATTERN = /^(include|exclude)\.(and|or)\.([1-9]\d*(?:\.[1-9]\d*)*)$/
+const LEGACY_DECADES: Record<string, string> = {
+  '2020s': '2020-2029',
+  '2010s': '2010-2019',
+  '2000s': '2000-2009',
+  earlier: '1900-1999',
+}
 
 const STATUS_TEXT: Record<string, string> = NOVEL_STATUS_CN
 
@@ -134,12 +132,15 @@ export function readBrowseQuery(query: Record<string, unknown>): LightNovelBrows
   return {
     page: readPageQuery(query),
     page_size: LIGHT_NOVEL_BROWSE_PAGE_SIZE,
-    search: readString(query.search)?.trim() || undefined,
     sort_field,
     sort_order,
     novel_status: STATUSES.find(item => item === readString(query.status)?.toUpperCase()),
     readable: readBool(query.readable),
-    decade: DECADES.find(item => item === readString(query.decade)),
+    years: readYears(
+      [readString(query.years), LEGACY_DECADES[readString(query.decade) ?? '']]
+        .filter(Boolean)
+        .join(','),
+    ),
     bunko_id: readInt(query.bunko_id),
     tag_groups: readTagGroups(query.tag_groups),
   }
@@ -164,24 +165,14 @@ export function sortValue(state: Pick<LightNovelBrowseState, 'sort_field' | 'sor
   return `${state.sort_field}:${state.sort_order}`
 }
 
-export function encodeTagGroup(group: TagFilterGroup): string {
-  return `${group.op}.${group.match}.${group.tag_ids.join('.')}`
-}
-
-export function tagIdsOf(groups: TagFilterGroup[]): number[] {
-  return [
-    ...new Set(groups.flatMap(group => group.tag_ids.filter(id => Number.isInteger(id) && id > 0))),
-  ]
-}
-
 function buildPath(base: string, state: LightNovelBrowseState): string {
   const query = new URLSearchParams()
   if (state.page > 1) query.set('page', String(state.page))
-  if (state.search) query.set('search', state.search)
   if (sortValue(state) !== 'publication_date:desc') query.set('sort', sortValue(state))
   if (state.novel_status) query.set('status', state.novel_status.toLowerCase())
   if (state.readable) query.set('readable', '1')
-  if (state.decade) query.set('decade', state.decade)
+  const years = writeYears(state.years)
+  if (years) query.set('years', years)
   if (state.bunko_id) query.set('bunko_id', String(state.bunko_id))
   for (const group of normalizeTagGroups(state.tag_groups)) {
     query.append('tag_groups', encodeTagGroup(group))
@@ -196,12 +187,6 @@ function readString(value: unknown): string | undefined {
   return typeof raw === 'string' ? raw : undefined
 }
 
-function readStrings(value: unknown): string[] {
-  if (value == null) return []
-  const raw = Array.isArray(value) ? value : String(value).split(',')
-  return raw.map(item => String(item).trim()).filter(Boolean)
-}
-
 function readBool(value: unknown): boolean {
   const raw = readString(value)
   return raw === '1' || raw === 'true'
@@ -211,43 +196,4 @@ function readInt(value: unknown): number | undefined {
   const raw = readString(value)
   const num = raw != null ? Number(raw) : Number.NaN
   return Number.isInteger(num) && num > 0 ? num : undefined
-}
-
-function readTagGroups(value: unknown): TagFilterGroup[] {
-  return normalizeTagGroups(
-    readStrings(value)
-      .map(decodeTagGroup)
-      .filter((group): group is TagFilterGroup => !!group),
-  )
-}
-
-function decodeTagGroup(value: string): TagFilterGroup | null {
-  const match = TAG_GROUP_PATTERN.exec(value)
-  if (!match || !match[1] || !match[2] || !match[3]) return null
-
-  return {
-    op: match[1] as TagFilterOp,
-    match: match[2] as TagMatchMode,
-    tag_ids: match[3].split('.').map(Number),
-  }
-}
-
-function normalizeTagGroups(groups: TagFilterGroup[]): TagFilterGroup[] {
-  const seen = new Set<string>()
-  const out: TagFilterGroup[] = []
-  for (const group of groups) {
-    const tag_ids = [...new Set(group.tag_ids.filter(id => Number.isInteger(id) && id > 0))]
-    if (!tag_ids.length) continue
-
-    const normalized: TagFilterGroup = {
-      op: group.op,
-      match: group.match,
-      tag_ids,
-    }
-    const key = encodeTagGroup(normalized)
-    if (seen.has(key)) continue
-    seen.add(key)
-    out.push(normalized)
-  }
-  return out
 }

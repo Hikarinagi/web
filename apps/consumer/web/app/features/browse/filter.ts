@@ -12,6 +12,7 @@ export interface TagFilterGroup {
 export interface BrowseChip {
   key: string
   label: string
+  tag?: boolean
   remove: () => void
 }
 

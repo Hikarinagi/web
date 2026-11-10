@@ -8,7 +8,7 @@
   } from '~/features/light-novel/explore'
 
   defineOptions({ name: 'LightNovelsBrowsePage' })
-  definePageMeta({ container: 'full', scrollToTop: true })
+  definePageMeta({ container: 'full', scrollToTop: true, middleware: 'browse-search' })
 
   const route = useRoute()
   const router = useRouter()
@@ -24,8 +24,9 @@
   }
 
   useHikariSeoMeta({
-    title: () => (state.value.search ? [`${state.value.search} · 图鉴`, '图鉴'] : '图鉴'),
-    description: () => '按发售日、更新时间、标签与关键词浏览轻小说图鉴，找到你感兴趣的作品！',
+    title: '轻小说图鉴',
+    headerTitle: '轻小说',
+    description: '按标签、开始年份与文库浏览轻小说，找到你感兴趣的作品！',
   })
 </script>
 

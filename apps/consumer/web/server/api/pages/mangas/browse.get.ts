@@ -4,32 +4,38 @@ import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
 type SelectedFilterLabel = { id: number; name: string }
-type GenreLabel = { key: string; name: string }
 
 async function handler(event: H3Event) {
   const state = readBrowseQuery(getQuery(event))
-  const [list, selected_filter_labels] = await Promise.all([
+  const [list, histogram, genres, selected_filter_labels] = await Promise.all([
     fetchBackendData(event, '/api/v3/mangas', {
       query: {
         page: state.page,
         page_size: state.page_size,
-        search: state.search,
         sort_field: state.sort_field,
         sort_order: state.sort_order,
         region: state.region,
         audience: state.audience,
         serial_status: state.serial_status,
-        decade: state.decade,
+        years: state.years.length ? state.years : undefined,
         magazine_id: state.magazine_id,
         tag: state.tag,
         tag_groups: state.tag_groups.length ? state.tag_groups.map(encodeTagGroup) : undefined,
         genre: state.genre.length ? state.genre : undefined,
       },
     }),
+    fetchBackendData(event, '/api/v3/mangas/histogram', {}),
+    fetchBackendData(event, '/api/v3/mangas/genres').catch(() => []),
     readSelectedFilterLabels(event, state),
   ])
 
-  return { list, selected_filter_labels, state }
+  return {
+    list,
+    histogram,
+    genres: genres.map(genre => ({ key: genre.key, name: genre.name })),
+    selected_filter_labels,
+    state,
+  }
 }
 
 async function readSelectedFilterLabels(
@@ -38,9 +44,8 @@ async function readSelectedFilterLabels(
 ): Promise<{
   tags: SelectedFilterLabel[]
   magazine: SelectedFilterLabel | null
-  genres: GenreLabel[]
 }> {
-  const [tags, magazine, genres] = await Promise.all([
+  const [tags, magazine] = await Promise.all([
     readEntityLabels(tagIdsOf(state.tag_groups), id =>
       fetchBackendData(event, '/api/v3/tags/{id}', { path: { id } }),
     ),
@@ -49,19 +54,9 @@ async function readSelectedFilterLabels(
           .then(producer => ({ id: producer.id, name: producer.name }))
           .catch(() => null)
       : Promise.resolve<SelectedFilterLabel | null>(null),
-    readGenreLabels(event, state.genre),
   ])
 
-  return { tags, magazine, genres }
-}
-
-async function readGenreLabels(event: H3Event, keys: string[]): Promise<GenreLabel[]> {
-  if (!keys.length) return []
-  const catalog = await fetchBackendData(event, '/api/v3/mangas/genres').catch(() => [])
-  return keys.flatMap(key => {
-    const genre = catalog.find(item => item.key === key)
-    return genre ? [{ key: genre.key, name: genre.name }] : []
-  })
+  return { tags, magazine }
 }
 
 async function readEntityLabels(

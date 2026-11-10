@@ -8,7 +8,7 @@
   } from '~/features/manga/explore'
 
   defineOptions({ name: 'MangasBrowsePage' })
-  definePageMeta({ container: 'full', scrollToTop: true })
+  definePageMeta({ container: 'full', scrollToTop: true, middleware: 'browse-search' })
 
   const route = useRoute()
   const router = useRouter()
@@ -24,9 +24,9 @@
   }
 
   useHikariSeoMeta({
-    title: () =>
-      state.value.search ? [`${state.value.search} · 漫画图鉴`, '漫画图鉴'] : '漫画图鉴',
-    description: () => '按更新时间、地区、受众与连载状态浏览漫画图鉴，找到你感兴趣的作品！',
+    title: '漫画图鉴',
+    headerTitle: '漫画',
+    description: '按标签、连载状态与开始年份浏览漫画，找到你感兴趣的作品！',
   })
 </script>
 

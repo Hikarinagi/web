@@ -22521,6 +22521,102 @@
         ],
         "type": "object"
       },
+      "GalgameListItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "description": "平台编码",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "tags": {
+            "description": "公开标签中赞同最多的三个，不含剧透标签与当前条件里包含的标签",
+            "items": {
+              "$ref": "#/components/schemas/GalgameListTagDto"
+            },
+            "type": "array"
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "platforms",
+          "tags",
+          "rating"
+        ],
+        "type": "object"
+      },
+      "GalgameListTagDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
       "GalgameMetricItemDto": {
         "properties": {
           "covers": {
@@ -25654,6 +25750,127 @@
           "publishers",
           "maker",
           "volume_count"
+        ],
+        "type": "object"
+      },
+      "LightNovelListItemDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryPersonDto"
+              }
+            ],
+            "description": "作者",
+            "nullable": true,
+            "type": "object"
+          },
+          "bunko": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+              }
+            ],
+            "description": "所属文库",
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "轻小说 ID",
+            "type": "number"
+          },
+          "latest_volume_date": {
+            "description": "已发售的最新一卷的发售日",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "enum": [
+              "SERIALIZING",
+              "FINISHED",
+              "PAUSED",
+              "ABANDONED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "首卷出版日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "description": "出版方",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "readable": {
+            "description": "是否有可在站内阅读的卷",
+            "type": "boolean"
+          },
+          "volume_count": {
+            "description": "卷数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "novel_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "author",
+          "bunko",
+          "publishers",
+          "volume_count",
+          "latest_volume_date",
+          "readable",
+          "rating"
         ],
         "type": "object"
       },
@@ -29638,6 +29855,140 @@
           "enabled",
           "batch_size",
           "cooldown_days"
+        ],
+        "type": "object"
+      },
+      "MangaListItemDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaListRefDto"
+              }
+            ],
+            "description": "第一位作者",
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/MangaCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "漫画 ID",
+            "type": "number"
+          },
+          "label": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaListRefDto"
+              }
+            ],
+            "description": "第一个文库",
+            "nullable": true,
+            "type": "object"
+          },
+          "latest_chapter_at": {
+            "description": "最新一话的更新时间",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "latest_volume_date": {
+            "description": "已发售的最新一卷的发售日",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "开始连载日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ],
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
+          },
+          "volume_count": {
+            "description": "卷数",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "serial_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "latest_chapter_at",
+          "author",
+          "label",
+          "volume_count",
+          "latest_volume_date",
+          "rating"
+        ],
+        "type": "object"
+      },
+      "MangaListRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
         ],
         "type": "object"
       },
@@ -55766,6 +56117,21 @@
         },
         "type": "object"
       },
+      "WorkYearBucketDto": {
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "year": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "year",
+          "count"
+        ],
+        "type": "object"
+      },
       "WorkYearDto": {
         "properties": {
           "code": {
@@ -55793,6 +56159,21 @@
           "code",
           "count",
           "year"
+        ],
+        "type": "object"
+      },
+      "WorkYearHistogramDto": {
+        "properties": {
+          "buckets": {
+            "description": "按开始年份统计的作品数，年份升序",
+            "items": {
+              "$ref": "#/components/schemas/WorkYearBucketDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "buckets"
         ],
         "type": "object"
       },
@@ -77259,7 +77640,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/GalgameSummaryDto"
+                        "$ref": "#/components/schemas/GalgameListItemDto"
                       },
                       "type": "array"
                     },
@@ -80792,6 +81173,21 @@
             }
           },
           {
+            "description": "开始年份，多个之间 OR",
+            "in": "query",
+            "name": "years",
+            "required": false,
+            "schema": {
+              "items": {
+                "maximum": 2200,
+                "minimum": 1900,
+                "type": "number"
+              },
+              "maxItems": 300,
+              "type": "array"
+            }
+          },
+          {
             "description": "Tag filter groups encoded as op.match.ids, e.g. include.and.1.2 or exclude.or.5.6. Groups are AND-combined.",
             "in": "query",
             "name": "tag_groups",
@@ -80844,7 +81240,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/LightNovelSummaryDto"
+                        "$ref": "#/components/schemas/LightNovelListItemDto"
                       },
                       "type": "array"
                     },
@@ -81071,6 +81467,27 @@
                     "$ref": "#/components/schemas/LightNovelHeroCoverDto"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovel"
+        ]
+      }
+    },
+    "/api/v3/light-novels/histogram": {
+      "get": {
+        "operationId": "LightNovelController_getHistogram",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkYearHistogramDto"
                 }
               }
             },
@@ -84269,6 +84686,21 @@
             }
           },
           {
+            "description": "开始年份，多个之间 OR",
+            "in": "query",
+            "name": "years",
+            "required": false,
+            "schema": {
+              "items": {
+                "maximum": 2200,
+                "minimum": 1900,
+                "type": "number"
+              },
+              "maxItems": 300,
+              "type": "array"
+            }
+          },
+          {
             "description": "按连载杂志(producer id)过滤",
             "in": "query",
             "name": "magazine_id",
@@ -84380,7 +84812,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/MangaSummaryDto"
+                        "$ref": "#/components/schemas/MangaListItemDto"
                       },
                       "type": "array"
                     },
@@ -84441,6 +84873,27 @@
                     "$ref": "#/components/schemas/MangaGenreDto"
                   },
                   "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
+    "/api/v3/mangas/histogram": {
+      "get": {
+        "operationId": "MangaController_getHistogram",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkYearHistogramDto"
                 }
               }
             },

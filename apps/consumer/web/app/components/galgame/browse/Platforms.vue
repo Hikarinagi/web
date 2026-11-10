@@ -2,7 +2,7 @@
   import { MultiSelect } from '@hina-ui/vue'
   import { PLATFORM_GROUPS, platformLabel } from '~/features/galgame/platforms'
 
-  defineOptions({ name: 'GalgameBrowsePlatformPopover' })
+  defineOptions({ name: 'GalgameBrowsePlatforms' })
   const model = defineModel<string[]>({ default: () => [] })
 
   const platformGroups = PLATFORM_GROUPS.map(group => ({
@@ -12,5 +12,11 @@
 </script>
 
 <template>
-  <MultiSelect v-model="model" :options="platformGroups" placeholder="平台" class="w-32" />
+  <MultiSelect
+    :model-value="model"
+    :options="platformGroups"
+    placeholder="平台"
+    aria-label="平台"
+    @update:model-value="value => (model = value.map(String))"
+  />
 </template>

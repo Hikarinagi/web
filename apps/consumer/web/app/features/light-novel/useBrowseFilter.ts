@@ -1,13 +1,8 @@
 import type { InjectionKey } from 'vue'
-import type { LightNovelBrowseState, TagFilterGroup } from './explore'
-
-type EntityKind = 'tag' | 'bunko'
-
-export interface BrowseChip {
-  key: string
-  label: string
-  remove: () => void
-}
+import type { BrowseChip, BrowseFilterRecall } from '~/features/browse/filter'
+import { tagConditionLabel, tagConditions, withoutCondition } from '~/features/browse/tag-groups'
+import { rangeText, yearRanges } from '~/features/browse/years'
+import { statusText, type LightNovelBrowseState } from './explore'
 
 export function useBrowseFilter(
   state: () => LightNovelBrowseState,
@@ -15,42 +10,79 @@ export function useBrowseFilter(
 ) {
   const labels = reactive(new Map<string, string>())
 
-  function remember(kind: EntityKind, entities: { id: number; name: string }[]) {
+  function remember(kind: string, entities: { id: number; name: string }[]) {
     for (const entity of entities) labels.set(`${kind}:${entity.id}`, entity.name)
   }
 
-  function entityLabel(kind: EntityKind, id: number): string {
+  function entityLabel(kind: string, id: number): string {
     return labels.get(`${kind}:${id}`) ?? `#${id}`
   }
 
-  const chips = computed<BrowseChip[]>(() =>
-    state().tag_groups.map((group, index) => ({
-      key: `tag-group:${index}`,
-      label: tagGroupLabel(group, id => entityLabel('tag', id)),
-      remove: () => update({ tag_groups: state().tag_groups.filter((_, i) => i !== index) }),
-    })),
-  )
+  const more = computed(() => (state().novel_status ? 1 : 0) + (state().bunko_id ? 1 : 0))
 
-  function clear() {
-    update({ tag_groups: [] })
+  const chips = computed<BrowseChip[]>(() => {
+    const s = state()
+    const out: BrowseChip[] = tagConditions(s.tag_groups).map(condition => ({
+      key: condition.key,
+      label: tagConditionLabel(condition, id => entityLabel('tag', id)),
+      tag: true,
+      remove: () => update({ tag_groups: withoutCondition(s.tag_groups, condition) }),
+    }))
+    for (const range of yearRanges(s.years)) {
+      out.push({
+        key: `year:${range.from}`,
+        label: rangeText(range),
+        remove: () =>
+          update({ years: s.years.filter(year => year < range.from || year > range.to) }),
+      })
+    }
+    if (s.readable)
+      out.push({
+        key: 'readable',
+        label: '可在站内阅读',
+        remove: () => update({ readable: false }),
+      })
+    if (s.novel_status)
+      out.push({
+        key: 'status',
+        label: statusText(s.novel_status),
+        remove: () => update({ novel_status: undefined }),
+      })
+    if (s.bunko_id) {
+      const id = s.bunko_id
+      out.push({
+        key: `bunko:${id}`,
+        label: entityLabel('bunko', id),
+        remove: () => update({ bunko_id: undefined }),
+      })
+    }
+    return out
+  })
+
+  function clearMore() {
+    update({ novel_status: undefined, bunko_id: undefined })
   }
 
-  return { remember, entityLabel, chips, count: computed(() => chips.value.length), clear }
+  function clear() {
+    update({
+      novel_status: undefined,
+      bunko_id: undefined,
+      readable: false,
+      years: [],
+      tag_groups: [],
+    })
+  }
+
+  return {
+    remember,
+    entityLabel,
+    chips,
+    count: computed(() => chips.value.length),
+    more,
+    clearMore,
+    clear,
+  }
 }
 
-function tagGroupLabel(group: TagFilterGroup, labelOf: (id: number) => string): string {
-  const labels = group.tag_ids.map(labelOf)
-  const joiner = group.match === 'and' ? ' + ' : ' / '
-  const prefix =
-    group.op === 'include'
-      ? group.match === 'and'
-        ? '包含'
-        : '包含任一'
-      : group.match === 'and'
-        ? '排除全部'
-        : '排除任一'
-  return `${prefix}: ${labels.join(joiner)}`
-}
-
-export type BrowseFilter = ReturnType<typeof useBrowseFilter>
+export type BrowseFilter = ReturnType<typeof useBrowseFilter> & BrowseFilterRecall
 export const BROWSE_FILTER_KEY: InjectionKey<BrowseFilter> = Symbol('light-novel-browse-filter')
