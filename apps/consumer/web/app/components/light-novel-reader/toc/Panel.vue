@@ -6,6 +6,8 @@
 
   defineOptions({ name: 'LightNovelReaderTocPanel' })
 
+  const props = defineProps<{ block?: ScrollLogicalPosition }>()
+
   const { engine, location, goTo } = useReader()
   const { rows, current, chapter } = location
   const { phase } = engine
@@ -23,7 +25,9 @@
       void nextTick(() => {
         const root: unknown = nav.value?.$el
         if (!(root instanceof Element)) return
-        root.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' })
+        root
+          .querySelector('[aria-current="page"]')
+          ?.scrollIntoView({ block: props.block ?? 'nearest' })
       }),
     { immediate: true, flush: 'post' },
   )

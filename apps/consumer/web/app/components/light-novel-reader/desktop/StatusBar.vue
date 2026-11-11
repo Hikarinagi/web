@@ -1,12 +1,16 @@
 <script setup lang="ts">
-  import { Inline, Progress, Text } from '@hina-ui/vue'
+  import { Button, DisclosureIcon, Inline, Popover, Progress, ScrollArea, Text } from '@hina-ui/vue'
   import { useReader } from '~/features/light-novel-reader/context'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'LightNovelReaderDesktopStatusBar' })
 
-  const { location, settings } = useReader()
+  const { location, settings, shell, engine } = useReader()
   const { title, current, chapter, book, laid, position, minutesLeft } = location
+  const { quickToc } = shell
+  const { phase } = engine
+
+  const label = computed(() => title.value || current.value?.label || '目录')
 
   const now = useNow({ interval: 30_000 })
   const clock = computed(() =>
@@ -39,9 +43,31 @@
     data-tour="progress"
     class="h-9 shrink-0 border-t border-line bg-surface px-5"
   >
-    <Text size="xs" weight="medium" truncate class="min-w-0 shrink">
-      {{ title || current?.label }}
-    </Text>
+    <Popover
+      v-model:open="quickToc"
+      side="top"
+      align="start"
+      :padded="false"
+      aria-label="目录"
+      class="w-80"
+      @close-auto-focus.prevent
+    >
+      <Button
+        variant="ghost"
+        tone="neutral"
+        size="xs"
+        :disabled="phase !== 'ready'"
+        class="-ms-2 max-w-full min-w-0 shrink"
+      >
+        <Text as="span" size="xs" weight="medium" truncate>{{ label }}</Text>
+        <template #trailing><DisclosureIcon /></template>
+      </Button>
+      <template #content>
+        <ScrollArea class="max-h-96">
+          <LightNovelReaderTocPanel block="center" />
+        </ScrollArea>
+      </template>
+    </Popover>
     <Text size="xs" tone="muted" class="min-w-32 shrink-0 tabular-nums">{{ pages }}</Text>
     <Progress
       v-if="percent != null"

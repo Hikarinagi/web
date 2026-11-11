@@ -18,10 +18,13 @@
 
   async function highlight(color: string) {
     const current = controller()
+    const view = engine.view.value
     if (!current) return
     lastColor.value = color
-    const record = await current.addAnnotation({ kind: 'highlight', color })
-    current.clearSelection()
+    const record = view
+      ? await highlights.mark(view, color)
+      : await current.addAnnotation({ kind: 'highlight', color })
+    engine.clearSelection()
     return record
   }
 
@@ -34,7 +37,7 @@
   async function copyText() {
     await copy(text.value)
     toast.success('已复制')
-    controller()?.clearSelection()
+    engine.clearSelection()
   }
 </script>
 
@@ -48,7 +51,7 @@
     aria-label="选区操作"
     @open-auto-focus.prevent
     @close-auto-focus.prevent
-    @escape-key-down="controller()?.clearSelection()"
+    @escape-key-down="engine.clearSelection()"
   >
     <template #content>
       <Stack gap="none" class="p-1">

@@ -1,8 +1,14 @@
 import { HIKARI_BIZ_CODE } from '@hikarinagi/shared'
-import { preloadReaderRuntime } from '@ritojs/core'
-import { canDrawWithWebGl2, WebGlUnavailableError } from '@ritojs/kit'
+import { preloadReaderRuntime, type Reader, type ReaderLocator, type TocEntry } from '@ritojs/core'
+import {
+  canDrawWithWebGl2,
+  createScrollController,
+  WebGlUnavailableError,
+  type ReadingPosition,
+  type ScrollController,
+} from '@ritojs/kit'
 import { isApiError } from '~/utils/api/error'
-import { createStack, effectOf, locatorOf, spreadOf } from './engine'
+import { createStack, effectOf, layoutWhere, locatorOf, marginOf, spreadOf } from './engine'
 import { cachedFont, fontCatalogue, fontFace, loadFont, type ReaderFont } from './fonts'
 import { cachedSkeleton, openPublication, startSession } from './publication'
 import type { ReaderHighlights } from './useReaderHighlights'
@@ -43,18 +49,124 @@ export function useReaderEngine(options: {
   const fault = ref<string | null>(null)
   const received = ref({ loaded: 0, total: 0, font: false })
   const stack = shallowRef<Awaited<ReturnType<typeof createStack>> | null>(null)
+  const view = shallowRef<ScrollController | null>(null)
+  const switching = ref(false)
   const font = shallowRef<ReaderFont | null>(null)
   let generation = 0
+  let reading: ReaderLocator | undefined
+  let turning: Promise<void> = Promise.resolve()
 
   const spread = () =>
-    spreadOf(device.value.spread, options.size.value, device.value.margin, device.value.fontSize)
+    device.value.flow === 'scrolled'
+      ? 'scrolled'
+      : spreadOf(
+          device.value.spread,
+          options.size.value,
+          device.value.margin,
+          device.value.fontSize,
+        )
+
+  const margin = () =>
+    marginOf(
+      device.value.flow,
+      options.size.value.width,
+      device.value.margin,
+      device.value.pageWidth,
+    )
 
   async function release() {
     const current = stack.value
+    const shown = view.value
     stack.value = null
+    view.value = null
+    shown?.dispose()
     current?.controller.dispose()
     current?.canvas.remove()
     await current?.reader.dispose()
+  }
+
+  async function createView(reader: Reader, from: ReaderLocator | undefined) {
+    const created = createScrollController(reader, document.createElement('canvas'), {
+      a11y: { enabled: true },
+    })
+    reading = from
+    created.on('position', ({ locator }) => (reading = locator))
+    if (from) await created.scrollToLocator(from)
+    return created
+  }
+
+  async function switchFlow() {
+    const current = stack.value
+    const scrolled = device.value.flow === 'scrolled'
+    if (!current || phase.value !== 'ready' || scrolled === (view.value !== null)) return
+    const { reader, controller } = current
+    const stale = () => stack.value !== current
+    const layOut = () =>
+      reader.updateLayout(options.size.value.width, options.size.value.height, spread(), margin())
+    switching.value = true
+    try {
+      if (scrolled) {
+        const from = controller.position?.sourceLocator
+        controller.suspend()
+        layOut()
+        await layoutWhere(reader, true)
+        const created = await createView(reader, from)
+        if (stale() || !options.host.value) {
+          created.dispose()
+          return
+        }
+        created.mount(options.host.value)
+        view.value = created
+        return
+      }
+      view.value?.dispose()
+      view.value = null
+      if (reading) await reader.navigateToLocator?.(reading)
+      if (stale()) return
+      layOut()
+      await layoutWhere(reader, false)
+      if (!stale()) controller.resume()
+    } catch (error) {
+      if (stale()) return
+      failure.value = 'engine'
+      fault.value = error instanceof Error ? `${error.name}: ${error.message}` : String(error)
+      phase.value = 'failed'
+    } finally {
+      switching.value = false
+    }
+  }
+
+  const spreads = () => {
+    const current = stack.value
+    if (!current) return []
+    return view.value ? current.reader.spreads : current.controller.spreads
+  }
+
+  function goTo(position: ReadingPosition) {
+    const shown = view.value
+    if (!shown) return stack.value?.controller.goToPosition(position)
+    return position.sourceLocator ? shown.scrollToLocator(position.sourceLocator) : undefined
+  }
+
+  function goToEntry(entry: TocEntry) {
+    const current = stack.value
+    const shown = view.value
+    if (!shown) {
+      current?.controller.navigateToTocEntry(entry)
+      return
+    }
+    const page = current?.reader.findPage(entry)
+    const target = page == null ? undefined : current?.reader.findSpread(page)
+    if (target != null) shown.scrollToSpread(target)
+    else {
+      const [href, anchorId] = entry.href.split('#')
+      void shown.scrollToLocator({ href: href!, ...(anchorId && { anchorId }) })
+    }
+  }
+
+  function clearSelection() {
+    if (view.value) view.value.clearSelection()
+    else stack.value?.controller.clearSelection()
   }
 
   async function open(at?: unknown) {
@@ -111,17 +223,19 @@ export function useReaderEngine(options: {
       ])
       if (id !== generation) return
       phase.value = 'layout'
+      const initialLocator = locatorOf(at ?? options.position())
+      const scrolled = device.value.flow === 'scrolled'
       const created = await createStack({
         publication,
         size: options.size.value,
-        margin: device.value.margin,
+        margin: margin(),
         spread: spread(),
         fontSize: device.value.fontSize,
         lineHeight: device.value.lineHeight,
         theme: palette.value,
         face: fontFace(chosen.sha256, bytes),
         effect: device.value.effect,
-        initialLocator: locatorOf(at ?? options.position()),
+        initialLocator,
         annotations: options.highlights.adapter,
         paintPage: (context, { bookPageIndex, width, height, margins }) => {
           if (bookPageIndex == null) return
@@ -143,10 +257,21 @@ export function useReaderEngine(options: {
         await created.reader.dispose()
         return
       }
+      if (scrolled) created.controller.suspend()
       created.controller.mount(options.host.value)
+      const shown = scrolled ? await createView(created.reader, initialLocator) : null
+      if (id !== generation || !options.host.value) {
+        shown?.dispose()
+        created.controller.dispose()
+        await created.reader.dispose()
+        return
+      }
+      shown?.mount(options.host.value)
       font.value = chosen
+      view.value = shown
       stack.value = created
       phase.value = 'ready'
+      turning = turning.then(switchFlow)
     } catch (error) {
       if (id !== generation) return
       const known =
@@ -162,23 +287,29 @@ export function useReaderEngine(options: {
   }
 
   watch(
-    () => [options.size.value, device.value.margin, device.value.spread] as const,
+    () => device.value.flow,
+    () => (turning = turning.then(switchFlow)),
+  )
+  watch(
+    [
+      () => options.size.value,
+      () => device.value.margin,
+      () => device.value.pageWidth,
+      () => device.value.spread,
+    ],
     () => {
       const controller = stack.value?.controller
       if (!controller) return
       controller.setSpreadMode(spread())
-      controller.resize(options.size.value.width, options.size.value.height, device.value.margin)
+      controller.resize(options.size.value.width, options.size.value.height, margin())
     },
   )
-  watch(
-    () => [device.value.fontSize, device.value.lineHeight] as const,
-    ([fontSize, lineHeight]) => {
-      const controller = stack.value?.controller
-      if (!controller) return
-      controller.setSpreadMode(spread())
-      controller.setTypography({ fontSize, lineHeight, lineHeightForce: true })
-    },
-  )
+  watch([() => device.value.fontSize, () => device.value.lineHeight], ([fontSize, lineHeight]) => {
+    const controller = stack.value?.controller
+    if (!controller) return
+    controller.setSpreadMode(spread())
+    controller.setTypography({ fontSize, lineHeight, lineHeightForce: true })
+  })
   watch(palette, theme =>
     stack.value?.controller.setTheme({
       backgroundColor: theme.background,
@@ -204,7 +335,23 @@ export function useReaderEngine(options: {
     void release()
   })
 
-  return { phase, failure, fault, received, stack, font, open, swapFont, release }
+  return {
+    phase,
+    failure,
+    fault,
+    received,
+    stack,
+    view,
+    switching,
+    font,
+    open,
+    swapFont,
+    release,
+    spreads,
+    goTo,
+    goToEntry,
+    clearSelection,
+  }
 }
 
 export type ReaderEngine = ReturnType<typeof useReaderEngine>

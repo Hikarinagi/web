@@ -22,6 +22,7 @@ export function useReaderShell() {
   )
   const drawer = ref<'left' | ReaderPanel | null>(null)
   const sheet = ref<'toc' | ReaderPanel | null>(null)
+  const quickToc = ref(false)
   const chrome = ref(true)
   const dock = ref(0)
   const tab = ref('toc')
@@ -39,6 +40,7 @@ export function useReaderShell() {
   watch([medium, wide, phone, focused], () => {
     drawer.value = null
     sheet.value = null
+    quickToc.value = false
   })
 
   watch(screen.isFullscreen, full => (stored.value = { ...stored.value, fullscreen: full }))
@@ -72,6 +74,7 @@ export function useReaderShell() {
 
   function settle() {
     sheet.value = null
+    quickToc.value = false
     if (!leftDocked.value) drawer.value = null
   }
 
@@ -88,6 +91,7 @@ export function useReaderShell() {
     stored,
     drawer,
     sheet,
+    quickToc,
     chrome,
     dock,
     tab,

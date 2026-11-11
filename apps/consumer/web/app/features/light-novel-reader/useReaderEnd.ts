@@ -15,10 +15,12 @@ export function useReaderEnd(options: {
   const stats = shallowRef<ApiData<'/api/v3/reader/volumes/{volume_id}/stats', 'get'> | null>()
   let generation = 0
   let armed = false
+  let bottom = false
 
   function last() {
     const controller = options.engine.stack.value?.controller
     if (!controller || !options.location.laid.value) return false
+    if (options.engine.view.value) return bottom
     return controller.currentSpread >= controller.totalSpreads - 1
   }
 
@@ -56,10 +58,27 @@ export function useReaderEnd(options: {
   useSwipe(options.host, {
     onSwipeEnd: (_, direction) => {
       const controller = options.engine.stack.value?.controller
-      if (direction === 'left' && armed && !open.value && !controller?.hasSelection && last())
-        enter()
+      const view = options.engine.view.value
+      const forward = view ? (view.axis === 'left' ? 'right' : 'up') : 'left'
+      const selected = view ? view.selection !== null : controller?.hasSelection
+      if (direction === forward && armed && !open.value && !selected && last()) enter()
     },
   })
+
+  watch(
+    options.engine.view,
+    (view, _, onCleanup) => {
+      bottom = false
+      if (!view) return
+      onCleanup(
+        view.on('scroll', ({ progress }) => {
+          bottom = progress >= 1
+          if (!bottom) open.value = false
+        }),
+      )
+    },
+    { immediate: true },
+  )
 
   watch(options.location.position, () => {
     if (stats.value === undefined && last()) void load()
@@ -82,7 +101,7 @@ export function useReaderEnd(options: {
     { immediate: true },
   )
 
-  return { open, stats, edge, close: () => void (open.value = false) }
+  return { open, stats, edge, last, close: () => void (open.value = false) }
 }
 
 export type ReaderEnd = ReturnType<typeof useReaderEnd>

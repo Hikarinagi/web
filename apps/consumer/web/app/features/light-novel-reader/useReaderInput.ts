@@ -1,3 +1,4 @@
+import { createKeyboardManager } from '@ritojs/kit/keyboard'
 import type { ReaderTurn } from './useReaderAnalytics'
 import type { ReaderEngine } from './useReaderEngine'
 
@@ -7,12 +8,15 @@ export function useReaderInput(options: {
   tapTurn: () => boolean
   paused: () => boolean
   edge: (forward: boolean) => boolean
+  atEnd: () => boolean
   turned: (method: ReaderTurn) => void
   onMiddle: () => void
   keys: Record<string, () => void>
 }) {
   const controller = () => options.engine.stack.value?.controller
+  const view = () => options.engine.view.value
   let press: { x: number; y: number; at: number } | null = null
+  let flick = { armed: false, total: 0, at: Number.NEGATIVE_INFINITY }
   let wheel = {
     total: 0,
     locked: false,
@@ -44,7 +48,7 @@ export function useReaderInput(options: {
     const host = options.host.value
     const start = press
     press = null
-    if (!current || !host || !start || event.detail > 1) return
+    if (view() || !current || !host || !start || event.detail > 1) return
     if (event.timeStamp - start.at > 300) return
     if (Math.hypot(event.clientX - start.x, event.clientY - start.y) > 8) return
     if (current.hitTestContent({ clientX: event.clientX, clientY: event.clientY })) return
@@ -64,6 +68,18 @@ export function useReaderInput(options: {
     'wheel',
     (event: WheelEvent) => {
       if (!controller() || event.ctrlKey) return
+      const strip = view()
+      if (strip) {
+        if (event.timeStamp - flick.at > 200) flick = { ...flick, armed: options.atEnd(), total: 0 }
+        flick.at = event.timeStamp
+        if (!flick.armed) return
+        const delta = strip.axis === 'left' ? event.deltaY - event.deltaX : event.deltaY
+        flick.total += event.deltaMode === 0 ? delta : delta * 40
+        if (flick.total < 30) return
+        flick.armed = false
+        options.edge(true)
+        return
+      }
       event.preventDefault()
       const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX
       const notch = event.deltaMode !== 0 || (Number.isInteger(delta) && Math.abs(delta) >= 100)
@@ -101,6 +117,27 @@ export function useReaderInput(options: {
     if (target !== document.body && !options.host.value?.contains(target)) event.stopPropagation()
   })
 
+  useEventListener(document.body, 'keydown', (event: KeyboardEvent) => {
+    const strip = view()
+    if (!strip || !/^(Arrow.+|Page.+|Home|End| )$/.test(event.key)) return
+    const editing =
+      event.target instanceof Element &&
+      event.target.closest(
+        'input, textarea, select, [contenteditable]:not([contenteditable="false"])',
+      )
+    if (options.paused() || editing) {
+      event.stopPropagation()
+      return
+    }
+    const [next, back] =
+      strip.axis === 'left' ? ['ArrowLeft', 'ArrowRight'] : ['ArrowDown', 'ArrowUp']
+    const space = event.key === ' '
+    const forward = event.key === next || event.key === 'PageDown' || (space && !event.shiftKey)
+    const backward = event.key === back || event.key === 'PageUp' || (space && event.shiftKey)
+    if ((forward && options.edge(true)) || (backward && options.edge(false)))
+      event.stopPropagation()
+  })
+
   watch(
     () => [options.engine.stack.value, options.paused()] as const,
     ([stack, paused], _, onCleanup) => {
@@ -116,6 +153,18 @@ export function useReaderInput(options: {
         ),
       ]
       onCleanup(() => offs.forEach(off => off()))
+    },
+    { immediate: true },
+  )
+
+  watch(
+    () => [options.engine.view.value, options.paused()] as const,
+    ([strip, paused], _, onCleanup) => {
+      if (!strip) return
+      const keyboard = createKeyboardManager(document.documentElement)
+      keyboard.setEnabled(!paused)
+      Object.entries(options.keys).forEach(([key, action]) => keyboard.register(key, action))
+      onCleanup(() => keyboard.dispose())
     },
     { immediate: true },
   )

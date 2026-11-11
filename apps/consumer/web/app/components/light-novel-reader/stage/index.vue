@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IconButton, Stack } from '@hina-ui/vue'
+  import { Center, IconButton, Spinner, Stack } from '@hina-ui/vue'
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import { useMediaQuery } from '@vueuse/core'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
@@ -16,7 +16,11 @@
   const hover = ref<'prev' | 'next' | null>(null)
   const arrows = computed(
     () =>
-      pointer.value && settings.device.value.tapTurn && phase.value === 'ready' && !end.open.value,
+      pointer.value &&
+      settings.device.value.tapTurn &&
+      settings.device.value.flow === 'paged' &&
+      phase.value === 'ready' &&
+      !end.open.value,
   )
 
   function bind(element: unknown) {
@@ -58,6 +62,9 @@
           v-if="phase === 'prepare' || phase === 'download' || phase === 'layout'"
         />
         <LightNovelReaderStageFailure v-else-if="phase === 'failed'" :data="data" />
+        <Center v-else-if="engine.switching.value" class="absolute inset-0">
+          <Spinner size="lg" />
+        </Center>
       </Transition>
       <LightNovelReaderEnd :data="data" />
       <LightNovelReaderStageResume />

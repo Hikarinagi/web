@@ -25,6 +25,33 @@ export function useReaderSelection(engine: ReaderEngine, host: Readonly<Ref<HTML
     { immediate: true },
   )
 
+  watch(
+    engine.view,
+    (view, _, onCleanup) => {
+      if (!view) return
+      rects.value = []
+      let offset = view.offset
+      const offs = [
+        view.on('selection', event => {
+          rects.value = event.range && !event.selecting ? event.rects : []
+          if (!event.range) return
+          text.value = event.text
+          chapter.value = event.range.sourceLocator != null
+        }),
+        view.on('scroll', event => {
+          if (Math.abs(event.offset - offset) < 0.5) return
+          offset = event.offset
+          rects.value = []
+        }),
+        view.on('rest', () => {
+          if (view.selection) rects.value = view.selectionRects()
+        }),
+      ]
+      onCleanup(() => offs.forEach(off => off()))
+    },
+    { immediate: true },
+  )
+
   useEventListener(host, 'pointerdown', () => (pressed.value = true), { passive: true })
   useEventListener('pointerup', () => (pressed.value = false), { passive: true })
   useEventListener('pointercancel', () => (pressed.value = false), { passive: true })
@@ -33,10 +60,12 @@ export function useReaderSelection(engine: ReaderEngine, host: Readonly<Ref<HTML
     const stack = engine.stack.value
     const current = rects.value
     if (!stack || pressed.value || !current.length) return null
+    const view = engine.view.value
+    const canvas = view?.canvas ?? stack.canvas
     return {
       getBoundingClientRect: () => {
-        const box = stack.canvas.getBoundingClientRect()
-        const scale = stack.controller.renderScale
+        const box = canvas.getBoundingClientRect()
+        const scale = view ? 1 : stack.controller.renderScale
         const left = Math.min(...current.map(rect => rect.x))
         const top = Math.min(...current.map(rect => rect.y))
         const right = Math.max(...current.map(rect => rect.x + rect.width))
@@ -48,7 +77,7 @@ export function useReaderSelection(engine: ReaderEngine, host: Readonly<Ref<HTML
           (bottom - top) * scale,
         )
       },
-      contextElement: stack.canvas,
+      contextElement: canvas,
     }
   })
 

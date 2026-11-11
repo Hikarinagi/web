@@ -38,7 +38,7 @@
     <template v-if="data.reader">
       <LightNovelReaderBookmarkToggle />
       <IconButton
-        v-if="settings.device.value.showGuide"
+        v-if="settings.device.value.showGuide && settings.device.value.flow === 'paged'"
         label="操作指引"
         variant="ghost"
         data-tour="guide"

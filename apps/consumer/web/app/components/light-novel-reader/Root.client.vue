@@ -49,6 +49,7 @@
     volumeId: () => props.data.volume.id,
     position: () => location.position.value,
     controller: () => engine.stack.value?.controller,
+    goTo: position => engine.goTo(position),
     track: (name, attributes) => analytics.track(name, attributes),
   })
   const engine = useReaderEngine({
@@ -72,7 +73,10 @@
     }),
   })
 
-  const tour = useReaderTour({ shell, ready: () => engine.phase.value === 'ready' })
+  const tour = useReaderTour({
+    shell,
+    ready: () => engine.phase.value === 'ready' && !engine.view.value,
+  })
   const end = useReaderEnd({
     volumeId: () => props.data.volume.id,
     host,
@@ -97,12 +101,14 @@
       Boolean(
         drawer.value ||
         sheet.value ||
+        shell.quickToc.value ||
         tour.open.value ||
         composer.open.value ||
         shell.shortcuts.value ||
         shell.report.value,
       ),
     edge: forward => end.edge(forward),
+    atEnd: () => end.last(),
     onMiddle: () => {
       if (phone.value) chrome.value = !chrome.value
     },
@@ -133,13 +139,13 @@
 
   function goTo(row: TocRow) {
     jumps.remember()
-    engine.stack.value?.controller.navigateToTocEntry(row.entry)
+    engine.goToEntry(row.entry)
     shell.settle()
   }
 
   const resume = useReaderResume({ volumeId: () => props.data.volume.id, engine, location })
   const selection = useReaderSelection(engine, host)
-  const events = useReaderEvents({ engine, host, shell, jumps, highlights })
+  const events = useReaderEvents({ engine, host, shell, jumps, highlights, search })
   const errors = useReaderErrors(engine)
 
   provideReader({

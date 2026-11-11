@@ -32,7 +32,10 @@ async function mountReader(edge: (forward: boolean) => boolean = () => false) {
       },
     },
   }
-  const engine = { stack: shallowRef({ controller }) } as unknown as ReaderEngine
+  const engine = {
+    stack: shallowRef({ controller }),
+    view: shallowRef(null),
+  } as unknown as ReaderEngine
   const host = ref<HTMLElement | null>(null)
   let input!: ReturnType<typeof useReaderInput>
   const wrapper = mount(
@@ -44,6 +47,7 @@ async function mountReader(edge: (forward: boolean) => boolean = () => false) {
           tapTurn: () => true,
           paused: () => false,
           edge,
+          atEnd: () => false,
           turned: method => methods.push(method),
           onMiddle: () => middles.push(1),
           keys: {},

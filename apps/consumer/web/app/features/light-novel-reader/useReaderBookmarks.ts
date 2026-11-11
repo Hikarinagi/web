@@ -57,7 +57,7 @@ export function useReaderBookmarks(options: {
     const position = options.location.position.value
     const anchorOf = stack?.reader.interactions?.getPageReadingAnchor
     if (!stack || !position || !anchorOf) return null
-    const pages = stack.controller.spreads[position.projection.spreadIndex]?.pageIndexes ?? [
+    const pages = options.engine.spreads()[position.projection.spreadIndex]?.pageIndexes ?? [
       position.projection.pageIndex,
     ]
     const [start, end] = await Promise.all([
@@ -95,7 +95,7 @@ export function useReaderBookmarks(options: {
 
   async function add() {
     const range = await bounds()
-    const locator = range?.start
+    const locator = options.engine.view.value ? range?.position.sourceLocator : range?.start
     if (!range || !locator) return
     const { stack, position } = range
     const point = locator.sourcePoint

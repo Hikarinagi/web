@@ -33,7 +33,11 @@ function mountLocation(spreads: number[][], scope = 'book') {
   const wrapper = mount(
     defineComponent({
       setup() {
-        location = useReaderLocation({ stack } as unknown as ReaderEngine)
+        location = useReaderLocation({
+          stack,
+          view: shallowRef(null),
+          spreads: () => spreads.map(pageIndexes => ({ pageIndexes })),
+        } as unknown as ReaderEngine)
         return () => null
       },
     }),

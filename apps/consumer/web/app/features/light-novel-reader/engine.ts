@@ -2,8 +2,10 @@ import {
   createReader,
   type Reader,
   type ReaderLocator,
+  type ReaderMargin,
   type ReaderShardedPublication,
   type ReaderHostFontFace,
+  type ReaderSpreadMode,
 } from '@ritojs/core'
 import {
   createController,
@@ -15,7 +17,7 @@ import {
   type TransitionEffect,
   type TransitionEffectName,
 } from '@ritojs/kit'
-import type { ReaderEffect, ReaderSpread } from './settings'
+import type { ReaderEffect, ReaderFlow, ReaderSpread } from './settings'
 import type { ReaderTheme } from './themes'
 
 export function effectOf(effect: ReaderEffect): TransitionEffectName | TransitionEffect {
@@ -33,6 +35,16 @@ export function spreadOf(
   return (size.width / 2 - margin * 2) / fontSize >= 22 ? 'double' : 'single'
 }
 
+export function marginOf(
+  flow: ReaderFlow,
+  width: number,
+  margin: number,
+  pageWidth: number,
+): ReaderMargin {
+  if (flow === 'paged') return margin
+  return { x: Math.floor((width - Math.min(width, pageWidth)) / 2) + margin, y: margin }
+}
+
 export function locatorOf(position: unknown): ReaderLocator | undefined {
   if (!position || typeof position !== 'object') return undefined
   const stored = position as Partial<ReadingPosition>
@@ -46,11 +58,29 @@ export function locatorOf(position: unknown): ReaderLocator | undefined {
   }
 }
 
+export function layoutWhere(reader: Reader, scrolled: boolean) {
+  const holds = () => (reader.getScrollLayout() !== undefined) === scrolled
+  if (holds()) return Promise.resolve()
+  return new Promise<void>((resolve, reject) => {
+    let stop = () => {}
+    const timeout = setTimeout(() => {
+      stop()
+      reject(new Error('The reader was not laid out in time'))
+    }, 15_000)
+    stop = reader.onLayoutCommitted(() => {
+      if (!holds()) return
+      clearTimeout(timeout)
+      stop()
+      resolve()
+    })
+  })
+}
+
 export async function createStack(options: {
   publication: ReaderShardedPublication
   size: { width: number; height: number }
-  margin: number
-  spread: 'single' | 'double'
+  margin: ReaderMargin
+  spread: ReaderSpreadMode
   fontSize: number
   lineHeight: number
   theme: ReaderTheme

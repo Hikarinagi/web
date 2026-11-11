@@ -42,9 +42,11 @@
               title: location.title.value || location.current.value?.label || null,
               href: position?.sourceLocator?.href ?? null,
             },
-            spread: controller
-              ? { current: controller.currentSpread, total: controller.totalSpreads }
-              : null,
+            spread: engine.view.value
+              ? { current: engine.view.value.currentSpread, total: engine.spreads().length }
+              : controller
+                ? { current: controller.currentSpread, total: controller.totalSpreads }
+                : null,
             viewport: {
               width: window.innerWidth,
               height: window.innerHeight,

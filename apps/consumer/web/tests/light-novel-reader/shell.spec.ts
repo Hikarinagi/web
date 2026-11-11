@@ -103,6 +103,30 @@ describe('专注模式', () => {
   })
 })
 
+describe('状态栏的快捷目录', () => {
+  it('跳转后关闭，不动已停靠的侧边栏', () => {
+    stubWidth(1600)
+    const shell = mountShell()
+    shell.quickToc.value = true
+
+    shell.settle()
+
+    expect(shell.quickToc.value).toBe(false)
+    expect(shell.leftDocked.value).toBe(true)
+  })
+
+  it('进入专注模式时关闭，避免阅读快捷键一直暂停', async () => {
+    stubWidth(1600)
+    const shell = mountShell()
+    shell.quickToc.value = true
+
+    shell.toggleFocus()
+    await nextTick()
+
+    expect(shell.quickToc.value).toBe(false)
+  })
+})
+
 describe('全屏', () => {
   afterEach(() => {
     Reflect.deleteProperty(document, 'fullScreen')

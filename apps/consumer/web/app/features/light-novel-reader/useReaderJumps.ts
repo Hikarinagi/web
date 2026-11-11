@@ -6,27 +6,33 @@ export function useReaderJumps(engine: ReaderEngine, location: ReaderLocation) {
   const trail = shallowRef<{ position: ReadingPosition; page: number | null }[]>([])
   const turned = ref(0)
 
+  function moved() {
+    turned.value += 1
+    if (turned.value >= 3) trail.value = []
+  }
+
   watch(
     engine.stack,
     (stack, _, onCleanup) => {
       trail.value = []
       if (!stack) return
-      onCleanup(
-        stack.controller.on('spreadChange', () => {
-          turned.value += 1
-          if (turned.value >= 3) trail.value = []
-        }),
-      )
+      onCleanup(stack.controller.on('spreadChange', moved))
+    },
+    { immediate: true },
+  )
+  watch(
+    engine.view,
+    (view, _, onCleanup) => {
+      if (view) onCleanup(view.on('window', moved))
     },
     { immediate: true },
   )
 
   function remember() {
-    const stack = engine.stack.value
     const position = location.position.value
-    if (!stack || !position) return
+    if (!engine.stack.value || !position) return
     const shown = location.laid.value
-      ? stack.controller.spreads[position.projection.spreadIndex]?.pageIndexes[0]
+      ? engine.spreads()[position.projection.spreadIndex]?.pageIndexes[0]
       : undefined
     trail.value = [...trail.value, { position, page: shown == null ? null : shown + 1 }]
     turned.value = -1
@@ -34,11 +40,10 @@ export function useReaderJumps(engine: ReaderEngine, location: ReaderLocation) {
 
   function back() {
     const last = trail.value.at(-1)
-    const controller = engine.stack.value?.controller
-    if (!last || !controller) return
+    if (!last || !engine.stack.value) return
     trail.value = trail.value.slice(0, -1)
     turned.value = -1
-    void controller.goToPosition(last.position)
+    void engine.goTo(last.position)
   }
 
   const target = computed(() => trail.value.at(-1) ?? null)

@@ -39,7 +39,7 @@ export function useReaderResume(options: {
   function accept() {
     const target = offer.value
     offer.value = null
-    if (target) void options.engine.stack.value?.controller.goToPosition(target.position)
+    if (target) void options.engine.goTo(target.position)
   }
 
   useEventListener(document, 'visibilitychange', () => {

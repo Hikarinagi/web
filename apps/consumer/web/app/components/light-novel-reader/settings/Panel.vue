@@ -2,11 +2,15 @@
   import { Divider, SegmentedControl, Stack, Switch, Text } from '@hina-ui/vue'
   import { useReader } from '~/features/light-novel-reader/context'
   import {
+    deviceDefaults,
     READER_EFFECTS,
+    READER_FLOWS,
     READER_RANGES,
     READER_SPREADS,
     type ReaderEffect,
+    type ReaderFlow,
     type ReaderSpread,
+    widestPage,
   } from '~/features/light-novel-reader/settings'
 
   defineOptions({ name: 'LightNovelReaderSettingsPanel' })
@@ -14,7 +18,14 @@
   const { settings } = useReader()
   const { device, phone } = settings
   const wakeLock = useWakeLock()
+  const { width: windowWidth } = useWindowSize()
+  const pageMax = computed(() => widestPage(windowWidth.value))
 
+  const flow = computed({
+    get: () => device.value.flow,
+    set: value => settings.update('flow', value as ReaderFlow),
+  })
+  const paged = computed(() => device.value.flow === 'paged')
   const spread = computed({
     get: () => device.value.spread,
     set: value => settings.update('spread', value as ReaderSpread),
@@ -55,11 +66,25 @@
       v-bind="READER_RANGES.margin"
       @change="settings.update('margin', $event)"
     />
-    <Stack v-if="!phone" gap="sm">
+    <Stack gap="sm">
+      <Text size="sm" tone="muted">阅读方式</Text>
+      <SegmentedControl v-model="flow" :options="[...READER_FLOWS]" block aria-label="阅读方式" />
+    </Stack>
+    <LightNovelReaderSettingsRange
+      v-if="!paged && windowWidth > READER_RANGES.pageWidth.min"
+      label="页面宽度"
+      :value="Math.min(device.pageWidth, pageMax)"
+      :min="READER_RANGES.pageWidth.min"
+      :max="pageMax"
+      :step="READER_RANGES.pageWidth.step"
+      :default-value="deviceDefaults(phone).pageWidth"
+      @change="settings.update('pageWidth', $event)"
+    />
+    <Stack v-if="!phone && paged" gap="sm">
       <Text size="sm" tone="muted">排列</Text>
       <SegmentedControl v-model="spread" :options="[...READER_SPREADS]" block aria-label="排列" />
     </Stack>
-    <Stack gap="sm">
+    <Stack v-if="paged" gap="sm">
       <Text size="sm" tone="muted">翻页效果</Text>
       <SegmentedControl
         v-model="effect"
@@ -71,6 +96,7 @@
     <Divider />
     <Stack gap="md">
       <Switch
+        v-if="paged"
         data-tour="settings-tap"
         :model-value="device.tapTurn"
         @update:model-value="settings.update('tapTurn', Boolean($event))"

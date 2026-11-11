@@ -1,6 +1,13 @@
-import type { OverlayAnchor } from '@hina-ui/vue'
+import { toast, type OverlayAnchor } from '@hina-ui/vue'
 import type { Reader, ReaderAnnotationTarget } from '@ritojs/core'
-import type { AnnotationRecord, ReaderController, ReadingPosition } from '@ritojs/kit'
+import type {
+  AnnotationRecord,
+  ReaderController,
+  ReadingPosition,
+  ScrollController,
+  ScrollHighlight,
+  ScrollPageRect,
+} from '@ritojs/kit'
 import { animate } from 'motion-v'
 import {
   HIGHLIGHT_COLORS,
@@ -43,9 +50,13 @@ export function useReaderHighlights(options: {
   volumeId: () => number
   position: () => ReadingPosition | null
   controller: () => ReaderController | undefined
+  goTo: (position: ReadingPosition) => Promise<unknown> | undefined
   track: ReaderAnalytics['track']
 }) {
   const entries = ref<HighlightEntry[]>([])
+  const layers = shallowRef<ScrollHighlight[]>([])
+  let placed = new Map<string, readonly ScrollPageRect[]>()
+  let placing = 0
   const preview = shallowRef<HighlightEntry | null>(null)
   const inspector = shallowReactive({
     open: false,
@@ -231,7 +242,7 @@ export function useReaderHighlights(options: {
     const entry = entries.value.find(item => item.id === id)
     if (!controller || !entry?.target || flashing.has(id)) return
     const { href, sourceRange } = entry.target
-    await controller.goToPosition({
+    await options.goTo({
       sourceLocator: { href, sourceRange },
       projection: { spreadIndex: 0, pageIndex: 0 },
       progress: 0,
@@ -264,6 +275,64 @@ export function useReaderHighlights(options: {
     Object.assign(inspector, { open: true, id, anchor, focus })
   }
 
+  function paint(records: readonly AnnotationRecord[]) {
+    layers.value = records.flatMap(record => {
+      const rects = placed.get(record.id)
+      if (!rects?.length) return []
+      return [
+        {
+          id: `annotation:${record.id}`,
+          color: record.color ?? HIGHLIGHT_COLORS[0].value,
+          zIndex: 1,
+          rects,
+        },
+      ]
+    })
+  }
+
+  async function place(reader: Reader, records: readonly AnnotationRecord[]) {
+    const id = ++placing
+    const interactions = reader.interactions
+    const found = await Promise.all(
+      records.map(async record => {
+        const located = await interactions?.resolveAnnotationTarget?.(record.target)
+        if (!located || located.level === 'orphaned') return [record.id, []] as const
+        const { href, sourceRange } = located.target
+        const exact = await interactions?.resolveExactSourceRange?.({ href, sourceRange })
+        return [record.id, exact?.status === 'resolved' ? exact.range.rects : []] as const
+      }),
+    )
+    if (id !== placing) return
+    placed = new Map(found)
+    paint(records)
+  }
+
+  function redraw(reader: Reader, records: readonly AnnotationRecord[]) {
+    paint(records)
+    if (records.some(record => !placed.has(record.id))) void place(reader, records)
+  }
+
+  async function mark(view: ScrollController, color: string) {
+    const controller = options.controller()
+    const locator = view.selection?.sourceLocator
+    if (!controller || !locator?.sourceRange) return
+    const target = await controller.reader.interactions
+      ?.createAnnotationTarget?.({ href: locator.href, sourceRange: locator.sourceRange })
+      .catch(() => undefined)
+    if (!target) {
+      toast.danger('这段文字无法高亮')
+      return
+    }
+    const record: AnnotationRecord = {
+      id: crypto.randomUUID(),
+      kind: 'highlight',
+      color,
+      target,
+      createdAt: Date.now(),
+    }
+    return controller.insertAnnotation(record) ? record : undefined
+  }
+
   useEventListener('online', retry)
 
   return {
@@ -278,6 +347,10 @@ export function useReaderHighlights(options: {
     retry,
     reveal,
     inspect,
+    layers,
+    place,
+    redraw,
+    mark,
   }
 }
 

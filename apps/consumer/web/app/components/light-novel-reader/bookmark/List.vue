@@ -12,10 +12,9 @@
   )
 
   function open(entry: BookmarkEntry) {
-    const controller = engine.stack.value?.controller
-    if (!controller || !entry.locator) return
+    if (!engine.stack.value || !entry.locator) return
     jumps.remember()
-    void controller.goToPosition({
+    void engine.goTo({
       sourceLocator: entry.locator,
       projection: { spreadIndex: 0, pageIndex: 0 },
       progress: entry.progress,

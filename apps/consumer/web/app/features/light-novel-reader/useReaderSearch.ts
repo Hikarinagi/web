@@ -1,4 +1,5 @@
-import type { SearchResult } from '@ritojs/kit'
+import type { Reader } from '@ritojs/core'
+import type { ScrollHighlight, SearchResult } from '@ritojs/kit'
 import type { ReaderAnalytics } from './useReaderAnalytics'
 import type { ReaderEngine } from './useReaderEngine'
 import type { ReaderJumps } from './useReaderJumps'
@@ -23,8 +24,10 @@ export function useReaderSearch(options: {
   const visited = ref(false)
   const answered = ref('')
   const summons = ref(0)
+  const layers = shallowRef<ScrollHighlight[]>([])
   let asked = ''
   let before: string | null = null
+  let painting = 0
 
   function reset() {
     asked = ''
@@ -58,7 +61,60 @@ export function useReaderSearch(options: {
     { immediate: true },
   )
 
-  watch([term, location.laid, engine.stack], ([value, laid, stack]) => {
+  async function paint(reader: Reader, page: number) {
+    const id = ++painting
+    const found = await Promise.all(
+      results.value.map(async (result, index) => {
+        const source = result.source
+        if (Math.abs(result.pageIndex - page) > 1 || source?.status !== 'resolved') return []
+        const exact = await reader.interactions?.resolveExactSourceRange?.({
+          href: source.href,
+          sourceRange: source.sourceRange,
+        })
+        if (exact?.status !== 'resolved') return []
+        return [
+          {
+            id: `search:${index}`,
+            color:
+              index === active.value && visited.value
+                ? 'rgba(249, 115, 22, 0.6)'
+                : 'rgba(250, 204, 21, 0.4)',
+            zIndex: 2,
+            rects: exact.range.rects,
+          },
+        ]
+      }),
+    )
+    if (id === painting) layers.value = found.flat()
+  }
+
+  function repaint() {
+    const stack = engine.stack.value
+    const view = engine.view.value
+    if (!stack || !view) return
+    void paint(stack.reader, stack.reader.spreads[view.currentSpread]?.leftPageIndex ?? 0)
+  }
+
+  watch(
+    engine.view,
+    (view, _, onCleanup) => {
+      layers.value = []
+      asked = ''
+      const stack = engine.stack.value
+      if (!view || !stack) return
+      const offs = [
+        view.on('window', repaint),
+        stack.reader.onLayoutCommitted(() => {
+          if (asked) stack.controller.search(asked)
+        }),
+      ]
+      onCleanup(() => offs.forEach(off => off()))
+    },
+    { immediate: true },
+  )
+  watch([results, active, visited], repaint)
+
+  watch([term, location.laid, engine.stack, engine.view], ([value, laid, stack]) => {
     const controller = stack?.controller
     if (!controller) return
     if (!value) {
@@ -101,6 +157,12 @@ export function useReaderSearch(options: {
     if (spread !== location.position.value?.projection.spreadIndex) jumps.remember()
     visited.value = true
     stack.controller.goToSearchResult(index)
+    const source = result.source
+    if (source?.status === 'resolved')
+      void engine.view.value?.scrollToLocator({
+        href: source.href,
+        sourceRange: source.sourceRange,
+      })
   }
 
   function step(forward: boolean) {
@@ -112,7 +174,7 @@ export function useReaderSearch(options: {
     }
     const stack = engine.stack.value
     const spread = location.position.value?.projection.spreadIndex
-    const page = spread == null ? undefined : stack?.controller.spreads[spread]?.pageIndexes[0]
+    const page = spread == null || !stack ? undefined : engine.spreads()[spread]?.pageIndexes[0]
     if (page == null) {
       go(forward ? 0 : total - 1)
       return
@@ -135,7 +197,7 @@ export function useReaderSearch(options: {
     before = null
   }
 
-  return { query, term, results, current, status, pinned, summons, go, step, open, close }
+  return { query, term, results, current, status, pinned, summons, layers, go, step, open, close }
 }
 
 export type ReaderSearch = ReturnType<typeof useReaderSearch>

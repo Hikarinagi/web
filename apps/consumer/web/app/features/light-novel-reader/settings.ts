@@ -1,6 +1,7 @@
 import { READER_SYSTEM_THEME, READER_THEMES } from './themes'
 
 export type ReaderFontId = 'original' | 'song' | 'kai'
+export type ReaderFlow = 'paged' | 'scrolled'
 export type ReaderSpread = 'auto' | 'single' | 'double'
 export type ReaderEffect = 'paper' | 'cover' | 'slide' | 'fade' | 'none'
 
@@ -8,6 +9,8 @@ export interface ReaderDeviceSettings {
   fontSize: number
   lineHeight: number
   margin: number
+  pageWidth: number
+  flow: ReaderFlow
   spread: ReaderSpread
   effect: ReaderEffect
   tapTurn: boolean
@@ -22,7 +25,18 @@ export const READER_RANGES = {
   fontSize: { min: 12, max: 36, step: 1 },
   lineHeight: { min: 1.2, max: 2.4, step: 0.1 },
   margin: { min: 0, max: 120, step: 4 },
+  pageWidth: { min: 480, step: 20 },
 } as const
+
+export function widestPage(windowWidth: number) {
+  const { min, step } = READER_RANGES.pageWidth
+  return min + Math.ceil(Math.max(0, windowWidth - min) / step) * step
+}
+
+export const READER_FLOWS: readonly { value: ReaderFlow; label: string }[] = [
+  { value: 'paged', label: '翻页' },
+  { value: 'scrolled', label: '滚动' },
+]
 
 export const READER_SPREADS: readonly { value: ReaderSpread; label: string }[] = [
   { value: 'auto', label: '自动' },
@@ -43,6 +57,8 @@ export function deviceDefaults(phone: boolean): ReaderDeviceSettings {
     fontSize: phone ? 17 : 18,
     lineHeight: 1.9,
     margin: phone ? 24 : 60,
+    pageWidth: 900,
+    flow: 'paged',
     spread: 'auto',
     effect: 'paper',
     tapTurn: false,

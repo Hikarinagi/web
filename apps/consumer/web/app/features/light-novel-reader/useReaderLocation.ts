@@ -1,3 +1,4 @@
+import type { Reader } from '@ritojs/core'
 import type { ReadingPosition } from '@ritojs/kit'
 import { rowAt, spineIndexOf, tocRows, type TocRow } from './toc'
 import type { ReaderEngine } from './useReaderEngine'
@@ -9,6 +10,28 @@ export function useReaderLocation(engine: ReaderEngine) {
   const title = ref('')
   const turns = shallowRef<number[]>([])
 
+  function turned() {
+    turns.value = [...turns.value.slice(-11), Date.now()]
+  }
+
+  function moveTo(next: ReadingPosition, reader: Reader) {
+    position.value = next
+    const href = next.sourceLocator?.href
+    const point = next.sourceLocator?.sourcePoint
+    if (!href || !point) {
+      title.value = ''
+      return
+    }
+    void reader.interactions?.tocEntryAtPosition?.({ href, point }).then(entry => {
+      if (position.value === next) title.value = entry?.label.trim() ?? ''
+    })
+  }
+
+  function layout(reader: Reader) {
+    laid.value = reader.layoutScope !== 'chapter' && engine.spreads().length > 0
+    rows.value = tocRows(reader, laid.value)
+  }
+
   watch(
     engine.stack,
     (stack, _, onCleanup) => {
@@ -19,24 +42,11 @@ export function useReaderLocation(engine: ReaderEngine) {
       turns.value = []
       if (!stack) return
       const { reader, controller } = stack
-      const layout = () => {
-        laid.value = reader.layoutScope !== 'chapter' && controller.totalSpreads > 0
-        rows.value = tocRows(reader, laid.value)
-      }
-      layout()
-      const offLayout = controller.on('layoutChange', layout)
+      layout(reader)
+      const offLayout = controller.on('layoutChange', () => layout(reader))
       const offPosition = controller.on('positionChange', ({ position: next }) => {
-        position.value = next
-        turns.value = [...turns.value.slice(-11), Date.now()]
-        const href = next.sourceLocator?.href
-        const point = next.sourceLocator?.sourcePoint
-        if (!href || !point) {
-          title.value = ''
-          return
-        }
-        void reader.interactions?.tocEntryAtPosition?.({ href, point }).then(entry => {
-          if (position.value === next) title.value = entry?.label.trim() ?? ''
-        })
+        turned()
+        moveTo(next, reader)
       })
       onCleanup(() => {
         offLayout()
@@ -46,11 +56,42 @@ export function useReaderLocation(engine: ReaderEngine) {
     { immediate: true },
   )
 
+  watch(
+    engine.view,
+    (view, _, onCleanup) => {
+      const stack = engine.stack.value
+      if (!view || !stack) return
+      const { reader } = stack
+      let progress = 0
+      layout(reader)
+      const offs = [
+        reader.onLayoutCommitted(() => layout(reader)),
+        view.on('scroll', event => (progress = event.progress)),
+        view.on('window', turned),
+        view.on('position', ({ locator }) =>
+          moveTo(
+            {
+              sourceLocator: locator,
+              projection: {
+                spreadIndex: view.currentSpread,
+                pageIndex: reader.spreads[view.currentSpread]?.leftPageIndex ?? 0,
+              },
+              progress,
+              timestamp: Date.now(),
+            },
+            reader,
+          ),
+        ),
+      ]
+      onCleanup(() => offs.forEach(off => off()))
+    },
+    { immediate: true },
+  )
+
   const pages = computed(() => {
-    const stack = engine.stack.value
     const spread = position.value?.projection.spreadIndex
-    if (!stack || !laid.value || spread == null) return null
-    return stack.controller.spreads[spread]?.pageIndexes ?? null
+    if (!laid.value || spread == null) return null
+    return engine.spreads()[spread]?.pageIndexes ?? null
   })
 
   const current = computed(() => (pages.value ? rowAt(rows.value, pages.value[0]!) : undefined))

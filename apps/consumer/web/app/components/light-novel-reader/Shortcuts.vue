@@ -12,17 +12,27 @@
 
   defineOptions({ name: 'LightNovelReaderShortcuts' })
 
-  const { shell } = useReader()
+  const { shell, settings } = useReader()
   const { shortcuts } = shell
   const mac = computed(() => import.meta.client && /Mac|iPhone|iPad/.test(navigator.platform))
 
   const rows = computed(() => {
     const command = mac.value ? '⌘' : 'Ctrl'
     const option = mac.value ? '⌥' : 'Alt'
+    const moves =
+      settings.device.value.flow === 'scrolled'
+        ? [
+            { label: '向下、向上滚动', keys: [['↓'], ['↑']] },
+            { label: '下一屏、上一屏', keys: [['PageDown'], ['空格'], ['PageUp']] },
+            { label: '卷首、卷末', keys: [['Home'], ['End']] },
+          ]
+        : [
+            { label: '下一页', keys: [['→'], ['PageDown'], ['空格']] },
+            { label: '上一页', keys: [['←'], ['PageUp']] },
+            { label: '第一页、最后一页', keys: [['Home'], ['End']] },
+          ]
     return [
-      { label: '下一页', keys: [['→'], ['PageDown'], ['空格']] },
-      { label: '上一页', keys: [['←'], ['PageUp']] },
-      { label: '第一页、最后一页', keys: [['Home'], ['End']] },
+      ...moves,
       { label: '搜索', keys: [[command, 'F']] },
       { label: '下一处、上一处搜索结果', keys: [['Enter'], ['Shift', 'Enter']] },
       { label: '添加或移除书签', keys: [[command, 'D']] },
