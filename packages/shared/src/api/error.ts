@@ -119,6 +119,9 @@ export const HIKARI_BIZ_CODE = {
   /** The lookup is still running: what it wrote cannot be reverted as a whole yet. */
   WIKI_LOOKUP_RUNNING: 'WIKI_LOOKUP_RUNNING',
   WIKI_NOTE_NOT_FOUND: 'WIKI_NOTE_NOT_FOUND',
+  WIKI_LEAD_NOT_FOUND: 'WIKI_LEAD_NOT_FOUND',
+  /** The lead has been settled: it can no longer be rejected or checked again. */
+  WIKI_LEAD_SETTLED: 'WIKI_LEAD_SETTLED',
   ARTICLE_NOT_FOUND: 'ARTICLE_NOT_FOUND',
   POST_NOT_FOUND: 'POST_NOT_FOUND',
   POLL_NOT_FOUND: 'POLL_NOT_FOUND',

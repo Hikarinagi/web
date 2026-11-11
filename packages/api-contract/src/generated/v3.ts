@@ -5829,6 +5829,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/leads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLeadController_getList"];
+        put?: never;
+        post: operations["AdminLeadController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/leads/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLeadController_getCounts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/leads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLeadController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/leads/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLeadController_reject"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/leads/{id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLeadController_retry"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/logs": {
         parameters: {
             query?: never;
@@ -6261,6 +6341,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSessionController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/sessions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSessionController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/settings": {
         parameters: {
             query?: never;
@@ -6271,6 +6383,38 @@ export interface paths {
         get: operations["AdminSettingsController_get"];
         put: operations["AdminSettingsController_update"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/settings/erogamescape": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSettingsController_getErogameScape"];
+        put: operations["AdminSettingsController_updateErogameScape"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/settings/erogamescape/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminSettingsController_checkErogameScape"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6592,6 +6736,22 @@ export interface paths {
         put: operations["AdminTaskController_enable"];
         post?: never;
         delete: operations["AdminTaskController_stop"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/tasks/{id}/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminTaskController_run"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -18749,6 +18909,19 @@ export interface components {
             start_at?: string | null;
             title: string;
         };
+        CreateLeadDto: {
+            brand?: string;
+            note?: string;
+            /** @description Release date as the source states it */
+            release?: string;
+            /** @description Title of the work as its source writes it */
+            title: string;
+            /**
+             * Format: uri
+             * @description Address of the page that tells of the work
+             */
+            url: string;
+        };
         CreateMangaNoteDto: {
             content: string;
         };
@@ -18987,7 +19160,7 @@ export interface components {
             description?: string;
             name: string;
             /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
+            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
         };
         CreateTelegramScheduleDto: {
             chat_id: number;
@@ -19204,7 +19377,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "PERSON" | "CHARACTER" | "LIGHT_NOVEL" | "MANGA" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -20429,6 +20602,27 @@ export interface components {
             name: string;
             /** @description 装扮相对头像的缩放比例 */
             scale: number;
+        };
+        ErogameScapeAccessDto: {
+            /** @description Whether a password is saved; it is never returned */
+            password_set: boolean;
+            /**
+             * Format: date-time
+             * @description When the server refused the saved name and password; null while they work
+             */
+            rejected_at: string | null;
+            /** @description Address of the directory of the supporter server that holds the query form */
+            url: string | null;
+            username: string | null;
+        };
+        ErogameScapeCheckDto: {
+            /** @description What went wrong when it failed */
+            detail: string | null;
+            /**
+             * @description ok: the server answered a query; unset: address, name or password is missing; rejected: the server refused the name and password; failed: the server could not be reached or gave no result
+             * @enum {string}
+             */
+            result: "ok" | "unset" | "rejected" | "failed";
         };
         FactDto: {
             /** @description Name of the property */
@@ -21680,6 +21874,88 @@ export interface components {
             id: number;
             title: string;
         };
+        LeadCountsDto: {
+            /** @description Leads an entry was made from since the given time */
+            created: number;
+            /** @description Leads found to be covered by an entry since the given time */
+            existing: number;
+            /** @description Leads not settled yet */
+            open: number;
+            /** @description Leads rejected since the given time */
+            rejected: number;
+            /** @description Leads reported since the given time */
+            reported: number;
+            /** @description Open leads that used up their checks without being settled */
+            stalled: number;
+        };
+        LeadDetailDto: {
+            /** @description Times it has been checked */
+            attempts: number;
+            brand: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** @description Entry made from the lead, or the entry that already covers the work */
+            entry: components["schemas"]["LookupEntryDto"] | null;
+            /** @description Lines of that page that carry the title */
+            excerpt: string;
+            id: number;
+            /** @description Latest session that checked it */
+            lookup_id: number | null;
+            note: string;
+            /** @description Why it was settled this way */
+            reason: string | null;
+            /** @description Release date as the source states it */
+            release: string | null;
+            /** @description Whether it is being checked at the moment */
+            running: boolean;
+            /** @description Search for new works that reported it */
+            scout_id: number | null;
+            /** @description Sessions that checked the lead, latest first */
+            sessions: components["schemas"]["SessionDto"][];
+            /** Format: date-time */
+            settled_at: string | null;
+            state: components["schemas"]["WikiLeadState"];
+            title: string;
+            /** @description Kind of work it tells of */
+            type: components["schemas"]["EntryType"];
+            /** @description Address of the page that tells of the work */
+            url: string;
+            /** @description Operator who added it by hand */
+            user: components["schemas"]["UserRefDto"] | null;
+        };
+        LeadDto: {
+            /** @description Times it has been checked */
+            attempts: number;
+            brand: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** @description Entry made from the lead, or the entry that already covers the work */
+            entry: components["schemas"]["LookupEntryDto"] | null;
+            /** @description Lines of that page that carry the title */
+            excerpt: string;
+            id: number;
+            /** @description Latest session that checked it */
+            lookup_id: number | null;
+            note: string;
+            /** @description Why it was settled this way */
+            reason: string | null;
+            /** @description Release date as the source states it */
+            release: string | null;
+            /** @description Whether it is being checked at the moment */
+            running: boolean;
+            /** @description Search for new works that reported it */
+            scout_id: number | null;
+            /** Format: date-time */
+            settled_at: string | null;
+            state: components["schemas"]["WikiLeadState"];
+            title: string;
+            /** @description Kind of work it tells of */
+            type: components["schemas"]["EntryType"];
+            /** @description Address of the page that tells of the work */
+            url: string;
+            /** @description Operator who added it by hand */
+            user: components["schemas"]["UserRefDto"] | null;
+        };
         LegacyTagAdminDto: {
             id: number;
             links: number;
@@ -22726,8 +23002,6 @@ export interface components {
             /** Format: date-time */
             due_at: string | null;
             entry: components["schemas"]["LookupEntryCardDto"];
-            /** @description Released within the recent period of the task */
-            fresh: boolean;
             /**
              * Format: date-time
              * @description Set aside, not to be looked up, at
@@ -22739,6 +23013,11 @@ export interface components {
             last: components["schemas"]["LookupQueueLastDto"] | null;
             /** @description Never looked up */
             never: boolean;
+            /**
+             * @description Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
+             * @enum {string|null}
+             */
+            reason: "fresh" | "new" | "hot" | "gap" | null;
             /**
              * Format: date-time
              * @description Asked to be looked up first at
@@ -26867,8 +27146,6 @@ export interface components {
             /** Format: date-time */
             due_at: string | null;
             entry: components["schemas"]["LookupEntryCardDto"];
-            /** @description Released within the recent period of the task */
-            fresh: boolean;
             /**
              * Format: date-time
              * @description Set aside, not to be looked up, at
@@ -26880,6 +27157,11 @@ export interface components {
             last: components["schemas"]["LookupQueueLastDto"] | null;
             /** @description Never looked up */
             never: boolean;
+            /**
+             * @description Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
+             * @enum {string|null}
+             */
+            reason: "fresh" | "new" | "hot" | "gap" | null;
             /**
              * Format: date-time
              * @description Asked to be looked up first at
@@ -27268,6 +27550,9 @@ export interface components {
             /** @enum {string} */
             engine?: "pg_trgm" | "manticore" | "opensearch";
             fresh?: boolean;
+        };
+        RejectLeadDto: {
+            reason: string;
         };
         RejectMangaProjectDto: {
             /** @description 退回原因 */
@@ -27750,6 +28035,62 @@ export interface components {
             content_json: {
                 [key: string]: unknown;
             };
+        };
+        SessionDetailDto: {
+            /** @description Tool calls made so far */
+            calls: number;
+            cost_usd: number;
+            /** @description What a running session is doing at the moment; null once it has ended */
+            current: components["schemas"]["LookupCurrentDto"] | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            error: string | null;
+            halted_by: components["schemas"]["UserRefDto"] | null;
+            id: number;
+            kind: components["schemas"]["WikiLookupKind"];
+            /** @description The lead a checking session is on */
+            lead: components["schemas"]["LeadDto"] | null;
+            /** @description Leads a search for new works reported */
+            leads: number;
+            messages: components["schemas"]["LookupMessageDto"][];
+            model: string;
+            /** @description Pages opened so far */
+            pages: number;
+            /** @description Model providers the session called */
+            routes: components["schemas"]["LookupRouteDto"][];
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupState"];
+            steps: number;
+            /** @description What a search for new works said it covered when it ended */
+            summary: string | null;
+            task: components["schemas"]["LookupTaskDto"];
+        };
+        SessionDto: {
+            /** @description Tool calls made so far */
+            calls: number;
+            cost_usd: number;
+            /** @description What a running session is doing at the moment; null once it has ended */
+            current: components["schemas"]["LookupCurrentDto"] | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            error: string | null;
+            id: number;
+            kind: components["schemas"]["WikiLookupKind"];
+            /** @description Leads a search for new works reported */
+            leads: number;
+            model: string;
+            /** @description Pages opened so far */
+            pages: number;
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupState"];
+            steps: number;
+            /** @description What a search for new works said it covered when it ended */
+            summary: string | null;
+            task: components["schemas"]["LookupTaskDto"];
         };
         SetMangaListingDto: {
             listing: components["schemas"]["MangaListing"];
@@ -29195,6 +29536,16 @@ export interface components {
             nsfw?: boolean;
             otome?: boolean;
         };
+        UpdateErogameScapeAccessDto: {
+            /** @description New password; leave out to keep the saved one */
+            password?: string;
+            /**
+             * Format: uri
+             * @description Address of the directory of the supporter server that holds the query form
+             */
+            url: string | null;
+            username: string | null;
+        };
         UpdateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
             description?: string;
@@ -30023,11 +30374,15 @@ export interface components {
             watched_at: string;
         };
         /** @enum {string} */
+        WikiLeadState: "OPEN" | "CREATED" | "EXISTING" | "REJECTED";
+        /** @enum {string} */
         WikiLogAction: "LOCK" | "UNLOCK" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
         /** @enum {string} */
         WikiLookupCallState: "RUNNING" | "OK" | "FAILED";
         /** @enum {string} */
         WikiLookupEnd: "SELF" | "OPERATOR" | "TIME" | "CALLS" | "ERROR";
+        /** @enum {string} */
+        WikiLookupKind: "ENTRY" | "LEAD" | "SCOUT";
         /** @enum {string} */
         WikiLookupOutcome: "WRITTEN" | "PRESENT" | "NOT_FOUND" | "UNSURE";
         /** @enum {string} */
@@ -40206,6 +40561,142 @@ export interface operations {
             };
         };
     };
+    AdminLeadController_getList: {
+        parameters: {
+            query: {
+                state?: components["schemas"]["WikiLeadState"];
+                /** @description Only leads reported by this search for new works */
+                scout_id?: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LeadDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminLeadController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLeadDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadDto"];
+                };
+            };
+        };
+    };
+    AdminLeadController_getCounts: {
+        parameters: {
+            query: {
+                /** @description Count leads reported and settled since this time */
+                from: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadCountsDto"];
+                };
+            };
+        };
+    };
+    AdminLeadController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeadDetailDto"];
+                };
+            };
+        };
+    };
+    AdminLeadController_reject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RejectLeadDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLeadController_retry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AdminLogController_getList: {
         parameters: {
             query: {
@@ -40930,6 +41421,54 @@ export interface operations {
             };
         };
     };
+    AdminSessionController_getList: {
+        parameters: {
+            query: {
+                /** @description Searches for new works, or sessions that checked a lead */
+                kind: "SCOUT" | "LEAD";
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["SessionDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminSessionController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionDetailDto"];
+                };
+            };
+        };
+    };
     AdminSettingsController_get: {
         parameters: {
             query?: never;
@@ -40968,6 +41507,67 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WikiSettingsDto"];
+                };
+            };
+        };
+    };
+    AdminSettingsController_getErogameScape: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErogameScapeAccessDto"];
+                };
+            };
+        };
+    };
+    AdminSettingsController_updateErogameScape: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateErogameScapeAccessDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErogameScapeAccessDto"];
+                };
+            };
+        };
+    };
+    AdminSettingsController_checkErogameScape: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErogameScapeCheckDto"];
                 };
             };
         };
@@ -41456,7 +42056,7 @@ export interface operations {
             query?: {
                 bot_id?: number;
                 /** @description Only the tasks of this program */
-                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
+                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
             };
             header?: never;
             path?: never;
@@ -41502,7 +42102,7 @@ export interface operations {
             query?: {
                 bot_id?: number;
                 /** @description Only the tasks of this program */
-                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
+                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
             };
             header?: never;
             path?: never;
@@ -41608,11 +42208,31 @@ export interface operations {
             };
         };
     };
+    AdminTaskController_run: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The task starts a run now unless one is under way */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AiModelController_getList: {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_agent";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_agent" | "wiki_scout" | "wiki_lead";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };

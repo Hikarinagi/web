@@ -13487,6 +13487,40 @@
         ],
         "type": "object"
       },
+      "CreateLeadDto": {
+        "properties": {
+          "brand": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "note": {
+            "maxLength": 600,
+            "type": "string"
+          },
+          "release": {
+            "description": "Release date as the source states it",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "title": {
+            "description": "Title of the work as its source writes it",
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "url": {
+            "description": "Address of the page that tells of the work",
+            "format": "uri",
+            "maxLength": 2000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "url"
+        ],
+        "type": "object"
+      },
       "CreateMangaNoteDto": {
         "properties": {
           "content": {
@@ -14321,6 +14355,8 @@
               "constraint_check",
               "game_duplicate",
               "agent",
+              "scout",
+              "lead",
               "volume_check",
               "image_rating"
             ],
@@ -15028,8 +15064,8 @@
             "enum": [
               "PERSON",
               "CHARACTER",
-              "LIGHT_NOVEL",
               "MANGA",
+              "LIGHT_NOVEL",
               "PRODUCER",
               "GALGAME",
               "LIGHT_NOVEL_VOLUME",
@@ -20368,6 +20404,60 @@
         ],
         "type": "object"
       },
+      "ErogameScapeAccessDto": {
+        "properties": {
+          "password_set": {
+            "description": "Whether a password is saved; it is never returned",
+            "type": "boolean"
+          },
+          "rejected_at": {
+            "description": "When the server refused the saved name and password; null while they work",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "description": "Address of the directory of the supporter server that holds the query form",
+            "nullable": true,
+            "type": "string"
+          },
+          "username": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "username",
+          "password_set",
+          "rejected_at"
+        ],
+        "type": "object"
+      },
+      "ErogameScapeCheckDto": {
+        "properties": {
+          "detail": {
+            "description": "What went wrong when it failed",
+            "nullable": true,
+            "type": "string"
+          },
+          "result": {
+            "description": "ok: the server answered a query; unset: address, name or password is missing; rejected: the server refused the name and password; failed: the server could not be reached or gave no result",
+            "enum": [
+              "ok",
+              "unset",
+              "rejected",
+              "failed"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "detail"
+        ],
+        "type": "object"
+      },
       "FactDto": {
         "properties": {
           "label": {
@@ -25375,6 +25465,287 @@
         ],
         "type": "object"
       },
+      "LeadCountsDto": {
+        "properties": {
+          "created": {
+            "description": "Leads an entry was made from since the given time",
+            "type": "number"
+          },
+          "existing": {
+            "description": "Leads found to be covered by an entry since the given time",
+            "type": "number"
+          },
+          "open": {
+            "description": "Leads not settled yet",
+            "type": "number"
+          },
+          "rejected": {
+            "description": "Leads rejected since the given time",
+            "type": "number"
+          },
+          "reported": {
+            "description": "Leads reported since the given time",
+            "type": "number"
+          },
+          "stalled": {
+            "description": "Open leads that used up their checks without being settled",
+            "type": "number"
+          }
+        },
+        "required": [
+          "reported",
+          "created",
+          "existing",
+          "rejected",
+          "open",
+          "stalled"
+        ],
+        "type": "object"
+      },
+      "LeadDetailDto": {
+        "properties": {
+          "attempts": {
+            "description": "Times it has been checked",
+            "type": "number"
+          },
+          "brand": {
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "entry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupEntryDto"
+              }
+            ],
+            "description": "Entry made from the lead, or the entry that already covers the work",
+            "nullable": true,
+            "type": "object"
+          },
+          "excerpt": {
+            "description": "Lines of that page that carry the title",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "lookup_id": {
+            "description": "Latest session that checked it",
+            "nullable": true,
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          },
+          "reason": {
+            "description": "Why it was settled this way",
+            "nullable": true,
+            "type": "string"
+          },
+          "release": {
+            "description": "Release date as the source states it",
+            "nullable": true,
+            "type": "string"
+          },
+          "running": {
+            "description": "Whether it is being checked at the moment",
+            "type": "boolean"
+          },
+          "scout_id": {
+            "description": "Search for new works that reported it",
+            "nullable": true,
+            "type": "number"
+          },
+          "sessions": {
+            "description": "Sessions that checked the lead, latest first",
+            "items": {
+              "$ref": "#/components/schemas/SessionDto"
+            },
+            "type": "array"
+          },
+          "settled_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLeadState"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryType"
+              }
+            ],
+            "description": "Kind of work it tells of"
+          },
+          "url": {
+            "description": "Address of the page that tells of the work",
+            "type": "string"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "Operator who added it by hand",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "brand",
+          "release",
+          "url",
+          "excerpt",
+          "note",
+          "state",
+          "reason",
+          "entry",
+          "scout_id",
+          "user",
+          "attempts",
+          "running",
+          "lookup_id",
+          "created_at",
+          "settled_at",
+          "sessions"
+        ],
+        "type": "object"
+      },
+      "LeadDto": {
+        "properties": {
+          "attempts": {
+            "description": "Times it has been checked",
+            "type": "number"
+          },
+          "brand": {
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "entry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupEntryDto"
+              }
+            ],
+            "description": "Entry made from the lead, or the entry that already covers the work",
+            "nullable": true,
+            "type": "object"
+          },
+          "excerpt": {
+            "description": "Lines of that page that carry the title",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "lookup_id": {
+            "description": "Latest session that checked it",
+            "nullable": true,
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          },
+          "reason": {
+            "description": "Why it was settled this way",
+            "nullable": true,
+            "type": "string"
+          },
+          "release": {
+            "description": "Release date as the source states it",
+            "nullable": true,
+            "type": "string"
+          },
+          "running": {
+            "description": "Whether it is being checked at the moment",
+            "type": "boolean"
+          },
+          "scout_id": {
+            "description": "Search for new works that reported it",
+            "nullable": true,
+            "type": "number"
+          },
+          "settled_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLeadState"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryType"
+              }
+            ],
+            "description": "Kind of work it tells of"
+          },
+          "url": {
+            "description": "Address of the page that tells of the work",
+            "type": "string"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "Operator who added it by hand",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "title",
+          "brand",
+          "release",
+          "url",
+          "excerpt",
+          "note",
+          "state",
+          "reason",
+          "entry",
+          "scout_id",
+          "user",
+          "attempts",
+          "running",
+          "lookup_id",
+          "created_at",
+          "settled_at"
+        ],
+        "type": "object"
+      },
       "LegacyTagAdminDto": {
         "properties": {
           "id": {
@@ -29342,10 +29713,6 @@
           "entry": {
             "$ref": "#/components/schemas/LookupEntryCardDto"
           },
-          "fresh": {
-            "description": "Released within the recent period of the task",
-            "type": "boolean"
-          },
           "held_at": {
             "description": "Set aside, not to be looked up, at",
             "format": "date-time",
@@ -29379,6 +29746,17 @@
             "description": "Never looked up",
             "type": "boolean"
           },
+          "reason": {
+            "description": "Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these",
+            "enum": [
+              "fresh",
+              "new",
+              "hot",
+              "gap"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "requested_at": {
             "description": "Asked to be looked up first at",
             "format": "date-time",
@@ -29407,7 +29785,7 @@
         "required": [
           "entry",
           "views",
-          "fresh",
+          "reason",
           "never",
           "due_at",
           "requested_at",
@@ -45285,10 +45663,6 @@
           "entry": {
             "$ref": "#/components/schemas/LookupEntryCardDto"
           },
-          "fresh": {
-            "description": "Released within the recent period of the task",
-            "type": "boolean"
-          },
           "held_at": {
             "description": "Set aside, not to be looked up, at",
             "format": "date-time",
@@ -45321,6 +45695,17 @@
           "never": {
             "description": "Never looked up",
             "type": "boolean"
+          },
+          "reason": {
+            "description": "Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these",
+            "enum": [
+              "fresh",
+              "new",
+              "hot",
+              "gap"
+            ],
+            "nullable": true,
+            "type": "string"
           },
           "requested_at": {
             "description": "Asked to be looked up first at",
@@ -45368,7 +45753,7 @@
         "required": [
           "entry",
           "views",
-          "fresh",
+          "reason",
           "never",
           "due_at",
           "requested_at",
@@ -46814,6 +47199,19 @@
             "type": "boolean"
           }
         },
+        "type": "object"
+      },
+      "RejectLeadDto": {
+        "properties": {
+          "reason": {
+            "maxLength": 600,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
         "type": "object"
       },
       "RejectMangaProjectDto": {
@@ -48727,6 +49125,242 @@
         },
         "required": [
           "content_json"
+        ],
+        "type": "object"
+      },
+      "SessionDetailDto": {
+        "properties": {
+          "calls": {
+            "description": "Tool calls made so far",
+            "type": "number"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "current": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupCurrentDto"
+              }
+            ],
+            "description": "What a running session is doing at the moment; null once it has ended",
+            "nullable": true,
+            "type": "object"
+          },
+          "ended_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "ended_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupEnd"
+              }
+            ],
+            "nullable": true
+          },
+          "error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "halted_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupKind"
+              }
+            ]
+          },
+          "lead": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LeadDto"
+              }
+            ],
+            "description": "The lead a checking session is on",
+            "nullable": true,
+            "type": "object"
+          },
+          "leads": {
+            "description": "Leads a search for new works reported",
+            "type": "number"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/LookupMessageDto"
+            },
+            "type": "array"
+          },
+          "model": {
+            "type": "string"
+          },
+          "pages": {
+            "description": "Pages opened so far",
+            "type": "number"
+          },
+          "routes": {
+            "description": "Model providers the session called",
+            "items": {
+              "$ref": "#/components/schemas/LookupRouteDto"
+            },
+            "type": "array"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupState"
+              }
+            ]
+          },
+          "steps": {
+            "type": "number"
+          },
+          "summary": {
+            "description": "What a search for new works said it covered when it ended",
+            "nullable": true,
+            "type": "string"
+          },
+          "task": {
+            "$ref": "#/components/schemas/LookupTaskDto"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "task",
+          "state",
+          "ended_by",
+          "started_at",
+          "ended_at",
+          "model",
+          "steps",
+          "calls",
+          "pages",
+          "cost_usd",
+          "error",
+          "summary",
+          "leads",
+          "current",
+          "lead",
+          "halted_by",
+          "messages",
+          "routes"
+        ],
+        "type": "object"
+      },
+      "SessionDto": {
+        "properties": {
+          "calls": {
+            "description": "Tool calls made so far",
+            "type": "number"
+          },
+          "cost_usd": {
+            "type": "number"
+          },
+          "current": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupCurrentDto"
+              }
+            ],
+            "description": "What a running session is doing at the moment; null once it has ended",
+            "nullable": true,
+            "type": "object"
+          },
+          "ended_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "ended_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupEnd"
+              }
+            ],
+            "nullable": true
+          },
+          "error": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupKind"
+              }
+            ]
+          },
+          "leads": {
+            "description": "Leads a search for new works reported",
+            "type": "number"
+          },
+          "model": {
+            "type": "string"
+          },
+          "pages": {
+            "description": "Pages opened so far",
+            "type": "number"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupState"
+              }
+            ]
+          },
+          "steps": {
+            "type": "number"
+          },
+          "summary": {
+            "description": "What a search for new works said it covered when it ended",
+            "nullable": true,
+            "type": "string"
+          },
+          "task": {
+            "$ref": "#/components/schemas/LookupTaskDto"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "task",
+          "state",
+          "ended_by",
+          "started_at",
+          "ended_at",
+          "model",
+          "steps",
+          "calls",
+          "pages",
+          "cost_usd",
+          "error",
+          "summary",
+          "leads",
+          "current"
         ],
         "type": "object"
       },
@@ -54816,6 +55450,33 @@
         },
         "type": "object"
       },
+      "UpdateErogameScapeAccessDto": {
+        "properties": {
+          "password": {
+            "description": "New password; leave out to keep the saved one",
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "url": {
+            "description": "Address of the directory of the supporter server that holds the query form",
+            "format": "uri",
+            "maxLength": 500,
+            "nullable": true,
+            "type": "string"
+          },
+          "username": {
+            "maxLength": 200,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "username"
+        ],
+        "type": "object"
+      },
       "UpdateFavoriteCollectionDto": {
         "properties": {
           "description": {
@@ -57966,6 +58627,15 @@
         ],
         "type": "object"
       },
+      "WikiLeadState": {
+        "enum": [
+          "OPEN",
+          "CREATED",
+          "EXISTING",
+          "REJECTED"
+        ],
+        "type": "string"
+      },
       "WikiLogAction": {
         "enum": [
           "LOCK",
@@ -58002,6 +58672,14 @@
           "TIME",
           "CALLS",
           "ERROR"
+        ],
+        "type": "string"
+      },
+      "WikiLookupKind": {
+        "enum": [
+          "ENTRY",
+          "LEAD",
+          "SCOUT"
         ],
         "type": "string"
       },
@@ -75203,6 +75881,229 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/leads": {
+      "get": {
+        "operationId": "AdminLeadController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/WikiLeadState"
+            }
+          },
+          {
+            "description": "Only leads reported by this search for new works",
+            "in": "query",
+            "name": "scout_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/LeadDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      },
+      "post": {
+        "operationId": "AdminLeadController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLeadDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/leads/counts": {
+      "get": {
+        "operationId": "AdminLeadController_getCounts",
+        "parameters": [
+          {
+            "description": "Count leads reported and settled since this time",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadCountsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/leads/{id}": {
+      "get": {
+        "operationId": "AdminLeadController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeadDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/leads/{id}/reject": {
+      "post": {
+        "operationId": "AdminLeadController_reject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectLeadDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/leads/{id}/retry": {
+      "post": {
+        "operationId": "AdminLeadController_retry",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/logs": {
       "get": {
         "operationId": "AdminLogController_getList",
@@ -76565,6 +77466,107 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/sessions": {
+      "get": {
+        "operationId": "AdminSessionController_getList",
+        "parameters": [
+          {
+            "description": "Searches for new works, or sessions that checked a lead",
+            "in": "query",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "enum": [
+                "SCOUT",
+                "LEAD"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SessionDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/sessions/{id}": {
+      "get": {
+        "operationId": "AdminSessionController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDetailDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/settings": {
       "get": {
         "operationId": "AdminSettingsController_get",
@@ -76604,6 +77606,77 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WikiSettingsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/settings/erogamescape": {
+      "get": {
+        "operationId": "AdminSettingsController_getErogameScape",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErogameScapeAccessDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      },
+      "put": {
+        "operationId": "AdminSettingsController_updateErogameScape",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateErogameScapeAccessDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErogameScapeAccessDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/settings/erogamescape/check": {
+      "post": {
+        "operationId": "AdminSettingsController_checkErogameScape",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErogameScapeCheckDto"
                 }
               }
             },
@@ -77474,6 +78547,8 @@
                 "constraint_check",
                 "game_duplicate",
                 "agent",
+                "scout",
+                "lead",
                 "volume_check",
                 "image_rating"
               ],
@@ -77567,6 +78642,8 @@
                 "constraint_check",
                 "game_duplicate",
                 "agent",
+                "scout",
+                "lead",
                 "volume_check",
                 "image_rating"
               ],
@@ -77719,6 +78796,29 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/tasks/{id}/runs": {
+      "post": {
+        "operationId": "AdminTaskController_run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The task starts a run now unless one is under way"
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
     "/api/v3/ai/models": {
       "get": {
         "operationId": "AiModelController_getList",
@@ -77752,7 +78852,9 @@
                 "galgame_duplicate",
                 "galgame_duplicate_investigate",
                 "wiki_series_check",
-                "wiki_agent"
+                "wiki_agent",
+                "wiki_scout",
+                "wiki_lead"
               ],
               "type": "string"
             }
