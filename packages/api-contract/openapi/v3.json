@@ -49566,10 +49566,15 @@
           "id": {
             "type": "number"
           },
-          "lookup_id": {
-            "description": "Lookup that last wrote the note",
+          "lookup": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SiteNoteLookupDto"
+              }
+            ],
+            "description": "Lookup, search for new works or check of a lead that last wrote the note",
             "nullable": true,
-            "type": "number"
+            "type": "object"
           },
           "retired_at": {
             "format": "date-time",
@@ -49594,11 +49599,30 @@
           "id",
           "host",
           "text",
-          "lookup_id",
+          "lookup",
           "user",
           "created_at",
           "confirmed_at",
           "retired_at"
+        ],
+        "type": "object"
+      },
+      "SiteNoteLookupDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupKind"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind"
         ],
         "type": "object"
       },

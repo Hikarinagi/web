@@ -28151,13 +28151,17 @@ export interface components {
             created_at: string;
             host: string;
             id: number;
-            /** @description Lookup that last wrote the note */
-            lookup_id: number | null;
+            /** @description Lookup, search for new works or check of a lead that last wrote the note */
+            lookup: components["schemas"]["SiteNoteLookupDto"] | null;
             /** Format: date-time */
             retired_at: string | null;
             text: string;
             /** @description Operator who last rewrote it */
             user: components["schemas"]["UserRefDto"] | null;
+        };
+        SiteNoteLookupDto: {
+            id: number;
+            kind: components["schemas"]["WikiLookupKind"];
         };
         SitemapEntryDto: {
             id: number;
