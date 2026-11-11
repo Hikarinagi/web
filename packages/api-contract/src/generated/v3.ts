@@ -23011,6 +23011,8 @@ export interface components {
             /** @description Operator who set it aside */
             holder: components["schemas"]["UserRefDto"] | null;
             last: components["schemas"]["LookupQueueLastDto"] | null;
+            /** @description Basic facts the work lacks: of a game its cover, introduction, platforms or release date; of a series the cover or the release date of some volume */
+            missing: ("cover" | "intro" | "platform" | "release_date" | "volume_cover" | "volume_release_date")[];
             /** @description Never looked up */
             never: boolean;
             /**
@@ -27155,6 +27157,8 @@ export interface components {
             /** @description Operator who set it aside */
             holder: components["schemas"]["UserRefDto"] | null;
             last: components["schemas"]["LookupQueueLastDto"] | null;
+            /** @description Basic facts the work lacks: of a game its cover, introduction, platforms or release date; of a series the cover or the release date of some volume */
+            missing: ("cover" | "intro" | "platform" | "release_date" | "volume_cover" | "volume_release_date")[];
             /** @description Never looked up */
             never: boolean;
             /**
@@ -41148,6 +41152,8 @@ export interface operations {
             query: {
                 task_id: number;
                 type: components["schemas"]["EntryType"];
+                /** @description Only entries the bot looks up for this reason */
+                reason?: "fresh" | "new" | "hot" | "gap";
                 offset?: number;
                 limit?: number;
             };

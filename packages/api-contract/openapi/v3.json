@@ -29742,6 +29742,21 @@
             "nullable": true,
             "type": "object"
           },
+          "missing": {
+            "description": "Basic facts the work lacks: of a game its cover, introduction, platforms or release date; of a series the cover or the release date of some volume",
+            "items": {
+              "enum": [
+                "cover",
+                "intro",
+                "platform",
+                "release_date",
+                "volume_cover",
+                "volume_release_date"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "never": {
             "description": "Never looked up",
             "type": "boolean"
@@ -29786,6 +29801,7 @@
           "entry",
           "views",
           "reason",
+          "missing",
           "never",
           "due_at",
           "requested_at",
@@ -45692,6 +45708,21 @@
             "nullable": true,
             "type": "object"
           },
+          "missing": {
+            "description": "Basic facts the work lacks: of a game its cover, introduction, platforms or release date; of a series the cover or the release date of some volume",
+            "items": {
+              "enum": [
+                "cover",
+                "intro",
+                "platform",
+                "release_date",
+                "volume_cover",
+                "volume_release_date"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "never": {
             "description": "Never looked up",
             "type": "boolean"
@@ -45754,6 +45785,7 @@
           "entry",
           "views",
           "reason",
+          "missing",
           "never",
           "due_at",
           "requested_at",
@@ -76993,6 +77025,21 @@
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/EntryType"
+            }
+          },
+          {
+            "description": "Only entries the bot looks up for this reason",
+            "in": "query",
+            "name": "reason",
+            "required": false,
+            "schema": {
+              "enum": [
+                "fresh",
+                "new",
+                "hot",
+                "gap"
+              ],
+              "type": "string"
             }
           },
           {
