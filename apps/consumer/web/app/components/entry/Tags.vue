@@ -41,25 +41,29 @@
       </IconButton>
     </Inline>
     <Inline v-if="listed.length || spoilers.length" gap="xs">
-      <NuxtLink
-        v-for="tag in visible"
-        :key="tag.id"
-        v-slot="{ href, navigate }"
-        :to="tagRoute(tag.id)"
-        custom
-      >
+      <template v-for="tag in visible" :key="`${tag.proposed ? 'proposal' : 'tag'}-${tag.id}`">
         <Chip
+          v-if="tag.proposed"
           v-tooltip="hint(tag)"
-          as="a"
-          :href="href"
           size="sm"
-          :variant="tag.proposed ? 'outline' : 'soft'"
-          :class="tag.proposed ? 'border-dashed' : undefined"
-          @click="navigate"
+          variant="outline"
+          class="border-dashed"
         >
           {{ tag.name }}
         </Chip>
-      </NuxtLink>
+        <NuxtLink v-else v-slot="{ href, navigate }" :to="tagRoute(tag.id)" custom>
+          <Chip
+            v-tooltip="hint(tag)"
+            as="a"
+            :href="href"
+            size="sm"
+            variant="soft"
+            @click="navigate"
+          >
+            {{ tag.name }}
+          </Chip>
+        </NuxtLink>
+      </template>
       <HnButton
         v-if="listed.length > COLLAPSED"
         variant="ghost"

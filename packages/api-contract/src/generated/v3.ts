@@ -5781,6 +5781,54 @@ export interface paths {
         patch: operations["AdminEntryController_setFlags"];
         trace?: never;
     };
+    "/api/v3/admin/wiki/entries/{id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEntryNoteController_getList"];
+        put?: never;
+        post: operations["AdminEntryNoteController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/entries/{id}/notes/{note_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminEntryNoteController_delete"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminEntryNoteController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/entries/{id}/properties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminEntryPropertyController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/logs": {
         parameters: {
             query?: never;
@@ -5805,6 +5853,182 @@ export interface paths {
             cookie?: never;
         };
         get: operations["AdminLogController_getActors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/calls/{call_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getCall"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/halt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLookupController_halt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLookupController_sendMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/pages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getPages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/pages/{page_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/revert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLookupController_revert"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/steps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getSteps"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/lookups/{id}/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getSubmissions"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5861,6 +6085,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminNoteController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/overview": {
         parameters: {
             query?: never;
@@ -5887,6 +6127,118 @@ export interface paths {
         get: operations["AdminTaskController_getPrograms"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminQueueController_getDue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/deferrals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminQueueController_defer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/entries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminQueueController_getEntry"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/holds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminQueueController_getHolds"];
+        put?: never;
+        post: operations["AdminQueueController_hold"];
+        delete: operations["AdminQueueController_release"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/matches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminQueueController_countMatches"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminQueueController_getRequests"];
+        put?: never;
+        post: operations["AdminQueueController_request"];
+        delete: operations["AdminQueueController_withdraw"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/queue/requests/matches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminQueueController_requestMatches"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5923,6 +6275,70 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/sites/exclusions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSiteExclusionController_getList"];
+        put?: never;
+        post: operations["AdminSiteExclusionController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/sites/exclusions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminSiteExclusionController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/sites/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminSiteNoteController_getList"];
+        put?: never;
+        post: operations["AdminSiteNoteController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/sites/notes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["AdminSiteNoteController_retire"];
+        options?: never;
+        head?: never;
+        patch: operations["AdminSiteNoteController_update"];
         trace?: never;
     };
     "/api/v3/admin/wiki/snapshot": {
@@ -5973,6 +6389,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/tags/legacy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTagController_listLegacy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/tags/legacy/{id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminTagController_restoreLegacy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/tags/merge": {
         parameters: {
             query?: never;
@@ -6005,14 +6453,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/admin/wiki/tags/pool": {
+    "/api/v3/admin/wiki/tags/proposals": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AdminTagController_listPool"];
+        get: operations["AdminTagController_listProposals"];
         put?: never;
         post?: never;
         delete?: never;
@@ -6034,7 +6482,7 @@ export interface paths {
         delete: operations["AdminTagController_softDelete"];
         options?: never;
         head?: never;
-        patch?: never;
+        patch: operations["AdminTagController_update"];
         trace?: never;
     };
     "/api/v3/admin/wiki/tags/{id}/hard": {
@@ -6051,22 +6499,6 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
-        trace?: never;
-    };
-    "/api/v3/admin/wiki/tags/{id}/pool": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch: operations["AdminTagController_updatePool"];
         trace?: never;
     };
     "/api/v3/admin/wiki/tags/{id}/restore": {
@@ -6111,6 +6543,22 @@ export interface paths {
         get: operations["AdminTaskController_getList"];
         put?: never;
         post: operations["AdminTaskController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/tasks/states": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTaskController_getStates"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -7710,7 +8158,7 @@ export interface paths {
         };
         get: operations["GalgameController_getTags"];
         put?: never;
-        post: operations["GalgameTagController_propose"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -7728,6 +8176,54 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameTagProposalController_getMine"];
+        put?: never;
+        post: operations["GalgameTagProposalController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/proposals/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameTagProposalController_check"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/galgames/{id}/tags/proposals/{proposal_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["GalgameTagProposalController_withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -8990,7 +9486,7 @@ export interface paths {
         };
         get: operations["LightNovelController_getTags"];
         put?: never;
-        post: operations["LightNovelTagController_propose"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -9008,6 +9504,54 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelTagProposalController_getMine"];
+        put?: never;
+        post: operations["LightNovelTagProposalController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/proposals/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelTagProposalController_check"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/tags/proposals/{proposal_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["LightNovelTagProposalController_withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -10078,7 +10622,7 @@ export interface paths {
         };
         get: operations["MangaController_getTags"];
         put?: never;
-        post: operations["MangaTagController_propose"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -10096,6 +10640,54 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaTagProposalController_getMine"];
+        put?: never;
+        post: operations["MangaTagProposalController_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/proposals/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaTagProposalController_check"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/tags/proposals/{proposal_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MangaTagProposalController_withdraw"];
         options?: never;
         head?: never;
         patch?: never;
@@ -12761,22 +13353,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["TagController_getByName"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/tags/pool": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["TagController_searchPool"];
         put?: never;
         post?: never;
         delete?: never;
@@ -18139,6 +18715,11 @@ export interface components {
             /** @enum {string} */
             type?: "GAME" | "PERSON" | "ORGANIZATION";
         };
+        CreateEntryNoteDto: {
+            /** @description Also put the entry first in the queue of the wiki bot */
+            request?: boolean;
+            text: string;
+        };
         CreateFavoriteCollectionDto: {
             /** @description 收藏夹简介 */
             description?: string;
@@ -18391,6 +18972,16 @@ export interface components {
              */
             alg: "RS256";
         };
+        CreateSiteExclusionDto: {
+            /** @description Any address on the site */
+            address: string;
+            reason: string;
+        };
+        CreateSiteNoteDto: {
+            /** @description Any address on the site */
+            address: string;
+            text: string;
+        };
         CreateTaskDto: {
             bot_id: number;
             description?: string;
@@ -18460,6 +19051,14 @@ export interface components {
             /** @enum {string} */
             type: "AVATAR_FRAME" | "BADGE";
             unlock_description: string | null;
+        };
+        DeferLookupsDto: {
+            /**
+             * Format: date-time
+             * @description Not looked up before this time
+             */
+            due_at: string;
+            entry_ids: number[];
         };
         DeletedChangeDto: {
             after: boolean;
@@ -19390,8 +19989,61 @@ export interface components {
             /** @description Operations of the merge: the repeated values deprecated, then the merge */
             operations: components["schemas"]["EditOperationDto"][];
         };
+        EntryNoteDto: {
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            text: string;
+            /** Format: date-time */
+            updated_at: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        EntryNoteItemDto: {
+            /** Format: date-time */
+            created_at: string;
+            entry: components["schemas"]["LookupEntryDto"];
+            id: number;
+            text: string;
+            /** Format: date-time */
+            updated_at: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        EntryPartDto: {
+            /** @description What tells it from the others: release date and kind of a release, voice and role of a character */
+            caption: string;
+            id: number;
+            /** @description Object key of its cover, or of the picture of a character */
+            image: string | null;
+            label: string;
+            /** @description Properties the task covers that it has no value for */
+            missing: number;
+            type: components["schemas"]["EntryType"];
+        };
+        EntryPropertiesDto: {
+            entry: components["schemas"]["LookupEntryDto"];
+            /** @description Entries looked up together with it: releases and appearances, volumes and books */
+            parts: components["schemas"]["EntryPartDto"][];
+            /** @description The properties of the entry the task covers */
+            properties: components["schemas"]["EntryPropertyDto"][];
+        };
         /** @enum {string} */
         EntryProperty: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+        EntryPropertyDto: {
+            /** @description Name of the property as shown to people */
+            label: string;
+            property: components["schemas"]["EntryProperty"];
+            /** @description What the latest lookup that reported on the property concluded */
+            report: components["schemas"]["EntryPropertyReportDto"] | null;
+            /** @description Values the entry has now */
+            values: components["schemas"]["EntryValueDto"][];
+        };
+        EntryPropertyReportDto: {
+            /** Format: date-time */
+            ended_at: string | null;
+            lookup_id: number;
+            note: string;
+            outcome: components["schemas"]["WikiLookupOutcome"];
+        };
         /** @enum {string} */
         EntryProtection: "LOCKED";
         EntryProtectionDto: {
@@ -19476,6 +20128,18 @@ export interface components {
         };
         /** @enum {string} */
         EntryType: "GAME" | "PRODUCT" | "SERIES" | "VOLUME" | "BOOK" | "PERSON" | "ORGANIZATION" | "CHARACTER" | "APPEARANCE";
+        EntryValueDto: {
+            /** @description Object key of an image value */
+            image: string | null;
+            /** @description The value has a source */
+            sourced: boolean;
+            /** @description Addresses or record keys of its sources */
+            sources: string[];
+            /** @description Id of the statement */
+            statement: number;
+            /** @description The value as one line of text */
+            text: string;
+        };
         EpubBulkDto: {
             /**
              * @description curate 标记已校订；uncurate 取消校订；remove 下架并删除文件
@@ -20905,6 +21569,10 @@ export interface components {
             revision: number;
             summary: string;
         };
+        HoldLookupsDto: {
+            entry_ids: number[];
+            reason: string;
+        };
         IdentitySessionDto: {
             /** Format: date-time */
             created_at: string;
@@ -21011,6 +21679,11 @@ export interface components {
         LandingRefDto: {
             id: number;
             title: string;
+        };
+        LegacyTagAdminDto: {
+            id: number;
+            links: number;
+            name: string;
         };
         LightNovelBunkoDto: {
             id: number;
@@ -21794,6 +22467,404 @@ export interface components {
             user: components["schemas"]["UserRefDto"] | null;
         };
         LogTaskDto: {
+            id: number;
+            name: string;
+        };
+        LookupCallDto: {
+            /** @description A few fields of the output, by tool: counts of results, the page number and title of an opened page, the label of a read entry, the results of a submit */
+            digest: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            error: string | null;
+            id: number;
+            input: {
+                [key: string]: unknown;
+            };
+            output: {
+                [key: string]: unknown;
+            } | null;
+            position: number;
+            /** @description What the bot said this call is for; empty for calls made without one */
+            purpose: string;
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupCallState"];
+            tool: string;
+        };
+        LookupCallItemDto: {
+            /** @description A few fields of the output, by tool: counts of results, the page number and title of an opened page, the label of a read entry, the results of a submit */
+            digest: {
+                [key: string]: unknown;
+            } | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            error: string | null;
+            id: number;
+            input: {
+                [key: string]: unknown;
+            };
+            position: number;
+            /** @description What the bot said this call is for; empty for calls made without one */
+            purpose: string;
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupCallState"];
+            tool: string;
+        };
+        LookupCurrentDto: {
+            /** @description Whether the latest call is still running */
+            busy: boolean;
+            /** @description The page opened last */
+            page: components["schemas"]["LookupCurrentPageDto"] | null;
+            /** @description What the bot said the latest call is for */
+            purpose: string;
+            /** @description Tool of the latest call */
+            tool: string | null;
+        };
+        LookupCurrentPageDto: {
+            id: number;
+            /** @description Object key of a small picture of the top of the page */
+            screenshot_thumb: string | null;
+            title: string | null;
+            url: string;
+        };
+        LookupDetailDto: {
+            /** @description Tool calls made so far */
+            calls: number;
+            cost_usd: number;
+            /**
+             * Format: date-time
+             * @description When the entry is due again
+             */
+            due_at: string | null;
+            edits: components["schemas"]["LookupEditDto"][];
+            /** Format: date-time */
+            ended_at: string | null;
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            entry: components["schemas"]["LookupEntryCardDto"];
+            error: string | null;
+            /** @description Properties the lookup was asked to fill, by entry type */
+            goal: {
+                [key: string]: string[];
+            };
+            halted_by: components["schemas"]["UserRefDto"] | null;
+            id: number;
+            input_tokens: number;
+            /** @description Submitted items of the lookup by result */
+            items: components["schemas"]["LookupItemsDto"];
+            messages: components["schemas"]["LookupMessageDto"][];
+            model: string;
+            /** @description Report items of the lookup by outcome */
+            outcomes: components["schemas"]["LookupOutcomesDto"];
+            output_tokens: number;
+            reports: components["schemas"]["LookupReportDto"][];
+            /** @description Model providers the lookup called */
+            routes: components["schemas"]["LookupRouteDto"][];
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupState"];
+            steps: number;
+            suggestions: components["schemas"]["LookupSuggestionDto"][];
+            task: components["schemas"]["LookupTaskDto"];
+        };
+        LookupEditDto: {
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            /** Format: date-time */
+            reverted_at: string | null;
+            summary: string;
+        };
+        LookupEntryCardDto: {
+            /** @description Cover of a game or a series */
+            cover: string | null;
+            /** @description Release date of a game or start date of a series, YYYY-MM-DD */
+            date: string | null;
+            id: number;
+            label: string;
+            /** @description First developers of a game or authors of a series */
+            makers: string[];
+            type: components["schemas"]["EntryType"];
+        };
+        LookupEntryDto: {
+            id: number;
+            label: string;
+            type: components["schemas"]["EntryType"];
+        };
+        LookupFaultDto: {
+            count: number;
+            error_kind: components["schemas"]["AiErrorKind"] | null;
+            /** Format: date-time */
+            first_at: string;
+            /** Format: date-time */
+            last_at: string;
+            provider: string | null;
+            provider_id: number | null;
+        };
+        LookupItemsDto: {
+            /** @description Submitted items already present */
+            present: number;
+            /** @description Properties left unwritten: every item submitted for them was refused, counting an item retried and then written as written */
+            refused: number;
+            /** @description Submitted items turned into suggestions */
+            suggested: number;
+            /** @description Submitted items written */
+            written: number;
+        };
+        LookupListItemDto: {
+            /** @description Tool calls made so far */
+            calls: number;
+            cost_usd: number;
+            /** @description What a running lookup is doing at the moment; null once it has ended */
+            current: components["schemas"]["LookupCurrentDto"] | null;
+            /** Format: date-time */
+            ended_at: string | null;
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            entry: components["schemas"]["LookupEntryCardDto"];
+            id: number;
+            input_tokens: number;
+            /** @description Submitted items of the lookup by result */
+            items: components["schemas"]["LookupItemsDto"];
+            /** @description Report items of the lookup by outcome */
+            outcomes: components["schemas"]["LookupOutcomesDto"];
+            output_tokens: number;
+            /** Format: date-time */
+            started_at: string;
+            state: components["schemas"]["WikiLookupState"];
+            steps: number;
+            task: components["schemas"]["LookupTaskDto"];
+        };
+        LookupMessageDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** @description Position of the step the message was handed to the model at; null while waiting */
+            delivered_at_step: number | null;
+            id: number;
+            text: string;
+            user: components["schemas"]["UserRefDto"];
+        };
+        LookupOutcomesDto: {
+            not_found: number;
+            present: number;
+            unsure: number;
+            written: number;
+        };
+        LookupOverviewDto: {
+            /** @description Cost of the lookups ended in the period */
+            cost_usd: number;
+            /** @description Lookups ended in the period */
+            ended: number;
+            /** @description Failed model requests by provider */
+            faults: components["schemas"]["LookupFaultDto"][];
+            /** @description Items submitted by the lookups ended */
+            items: components["schemas"]["LookupItemsDto"];
+            /** @description Reasons items were not written */
+            refusals: components["schemas"]["LookupRefusalDto"][];
+            /** @description Sites opened, those with failures first */
+            sites: components["schemas"]["LookupSiteDto"][];
+        };
+        LookupPageDto: {
+            browser_error: string | null;
+            /** @description What was clicked on the page after it loaded, when the page is what a click showed */
+            clicked: string | null;
+            cut: boolean;
+            /** Format: date-time */
+            fetched_at: string;
+            id: number;
+            images: components["schemas"]["LookupPageImageDto"][];
+            /** @description Line 1 is the first element */
+            lines: string[];
+            links: components["schemas"]["LookupPageLinkDto"][];
+            loaded: boolean;
+            pending_images: number;
+            requested_url: string;
+            /** @description Object key of the page screenshot */
+            screenshot: string | null;
+            /** @description Object key of a small picture of the top of the page */
+            screenshot_thumb: string | null;
+            title: string | null;
+            url: string;
+        };
+        LookupPageImageDto: {
+            alt?: string;
+            link?: string;
+            /** @description Number drawn on the screenshot */
+            n?: number;
+            url: string;
+        };
+        LookupPageItemDto: {
+            browser_error: string | null;
+            /** @description What was clicked on the page after it loaded, when the page is what a click showed */
+            clicked: string | null;
+            cut: boolean;
+            /** Format: date-time */
+            fetched_at: string;
+            id: number;
+            loaded: boolean;
+            pending_images: number;
+            requested_url: string;
+            /** @description Object key of the page screenshot */
+            screenshot: string | null;
+            /** @description Object key of a small picture of the top of the page */
+            screenshot_thumb: string | null;
+            title: string | null;
+            url: string;
+        };
+        LookupPageLinkDto: {
+            text: string;
+            url: string;
+        };
+        LookupQueueDto: {
+            items: components["schemas"]["LookupQueueItemDto"][];
+            more: boolean;
+            /** @description Entry types the task claims */
+            types: components["schemas"]["EntryType"][];
+        };
+        LookupQueueItemDto: {
+            /** Format: date-time */
+            due_at: string | null;
+            entry: components["schemas"]["LookupEntryCardDto"];
+            /** @description Released within the recent period of the task */
+            fresh: boolean;
+            /**
+             * Format: date-time
+             * @description Set aside, not to be looked up, at
+             */
+            held_at: string | null;
+            held_reason: string | null;
+            /** @description Operator who set it aside */
+            holder: components["schemas"]["UserRefDto"] | null;
+            last: components["schemas"]["LookupQueueLastDto"] | null;
+            /** @description Never looked up */
+            never: boolean;
+            /**
+             * Format: date-time
+             * @description Asked to be looked up first at
+             */
+            requested_at: string | null;
+            /** @description Operator who asked for it */
+            requester: components["schemas"]["UserRefDto"] | null;
+            /** @description A lookup of the entry is running */
+            running: boolean;
+            views: number | null;
+        };
+        LookupQueueLastDto: {
+            /** Format: date-time */
+            ended_at: string | null;
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            id: number;
+            outcomes: components["schemas"]["LookupOutcomesDto"];
+            state: components["schemas"]["WikiLookupState"];
+        };
+        LookupRefDto: {
+            entry: components["schemas"]["LookupEntryDto"];
+            id: number;
+        };
+        LookupRefusalDto: {
+            count: number;
+            /** Format: date-time */
+            last_at: string;
+            /** @description The latest lookups refused for it */
+            lookups: components["schemas"]["LookupRefDto"][];
+            reason: string;
+        };
+        LookupReportDto: {
+            entry: components["schemas"]["LookupEntryDto"];
+            id: number;
+            note: string;
+            outcome: components["schemas"]["WikiLookupOutcome"];
+            property: string;
+            /** @description Name of the property as shown to people */
+            property_label: string;
+        };
+        LookupRouteDto: {
+            failed: number;
+            provider: string | null;
+            provider_id: number | null;
+            requests: number;
+        };
+        LookupSiteDto: {
+            /** @description Pages opened whose text was missing or nearly empty */
+            empty: number;
+            /** @description An operator has excluded the site */
+            excluded: boolean;
+            /** @description Openings that failed */
+            failed: number;
+            host: string;
+            /** Format: date-time */
+            last_at: string;
+            /** @description The latest error or browser error */
+            last_error: string | null;
+            /** @description The latest lookups in which the site failed or gave no text */
+            lookups: components["schemas"]["LookupRefDto"][];
+            /** @description Pages of the site opened, not counting reopened copies */
+            opened: number;
+        };
+        LookupStepDto: {
+            calls: components["schemas"]["LookupCallItemDto"][];
+            /** Format: date-time */
+            ended_at: string | null;
+            id: number;
+            input_tokens: number;
+            output_tokens: number;
+            position: number;
+            reasoning: string;
+            /** Format: date-time */
+            started_at: string;
+            text: string;
+        };
+        LookupStepsDto: {
+            state: components["schemas"]["WikiLookupState"];
+            steps: components["schemas"]["LookupStepDto"][];
+        };
+        LookupSubmissionDto: {
+            /** @description The submit call the item was handed in with */
+            call_id: number;
+            /** @description The entry already had the value and the cited source was added to it */
+            cited: boolean;
+            /** @description Edit the item was written with */
+            edit_id: number | null;
+            /** @description Entry the item is for */
+            entry: components["schemas"]["LookupEntryDto"] | null;
+            /** @description Address of a submitted image */
+            image: string | null;
+            /** @description First and last cited line of the page, from 1 */
+            lines: number[] | null;
+            /** @description Title of the release the item asks to create, when it is for a new release */
+            new_version: string | null;
+            /** @description Wording of the source for the value */
+            original: string | null;
+            /** @description The page cited */
+            page: components["schemas"]["LookupCurrentPageDto"] | null;
+            /** @description Place of the item among the items of that call, from 0 */
+            position: number;
+            property: string;
+            /** @description Name of the property as shown to people */
+            property_label: string;
+            /** @description Text of the cited lines */
+            quote: string;
+            /** @description Why the item was not written */
+            reason: string | null;
+            /** @description written, present, suggested or not_written; null while the call is running */
+            result: string | null;
+            /** @description The bot marked the item as one it is unsure of */
+            unsure: boolean;
+            /** @description The submitted value as one line of text; empty when the quote is the value */
+            value: string;
+        };
+        LookupSuggestionDto: {
+            /** Format: date-time */
+            created_at: string;
+            /** @description Entry the suggested value is for */
+            entry_id: number | null;
+            id: number;
+            problem: string;
+            property: components["schemas"]["EntryProperty"] | null;
+            status: components["schemas"]["WikiTodoStatus"];
+        };
+        LookupTaskDto: {
             id: number;
             name: string;
         };
@@ -23548,18 +24619,6 @@ export interface components {
             name: string;
             /** @enum {string} */
             role: "OWNER" | "ADMIN" | "MEMBER";
-        };
-        NamedEntityAdminItemDto: {
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            deleted_at: string | null;
-            id: number;
-            name: string;
-            /** @enum {string} */
-            status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
-            /** Format: date-time */
-            updated_at: string;
         };
         NovelBackfillDto: {
             light_novel_ids?: number[];
@@ -25644,7 +26703,7 @@ export interface components {
             max: number;
             min: number;
             /** @enum {string} */
-            unit: "items" | "series" | "chars" | "days" | "hours" | "minutes";
+            unit: "items" | "series" | "chars" | "days" | "hours" | "minutes" | "parts" | "percent";
         };
         PromoBannerDto: {
             id: number;
@@ -25800,6 +26859,58 @@ export interface components {
         PurchaseDownloadCardsDto: {
             /** @default 1 */
             quantity: number;
+        };
+        QueueCountDto: {
+            count: number;
+        };
+        QueueEntryDto: {
+            /** Format: date-time */
+            due_at: string | null;
+            entry: components["schemas"]["LookupEntryCardDto"];
+            /** @description Released within the recent period of the task */
+            fresh: boolean;
+            /**
+             * Format: date-time
+             * @description Set aside, not to be looked up, at
+             */
+            held_at: string | null;
+            held_reason: string | null;
+            /** @description Operator who set it aside */
+            holder: components["schemas"]["UserRefDto"] | null;
+            last: components["schemas"]["LookupQueueLastDto"] | null;
+            /** @description Never looked up */
+            never: boolean;
+            /**
+             * Format: date-time
+             * @description Asked to be looked up first at
+             */
+            requested_at: string | null;
+            /** @description Properties the pending request is limited to; null when it covers everything */
+            requested_goal: components["schemas"]["TaskPropertiesDto"][] | null;
+            /** @description Message that goes with the request */
+            requested_note: string | null;
+            /** @description Operator who asked for it */
+            requester: components["schemas"]["UserRefDto"] | null;
+            /** @description A lookup of the entry is running */
+            running: boolean;
+            /** @description The lookup running for the entry */
+            running_lookup_id: number | null;
+            views: number | null;
+        };
+        QueueMatchDto: {
+            /** @description An organization entry among the brands, labels or publishers */
+            maker_id?: number;
+            /** @description Only entries with no value of this property */
+            missing?: components["schemas"]["EntryProperty"];
+            task_id: number;
+            type: components["schemas"]["EntryType"];
+            /** @description Year of release, or of the first volume */
+            year?: number;
+        };
+        QueueRequestDto: {
+            count: number;
+            /** @description The submitted entry ids and links that were not added */
+            unresolved: string[];
         };
         QueueStatusDto: {
             active: number;
@@ -26272,6 +27383,20 @@ export interface components {
         };
         /** @enum {string} */
         ReportStatus: "PENDING" | "RESOLVED" | "REJECTED";
+        RequestGoalDto: {
+            properties: components["schemas"]["EntryProperty"][];
+            type: components["schemas"]["EntryType"];
+        };
+        RequestLookupsDto: {
+            entry_ids?: number[];
+            /** @description Look up only these properties this time; omitted, everything the task covers is looked up */
+            goal?: components["schemas"]["RequestGoalDto"][];
+            /** @description Links to entry pages or to the reader pages of games, series, people and organizations */
+            links?: string[];
+            /** @description Handed to the bot as a message from the operator when the lookup starts */
+            note?: string;
+            task_id: number;
+        };
         RequestNovelPretranslationDto: {
             /** @description 模型；不传则使用默认模型 */
             model?: string;
@@ -26474,6 +27599,9 @@ export interface components {
             /** @description The new monotonic version number of the resource. */
             version: number;
         };
+        RewriteSiteNoteDto: {
+            text: string;
+        };
         RollbackEditsDto: {
             editor_id: number;
             note?: string;
@@ -26613,6 +27741,9 @@ export interface components {
             /** @description 板块信息 */
             section: components["schemas"]["SectionRefDto"];
         };
+        SendLookupMessageDto: {
+            text: string;
+        };
         SendMessageDto: {
             attachments?: components["schemas"]["PrivateMessageAttachmentInputDto"][];
             /** @description 编辑器文档(text+emoji) */
@@ -26663,6 +27794,29 @@ export interface components {
         };
         SiteConfigDto: {
             feature_flags: components["schemas"]["FeatureFlagsDto"];
+        };
+        SiteExclusionDto: {
+            /** Format: date-time */
+            created_at: string;
+            host: string;
+            id: number;
+            reason: string;
+            user: components["schemas"]["UserRefDto"] | null;
+        };
+        SiteNoteDto: {
+            /** Format: date-time */
+            confirmed_at: string;
+            /** Format: date-time */
+            created_at: string;
+            host: string;
+            id: number;
+            /** @description Lookup that last wrote the note */
+            lookup_id: number | null;
+            /** Format: date-time */
+            retired_at: string | null;
+            text: string;
+            /** @description Operator who last rewrote it */
+            user: components["schemas"]["UserRefDto"] | null;
         };
         SitemapEntryDto: {
             id: number;
@@ -26920,6 +28074,23 @@ export interface components {
             kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm" | "novel_project" | "manga_project";
             work_id: number | null;
         };
+        TagAdminItemDto: {
+            aliases: string[];
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            deleted_at: string | null;
+            galgames: number;
+            id: number;
+            light_novels: number;
+            mangas: number;
+            members: number;
+            name: string;
+            spoiler: boolean;
+            status: components["schemas"]["PublishStatus"];
+            /** Format: date-time */
+            updated_at: string;
+        };
         TagDetailDto: {
             aliases: string[];
             /** Format: date-time */
@@ -26937,42 +28108,22 @@ export interface components {
         };
         TagHiddenGroupDto: {
             examples: string[];
-            kind: components["schemas"]["TagKind"];
             links: number;
+            /** @description 为空表示名字不在不收的名字表里 */
+            reason: components["schemas"]["TagRefusalReason"] | null;
             tags: number;
         };
-        /** @enum {string} */
-        TagKind: "CONTENT" | "FIELD" | "PERSONAL" | "OPINION" | "COMMENT" | "RATING";
         TagLightNovelRelationDto: {
             light_novel: components["schemas"]["LightNovelSummaryDto"];
         };
-        TagPoolItemAdminDto: {
-            aliases: string[];
-            /** Format: date-time */
-            created_at: string;
-            galgames: number;
-            id: number;
-            kind: components["schemas"]["TagKind"];
-            light_novels: number;
-            mangas: number;
-            members: number;
-            name: string;
-            pool_state: components["schemas"]["TagPoolState"];
-            spoiler: boolean;
-        };
-        TagPoolItemDto: {
+        TagListItemDto: {
+            /** @description 按别名命中时命中的那个别名 */
             alias: string | null;
             id: number;
             name: string;
+            spoiler: boolean;
             works: number;
         };
-        TagPoolSearchDto: {
-            items: components["schemas"]["TagPoolItemDto"][];
-            /** @description 不能作为标签的原因 */
-            reject: string | null;
-        };
-        /** @enum {string} */
-        TagPoolState: "CANDIDATE" | "POOL" | "HIDDEN";
         TagPreviewDto: {
             aliases: string[];
             description: string | null;
@@ -26980,6 +28131,23 @@ export interface components {
             name: string;
             spoiler: boolean;
         };
+        TagProposalGroupAdminDto: {
+            /**
+             * Format: date-time
+             * @description 最早那条提议的时间
+             */
+            created_at: string;
+            members: number;
+            /** @description 最早那条提议的写法 */
+            name: string;
+            name_key: string;
+            works: number;
+        };
+        /**
+         * @description 为空表示名字不在不收的名字表里
+         * @enum {string}
+         */
+        TagRefusalReason: "FIELD" | "PERSONAL" | "OPINION" | "COMMENT" | "RATING";
         TaskBatchDto: {
             /** Format: date-time */
             created_at: string;
@@ -27114,6 +28282,32 @@ export interface components {
         TaskPropertiesDto: {
             properties: components["schemas"]["EntryProperty"][];
             type: components["schemas"]["EntryType"];
+        };
+        TaskStateDto: {
+            bot: components["schemas"]["TaskBotDto"];
+            budget_weight: number;
+            creates: components["schemas"]["EntryType"][];
+            deferrable: boolean;
+            description: string;
+            enabled: boolean;
+            /** Format: date-time */
+            enabled_at: string | null;
+            enabled_by: components["schemas"]["UserRefDto"] | null;
+            id: number;
+            merges: boolean;
+            name: string;
+            /** @description Parameters of the program, defaults filled in */
+            params: {
+                [key: string]: number;
+            };
+            program: string;
+            properties: components["schemas"]["TaskPropertiesDto"][];
+            /** @description Edits allowed per rate window */
+            rate: number;
+            /** @description Six-field cron expression in Asia/Shanghai */
+            schedule: string;
+            stopped_reason: components["schemas"]["WikiTaskStop"] | null;
+            trial_limit: number | null;
         };
         TaskWriteDto: {
             /** @description Statements this task wrote in the last 30 days */
@@ -28486,11 +29680,9 @@ export interface components {
         UpdateSourceLinkGroupsDto: {
             groups: string[];
         };
-        UpdateTagPoolDto: {
+        UpdateTagDto: {
             aliases?: string[];
-            kind?: components["schemas"]["TagKind"];
             name?: string;
-            pool_state?: components["schemas"]["TagPoolState"];
             spoiler?: boolean;
         };
         UpdateTaskDto: {
@@ -28832,6 +30024,14 @@ export interface components {
         };
         /** @enum {string} */
         WikiLogAction: "LOCK" | "UNLOCK" | "GRANT" | "REVOKE" | "BAN" | "UNBAN" | "TASK_ENABLE" | "TASK_STOP" | "TASK_CREATE" | "TASK_UPDATE" | "BOT_CREATE" | "BOT_DISABLE" | "BOT_ENABLE" | "MERGE" | "DELETE" | "RESTORE";
+        /** @enum {string} */
+        WikiLookupCallState: "RUNNING" | "OK" | "FAILED";
+        /** @enum {string} */
+        WikiLookupEnd: "SELF" | "OPERATOR" | "TIME" | "CALLS" | "ERROR";
+        /** @enum {string} */
+        WikiLookupOutcome: "WRITTEN" | "PRESENT" | "NOT_FOUND" | "UNSURE";
+        /** @enum {string} */
+        WikiLookupState: "RUNNING" | "FINISHED" | "HALTED" | "FAILED";
         WikiRulesDto: {
             /** @description 附录 A 记录细则（Markdown） */
             appendix: string;
@@ -28867,9 +30067,11 @@ export interface components {
             };
         };
         /** @enum {string} */
-        WikiTaskStop: "MANUAL" | "TRIAL" | "AUTO";
+        WikiTaskStop: "MANUAL" | "TRIAL" | "AUTO" | "SUGGESTED";
         /** @enum {string} */
         WikiTodoKind: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
+        /** @enum {string} */
+        WikiTodoStatus: "OPEN" | "DONE" | "REJECTED";
         WorkCardDto: {
             aliases: string[];
             average_rate: number | null;
@@ -28906,6 +30108,23 @@ export interface components {
             average: number | null;
             count: number;
         };
+        WorkTagProposalCheckDto: {
+            allowed: boolean;
+            /** @description 不能作为标签的原因：year、platform、brand、person、character、field、personal、opinion、comment、rating */
+            reason: string | null;
+        };
+        WorkTagProposalDto: {
+            /** Format: date-time */
+            created_at: string;
+            id: number;
+            name: string;
+        };
+        WorkTagProposeResultDto: {
+            /** @description 名字存为提议时的提议 */
+            proposal_id: number | null;
+            /** @description 名字已是标签或因此成为标签时，投了符合的那个标签 */
+            tag_id: number | null;
+        };
         WorkTagVoteDto: {
             tag: components["schemas"]["WorkTagVoteTagDto"];
             value: number;
@@ -28917,8 +30136,6 @@ export interface components {
         WorkTagVoteTagDto: {
             id: number;
             name: string;
-            /** @enum {string} */
-            pool_state: "CANDIDATE" | "POOL" | "HIDDEN";
             spoiler: boolean;
         };
         WorkViewDto: {
@@ -28960,6 +30177,9 @@ export interface components {
             lock_ttl_seconds: number;
             /** @description 无活动多少天后标记为停滞并释放 */
             stale_days: number;
+        };
+        WriteEntryNoteDto: {
+            text: string;
         };
     };
     responses: never;
@@ -38871,6 +40091,121 @@ export interface operations {
             };
         };
     };
+    AdminEntryNoteController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryNoteDto"][];
+                };
+            };
+        };
+    };
+    AdminEntryNoteController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateEntryNoteDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryNoteDto"];
+                };
+            };
+        };
+    };
+    AdminEntryNoteController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminEntryNoteController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                note_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WriteEntryNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryNoteDto"];
+                };
+            };
+        };
+    };
+    AdminEntryPropertyController_getList: {
+        parameters: {
+            query: {
+                task_id: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntryPropertiesDto"];
+                };
+            };
+        };
+    };
     AdminLogController_getList: {
         parameters: {
             query: {
@@ -38915,6 +40250,268 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserRefDto"][];
+                };
+            };
+        };
+    };
+    AdminLookupController_getList: {
+        parameters: {
+            query: {
+                task_id?: number;
+                entry_id?: number;
+                state?: components["schemas"]["WikiLookupState"];
+                /** @description Ended in one of these ways; repeat the parameter or separate with commas */
+                ended_by?: components["schemas"]["WikiLookupEnd"][];
+                /** @description Only lookups that have ended, the latest ended first */
+                ended?: boolean;
+                type?: components["schemas"]["EntryType"];
+                /** @description Only lookups with submitted items that were not written */
+                refused?: boolean;
+                /** @description Only lookups whose report holds an unsure item */
+                unsure?: boolean;
+                /** @description Part of the entry label, or the entry id */
+                q?: string;
+                /** @description Started at or after this time */
+                from?: string;
+                /** @description Started before this time */
+                to?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LookupListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminLookupController_getOverview: {
+        parameters: {
+            query: {
+                task_id?: number;
+                /** @description Count what happened at or after this time */
+                from: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupOverviewDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupDetailDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_getCall: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                call_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupCallDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_halt: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLookupController_sendMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendLookupMessageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupMessageDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_getPages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupPageItemDto"][];
+                };
+            };
+        };
+    };
+    AdminLookupController_getPage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                page_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupPageDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_revert: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RevertOutcomeDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_getSteps: {
+        parameters: {
+            query?: {
+                /** @description Return the steps after this position; omit for all of them */
+                after?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupStepsDto"];
+                };
+            };
+        };
+    };
+    AdminLookupController_getSubmissions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupSubmissionDto"][];
                 };
             };
         };
@@ -38988,6 +40585,31 @@ export interface operations {
             };
         };
     };
+    AdminNoteController_getList: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["EntryNoteItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
     AdminWikiOverviewController_get: {
         parameters: {
             query?: never;
@@ -39022,6 +40644,267 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProgramListDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_getDue: {
+        parameters: {
+            query: {
+                task_id: number;
+                type: components["schemas"]["EntryType"];
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupQueueDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_defer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeferLookupsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueCountDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_getEntry: {
+        parameters: {
+            query: {
+                task_id: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueEntryDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_getHolds: {
+        parameters: {
+            query: {
+                task_id: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LookupQueueItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminQueueController_hold: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HoldLookupsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueCountDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_release: {
+        parameters: {
+            query: {
+                /** @description Entry ids; repeat the parameter or separate with commas */
+                entry_ids: number[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminQueueController_countMatches: {
+        parameters: {
+            query: {
+                task_id: number;
+                type: components["schemas"]["EntryType"];
+                /** @description An organization entry among the brands, labels or publishers */
+                maker_id?: number;
+                /** @description Year of release, or of the first volume */
+                year?: number;
+                /** @description Only entries with no value of this property */
+                missing?: components["schemas"]["EntryProperty"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueCountDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_getRequests: {
+        parameters: {
+            query: {
+                task_id: number;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LookupQueueItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminQueueController_request: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestLookupsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueRequestDto"];
+                };
+            };
+        };
+    };
+    AdminQueueController_withdraw: {
+        parameters: {
+            query?: {
+                /** @description Withdraws every request of this task when no entry ids are given */
+                task_id?: number;
+                /** @description Entry ids; repeat the parameter or separate with commas */
+                entry_ids?: number[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminQueueController_requestMatches: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QueueMatchDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueCountDto"];
                 };
             };
         };
@@ -39089,6 +40972,163 @@ export interface operations {
             };
         };
     };
+    AdminSiteExclusionController_getList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteExclusionDto"][];
+                };
+            };
+        };
+    };
+    AdminSiteExclusionController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSiteExclusionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteExclusionDto"];
+                };
+            };
+        };
+    };
+    AdminSiteExclusionController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminSiteNoteController_getList: {
+        parameters: {
+            query: {
+                /** @description Host name, or part of one */
+                host?: string;
+                /** @description 为真时只列出已作废的 */
+                retired: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["SiteNoteDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminSiteNoteController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSiteNoteDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteNoteDto"];
+                };
+            };
+        };
+    };
+    AdminSiteNoteController_retire: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminSiteNoteController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RewriteSiteNoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteNoteDto"];
+                };
+            };
+        };
+    };
     AdminSnapshotController_get: {
         parameters: {
             query: {
@@ -39137,12 +41177,12 @@ export interface operations {
     AdminTagController_list: {
         parameters: {
             query: {
-                status?: components["schemas"]["PublishStatus"];
-                deleted: boolean;
-                locked?: boolean;
-                otome?: boolean;
-                nsfw?: boolean;
                 q?: string;
+                status?: components["schemas"]["PublishStatus"];
+                /** @description 为真时只列出已删除的标签 */
+                deleted: boolean;
+                media?: "galgame" | "light_novel" | "manga";
+                spoiler?: boolean;
                 page: number;
                 page_size: number;
             };
@@ -39158,7 +41198,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["NamedEntityAdminItemDto"][];
+                        items: components["schemas"]["TagAdminItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -39181,6 +41221,52 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["TagHiddenGroupDto"][];
                 };
+            };
+        };
+    };
+    AdminTagController_listLegacy: {
+        parameters: {
+            query: {
+                /** @description 不传时列出名字不在不收的名字表里的旧标签 */
+                reason?: components["schemas"]["TagRefusalReason"];
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LegacyTagAdminDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminTagController_restoreLegacy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -39229,14 +41315,9 @@ export interface operations {
             };
         };
     };
-    AdminTagController_listPool: {
+    AdminTagController_listProposals: {
         parameters: {
             query: {
-                state: components["schemas"]["TagPoolState"];
-                kind?: components["schemas"]["TagKind"];
-                media?: "galgame" | "light_novel" | "manga";
-                spoiler?: boolean;
-                q?: string;
                 page: number;
                 page_size: number;
             };
@@ -39252,7 +41333,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["TagPoolItemAdminDto"][];
+                        items: components["schemas"]["TagProposalGroupAdminDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -39275,7 +41356,32 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
+                    "application/json": components["schemas"]["TagAdminItemDto"];
+                };
+            };
+        };
+    };
+    AdminTagController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTagDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagAdminItemDto"];
                 };
             };
         };
@@ -39290,29 +41396,6 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    AdminTagController_updatePool: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateTagPoolDto"];
-            };
-        };
         responses: {
             200: {
                 headers: {
@@ -39338,7 +41421,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
+                    "application/json": components["schemas"]["TagAdminItemDto"];
                 };
             };
         };
@@ -39363,7 +41446,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["NamedEntityAdminItemDto"];
+                    "application/json": components["schemas"]["TagAdminItemDto"];
                 };
             };
         };
@@ -39372,6 +41455,8 @@ export interface operations {
         parameters: {
             query?: {
                 bot_id?: number;
+                /** @description Only the tasks of this program */
+                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
             };
             header?: never;
             path?: never;
@@ -39408,6 +41493,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TaskCreatedDto"];
+                };
+            };
+        };
+    };
+    AdminTaskController_getStates: {
+        parameters: {
+            query?: {
+                bot_id?: number;
+                /** @description Only the tasks of this program */
+                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "volume_check" | "image_rating";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskStateDto"][];
                 };
             };
         };
@@ -42422,7 +44530,49 @@ export interface operations {
             };
         };
     };
-    GalgameTagController_propose: {
+    GalgameTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    GalgameTagProposalController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagProposalDto"][];
+                };
+            };
+        };
+    };
+    GalgameTagProposalController_propose: {
         parameters: {
             query?: never;
             header?: never;
@@ -42442,14 +44592,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                    "application/json": components["schemas"]["WorkTagProposeResultDto"];
                 };
             };
         };
     };
-    GalgameTagController_getMine: {
+    GalgameTagProposalController_check: {
         parameters: {
-            query?: never;
+            query: {
+                name: string;
+            };
             header?: never;
             path: {
                 id: number;
@@ -42463,8 +44615,28 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                    "application/json": components["schemas"]["WorkTagProposalCheckDto"];
                 };
+            };
+        };
+    };
+    GalgameTagProposalController_withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                proposal_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -44358,7 +46530,49 @@ export interface operations {
             };
         };
     };
-    LightNovelTagController_propose: {
+    LightNovelTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTagProposalController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagProposalDto"][];
+                };
+            };
+        };
+    };
+    LightNovelTagProposalController_propose: {
         parameters: {
             query?: never;
             header?: never;
@@ -44378,14 +46592,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                    "application/json": components["schemas"]["WorkTagProposeResultDto"];
                 };
             };
         };
     };
-    LightNovelTagController_getMine: {
+    LightNovelTagProposalController_check: {
         parameters: {
-            query?: never;
+            query: {
+                name: string;
+            };
             header?: never;
             path: {
                 id: number;
@@ -44399,8 +46615,28 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                    "application/json": components["schemas"]["WorkTagProposalCheckDto"];
                 };
+            };
+        };
+    };
+    LightNovelTagProposalController_withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                proposal_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -46299,7 +48535,49 @@ export interface operations {
             };
         };
     };
-    MangaTagController_propose: {
+    MangaTagController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                };
+            };
+        };
+    };
+    MangaTagProposalController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkTagProposalDto"][];
+                };
+            };
+        };
+    };
+    MangaTagProposalController_propose: {
         parameters: {
             query?: never;
             header?: never;
@@ -46319,14 +48597,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteResultDto"];
+                    "application/json": components["schemas"]["WorkTagProposeResultDto"];
                 };
             };
         };
     };
-    MangaTagController_getMine: {
+    MangaTagProposalController_check: {
         parameters: {
-            query?: never;
+            query: {
+                name: string;
+            };
             header?: never;
             path: {
                 id: number;
@@ -46340,8 +48620,28 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["WorkTagVoteDto"][];
+                    "application/json": components["schemas"]["WorkTagProposalCheckDto"];
                 };
+            };
+        };
+    };
+    MangaTagProposalController_withdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                proposal_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -51046,7 +53346,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["EntitySummaryDto"][];
+                        items: components["schemas"]["TagListItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -51070,27 +53370,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TagDetailDto"];
-                };
-            };
-        };
-    };
-    TagController_searchPool: {
-        parameters: {
-            query: {
-                q: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["TagPoolSearchDto"];
                 };
             };
         };

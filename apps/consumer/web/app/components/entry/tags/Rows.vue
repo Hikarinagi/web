@@ -22,7 +22,7 @@
     <Stack gap="none">
       <Inline
         v-for="tag in control.all.value"
-        :key="tag.id"
+        :key="`${tag.proposed ? 'proposal' : 'tag'}-${tag.id}`"
         gap="sm"
         align="center"
         :wrap="false"

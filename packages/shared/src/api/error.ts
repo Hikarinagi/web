@@ -113,6 +113,12 @@ export const HIKARI_BIZ_CODE = {
   WIKI_TASK_STOPPED: 'WIKI_TASK_STOPPED',
   WIKI_TASK_SCOPE: 'WIKI_TASK_SCOPE',
   WIKI_BOT_NOT_FOUND: 'WIKI_BOT_NOT_FOUND',
+  WIKI_LOOKUP_NOT_FOUND: 'WIKI_LOOKUP_NOT_FOUND',
+  /** The lookup has ended: it takes no message and cannot be halted. */
+  WIKI_LOOKUP_ENDED: 'WIKI_LOOKUP_ENDED',
+  /** The lookup is still running: what it wrote cannot be reverted as a whole yet. */
+  WIKI_LOOKUP_RUNNING: 'WIKI_LOOKUP_RUNNING',
+  WIKI_NOTE_NOT_FOUND: 'WIKI_NOTE_NOT_FOUND',
   ARTICLE_NOT_FOUND: 'ARTICLE_NOT_FOUND',
   POST_NOT_FOUND: 'POST_NOT_FOUND',
   POLL_NOT_FOUND: 'POLL_NOT_FOUND',

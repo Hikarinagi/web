@@ -29,7 +29,12 @@
 
   const text = ref('')
   const listOpen = ref(false)
-  const result = ref<ApiData<'/api/v3/tags/pool', 'get'>>({ items: [], reject: null })
+  const empty = { items: [], allowed: true, reject: null }
+  const result = ref<{
+    items: ApiData<'/api/v3/tags', 'get'>['items']
+    allowed: boolean
+    reject: string | null
+  }>(empty)
   let sequence = 0
 
   watchDebounced(
@@ -38,11 +43,18 @@
       const current = ++sequence
       const query = value.trim()
       if (!query) {
-        result.value = { items: [], reject: null }
+        result.value = empty
         return
       }
-      const found = await hikariRequest('/api/v3/tags/pool', { method: 'get', query: { q: query } })
-      if (current === sequence) result.value = found
+      const [found, verdict] = await Promise.all([
+        hikariRequest('/api/v3/tags', {
+          method: 'get',
+          query: { search: query, page: 1, page_size: 6 },
+        }),
+        props.control.check(query),
+      ])
+      if (current === sequence)
+        result.value = { items: found.items, allowed: verdict.allowed, reject: verdict.reason }
     },
     { debounce: 200 },
   )
@@ -74,7 +86,7 @@
       alias: item.alias,
       count: item.works,
     }))
-    return exact.value
+    return exact.value || !result.value.allowed
       ? found
       : [{ value: '__propose__', label: text.value.trim(), propose: true }, ...found]
   })
@@ -101,8 +113,8 @@
   }
 
   async function submit(value: string) {
-    if (!tagKey(value) || reject.value) return
     const hit = exact.value
+    if (!tagKey(value) || reject.value || (!hit && !result.value.allowed)) return
     text.value = ''
     if (hit) await props.control.voteOn(hit)
     else await props.control.propose(value.trim())

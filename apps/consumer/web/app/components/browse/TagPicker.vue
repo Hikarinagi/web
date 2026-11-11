@@ -9,7 +9,7 @@
     Stack,
     Text,
   } from '@hina-ui/vue'
-  import { useEntitySearch } from '~/features/creator/composables/useEntitySearch'
+  import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { BROWSE_FILTER_RECALL_KEY, type TagFilterGroup } from '~/features/browse/filter'
   import { excludeTag, includeTag, tagIdsOf } from '~/features/browse/tag-groups'
 
@@ -18,15 +18,44 @@
   const emit = defineEmits<{ update: [groups: TagFilterGroup[]] }>()
 
   const filter = inject(BROWSE_FILTER_RECALL_KEY, null)
-  const { query, results, loading, searched, refresh } = useEntitySearch(() => 'tag', {
-    scope: 'public',
-  })
+  const query = ref('')
+  const results = ref<ApiData<'/api/v3/tags', 'get'>['items']>([])
+  const loading = ref(false)
+  const searched = ref(false)
+  let sequence = 0
   const chosen = computed(() => new Set(tagIdsOf(props.groups)))
   const rows = computed(() => {
     const list = results.value.filter(row => !chosen.value.has(row.id))
     return props.limit && !query.value.trim() ? list.slice(0, props.limit) : list
   })
 
+  async function refresh() {
+    const current = ++sequence
+    const search = query.value.trim()
+    loading.value = true
+    searched.value = false
+    try {
+      const found = await hikariRequest('/api/v3/tags', {
+        query: { search: search || undefined, page: 1, page_size: 24 },
+      })
+      if (current !== sequence) return
+      results.value = search ? found.items : found.items.filter(row => !row.spoiler)
+      searched.value = true
+    } catch {
+      if (current === sequence) results.value = []
+    } finally {
+      if (current === sequence) loading.value = false
+    }
+  }
+
+  const debounced = useDebounceFn(refresh, 250)
+  watch(query, () => {
+    sequence += 1
+    results.value = []
+    searched.value = false
+    loading.value = true
+    void debounced()
+  })
   watch(results, list => filter?.remember('tag', list))
   onMounted(() => void refresh())
 

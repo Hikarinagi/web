@@ -3,7 +3,7 @@ import { topVotedMedia } from '~/utils/media/image'
 
 export type ProducerType = components['schemas']['ProducerType']
 
-type BackendEntitySummary = ApiData<'/api/v3/tags', 'get'>['items'][number]
+type BackendEntitySummary = ApiData<'/api/v3/entity-search', 'get'>['items'][number]
 
 export type EntityTarget =
   'tag' | 'person' | 'producer' | 'character' | 'galgame' | 'light_novel' | 'manga'
@@ -17,10 +17,6 @@ export async function fetchEntitySearch(
   const query = { search, page: 1, page_size: pageSize } as const
   if (opts.scope === 'public') {
     switch (target) {
-      case 'tag': {
-        const res = await hikariRequest('/api/v3/tags', { query })
-        return res.items
-      }
       case 'producer': {
         const res = await hikariRequest('/api/v3/producers', {
           query: { ...query, types: opts.producerTypes?.length ? opts.producerTypes : undefined },

@@ -17,7 +17,7 @@
         v-for="item in items"
         :key="item.id"
         selectable
-        :selected="control.all.value.find(tag => tag.id === item.id)?.mine === 1"
+        :selected="control.all.value.find(tag => !tag.proposed && tag.id === item.id)?.mine === 1"
         size="sm"
         @update:selected="control.voteOn(item)"
       >

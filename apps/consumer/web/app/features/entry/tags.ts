@@ -20,7 +20,6 @@ export const TAG_REJECT_LABELS: Record<string, string> = {
   year: '是年份',
   platform: '是平台名称',
   field: '属于作品资料',
-  hidden: '已被隐藏',
 }
 
 export const TAG_REJECT_ACTIONS: Record<string, { label: string; target: string }> = {
