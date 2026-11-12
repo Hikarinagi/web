@@ -22921,6 +22921,11 @@ export interface components {
             text: string;
             user: components["schemas"]["UserRefDto"];
         };
+        LookupNewEntryDto: {
+            /** @description Name the call gave the entry */
+            name: string;
+            type: components["schemas"]["EntryType"];
+        };
         LookupOutcomesDto: {
             not_found: number;
             present: number;
@@ -23113,8 +23118,8 @@ export interface components {
             image: string | null;
             /** @description First and last cited line of the page, from 1 */
             lines: number[] | null;
-            /** @description Title of the release the item asks to create, when it is for a new release */
-            new_version: string | null;
+            /** @description The entry the same call asks to create, when the item is for that entry */
+            new_entry: components["schemas"]["LookupNewEntryDto"] | null;
             /** @description Wording of the source for the value */
             original: string | null;
             /** @description The page cited */

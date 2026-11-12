@@ -29418,6 +29418,26 @@
         ],
         "type": "object"
       },
+      "LookupNewEntryDto": {
+        "properties": {
+          "name": {
+            "description": "Name the call gave the entry",
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryType"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
       "LookupOutcomesDto": {
         "properties": {
           "not_found": {
@@ -30115,10 +30135,15 @@
             "nullable": true,
             "type": "array"
           },
-          "new_version": {
-            "description": "Title of the release the item asks to create, when it is for a new release",
+          "new_entry": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupNewEntryDto"
+              }
+            ],
+            "description": "The entry the same call asks to create, when the item is for that entry",
             "nullable": true,
-            "type": "string"
+            "type": "object"
           },
           "original": {
             "description": "Wording of the source for the value",
@@ -30173,7 +30198,7 @@
           "call_id",
           "position",
           "entry",
-          "new_version",
+          "new_entry",
           "property",
           "property_label",
           "value",
