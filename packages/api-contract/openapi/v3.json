@@ -19258,10 +19258,6 @@
             "nullable": true,
             "type": "string"
           },
-          "sourced": {
-            "description": "The value has a source",
-            "type": "boolean"
-          },
           "sources": {
             "description": "Addresses or record keys of its sources",
             "items": {
@@ -19282,7 +19278,6 @@
           "statement",
           "text",
           "image",
-          "sourced",
           "sources"
         ],
         "type": "object"

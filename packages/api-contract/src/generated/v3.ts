@@ -20304,8 +20304,6 @@ export interface components {
         EntryValueDto: {
             /** @description Object key of an image value */
             image: string | null;
-            /** @description The value has a source */
-            sourced: boolean;
             /** @description Addresses or record keys of its sources */
             sources: string[];
             /** @description Id of the statement */
