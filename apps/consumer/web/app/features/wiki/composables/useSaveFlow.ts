@@ -53,15 +53,6 @@ export function useSaveFlow(
 
   async function save() {
     saving.value = true
-    const later =
-      (check.value?.statements ?? []).some(
-        item =>
-          item.status === 'CLUE' &&
-          editor.statements.value.get(item.statement_id)?.statement.status === 'ACTIVE',
-      ) ||
-      editor.draft.value.created.some(entry =>
-        ['GAME', 'SERIES', 'PERSON', 'ORGANIZATION'].includes(entry.type),
-      )
     try {
       const result = await hikariRequest('/api/v3/wiki/edits', { method: 'POST', body: body() })
       if (watching.value)
@@ -77,10 +68,7 @@ export function useSaveFlow(
       editor.discard()
       bus.emit(result.entries)
       check.value = null
-      await nav.query(
-        { save: null, undone: null, saved: String(result.edit_id), later: later ? '1' : null },
-        'replace',
-      )
+      await nav.query({ save: null, undone: null, saved: String(result.edit_id) }, 'replace')
       await saved(result)
       return true
     } catch {

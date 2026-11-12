@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { AspectRatio, FileUpload, Inline, Select, Stack, Text } from '@hina-ui/vue'
+  import { AspectRatio, FileUpload, Inline, Select, Stack, Tag, Text } from '@hina-ui/vue'
   import { uploadImage } from '~/components/media-library/lib/upload'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
   import { mediaDraft, RATING_LEVELS } from '~/features/wiki/editor/inputs'
@@ -42,7 +42,7 @@
 
 <template>
   <Stack v-if="card" gap="sm">
-    <AspectRatio :ratio="ratio ?? 3 / 4" class="overflow-hidden rounded-sm bg-inset">
+    <AspectRatio :ratio="ratio ?? 3 / 4" class="relative overflow-hidden rounded-sm bg-inset">
       <HikariImage
         v-if="model.media"
         :src="model.media"
@@ -52,6 +52,9 @@
         class="size-full"
         image-class="size-full object-cover"
       />
+      <Tag v-if="!model.is_public" tone="warning" size="sm" class="absolute top-1 left-1">
+        未公开
+      </Tag>
     </AspectRatio>
     <Inline gap="xs" align="end" :wrap="false">
       <Stack gap="none" class="min-w-0 flex-1">

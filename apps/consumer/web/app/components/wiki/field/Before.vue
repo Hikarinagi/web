@@ -16,18 +16,26 @@
       .filter(item => item.state !== 'added' && item.state !== 'moved_in')
       .map(item => item.before ?? item.value),
   )
+  const current = computed(
+    () =>
+      props.view.values.find(item => item.state !== 'removed' && item.state !== 'moved_out')?.value,
+  )
   const before = computed(
     () =>
       original.value
-        .map(value => valueText({ ...value, property: props.definition.property }))
+        .map(value => {
+          const text = valueText({ ...value, property: props.definition.property })
+          const mark = !value.is_public
+            ? '未公开'
+            : current.value && !current.value.is_public
+              ? '公开'
+              : null
+          return text && mark ? `${text}（${mark}）` : text
+        })
         .filter(Boolean)
         .join('、') || '无',
   )
-  const after = computed(
-    () =>
-      props.view.values.find(item => item.state !== 'removed' && item.state !== 'moved_out')?.value
-        .text ?? '',
-  )
+  const after = computed(() => current.value?.text ?? '')
 
   function revert() {
     for (const item of props.view.values) if (item.state !== 'same') editor.revert(item.id)

@@ -43,6 +43,7 @@ export type ValueDraft = Pick<
   | 'target'
   | 'media'
   | 'versions'
+  | 'is_public'
 >
 
 export interface AddedValue {
@@ -111,6 +112,7 @@ export function emptyValue(): ValueDraft {
     target: null,
     media: null,
     versions: [],
+    is_public: true,
   }
 }
 
@@ -148,6 +150,7 @@ export function valueOf(statement: Omit<EntryStatement, 'editor'>): ValueDraft {
     target: statement.target,
     media: statement.media,
     versions: statement.versions,
+    is_public: statement.is_public,
   }
 }
 
@@ -169,13 +172,19 @@ function changedFields(before: ValueDraft, after: ValueDraft) {
     versions:
       before.versions.map(item => item.id).join(',') !==
       after.versions.map(item => item.id).join(','),
+    is_public: before.is_public !== after.is_public,
   }
 }
 
 export function sameValue(before: ValueDraft, after: ValueDraft): boolean {
   const diff = changedFields(before, after)
   return (
-    !diff.value.length && !diff.qualifiers.length && !diff.target && !diff.media && !diff.versions
+    !diff.value.length &&
+    !diff.qualifiers.length &&
+    !diff.target &&
+    !diff.media &&
+    !diff.versions &&
+    !diff.is_public
   )
 }
 
@@ -239,6 +248,7 @@ export function operationsOf(
         ...qualifierInput(item.value, QUALIFIER_FIELDS),
         ...versionsInput(item.value.versions),
       },
+      ...(item.value.is_public ? {} : { is_public: false }),
     })
   }
   const touched = new Set([...Object.keys(draft.changed), ...Object.keys(draft.positions)])
@@ -261,13 +271,15 @@ export function operationsOf(
       ...(diff.versions ? versionsInput(after.versions) : {}),
     }
     const moved = position !== undefined && position !== statement.position
-    if (!Object.keys(value).length && !Object.keys(qualifiers).length && !moved) continue
+    if (!Object.keys(value).length && !Object.keys(qualifiers).length && !moved && !diff.is_public)
+      continue
     operations.push({
       op: 'modify',
       statement: statement.id,
       ...(Object.keys(value).length ? { value } : {}),
       ...(Object.keys(qualifiers).length ? { qualifiers } : {}),
       ...(moved ? { position } : {}),
+      ...(diff.is_public ? { is_public: after.is_public } : {}),
     })
   }
   for (const [key, reason] of Object.entries(draft.removed))

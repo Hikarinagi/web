@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IconButton, Inline, Stack, Text } from '@hina-ui/vue'
+  import { IconButton, Inline, Stack, Tag, Text } from '@hina-ui/vue'
   import { Undo2 } from '@lucide/vue'
   import type { ComponentPublicInstance } from 'vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
@@ -105,6 +105,7 @@
     qualify: (kind: QualifierKind) => shown.value.push(kind),
     extra: (kind: ExtraKind) => extras.value.push(kind),
     unknown: (on: boolean) => patch({ value_kind: on ? 'UNKNOWN' : 'VALUE' }),
+    conceal: (on: boolean) => patch({ is_public: !on }),
     move: (step: -1 | 1) =>
       editor.order(props.entry, props.definition.property, props.item.id, step),
     relocate: () =>
@@ -187,6 +188,7 @@
         </WikiFieldImage>
         <WikiFieldSimple v-else v-model="value" :definition="definition" :label="label" />
       </Stack>
+      <Tag v-if="!value.is_public && !card" tone="warning" size="sm" class="shrink-0"> 未公开 </Tag>
       <WikiFieldMenu v-if="!card" v-bind="menu" v-on="actions" />
     </Inline>
     <WikiFieldExtras v-if="!inactive" v-model="value" v-model:extras="extras" />

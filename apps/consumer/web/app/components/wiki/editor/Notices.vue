@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Alert, Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { Alert, Inline, Link } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
 
@@ -21,7 +21,7 @@
   const notice = computed({
     get: () => saved.value !== null,
     set: next => {
-      if (!next) void nav.query({ saved: null, later: null, undone: null }, 'replace')
+      if (!next) void nav.query({ saved: null, undone: null }, 'replace')
     },
   })
   const undone = computed(() => route.query.undone === '1')
@@ -44,21 +44,18 @@
     :title="undone ? '已撤销' : '已保存'"
     closable
   >
-    <Stack gap="xs">
-      <Text v-if="route.query.later === '1' && !undone" size="sm">确认后显示在作品页。</Text>
-      <Inline gap="md">
-        <Link :as="NuxtLink" :to="`/create/wiki/changes/${saved}`" class="text-sm">
-          查看本次修改
-        </Link>
-        <Link
-          v-if="!undone"
-          :as="NuxtLink"
-          :to="{ path: props.base, query: { ...route.query, panel: 'undo', edit: String(saved) } }"
-          class="text-sm"
-        >
-          撤销
-        </Link>
-      </Inline>
-    </Stack>
+    <Inline gap="md">
+      <Link :as="NuxtLink" :to="`/create/wiki/changes/${saved}`" class="text-sm">
+        查看本次修改
+      </Link>
+      <Link
+        v-if="!undone"
+        :as="NuxtLink"
+        :to="{ path: props.base, query: { ...route.query, panel: 'undo', edit: String(saved) } }"
+        class="text-sm"
+      >
+        撤销
+      </Link>
+    </Inline>
   </Alert>
 </template>

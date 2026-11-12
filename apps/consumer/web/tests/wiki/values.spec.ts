@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { relationPhrase, valueText } from '~/features/wiki/values'
+import { qualifierText, relationPhrase, valueText } from '~/features/wiki/values'
 
 describe('valueText', () => {
   it('names the song of a song credit and whether it is a theme or insert song', () => {
@@ -40,6 +40,23 @@ describe('valueText', () => {
     )
     expect(valueText({ property: 'GAME_RELATION', code: 'SAME_SERIES', target })).toBe(
       '与《D.C. 〜ダ・カーポ〜》同系列',
+    )
+  })
+})
+
+describe('qualifierText', () => {
+  it('names what a value applies to and that it is not public', () => {
+    const plain = {
+      period_from: null,
+      period_from_precision: null,
+      period_to: null,
+      period_to_precision: null,
+      part: null,
+    }
+    expect(qualifierText(plain)).toBeNull()
+    expect(qualifierText({ ...plain, is_public: true })).toBeNull()
+    expect(qualifierText({ ...plain, part: '体验版', is_public: false })).toBe(
+      '适用于体验版，未公开',
     )
   })
 })

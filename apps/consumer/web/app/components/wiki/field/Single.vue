@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Inline, Text } from '@hina-ui/vue'
+  import { Inline, Tag, Text } from '@hina-ui/vue'
   import type { ComponentPublicInstance } from 'vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import {
@@ -78,6 +78,7 @@
       :label="label"
       class="min-w-0 flex-1"
     />
+    <Tag v-if="!value.is_public" tone="warning" size="sm" class="shrink-0">未公开</Tag>
     <WikiFieldMenu
       fixed
       :label="label"
@@ -88,6 +89,7 @@
       :up="false"
       :down="false"
       @unknown="on => (value = { ...value, value_kind: on ? 'UNKNOWN' : 'VALUE' })"
+      @conceal="on => (value = { ...value, is_public: !on })"
     />
   </Inline>
 </template>

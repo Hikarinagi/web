@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { IconButton, Inline, Select, Text } from '@hina-ui/vue'
+  import { Checkbox, IconButton, Inline, Select, Text } from '@hina-ui/vue'
   import { ArrowLeftRight } from '@lucide/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { useWorkRelations } from '~/features/wiki/composables/useWorkRelations'
@@ -28,6 +28,10 @@
     if (!next) return
     kind.value = null
     side.value = 'given'
+  })
+  const concealed = ref(false)
+  watch(joining, next => {
+    if (next) concealed.value = false
   })
   const related = computed(() =>
     relations.rows.value.filter(row => row.state !== 'removed').map(row => row.other.id),
@@ -63,6 +67,7 @@
       ...emptyValue(),
       target: { id: item.id, type: item.type, label: item.label },
       code: 'SAME_PERSON',
+      is_public: !concealed.value,
     })
     close()
   }
@@ -110,5 +115,9 @@
     confirm="添加"
     @close="close"
     @pick="join"
-  />
+  >
+    <template #default="{ picked }">
+      <Checkbox v-if="picked" v-model="concealed">未公开</Checkbox>
+    </template>
+  </WikiEditorPick>
 </template>

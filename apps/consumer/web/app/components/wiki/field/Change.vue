@@ -10,8 +10,20 @@
   const emit = defineEmits<{ revert: [] }>()
 
   const compare = ref(false)
+  const disclosed = computed(() => {
+    const before = props.item.before
+    return props.item.state === 'changed' &&
+      before &&
+      before.is_public !== props.item.value.is_public
+      ? before.is_public
+        ? '公开'
+        : '未公开'
+      : null
+  })
   const describe = (value: ValueDraft) => {
-    const qualifier = qualifierText(value)
+    const qualifier = [qualifierText(value), disclosed.value === '公开' ? '公开' : null]
+      .filter(Boolean)
+      .join('，')
     const text = valueText({ ...value, property: props.item.property })
     return qualifier ? `${text}（${qualifier}）` : text
   }
@@ -30,11 +42,12 @@
       <Text v-if="item.state === 'changed' && !long && !image" as="span" size="xs" tone="muted">
         修改前：{{ item.before ? describe(item.before) || '空' : '空' }}
       </Text>
+      <Text v-else-if="disclosed" as="span" size="xs" tone="muted">修改前：{{ disclosed }}</Text>
       <Text v-else-if="STATES[item.state]" as="span" size="xs" tone="muted">
         {{ STATES[item.state] }}
       </Text>
       <Button
-        v-if="item.state === 'changed' && long"
+        v-if="item.state === 'changed' && long && item.before?.text !== item.value.text"
         variant="link"
         size="sm"
         @click="compare = !compare"
@@ -44,7 +57,7 @@
       <Button variant="link" size="sm" @click="emit('revert')">撤回</Button>
     </Inline>
     <WikiDiffImages
-      v-if="item.state === 'changed' && image"
+      v-if="item.state === 'changed' && image && item.before?.media?.id !== item.value.media?.id"
       :before="item.before?.media ?? null"
       :after="item.value.media"
     />

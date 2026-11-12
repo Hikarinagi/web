@@ -22,6 +22,7 @@
     qualify: [kind: QualifierKind]
     extra: [kind: ExtraKind]
     unknown: [on: boolean]
+    conceal: [on: boolean]
     move: [step: -1 | 1]
     relocate: []
     remove: []
@@ -73,6 +74,9 @@
         @select="emit('unknown', value.value_kind !== 'UNKNOWN')"
       >
         {{ value.value_kind === 'UNKNOWN' ? '取消未知' : '记为未知' }}
+      </DropdownMenuItem>
+      <DropdownMenuItem v-if="!definition.public_only" @select="emit('conceal', value.is_public)">
+        {{ value.is_public ? '记为未公开' : '取消未公开' }}
       </DropdownMenuItem>
       <template v-if="multiple && !fixed && (up || down)">
         <DropdownMenuSeparator />

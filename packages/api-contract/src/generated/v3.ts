@@ -18414,13 +18414,13 @@ export interface components {
         CheckedStatementDto: {
             citations: components["schemas"]["CheckedCitationDto"][];
             entry_id: number;
-            /** @description Whether the value is a public record of every work it concerns (A.9.5.5) */
+            /** @description Whether the value is recorded as a public record (A.9.5.5) */
             is_public: boolean;
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             statement_id: number;
             /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
+            status: "ACTIVE" | "DEPRECATED";
         };
         CitationSummaryDto: {
             accessed_at: string | null;
@@ -18580,7 +18580,7 @@ export interface components {
             song: string | null;
             song_kind: string | null;
             /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
+            status: "ACTIVE" | "DEPRECATED";
             target: components["schemas"]["EntryRefDto"] | null;
             tax_included: boolean | null;
             text: string | null;
@@ -19849,6 +19849,7 @@ export interface components {
             entry_ref?: string;
             from?: number;
             into?: number;
+            is_public?: boolean;
             media?: number;
             note?: string;
             /** @enum {string} */
@@ -25537,7 +25538,7 @@ export interface components {
             resource_type: components["schemas"]["ContributionResourceType"];
         };
         OpenCharacterAppearanceDto: {
-            /** @description 只在作品内记录、没有公开记录；名字可能是剧透，是否显示由调用方决定 */
+            /** @description 标签为未公开记录的出场角色；名字可能是剧透，是否显示由调用方决定 */
             hidden: boolean;
             /** @description 出场角色 ID */
             id: number;
@@ -25553,7 +25554,7 @@ export interface components {
             work: components["schemas"]["OpenCharacterAppearanceWorkDto"] | null;
         };
         OpenCharacterAppearanceNameDto: {
-            /** @description 不是该作的公开记录；名字可能是剧透，是否显示由调用方决定 */
+            /** @description 未公开记录；名字可能是剧透，是否显示由调用方决定 */
             hidden: boolean;
             /** @description 适用于作品的哪一部分 */
             part: string | null;
@@ -25569,7 +25570,7 @@ export interface components {
             appearance: number;
             /** @description 关系：SAME_PERSON 为同一人物 */
             code: string;
-            /** @description 不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定 */
+            /** @description 未公开记录；关系可能是剧透，是否显示由调用方决定 */
             hidden: boolean;
             /** @description 另一个出场角色的名字 */
             label: string;
@@ -25597,7 +25598,7 @@ export interface components {
             age: number | null;
             /** @description 别名列表 */
             aliases: string[];
-            /** @description 各作品中的出场角色，含只在作品内记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里 */
+            /** @description 各作品中的出场角色，含标签为未公开记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里 */
             appearances: components["schemas"]["OpenCharacterAppearanceDto"][];
             /** @description 生日日 */
             birthday_day: number | null;
@@ -27030,13 +27031,12 @@ export interface components {
             move_only: boolean;
             note: boolean;
             optional_code: boolean;
-            /** @description A value without a source is still a valid value of this property */
-            optional_source: boolean;
             original: boolean;
             /** @description Photos of the package or of the credits in the work can support it */
             package_image: boolean;
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+            /** @description A value of this property cannot be recorded as not public */
             public_only: boolean;
             qualifiers: string[];
             reading: boolean;
@@ -28296,7 +28296,7 @@ export interface components {
             song: string | null;
             song_kind: string | null;
             /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
+            status: "ACTIVE" | "DEPRECATED";
             target: components["schemas"]["EntryRefDto"] | null;
             tax_included: boolean | null;
             text: string | null;
@@ -29184,7 +29184,7 @@ export interface components {
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             /** @enum {string} */
-            status: "ACTIVE" | "CLUE" | "DEPRECATED";
+            status: "ACTIVE" | "DEPRECATED";
             target: components["schemas"]["EntryRefDto"] | null;
             text: string | null;
             /** @enum {string} */

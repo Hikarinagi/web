@@ -91,6 +91,27 @@ describe('operationsOf', () => {
     draft.changed[11] = valueOf(alias)
     expect(operationsOf(draft, index)).toEqual([])
   })
+
+  it('sends whether a value is public only when it is added as not public or that changed', () => {
+    const name = statement({ id: 31, property: 'NAME', text: 'アルトリア' })
+    const names = new Map([[31, { entry: 7, statement: name }]])
+    const draft = emptyDraft()
+    draft.added.push(
+      { id: -1, entry: 7, property: 'NAME', value: { ...emptyValue(), text: '騎士王' } },
+      {
+        id: -2,
+        entry: 7,
+        property: 'NAME',
+        value: { ...emptyValue(), text: '真名', is_public: false },
+      },
+    )
+    draft.changed[31] = { ...valueOf(name), is_public: false }
+    const [open, hidden, modify] = operationsOf(draft, names)
+    expect(open).not.toHaveProperty('is_public')
+    expect(hidden).toMatchObject({ op: 'add', is_public: false })
+    expect(modify).toEqual({ op: 'modify', statement: 31, is_public: false })
+    expect(changeCount(draft)).toBe(3)
+  })
 })
 
 describe('propertyOf', () => {

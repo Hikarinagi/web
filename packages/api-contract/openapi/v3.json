@@ -11280,7 +11280,7 @@
             "type": "number"
           },
           "is_public": {
-            "description": "Whether the value is a public record of every work it concerns (A.9.5.5)",
+            "description": "Whether the value is recorded as a public record (A.9.5.5)",
             "type": "boolean"
           },
           "property": {
@@ -11359,7 +11359,6 @@
           "status": {
             "enum": [
               "ACTIVE",
-              "CLUE",
               "DEPRECATED"
             ],
             "type": "string"
@@ -12146,7 +12145,6 @@
           "status": {
             "enum": [
               "ACTIVE",
-              "CLUE",
               "DEPRECATED"
             ],
             "type": "string"
@@ -16999,6 +16997,9 @@
           "into": {
             "minimum": 1,
             "type": "number"
+          },
+          "is_public": {
+            "type": "boolean"
           },
           "media": {
             "minimum": 1,
@@ -39521,7 +39522,7 @@
       "OpenCharacterAppearanceDto": {
         "properties": {
           "hidden": {
-            "description": "只在作品内记录、没有公开记录；名字可能是剧透，是否显示由调用方决定",
+            "description": "标签为未公开记录的出场角色；名字可能是剧透，是否显示由调用方决定",
             "type": "boolean"
           },
           "id": {
@@ -39578,7 +39579,7 @@
       "OpenCharacterAppearanceNameDto": {
         "properties": {
           "hidden": {
-            "description": "不是该作的公开记录；名字可能是剧透，是否显示由调用方决定",
+            "description": "未公开记录；名字可能是剧透，是否显示由调用方决定",
             "type": "boolean"
           },
           "part": {
@@ -39623,7 +39624,7 @@
             "type": "string"
           },
           "hidden": {
-            "description": "不是两部作品都公开的记录；关系可能是剧透，是否显示由调用方决定",
+            "description": "未公开记录；关系可能是剧透，是否显示由调用方决定",
             "type": "boolean"
           },
           "label": {
@@ -39709,7 +39710,7 @@
             "type": "array"
           },
           "appearances": {
-            "description": "各作品中的出场角色，含只在作品内记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里",
+            "description": "各作品中的出场角色，含标签为未公开记录的；name、aliases 与 intro 只取公开记录，未公开记录只出现在这里",
             "items": {
               "$ref": "#/components/schemas/OpenCharacterAppearanceDto"
             },
@@ -45072,10 +45073,6 @@
           "optional_code": {
             "type": "boolean"
           },
-          "optional_source": {
-            "description": "A value without a source is still a valid value of this property",
-            "type": "boolean"
-          },
           "original": {
             "type": "boolean"
           },
@@ -45154,6 +45151,7 @@
             "type": "string"
           },
           "public_only": {
+            "description": "A value of this property cannot be recorded as not public",
             "type": "boolean"
           },
           "qualifiers": {
@@ -45248,7 +45246,6 @@
           "unique",
           "unique_codes",
           "sources",
-          "optional_source",
           "clauses",
           "work_content",
           "package_image"
@@ -50297,7 +50294,6 @@
           "status": {
             "enum": [
               "ACTIVE",
-              "CLUE",
               "DEPRECATED"
             ],
             "type": "string"
@@ -54164,7 +54160,6 @@
           "status": {
             "enum": [
               "ACTIVE",
-              "CLUE",
               "DEPRECATED"
             ],
             "type": "string"

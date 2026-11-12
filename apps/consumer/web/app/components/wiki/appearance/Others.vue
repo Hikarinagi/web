@@ -13,9 +13,10 @@
     TableHead,
     TableHeader,
     TableRow,
+    Tag,
     Text,
   } from '@hina-ui/vue'
-  import { Plus, Undo2, X } from '@lucide/vue'
+  import { Eye, EyeOff, Plus, Undo2, X } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { useEntryCards } from '~/features/wiki/composables/useEntryCards'
@@ -53,6 +54,8 @@
     name: string
     voices: string[]
     state: 'same' | 'added' | 'removed'
+    concealed: boolean
+    conceal: (() => void) | null
     act: () => void
   }
   const rows = computed<Row[]>(() =>
@@ -66,6 +69,8 @@
           name: live(entry, 'LABEL')[0]?.text || entry.label,
           voices: live(entry, 'CREDIT').flatMap(item => item.text ?? item.target?.label ?? []),
           state: detached ? ('removed' as const) : ('same' as const),
+          concealed: false,
+          conceal: null,
           act: () => editor.detach(entry.id, !detached),
         }
       }),
@@ -73,6 +78,7 @@
         const target = item.value.target
         if (!target) return []
         const card = cards.value.get(target.id)
+        const state = item.state === 'added' || item.state === 'removed' ? item.state : 'same'
         return [
           {
             key: `value-${item.id}`,
@@ -80,8 +86,13 @@
             card: target.id,
             name: card?.label ?? target.label,
             voices: card?.voices ?? [],
-            state: item.state === 'added' || item.state === 'removed' ? item.state : 'same',
-            act: () => (item.state === 'same' ? editor.remove(item.id) : editor.revert(item.id)),
+            state,
+            concealed: !item.value.is_public,
+            conceal:
+              state === 'removed'
+                ? null
+                : () => editor.set(item.id, { ...item.value, is_public: !item.value.is_public }),
+            act: () => (state === 'same' ? editor.remove(item.id) : editor.revert(item.id)),
           },
         ]
       }),
@@ -129,23 +140,31 @@
       <TableBody>
         <TableRow v-for="row in rows" :key="row.key" :class="TONE[row.state]">
           <TableCell class="w-full max-w-0 py-2.5">
-            <Stack gap="xs">
-              <WikiWorkLine
-                v-if="row.work"
-                :work="row.work"
-                :card="cards.get(row.card)"
-                link
-                :strike="row.state === 'removed'"
-              />
-              <Inline gap="md" :wrap="false" class="min-w-0 sm:hidden">
-                <Link :as="NuxtLink" :to="`/entries/${row.card}/edit`" lang="ja" class="text-sm">
-                  {{ row.name }}
-                </Link>
-                <Text size="sm" lang="ja" truncate :tone="row.voices.length ? undefined : 'muted'">
-                  {{ row.voices.join('、') || '配音未记录' }}
-                </Text>
-              </Inline>
-            </Stack>
+            <Inline gap="sm" align="center" :wrap="false">
+              <Stack gap="xs" class="min-w-0 flex-1">
+                <WikiWorkLine
+                  v-if="row.work"
+                  :work="row.work"
+                  :card="cards.get(row.card)"
+                  link
+                  :strike="row.state === 'removed'"
+                />
+                <Inline gap="md" :wrap="false" class="min-w-0 sm:hidden">
+                  <Link :as="NuxtLink" :to="`/entries/${row.card}/edit`" lang="ja" class="text-sm">
+                    {{ row.name }}
+                  </Link>
+                  <Text
+                    size="sm"
+                    lang="ja"
+                    truncate
+                    :tone="row.voices.length ? undefined : 'muted'"
+                  >
+                    {{ row.voices.join('、') || '配音未记录' }}
+                  </Text>
+                </Inline>
+              </Stack>
+              <Tag v-if="row.concealed" tone="warning" size="sm" class="shrink-0">未公开</Tag>
+            </Inline>
           </TableCell>
           <TableCell class="py-2.5 whitespace-nowrap max-sm:hidden">
             <Link :as="NuxtLink" :to="`/entries/${row.card}/edit`" lang="ja" class="text-sm">
@@ -158,7 +177,18 @@
             </Text>
           </TableCell>
           <TableCell class="py-2.5">
-            <Inline justify="end" :wrap="false">
+            <Inline justify="end" align="center" gap="xs" :wrap="false">
+              <IconButton
+                v-if="row.conceal"
+                :label="row.concealed ? '取消未公开' : '记为未公开'"
+                variant="ghost"
+                tone="neutral"
+                size="sm"
+                @click="row.conceal()"
+              >
+                <Eye v-if="row.concealed" />
+                <EyeOff v-else />
+              </IconButton>
               <IconButton
                 :label="LABEL[row.state]"
                 variant="ghost"

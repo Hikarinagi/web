@@ -129,7 +129,7 @@ export function qualifierText(
     ComparedStatement,
     'period_from' | 'period_from_precision' | 'period_to' | 'period_to_precision' | 'part'
   > &
-    Partial<Pick<ComparedStatement, 'language' | 'versions'>>,
+    Partial<Pick<ComparedStatement, 'language' | 'versions' | 'is_public'>>,
 ): string | null {
   const from = statement.period_from
     ? dateText(statement.period_from, statement.period_from_precision)
@@ -145,6 +145,7 @@ export function qualifierText(
       : null,
     statement.language ? langLabel(statement.language) : null,
     period,
+    statement.is_public === false ? '未公开' : null,
   ].filter(Boolean)
   return parts.length ? parts.join('，') : null
 }
