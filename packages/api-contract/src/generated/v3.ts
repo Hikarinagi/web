@@ -17897,6 +17897,8 @@ export interface components {
             cast_role: "MAIN" | "SUPPORTING" | "CAMEO" | null;
             /** @description Character this appearance belongs to */
             character_id: number | null;
+            /** @description Chinese name, when one is recorded */
+            chinese_name: string | null;
             /** @description Group title on the official site */
             group: string | null;
             /** @description Only the work itself records this appearance */
@@ -30358,6 +30360,10 @@ export interface components {
             title: string;
         };
         VoiceDto: {
+            /** @description Chinese name of the person */
+            chinese_name: string | null;
+            /** @description Portrait of the person */
+            image: components["schemas"]["MediaAssetDto"] | null;
             person_id: number | null;
             /** @description Name as printed */
             text: string;

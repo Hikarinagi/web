@@ -21,6 +21,10 @@
   >
     <DescriptionTerm>名字</DescriptionTerm>
     <DescriptionDetails lang="ja">{{ person.name }}</DescriptionDetails>
+    <template v-if="person.trans_name">
+      <DescriptionTerm>中文名</DescriptionTerm>
+      <DescriptionDetails>{{ person.trans_name }}</DescriptionDetails>
+    </template>
     <template v-if="person.aliases.length">
       <DescriptionTerm>别名</DescriptionTerm>
       <DescriptionDetails>

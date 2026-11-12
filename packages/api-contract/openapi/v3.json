@@ -9183,6 +9183,11 @@
             "nullable": true,
             "type": "number"
           },
+          "chinese_name": {
+            "description": "Chinese name, when one is recorded",
+            "nullable": true,
+            "type": "string"
+          },
           "group": {
             "description": "Group title on the official site",
             "nullable": true,
@@ -9227,6 +9232,7 @@
         "required": [
           "id",
           "label",
+          "chinese_name",
           "group",
           "cast_role",
           "protagonist",
@@ -58619,6 +58625,21 @@
       },
       "VoiceDto": {
         "properties": {
+          "chinese_name": {
+            "description": "Chinese name of the person",
+            "nullable": true,
+            "type": "string"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "Portrait of the person",
+            "nullable": true,
+            "type": "object"
+          },
           "person_id": {
             "nullable": true,
             "type": "number"
@@ -58638,6 +58659,8 @@
         "required": [
           "text",
           "person_id",
+          "chinese_name",
+          "image",
           "versions"
         ],
         "type": "object"
