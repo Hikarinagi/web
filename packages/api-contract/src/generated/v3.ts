@@ -21676,7 +21676,7 @@ export interface components {
         GameCreditsDto: {
             /** @description Organizations first, then people by role */
             groups: components["schemas"]["CreditGroupDto"][];
-            /** @description The first release the credits come from */
+            /** @description The first release the credits come from, when the game records no staff of its own */
             product: components["schemas"]["ProductRefDto"] | null;
             /** @description Unofficial translators */
             translators: components["schemas"]["ProductCreditDto"][];

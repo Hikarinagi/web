@@ -110,6 +110,21 @@ const CHANNEL_LABELS: Record<string, string> = {
   PLAYSTATION_STORE: 'PlayStation Store',
   NINTENDO_ESHOP: 'ニンテンドーeショップ',
   GOOGLE_PLAY: 'Google Play',
+  APP_STORE: 'App Store',
+  MELONBOOKS: 'メロンブックス',
+  BOOTH: 'BOOTH',
+  FREEM: 'ふりーむ！',
+  NOVELGAME: 'ノベルゲームコレクション',
+  FREEGAME_MUGEN: 'フリーゲーム夢現',
+  ITCH: 'itch.io',
+  GOG: 'GOG',
+  MANGAGAMER: 'MangaGamer',
+  DENPASOFT: 'Denpasoft',
+  ANIMATE_GAMES: 'アニメイトゲームス',
+  NUTAKU: 'Nutaku',
+  JOHREN: 'Johren',
+  FAKKU: 'FAKKU',
+  KAGURA_GAMES: 'Kagura Games',
 }
 
 export function channelLabel(code: string | null): string {

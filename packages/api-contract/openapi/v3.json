@@ -24724,7 +24724,7 @@
                 "$ref": "#/components/schemas/ProductRefDto"
               }
             ],
-            "description": "The first release the credits come from",
+            "description": "The first release the credits come from, when the game records no staff of its own",
             "nullable": true,
             "type": "object"
           },
