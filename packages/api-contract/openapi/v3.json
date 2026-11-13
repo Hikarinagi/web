@@ -28030,6 +28030,11 @@
             "nullable": true,
             "type": "string"
           },
+          "price_tax_included": {
+            "description": "Whether the price includes tax",
+            "nullable": true,
+            "type": "boolean"
+          },
           "publication_date": {
             "format": "date-time",
             "nullable": true,
@@ -28111,6 +28116,7 @@
           "isbn",
           "price_amount",
           "price_currency",
+          "price_tax_included",
           "publication_date",
           "publication_date_precision",
           "pages",
@@ -35382,6 +35388,11 @@
             "nullable": true,
             "type": "string"
           },
+          "price_tax_included": {
+            "description": "Whether the price includes tax",
+            "nullable": true,
+            "type": "boolean"
+          },
           "publication_date": {
             "format": "date-time",
             "nullable": true,
@@ -35455,6 +35466,7 @@
           "isbn",
           "price_amount",
           "price_currency",
+          "price_tax_included",
           "publisher",
           "chapter_count",
           "editions",

@@ -22571,6 +22571,8 @@ export interface components {
             pages: number | null;
             price_amount: number | null;
             price_currency: string | null;
+            /** @description Whether the price includes tax */
+            price_tax_included: boolean | null;
             /** Format: date-time */
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
@@ -24465,6 +24467,8 @@ export interface components {
             page_count: number;
             price_amount: number | null;
             price_currency: string | null;
+            /** @description Whether the price includes tax */
+            price_tax_included: boolean | null;
             /** Format: date-time */
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
