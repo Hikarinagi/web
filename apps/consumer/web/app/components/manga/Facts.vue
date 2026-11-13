@@ -11,6 +11,7 @@
   import { NuxtLink } from '#components'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { dayText } from '~/features/entry/date'
+  import { creditRoleLabel } from '~/features/entry/labels'
   import {
     MANGA_AUDIENCE_LABELS,
     MANGA_READING_MODE_LABELS,
@@ -44,7 +45,13 @@
     props.producers.filter(item => item.role === 'MAGAZINE').map(item => item.producer),
   )
   const publishers = computed(() =>
-    props.producers.filter(item => item.role === 'PUBLISHER').map(item => item.producer),
+    [
+      { label: '出版社', items: props.producers.filter(item => item.role === 'PUBLISHER') },
+      {
+        label: creditRoleLabel('CHINESE_PUBLISHER'),
+        items: props.producers.filter(item => item.code === 'CHINESE_PUBLISHER'),
+      },
+    ].filter(group => group.items.length),
   )
   const lastVolume = computed(() => props.volumes.findLast(volume => volume.publication_date))
   const book = computed(() =>
@@ -103,20 +110,20 @@
         </Stack>
       </DescriptionDetails>
     </template>
-    <template v-if="publishers.length">
-      <DescriptionTerm>出版社</DescriptionTerm>
+    <template v-for="group in publishers" :key="group.label">
+      <DescriptionTerm>{{ group.label }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
           <Link
-            v-for="publisher in publishers"
-            :key="publisher.id"
+            v-for="item in group.items"
+            :key="item.producer.id"
             :as="NuxtLink"
-            :to="`/producers/${publisher.id}`"
+            :to="`/producers/${item.producer.id}`"
             tone="neutral"
             class="self-start"
             lang="ja"
           >
-            {{ publisher.name }}
+            {{ item.producer.name }}
           </Link>
         </Stack>
       </DescriptionDetails>

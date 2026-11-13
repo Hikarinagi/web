@@ -11,6 +11,7 @@
   import { NuxtLink } from '#components'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { dayText } from '~/features/entry/date'
+  import { creditRoleLabel } from '~/features/entry/labels'
 
   defineOptions({ name: 'LightNovelFacts' })
   const props = defineProps<{
@@ -38,7 +39,10 @@
   const organizations = computed(() => {
     const map = new Map<string, { id: number; name: string; to: string }[]>()
     for (const item of props.producers) {
-      const label = getLightNovelProducerRelationLabel(item.relation ?? 'other')
+      const label =
+        item.code === 'CHINESE_PUBLISHER'
+          ? creditRoleLabel(item.code)
+          : getLightNovelProducerRelationLabel(item.relation ?? 'other')
       const to =
         item.relation === 'bunko'
           ? `/light-novels/bunko/${item.producer.id}`

@@ -11,7 +11,13 @@
   }>()
 
   const publishers = computed(() =>
-    [...new Set(props.producers.map(item => item.producer.name))].join('、'),
+    [
+      ...new Set(
+        props.producers
+          .filter(item => item.code !== 'CHINESE_PUBLISHER')
+          .map(item => item.producer.name),
+      ),
+    ].join('、'),
   )
 </script>
 

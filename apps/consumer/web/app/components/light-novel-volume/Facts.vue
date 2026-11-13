@@ -25,7 +25,11 @@
     return [...map].map(([key, people]) => ({ key, people }))
   })
   const publishers = computed(() => [
-    ...new Map(props.producers.map(item => [item.producer.id, item.producer])).values(),
+    ...new Map(
+      props.producers
+        .filter(item => item.code !== 'CHINESE_PUBLISHER')
+        .map(item => [item.producer.id, item.producer]),
+    ).values(),
   ])
 </script>
 

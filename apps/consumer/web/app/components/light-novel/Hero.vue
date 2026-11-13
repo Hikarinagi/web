@@ -52,7 +52,13 @@
       })),
   )
   const publishers = computed(() =>
-    [...new Set(props.producers.map(item => item.producer.name))].join('、'),
+    [
+      ...new Set(
+        props.producers
+          .filter(item => item.code !== 'CHINESE_PUBLISHER')
+          .map(item => item.producer.name),
+      ),
+    ].join('、'),
   )
   const summary = computed(() =>
     (props.lightNovel.summary_cn || props.lightNovel.summary || '')
