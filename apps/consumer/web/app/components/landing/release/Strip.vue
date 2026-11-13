@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import { NuxtLink } from '#components'
   import { dayLabel, weekdayLabel } from '~/features/landing/labels'
   import { useAlignTo, useReveal, type LandingDay } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
@@ -56,12 +57,13 @@
             v-for="{ item, work } in day.entries"
             :key="item.id"
             :data-stage-item="item.id"
-            as="button"
-            type="button"
+            :as="item.images.length ? 'button' : NuxtLink"
+            :type="item.images.length ? 'button' : undefined"
+            :to="item.images.length ? undefined : work.to"
             gap="xs"
-            :aria-pressed="item.id === selected"
+            :aria-pressed="item.images.length ? item.id === selected : undefined"
             class="w-(--landing-strip-cover) hn-interactive rounded-md text-start"
-            @click="emit('pick', item)"
+            @click="item.images.length && emit('pick', item)"
           >
             <HikariImage
               :src="work.cover"

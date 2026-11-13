@@ -13,8 +13,13 @@
   const days = computed(() =>
     groupByDay(props.items, item => item.release_date?.slice(0, 10), props.today),
   )
-  const first = days.value.find(day => !day.past) ?? days.value.at(-1)
-  const { selected, pick } = useStagePick(first!.items[0]!)
+  const staged = computed(() =>
+    days.value.flatMap(day => day.items).filter(item => item.images.length),
+  )
+  const upcoming = days.value
+    .flatMap(day => (day.past ? [] : day.items))
+    .find(item => item.images.length)
+  const { selected, pick } = useStagePick(upcoming ?? staged.value.at(-1) ?? props.items[0]!)
   const stage = useTemplateRef<{ $el: HTMLElement }>('stage')
   const { running, paused } = useAutoplay(() => stage.value?.$el)
   const shot = ref(0)
@@ -25,7 +30,7 @@
       shot.value += 1
       return
     }
-    const list = days.value.flatMap(day => day.items)
+    const list = staged.value
     pick(list[(list.indexOf(selected.value) + 1) % list.length] ?? selected.value)
   }
 
@@ -45,7 +50,7 @@
     >
       <VisuallyHidden as="h2">发售日程</VisuallyHidden>
       <Grid gap="lg" class="lg:grid-cols-12">
-        <Stack gap="md" class="min-w-0 lg:col-span-8">
+        <Stack v-if="staged.length" gap="md" class="min-w-0 lg:col-span-8">
           <LandingReleaseGallery
             v-model:shot="shot"
             :item="selected"
@@ -60,7 +65,12 @@
         <LandingReleaseStrip :days="days" :selected="selected.id" class="lg:hidden" @pick="pick" />
         <Card
           :padded="false"
-          class="relative hidden overflow-hidden border-0 bg-surface/55 shadow-none ring-1 ring-fg/10 backdrop-blur-xl backdrop-saturate-150 lg:col-span-4 lg:block"
+          :class="
+            cn(
+              'relative hidden overflow-hidden border-0 bg-surface/55 shadow-none ring-1 ring-fg/10 backdrop-blur-xl backdrop-saturate-150 lg:block',
+              staged.length ? 'lg:col-span-4' : 'min-h-96 lg:col-span-12',
+            )
+          "
         >
           <LandingReleaseList :days="days" :today="today" :selected="selected.id" @pick="pick" />
         </Card>

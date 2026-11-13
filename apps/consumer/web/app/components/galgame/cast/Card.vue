@@ -99,7 +99,6 @@
             </Text>
           </template>
         </Text>
-        <Text v-else-if="!concealed" size="sm" tone="faint">声优未登记</Text>
       </Stack>
     </Inline>
   </Card>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Divider, Inline, Ripple, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import { NuxtLink } from '#components'
   import { dayLabel, weekdayLabel } from '~/features/landing/labels'
   import { useAlignTo, useReveal, type LandingDay } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
@@ -63,14 +64,15 @@
           v-for="{ item, work } in day.entries"
           :key="item.id"
           :data-stage-item="item.id"
-          as="button"
-          type="button"
-          :aria-pressed="item.id === selected"
+          :as="item.images.length ? 'button' : NuxtLink"
+          :type="item.images.length ? 'button' : undefined"
+          :to="item.images.length ? undefined : work.to"
+          :aria-pressed="item.images.length ? item.id === selected : undefined"
           gap="md"
           align="center"
           :wrap="false"
           class="hn-state-layer relative isolate mx-2 hn-interactive rounded-lg px-2 py-1.5 text-start"
-          @click="emit('pick', item)"
+          @click="item.images.length && emit('pick', item)"
         >
           <Ripple />
           <Stack
