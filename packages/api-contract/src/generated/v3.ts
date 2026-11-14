@@ -7989,6 +7989,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/covers/vote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CurrentUserGalgameCoverVoteController_getMine"];
+        put: operations["CurrentUserGalgameCoverVoteController_vote"];
+        post?: never;
+        delete: operations["CurrentUserGalgameCoverVoteController_retract"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/credits": {
         parameters: {
             query?: never;
@@ -18762,6 +18778,19 @@ export interface components {
         CountByTypeDto: {
             count: number;
             target_type: string;
+        };
+        CoverTallyDto: {
+            media_id: number;
+            votes: number;
+        };
+        CoverVoteDto: {
+            media_id: number;
+        };
+        CoverVoteStateDto: {
+            covers: components["schemas"]["CoverTallyDto"][];
+            my_media_id: number | null;
+            /** @description 作品当前显示的封面 */
+            shown_media_id: number | null;
         };
         CreateAiModelDto: {
             /** @description 模型目录中的规范 ID */
@@ -44706,6 +44735,73 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GalgameContributorsDto"];
+                };
+            };
+        };
+    };
+    CurrentUserGalgameCoverVoteController_getMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserGalgameCoverVoteController_vote: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoverVoteDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
+                };
+            };
+        };
+    };
+    CurrentUserGalgameCoverVoteController_retract: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CoverVoteStateDto"];
                 };
             };
         };

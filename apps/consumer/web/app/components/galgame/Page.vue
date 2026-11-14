@@ -10,8 +10,8 @@
   import { langLabel } from '~/features/galgame/labels'
   import { GALGAME_STATUS_LABEL, type GalgameRateStatus } from '~/features/galgame/rate'
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
+  import { useGalgameCover } from '~/features/galgame/useCoverVote'
   import { useGallery } from '~/features/galgame/useGallery'
-  import { getGalgameCover } from '~/utils/media/galgame'
   import type { EntryReview } from '~/components/entry/Reviews.vue'
 
   defineOptions({ name: 'GalgamePage' })
@@ -19,7 +19,7 @@
 
   const title = computed(() => props.data.display.title || `Galgame #${props.data.galgame.id}`)
   const images = computed(() => props.data.galgame.images.filter(image => image.src.trim()))
-  const cover = computed(() => getGalgameCover(props.data.galgame))
+  const cover = useGalgameCover(() => props.data.galgame)
 
   const index = ref(0)
   const hash = computed(

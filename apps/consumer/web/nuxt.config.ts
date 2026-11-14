@@ -78,6 +78,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/setting/decoration': { redirect: { to: '/me/decoration', statusCode: 301 } },
     '/setting/items': { redirect: { to: '/me/items', statusCode: 301 } },
+    '/create/contributions/**': {
+      redirect: { to: '/create/wiki/changes?f=mine', statusCode: 301 },
+    },
   },
 
   nitro: {

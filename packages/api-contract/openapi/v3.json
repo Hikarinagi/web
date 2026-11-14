@@ -12844,6 +12844,58 @@
         ],
         "type": "object"
       },
+      "CoverTallyDto": {
+        "properties": {
+          "media_id": {
+            "type": "number"
+          },
+          "votes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "media_id",
+          "votes"
+        ],
+        "type": "object"
+      },
+      "CoverVoteDto": {
+        "properties": {
+          "media_id": {
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "media_id"
+        ],
+        "type": "object"
+      },
+      "CoverVoteStateDto": {
+        "properties": {
+          "covers": {
+            "items": {
+              "$ref": "#/components/schemas/CoverTallyDto"
+            },
+            "type": "array"
+          },
+          "my_media_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "shown_media_id": {
+            "description": "作品当前显示的封面",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "my_media_id",
+          "shown_media_id",
+          "covers"
+        ],
+        "type": "object"
+      },
       "CreateAiModelDto": {
         "properties": {
           "canonical_id": {
@@ -83505,6 +83557,102 @@
         },
         "tags": [
           "Galgame"
+        ]
+      }
+    },
+    "/api/v3/galgames/{id}/covers/vote": {
+      "delete": {
+        "operationId": "CurrentUserGalgameCoverVoteController_retract",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverVoteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "cover-vote"
+        ]
+      },
+      "get": {
+        "operationId": "CurrentUserGalgameCoverVoteController_getMine",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverVoteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "cover-vote"
+        ]
+      },
+      "put": {
+        "operationId": "CurrentUserGalgameCoverVoteController_vote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CoverVoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoverVoteStateDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "cover-vote"
         ]
       }
     },

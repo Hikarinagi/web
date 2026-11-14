@@ -4,8 +4,7 @@
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { platformLabel } from '~/features/galgame/platforms'
-  import { getGalgameCover } from '~/utils/media/galgame'
-  import { getCoverMediaLayout } from '~/utils/media/layout'
+  import { useGalgameCover } from '~/features/galgame/useCoverVote'
 
   defineOptions({ name: 'GalgameStage' })
   const props = defineProps<{
@@ -20,8 +19,7 @@
   defineEmits<{ gallery: [index: number]; cover: []; rate: [] }>()
 
   const images = computed(() => props.data.galgame.images.filter(image => image.src.trim()))
-  const cover = computed(() => getGalgameCover(props.data.galgame))
-  const layout = computed(() => getCoverMediaLayout(cover.value))
+  const cover = useGalgameCover(() => props.data.galgame)
   const backdrop = computed(() => images.value[index.value] ?? cover.value)
   const brand = computed(() => props.data.display.brands[0] ?? null)
   const subtitle = computed(() => {
@@ -164,36 +162,16 @@
           />
         </Stack>
 
-        <Stack v-if="cover" gap="none" class="relative hidden shrink-0 lg:flex">
-          <Card
-            as="button"
-            type="button"
-            :padded="false"
-            aria-label="查看封面"
-            :disabled="!zoomable"
-            class="overflow-hidden rounded-lg border-0 shadow-2xl ring-1 ring-fg/15 enabled:cursor-zoom-in"
-            @click="$emit('cover')"
-          >
-            <HikariImage
-              :src="cover"
-              :alt="`${title} 封面`"
-              :ratio="layout.ratio"
-              :processing="layout.processing"
-              preload
-              class="w-(--stage-cover-width)"
-            />
-          </Card>
-          <NsfwControl
-            :images="[cover, ...images]"
-            :nsfw="data.galgame.nsfw"
-            class="absolute bottom-2 left-2"
-          />
-        </Stack>
-        <WorkCoverAdd
-          v-else
-          resource="galgame"
-          :work-id="data.galgame.id"
-          class="hidden shrink-0 lg:flex"
+        <GalgameStageCover
+          :galgame-id="data.galgame.id"
+          :cover="cover"
+          :covers="data.galgame.covers"
+          :mine="data.my_cover_vote"
+          :images="images"
+          :nsfw="data.galgame.nsfw"
+          :title="title"
+          :zoomable="zoomable"
+          @open="$emit('cover')"
         />
       </Inline>
 
@@ -237,12 +215,19 @@
       </ScrollRail>
     </Stack>
 
-    <NsfwControl
-      :images="[cover, ...images]"
-      :nsfw="data.galgame.nsfw"
+    <Inline
+      gap="sm"
+      :wrap="false"
       :class="
         cn('absolute top-[calc(var(--app-header-height)+0.75rem)] right-3', cover && 'lg:hidden')
       "
-    />
+    >
+      <NsfwControl :images="[cover, ...images]" :nsfw="data.galgame.nsfw" />
+      <GalgameCoverVoteEntry
+        :galgame-id="data.galgame.id"
+        :covers="data.galgame.covers"
+        :mine="data.my_cover_vote"
+      />
+    </Inline>
   </Section>
 </template>

@@ -2,7 +2,7 @@
   import { Button as HnButton, Inline, Stack, Text } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { getGalgameCover } from '~/utils/media/galgame'
+  import { useGalgameCover } from '~/features/galgame/useCoverVote'
 
   defineOptions({ name: 'GalgameStickyBar' })
   const props = defineProps<{
@@ -14,7 +14,7 @@
   }>()
   defineEmits<{ go: [id: string] }>()
 
-  const cover = computed(() => getGalgameCover(props.data.galgame))
+  const cover = useGalgameCover(() => props.data.galgame)
   const line = computed(() =>
     [props.data.rate_stats.average?.toFixed(1), props.data.display.brands[0]?.text]
       .filter(Boolean)

@@ -3,7 +3,8 @@
   import { ArrowLeft } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { getGalgameBannerSource, getGalgameCover } from '~/utils/media/galgame'
+  import { useGalgameCover } from '~/features/galgame/useCoverVote'
+  import { getGalgameBannerSource } from '~/utils/media/galgame'
   import { getCoverMediaLayout } from '~/utils/media/layout'
 
   defineOptions({ name: 'GalgameBand' })
@@ -13,7 +14,7 @@
     heading: string
   }>()
 
-  const cover = computed(() => getGalgameCover(props.galgame))
+  const cover = useGalgameCover(() => props.galgame)
   const banner = computed(() => getGalgameBannerSource(props.galgame))
   const layout = computed(() => getCoverMediaLayout(cover.value))
 </script>
