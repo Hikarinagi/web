@@ -2,7 +2,7 @@
   import { Lightbox, Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { gameRating } from '~/features/entry/rating'
-  import { blurUrl } from '~/features/entry/tone'
+  import { blurUrl, stageTone } from '~/features/entry/tone'
   import { useActiveSection } from '~/features/entry/useActiveSection'
   import { usePageTone } from '~/features/entry/usePageTone'
   import { nearbyBrandWorks } from '~/features/galgame/brand'
@@ -20,9 +20,9 @@
       data: GalgamePageData
       galgameId: number
       embedded?: boolean
-      tinted?: boolean
+      tone?: 'page' | 'scope'
     }>(),
-    { tinted: true },
+    { tone: 'page' },
   )
 
   const title = computed(() => props.data.display.title || `Galgame #${props.data.galgame.id}`)
@@ -34,7 +34,8 @@
     () => images.value[index.value]?.thumb_hash ?? cover.value?.thumb_hash ?? null,
   )
   const glow = computed(() => blurUrl(hash.value))
-  usePageTone(hash, { enabled: props.tinted })
+  usePageTone(hash, { enabled: props.tone === 'page' })
+  const scope = computed(() => (props.tone === 'scope' ? stageTone(hash.value) : undefined))
 
   const values = (property: string) =>
     props.data.facts.find(fact => fact.property === property)?.values ?? []
@@ -116,7 +117,12 @@
 </script>
 
 <template>
-  <Stack gap="none" class="relative isolate min-h-screen bg-canvas transition-colors duration-700">
+  <Stack
+    gap="none"
+    class="relative isolate min-h-screen bg-canvas transition-colors duration-700"
+    :data-page-tone="scope ? 'stage' : undefined"
+    :style="scope"
+  >
     <Stack
       gap="none"
       class="pointer-events-none absolute inset-x-0 top-0 -z-10 hidden h-(--ambient-height) mask-(--ambient-fade) opacity-(--tone-glow) transition-opacity duration-700 dark:flex"

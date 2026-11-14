@@ -399,7 +399,14 @@ html.dark {
   --row-chip: rgb(255 255 255 / 0.1);
 }
 
-html[data-page-tone].dark {
+[data-page-tone] {
+  --stage-veil: var(--tone-soft);
+  --stage-control: color-mix(in oklab, var(--stage-veil) 90%, var(--hn-fg-default));
+}
+
+html[data-page-tone].dark,
+html.dark [data-page-tone] {
+  --stage-veil: var(--tone-deep);
   --hn-bg-canvas: var(--tone-deep);
   --hn-surface: var(--tone-deep-2);
   --hn-bg-subtle: color-mix(in oklab, var(--tone-deep-2) 88%, white);
@@ -407,7 +414,8 @@ html[data-page-tone].dark {
   --hn-border: var(--tone-line);
 }
 
-html[data-page-tone='paper']:not(.dark) {
+html[data-page-tone='paper']:not(.dark),
+html:not(.dark) [data-page-tone='paper'] {
   --hn-bg-canvas: var(--tone-paper);
 }
 

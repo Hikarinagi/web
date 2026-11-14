@@ -69,7 +69,7 @@
         :data="data"
         :galgame-id="galgame"
         embedded
-        :tinted="false"
+        tone="scope"
         inert
         class="[--app-header-height:0px]"
       />
