@@ -2,7 +2,6 @@
   import { Card, Stack } from '@hina-ui/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import type { CoverVoteState, GalgameCover } from '~/features/galgame/useCoverVote'
-  import type { HikariImageSource } from '~/utils/media/image'
   import { getCoverMediaLayout } from '~/utils/media/layout'
 
   defineOptions({ name: 'GalgameStageCover' })
@@ -12,7 +11,6 @@
     covers: GalgameCover[]
     products: GalgamePageData['products']
     mine: CoverVoteState | null
-    images: HikariImageSource[]
     nsfw: boolean
     title: string
     zoomable: boolean
@@ -42,7 +40,7 @@
         class="w-(--stage-cover-width)"
       />
     </Card>
-    <NsfwControl :images="[cover, ...images]" :nsfw="nsfw" class="absolute bottom-2 left-2" />
+    <NsfwControl :images="[cover]" :nsfw="nsfw" class="absolute bottom-2 left-2" />
     <GalgameCoverVoteEntry
       :galgame-id="galgameId"
       :covers="covers"

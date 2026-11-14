@@ -170,7 +170,6 @@
           :covers="data.galgame.covers"
           :products="data.products"
           :mine="data.my_cover_vote"
-          :images="images"
           :nsfw="data.galgame.nsfw"
           :title="title"
           :zoomable="zoomable"
@@ -221,16 +220,16 @@
     <Inline
       gap="sm"
       :wrap="false"
-      :class="
-        cn('absolute top-[calc(var(--app-header-height)+0.75rem)] right-3', cover && 'lg:hidden')
-      "
+      class="absolute top-[calc(var(--app-header-height)+0.75rem)] right-3"
     >
-      <NsfwControl :images="[cover, ...images]" :nsfw="data.galgame.nsfw" />
+      <NsfwControl :images="[cover, ...images]" :nsfw="data.galgame.nsfw" class="lg:hidden" />
+      <NsfwControl :images="images" :nsfw="data.galgame.nsfw" class="hidden lg:inline-flex" />
       <GalgameCoverVoteEntry
         :galgame-id="data.galgame.id"
         :covers="data.galgame.covers"
         :products="data.products"
         :mine="data.my_cover_vote"
+        :class="cover && 'lg:hidden'"
       />
     </Inline>
   </Section>
