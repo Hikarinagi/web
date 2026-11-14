@@ -1,15 +1,17 @@
 import type { RunRecord } from './types'
 
 const DB_NAME = 'hikari-download'
+const DB_VERSION = 2
 const STORE = 'runs'
 
 function open(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1)
+    const request = indexedDB.open(DB_NAME, DB_VERSION)
     request.onupgradeneeded = () => {
-      if (!request.result.objectStoreNames.contains(STORE)) {
-        request.result.createObjectStore(STORE, { keyPath: 'taskId' })
+      if (request.result.objectStoreNames.contains(STORE)) {
+        request.result.deleteObjectStore(STORE)
       }
+      request.result.createObjectStore(STORE, { keyPath: 'taskId' })
     }
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)

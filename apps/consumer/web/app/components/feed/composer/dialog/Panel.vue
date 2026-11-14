@@ -32,7 +32,7 @@
     removeTopic,
     createTopic,
     relatedWorks,
-    relatedWorksFull,
+    relatedWorksLimit,
     addWork,
     removeWork,
     entityCardItems,
@@ -123,7 +123,7 @@
       <FeedComposerRelatedWorks
         :show="!loading"
         :works="relatedWorks"
-        :full="relatedWorksFull"
+        :limit="relatedWorksLimit"
         @add="addWork"
         @remove="removeWork"
       />

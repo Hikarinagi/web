@@ -18,6 +18,7 @@ import type { EditorPlugin, ToolbarDropdownItem } from '../types'
 import EntityCardEditorView from './EntityCardEditorView.vue'
 import EntityCardSearch from './EntityCardSearch.vue'
 import { ENTITY_CARD_META } from './labels'
+import { entityCardsFull } from './limit'
 import { ENTITY_CARD_TYPES, type EntityCardType } from './types'
 
 const NODE_VIEW = {
@@ -46,6 +47,7 @@ const dropdownItems: ToolbarDropdownItem[] = ENTITY_CARD_TYPES.map(type => ({
   icon: ENTITY_CARD_META[type].icon,
   label: ENTITY_CARD_META[type].label,
   onClick: (editor, ctx, trigger) => {
+    if (entityCardsFull(editor, ctx.entityCardLimit)) return
     ctx.openOverlay('entity-card', trigger, {
       editor,
       entityType: type as EntityCardType,

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:24-bookworm-slim AS base
+FROM node:24.22.1-bookworm-slim AS base
 
 ENV PNPM_HOME=/pnpm
 ENV PATH="${PNPM_HOME}:${PATH}"
@@ -45,7 +45,7 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     /prod/frontend/vitest.config.ts \
     /prod/frontend/tsconfig.json
 
-FROM node:24-bookworm-slim AS runner
+FROM node:24.22.1-bookworm-slim AS runner
 
 ARG APP_VERSION=dev
 ENV APP_VERSION=$APP_VERSION

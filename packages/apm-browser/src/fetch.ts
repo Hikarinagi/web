@@ -83,9 +83,16 @@ async function outcomeOf(
       const body = (await response.clone().json()) as {
         request_id?: unknown
         error?: { code?: unknown }
+        errors?: { extensions?: { code?: unknown; requestId?: unknown } }[]
       } | null
       if (typeof body?.request_id === 'string') requestId ??= body.request_id
-      if (typeof body?.error?.code === 'string') code = body.error.code
+      const gqlExt = body?.errors?.[0]?.extensions
+      if (typeof gqlExt?.requestId === 'string') requestId ??= gqlExt.requestId
+      if (typeof body?.error?.code === 'string') {
+        code = body.error.code
+      } else if (typeof gqlExt?.code === 'string') {
+        code = gqlExt.code
+      }
     } catch {
       /* body was not the api envelope */
     }
@@ -96,9 +103,11 @@ async function outcomeOf(
     ? 'ok'
     : !own
       ? 'external'
-      : response.status >= 500
-        ? 'fault'
-        : 'client_error'
+      : code === 'SITE_MAINTENANCE'
+        ? 'client_error'
+        : response.status >= 500
+          ? 'fault'
+          : 'client_error'
   attributes[ATTR_OUTCOME] = outcome
   if (outcome === 'ok') return { status: 'ok', attributes }
   if (outcome === 'fault') {

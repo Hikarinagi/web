@@ -29,6 +29,7 @@ export interface UseTiptapOptions {
   plugins: EditorPlugin[]
   summariesRef: Ref<EntitySummaries>
   documentEmojiSetsRef: Ref<EmojiSetDisplay[]>
+  entityCardLimit?: number
   initialContent?: unknown
   editable?: boolean
   placeholder?: string
@@ -73,6 +74,7 @@ export function useTiptap(options: UseTiptapOptions): UseTiptapReturn {
     closeOverlay,
     summariesRef: options.summariesRef,
     documentEmojiSetsRef: options.documentEmojiSetsRef,
+    entityCardLimit: options.entityCardLimit,
   }
   provide(EDITOR_PLUGIN_CONTEXT_KEY, pluginContext)
 

@@ -28,7 +28,6 @@ interface EntrySlot {
 
 const PROGRESS_INTERVAL_MS = 250
 const SPEED_WINDOW_MS = 5000
-const PERSIST_INTERVAL_MS = 1000
 
 function safeName(name: string) {
   return name.replace(/[\\/:*?"<>|\p{Cc}]/gu, '_')
@@ -43,7 +42,6 @@ export class TaskRunner {
   private paused = false
   private written = 0
   private lastPost = 0
-  private lastPersist = 0
   private currentFile: number | null = null
 
   constructor(
@@ -96,7 +94,7 @@ export class TaskRunner {
     } catch (error) {
       if (this.abort.signal.aborted) {
         if (this.paused) {
-          await this.persist(true)
+          await this.persist()
           this.postProgress(true)
           this.io.post({ type: 'paused', taskId })
         } else {
@@ -104,7 +102,7 @@ export class TaskRunner {
         }
         return
       }
-      await this.persist(true)
+      await this.persist()
       this.postProgress(true)
       this.io.post({ type: 'error', taskId, failure: this.failure(error) })
     }
@@ -149,7 +147,7 @@ export class TaskRunner {
       this.record!.files[file.index] = state
       const resuming = state.done.length > 0
       sink = await fileSink(handle, resuming)
-      if (!resuming) await this.persist(true)
+      if (!resuming) await this.persist()
     } else {
       state = { handle: null, done: [], crcs: {}, complete: false }
       await this.io.openPort(file)
@@ -165,8 +163,9 @@ export class TaskRunner {
       progress.written += slots[index]!.blockSize
       this.written += slots[index]!.blockSize
     }
+    const unsaved: number[] = []
     try {
-      await this.writeEntries(file, layout, slots, sink, state, done)
+      await this.writeEntries(file, layout, slots, sink, state, done, unsaved)
       if (layout) {
         const crcs = layout.entries.map(entry => state.crcs[entry.index] ?? 0)
         const tail = zipTail(layout, crcs, this.command.stamp)
@@ -176,9 +175,17 @@ export class TaskRunner {
       await sink.close()
       state.complete = true
       progress.state = 'done'
-      await this.persist(true)
+      await this.persist()
     } catch (error) {
-      await sink.abort()
+      const keep = this.command.sink === 'fs' && (this.paused || !this.abort.signal.aborted)
+      const kept =
+        keep &&
+        (await sink.close().then(
+          () => true,
+          () => false,
+        ))
+      if (kept) state.done.push(...unsaved)
+      else await sink.abort()
       if (this.command.sink !== 'fs') {
         progress.written = 0
         progress.state = 'waiting'
@@ -196,6 +203,7 @@ export class TaskRunner {
     sink: Sink,
     state: FileRunState,
     done: Set<number>,
+    unsaved: number[],
   ) {
     const { manifest } = this.command
     const parallel = Math.max(1, manifest.parallel_connections)
@@ -222,7 +230,7 @@ export class TaskRunner {
           for (const index of pending) {
             const data = await results.get(index)!
             results.delete(index)
-            await this.commit(file, layout, slots, sink, state, index, data)
+            await this.commit(file, layout, slots, sink, state, unsaved, index, data)
             schedule()
           }
         }
@@ -235,7 +243,7 @@ export class TaskRunner {
             signal.throwIfAborted()
             const index = pending[cursor++]!
             const data = await fetchEntry(manifest, file, file.entries[index]!, signal, this.gate)
-            await this.commit(file, layout, slots, sink, state, index, data)
+            await this.commit(file, layout, slots, sink, state, unsaved, index, data)
           }
         }
         await Promise.all(
@@ -256,6 +264,7 @@ export class TaskRunner {
     slots: EntrySlot[],
     sink: Sink,
     state: FileRunState,
+    unsaved: number[],
     index: number,
     data: Uint8Array,
   ) {
@@ -267,10 +276,9 @@ export class TaskRunner {
       block = entryBlock(layout.entries[index]!, data, crc, this.command.stamp)
     }
     await sink.write(slot.offset, block)
-    state.done.push(index)
+    unsaved.push(index)
     state.crcs[index] = crc
     this.advance(this.files[file.index]!, block.byteLength)
-    await this.persist(false)
   }
 
   private advance(progress: FileProgress, bytes: number) {
@@ -298,12 +306,8 @@ export class TaskRunner {
     })
   }
 
-  private async persist(force: boolean) {
-    if (!this.record) return
-    const now = Date.now()
-    if (!force && now - this.lastPersist < PERSIST_INTERVAL_MS) return
-    this.lastPersist = now
-    await saveRun(this.record)
+  private async persist() {
+    if (this.record) await saveRun(this.record)
   }
 }
 

@@ -96,9 +96,22 @@ function formatDetails(details: Record<string, unknown> | undefined): string {
 
 export function showApiErrorToast(error: HikariApiError) {
   if (!import.meta.client) return
+  if (isMaintenanceError(error)) {
+    enterMaintenanceMode(error)
+    return
+  }
 
   const detail = formatDetails(error.details)
   toast.danger(error.message, { description: detail || undefined })
+}
+
+export function isMaintenanceError(error: unknown): boolean {
+  return isApiError(error) && error.code === HIKARI_BIZ_CODE.SITE_MAINTENANCE
+}
+
+export function enterMaintenanceMode(error: HikariApiError) {
+  if (!import.meta.client) return
+  showError(toPageError(error))
 }
 
 export function isAuthError(error: unknown) {

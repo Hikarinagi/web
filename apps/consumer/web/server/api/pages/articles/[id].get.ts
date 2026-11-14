@@ -1,39 +1,13 @@
-import type { ApiData } from '@hikarinagi/api-contract/v3'
 import { getQuery, getRouterParam, type H3Event } from 'h3'
 import { COMMENT_PAGE_SIZE, commentFocusId } from '~/features/comment/comment'
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
-
-type RelatedWork = ApiData<'/api/v3/articles/{id}', 'get'>['related_works'][number]
 
 async function loadRecent(event: H3Event, authorId: number, excludeId: number) {
   const res = await fetchBackendData(event, '/api/v3/articles', {
     query: { creator_id: authorId, page: 1, page_size: 6 },
   }).catch(() => null)
   return (res?.items ?? []).filter(a => a.id !== excludeId).slice(0, 5)
-}
-
-async function loadOtherReviews(event: H3Event, relatedWorks: RelatedWork[]) {
-  const groups = await Promise.all(
-    relatedWorks.map(async work => {
-      const reviews =
-        work.work_type === 'GALGAME'
-          ? ((
-              await fetchBackendData(event, '/api/v3/galgames/{id}/rates', {
-                path: { id: work.id },
-                query: { sort: 'hot', page: 1, page_size: 4, has_content: true },
-              }).catch(() => null)
-            )?.items ?? [])
-          : ((
-              await fetchBackendData(event, '/api/v3/light-novels/{id}/rates', {
-                path: { id: work.id },
-                query: { sort: 'hot', page: 1, page_size: 4, has_content: true },
-              }).catch(() => null)
-            )?.items ?? [])
-      return { work, reviews: reviews.slice(0, 2) }
-    }),
-  )
-  return groups.filter(g => g.reviews.length > 0)
 }
 
 async function handler(event: H3Event) {
@@ -47,7 +21,7 @@ async function handler(event: H3Event) {
       ? fetchBackendData(event, '/api/v3/user/{id}', { path: { id: authorId } }).catch(() => null)
       : null,
     authorId ? loadRecent(event, authorId, id) : [],
-    loadOtherReviews(event, article.related_works),
+    fetchBackendData(event, '/api/v3/articles/{id}/works/rates', { path: { id } }).catch(() => []),
     fetchBackendData(event, '/api/v3/comments', {
       query: {
         target_type: 'article',

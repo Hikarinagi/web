@@ -38,4 +38,17 @@ describe('reportServerError', () => {
     )
     expect(failSpan).not.toHaveBeenCalled()
   })
+
+  it('ignores SITE_MAINTENANCE 503 errors', () => {
+    expect(
+      reportServerError(
+        Object.assign(new Error('maintenance'), {
+          statusCode: 503,
+          data: { code: 'SITE_MAINTENANCE' },
+        }),
+        event,
+      ),
+    ).toBe(false)
+    expect(failSpan).not.toHaveBeenCalled()
+  })
 })

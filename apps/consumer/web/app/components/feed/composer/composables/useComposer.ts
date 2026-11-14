@@ -5,6 +5,7 @@ import {
   type PollNodeAttrs,
 } from '@hikarinagi/editor-schema'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
+import { toast } from '@hina-ui/vue'
 import { useTiptap } from '~/components/hikari-editor/composables/useTiptap'
 import { emptyEditorSummaries } from '~/components/hikari-editor/composables/useEditorSummaries'
 import { useEditorPlugins } from '~/components/hikari-editor/plugins'
@@ -30,7 +31,6 @@ import type { FeedItemByType } from '~/features/feed/feed'
 
 export const POST_MAX_COVERS = 9
 export const POST_MAX_TOPICS = 5
-export const POST_MAX_RELATED_WORKS = 10
 export const COMPOSER_KIND_OPTIONS = [
   { value: 'post', label: '图文' },
   { value: 'article', label: '文章' },
@@ -88,6 +88,7 @@ export function useComposer(
   )
 
   const plugins = useEditorPlugins('post')
+  const limits = useContentLimits()
   const title = ref('')
   const covers = ref<MediaValue[]>([])
   const topics = ref<ComposerTopic[]>([])
@@ -111,7 +112,8 @@ export function useComposer(
 
   const coversFull = computed(() => covers.value.length >= POST_MAX_COVERS)
   const topicsFull = computed(() => topics.value.length >= POST_MAX_TOPICS)
-  const relatedWorksFull = computed(() => relatedWorks.value.length >= POST_MAX_RELATED_WORKS)
+  const relatedWorksLimit = computed(() => limits.value.post_related_works)
+  const relatedWorksFull = computed(() => relatedWorks.value.length >= relatedWorksLimit.value)
   const hasContent = computed(
     () => !isEmpty.value || covers.value.length > 0 || pollDef.value !== null,
   )
@@ -164,11 +166,11 @@ export function useComposer(
   }
 
   function addWork(work: ComposerWork) {
-    if (
-      relatedWorksFull.value ||
-      relatedWorks.value.some(w => w.work_type === work.work_type && w.id === work.id)
-    )
+    if (relatedWorks.value.some(w => w.work_type === work.work_type && w.id === work.id)) return
+    if (relatedWorksFull.value) {
+      toast.warning(`最多关联 ${relatedWorksLimit.value} 个作品`)
       return
+    }
     relatedWorks.value = [...relatedWorks.value, work]
   }
   function removeWork(work: ComposerWork) {
@@ -229,6 +231,7 @@ export function useComposer(
     plugins,
     summariesRef,
     documentEmojiSetsRef,
+    entityCardLimit: limits.value.post_entity_cards,
     placeholder: '分享你的发现、推荐…',
     editorProps: {
       handleKeyDown(_view, event) {
@@ -479,7 +482,7 @@ export function useComposer(
     submitting,
     coversFull,
     topicsFull,
-    relatedWorksFull,
+    relatedWorksLimit,
     hasContent,
     canPublish,
     openCoverLibrary,

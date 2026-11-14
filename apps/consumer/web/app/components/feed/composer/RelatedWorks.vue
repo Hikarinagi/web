@@ -8,7 +8,7 @@
 
   defineOptions({ name: 'FeedComposerRelatedWorks' })
 
-  defineProps<{ show: boolean; works: ComposerWork[]; full: boolean }>()
+  defineProps<{ show: boolean; works: ComposerWork[]; limit: number }>()
   const emit = defineEmits<{ add: [work: ComposerWork]; remove: [work: ComposerWork] }>()
 
   const pickerOpen = ref(false)
@@ -44,7 +44,6 @@
         </Chip>
 
         <FeedComposerRelatedWorksPicker
-          v-if="!full"
           v-model:open="pickerOpen"
           :selected="works"
           @add="work => emit('add', work)"
@@ -52,7 +51,7 @@
         >
           <Chip as="button" variant="outline" size="sm" class="border-dashed text-muted">
             <template #icon><BookMarked /></template>
-            关联作品
+            {{ works.length ? `关联作品 ${works.length}/${limit}` : '关联作品' }}
           </Chip>
         </FeedComposerRelatedWorksPicker>
       </Inline>

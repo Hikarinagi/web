@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { abortErrorOf, isAbortError, normalizeApiError } from '../../app/utils/api/error'
+import {
+  abortErrorOf,
+  isAbortError,
+  isMaintenanceError,
+  normalizeApiError,
+} from '../../app/utils/api/error'
 
 function fetchError(status: number, body: unknown) {
   return Object.assign(new Error(`[PATCH] "/x": ${status}`), { status, data: body })
@@ -28,6 +33,32 @@ describe('normalizeApiError', () => {
     )
     expect(err.message).toBe('投票已有人参与，选项无法修改')
     expect(err.status).toBe(422)
+  })
+
+  it('preserves SITE_MAINTENANCE details and identifies maintenance errors', () => {
+    const err = normalizeApiError(
+      fetchError(503, {
+        success: false,
+        error: {
+          code: 'SITE_MAINTENANCE',
+          message: '数据库维护中',
+          retryable: true,
+          details: {
+            ends_at: '2026-11-14T15:00:00.000Z',
+            telegram_url: 'https://t.me/hikari_nagi',
+          },
+        },
+        request_id: 'r-maint',
+      }),
+    )
+    expect(err.status).toBe(503)
+    expect(err.code).toBe('SITE_MAINTENANCE')
+    expect(err.details).toEqual({
+      ends_at: '2026-11-14T15:00:00.000Z',
+      telegram_url: 'https://t.me/hikari_nagi',
+    })
+    expect(isMaintenanceError(err)).toBe(true)
+    expect(isMaintenanceError(normalizeApiError(fetchError(500, {})))).toBe(false)
   })
 })
 

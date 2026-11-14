@@ -87,7 +87,7 @@ export function checkLimits(counters: LimitCounters, limits: PresetLimits): Vali
     issues.push({
       path: [],
       code: 'limit_exceeded_entity_card_nodes',
-      message: `实体卡片数量超出限制 (${counters.entity_card_nodes} > ${limits.max_entity_card_nodes})`,
+      message: `正文最多插入 ${limits.max_entity_card_nodes} 个卡片，当前为 ${counters.entity_card_nodes} 个`,
     })
   }
   if (counters.mention_user_nodes > limits.max_mention_user_nodes) {

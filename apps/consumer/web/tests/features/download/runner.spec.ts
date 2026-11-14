@@ -85,9 +85,7 @@ function fakeDirectory(store: Map<string, Uint8Array>) {
             close: async () => {
               store.set(name, bytes)
             },
-            abort: async () => {
-              store.set(name, bytes)
-            },
+            abort: async () => {},
           }
         },
       } as unknown as FileSystemFileHandle
@@ -211,5 +209,57 @@ describe('TaskRunner', () => {
     const file = records.get(42)?.files[0]
     expect(file?.complete).toBe(false)
     expect(file?.done).toEqual(expect.arrayContaining([0, 1]))
+  })
+
+  it('keeps the entries written before a pause when the download continues', async () => {
+    const store = new Map<string, Uint8Array>()
+    const directory = fakeDirectory(store)
+    holdOn = 3
+    const runner = new TaskRunner(command(directory), io([]))
+    const running = runner.run()
+    while (!fetched.includes(3)) await new Promise(resolve => setTimeout(resolve, 0))
+    runner.pause()
+    release()
+    await running
+
+    holdOn = null
+    fetched.length = 0
+    const events: WorkerEvent[] = []
+    await new TaskRunner(command(directory), io(events)).run()
+    expect(events.at(-1)).toMatchObject({ type: 'done', taskId: 42 })
+    expect(fetched).not.toContain(1)
+    const unzipped = unzipSync(store.get('漫画 第 1 话.cbz')!)
+    for (const id of [1, 2, 3, 4]) {
+      expect(unzipped[`00000${id}_第 1 话_000${id}.jpg`]).toEqual(pages.get(id))
+    }
+  })
+
+  it('discards the partial file when the download is cancelled', async () => {
+    const store = new Map<string, Uint8Array>()
+    const directory = fakeDirectory(store)
+    holdOn = 3
+    const runner = new TaskRunner(command(directory), io([]))
+    const running = runner.run()
+    while (!fetched.includes(3)) await new Promise(resolve => setTimeout(resolve, 0))
+    runner.cancel()
+    release()
+    await running
+    expect(store.has('漫画 第 1 话.cbz')).toBe(false)
+    expect(records.has(42)).toBe(false)
+  })
+
+  it('does not record entries as done while they only exist in the unsaved file', async () => {
+    const store = new Map<string, Uint8Array>()
+    const directory = fakeDirectory(store)
+    let clock = Date.now()
+    const now = vi.spyOn(Date, 'now').mockImplementation(() => (clock += 2000))
+    holdOn = 3
+    const running = new TaskRunner(command(directory), io([])).run()
+    while (!fetched.includes(3)) await new Promise(resolve => setTimeout(resolve, 0))
+    const record = records.get(42)!
+    expect(record.files[0]!.done).toEqual([])
+    release()
+    await running
+    now.mockRestore()
   })
 })

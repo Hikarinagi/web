@@ -24,6 +24,8 @@ import type {
 
 import {
   abortErrorOf,
+  enterMaintenanceMode,
+  isMaintenanceError,
   normalizeApiError,
   showApiErrorToast,
   throwPageError,
@@ -222,7 +224,11 @@ function throwFetchError(error: unknown, toast: boolean): never {
   if (abort) throw abort
 
   const apiError = normalizeApiError(error)
-  if (toast) showApiErrorToast(apiError)
+  if (isMaintenanceError(apiError)) {
+    enterMaintenanceMode(apiError)
+  } else if (toast) {
+    showApiErrorToast(apiError)
+  }
 
   throw toNuxtError(apiError)
 }

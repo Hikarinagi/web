@@ -168,6 +168,7 @@ export function useArticleEditor(articleId: Ref<number | null>, review?: Article
     plugins,
     summariesRef,
     documentEmojiSetsRef,
+    entityCardLimit: useContentLimits().value.article_entity_cards,
     placeholder: '开始写点什么…',
     onUpdate({ isEmpty: empty, charCount: count }) {
       isEmpty.value = empty

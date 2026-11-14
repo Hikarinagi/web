@@ -23,7 +23,7 @@
         <Link :as="NuxtLink" :to="workTo(g.work)" tone="neutral" class="truncate">
           <Text as="span" size="xs" weight="semibold">{{ g.work.title }}</Text>
         </Link>
-        <Stack v-for="r in g.reviews" :key="r.id" gap="xs">
+        <Stack v-for="r in g.rates" :key="r.id" gap="xs">
           <Inline gap="sm" align="center" :wrap="false">
             <Avatar :user="r.rater" card class="size-5! shrink-0" />
             <UserName :user="r.rater" class="min-w-0 text-xs font-medium text-fg" />

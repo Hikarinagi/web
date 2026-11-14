@@ -3077,6 +3077,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/platform/content-limits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminContentLimitsController_get"];
+        put: operations["AdminContentLimitsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/platform/point-earning": {
         parameters: {
             query?: never;
@@ -6927,6 +6943,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["ArticleController_recordView"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/articles/{id}/works/rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ArticleController_workRates"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -18004,6 +18036,10 @@ export interface components {
             /** @description 浏览量 */
             view_count: number;
         };
+        ArticleWorkRatesDto: {
+            rates: (components["schemas"]["GalgameRateDto"] | components["schemas"]["LightNovelRateDto"])[];
+            work: components["schemas"]["ArticleRelatedWorkDto"];
+        };
         AssetUploadResultDto: {
             height: number | null;
             id: number;
@@ -18654,6 +18690,11 @@ export interface components {
             pinned: boolean;
             text: string | null;
             type: string;
+        };
+        ContentLimitsDto: {
+            article_entity_cards: number;
+            post_entity_cards: number;
+            post_related_works: number;
         };
         ContentMetaResDto: {
             embed_count: number;
@@ -23213,6 +23254,8 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             view_count: number;
+            /** @enum {string} */
+            visible: "PUBLIC" | "PRIVATE";
         };
         /**
          * @description 受众分类
@@ -28147,6 +28190,7 @@ export interface components {
             works: number;
         };
         SiteConfigDto: {
+            content_limits: components["schemas"]["ContentLimitsDto"];
             feature_flags: components["schemas"]["FeatureFlagsDto"];
         };
         SiteExclusionDto: {
@@ -29472,6 +29516,11 @@ export interface components {
             rule?: {
                 [key: string]: unknown;
             };
+        };
+        UpdateContentLimitsDto: {
+            article_entity_cards: number;
+            post_entity_cards: number;
+            post_related_works: number;
         };
         UpdateDecorationDto: {
             /** @enum {string} */
@@ -36042,6 +36091,48 @@ export interface operations {
             };
         };
     };
+    AdminContentLimitsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentLimitsDto"];
+                };
+            };
+        };
+    };
+    AdminContentLimitsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateContentLimitsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContentLimitsDto"];
+                };
+            };
+        };
+    };
     AdminPointEarningController_get: {
         parameters: {
             query?: never;
@@ -42567,6 +42658,27 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    ArticleController_workRates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArticleWorkRatesDto"][];
+                };
             };
         };
     };

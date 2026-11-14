@@ -101,6 +101,7 @@ export function useEditorHost(opts: UseEditorHostOptions) {
     plugins,
     summariesRef,
     documentEmojiSetsRef,
+    entityCardLimit: COMMENT_PRESET.limits.max_entity_card_nodes,
     initialContent: opts.initialContent,
     placeholder: opts.placeholder,
     editorProps: {

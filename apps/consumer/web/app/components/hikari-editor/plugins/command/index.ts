@@ -24,6 +24,7 @@ import { insertHorizontalRule } from '../horizontal-rule'
 import { getSelectionAnchor, readLinkContext } from '../link/helpers'
 import type { EditorPlugin, EditorPluginContext } from '../types'
 import { ENTITY_CARD_META } from '../entity-card/labels'
+import { entityCardsFull } from '../entity-card/limit'
 import { ENTITY_CARD_TYPES, type EntityCardType } from '../entity-card/types'
 import { openPollInsert } from '../poll'
 import { insertTable } from '../table'
@@ -108,6 +109,10 @@ async function insertImage(ctx: CommandActionContext) {
 }
 
 function openEntityCard(ctx: CommandActionContext, entityType: EntityCardType) {
+  if (entityCardsFull(ctx.editor, ctx.pluginContext.entityCardLimit)) {
+    ctx.editor.chain().focus().deleteRange(ctx.range).run()
+    return
+  }
   openOverlay(ctx, 'entity-card', {
     editor: ctx.editor,
     entityType,

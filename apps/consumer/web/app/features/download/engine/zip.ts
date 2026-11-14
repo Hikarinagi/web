@@ -4,11 +4,9 @@ const EOCD = 22
 const EOCD64 = 56
 const EOCD64_LOCATOR = 20
 const ZIP64_LOCAL_EXTRA = 20
-const DESCRIPTOR = 16
-const DESCRIPTOR64 = 24
 const LIMIT32 = 0xffffffff
 const LIMIT16 = 0xffff
-const FLAGS = 0x0808
+const FLAGS = 0x0800
 const VERSION = 20
 const VERSION64 = 45
 
@@ -57,7 +55,7 @@ export function zipLayout(inputs: ZipEntryInput[]): ZipLayout {
     const name = encoder.encode(input.name)
     const zip64 = input.size >= LIMIT32 || offset >= LIMIT32
     const header = LOCAL_HEADER + name.length + (zip64 ? ZIP64_LOCAL_EXTRA : 0)
-    const blockSize = header + input.size + (zip64 ? DESCRIPTOR64 : DESCRIPTOR)
+    const blockSize = header + input.size
     entries.push({
       index,
       name,
@@ -135,9 +133,9 @@ export function entryBlock(
   writer.u16(0)
   writer.u16(stamp.time)
   writer.u16(stamp.date)
-  writer.u32(0)
-  writer.u32(entry.zip64 ? LIMIT32 : 0)
-  writer.u32(entry.zip64 ? LIMIT32 : 0)
+  writer.u32(crc)
+  writer.u32(entry.zip64 ? LIMIT32 : entry.size)
+  writer.u32(entry.zip64 ? LIMIT32 : entry.size)
   writer.u16(entry.name.length)
   writer.u16(entry.zip64 ? ZIP64_LOCAL_EXTRA : 0)
   writer.raw(entry.name)
@@ -148,15 +146,6 @@ export function entryBlock(
     writer.u64(entry.size)
   }
   writer.raw(data)
-  writer.u32(0x08074b50)
-  writer.u32(crc)
-  if (entry.zip64) {
-    writer.u64(entry.size)
-    writer.u64(entry.size)
-  } else {
-    writer.u32(entry.size)
-    writer.u32(entry.size)
-  }
   return writer.bytes
 }
 

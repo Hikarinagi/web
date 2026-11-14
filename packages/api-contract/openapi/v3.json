@@ -9600,6 +9600,31 @@
         ],
         "type": "object"
       },
+      "ArticleWorkRatesDto": {
+        "properties": {
+          "rates": {
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/GalgameRateDto"
+                },
+                {
+                  "$ref": "#/components/schemas/LightNovelRateDto"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "work": {
+            "$ref": "#/components/schemas/ArticleRelatedWorkDto"
+          }
+        },
+        "required": [
+          "work",
+          "rates"
+        ],
+        "type": "object"
+      },
       "AssetUploadResultDto": {
         "properties": {
           "height": {
@@ -12524,6 +12549,25 @@
         ],
         "type": "object"
       },
+      "ContentLimitsDto": {
+        "properties": {
+          "article_entity_cards": {
+            "type": "number"
+          },
+          "post_entity_cards": {
+            "type": "number"
+          },
+          "post_related_works": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "article_entity_cards",
+          "post_entity_cards",
+          "post_related_works"
+        ],
+        "type": "object"
+      },
       "ContentMetaResDto": {
         "properties": {
           "embed_count": {
@@ -14063,7 +14107,6 @@
             "items": {
               "$ref": "#/components/schemas/PostWorkRefDto"
             },
-            "maxItems": 10,
             "type": "array"
           },
           "section_ids": {
@@ -30491,6 +30534,13 @@
           },
           "view_count": {
             "type": "number"
+          },
+          "visible": {
+            "enum": [
+              "PUBLIC",
+              "PRIVATE"
+            ],
+            "type": "string"
           }
         },
         "required": [
@@ -30499,6 +30549,7 @@
           "title",
           "cover",
           "status",
+          "visible",
           "view_count",
           "like_count",
           "created_at",
@@ -49574,12 +49625,16 @@
       },
       "SiteConfigDto": {
         "properties": {
+          "content_limits": {
+            "$ref": "#/components/schemas/ContentLimitsDto"
+          },
           "feature_flags": {
             "$ref": "#/components/schemas/FeatureFlagsDto"
           }
         },
         "required": [
-          "feature_flags"
+          "feature_flags",
+          "content_limits"
         ],
         "type": "object"
       },
@@ -55253,6 +55308,31 @@
         },
         "type": "object"
       },
+      "UpdateContentLimitsDto": {
+        "properties": {
+          "article_entity_cards": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          },
+          "post_entity_cards": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          },
+          "post_related_works": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "article_entity_cards",
+          "post_entity_cards",
+          "post_related_works"
+        ],
+        "type": "object"
+      },
       "UpdateDecorationDto": {
         "properties": {
           "category": {
@@ -56965,7 +57045,6 @@
             "items": {
               "$ref": "#/components/schemas/PostWorkRefDto"
             },
-            "maxItems": 10,
             "type": "array"
           },
           "section_ids": {
@@ -57039,7 +57118,6 @@
             "items": {
               "$ref": "#/components/schemas/PostWorkRefDto"
             },
-            "maxItems": 10,
             "type": "array"
           },
           "section_ids": {
@@ -68564,6 +68642,56 @@
         ]
       }
     },
+    "/api/v3/admin/platform/content-limits": {
+      "get": {
+        "operationId": "AdminContentLimitsController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentLimitsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/platform"
+        ]
+      },
+      "put": {
+        "operationId": "AdminContentLimitsController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContentLimitsDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentLimitsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/platform"
+        ]
+      }
+    },
     "/api/v3/admin/platform/point-earning": {
       "get": {
         "operationId": "AdminPointEarningController_get",
@@ -79473,6 +79601,39 @@
         ],
         "responses": {
           "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "articles"
+        ]
+      }
+    },
+    "/api/v3/articles/{id}/works/rates": {
+      "get": {
+        "operationId": "ArticleController_workRates",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ArticleWorkRatesDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
             "description": ""
           }
         },

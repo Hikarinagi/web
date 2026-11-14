@@ -16,7 +16,13 @@ import type {
   HikariRequestMethod,
 } from './contract'
 
-import { abortErrorOf, normalizeApiError, showApiErrorToast } from './error'
+import {
+  abortErrorOf,
+  enterMaintenanceMode,
+  isMaintenanceError,
+  normalizeApiError,
+  showApiErrorToast,
+} from './error'
 import { normalizeApiPath, resolveApiPath, type ApiPathParamValue } from './path'
 import { unwrapApiResponse } from './response'
 import { readApiBinary, type DownloadProgress } from './binary'
@@ -170,7 +176,11 @@ export async function hikariRequest<TPath extends ApiPath, TMethod extends ApiMe
     if (abort) throw abort
 
     const apiError = normalizeApiError(error)
-    if (toast) showApiErrorToast(apiError)
+    if (isMaintenanceError(apiError)) {
+      enterMaintenanceMode(apiError)
+    } else if (toast) {
+      showApiErrorToast(apiError)
+    }
     throw apiError
   }
 }

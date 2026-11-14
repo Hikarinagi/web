@@ -11,6 +11,7 @@ export interface EditorPluginContext {
   closeOverlay: (id: string) => void
   summariesRef: Ref<EntitySummaries>
   documentEmojiSetsRef: Ref<EmojiSetDisplay[]>
+  entityCardLimit?: number
 }
 
 export interface ToolbarDropdownItem {

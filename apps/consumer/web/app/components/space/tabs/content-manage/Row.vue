@@ -44,6 +44,7 @@
     <Stack gap="xs" class="min-w-0 flex-1">
       <Inline align="center" gap="sm" :wrap="false" class="min-w-0">
         <Tag v-if="badge" :tone="badge.tone" size="sm" class="shrink-0">{{ badge.label }}</Tag>
+        <Tag v-if="item.visible === 'PRIVATE'" tone="neutral" size="sm" class="shrink-0">私密</Tag>
         <Text weight="medium" truncate>{{ item.title || '未命名草稿' }}</Text>
       </Inline>
       <Inline align="center" gap="md" :wrap="false">

@@ -75,15 +75,51 @@ describe('stored zip output', () => {
     for (const file of files) expect(unzipped[file.name]).toEqual(file.data)
   })
 
-  it('writes the data descriptor with the crc of the entry', () => {
+  it('writes the crc and sizes into the local header without a data descriptor', () => {
     const data = new TextEncoder().encode('123456789')
     const layout = zipLayout([{ name: 'x', size: data.length }])
     const block = entryBlock(layout.entries[0]!, data, crc32(data), stamp)
     const view = new DataView(block.buffer)
-    const descriptor = block.length - 16
-    expect(view.getUint32(descriptor, true)).toBe(0x08074b50)
-    expect(view.getUint32(descriptor + 4, true)).toBe(0xcbf43926)
-    expect(view.getUint32(descriptor + 8, true)).toBe(9)
+    expect(view.getUint16(6, true) & 0x0008).toBe(0)
+    expect(view.getUint32(14, true)).toBe(0xcbf43926)
+    expect(view.getUint32(18, true)).toBe(9)
+    expect(view.getUint32(22, true)).toBe(9)
+    expect(block.length).toBe(30 + 1 + 9)
     expect(() => entryBlock(layout.entries[0]!, data.subarray(1), 0, stamp)).toThrow()
+  })
+
+  it('can be read front to back from the local headers alone', () => {
+    const files = ['mimetype', 'META-INF/container.xml', 'OEBPS/images/000001.webp'].map(
+      (name, index) => ({ name, data: new TextEncoder().encode(`${name}:${index}`) }),
+    )
+    const { layout, output } = build(files)
+    const view = new DataView(output.buffer)
+    const decoder = new TextDecoder()
+    const names: string[] = []
+    let offset = 0
+    while (view.getUint32(offset, true) === 0x04034b50) {
+      const size = view.getUint32(offset + 18, true)
+      const nameLength = view.getUint16(offset + 26, true)
+      const extraLength = view.getUint16(offset + 28, true)
+      names.push(decoder.decode(output.subarray(offset + 30, offset + 30 + nameLength)))
+      offset += 30 + nameLength + extraLength + size
+    }
+    expect(names).toEqual(files.map(file => file.name))
+    expect(offset).toBe(layout.centralOffset)
+    expect(view.getUint32(offset, true)).toBe(0x02014b50)
+  })
+
+  it('has the size the server declares for the file', () => {
+    const files = [
+      { name: 'mimetype', size: 20 },
+      { name: '000001_第 1 话_0001.jpg', size: 1234 },
+    ]
+    const layout = zipLayout(files)
+    const declared =
+      files.reduce((sum, file) => {
+        const name = new TextEncoder().encode(file.name).length
+        return sum + 30 + name + file.size + 46 + name
+      }, 0) + 22
+    expect(layout.totalSize).toBe(declared)
   })
 })

@@ -144,6 +144,45 @@ describe('instrumentFetch', () => {
     expect(attr(span, 'hikari.outcome')).toEqual({ stringValue: 'fault' })
   })
 
+  it('treats SITE_MAINTENANCE 503 responses as non-fault across REST and GraphQL', async () => {
+    responder = async () =>
+      new Response(
+        JSON.stringify({
+          success: false,
+          error: { code: 'SITE_MAINTENANCE', message: '站点正在停机维护' },
+          request_id: 'maint-1',
+        }),
+        { status: 503, headers: { 'content-type': 'application/json' } },
+      )
+    await fetch('/api/v3/shelf')
+
+    responder = async () =>
+      new Response(
+        JSON.stringify({
+          errors: [
+            {
+              message: '站点正在停机维护',
+              extensions: { code: 'SITE_MAINTENANCE', requestId: 'maint-2' },
+            },
+          ],
+        }),
+        { status: 503, headers: { 'content-type': 'application/json' } },
+      )
+    await fetch('/graphql', { method: 'POST' })
+    await apm.flush()
+
+    const [restSpan, gqlSpan] = spansOf(sent)
+    expect(restSpan.status).toEqual({ code: 0 })
+    expect(attr(restSpan, 'hikari.outcome')).toEqual({ stringValue: 'client_error' })
+    expect(attr(restSpan, 'hikari.biz_code')).toEqual({ stringValue: 'SITE_MAINTENANCE' })
+    expect(attr(restSpan, 'hikari.request_id')).toEqual({ stringValue: 'maint-1' })
+
+    expect(gqlSpan.status).toEqual({ code: 0 })
+    expect(attr(gqlSpan, 'hikari.outcome')).toEqual({ stringValue: 'client_error' })
+    expect(attr(gqlSpan, 'hikari.biz_code')).toEqual({ stringValue: 'SITE_MAINTENANCE' })
+    expect(attr(gqlSpan, 'hikari.request_id')).toEqual({ stringValue: 'maint-2' })
+  })
+
   it('records first-party network failures as errors and rethrows', async () => {
     responder = async () => {
       throw new TypeError('Failed to fetch')
