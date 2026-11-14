@@ -79,17 +79,17 @@
   const fallbackActive = ref(false)
 
   // 门禁判据集中在此：作品级 nsfw 或逐图分级(sexual/violence)任一命中即按 NSFW 处理。
-  // content_limit 策略仍由 useNsfwPolicy 统一裁决(block / blur / 显示)。
-  const { shouldBlockNsfw, shouldBlurNsfw } = useNsfwPolicy()
+  // content_limit 策略仍由 useNsfwPolicy 统一裁决(遮挡 / 可否揭开 / 显示)。
+  const { shouldMaskNsfw, canReveal } = useNsfwPolicy()
   const { revealed } = useNsfwReveal()
   const sourceSrc = computed(() => imageSourceSrc(props.src))
   const isNsfw = computed(
     () => props.nsfw || props.sexual > 0 || props.violence > 0 || imageSourceNsfw(props.src),
   )
-  const blockNsfw = computed(() => shouldBlockNsfw(isNsfw))
   const blurNsfw = computed(
     () =>
-      !blockNsfw.value && shouldBlurNsfw(isNsfw) && !revealed.value.includes(sourceSrc.value ?? ''),
+      shouldMaskNsfw(isNsfw) &&
+      !(canReveal.value && revealed.value.includes(sourceSrc.value ?? '')),
   )
   const thumbHash = computed(() => imageSourceThumbHash(props.src))
   const hashSrc = computed(() =>
@@ -118,7 +118,7 @@
     }),
   )
   // nsfw 需模糊但该图无法走处理器(未登记外链等)→ 处理器加不上 blur,绝不直出原图；
-  // fail-closed 当作 block 处理(不加载原图，显示 fallback),避免静默裸露。
+  // fail-closed(不加载原图，显示 fallback),避免静默裸露。
   const unsafeNsfwBlur = computed(
     () =>
       blurNsfw.value &&
@@ -127,9 +127,7 @@
         imageProcessorHost: config.public.imageProcessorHost,
       }),
   )
-  const mainSrc = computed(
-    () => hashSrc.value || (blockNsfw.value || unsafeNsfwBlur.value ? '' : rawMainSrc.value),
-  )
+  const mainSrc = computed(() => hashSrc.value || (unsafeNsfwBlur.value ? '' : rawMainSrc.value))
   const fallbackSrc = computed(() =>
     resolveImageUrl(props.fallbackSrc || defaultFallbackImage, {
       cdnHost: config.public.cdnHost,
@@ -154,7 +152,7 @@
     () => Boolean(fallbackSrc.value) && resolvedSrc.value === fallbackSrc.value,
   )
   const placeholder = computed(() =>
-    blockNsfw.value || blurNsfw.value || isFallbackImage.value ? undefined : thumbHash.value,
+    blurNsfw.value || isFallbackImage.value ? undefined : thumbHash.value,
   )
   const resolvedImageClass = computed(() =>
     isFallbackImage.value ? props.fallbackImageClass : props.imageClass,

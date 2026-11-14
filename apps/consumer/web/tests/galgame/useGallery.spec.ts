@@ -7,8 +7,12 @@ const revealed = ref<string[]>([])
 
 vi.mock('../../app/features/nsfw/composables/useNsfwPolicy', () => ({
   useNsfwPolicy: () => ({
-    shouldBlockNsfw: (nsfw: unknown) => state.limit === 'block' && Boolean(toValue(nsfw)),
-    shouldBlurNsfw: (nsfw: unknown) => state.limit === 'blur' && Boolean(toValue(nsfw)),
+    shouldMaskNsfw: (nsfw: unknown) => state.limit !== 'show' && Boolean(toValue(nsfw)),
+    canReveal: {
+      get value() {
+        return state.limit === 'blur'
+      },
+    },
   }),
 }))
 vi.mock('../../app/features/nsfw/composables/useNsfwReveal', () => ({
@@ -65,6 +69,7 @@ describe('useGallery', () => {
 
   it('opens nothing when every image is hidden', () => {
     state.limit = 'block'
+    revealed.value = ['images/2.webp']
     const { open, show } = useGallery(() => ({
       images: [picture(2, true)],
       cover: null,

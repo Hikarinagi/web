@@ -19,8 +19,12 @@ describe('HikariImage', () => {
       public: { cdnHost: 'https://cdn.example.com', imageProcessorHost: 'https://img.example.com' },
     }))
     vi.stubGlobal('useNsfwPolicy', () => ({
-      shouldBlockNsfw: (nsfw: unknown) => limit === 'block' && Boolean(toValue(nsfw)),
-      shouldBlurNsfw: (nsfw: unknown) => limit === 'blur' && Boolean(toValue(nsfw)),
+      shouldMaskNsfw: (nsfw: unknown) => limit !== 'show' && Boolean(toValue(nsfw)),
+      canReveal: {
+        get value() {
+          return limit === 'blur'
+        },
+      },
     }))
     vi.stubGlobal('useHead', () => {})
   })
@@ -89,11 +93,18 @@ describe('HikariImage', () => {
     expect(render({ src: 'media/b.webp', sexual: 0, violence: 0 }).src).toContain('media/b.webp')
   })
 
-  it('never shows the thumb hash of a blocked image', () => {
+  it('shows only the thumb hash to a viewer who may not reveal the image', () => {
     limit = 'block'
+    revealed.value = ['media/a.webp']
     const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: 2 })
+    expect(props.src).toMatch(/^data:image\/png;base64,/)
     expect(props.thumbhash).toBeUndefined()
-    expect(props.src).not.toContain('media/a.webp')
+  })
+
+  it('shows the fallback when an image the viewer may not reveal cannot be blurred', () => {
+    limit = 'block'
+    const props = render({ src: 'https://example.org/a.webp', sexual: 2 })
+    expect(props.src).not.toContain('example.org')
     expect(props.src).not.toMatch(/^data:/)
   })
 })

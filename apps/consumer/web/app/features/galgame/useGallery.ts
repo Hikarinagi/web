@@ -10,7 +10,7 @@ export function useGallery(
   source: () => { images: Picture[]; cover: Picture | null; title: string },
 ) {
   const config = useRuntimeConfig()
-  const { shouldBlockNsfw, shouldBlurNsfw } = useNsfwPolicy()
+  const { shouldMaskNsfw, canReveal } = useNsfwPolicy()
   const { revealed } = useNsfwReveal()
   const loaded = ref(false)
   const open = ref(false)
@@ -18,8 +18,8 @@ export function useGallery(
 
   function viewable(image: Picture | null) {
     if (!image) return false
-    const nsfw = imageSourceNsfw(image)
-    return !shouldBlockNsfw(nsfw) && !(shouldBlurNsfw(nsfw) && !revealed.value.includes(image.src))
+    if (!shouldMaskNsfw(imageSourceNsfw(image))) return true
+    return canReveal.value && revealed.value.includes(image.src)
   }
 
   const pictures = computed(() => {

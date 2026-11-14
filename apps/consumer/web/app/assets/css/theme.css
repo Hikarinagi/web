@@ -39,6 +39,7 @@
   --color-hikari-orange-hover: #e6733d;
   --color-hikari-cyan: #00cccc;
   --color-hikari-cyan-hover: #009999;
+  --color-hikari-shiori: #f59e0b;
 
   --color-hikari-surface-0: #ffffff;
   --color-hikari-surface-50: #f8fafc;
@@ -366,10 +367,36 @@ html.dark {
   --manga-cover-sm: 7rem;
   --volume-cover: 15rem;
   --volume-cover-sm: 11rem;
+  --calendar-ruler-height: 13rem;
+  --calendar-ruler-col: minmax(2.125rem, 1fr);
+  --calendar-date-rail: 7.25rem;
+  --calendar-spot-cover: 16.5rem;
+  --calendar-spot-text: 34em;
+  --calendar-shelf-height: 13.5rem;
+  --calendar-shelf-height-sm: 9.375rem;
+  --ranking-container: 64rem;
+  --ranking-rank: 4.75rem;
+  --ranking-rank-sm: 3.25rem;
+  --ranking-row: 7rem;
+  --ranking-row-sm: 6rem;
+  --ranking-cover: 4.5rem;
+  --ranking-cover-sm: 3.75rem;
+  --ranking-logo: 25rem;
+  --ranking-logo-sm: 18rem;
+  --row-bg-l: 95.5%;
+  --row-line-l: 88%;
+  --row-ink-l: 26%;
+  --row-soft-l: 38%;
+  --row-chip: rgb(255 255 255 / 0.7);
 }
 
 html.dark {
   --stage-veil: var(--tone-deep);
+  --row-bg-l: 13%;
+  --row-line-l: 21%;
+  --row-ink-l: 88%;
+  --row-soft-l: 74%;
+  --row-chip: rgb(255 255 255 / 0.1);
 }
 
 html[data-page-tone].dark {

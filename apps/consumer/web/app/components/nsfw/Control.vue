@@ -11,7 +11,9 @@
     nsfw: false,
   })
 
-  const { shouldBlurNsfw } = useNsfwPolicy()
+  const auth = useAuthStore()
+  const { requireLogin } = useAuthGate()
+  const { shouldMaskNsfw, canReveal } = useNsfwPolicy()
   const { revealed, reveal, conceal } = useNsfwReveal()
 
   const sources = computed(() =>
@@ -20,12 +22,25 @@
       return source && (props.nsfw || imageSourceNsfw(image)) ? [source] : []
     }),
   )
-  const shown = computed(() => sources.value.length > 0 && shouldBlurNsfw(true))
-  const masked = computed(() => sources.value.some(source => !revealed.value.includes(source)))
+  const shown = computed(() => sources.value.length > 0 && shouldMaskNsfw(true))
+  const masked = computed(
+    () => !canReveal.value || sources.value.some(source => !revealed.value.includes(source)),
+  )
 </script>
 
 <template>
-  <DropdownMenu v-if="shown" :key="String(masked)" label="图片显示" align="start">
+  <Button
+    v-if="shown && !auth.isAuthenticated"
+    v-bind="$attrs"
+    variant="soft"
+    tone="neutral"
+    size="sm"
+    @click="requireLogin()"
+  >
+    <template #icon><EyeOff /></template>
+    已模糊
+  </Button>
+  <DropdownMenu v-else-if="shown" :key="String(masked)" label="图片显示" align="start">
     <Button v-if="masked" v-bind="$attrs" variant="soft" tone="neutral" size="sm">
       <template #icon><EyeOff /></template>
       已模糊
@@ -35,14 +50,16 @@
     </IconButton>
 
     <template #content>
-      <DropdownMenuItem v-if="masked" @select="reveal(sources)">
-        <template #icon><Eye /></template>
-        显示图片
-      </DropdownMenuItem>
-      <DropdownMenuItem v-else @select="conceal(sources)">
-        <template #icon><EyeOff /></template>
-        恢复模糊
-      </DropdownMenuItem>
+      <template v-if="canReveal">
+        <DropdownMenuItem v-if="masked" @select="reveal(sources)">
+          <template #icon><Eye /></template>
+          显示图片
+        </DropdownMenuItem>
+        <DropdownMenuItem v-else @select="conceal(sources)">
+          <template #icon><EyeOff /></template>
+          恢复模糊
+        </DropdownMenuItem>
+      </template>
       <DropdownMenuItem @select="navigateTo('/setting/preference')">
         <template #icon><SlidersHorizontal /></template>
         调整显示设置

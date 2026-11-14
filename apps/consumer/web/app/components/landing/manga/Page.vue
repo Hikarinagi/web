@@ -3,7 +3,6 @@
   import type { MangasPageData } from '~~/server/api/pages/mangas.get'
   import { chapterLabel, dayLabel, daysBetween, relativeDay } from '~/features/landing/labels'
   import { mangaWork } from '~/features/landing/works'
-  import { mangaSerialStatusLabel } from '~/features/manga/labels'
 
   defineOptions({ name: 'LandingMangaPage' })
   const props = defineProps<{ data: MangasPageData }>()
@@ -49,13 +48,6 @@
       },
     ].filter(row => row.items.length),
   )
-  const hot = computed(() =>
-    props.data.hot.map(item => ({
-      work: mangaWork(item),
-      detail: chapterLabel(item.chapter),
-      status: mangaSerialStatusLabel(item.serial_status) || undefined,
-    })),
-  )
   const charts = computed(() =>
     [
       {
@@ -84,12 +76,9 @@
     <LandingUpdateStage :days="data.days" :today="data.today" :selected="data.selected_day" />
     <Stack gap="none" class="mx-auto w-full max-w-(--entry-container) gap-12 px-4 lg:px-6">
       <LandingLead v-if="lead.length" :rows="lead" ratio="2/3" />
-      <LandingSection v-if="hot.length" title="本周热门">
-        <template #actions>
-          <ViewAllLink to="/mangas/ranking">排行榜</ViewAllLink>
-        </template>
-        <LandingPodiumBook :items="hot" />
-      </LandingSection>
+      <RankingShowcase v-if="data.ranking.length" medium="mangas">
+        <MangaRankingRow v-for="item in data.ranking" :key="item.id" :item="item" />
+      </RankingShowcase>
       <LandingSection
         v-for="row in data.similar"
         :key="row.ref.id"

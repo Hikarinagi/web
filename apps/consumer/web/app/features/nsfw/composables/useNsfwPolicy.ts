@@ -23,11 +23,13 @@ export function useNsfwPolicy() {
     return hasNsfw(nsfw) && contentLimit.value === NEVER_SHOW_NSFW
   }
 
-  function shouldBlurNsfw(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {
-    return hasNsfw(nsfw) && contentLimit.value === SHOW_NSFW_WITH_SPOILER
+  function shouldMaskNsfw(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {
+    return hasNsfw(nsfw) && contentLimit.value !== JUST_SHOW_NSFW
   }
 
-  return { contentLimit, shouldBlockNsfw, shouldBlurNsfw }
+  const canReveal = computed(() => contentLimit.value === SHOW_NSFW_WITH_SPOILER)
+
+  return { contentLimit, shouldBlockNsfw, shouldMaskNsfw, canReveal }
 }
 
 export function useNsfwDetailGate(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {

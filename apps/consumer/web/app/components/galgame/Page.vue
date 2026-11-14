@@ -15,7 +15,15 @@
   import type { EntryReview } from '~/components/entry/Reviews.vue'
 
   defineOptions({ name: 'GalgamePage' })
-  const props = defineProps<{ data: GalgamePageData; galgameId: number; embedded?: boolean }>()
+  const props = withDefaults(
+    defineProps<{
+      data: GalgamePageData
+      galgameId: number
+      embedded?: boolean
+      tinted?: boolean
+    }>(),
+    { tinted: true },
+  )
 
   const title = computed(() => props.data.display.title || `Galgame #${props.data.galgame.id}`)
   const images = computed(() => props.data.galgame.images.filter(image => image.src.trim()))
@@ -26,7 +34,7 @@
     () => images.value[index.value]?.thumb_hash ?? cover.value?.thumb_hash ?? null,
   )
   const glow = computed(() => blurUrl(hash.value))
-  usePageTone(hash, { enabled: !props.embedded })
+  usePageTone(hash, { enabled: props.tinted })
 
   const values = (property: string) =>
     props.data.facts.find(fact => fact.property === property)?.values ?? []

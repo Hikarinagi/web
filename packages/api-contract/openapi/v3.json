@@ -22096,6 +22096,18 @@
             "description": "Galgame ID",
             "type": "number"
           },
+          "images": {
+            "description": "可公开的示例 CG，至多四张",
+            "items": {
+              "$ref": "#/components/schemas/RatedMediaAssetDto"
+            },
+            "type": "array"
+          },
+          "intro": {
+            "description": "简介的开头",
+            "nullable": true,
+            "type": "string"
+          },
           "maker": {
             "nullable": true,
             "type": "string"
@@ -22159,7 +22171,9 @@
           "maker",
           "platforms",
           "age_rating",
-          "price"
+          "price",
+          "images",
+          "intro"
         ],
         "type": "object"
       },
@@ -27114,8 +27128,25 @@
           "rating": {
             "$ref": "#/components/schemas/WorkRatingDto"
           },
+          "tags": {
+            "description": "票数最高的至多四个标签，不含剧透标签",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "volume_count": {
             "type": "number"
+          },
+          "volume_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "有封面的卷中已发售的最新一卷的封面",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -27136,7 +27167,9 @@
           "intro",
           "rank",
           "previous",
-          "rating"
+          "rating",
+          "tags",
+          "volume_cover"
         ],
         "type": "object"
       },
@@ -34090,6 +34123,23 @@
               "PAUSED": "暂停连载",
               "SERIALIZING": "连载中"
             }
+          },
+          "tags": {
+            "description": "票数最高的至多四个标签，不含剧透标签",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "volume_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "有封面的卷中已发售的最新一卷的封面",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -34109,7 +34159,9 @@
           "intro",
           "rank",
           "previous",
-          "rating"
+          "rating",
+          "tags",
+          "volume_cover"
         ],
         "type": "object"
       },
@@ -86488,6 +86540,18 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "description": "只取前若干名",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -86595,6 +86659,18 @@
                 "month"
               ],
               "type": "string"
+            }
+          },
+          {
+            "description": "只取前若干名",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
             }
           }
         ],

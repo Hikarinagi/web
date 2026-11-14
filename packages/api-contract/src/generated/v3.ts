@@ -21120,6 +21120,10 @@ export interface components {
             covers: components["schemas"]["GalgameCoverRelationDto"][];
             /** @description Galgame ID */
             id: number;
+            /** @description 可公开的示例 CG，至多四张 */
+            images: components["schemas"]["RatedMediaAssetDto"][];
+            /** @description 简介的开头 */
+            intro: string | null;
             maker: string | null;
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
@@ -22440,7 +22444,11 @@ export interface components {
             publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
             rank: number;
             rating: components["schemas"]["WorkRatingDto"];
+            /** @description 票数最高的至多四个标签，不含剧透标签 */
+            tags: string[];
             volume_count: number;
+            /** @description 有封面的卷中已发售的最新一卷的封面 */
+            volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
         };
         LightNovelRateCardSummaryResDto: {
             id: number;
@@ -24240,6 +24248,10 @@ export interface components {
             rating: components["schemas"]["WorkRatingDto"];
             /** @description 连载状态，系列没有记录出版状态时为空 */
             serial_status: components["schemas"]["MangaSerialStatus"] | null;
+            /** @description 票数最高的至多四个标签，不含剧透标签 */
+            tags: string[];
+            /** @description 有封面的卷中已发售的最新一卷的封面 */
+            volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
         };
         MangaRateCardSummaryResDto: {
             id: number;
@@ -46506,6 +46518,8 @@ export interface operations {
         parameters: {
             query?: {
                 period?: "day" | "week" | "month";
+                /** @description 只取前若干名 */
+                limit?: number;
             };
             header?: never;
             path?: never;
@@ -46573,6 +46587,8 @@ export interface operations {
         parameters: {
             query?: {
                 period?: "day" | "week" | "month";
+                /** @description 只取前若干名 */
+                limit?: number;
             };
             header?: never;
             path?: never;

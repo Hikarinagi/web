@@ -69,6 +69,7 @@
         :data="data"
         :galgame-id="galgame"
         embedded
+        :tinted="false"
         inert
         class="[--app-header-height:0px]"
       />

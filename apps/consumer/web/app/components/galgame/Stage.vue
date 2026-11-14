@@ -21,6 +21,9 @@
   const images = computed(() => props.data.galgame.images.filter(image => image.src.trim()))
   const cover = useGalgameCover(() => props.data.galgame)
   const backdrop = computed(() => images.value[index.value] ?? cover.value)
+  const soft = computed(
+    () => !images.value.length && (cover.value?.width ?? 0) <= (cover.value?.height ?? 0),
+  )
   const brand = computed(() => props.data.display.brands[0] ?? null)
   const subtitle = computed(() => {
     const { display, galgame } = props.data
@@ -37,12 +40,11 @@
     ].filter(item => item.text)
   })
   const stats = computed(() => props.data.rate_stats)
-  const backdropProcessing = {
-    width: 1920,
-    quality: 80,
-    fit: 'scale-down',
-    format: 'auto',
-  } as const
+  const backdropProcessing = computed(() =>
+    soft.value
+      ? ({ width: 480, quality: 60, fit: 'scale-down', format: 'auto' } as const)
+      : ({ width: 1920, quality: 80, fit: 'scale-down', format: 'auto' } as const),
+  )
   const thumbProcessing = { width: 240, quality: 72, fit: 'cover', format: 'auto' } as const
 </script>
 
@@ -63,11 +65,11 @@
         <HikariImage
           :key="backdrop?.src ?? 'none'"
           :src="backdrop"
-          :alt="`${title} 的游戏画面`"
+          :alt="soft ? '' : `${title} 的游戏画面`"
           :preload="{ fetchPriority: 'high' }"
           :processing="backdropProcessing"
           class="absolute inset-0 size-full"
-          image-class="object-cover object-top"
+          :image-class="cn('object-cover', soft ? 'scale-110 blur-3xl' : 'object-top')"
         />
       </Transition>
       <Stack

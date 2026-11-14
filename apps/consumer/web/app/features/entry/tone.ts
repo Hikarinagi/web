@@ -48,3 +48,16 @@ export function stageTone(hash?: string | null) {
     '--tone-glow': Math.min(0.4, 40 / Math.max(luminance - 20, 1)).toFixed(2),
   }
 }
+
+export function rowTone(hash?: string | null) {
+  const [hue, saturation] = toHsl(averageColor(hash)) as [number, number]
+  const h = Math.round(hue)
+  const s =
+    saturation < 0.06 ? 0 : Math.round(Math.min(Math.max(saturation * 1.8, 0.3), 0.58) * 100)
+  return {
+    '--row-bg': `hsl(${h} ${s}% var(--row-bg-l))`,
+    '--row-line': `hsl(${h} ${s}% var(--row-line-l))`,
+    '--row-ink': `hsl(${h} ${s}% var(--row-ink-l))`,
+    '--row-soft': `hsl(${h} ${Math.round(s * 0.7)}% var(--row-soft-l))`,
+  }
+}

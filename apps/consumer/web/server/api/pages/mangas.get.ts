@@ -1,14 +1,18 @@
 import { getCookie, type H3Event } from 'h3'
 import { VISITOR_COOKIE, VISITOR_PATTERN } from '#shared/utils/visitor'
+import { RANKING_LEAD } from '~/features/ranking/ranking'
 import { fetchBackendData } from '../../utils/backend-api'
 import { definePageBffHandler } from '../../utils/page-bff'
 
 async function handler(event: H3Event) {
   const visitor = getCookie(event, VISITOR_COOKIE)
-  const [landing, shelf, banners] = await Promise.all([
+  const [landing, ranking, shelf, banners] = await Promise.all([
     fetchBackendData(event, '/api/v3/landing/mangas', {
       query: visitor && VISITOR_PATTERN.test(visitor) ? { visitor } : {},
     }),
+    fetchBackendData(event, '/api/v3/landing/mangas/ranking', {
+      query: { period: 'week', limit: RANKING_LEAD },
+    }).catch(() => null),
     fetchBackendData(event, '/api/v3/reader/me/manga/reading', {
       query: { page: 1, page_size: 12, status: 'reading' },
     }).catch(() => null),
@@ -19,6 +23,7 @@ async function handler(event: H3Event) {
   const updated = new Set(landing.updated.map(item => item.id))
   return {
     ...landing,
+    ranking: ranking?.items ?? [],
     reading: (shelf?.items ?? []).filter(item => !updated.has(item.manga_id)),
     banners,
   }

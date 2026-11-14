@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { Stack, VisuallyHidden } from '@hina-ui/vue'
-  import { NOVEL_STATUS_CN } from '@hikarinagi/shared'
   import type { LightNovelsPageData } from '~~/server/api/pages/light-novels.get'
   import { dayLabel, volumeLabel } from '~/features/landing/labels'
   import { novelWork } from '~/features/landing/works'
@@ -46,13 +45,6 @@
       },
     ].filter(row => row.items.length),
   )
-  const hot = computed(() =>
-    props.data.hot.map(item => ({
-      work: novelWork(item),
-      detail: `共 ${item.volume_count} 卷`,
-      status: item.novel_status ? NOVEL_STATUS_CN[item.novel_status] : undefined,
-    })),
-  )
   const finished = computed(() =>
     props.data.finished.map(item => ({
       work: novelWork(item),
@@ -75,12 +67,9 @@
       "
     >
       <LandingLead v-if="lead.length" :rows="lead" ratio="2/3" />
-      <LandingSection v-if="hot.length" title="本周热门">
-        <template #actions>
-          <ViewAllLink to="/light-novels/ranking">排行榜</ViewAllLink>
-        </template>
-        <LandingPodiumBook :items="hot" />
-      </LandingSection>
+      <RankingShowcase v-if="data.ranking.length" medium="light-novels">
+        <LightNovelRankingRow v-for="item in data.ranking" :key="item.id" :item="item" />
+      </RankingShowcase>
       <LandingSection
         v-for="row in data.similar"
         :key="row.ref.id"
