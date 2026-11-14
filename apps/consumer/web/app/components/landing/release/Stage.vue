@@ -75,6 +75,7 @@
           <LandingReleaseList :days="days" :today="today" :selected="selected.id" @pick="pick" />
         </Card>
       </Grid>
+      <ViewAllLink to="/galgames/calendar" class="self-end">发售日历</ViewAllLink>
     </Stack>
   </Section>
 </template>

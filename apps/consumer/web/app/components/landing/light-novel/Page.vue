@@ -80,6 +80,9 @@
     >
       <LandingLead v-if="!data.volumes.length && lead.length" :rows="lead" ratio="2/3" />
       <LandingSection v-if="hot.length" title="本周热门">
+        <template #actions>
+          <ViewAllLink to="/light-novels/ranking">排行榜</ViewAllLink>
+        </template>
         <LandingPodiumBook :items="hot" />
       </LandingSection>
       <LandingSection

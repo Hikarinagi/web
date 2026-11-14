@@ -88,6 +88,9 @@
     </LandingUpdateStage>
     <Stack gap="none" class="mx-auto w-full max-w-(--entry-container) gap-12 px-4 lg:px-6">
       <LandingSection v-if="hot.length" title="本周热门">
+        <template #actions>
+          <ViewAllLink to="/mangas/ranking">排行榜</ViewAllLink>
+        </template>
         <LandingPodiumBook :items="hot" />
       </LandingSection>
       <LandingSection
