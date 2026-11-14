@@ -4873,12 +4873,32 @@
             "nullable": true,
             "type": "object"
           },
+          "head_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "个人主页的头图",
+            "nullable": true,
+            "type": "object"
+          },
           "id": {
             "description": "用户 ID",
             "type": "number"
           },
           "is_bot": {
             "type": "boolean"
+          },
+          "mobile_head_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "手机端个人主页的头图",
+            "nullable": true,
+            "type": "object"
           },
           "moderation_counts": {
             "items": {
@@ -4946,6 +4966,8 @@
           "is_bot",
           "bio",
           "signature",
+          "head_cover",
+          "mobile_head_cover",
           "moderation_counts",
           "reports_against",
           "permission_groups",
@@ -59028,6 +59050,18 @@
             "maxLength": 500,
             "nullable": true,
             "type": "string"
+          },
+          "head_cover_id": {
+            "description": "个人主页的头图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "mobile_head_cover_id": {
+            "description": "手机端个人主页的头图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
           },
           "nickname": {
             "maxLength": 32,

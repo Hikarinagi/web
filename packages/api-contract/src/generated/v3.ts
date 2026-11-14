@@ -16887,9 +16887,13 @@ export interface components {
             equipped_badges: components["schemas"]["EquippedBadgeDto"][];
             /** @description 当前佩戴的头像框 */
             equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 个人主页的头图 */
+            head_cover: components["schemas"]["MediaAssetDto"] | null;
             /** @description 用户 ID */
             id: number;
             is_bot: boolean;
+            /** @description 手机端个人主页的头图 */
+            mobile_head_cover: components["schemas"]["MediaAssetDto"] | null;
             moderation_counts: components["schemas"]["ModerationCountDto"][];
             /** @description 用户名 */
             name: string;
@@ -30580,6 +30584,10 @@ export interface components {
         UserProfileDto: {
             avatar_id?: number | null;
             bio?: string | null;
+            /** @description 个人主页的头图 */
+            head_cover_id?: number | null;
+            /** @description 手机端个人主页的头图 */
+            mobile_head_cover_id?: number | null;
             nickname?: string;
             signature?: string | null;
         };
