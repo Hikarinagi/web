@@ -47,7 +47,7 @@
           :class="volume.id === current ? 'w-28' : 'w-22 opacity-75 hover:opacity-100'"
         >
           <EntryBookCover
-            :media="volume.cover"
+            :media="volume.display_cover"
             :alt="`${getMangaVolumeTitle(volume)} 封面`"
             :width="240"
             :class="

@@ -144,7 +144,7 @@ function lightNovelVolumeMap(
   const series = raw.series?.name_cn || raw.series?.name || null
   const volumeTag =
     raw.volume_label || (raw.volume_number != null ? `第 ${raw.volume_number} 卷` : null)
-  const cover = topWorkCover(raw.covers)
+  const cover = raw.display_cover
   const summary: LightNovelVolumeCardSummary = {
     id: raw.id,
     name: raw.name,

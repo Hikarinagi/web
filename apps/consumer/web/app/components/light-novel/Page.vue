@@ -7,11 +7,7 @@
   import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
   import { useLightNovelRate } from '~/features/light-novel/useLightNovelRate'
   import { topVotedMedia } from '~/utils/media/image'
-  import {
-    getLightNovelCover,
-    getLightNovelTitle,
-    getLightNovelVolumeCover,
-  } from '~/utils/media/light-novel'
+  import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
 
   defineOptions({ name: 'LightNovelPage' })
@@ -19,9 +15,8 @@
 
   const title = computed(() => getLightNovelTitle(props.data.light_novel))
   const hash = computed(() => {
-    const volume = props.data.volumes.at(-1)
     const cover =
-      (volume && getLightNovelVolumeCover(volume)) ?? getLightNovelCover(props.data.light_novel)
+      props.data.volumes.at(-1)?.display_cover ?? getLightNovelCover(props.data.light_novel)
     return cover?.thumb_hash ?? null
   })
   usePageTone(hash, { paper: true })

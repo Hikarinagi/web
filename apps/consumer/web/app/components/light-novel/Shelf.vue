@@ -23,11 +23,7 @@
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { dayText, monthText } from '~/features/entry/date'
   import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
-  import {
-    getLightNovelVolumeCover,
-    getLightNovelVolumeLabel,
-    getLightNovelVolumeTitle,
-  } from '~/utils/media/light-novel'
+  import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
   type Volume = LightNovelPageData['volumes'][number]
 
@@ -100,7 +96,7 @@
         :aria-label="label(volume)"
       >
         <EntryBookCover
-          :media="getLightNovelVolumeCover(volume)"
+          :media="volume.display_cover"
           :alt="`${label(volume)}封面`"
           :class="
             current === volume.id
@@ -169,8 +165,8 @@
           <TableCell class="max-w-xs">
             <Inline gap="sm" align="center" :wrap="false">
               <HikariImage
-                v-if="getLightNovelVolumeCover(volume)"
-                :src="getLightNovelVolumeCover(volume)"
+                v-if="volume.display_cover"
+                :src="volume.display_cover"
                 alt=""
                 :ratio="7 / 10"
                 preset="thumbnail"

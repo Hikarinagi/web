@@ -3,7 +3,6 @@
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
   import { usePageTone } from '~/features/entry/usePageTone'
   import { getRevisionEditPath } from '~/features/revision/resources'
-  import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'MangaVolumePage' })
   const props = defineProps<{ data: MangaVolumePageData; volumeId: number }>()
@@ -16,9 +15,7 @@
   )
   const next = computed(() => (index.value >= 0 ? props.data.volumes[index.value + 1] : undefined))
 
-  const cover = computed(
-    () => props.data.volume.cover ?? topVotedMedia(props.data.volume.manga.covers),
-  )
+  const cover = computed(() => props.data.volume.display_cover)
   usePageTone(
     computed(() => cover.value?.thumb_hash ?? null),
     { paper: true },

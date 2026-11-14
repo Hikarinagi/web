@@ -21881,6 +21881,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -27947,6 +27948,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -28286,6 +28288,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -28345,6 +28348,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -28400,6 +28404,16 @@
           "created_at": {
             "format": "date-time",
             "type": "string"
+          },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
           },
           "download_times": {
             "type": "number"
@@ -28544,6 +28558,7 @@
           "name",
           "name_cn",
           "covers",
+          "display_cover",
           "isbn",
           "price_amount",
           "price_currency",
@@ -28634,6 +28649,16 @@
             },
             "type": "array"
           },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
+          },
           "has_epub": {
             "type": "boolean"
           },
@@ -28690,6 +28715,7 @@
           "publication_date",
           "publication_date_precision",
           "covers",
+          "display_cover",
           "series",
           "has_epub"
         ],
@@ -28744,6 +28770,16 @@
               "$ref": "#/components/schemas/LightNovelVolumeCoverRelationDto"
             },
             "type": "array"
+          },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "type": "number"
@@ -28819,6 +28855,7 @@
           "name",
           "name_cn",
           "covers",
+          "display_cover",
           "publication_date",
           "publication_date_precision",
           "relation",
@@ -28837,6 +28874,16 @@
               "$ref": "#/components/schemas/LightNovelVolumeCoverRelationDto"
             },
             "type": "array"
+          },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "type": "number"
@@ -28891,6 +28938,7 @@
           "publication_date",
           "publication_date_precision",
           "covers",
+          "display_cover",
           "series"
         ],
         "type": "object"
@@ -28926,6 +28974,16 @@
               "$ref": "#/components/schemas/LightNovelVolumeCoverRelationDto"
             },
             "type": "array"
+          },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
           },
           "id": {
             "type": "number"
@@ -28994,6 +29052,7 @@
           "publication_date",
           "publication_date_precision",
           "covers",
+          "display_cover",
           "series",
           "previous",
           "readers",
@@ -31242,7 +31301,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "卷取单行本条目封面",
+            "description": "卷先取单行本条目的封面，其次取本章的封面，都没有时取所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -35937,6 +35996,16 @@
             "format": "date-time",
             "type": "string"
           },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "nullable": true,
+            "type": "object"
+          },
           "editions": {
             "items": {
               "$ref": "#/components/schemas/MangaEditionDto"
@@ -36071,6 +36140,7 @@
           "publication_date_precision",
           "page_count",
           "cover",
+          "display_cover",
           "status",
           "views",
           "read_times",
@@ -36089,6 +36159,16 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "nullable": true,
+            "type": "object"
+          },
+          "display_cover": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -36138,6 +36218,7 @@
           "name",
           "name_cn",
           "cover",
+          "display_cover",
           "isbn",
           "publication_date",
           "publication_date_precision",
@@ -47355,6 +47436,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
+            "description": "当前卷的封面，当前卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },
@@ -49467,6 +49549,7 @@
                 "$ref": "#/components/schemas/SearchCoverDto"
               }
             ],
+            "description": "轻小说卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
           },

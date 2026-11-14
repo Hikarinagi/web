@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
-  import { getLightNovelVolumeCover } from '~/utils/media/light-novel'
 
   defineOptions({ name: 'LightNovelHeroCoverStack' })
   const props = defineProps<{
@@ -12,13 +11,16 @@
   }>()
 
   const covers = computed(() => {
-    const items = props.volumes.slice(-3).map(getLightNovelVolumeCover)
+    const items = props.volumes.slice(-3).map(volume => volume.display_cover)
     return items.length ? items : [props.fallback]
   })
   const front = computed(() => covers.value.at(-1) ?? null)
   const middle = computed(() => (covers.value.length > 1 ? covers.value.at(-2) : null))
   const back = computed(() => (covers.value.length > 2 ? covers.value[0] : null))
-  const allCovers = computed(() => [props.fallback, ...props.volumes.map(getLightNovelVolumeCover)])
+  const allCovers = computed(() => [
+    props.fallback,
+    ...props.volumes.map(volume => volume.display_cover),
+  ])
 </script>
 
 <template>

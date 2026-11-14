@@ -21068,6 +21068,7 @@ export interface components {
             work_refs: components["schemas"]["FeedWorkRefDto"][];
         };
         FeedVolumeRefDto: {
+            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
@@ -22650,6 +22651,7 @@ export interface components {
             ref: components["schemas"]["LandingRefDto"];
         };
         LightNovelStageVolumeDto: {
+            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             intro: string | null;
@@ -22742,6 +22744,7 @@ export interface components {
             tag: components["schemas"]["TagPreviewDto"];
         };
         LightNovelVolumeBriefDto: {
+            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             /** @description 卷号原文 */
@@ -22756,6 +22759,7 @@ export interface components {
             nsfw: boolean;
             publication_date: string | null;
             series_name: string | null;
+            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
             top_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             volume_label: string | null;
             volume_number: number | null;
@@ -22769,6 +22773,8 @@ export interface components {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
             /** Format: date-time */
             created_at: string;
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             download_times: number;
             /** @description 条目 ID */
             entry_id: number;
@@ -22826,6 +22832,8 @@ export interface components {
         };
         LightNovelVolumeListItemDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             has_epub: boolean;
             id: number;
             name: string | null;
@@ -22853,6 +22861,8 @@ export interface components {
         };
         LightNovelVolumeRelationDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             isbn: string | null;
             name: string;
@@ -22876,6 +22886,8 @@ export interface components {
         };
         LightNovelVolumeSummaryDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
             name_cn: string | null;
@@ -22896,6 +22908,8 @@ export interface components {
         };
         LightNovelVolumeWantedDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
             name_cn: string | null;
@@ -23499,7 +23513,7 @@ export interface components {
         MangaChapterRelationDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
-            /** @description 卷取单行本条目封面 */
+            /** @description 卷先取单行本条目的封面，其次取本章的封面，都没有时取所属系列的封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /**
              * Format: date-time
@@ -24721,6 +24735,8 @@ export interface components {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             editions: components["schemas"]["MangaEditionDto"][] | null;
             /** @description 条目 ID */
             entry_id: number;
@@ -24755,6 +24771,8 @@ export interface components {
         };
         MangaVolumeRelationDto: {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
+            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             isbn: string | null;
             name: string | null;
@@ -27714,6 +27732,7 @@ export interface components {
             author: string | null;
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             current_chapter_title: string | null;
+            /** @description 当前卷的封面，当前卷没有封面时为所属系列的封面 */
             current_volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             current_volume_id: number;
             current_volume_number: number | null;
@@ -28237,6 +28256,7 @@ export interface components {
             width: number | null;
         };
         SearchHitDto: {
+            /** @description 轻小说卷没有封面时为所属系列的封面 */
             cover: components["schemas"]["SearchCoverDto"] | null;
             /** @description 开发厂商，仅 galgame 命中携带 */
             developer: string | null;

@@ -5,7 +5,6 @@ import { topVotedMedia } from './image'
 type LightNovelDetail = LightNovelPageData['light_novel']
 type LightNovelVolume = LightNovelPageData['volumes'][number] | LightNovelVolumePageData['volume']
 type LightNovelCover = LightNovelDetail['covers'][number]['media']
-type LightNovelVolumeCover = LightNovelVolume['covers'][number]['media']
 
 export function getLightNovelTitle(lightNovel: LightNovelDetail) {
   return lightNovel.name_cn || lightNovel.name
@@ -32,12 +31,4 @@ export function getLightNovelVolumeLabel(
   if (label && !/^\d+(\.\d+)?$/.test(label)) return label
   const number = label ?? volume.volume_number
   return number != null ? `第 ${number} 卷` : null
-}
-
-export function getLightNovelVolumeCover(volume: LightNovelVolume): LightNovelVolumeCover | null {
-  return topVotedMedia(volume.covers)
-}
-
-export function getLightNovelVolumeCoverSrc(volume: LightNovelVolume) {
-  return getLightNovelVolumeCover(volume)?.src || undefined
 }

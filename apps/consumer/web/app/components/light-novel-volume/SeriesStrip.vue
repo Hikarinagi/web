@@ -2,7 +2,7 @@
   import { Inline, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { monthText } from '~/features/entry/date'
-  import { getLightNovelVolumeCover, getLightNovelVolumeLabel } from '~/utils/media/light-novel'
+  import { getLightNovelVolumeLabel } from '~/utils/media/light-novel'
 
   defineOptions({ name: 'LightNovelVolumeSeriesStrip' })
   defineProps<{
@@ -47,7 +47,7 @@
           :class="volume.id === current ? 'w-28' : 'w-22 opacity-75 hover:opacity-100'"
         >
           <EntryBookCover
-            :media="getLightNovelVolumeCover(volume)"
+            :media="volume.display_cover"
             :alt="`${getLightNovelVolumeLabel(volume)}封面`"
             :width="240"
             :class="

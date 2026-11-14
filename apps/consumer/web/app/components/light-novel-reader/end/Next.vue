@@ -4,11 +4,7 @@
   import { NuxtLink } from '#components'
   import type { LightNovelVolumeReaderPageData } from '~~/server/api/pages/light-novel-volumes/[id]/reader.get'
   import { useReader } from '~/features/light-novel-reader/context'
-  import {
-    getLightNovelVolumeCover,
-    getLightNovelVolumeLabel,
-    getLightNovelVolumeTitle,
-  } from '~/utils/media/light-novel'
+  import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
   defineOptions({ name: 'LightNovelReaderEndNext' })
 
@@ -42,7 +38,7 @@
   <Card v-if="next">
     <Inline gap="md" align="center" :wrap="false">
       <HikariImage
-        :src="getLightNovelVolumeCover(next)"
+        :src="next.display_cover"
         :alt="getLightNovelVolumeTitle(next)"
         class="aspect-7/10 w-13.5 shrink-0 rounded bg-subtle"
         image-class="object-cover"

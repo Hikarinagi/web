@@ -3,7 +3,6 @@
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { usePageTone } from '~/features/entry/usePageTone'
   import { getRevisionEditPath } from '~/features/revision/resources'
-  import { getLightNovelCover, getLightNovelVolumeCover } from '~/utils/media/light-novel'
 
   defineOptions({ name: 'LightNovelVolumePage' })
   const props = defineProps<{ data: LightNovelVolumePageData; volumeId: number }>()
@@ -19,11 +18,7 @@
   )
   const next = computed(() => (index.value >= 0 ? props.data.volumes[index.value + 1] : undefined))
 
-  const hash = computed(() => {
-    const cover =
-      getLightNovelVolumeCover(props.data.volume) ?? getLightNovelCover(props.data.light_novel)
-    return cover?.thumb_hash ?? null
-  })
+  const hash = computed(() => props.data.volume.display_cover?.thumb_hash ?? null)
   usePageTone(hash, { paper: true })
 
   const summary = computed(() =>

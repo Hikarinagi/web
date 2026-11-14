@@ -5,7 +5,6 @@
   import { readSpan, readTime } from '~/features/light-novel-reader/end'
   import {
     getLightNovelTitle,
-    getLightNovelVolumeCover,
     getLightNovelVolumeLabel,
     getLightNovelVolumeTitle,
   } from '~/utils/media/light-novel'
@@ -49,7 +48,7 @@
   <Stack gap="lg">
     <Inline gap="lg" align="start" :wrap="false">
       <HikariImage
-        :src="getLightNovelVolumeCover(data.volume)"
+        :src="data.volume.display_cover"
         :alt="title"
         class="aspect-7/10 w-26 shrink-0 rounded-md bg-subtle"
         image-class="object-cover"

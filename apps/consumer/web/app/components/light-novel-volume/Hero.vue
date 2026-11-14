@@ -4,12 +4,7 @@
   import { NuxtLink } from '#components'
   import type { LightNovelVolumePageData } from '~~/server/api/pages/light-novel-volumes/[id].get'
   import { dayText } from '~/features/entry/date'
-  import {
-    getLightNovelCover,
-    getLightNovelTitle,
-    getLightNovelVolumeCover,
-    getLightNovelVolumeTitle,
-  } from '~/utils/media/light-novel'
+  import { getLightNovelTitle, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
   defineOptions({ name: 'LightNovelVolumeHero' })
   const props = defineProps<{
@@ -29,9 +24,7 @@
 
   const title = computed(() => getLightNovelVolumeTitle(props.volume))
   const seriesTitle = computed(() => getLightNovelTitle(props.lightNovel))
-  const cover = computed(
-    () => getLightNovelVolumeCover(props.volume) ?? getLightNovelCover(props.lightNovel),
-  )
+  const cover = computed(() => props.volume.display_cover)
   const groups = computed(() =>
     ['author', 'illustrator'].flatMap(relation => {
       const people = props.people.filter(item => item.relation === relation)

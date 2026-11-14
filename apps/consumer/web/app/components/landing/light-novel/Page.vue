@@ -31,7 +31,7 @@
             to: `/light-novels/${item.light_novel_id}`,
             title: item.title,
             sub: item.author ?? '',
-            cover: item.current_volume_cover ?? item.cover,
+            cover: item.current_volume_cover,
           },
           to: `/light-novel-volumes/${item.current_volume_id}/read`,
           note:

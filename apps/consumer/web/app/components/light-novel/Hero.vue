@@ -4,11 +4,7 @@
   import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { monthText } from '~/features/entry/date'
-  import {
-    getLightNovelCover,
-    getLightNovelTitle,
-    getLightNovelVolumeCover,
-  } from '~/utils/media/light-novel'
+  import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
 
   const props = defineProps<{
     lightNovel: LightNovelPageData['light_novel']
@@ -32,10 +28,7 @@
       : '',
   )
   const cover = computed(() => getLightNovelCover(props.lightNovel))
-  const latest = computed(() => {
-    const volume = props.volumes.at(-1)
-    return (volume && getLightNovelVolumeCover(volume)) ?? cover.value
-  })
+  const latest = computed(() => props.volumes.at(-1)?.display_cover ?? cover.value)
   const first = computed(() => props.volumes.find(volume => volume.publication_date))
   const last = computed(() => props.volumes.findLast(volume => volume.publication_date))
   const finished = computed(() => props.lightNovel.novel_status === 'FINISHED')

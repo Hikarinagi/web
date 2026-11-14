@@ -47,7 +47,7 @@
             class="w-12 shrink-0 overflow-hidden rounded-md ring-1 ring-line"
           >
             <HikariImage
-              :src="row.entry.cover"
+              :src="row.entry.display_cover"
               :alt="row.label"
               class="size-full"
               image-class="object-cover"
