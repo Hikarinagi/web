@@ -8965,6 +8965,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/landing/galgames/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LandingController_galgameCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/landing/galgames/feed": {
         parameters: {
             query?: never;
@@ -9013,6 +9029,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/landing/light-novels/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LandingController_lightNovelRanking"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/landing/mangas": {
         parameters: {
             query?: never;
@@ -9037,6 +9069,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["LandingController_mangaFeed"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/landing/mangas/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LandingController_mangaRanking"];
         put?: never;
         post?: never;
         delete?: never;
@@ -21050,6 +21098,53 @@ export interface components {
             review: number;
             translation: number;
         };
+        GalgameCalendarDto: {
+            /** @description 有发售记录的最早年份 */
+            first_year: number;
+            /** @description 当月发售的作品，按发售日排列，只精确到月的排在最后 */
+            items: components["schemas"]["GalgameCalendarItemDto"][];
+            /** @description 有发售记录的最晚年份 */
+            last_year: number;
+            /** @description 所显示的年月 */
+            month: string;
+            /** @description 所在年份各月的作品数 */
+            months: components["schemas"]["GalgameCalendarMonthDto"][];
+            /** @description 东八区今天的日期 */
+            today: string;
+        };
+        GalgameCalendarItemDto: {
+            /** @enum {string|null} */
+            age_rating: "ALL_AGES" | "R15" | "R18" | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            maker: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            platforms: string[];
+            /** @description 各版本中最低的日元价格 */
+            price: string | null;
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
+        GalgameCalendarMonthDto: {
+            /** @description 当月发售的作品数 */
+            count: number;
+            /** @description 年月，如 2026-11 */
+            month: string;
+        };
         GalgameCardSummaryResDto: {
             id: number;
             nsfw: boolean;
@@ -22297,6 +22392,52 @@ export interface components {
         LightNovelProgressOverviewDto: {
             continue_volume_id: number | null;
             progresses: components["schemas"]["LightNovelProgressEntryDto"][];
+        };
+        LightNovelRankingDto: {
+            /** @description 统计区间的第一天 */
+            from: string;
+            items: components["schemas"]["LightNovelRankingItemDto"][];
+            /** @enum {string} */
+            period: "day" | "week" | "month";
+            /** @description 统计区间的最后一天 */
+            to: string;
+        };
+        LightNovelRankingItemDto: {
+            /** @description 作者 */
+            author: components["schemas"]["LightNovelSummaryPersonDto"] | null;
+            /** @description 所属文库 */
+            bunko: components["schemas"]["LightNovelSummaryProducerDto"] | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["LightNovelCoverRelationDto"][];
+            /** @description 轻小说 ID */
+            id: number;
+            maker: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /**
+             * @description 连载状态，系列没有记录出版状态时为空
+             * @enum {string|null}
+             */
+            novel_status: "SERIALIZING" | "FINISHED" | "PAUSED" | "ABANDONED" | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 上一期的名次，上一期未上榜为空 */
+            previous: number | null;
+            /**
+             * Format: date-time
+             * @description 首卷出版日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            /** @description 出版方 */
+            publishers: components["schemas"]["LightNovelSummaryProducerRelationDto"][];
+            rank: number;
+            rating: components["schemas"]["WorkRatingDto"];
+            volume_count: number;
         };
         LightNovelRateCardSummaryResDto: {
             id: number;
@@ -24036,6 +24177,51 @@ export interface components {
             name: string;
             paused: boolean;
             waiting: number;
+        };
+        MangaRankingDto: {
+            /** @description 统计区间的第一天 */
+            from: string;
+            items: components["schemas"]["MangaRankingItemDto"][];
+            /** @enum {string} */
+            period: "day" | "week" | "month";
+            /** @description 统计区间的最后一天 */
+            to: string;
+        };
+        MangaRankingItemDto: {
+            /** @description 最新一话 */
+            chapter: components["schemas"]["LandingChapterDto"] | null;
+            /** @description 连载话数 */
+            chapters: number | null;
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["MangaCoverRelationDto"][];
+            /** @description 漫画 ID */
+            id: number;
+            /**
+             * Format: date-time
+             * @description 最新一话的更新时间
+             */
+            latest_chapter_at: string | null;
+            maker: string | null;
+            /** @description 原名 */
+            name: string;
+            /** @description 中文名 */
+            name_cn: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 上一期的名次，上一期未上榜为空 */
+            previous: number | null;
+            /**
+             * Format: date-time
+             * @description 开始连载日期
+             */
+            publication_date: string | null;
+            publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 新的出版状态编码 */
+            publication_status: string | null;
+            rank: number;
+            rating: components["schemas"]["WorkRatingDto"];
+            /** @description 连载状态，系列没有记录出版状态时为空 */
+            serial_status: components["schemas"]["MangaSerialStatus"] | null;
         };
         MangaRateCardSummaryResDto: {
             id: number;
@@ -46200,6 +46386,28 @@ export interface operations {
             };
         };
     };
+    LandingController_galgameCalendar: {
+        parameters: {
+            query?: {
+                /** @description 年月，如 2026-11；不传为东八区的本月 */
+                month?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameCalendarDto"];
+                };
+            };
+        };
+    };
     LandingController_galgameFeed: {
         parameters: {
             query: {
@@ -46270,6 +46478,27 @@ export interface operations {
             };
         };
     };
+    LandingController_lightNovelRanking: {
+        parameters: {
+            query?: {
+                period?: "day" | "week" | "month";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelRankingDto"];
+                };
+            };
+        };
+    };
     LandingController_manga: {
         parameters: {
             query?: {
@@ -46312,6 +46541,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaFeedDto"];
+                };
+            };
+        };
+    };
+    LandingController_mangaRanking: {
+        parameters: {
+            query?: {
+                period?: "day" | "week" | "month";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRankingDto"];
                 };
             };
         };

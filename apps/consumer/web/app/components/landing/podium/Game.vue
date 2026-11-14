@@ -36,7 +36,7 @@
             :alt="entry.image ? `${entry.work.title} 的游戏画面` : entry.work.title"
             :processing="{ width: 640, quality: 82, fit: 'cover' }"
             class="absolute inset-0 size-full"
-            image-class="size-full object-cover"
+            :image-class="cn('size-full object-cover', !entry.image && 'object-top')"
           />
           <Tag
             variant="solid"

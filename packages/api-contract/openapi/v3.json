@@ -22030,6 +22030,155 @@
         ],
         "type": "object"
       },
+      "GalgameCalendarDto": {
+        "properties": {
+          "first_year": {
+            "description": "有发售记录的最早年份",
+            "type": "number"
+          },
+          "items": {
+            "description": "当月发售的作品，按发售日排列，只精确到月的排在最后",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCalendarItemDto"
+            },
+            "type": "array"
+          },
+          "last_year": {
+            "description": "有发售记录的最晚年份",
+            "type": "number"
+          },
+          "month": {
+            "description": "所显示的年月",
+            "type": "string"
+          },
+          "months": {
+            "description": "所在年份各月的作品数",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCalendarMonthDto"
+            },
+            "type": "array"
+          },
+          "today": {
+            "description": "东八区今天的日期",
+            "type": "string"
+          }
+        },
+        "required": [
+          "today",
+          "month",
+          "first_year",
+          "last_year",
+          "months",
+          "items"
+        ],
+        "type": "object"
+      },
+      "GalgameCalendarItemDto": {
+        "properties": {
+          "age_rating": {
+            "enum": [
+              "ALL_AGES",
+              "R15",
+              "R18"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "price": {
+            "description": "各版本中最低的日元价格",
+            "nullable": true,
+            "type": "string"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms",
+          "age_rating",
+          "price"
+        ],
+        "type": "object"
+      },
+      "GalgameCalendarMonthDto": {
+        "properties": {
+          "count": {
+            "description": "当月发售的作品数",
+            "type": "number"
+          },
+          "month": {
+            "description": "年月，如 2026-11",
+            "type": "string"
+          }
+        },
+        "required": [
+          "month",
+          "count"
+        ],
+        "type": "object"
+      },
       "GalgameCardSummaryResDto": {
         "properties": {
           "id": {
@@ -26825,6 +26974,162 @@
         "required": [
           "progresses",
           "continue_volume_id"
+        ],
+        "type": "object"
+      },
+      "LightNovelRankingDto": {
+        "properties": {
+          "from": {
+            "description": "统计区间的第一天",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LightNovelRankingItemDto"
+            },
+            "type": "array"
+          },
+          "period": {
+            "enum": [
+              "day",
+              "week",
+              "month"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "description": "统计区间的最后一天",
+            "type": "string"
+          }
+        },
+        "required": [
+          "period",
+          "from",
+          "to",
+          "items"
+        ],
+        "type": "object"
+      },
+      "LightNovelRankingItemDto": {
+        "properties": {
+          "author": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryPersonDto"
+              }
+            ],
+            "description": "作者",
+            "nullable": true,
+            "type": "object"
+          },
+          "bunko": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelSummaryProducerDto"
+              }
+            ],
+            "description": "所属文库",
+            "nullable": true,
+            "type": "object"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "轻小说 ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "novel_status": {
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "enum": [
+              "SERIALIZING",
+              "FINISHED",
+              "PAUSED",
+              "ABANDONED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "previous": {
+            "description": "上一期的名次，上一期未上榜为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "publication_date": {
+            "description": "首卷出版日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "description": "出版方",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "rank": {
+            "type": "number"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "volume_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "novel_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "author",
+          "bunko",
+          "publishers",
+          "maker",
+          "volume_count",
+          "rank",
+          "previous",
+          "rating"
         ],
         "type": "object"
       },
@@ -33584,6 +33889,156 @@
           "delayed",
           "failed",
           "paused"
+        ],
+        "type": "object"
+      },
+      "MangaRankingDto": {
+        "properties": {
+          "from": {
+            "description": "统计区间的第一天",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MangaRankingItemDto"
+            },
+            "type": "array"
+          },
+          "period": {
+            "enum": [
+              "day",
+              "week",
+              "month"
+            ],
+            "type": "string"
+          },
+          "to": {
+            "description": "统计区间的最后一天",
+            "type": "string"
+          }
+        },
+        "required": [
+          "period",
+          "from",
+          "to",
+          "items"
+        ],
+        "type": "object"
+      },
+      "MangaRankingItemDto": {
+        "properties": {
+          "chapter": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LandingChapterDto"
+              }
+            ],
+            "description": "最新一话",
+            "nullable": true,
+            "type": "object"
+          },
+          "chapters": {
+            "description": "连载话数",
+            "nullable": true,
+            "type": "number"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/MangaCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "漫画 ID",
+            "type": "number"
+          },
+          "latest_chapter_at": {
+            "description": "最新一话的更新时间",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name": {
+            "description": "原名",
+            "type": "string"
+          },
+          "name_cn": {
+            "description": "中文名",
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "previous": {
+            "description": "上一期的名次，上一期未上榜为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "publication_date": {
+            "description": "开始连载日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "新的出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "rank": {
+            "type": "number"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/WorkRatingDto"
+          },
+          "serial_status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaSerialStatus"
+              }
+            ],
+            "description": "连载状态，系列没有记录出版状态时为空",
+            "nullable": true,
+            "x-enum-descriptions": {
+              "ABANDONED": "中止连载",
+              "FINISHED": "已完结",
+              "PAUSED": "暂停连载",
+              "SERIALIZING": "连载中"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "name_cn",
+          "covers",
+          "nsfw",
+          "serial_status",
+          "publication_status",
+          "publication_date",
+          "publication_date_precision",
+          "latest_chapter_at",
+          "maker",
+          "chapter",
+          "chapters",
+          "rank",
+          "previous",
+          "rating"
         ],
         "type": "object"
       },
@@ -85776,6 +86231,38 @@
         ]
       }
     },
+    "/api/v3/landing/galgames/calendar": {
+      "get": {
+        "operationId": "LandingController_galgameCalendar",
+        "parameters": [
+          {
+            "description": "年月，如 2026-11；不传为东八区的本月",
+            "in": "query",
+            "name": "month",
+            "required": false,
+            "schema": {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameCalendarDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "landing"
+        ]
+      }
+    },
     "/api/v3/landing/galgames/feed": {
       "get": {
         "operationId": "LandingController_galgameFeed",
@@ -85889,6 +86376,42 @@
         ]
       }
     },
+    "/api/v3/landing/light-novels/ranking": {
+      "get": {
+        "operationId": "LandingController_lightNovelRanking",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "week",
+              "enum": [
+                "day",
+                "week",
+                "month"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRankingDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "landing"
+        ]
+      }
+    },
     "/api/v3/landing/mangas": {
       "get": {
         "operationId": "LandingController_manga",
@@ -85950,6 +86473,42 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MangaFeedDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "landing"
+        ]
+      }
+    },
+    "/api/v3/landing/mangas/ranking": {
+      "get": {
+        "operationId": "LandingController_mangaRanking",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "week",
+              "enum": [
+                "day",
+                "week",
+                "month"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRankingDto"
                 }
               }
             },
