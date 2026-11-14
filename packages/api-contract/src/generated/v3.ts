@@ -21896,6 +21896,8 @@ export interface components {
         HikariPointGuideDto: {
             channels: components["schemas"]["PointChannelDto"][];
             check_in: components["schemas"]["CheckInRangeDto"];
+            /** @description 账号注册满这么多天后，签到以外的途径才发放光点；0 表示不限制 */
+            min_account_days: number;
         };
         HikariPointOverviewDto: {
             by_reason: components["schemas"]["PointReasonTotalDto"][];
@@ -26827,6 +26829,7 @@ export interface components {
             event: components["schemas"]["PointEventInputDto"] | null;
             first_time: components["schemas"]["FirstTimeBonusInputDto"];
             frozen: boolean;
+            new_account_days: number;
             post: components["schemas"]["PointChannelInputDto"];
             rate: components["schemas"]["PointChannelInputDto"];
             reading: components["schemas"]["PointChannelInputDto"];
@@ -30199,6 +30202,8 @@ export interface components {
             event: components["schemas"]["PointEventInputDto"] | null;
             first_time: components["schemas"]["FirstTimeBonusInputDto"];
             frozen: boolean;
+            /** @description 注册未满这么多天的账号不发放光点，0 表示不限制 */
+            new_account_days?: number;
             post: components["schemas"]["PointChannelInputDto"];
             rate: components["schemas"]["PointChannelInputDto"];
             reading: components["schemas"]["PointChannelInputDto"];

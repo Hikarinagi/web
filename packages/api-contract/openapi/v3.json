@@ -25199,11 +25199,16 @@
           },
           "check_in": {
             "$ref": "#/components/schemas/CheckInRangeDto"
+          },
+          "min_account_days": {
+            "description": "账号注册满这么多天后，签到以外的途径才发放光点；0 表示不限制",
+            "type": "number"
           }
         },
         "required": [
           "check_in",
-          "channels"
+          "channels",
+          "min_account_days"
         ],
         "type": "object"
       },
@@ -43522,6 +43527,9 @@
           "frozen": {
             "type": "boolean"
           },
+          "new_account_days": {
+            "type": "number"
+          },
           "post": {
             "$ref": "#/components/schemas/PointChannelInputDto"
           },
@@ -43552,6 +43560,7 @@
           "translation",
           "epub",
           "review_min_length",
+          "new_account_days",
           "first_time",
           "frozen",
           "event"
@@ -57556,6 +57565,12 @@
           },
           "frozen": {
             "type": "boolean"
+          },
+          "new_account_days": {
+            "description": "注册未满这么多天的账号不发放光点，0 表示不限制",
+            "maximum": 365,
+            "minimum": 0,
+            "type": "number"
           },
           "post": {
             "$ref": "#/components/schemas/PointChannelInputDto"
