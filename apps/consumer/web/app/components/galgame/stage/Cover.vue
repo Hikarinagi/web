@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Card, Stack } from '@hina-ui/vue'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import type { CoverVoteState, GalgameCover } from '~/features/galgame/useCoverVote'
   import type { HikariImageSource } from '~/utils/media/image'
   import { getCoverMediaLayout } from '~/utils/media/layout'
@@ -9,6 +10,7 @@
     galgameId: number
     cover: GalgameCover['media'] | null
     covers: GalgameCover[]
+    products: GalgamePageData['products']
     mine: CoverVoteState | null
     images: HikariImageSource[]
     nsfw: boolean
@@ -44,6 +46,7 @@
     <GalgameCoverVoteEntry
       :galgame-id="galgameId"
       :covers="covers"
+      :products="products"
       :mine="mine"
       class="absolute right-2 bottom-2"
     />

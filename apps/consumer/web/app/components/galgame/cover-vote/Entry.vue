@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { IconButton } from '@hina-ui/vue'
   import { Images } from '@lucide/vue'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { getRevisionEditPath } from '~/features/revision/resources'
   import {
     useCoverVote,
@@ -14,6 +15,7 @@
   const props = defineProps<{
     galgameId: number
     covers: GalgameCover[]
+    products: GalgamePageData['products']
     mine: CoverVoteState | null
   }>()
 
@@ -39,9 +41,10 @@
     >
       <Images />
     </IconButton>
-    <GalgameCoverVoteDialog
+    <GalgameCoverVoteDrawer
       v-model:visible="open"
       :covers="covers"
+      :products="products"
       :state="state"
       :busy="busy"
       :edit-path="editPath"

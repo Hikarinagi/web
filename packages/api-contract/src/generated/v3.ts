@@ -21086,6 +21086,8 @@ export interface components {
             language: string | null;
             /** @description 封面图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
+            /** @description 封面所属的发行版本；同一张图记在几个发行版本上时为其中最早的一个 */
+            product_id: number;
             /** @description 封面得票数 */
             votes: number;
         };

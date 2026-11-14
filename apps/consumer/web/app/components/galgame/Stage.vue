@@ -166,6 +166,7 @@
           :galgame-id="data.galgame.id"
           :cover="cover"
           :covers="data.galgame.covers"
+          :products="data.products"
           :mine="data.my_cover_vote"
           :images="images"
           :nsfw="data.galgame.nsfw"
@@ -226,6 +227,7 @@
       <GalgameCoverVoteEntry
         :galgame-id="data.galgame.id"
         :covers="data.galgame.covers"
+        :products="data.products"
         :mine="data.my_cover_vote"
       />
     </Inline>
