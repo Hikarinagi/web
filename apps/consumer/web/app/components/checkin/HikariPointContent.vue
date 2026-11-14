@@ -76,5 +76,8 @@
       </Inline>
     </Card>
     <Skeleton v-else class="h-88 rounded-xl" />
+    <Text v-if="data?.min_account_days" size="xs" tone="muted">
+      除每日签到外，其他途径在账号注册满 {{ data.min_account_days }} 天后开始发放光点
+    </Text>
   </Stack>
 </template>
