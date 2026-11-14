@@ -91,7 +91,7 @@
           :alt="`${title} 封面`"
           preload
           :width="480"
-          class="absolute! inset-x-0 bottom-0 shadow-2xl ring-4! ring-(--hn-bg-canvas)!"
+          class="absolute! inset-x-0 bottom-0 shadow-2xl"
         >
           <NsfwControl
             :images="[cover, ...volumes.map(volume => volume.cover)]"
