@@ -77,7 +77,7 @@
       </template>
     </EntrySectionHead>
 
-    <Grid v-if="unit === 'chapter' && recent.length" :cols="2" gap="sm" class="lg:grid-cols-4">
+    <Grid v-if="recent.length" :cols="2" gap="sm" class="lg:grid-cols-4">
       <Card
         v-for="chapter in recent"
         :key="chapter.id"
