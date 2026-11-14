@@ -27043,6 +27043,11 @@
             "description": "轻小说 ID",
             "type": "number"
           },
+          "intro": {
+            "description": "简介的开头",
+            "nullable": true,
+            "type": "string"
+          },
           "maker": {
             "nullable": true,
             "type": "string"
@@ -27127,6 +27132,7 @@
           "publishers",
           "maker",
           "volume_count",
+          "intro",
           "rank",
           "previous",
           "rating"
@@ -33953,6 +33959,11 @@
             "description": "漫画 ID",
             "type": "number"
           },
+          "intro": {
+            "description": "简介的开头",
+            "nullable": true,
+            "type": "string"
+          },
           "latest_chapter_at": {
             "description": "最新一话的更新时间",
             "format": "date-time",
@@ -34036,6 +34047,7 @@
           "maker",
           "chapter",
           "chapters",
+          "intro",
           "rank",
           "previous",
           "rating"

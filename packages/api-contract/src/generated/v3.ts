@@ -22411,6 +22411,8 @@ export interface components {
             covers: components["schemas"]["LightNovelCoverRelationDto"][];
             /** @description 轻小说 ID */
             id: number;
+            /** @description 简介的开头 */
+            intro: string | null;
             maker: string | null;
             /** @description 原名 */
             name: string;
@@ -24196,6 +24198,8 @@ export interface components {
             covers: components["schemas"]["MangaCoverRelationDto"][];
             /** @description 漫画 ID */
             id: number;
+            /** @description 简介的开头 */
+            intro: string | null;
             /**
              * Format: date-time
              * @description 最新一话的更新时间
