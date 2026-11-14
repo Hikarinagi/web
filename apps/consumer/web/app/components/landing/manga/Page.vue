@@ -81,12 +81,9 @@
 <template>
   <Stack gap="none" class="-mt-(--app-header-height) pb-16">
     <VisuallyHidden as="h1">漫画</VisuallyHidden>
-    <LandingUpdateStage :days="data.days" :today="data.today" :selected="data.selected_day">
-      <template v-if="lead.length" #lead>
-        <LandingLead :rows="lead" ratio="2/3" class="pb-4" />
-      </template>
-    </LandingUpdateStage>
+    <LandingUpdateStage :days="data.days" :today="data.today" :selected="data.selected_day" />
     <Stack gap="none" class="mx-auto w-full max-w-(--entry-container) gap-12 px-4 lg:px-6">
+      <LandingLead v-if="lead.length" :rows="lead" ratio="2/3" />
       <LandingSection v-if="hot.length" title="本周热门">
         <template #actions>
           <ViewAllLink to="/mangas/ranking">排行榜</ViewAllLink>

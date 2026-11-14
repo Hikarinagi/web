@@ -37,7 +37,6 @@
         gap="lg"
         class="mx-auto w-full max-w-(--entry-container) px-4 pt-(--landing-stage-top) pb-12 lg:px-6"
       >
-        <slot name="lead" />
         <VisuallyHidden as="h2">每日更新</VisuallyHidden>
         <Inline align="center" justify="between" gap="md" class="gap-y-2">
           <TabsList>

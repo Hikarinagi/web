@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Text } from '@hina-ui/vue'
+  import { Tag, Text } from '@hina-ui/vue'
   import type { MangasRankingPageData } from '~~/server/api/pages/mangas/ranking.get'
   import { chapterLabel, dayLabel, daysBetween } from '~/features/landing/labels'
   import { mangaWork } from '~/features/landing/works'
@@ -39,7 +39,7 @@
     :pending="pending"
     @update="emit('update', $event)"
   >
-    <RankingRow
+    <RankingTile
       v-for="row in rows"
       :key="row.item.id"
       :to="row.work.to"
@@ -47,29 +47,25 @@
       :previous="row.item.previous"
       :title="row.work.title"
       :original="row.work.original"
+      :sub="row.work.sub"
       :cover="row.work.cover"
       :intro="row.item.intro"
     >
-      <template #meta>
-        <Text v-if="row.work.sub" size="xs" tone="muted" truncate lang="ja" class="min-w-0">
-          {{ row.work.sub }}
-        </Text>
-        <Text v-if="row.status" size="xs" tone="muted" class="shrink-0">{{ row.status }}</Text>
-      </template>
-      <template v-if="row.rated || row.chapter" #aside>
-        <LandingScore
-          v-if="row.rated"
-          :score="row.rated.average!"
-          :rated="row.rated.count"
-          class="shrink-0"
-        />
-        <Text v-if="row.chapter" size="xs" tone="muted" truncate class="max-w-full tabular-nums">
+      <template #detail>
+        <Tag v-if="row.status" size="sm" tone="neutral" class="shrink-0">{{ row.status }}</Tag>
+        <Text v-if="row.chapter" size="sm" tone="muted" truncate class="min-w-0 tabular-nums">
           {{ row.chapter }}
         </Text>
-        <Text v-if="row.updated" size="xs" tone="faint" class="shrink-0 tabular-nums max-md:hidden">
-          {{ row.updated }}
-        </Text>
       </template>
-    </RankingRow>
+      <template #facts>
+        <MangaRankingFacts
+          :rated="row.rated"
+          :author="row.work.sub"
+          :status="row.status"
+          :chapter="row.chapter"
+          :updated="row.updated"
+        />
+      </template>
+    </RankingTile>
   </RankingShell>
 </template>

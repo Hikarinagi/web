@@ -11,7 +11,8 @@ export function calendarRoute(month?: string) {
   return `/galgames/calendar${month ? `?month=${month}` : ''}`
 }
 
-export function monthText(month: string) {
+export function shiftMonth(month: string, delta: number) {
   const [year, index] = month.split('-').map(Number)
-  return `${year} 年 ${index} 月`
+  const total = year! * 12 + index! - 1 + delta
+  return `${Math.floor(total / 12)}-${String((total % 12) + 1).padStart(2, '0')}`
 }

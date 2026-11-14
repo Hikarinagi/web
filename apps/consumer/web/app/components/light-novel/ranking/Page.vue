@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Text } from '@hina-ui/vue'
+  import { Tag, Text } from '@hina-ui/vue'
   import type { LightNovelsRankingPageData } from '~~/server/api/pages/light-novels/ranking.get'
   import { novelWork } from '~/features/landing/works'
   import { statusText } from '~/features/light-novel/explore'
@@ -32,7 +32,7 @@
     :pending="pending"
     @update="emit('update', $event)"
   >
-    <RankingRow
+    <RankingTile
       v-for="row in rows"
       :key="row.item.id"
       :to="row.work.to"
@@ -40,29 +40,31 @@
       :previous="row.item.previous"
       :title="row.work.title"
       :original="row.work.original"
+      :sub="row.work.sub"
       :cover="row.work.cover"
       :intro="row.item.intro"
     >
-      <template #meta>
-        <Text v-if="row.work.sub" size="xs" tone="muted" truncate lang="ja" class="min-w-0">
-          {{ row.work.sub }}
-        </Text>
-        <Text v-if="row.item.bunko" size="xs" tone="faint" truncate lang="ja" class="min-w-0">
-          {{ row.item.bunko.name }}
+      <template #detail>
+        <Tag v-if="row.status" size="sm" tone="neutral" class="shrink-0">{{ row.status }}</Tag>
+        <Text
+          v-if="row.item.volume_count"
+          size="sm"
+          tone="muted"
+          truncate
+          class="min-w-0 tabular-nums"
+        >
+          共 {{ row.item.volume_count }} 卷
         </Text>
       </template>
-      <template v-if="row.rated || row.item.volume_count || row.status" #aside>
-        <LandingScore
-          v-if="row.rated"
-          :score="row.rated.average!"
-          :rated="row.rated.count"
-          class="shrink-0"
+      <template #facts>
+        <LightNovelRankingFacts
+          :rated="row.rated"
+          :author="row.work.sub"
+          :bunko="row.item.bunko?.name"
+          :volumes="row.item.volume_count"
+          :status="row.status"
         />
-        <Text v-if="row.item.volume_count" size="xs" tone="muted" class="shrink-0 tabular-nums">
-          {{ row.item.volume_count }} 卷
-        </Text>
-        <Text v-if="row.status" size="xs" tone="faint" class="shrink-0">{{ row.status }}</Text>
       </template>
-    </RankingRow>
+    </RankingTile>
   </RankingShell>
 </template>

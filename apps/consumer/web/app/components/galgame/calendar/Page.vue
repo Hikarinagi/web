@@ -1,8 +1,20 @@
 <script setup lang="ts">
-  import { Divider, Empty, Grid, Heading, Inline, Stack, Text } from '@hina-ui/vue'
+  import {
+    Button,
+    Empty,
+    Grid,
+    Heading,
+    IconButton,
+    Inline,
+    SegmentedControl,
+    Select,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
+  import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import type { GalgamesCalendarPageData } from '~~/server/api/pages/galgames/calendar.get'
-  import { monthText } from '~/features/galgame/calendar'
-  import { dayLabel, weekdayLabel } from '~/features/landing/labels'
+  import { shiftMonth } from '~/features/galgame/calendar'
+  import { daysBetween, weekdayLabel } from '~/features/landing/labels'
 
   type Calendar = GalgamesCalendarPageData['calendar']
 
@@ -10,85 +22,120 @@
   const props = defineProps<{ calendar: Calendar; month: string; pending?: boolean }>()
   const emit = defineEmits<{ update: [month: string] }>()
 
-  const days = computed(() => {
-    const groups = new Map<string, Calendar['items']>()
-    for (const item of props.calendar.items) {
-      if (item.release_date_precision !== 'DAY' || !item.release_date) continue
-      const date = item.release_date.slice(0, 10)
-      groups.set(date, [...(groups.get(date) ?? []), item])
-    }
-    return [...groups].map(([date, items]) => ({ date, items }))
-  })
-  const vague = computed(() =>
-    props.calendar.items.filter(item => item.release_date_precision !== 'DAY'),
+  const year = computed(() => Number(props.month.slice(0, 4)))
+  const years = computed(() =>
+    Array.from(
+      { length: props.calendar.last_year - props.calendar.first_year + 1 },
+      (_, index) => props.calendar.last_year - index,
+    ).map(value => ({ value, label: `${value} 年` })),
   )
-  const counts = computed(() => new Map(days.value.map(day => [day.date, day.items.length])))
-  const upcoming = computed(() => {
-    const { today, month } = props.calendar
-    if (!today.startsWith(month) || counts.value.has(today)) return null
-    return days.value.find(day => day.date > today)?.date ?? null
+  const months = Array.from({ length: 12 }, (_, index) => ({
+    value: String(index + 1).padStart(2, '0'),
+    label: `${index + 1} 月`,
+  }))
+  const current = computed(() => props.calendar.today.slice(0, 7))
+  const tiles = computed(() => {
+    let last = ''
+    return props.calendar.items.map(item => {
+      const exact = item.release_date_precision === 'DAY' && !!item.release_date
+      const date = exact ? item.release_date!.slice(0, 10) : 'vague'
+      const first = date !== last
+      last = date
+      const left = exact ? daysBetween(props.calendar.today, date) : -1
+      return {
+        item,
+        label: !first
+          ? ''
+          : exact
+            ? `${Number(date.slice(8))} 日 ${weekdayLabel(date)}`
+            : '日期未定',
+        badge: !first || left < 0 ? '' : left === 0 ? '今天' : `还有 ${left} 天`,
+        today: left === 0,
+        upcoming: left >= 0,
+      }
+    })
   })
 
-  function pick(date: string) {
-    document.getElementById(`day-${date}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+  function pick(value: string | number | null | undefined, part: 'year' | 'month') {
+    if (value == null) return
+    emit(
+      'update',
+      part === 'year' ? `${value}${props.month.slice(4)}` : `${props.month.slice(0, 5)}${value}`,
+    )
   }
 </script>
 
 <template>
-  <Stack gap="lg" class="mx-auto w-full max-w-(--entry-container) px-4 pt-6 pb-16 lg:px-6">
-    <Inline gap="sm" align="baseline">
-      <Heading :level="1" size="2xl">发售日历</Heading>
-      <Text tone="muted" class="tabular-nums">{{ monthText(calendar.month) }}</Text>
-      <Text v-if="calendar.items.length" tone="muted" class="tabular-nums">
-        {{ calendar.items.length }} 部
-      </Text>
-    </Inline>
-    <Grid gap="xl" class="lg:grid-cols-12">
-      <Stack
-        as="aside"
-        gap="lg"
-        class="min-w-0 lg:sticky lg:top-(--sticky-top) lg:order-last lg:col-span-4 lg:self-start xl:col-span-3"
-      >
-        <GalgameCalendarMonth
-          :month="month"
-          :today="calendar.today"
-          :first-year="calendar.first_year"
-          :last-year="calendar.last_year"
-          :counts="counts"
-          @update="emit('update', $event)"
-          @pick="pick"
-        />
-        <GalgameCalendarYear
-          :month="month"
-          :months="calendar.months"
-          class="max-lg:hidden"
-          @update="emit('update', $event)"
-        />
-      </Stack>
-      <Stack gap="md" class="relative min-w-0 lg:col-span-8 xl:col-span-9">
-        <Empty v-if="!calendar.items.length" title="这个月没有发售的作品" />
-        <template v-for="(day, index) in days" :key="day.date">
-          <Divider v-if="day.date === upcoming">今天</Divider>
-          <Divider v-else-if="index" />
-          <GalgameCalendarDay
-            :id="`day-${day.date}`"
-            :title="String(Number(day.date.slice(8)))"
-            :note="weekdayLabel(day.date)"
-            :label="`${dayLabel(day.date)}${weekdayLabel(day.date)}`"
-            :today="day.date === calendar.today"
-            :items="day.items"
+  <Stack gap="lg" class="mx-auto w-full max-w-(--entry-container) px-4 pt-5 pb-16 lg:px-6">
+    <Stack gap="md">
+      <Inline gap="md" align="center" justify="between">
+        <Inline gap="sm" align="baseline">
+          <Heading :level="1" size="2xl">Galgame 发售日历</Heading>
+          <Text v-if="calendar.items.length" tone="muted" class="tabular-nums">
+            {{ calendar.items.length }} 部
+          </Text>
+        </Inline>
+        <Inline gap="sm" align="center" :wrap="false">
+          <Select
+            :model-value="year"
+            :options="years"
+            size="sm"
+            aria-label="年份"
+            class="w-28"
+            @update:model-value="pick($event, 'year')"
           />
-        </template>
-        <Divider v-if="vague.length && days.length" />
-        <GalgameCalendarDay
-          v-if="vague.length"
-          title="月内"
-          note="日期未定"
-          :label="`${monthText(calendar.month)}，日期未定`"
-          :items="vague"
-        />
-        <LoadingOverlay :visible="pending" />
-      </Stack>
-    </Grid>
+          <IconButton
+            label="上个月"
+            size="sm"
+            variant="outline"
+            tone="neutral"
+            @click="emit('update', shiftMonth(month, -1))"
+          >
+            <ChevronLeft />
+          </IconButton>
+          <IconButton
+            label="下个月"
+            size="sm"
+            variant="outline"
+            tone="neutral"
+            @click="emit('update', shiftMonth(month, 1))"
+          >
+            <ChevronRight />
+          </IconButton>
+          <Button
+            size="sm"
+            variant="ghost"
+            tone="neutral"
+            :disabled="month === current"
+            @click="emit('update', current)"
+          >
+            回到本月
+          </Button>
+        </Inline>
+      </Inline>
+      <ScrollRail class="-mx-4 lg:mx-0">
+        <Stack gap="none" class="w-max px-4 lg:w-full lg:px-0">
+          <SegmentedControl
+            :model-value="month.slice(5)"
+            :options="months"
+            aria-label="月份"
+            block
+            @update:model-value="pick($event, 'month')"
+          />
+        </Stack>
+      </ScrollRail>
+    </Stack>
+    <Stack gap="none" class="relative">
+      <Empty v-if="!tiles.length" title="这个月没有发售的作品" />
+      <Grid
+        v-else
+        :cols="2"
+        gap="none"
+        class="gap-x-5 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+      >
+        <GalgameCalendarTile v-for="tile in tiles" :key="tile.item.id" v-bind="tile" />
+      </Grid>
+      <LoadingOverlay :visible="pending" />
+    </Stack>
   </Stack>
 </template>

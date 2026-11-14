@@ -64,11 +64,7 @@
 <template>
   <Stack gap="none" class="-mt-(--app-header-height) pb-16">
     <VisuallyHidden as="h1">轻小说</VisuallyHidden>
-    <LandingVolumeStage v-if="data.volumes.length" :volumes="data.volumes" :today="data.today">
-      <template v-if="lead.length" #lead>
-        <LandingLead :rows="lead" ratio="2/3" class="pb-4" />
-      </template>
-    </LandingVolumeStage>
+    <LandingVolumeStage v-if="data.volumes.length" :volumes="data.volumes" :today="data.today" />
     <Stack
       gap="none"
       :class="
@@ -78,7 +74,7 @@
         )
       "
     >
-      <LandingLead v-if="!data.volumes.length && lead.length" :rows="lead" ratio="2/3" />
+      <LandingLead v-if="lead.length" :rows="lead" ratio="2/3" />
       <LandingSection v-if="hot.length" title="本周热门">
         <template #actions>
           <ViewAllLink to="/light-novels/ranking">排行榜</ViewAllLink>

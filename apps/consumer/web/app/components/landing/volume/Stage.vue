@@ -31,7 +31,6 @@
       gap="lg"
       class="mx-auto w-full max-w-(--entry-container) px-4 pt-(--landing-stage-top) pb-12 lg:px-6"
     >
-      <slot name="lead" />
       <VisuallyHidden as="h2">新卷与即将发售</VisuallyHidden>
       <LandingVolumeFeature :volume="selected" />
       <LandingVolumeStrip

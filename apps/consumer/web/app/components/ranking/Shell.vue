@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Empty, Heading, Inline, SegmentedControl, Stack, Text } from '@hina-ui/vue'
+  import { Empty, Grid, Heading, Inline, SegmentedControl, Stack, Text } from '@hina-ui/vue'
   import { RANKING_PERIODS, rangeText, type RankingPeriod } from '~/features/ranking/ranking'
 
   defineOptions({ name: 'RankingShell' })
@@ -20,13 +20,8 @@
 </script>
 
 <template>
-  <Stack gap="sm" class="mx-auto w-full max-w-(--entry-container) px-4 pt-5 pb-16 lg:px-6">
-    <Inline
-      gap="md"
-      align="end"
-      justify="between"
-      class="sticky top-(--app-header-height) z-10 -mx-4 bg-canvas/90 px-4 py-3 backdrop-blur lg:-mx-6 lg:px-6"
-    >
+  <Stack gap="lg" class="mx-auto w-full max-w-(--entry-container) px-4 pt-5 pb-16 lg:px-6">
+    <Inline gap="md" align="end" justify="between">
       <Stack gap="xs" class="min-w-0">
         <Heading :level="1" size="2xl">{{ title }}</Heading>
         <Inline gap="xs" align="center" :wrap="false">
@@ -46,7 +41,14 @@
     </Inline>
     <Stack gap="none" class="relative">
       <Empty v-if="!count" title="这一期没有作品上榜" />
-      <slot v-else />
+      <Grid
+        v-else
+        :cols="2"
+        gap="none"
+        class="gap-x-5 gap-y-7 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+      >
+        <slot />
+      </Grid>
       <LoadingOverlay :visible="pending" />
     </Stack>
   </Stack>
