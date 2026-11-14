@@ -72,12 +72,6 @@
           今天
         </Text>
         <Stack
-          v-if="column.now"
-          gap="none"
-          aria-hidden="true"
-          class="absolute top-0 bottom-9 left-1/2 border-s border-dashed border-warning"
-        />
-        <Stack
           v-if="column.count"
           gap="none"
           class="min-h-0 flex-col-reverse gap-1 overflow-hidden px-0.5"

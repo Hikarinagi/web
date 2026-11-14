@@ -74,15 +74,20 @@
           {{ item.intro }}
         </Text>
         <Inline v-if="item.images.length" gap="sm" :wrap="false" class="overflow-hidden">
-          <HikariImage
+          <Stack
             v-for="image in item.images"
             :key="image.id"
-            :src="image"
-            alt=""
-            :processing="{ width: 240, quality: 80, fit: 'cover' }"
-            class="aspect-video h-15 shrink-0 overflow-hidden rounded-sm ring-1 ring-fg/10"
-            image-class="object-cover"
-          />
+            gap="none"
+            class="relative aspect-video h-15 shrink-0 overflow-hidden rounded-sm bg-subtle ring-1 ring-fg/10"
+          >
+            <HikariImage
+              :src="image"
+              alt=""
+              :processing="{ width: 240, quality: 80, fit: 'cover' }"
+              class="absolute inset-0 size-full"
+              image-class="object-cover"
+            />
+          </Stack>
         </Inline>
       </Stack>
     </Stack>
