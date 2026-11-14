@@ -14,15 +14,12 @@
     defineProps<{
       rows: LandingChartRow[]
       ratio: LandingRatio
-      start?: number
       columns?: 1 | 2 | 4
     }>(),
-    { start: 1, columns: 2 },
+    { columns: 2 },
   )
 
-  const ranked = computed(() =>
-    props.rows.map((row, index) => ({ ...row, rank: props.start + index })),
-  )
+  const ranked = computed(() => props.rows.map((row, index) => ({ ...row, rank: index + 1 })))
   const tracks = computed(() => ({
     '--chart-rows-2': `repeat(${Math.ceil(props.rows.length / 2)}, auto)`,
     '--chart-rows-4': `repeat(${Math.ceil(props.rows.length / 4)}, auto)`,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Divider, Inline, Ripple, ScrollArea, Stack, Text } from '@hina-ui/vue'
+  import { Divider, Inline, Ripple, ScrollArea, Stack, Tag, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
   import { dayLabel, weekdayLabel } from '~/features/landing/labels'
@@ -38,21 +38,29 @@
   <ScrollArea ref="area" class="absolute inset-0" auto-hide="leave">
     <Stack gap="none" class="pb-3">
       <template v-for="(day, index) in groups" :key="day.date">
+        <Stack
+          v-if="index === firstUpcoming && day.date !== today"
+          ref="marker"
+          gap="none"
+          class="px-4 pt-4"
+        >
+          <Divider>今天</Divider>
+        </Stack>
         <Inline
-          v-if="index === firstUpcoming"
+          v-if="day.date === today"
           ref="marker"
           gap="sm"
           align="center"
           :wrap="false"
-          class="px-4 pt-4 pb-1"
+          class="px-4 pt-3 pb-1.5"
         >
-          <Text size="xs" weight="semibold" class="shrink-0 text-accent-text">今天</Text>
-          <Text size="xs" weight="semibold" class="shrink-0 text-accent-text tabular-nums">
-            {{ dayLabel(today) }}{{ weekdayLabel(today) }}
+          <Text size="xs" weight="semibold" class="tabular-nums">
+            {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
           </Text>
-          <Divider class="flex-1 border-accent/40" />
+          <Tag tone="accent">今天</Tag>
         </Inline>
         <Text
+          v-else
           size="xs"
           weight="semibold"
           :tone="day.past ? 'muted' : undefined"

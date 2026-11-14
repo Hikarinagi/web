@@ -1,13 +1,10 @@
 <script setup lang="ts">
   import { Grid, Stack, VisuallyHidden } from '@hina-ui/vue'
-  import { ListChecks } from '@lucide/vue'
   import type { GalgamesPageData } from '~~/server/api/pages/galgames.get'
   import { galgameWork } from '~/features/landing/works'
 
   defineOptions({ name: 'LandingGalgamePage' })
   const props = defineProps<{ data: GalgamesPageData }>()
-
-  const recording = ref(false)
 
   const charts = computed(() =>
     [
@@ -63,12 +60,6 @@
         </LandingSection>
       </Grid>
       <LandingSection title="为你推荐">
-        <template #actions>
-          <Button variant="ghost" tone="neutral" size="sm" login-required @click="recording = true">
-            <template #icon><ListChecks /></template>
-            记录玩过的游戏
-          </Button>
-        </template>
         <LandingFeed
           :key="data.feed.cursor ?? 'end'"
           path="/api/v3/landing/galgames/feed"
@@ -77,7 +68,6 @@
           kind="galgame"
         />
       </LandingSection>
-      <GalgameExploreRecordDialog v-model:visible="recording" />
     </Stack>
   </Stack>
 </template>

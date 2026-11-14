@@ -311,6 +311,7 @@ html.dark {
   --landing-text-fade: linear-gradient(to bottom, #000 calc(100% - 2lh), transparent);
   --landing-tile: 8.5rem;
   --landing-tile-lg: 10.5rem;
+  --landing-tile-wide: 15rem;
   --landing-card: 18rem;
   --landing-line: 1lh;
   --landing-lines-2: 2lh;

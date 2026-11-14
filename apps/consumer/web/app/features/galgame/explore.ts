@@ -124,20 +124,6 @@ export function titleOf(
   return galgame.trans_title || galgame.origin_title || `Galgame #${galgame.id}`
 }
 
-export function producerText(galgame: Pick<GalgameSummary, 'producers'>): string {
-  const producers = galgame.producers
-    .filter(row => !row.role || row.role === 'DEVELOPER')
-    .map(row => row.producer.name)
-
-  return producers.length ? producers.slice(0, 2).join(' / ') : '厂商未收录'
-}
-
-export function yearText(galgame: Pick<GalgameSummary, 'release_date'>): string {
-  if (!galgame.release_date) return '发售日未定'
-  const year = new Date(galgame.release_date).getFullYear()
-  return Number.isFinite(year) ? String(year) : '发售日未定'
-}
-
 function buildPath(base: string, state: GalgameBrowseState): string {
   const query = new URLSearchParams()
   if (state.page > 1) query.set('page', String(state.page))
