@@ -21693,6 +21693,16 @@ export interface components {
             items: components["schemas"]["GalgameLandingItemDto"][];
             ref: components["schemas"]["LandingRefDto"];
         };
+        GalgameSnapshotDto: {
+            characters: components["schemas"]["GalgameCharacterRelationDto"][];
+            credits: components["schemas"]["GameCreditsDto"];
+            display: components["schemas"]["GameDisplayDto"];
+            facts: components["schemas"]["FactDto"][];
+            galgame: components["schemas"]["GalgameDetailDto"];
+            products: components["schemas"]["ProductListingDto"][];
+            relations: components["schemas"]["GalgameRelationDto"][];
+            revision: components["schemas"]["HistoryRevisionDto"];
+        };
         GalgameStaffRelationDto: {
             /** @description 新的职责或关系编码 */
             code: string;
@@ -21802,6 +21812,7 @@ export interface components {
             /** @description Entries the edit changed */
             entries: components["schemas"]["ProductRefDto"][];
             id: number;
+            reverted: boolean;
             summary: string;
         };
         HistoryRevisionDto: {
@@ -21825,15 +21836,6 @@ export interface components {
             reverted: boolean;
             /** @description Revision to view or compare; null for a revision of the old site */
             revision: number | null;
-            summary: string;
-        };
-        HistorySnapshotDto: {
-            /** Format: date-time */
-            created_at: string;
-            editor: components["schemas"]["UserRefDto"];
-            game: components["schemas"]["GameDisplayDto"];
-            products: components["schemas"]["ProductSummaryDto"][];
-            revision: number;
             summary: string;
         };
         HoldLookupsDto: {
@@ -27029,19 +27031,6 @@ export interface components {
         };
         ProductRefDto: {
             id: number;
-            title: string;
-        };
-        ProductSummaryDto: {
-            age_rating: string | null;
-            /** @description The product holds more than one game */
-            collection: boolean;
-            id: number;
-            /** @description Version type of the product for this game */
-            kind: string | null;
-            platforms: string[];
-            price: components["schemas"]["PriceDto"] | null;
-            release: components["schemas"]["ReleaseDto"] | null;
-            release_status: string | null;
             title: string;
         };
         ProgramDto: {
@@ -44936,7 +44925,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HistorySnapshotDto"];
+                    "application/json": components["schemas"]["GalgameSnapshotDto"];
                 };
             };
         };

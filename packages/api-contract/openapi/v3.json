@@ -24540,6 +24540,57 @@
         ],
         "type": "object"
       },
+      "GalgameSnapshotDto": {
+        "properties": {
+          "characters": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameCharacterRelationDto"
+            },
+            "type": "array"
+          },
+          "credits": {
+            "$ref": "#/components/schemas/GameCreditsDto"
+          },
+          "display": {
+            "$ref": "#/components/schemas/GameDisplayDto"
+          },
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/FactDto"
+            },
+            "type": "array"
+          },
+          "galgame": {
+            "$ref": "#/components/schemas/GalgameDetailDto"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductListingDto"
+            },
+            "type": "array"
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameRelationDto"
+            },
+            "type": "array"
+          },
+          "revision": {
+            "$ref": "#/components/schemas/HistoryRevisionDto"
+          }
+        },
+        "required": [
+          "galgame",
+          "display",
+          "facts",
+          "products",
+          "credits",
+          "characters",
+          "relations",
+          "revision"
+        ],
+        "type": "object"
+      },
       "GalgameStaffRelationDto": {
         "properties": {
           "code": {
@@ -25042,6 +25093,9 @@
           "id": {
             "type": "number"
           },
+          "reverted": {
+            "type": "boolean"
+          },
           "summary": {
             "type": "string"
           }
@@ -25050,6 +25104,7 @@
           "id",
           "created_at",
           "summary",
+          "reverted",
           "entries"
         ],
         "type": "object"
@@ -25129,41 +25184,6 @@
           "imported",
           "batch_id",
           "edits"
-        ],
-        "type": "object"
-      },
-      "HistorySnapshotDto": {
-        "properties": {
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "editor": {
-            "$ref": "#/components/schemas/UserRefDto"
-          },
-          "game": {
-            "$ref": "#/components/schemas/GameDisplayDto"
-          },
-          "products": {
-            "items": {
-              "$ref": "#/components/schemas/ProductSummaryDto"
-            },
-            "type": "array"
-          },
-          "revision": {
-            "type": "number"
-          },
-          "summary": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "revision",
-          "created_at",
-          "editor",
-          "summary",
-          "game",
-          "products"
         ],
         "type": "object"
       },
@@ -44796,69 +44816,6 @@
         "required": [
           "id",
           "title"
-        ],
-        "type": "object"
-      },
-      "ProductSummaryDto": {
-        "properties": {
-          "age_rating": {
-            "nullable": true,
-            "type": "string"
-          },
-          "collection": {
-            "description": "The product holds more than one game",
-            "type": "boolean"
-          },
-          "id": {
-            "type": "number"
-          },
-          "kind": {
-            "description": "Version type of the product for this game",
-            "nullable": true,
-            "type": "string"
-          },
-          "platforms": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "price": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PriceDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "release": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ReleaseDto"
-              }
-            ],
-            "nullable": true,
-            "type": "object"
-          },
-          "release_status": {
-            "nullable": true,
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "title",
-          "kind",
-          "collection",
-          "platforms",
-          "release",
-          "release_status",
-          "price",
-          "age_rating"
         ],
         "type": "object"
       },
@@ -83876,7 +83833,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HistorySnapshotDto"
+                  "$ref": "#/components/schemas/GalgameSnapshotDto"
                 }
               }
             },

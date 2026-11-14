@@ -2,7 +2,7 @@ import { getRouterParam, type H3Event } from 'h3'
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
-async function handler(event: H3Event) {
+export async function handler(event: H3Event) {
   const id = Number(getRouterParam(event, 'id'))
 
   const [

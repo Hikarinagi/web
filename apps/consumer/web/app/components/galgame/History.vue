@@ -1,19 +1,9 @@
 <script setup lang="ts">
-  import {
-    Button,
-    Empty,
-    Inline,
-    Stack,
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow,
-    Text,
-  } from '@hina-ui/vue'
+  import { Button, Card, Empty, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import { GitCompare } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { GalgameHistoryPageData } from '~~/server/api/pages/galgames/[id]/revisions/index.get'
+  import { TimeFormatEnum, timeFormat } from '~/utils/time-format'
 
   defineOptions({ name: 'GalgameHistory' })
   const props = defineProps<{
@@ -23,6 +13,28 @@
     loading: boolean
   }>()
   const page = defineModel<number>('page', { required: true })
+
+  type Row = GalgameHistoryPageData['history']['items'][number]
+
+  const days = computed(() => {
+    const year = new Date().getFullYear()
+    const groups: { key: string; label: string; rows: Row[] }[] = []
+    for (const row of props.history.items) {
+      const key = timeFormat(row.created_at, TimeFormatEnum.YYYY_MM_DD)
+      const last = groups.at(-1)
+      if (last?.key === key) {
+        last.rows.push(row)
+        continue
+      }
+      const sameYear = new Date(row.created_at).getFullYear() === year
+      const label = timeFormat(
+        row.created_at,
+        sameYear ? TimeFormatEnum.M_D_CN : TimeFormatEnum.YYYY_M_D_CN,
+      )
+      groups.push({ key, label, rows: [row] })
+    }
+    return groups
+  })
 
   const selected = ref<number[]>([])
   const toggle = (revision: number, on: boolean) => {
@@ -37,16 +49,14 @@
 </script>
 
 <template>
-  <Stack gap="lg" class="mx-auto max-w-app px-6 py-10">
+  <Stack gap="lg" class="mx-auto max-w-app px-4 py-10 sm:px-6">
     <GalgameHistoryHeader
       :galgame-id="galgameId"
       :display="display"
       :total="history.meta.total_items"
     />
     <Inline align="center" justify="between" gap="md">
-      <Text size="sm" tone="muted">
-        已选 {{ selected.length }} 条<template v-if="!compareTo">，选择两条修订以进行比较</template>
-      </Text>
+      <Text size="sm" tone="muted">已选 {{ selected.length }} 条</Text>
       <Button
         :as="compareTo ? NuxtLink : 'button'"
         :to="compareTo ?? undefined"
@@ -56,30 +66,27 @@
         比较所选的两条修订
       </Button>
     </Inline>
-    <Stack gap="none" class="transition-opacity" :class="loading ? 'opacity-60' : 'opacity-100'">
-      <Table v-if="history.items.length">
-        <TableHeader>
-          <TableRow>
-            <TableHead><span class="sr-only">选择</span></TableHead>
-            <TableHead>时间</TableHead>
-            <TableHead>编辑者</TableHead>
-            <TableHead>摘要</TableHead>
-            <TableHead><span class="sr-only">查看此修订下的条目</span></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+    <Stack
+      v-if="days.length"
+      gap="xl"
+      class="transition-opacity"
+      :class="loading ? 'opacity-60' : 'opacity-100'"
+    >
+      <Stack v-for="day in days" :key="day.key" as="section" gap="sm">
+        <Heading :level="2" size="sm" class="px-1 text-muted">{{ day.label }}</Heading>
+        <Card :padded="false" class="divide-y divide-line">
           <GalgameHistoryRow
-            v-for="(row, index) in history.items"
-            :key="row.revision ?? `old-${index}`"
+            v-for="(row, index) in day.rows"
+            :key="row.revision ?? `old-${day.key}-${index}`"
             :row="row"
             :galgame-id="galgameId"
             :selected="row.revision !== null && selected.includes(row.revision)"
             @toggle="on => row.revision !== null && toggle(row.revision, on)"
           />
-        </TableBody>
-      </Table>
-      <Empty v-else size="sm" title="暂无修订" />
+        </Card>
+      </Stack>
     </Stack>
+    <Empty v-else size="sm" title="暂无修订" />
     <Paginator
       v-model:page="page"
       :meta="history.meta"
