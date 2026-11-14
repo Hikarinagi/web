@@ -19284,7 +19284,7 @@ export interface components {
             description?: string;
             name: string;
             /** @enum {string} */
-            program: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
+            program: "record_link" | "record_follow" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "constraint_check" | "agent" | "scout" | "lead" | "image_rating";
         };
         CreateTelegramScheduleDto: {
             chat_id: number;
@@ -42425,7 +42425,7 @@ export interface operations {
             query?: {
                 bot_id?: number;
                 /** @description Only the tasks of this program */
-                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
+                program?: "record_link" | "record_follow" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "constraint_check" | "agent" | "scout" | "lead" | "image_rating";
             };
             header?: never;
             path?: never;
@@ -42471,7 +42471,7 @@ export interface operations {
             query?: {
                 bot_id?: number;
                 /** @description Only the tasks of this program */
-                program?: "record_link" | "record_follow" | "book_intake" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "game_intake" | "book_judge" | "game_judge" | "constraint_check" | "game_duplicate" | "agent" | "scout" | "lead" | "volume_check" | "image_rating";
+                program?: "record_link" | "record_follow" | "credit_link" | "game_link" | "basis_cite" | "character_merge" | "fourth_tier" | "route_pages" | "import_fill" | "identifier_merge" | "constraint_check" | "agent" | "scout" | "lead" | "image_rating";
             };
             header?: never;
             path?: never;
@@ -42601,7 +42601,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_read" | "wiki_image_check" | "entry_check" | "book_identity" | "book_investigate" | "galgame_identity" | "galgame_investigate" | "galgame_duplicate" | "galgame_duplicate_investigate" | "wiki_series_check" | "wiki_agent" | "wiki_scout" | "wiki_lead";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_check" | "entry_check" | "wiki_agent" | "wiki_scout" | "wiki_lead";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };
