@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Grid, Section, Stack, VisuallyHidden } from '@hina-ui/vue'
+  import { Grid, Section, Stack, VisuallyHidden } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { groupByDay, useAutoplay, useStagePick } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
@@ -62,20 +62,22 @@
           />
           <LandingReleaseInfo :item="selected" />
         </Stack>
-        <LandingReleaseStrip :days="days" :selected="selected.id" class="lg:hidden" @pick="pick" />
-        <Card
-          :padded="false"
-          :class="
-            cn(
-              'relative hidden overflow-hidden border-0 bg-surface/55 shadow-none ring-1 ring-fg/10 backdrop-blur-xl backdrop-saturate-150 lg:block',
-              staged.length ? 'lg:col-span-4' : 'min-h-96 lg:col-span-12',
-            )
-          "
+        <Stack
+          gap="xs"
+          :class="cn('min-w-0', staged.length ? 'lg:col-span-4' : 'lg:col-span-12 lg:min-h-96')"
         >
-          <LandingReleaseList :days="days" :today="today" :selected="selected.id" @pick="pick" />
-        </Card>
+          <LandingReleaseCalendarLink :today="today" />
+          <LandingReleaseStrip
+            :days="days"
+            :selected="selected.id"
+            class="lg:hidden"
+            @pick="pick"
+          />
+          <Stack gap="none" class="relative hidden min-h-0 flex-1 lg:block">
+            <LandingReleaseList :days="days" :today="today" :selected="selected.id" @pick="pick" />
+          </Stack>
+        </Stack>
       </Grid>
-      <ViewAllLink to="/galgames/calendar" class="self-end">发售日历</ViewAllLink>
     </Stack>
   </Section>
 </template>

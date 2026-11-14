@@ -42,7 +42,7 @@
           v-if="index === firstUpcoming && day.date !== today"
           ref="marker"
           gap="none"
-          class="px-4 pt-4"
+          class="px-2 pt-4"
         >
           <Divider>今天</Divider>
         </Stack>
@@ -52,7 +52,7 @@
           gap="sm"
           align="center"
           :wrap="false"
-          class="px-4 pt-3 pb-1.5"
+          class="px-2 pt-3 pb-1.5"
         >
           <Text size="xs" weight="semibold" class="tabular-nums">
             {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
@@ -64,7 +64,7 @@
           size="xs"
           weight="semibold"
           :tone="day.past ? 'muted' : undefined"
-          class="px-4 pt-3 pb-1.5 tabular-nums"
+          class="px-2 pt-3 pb-1.5 tabular-nums"
         >
           {{ dayLabel(day.date) }}{{ weekdayLabel(day.date) }}
         </Text>
@@ -79,7 +79,7 @@
           gap="md"
           align="center"
           :wrap="false"
-          class="hn-state-layer relative isolate mx-2 hn-interactive rounded-lg px-2 py-1.5 text-start"
+          class="hn-state-layer relative isolate hn-interactive rounded-lg px-2 py-1.5 text-start"
           @click="item.images.length && emit('pick', item)"
         >
           <Ripple />
