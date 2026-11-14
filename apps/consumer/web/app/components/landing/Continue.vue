@@ -12,14 +12,19 @@
   }
 
   defineOptions({ name: 'LandingContinue' })
-  defineProps<{ items: LandingContinueItem[]; ratio: LandingRatio }>()
+  defineProps<{ items: LandingContinueItem[]; ratio: LandingRatio; paired?: boolean }>()
 </script>
 
 <template>
   <ScrollRail class="-mx-4 -my-1 sm:mx-0">
     <Grid
       gap="sm"
-      class="w-max auto-cols-(--landing-card) grid-flow-col grid-cols-none px-4 py-1 sm:px-0 lg:w-full lg:auto-cols-auto lg:grid-flow-row lg:grid-cols-4"
+      :class="
+        cn(
+          'w-max auto-cols-(--landing-card) grid-flow-col grid-cols-none px-4 py-1 sm:px-0 lg:w-full lg:auto-cols-auto lg:grid-flow-row',
+          paired ? 'lg:grid-cols-2' : 'lg:grid-cols-4',
+        )
+      "
     >
       <Card
         v-for="item in items"

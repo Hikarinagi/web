@@ -44,7 +44,7 @@
       image-class="object-cover object-top"
     />
     <Stack gap="none" class="min-w-0 flex-1 gap-1">
-      <Text size="sm" weight="medium" class="line-clamp-2 leading-snug">{{ work.title }}</Text>
+      <Text size="sm" weight="medium" truncate>{{ work.title }}</Text>
       <Text v-if="work.sub" size="xs" tone="muted" truncate>{{ work.sub }}</Text>
       <LandingScore v-if="score" :score="score" :rated="rated" />
       <Text v-else-if="note" size="xs" tone="muted" truncate class="tabular-nums">

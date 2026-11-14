@@ -10,7 +10,7 @@
 <template>
   <Grid gap="xl" :class="rows.length > 1 ? 'lg:grid-cols-2 lg:gap-x-10' : ''">
     <LandingSection v-for="row in rows" :key="row.title" :title="row.title">
-      <LandingContinue :items="row.items" :ratio="ratio" />
+      <LandingContinue :items="row.items" :ratio="ratio" :paired="rows.length > 1" />
     </LandingSection>
   </Grid>
 </template>

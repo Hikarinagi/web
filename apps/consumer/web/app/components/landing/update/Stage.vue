@@ -11,7 +11,6 @@
     VisuallyHidden,
   } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
-  import { browseRoute, readBrowseQuery } from '~/features/manga/explore'
   import { dayLabel, daysBetween, weekdayLabel } from '~/features/landing/labels'
   import { topVotedMedia } from '~/utils/media/image'
 
@@ -24,11 +23,6 @@
   const current = computed(() => props.days.find(day => day.date === value.value))
   const size = computed(() => Math.max(0, ...props.days.map(day => day.items.length)))
   const hash = computed(() => topVotedMedia(current.value?.items[0]?.covers)?.thumb_hash ?? null)
-  const browseTo = browseRoute({
-    ...readBrowseQuery({}),
-    sort_field: 'latest_chapter_at',
-    sort_order: 'desc',
-  })
   const relative = (date: string) => {
     const diff = daysBetween(date, props.today)
     return diff === 0 ? '今天' : diff === 1 ? '昨天' : ''
@@ -57,9 +51,6 @@
               </Text>
             </TabsTrigger>
           </TabsList>
-          <ViewAllLink v-if="current?.total" :to="browseTo" class="tabular-nums">
-            全部 {{ current.total }} 部
-          </ViewAllLink>
         </Inline>
         <TabsContent v-for="day in days" :key="day.date" :value="day.date">
           <LandingUpdateDay :day="day" :size="size" />

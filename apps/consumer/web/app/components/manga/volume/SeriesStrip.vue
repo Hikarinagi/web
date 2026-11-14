@@ -31,8 +31,8 @@
 
 <template>
   <EntrySectionHead id="series" title="同系列" :count="volumes.length" />
-  <ScrollArea ref="area" direction="horizontal" :wheel-redirect="false" class="-mx-4 lg:-mx-1">
-    <Inline gap="md" align="end" :wrap="false" class="w-max px-4 pt-1 pb-3 lg:px-1">
+  <ScrollArea ref="area" direction="horizontal" :wheel-redirect="false" class="-mx-4 lg:-mx-2">
+    <Inline gap="md" align="end" :wrap="false" class="w-max px-4 pt-2 pb-3 lg:px-2">
       <NuxtLink
         v-for="volume in volumes"
         :key="volume.id"
