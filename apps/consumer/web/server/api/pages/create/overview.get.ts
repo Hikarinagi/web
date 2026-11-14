@@ -18,7 +18,7 @@ async function handler(event: H3Event) {
       query: { page: 1, page_size: 5 },
     }),
     fetchBackendData(event, '/api/v3/wiki/changes', {
-      query: { unpatrolled: true, page: 1, page_size: 1 },
+      query: { unpatrolled: true, bot: false, page: 1, page_size: 1 },
     }),
     fetchBackendData(event, '/api/v3/novel-projects', { query: review }),
     fetchBackendData(event, '/api/v3/manga-projects', { query: review }),
