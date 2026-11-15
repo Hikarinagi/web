@@ -19501,7 +19501,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "PRODUCER" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
