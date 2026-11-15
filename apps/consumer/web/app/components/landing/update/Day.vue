@@ -83,7 +83,7 @@
     <ScrollRail class="-mx-4 -my-2 sm:-mx-2 lg:col-span-9">
       <Grid
         gap="none"
-        class="w-max auto-cols-(--landing-tile) grid-flow-col grid-cols-none gap-x-4 px-4 py-2 sm:w-auto sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-4 sm:gap-y-6 sm:px-2 lg:grid-cols-5"
+        class="w-max auto-cols-(--landing-tile) grid-flow-col gap-x-4 px-4 py-2 sm:w-auto sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-4 sm:gap-y-6 sm:px-2 lg:grid-cols-5"
       >
         <BrowseWorkCard
           v-for="entry in rest"

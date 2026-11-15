@@ -59,7 +59,6 @@
         variant="ghost"
         tone="neutral"
         pill
-        icon-only
         :class="dayClass"
         :aria-label="`补签 ${cell.key}`"
       >
@@ -72,7 +71,6 @@
       variant="ghost"
       tone="neutral"
       pill
-      icon-only
       :class="dayClass"
       :aria-label="`使用补签卡补签 ${cell.key}`"
       @click="emit('purchase', cell.key)"
