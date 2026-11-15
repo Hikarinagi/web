@@ -15181,8 +15181,8 @@
               "CHARACTER",
               "MANGA",
               "LIGHT_NOVEL",
-              "PRODUCER",
               "GALGAME",
+              "PRODUCER",
               "LIGHT_NOVEL_VOLUME",
               "MANGA_VOLUME",
               "MANGA_CHAPTER",
@@ -30675,7 +30675,7 @@
             "type": "object"
           },
           "image": {
-            "description": "Address of a submitted image",
+            "description": "Address of a submitted image, or of the image the quote was read from",
             "nullable": true,
             "type": "string"
           },
@@ -30724,7 +30724,7 @@
             "type": "string"
           },
           "quote": {
-            "description": "Text of the cited lines",
+            "description": "Text of the cited lines, or the words the bot read on the cited image",
             "type": "string"
           },
           "reason": {

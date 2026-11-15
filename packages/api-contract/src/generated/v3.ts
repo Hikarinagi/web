@@ -19501,7 +19501,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "PRODUCER" | "GALGAME" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "PRODUCER" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -23362,7 +23362,7 @@ export interface components {
             edit_id: number | null;
             /** @description Entry the item is for */
             entry: components["schemas"]["LookupEntryDto"] | null;
-            /** @description Address of a submitted image */
+            /** @description Address of a submitted image, or of the image the quote was read from */
             image: string | null;
             /** @description First and last cited line of the page, from 1 */
             lines: number[] | null;
@@ -23377,7 +23377,7 @@ export interface components {
             property: string;
             /** @description Name of the property as shown to people */
             property_label: string;
-            /** @description Text of the cited lines */
+            /** @description Text of the cited lines, or the words the bot read on the cited image */
             quote: string;
             /** @description Why the item was not written */
             reason: string | null;
