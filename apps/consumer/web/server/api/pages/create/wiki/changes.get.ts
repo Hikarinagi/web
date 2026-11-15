@@ -12,7 +12,7 @@ async function handler(event: H3Event) {
       : state.f === 'watched'
         ? await fetchBackendData(event, '/api/v3/user/me/wiki/watchlist', { query })
         : await fetchBackendData(event, '/api/v3/wiki/changes', {
-            query: state.f === 'unchecked' ? { ...query, unpatrolled: true, bot: false } : query,
+            query: state.f === 'unchecked' ? { ...query, unpatrolled: true } : query,
           })
   return { list, state }
 }

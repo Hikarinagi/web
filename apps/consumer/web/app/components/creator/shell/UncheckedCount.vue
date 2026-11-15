@@ -5,7 +5,7 @@
 
   const { data, refresh } = useHikariApiData('/api/v3/wiki/changes', {
     key: 'wiki-unchecked-count',
-    query: { unpatrolled: true, bot: false, page: 1, page_size: 1 },
+    query: { unpatrolled: true, page: 1, page_size: 1 },
     lazy: true,
     server: false,
     toast: false,
