@@ -51965,8 +51965,13 @@
             "nullable": true,
             "type": "number"
           },
+          "charged": {
+            "description": "Average USD of the recent entries spent on the limited channels this task is paced by",
+            "nullable": true,
+            "type": "number"
+          },
           "hourly": {
-            "description": "USD per hour for this task now; null when no channel has a limit",
+            "description": "USD per hour for this task now on the limited channels its scenes go through; null when none of them has a limit",
             "nullable": true,
             "type": "number"
           },
@@ -51992,7 +51997,7 @@
             "type": "string"
           },
           "weights": {
-            "description": "Sum of the weights of the tasks running now",
+            "description": "Sum of the weights of the running tasks sharing a limited channel with this one, or of every running task when this one is not running",
             "type": "number"
           }
         },
@@ -52000,6 +52005,7 @@
           "hourly",
           "weights",
           "average",
+          "charged",
           "spent_today",
           "items_today",
           "pending",
@@ -79707,7 +79713,7 @@
         ],
         "responses": {
           "202": {
-            "description": "The task starts a run now unless one is under way"
+            "description": "A run of the task has started"
           }
         },
         "tags": [

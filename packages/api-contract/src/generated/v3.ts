@@ -28819,7 +28819,9 @@ export interface components {
         TaskBudgetDto: {
             /** @description Average USD of the recent entries */
             average: number | null;
-            /** @description USD per hour for this task now; null when no channel has a limit */
+            /** @description Average USD of the recent entries spent on the limited channels this task is paced by */
+            charged: number | null;
+            /** @description USD per hour for this task now on the limited channels its scenes go through; null when none of them has a limit */
             hourly: number | null;
             /** @description Entries maintained today, Beijing time */
             items_today: number;
@@ -28829,7 +28831,7 @@ export interface components {
             spent_today: number;
             /** @enum {string|null} */
             state: "waiting" | "peak" | null;
-            /** @description Sum of the weights of the tasks running now */
+            /** @description Sum of the weights of the running tasks sharing a limited channel with this one, or of every running task when this one is not running */
             weights: number;
         };
         TaskChangeDto: {
@@ -42588,7 +42590,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The task starts a run now unless one is under way */
+            /** @description A run of the task has started */
             202: {
                 headers: {
                     [name: string]: unknown;
