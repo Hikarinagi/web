@@ -121,7 +121,12 @@ export function namesOf(character: Pick<CharacterDetail, 'name' | 'reading' | 'a
   return { reading, aliases: aliases.filter(alias => alias !== reading) }
 }
 
-export function viewOf(character: CharacterDetail, list: Appearance[], work: Appearance | null) {
+export function viewOf(
+  character: CharacterDetail,
+  list: Appearance[],
+  work: Appearance | null,
+  picked: boolean,
+) {
   const base: Profile = {
     ...character.profile,
     gender: character.gender,
@@ -139,7 +144,7 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
     work && told(work) ? null : list.filter(told).sort((a, b) => distance(a) - distance(b))[0]
   const source = work && told(work) ? work : (near ?? character)
   return {
-    image: work?.image ?? character.image,
+    image: (picked ? work?.image : null) ?? character.image,
     nsfw: work?.nsfw ?? false,
     profile,
     intro: source.trans_intro || source.intro,
