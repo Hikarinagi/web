@@ -29348,6 +29348,7 @@ export interface components {
             message_defaults: components["schemas"]["TelegramMessagesInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
             notifications: components["schemas"]["TelegramNotificationsInputDto"];
+            private_replies: ("checkin" | "me" | "help")[];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };
@@ -30462,6 +30463,8 @@ export interface components {
             join_gate: components["schemas"]["TelegramJoinGateInputDto"];
             messages: components["schemas"]["TelegramMessagesInputDto"];
             notifications: components["schemas"]["TelegramNotificationsInputDto"];
+            /** @description 群里只给发送者本人看回复的命令；省略则保持现值 */
+            private_replies?: ("checkin" | "me" | "help")[];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
         };

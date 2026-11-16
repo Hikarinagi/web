@@ -54110,6 +54110,17 @@
           "notifications": {
             "$ref": "#/components/schemas/TelegramNotificationsInputDto"
           },
+          "private_replies": {
+            "items": {
+              "enum": [
+                "checkin",
+                "me",
+                "help"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
           "settings_poll_seconds": {
             "type": "number"
           },
@@ -54124,6 +54135,7 @@
           "settings_poll_seconds",
           "join_gate",
           "check_in_enabled",
+          "private_replies",
           "verification",
           "messages",
           "message_defaults",
@@ -58495,6 +58507,19 @@
           },
           "notifications": {
             "$ref": "#/components/schemas/TelegramNotificationsInputDto"
+          },
+          "private_replies": {
+            "description": "群里只给发送者本人看回复的命令；省略则保持现值",
+            "items": {
+              "enum": [
+                "checkin",
+                "me",
+                "help"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
           },
           "settings_poll_seconds": {
             "maximum": 3600,
