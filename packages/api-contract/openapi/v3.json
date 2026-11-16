@@ -17681,6 +17681,9 @@
               "version_scope"
             ],
             "type": "string"
+          },
+          "statement_id": {
+            "type": "number"
           }
         },
         "required": [
