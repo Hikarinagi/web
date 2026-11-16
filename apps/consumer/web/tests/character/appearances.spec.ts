@@ -91,17 +91,8 @@ describe('viewOf', () => {
     const list = appearancesOf(
       lists([game(1, '2001-01-01', { profile: { ...blankProfile, height: '150cm' } })]),
     )
-    const view = viewOf(character, list, list[0] ?? null, false)
+    const view = viewOf(character, list, list[0] ?? null)
     expect(view.profile).toMatchObject({ height: '150cm', birthday: '9月4日', gender: '女' })
-  })
-
-  it('shows the picture of the character until a work is picked, then the picture in that work', () => {
-    const best = { id: 1, src: 'images/best.webp' }
-    const own = { id: 2, src: 'images/own.webp' }
-    const list = appearancesOf(lists([game(1, '2001-01-01', { image: own })]))
-    const shown = { ...character, image: best } as typeof character
-    expect(viewOf(shown, list, list[0] ?? null, false).image).toEqual(best)
-    expect(viewOf(shown, list, list[0] ?? null, true).image).toEqual(own)
   })
 
   it('borrows the intro of the nearest work and says which one', () => {
@@ -112,21 +103,21 @@ describe('viewOf', () => {
         game(3, '2014-01-01', { intro: 'new' }),
       ]),
     )
-    const view = viewOf(character, list, list[1] ?? null, false)
+    const view = viewOf(character, list, list[1] ?? null)
     expect(view.intro).toBe('old')
     expect(view.introFrom?.id).toBe(1)
   })
 
   it('uses the character intro when no work has one', () => {
     const list = appearancesOf(lists([game(1, '2001-01-01')]))
-    const view = viewOf(character, list, list[0] ?? null, false)
+    const view = viewOf(character, list, list[0] ?? null)
     expect(view.intro).toBe('base')
     expect(view.introFrom).toBeNull()
   })
 
   it('prefers the translated intro and marks the original', () => {
     const list = appearancesOf(lists([game(1, '2001-01-01', { intro: 'ja', trans_intro: 'zh' })]))
-    expect(viewOf(character, list, list[0] ?? null, false)).toMatchObject({
+    expect(viewOf(character, list, list[0] ?? null)).toMatchObject({
       intro: 'zh',
       original: false,
     })

@@ -10,9 +10,7 @@
   const list = computed(() => appearancesOf(props.data))
   const selected = ref(defaultAppearance(list.value)?.key ?? '')
   const work = computed(() => list.value.find(item => item.key === selected.value) ?? null)
-  const picked = ref(false)
-  watch(selected, () => (picked.value = true), { once: true })
-  const view = computed(() => viewOf(props.data.character, list.value, work.value, picked.value))
+  const view = computed(() => viewOf(props.data.character, list.value, work.value))
   const cast = useCast(props.data.cast, work)
 
   const external = computed(() => {
