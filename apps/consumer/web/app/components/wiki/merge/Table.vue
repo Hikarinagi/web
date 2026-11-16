@@ -18,7 +18,7 @@
   } from '@hina-ui/vue'
   import { ArrowLeft } from '@lucide/vue'
   import { NuxtLink } from '#components'
-  import type { EditOperation, EntryStatement } from '~/features/wiki/editor/draft'
+  import type { EntryStatement } from '~/features/wiki/editor/draft'
   import { qualifierText, valueText } from '~/features/wiki/values'
   import type { MergePageData } from '~~/server/api/pages/entries/[id]/merge/[other].get'
 
@@ -57,14 +57,22 @@
           label: definition.label,
           kept,
           merged,
-          conflict: props.data.preview.conflicts.includes(definition.property),
+          conflict: props.data.preview.conflicts.find(
+            item => item.property === definition.property,
+          ),
         },
       ]
     }),
   )
+  const chosen = (row: (typeof rows.value)[number]) =>
+    choices.value[row.property] ?? (row.conflict?.kept ? 'kept' : 'merged')
   const options = (row: (typeof rows.value)[number]) => [
-    { value: 'kept', label: row.kept.map(describe).join('、') },
-    { value: 'merged', label: row.merged.map(describe).join('、') },
+    { value: 'kept', label: row.kept.map(describe).join('、'), disabled: !row.conflict?.kept },
+    {
+      value: 'merged',
+      label: row.merged.map(describe).join('、'),
+      disabled: !row.conflict?.merged,
+    },
   ]
 
   function choose(property: string, value: unknown) {
@@ -74,12 +82,7 @@
   async function merge() {
     submitting.value = true
     try {
-      const dropped: EditOperation[] = rows.value
-        .filter(row => row.conflict)
-        .flatMap(row =>
-          (choices.value[row.property] ?? 'kept') === 'kept' ? row.merged : row.kept,
-        )
-        .map(statement => ({ op: 'deprecate', statement: statement.id, reason: 'CONTRADICTED' }))
+      const dropped = rows.value.flatMap(row => row.conflict?.[chosen(row)] ?? [])
       const text = note.value.trim()
       const result = await hikariRequest('/api/v3/wiki/edits', {
         method: 'POST',
@@ -141,7 +144,7 @@
               </TableCell>
               <TableCell v-if="row.conflict" colspan="2" class="py-3 align-top">
                 <RadioGroup
-                  :model-value="choices[row.property] ?? 'kept'"
+                  :model-value="chosen(row)"
                   :options="options(row)"
                   orientation="horizontal"
                   lang="ja"

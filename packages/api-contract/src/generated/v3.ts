@@ -20273,6 +20273,14 @@ export interface components {
             similar: components["schemas"]["EntryRefDto"][];
             source: components["schemas"]["SourceDto"] | null;
         };
+        EntryMergeConflictDto: {
+            /** @description Deprecations that keep the values of the entry kept: a value with a verified source is deprecated as contradicted by the verified sources of the values it clashes with, a value without one as a duplicate; null when a value with a verified source would yield to values without one */
+            kept: components["schemas"]["EditOperationDto"][] | null;
+            /** @description Deprecations that keep the values of the entry merged, built the same way as kept */
+            merged: components["schemas"]["EditOperationDto"][] | null;
+            /** @enum {string} */
+            property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
+        };
         EntryMergeMovedDto: {
             count: number;
             /** @description Legacy table whose rows move to the entry kept */
@@ -20282,7 +20290,7 @@ export interface components {
             /** @description Comments moved to the entry kept */
             comments: number;
             /** @description Properties where both entries hold different sourced values, or include different entries */
-            conflicts: ("TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "ORDER" | "BOOK_FORMAT" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK")[];
+            conflicts: components["schemas"]["EntryMergeConflictDto"][];
             moved: components["schemas"]["EntryMergeMovedDto"][];
             /** @description Operations of the merge: the repeated values deprecated, then the merge */
             operations: components["schemas"]["EditOperationDto"][];
