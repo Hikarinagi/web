@@ -26,7 +26,7 @@ describe('mapVoiceItems', () => {
 
     expect(items).toEqual([
       {
-        to: '/characters/92525',
+        to: '/characters/92525?work=galgame:1',
         image: null,
         name: '中野一花',
         sub: '出演 3 部作品 · 五等分のプリンセス / 花嫁物语 等',

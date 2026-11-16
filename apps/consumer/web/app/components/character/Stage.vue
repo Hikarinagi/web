@@ -165,7 +165,7 @@
           />
         </Stack>
       </Stack>
-      <CharacterCast :cast="cast" :character-id="character.id" />
+      <CharacterCast :cast="cast" :character-id="character.id" :work="work" />
     </Stack>
   </Section>
 </template>

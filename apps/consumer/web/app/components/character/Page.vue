@@ -1,17 +1,19 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import type { CharacterPageData } from '~~/server/api/pages/characters/[id].get'
-  import { appearancesOf, defaultAppearance, viewOf } from '~/features/character/appearances'
+  import { appearancesOf, characterPath, viewOf } from '~/features/character/appearances'
   import { useCast } from '~/features/character/useCast'
 
   defineOptions({ name: 'CharacterPage' })
   const props = defineProps<{ data: CharacterPageData }>()
+  const router = useRouter()
 
   const list = computed(() => appearancesOf(props.data))
-  const selected = ref(defaultAppearance(list.value)?.key ?? '')
+  const selected = ref(props.data.selected ?? '')
   const work = computed(() => list.value.find(item => item.key === selected.value) ?? null)
   const view = computed(() => viewOf(props.data.character, list.value, work.value))
   const cast = useCast(props.data.cast, work)
+  watch(selected, () => void router.replace(characterPath(props.data.character.id, work.value)))
 
   const external = computed(() => {
     const { vndb_id: vndb, bangumi_id: bangumi } = props.data.character

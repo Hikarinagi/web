@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   appearancesOf,
-  defaultAppearance,
+  characterPath,
   galgameCast,
   namesOf,
+  pickAppearance,
   profileRows,
+  readWork,
   viewOf,
   voiceSummary,
   type Appearance,
@@ -72,17 +74,80 @@ describe('appearancesOf', () => {
     expect(list.map(item => item.key)).toEqual(['manga:1', 'galgame:2'])
     expect(list[1]?.path).toBe('/galgames/2')
   })
+})
+
+describe('pickAppearance', () => {
+  const list = appearancesOf(
+    lists([game(447, '2014-01-01'), game(448, '2015-01-01')], [manga(3, '2020-01-01')]),
+  )
+
+  it('opens on the work the reader came from', () => {
+    expect(pickAppearance(list, 'galgame:447')?.key).toBe('galgame:447')
+    expect(pickAppearance(list, 'manga:3')?.key).toBe('manga:3')
+  })
 
   it('opens on the latest game even when a newer manga exists', () => {
-    const list = appearancesOf(
-      lists([game(1, '2001-01-01'), game(2, '2010-01-01')], [manga(3, '2020-01-01')]),
-    )
-    expect(defaultAppearance(list)?.key).toBe('galgame:2')
+    expect(pickAppearance(list, null)?.key).toBe('galgame:448')
+  })
+
+  it('opens on the latest game when the work is not one the character appears in', () => {
+    expect(pickAppearance(list, 'galgame:1')?.key).toBe('galgame:448')
+    expect(pickAppearance(list, 'light-novel:447')?.key).toBe('galgame:448')
   })
 
   it('falls back to the latest work without a game', () => {
-    const list = appearancesOf(lists([], [manga(3, '2020-01-01')]))
-    expect(defaultAppearance(list)?.key).toBe('manga:3')
+    const books = appearancesOf(lists([], [manga(3, '2020-01-01')]))
+    expect(pickAppearance(books, null)?.key).toBe('manga:3')
+  })
+
+  it('has nothing to open without appearances', () => {
+    expect(pickAppearance([], 'galgame:447')).toBeNull()
+  })
+})
+
+describe('readWork', () => {
+  it('reads the work key of every medium', () => {
+    expect(readWork({ work: 'galgame:447' })).toBe('galgame:447')
+    expect(readWork({ work: 'light-novel:12' })).toBe('light-novel:12')
+    expect(readWork({ work: 'manga:3' })).toBe('manga:3')
+  })
+
+  it('takes the first of repeated values', () => {
+    expect(readWork({ work: ['manga:3', 'galgame:447'] })).toBe('manga:3')
+  })
+
+  it('reads nothing when the work is missing or malformed', () => {
+    expect(readWork({})).toBeNull()
+    for (const work of [
+      '',
+      'galgame',
+      'galgame:',
+      'galgame:0',
+      'galgame:-1',
+      'galgame:1a',
+      'game:1',
+    ])
+      expect(readWork({ work })).toBeNull()
+    expect(readWork({ work: 447 })).toBeNull()
+    expect(readWork({ work: [null] })).toBeNull()
+  })
+})
+
+describe('characterPath', () => {
+  it('links to the character without a work', () => {
+    expect(characterPath(9)).toBe('/characters/9')
+    expect(characterPath(9, null)).toBe('/characters/9')
+  })
+
+  it('carries the work the link comes from', () => {
+    expect(characterPath(9, { kind: 'galgame', id: 447 })).toBe('/characters/9?work=galgame:447')
+  })
+
+  it('carries a work the page reads back as that appearance', () => {
+    const list = appearancesOf(lists([game(447, '2014-01-01'), game(448, '2015-01-01')]))
+    const url = new URL(characterPath(9, list[0]), 'https://example.com')
+    const key = readWork(Object.fromEntries(url.searchParams))
+    expect(pickAppearance(list, key)?.key).toBe('galgame:447')
   })
 })
 

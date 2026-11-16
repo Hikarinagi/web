@@ -1,8 +1,9 @@
-import type { H3Event } from 'h3'
+import { getQuery, type H3Event } from 'h3'
 import {
   appearancesOf,
-  defaultAppearance,
   galgameCast,
+  pickAppearance,
+  readWork,
   seriesCast,
 } from '~/features/character/appearances'
 import { fetchBackendData } from '../../../utils/backend-api'
@@ -27,7 +28,10 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/characters/{id}/contributors', { path: { id } }),
   ])
 
-  const work = defaultAppearance(appearancesOf({ galgames, light_novels, mangas }))
+  const work = pickAppearance(
+    appearancesOf({ galgames, light_novels, mangas }),
+    readWork(getQuery(event)),
+  )
   const path = { id: work?.id ?? 0 }
   const cast = await (
     work?.kind === 'galgame'
@@ -39,7 +43,15 @@ async function handler(event: H3Event) {
           : Promise.resolve([])
   ).catch(() => [])
 
-  return { character, galgames, light_novels, mangas, contributors, cast }
+  return {
+    character,
+    galgames,
+    light_novels,
+    mangas,
+    contributors,
+    cast,
+    selected: work?.key ?? null,
+  }
 }
 
 export type CharacterPageData = Awaited<ReturnType<typeof handler>>

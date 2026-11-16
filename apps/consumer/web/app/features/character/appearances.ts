@@ -102,8 +102,21 @@ export function appearancesOf(data: Lists): Appearance[] {
   return list.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''))
 }
 
-export const defaultAppearance = (list: Appearance[]) =>
-  list.filter(item => item.kind === 'galgame').at(-1) ?? list.at(-1) ?? null
+export function readWork(query: Record<string, unknown>) {
+  const value = Array.isArray(query.work) ? query.work[0] : query.work
+  return typeof value === 'string' && /^(galgame|light-novel|manga):[1-9]\d*$/.test(value)
+    ? value
+    : null
+}
+
+export const pickAppearance = (list: Appearance[], key: string | null) =>
+  list.find(item => item.key === key) ??
+  list.filter(item => item.kind === 'galgame').at(-1) ??
+  list.at(-1) ??
+  null
+
+export const characterPath = (id: number, work?: { kind: AppearanceKind; id: number } | null) =>
+  work ? `/characters/${id}?work=${work.kind}:${work.id}` : `/characters/${id}`
 
 export const yearOf = (date: string | null) => (date ? date.slice(0, 4) : '年份不详')
 

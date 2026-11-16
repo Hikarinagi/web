@@ -2,11 +2,12 @@
   import { Card, Inline, Link, Ripple, Spoiler, Stack, Tag, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
+  import { characterPath } from '~/features/character/appearances'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { platformLabel } from '~/features/galgame/platforms'
 
   defineOptions({ name: 'GalgameCastCard' })
-  const props = defineProps<{ item: GalgamePageData['characters'][number] }>()
+  const props = defineProps<{ item: GalgamePageData['characters'][number]; galgameId: number }>()
 
   const concealed = ref(Boolean(props.item.appearance?.hidden))
   const name = computed(
@@ -58,7 +59,7 @@
         <Inline v-else gap="xs" align="center" :wrap="false" class="min-w-0">
           <Link
             :as="NuxtLink"
-            :to="`/characters/${item.character.id}`"
+            :to="characterPath(item.character.id, { kind: 'galgame', id: galgameId })"
             tone="neutral"
             :underline="false"
             class="truncate font-medium after:absolute after:inset-0"

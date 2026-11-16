@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { readWork } from '~/features/character/appearances'
   import { characterSeo } from '~/features/seo/character'
 
   definePageMeta({ container: 'full' })
@@ -6,7 +7,10 @@
   const route = useRoute()
   const id = Number(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id)
 
-  const { data } = await useHikariApiData(`/api/pages/characters/${id}`, { fatal: true })
+  const { data } = await useHikariApiData(`/api/pages/characters/${id}`, {
+    fatal: true,
+    query: { work: readWork(route.query) ?? undefined },
+  })
   await redirectIfMerged(data)
 
   const seo = computed(() => (data.value ? characterSeo(data.value) : null))

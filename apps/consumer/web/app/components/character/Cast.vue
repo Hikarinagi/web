@@ -2,11 +2,11 @@
   import { IconButton, Inline, ScrollArea, Text } from '@hina-ui/vue'
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import { NuxtLink } from '#components'
-  import type { CastMember } from '~/features/character/appearances'
+  import { characterPath, type Appearance, type CastMember } from '~/features/character/appearances'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
 
   defineOptions({ name: 'CharacterCast' })
-  const props = defineProps<{ cast: CastMember[]; characterId: number }>()
+  const props = defineProps<{ cast: CastMember[]; characterId: number; work: Appearance | null }>()
 
   const at = computed(() => props.cast.findIndex(member => member.id === props.characterId))
   const prev = computed(() => (at.value > 0 ? props.cast[at.value - 1] : undefined))
@@ -24,7 +24,7 @@
           v-for="member in cast"
           :key="member.id"
           v-tooltip="member.name"
-          :to="`/characters/${member.id}`"
+          :to="characterPath(member.id, work)"
           class="block shrink-0 hn-interactive rounded-lg"
           :aria-current="member.id === characterId ? 'page' : undefined"
           :aria-label="member.name"
@@ -50,7 +50,7 @@
     <Inline gap="xs" :wrap="false" class="shrink-0">
       <IconButton
         :as="prev ? NuxtLink : undefined"
-        :to="prev ? `/characters/${prev.id}` : undefined"
+        :to="prev ? characterPath(prev.id, work) : undefined"
         :disabled="!prev"
         :label="prev ? `上一位：${prev.name}` : '没有上一位'"
         variant="ghost"
@@ -61,7 +61,7 @@
       </IconButton>
       <IconButton
         :as="next ? NuxtLink : undefined"
-        :to="next ? `/characters/${next.id}` : undefined"
+        :to="next ? characterPath(next.id, work) : undefined"
         :disabled="!next"
         :label="next ? `下一位：${next.name}` : '没有下一位'"
         variant="ghost"

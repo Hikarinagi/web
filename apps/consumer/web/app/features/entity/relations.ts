@@ -1,5 +1,6 @@
 import type { components } from '@hikarinagi/api-contract/v3'
 import { topVotedMedia } from '~/utils/media/image'
+import { characterPath } from '~/features/character/appearances'
 import type { EntityKind, VoiceCardItem, WorkCardItem } from './entity'
 import { personLnRelationLabel, producerLnRelationLabel, workYear } from './labels'
 import { staffRoleLabel } from '~/features/galgame/labels'
@@ -145,8 +146,9 @@ export function mapVoiceItems(items: readonly unknown[]): VoiceCardItem[] {
   return (items as PersonCharacterRel[]).map(item => {
     const titles = item.galgames.map(galgame => galgame.trans_title || galgame.origin_title)
     const preview = titles.slice(0, 2).join(' / ')
+    const [first] = item.galgames
     return {
-      to: `/characters/${item.character.id}`,
+      to: characterPath(item.character.id, first ? { kind: 'galgame', id: first.id } : null),
       image: item.character.image ?? null,
       name: item.character.trans_name || item.character.name,
       sub:

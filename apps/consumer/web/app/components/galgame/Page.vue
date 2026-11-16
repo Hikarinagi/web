@@ -202,7 +202,7 @@
           /></Stack>
           <Stack gap="md" class="lg:hidden"><EntryRatingCard :rating="rating" plain /></Stack>
           <Stack v-if="data.characters.length" gap="md">
-            <GalgameCast :characters="data.characters" />
+            <GalgameCast :characters="data.characters" :galgame-id="galgameId" />
           </Stack>
           <Stack gap="md">
             <EntryReviews

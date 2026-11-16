@@ -3,7 +3,7 @@
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameCast' })
-  defineProps<{ characters: GalgamePageData['characters'] }>()
+  defineProps<{ characters: GalgamePageData['characters']; galgameId: number }>()
 
   const COLLAPSED = 9
   const all = ref(false)
@@ -34,6 +34,7 @@
         v-for="(item, index) in characters"
         :key="`${item.role}-${item.character.id}`"
         :item="item"
+        :galgame-id="galgameId"
         :class="cn('w-(--card-cast) shrink-0 sm:w-auto', !all && index >= COLLAPSED && 'sm:hidden')"
       />
     </Inline>

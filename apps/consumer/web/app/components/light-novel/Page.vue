@@ -103,7 +103,9 @@
           <LightNovelShelf :volumes="data.volumes" :progress="data.progress" />
         </Stack>
         <Stack v-if="characters.length" gap="md"
-          ><EntryCharacters :characters="characters"
+          ><EntryCharacters
+            :characters="characters"
+            :work="{ kind: 'light-novel', id: lightNovelId }"
         /></Stack>
         <Stack gap="md"><LightNovelRelations :relations="data.relations" /></Stack>
         <Stack gap="md">

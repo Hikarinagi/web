@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { Button as HnButton, Grid, Link, Stack } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
+  import { characterPath, type AppearanceKind } from '~/features/character/appearances'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import type { HikariImageSource } from '~/utils/media/image'
 
   defineOptions({ name: 'EntryCharacters' })
   const props = defineProps<{
     characters: { id: number; name: string; image: HikariImageSource }[]
+    work: { kind: AppearanceKind; id: number }
   }>()
 
   const COLLAPSED = 12
@@ -44,7 +46,7 @@
       />
       <Link
         :as="NuxtLink"
-        :to="`/characters/${member.id}`"
+        :to="characterPath(member.id, work)"
         tone="neutral"
         class="truncate text-sm"
         lang="ja"

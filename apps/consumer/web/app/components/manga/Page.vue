@@ -97,7 +97,7 @@
           @refresh="$emit('refresh')"
         />
         <Stack v-if="characters.length" gap="md">
-          <EntryCharacters :characters="characters" />
+          <EntryCharacters :characters="characters" :work="{ kind: 'manga', id: mangaId }" />
         </Stack>
         <Stack gap="md">
           <EntryReviews

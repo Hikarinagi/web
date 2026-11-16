@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { Card, Inline, Link, SimpleGrid, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
+  import { characterPath } from '~/features/character/appearances'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { yearOf, type VoiceRole } from '~/features/person/works'
 
@@ -25,7 +26,12 @@
         <Stack gap="none" class="min-w-0">
           <Link
             :as="NuxtLink"
-            :to="`/characters/${voice.id}`"
+            :to="
+              characterPath(
+                voice.id,
+                voice.works[0] ? { kind: 'galgame', id: voice.works[0].id } : null,
+              )
+            "
             tone="neutral"
             class="truncate font-medium"
             lang="ja"
