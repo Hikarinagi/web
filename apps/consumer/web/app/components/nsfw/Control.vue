@@ -4,7 +4,7 @@
   import { useNsfwPolicy } from '~/features/nsfw/composables/useNsfwPolicy'
   import { useNsfwReveal } from '~/features/nsfw/composables/useNsfwReveal'
   import type { HikariImageSource } from '~/utils/media/image'
-  import { imageSourceNsfw, imageSourceSrc } from '~/utils/media/image'
+  import { imageSourceSafety, imageSourceSrc } from '~/utils/media/image'
 
   defineOptions({ name: 'NsfwControl', inheritAttrs: false })
   const props = withDefaults(defineProps<{ images: HikariImageSource[]; nsfw?: boolean }>(), {
@@ -13,19 +13,28 @@
 
   const auth = useAuthStore()
   const { requireLogin } = useAuthGate()
-  const { shouldMaskNsfw, canReveal } = useNsfwPolicy()
+  const { limitOf } = useNsfwPolicy()
   const { revealed, reveal, conceal } = useNsfwReveal()
 
-  const sources = computed(() =>
+  const limited = computed(() =>
     props.images.flatMap(image => {
       const source = imageSourceSrc(image)
-      return source && (props.nsfw || imageSourceNsfw(image)) ? [source] : []
+      if (!source) return []
+      const safety = imageSourceSafety(image)
+      const limit = limitOf({ ...safety, nsfw: props.nsfw || safety.nsfw })
+      return limit === 'JUST_SHOW' ? [] : [{ source, limit }]
     }),
   )
-  const shown = computed(() => sources.value.length > 0 && shouldMaskNsfw(true))
-  const masked = computed(
-    () => !canReveal.value || sources.value.some(source => !revealed.value.includes(source)),
+  const sources = computed(() =>
+    limited.value.flatMap(item => (item.limit === 'SHOW_WITH_SPOILER' ? [item.source] : [])),
   )
+  const shown = computed(() => limited.value.length > 0)
+  const masked = computed(() =>
+    limited.value.some(
+      item => item.limit !== 'SHOW_WITH_SPOILER' || !revealed.value.includes(item.source),
+    ),
+  )
+  const hiding = computed(() => sources.value.some(source => !revealed.value.includes(source)))
 </script>
 
 <template>
@@ -50,8 +59,8 @@
     </IconButton>
 
     <template #content>
-      <template v-if="canReveal">
-        <DropdownMenuItem v-if="masked" @select="reveal(sources)">
+      <template v-if="sources.length">
+        <DropdownMenuItem v-if="hiding" @select="reveal(sources)">
           <template #icon><Eye /></template>
           显示图片
         </DropdownMenuItem>

@@ -27048,7 +27048,10 @@ export interface components {
         PrivateUserDto: {
             avatar: components["schemas"]["MediaAssetDto"] | null;
             bio: string | null;
-            /** @enum {string} */
+            /**
+             * @description 四个档位里最严的一项
+             * @enum {string}
+             */
             content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /** Format: email */
             email: string;
@@ -27062,10 +27065,30 @@ export interface components {
             nickname: string | null;
             /** @enum {string} */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
+            /**
+             * @description 成人内容：露点
+             * @enum {string}
+             */
+            sexual_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片
+             * @enum {string}
+             */
+            sexual_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             signature: string | null;
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE" | "BANNED";
             username_changed: boolean;
+            /**
+             * @description 血腥暴力：轻度
+             * @enum {string}
+             */
+            violence_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 血腥暴力：严重
+             * @enum {string}
+             */
+            violence_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
         };
         ProducerCardSummaryResDto: {
             id: number;
@@ -30031,9 +30054,32 @@ export interface components {
             signature?: string | null;
         };
         UpdateMeSettingsDto: {
-            /** @enum {string} */
+            /**
+             * @description 把成人内容与血腥暴力的四个档位都设为这个值，单设的档位优先
+             * @enum {string}
+             */
             content_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             hide_otome?: boolean;
+            /**
+             * @description 成人内容：露点
+             * @enum {string}
+             */
+            sexual_1_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片，不能比露点宽松
+             * @enum {string}
+             */
+            sexual_2_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 血腥暴力：轻度
+             * @enum {string}
+             */
+            violence_1_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 血腥暴力：严重；不能比轻度宽松
+             * @enum {string}
+             */
+            violence_2_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
         };
         UpdateMediaGcSettingsDto: {
             batch_size?: number;
@@ -30628,9 +30674,32 @@ export interface components {
         /** @enum {string} */
         UserRole: "USER" | "ADMIN" | "SUPER_ADMIN";
         UserSettingsDto: {
-            /** @enum {string} */
+            /**
+             * @description 四个档位里最严的一项
+             * @enum {string}
+             */
             content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             hide_otome: boolean;
+            /**
+             * @description 成人内容：露点
+             * @enum {string}
+             */
+            sexual_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片
+             * @enum {string}
+             */
+            sexual_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 血腥暴力：轻度
+             * @enum {string}
+             */
+            violence_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
+            /**
+             * @description 血腥暴力：严重
+             * @enum {string}
+             */
+            violence_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
         };
         UserStatisticsDto: {
             created_article_count: number;

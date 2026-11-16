@@ -44481,6 +44481,7 @@
             "type": "string"
           },
           "content_limit": {
+            "description": "四个档位里最严的一项",
             "enum": [
               "NEVER_SHOW_NSFW_CONTENT",
               "SHOW_WITH_SPOILER",
@@ -44546,6 +44547,24 @@
             ],
             "type": "string"
           },
+          "sexual_1_limit": {
+            "description": "成人内容：露点",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "sexual_2_limit": {
+            "description": "成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
           "signature": {
             "nullable": true,
             "type": "string"
@@ -44560,6 +44579,24 @@
           },
           "username_changed": {
             "type": "boolean"
+          },
+          "violence_1_limit": {
+            "description": "血腥暴力：轻度",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "violence_2_limit": {
+            "description": "血腥暴力：严重",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
           }
         },
         "required": [
@@ -44578,6 +44615,10 @@
           "role",
           "status",
           "content_limit",
+          "sexual_1_limit",
+          "sexual_2_limit",
+          "violence_1_limit",
+          "violence_2_limit",
           "hide_otome"
         ],
         "type": "object"
@@ -56878,6 +56919,7 @@
       "UpdateMeSettingsDto": {
         "properties": {
           "content_limit": {
+            "description": "把成人内容与血腥暴力的四个档位都设为这个值，单设的档位优先",
             "enum": [
               "NEVER_SHOW_NSFW_CONTENT",
               "SHOW_WITH_SPOILER",
@@ -56887,6 +56929,42 @@
           },
           "hide_otome": {
             "type": "boolean"
+          },
+          "sexual_1_limit": {
+            "description": "成人内容：露点",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "sexual_2_limit": {
+            "description": "成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片，不能比露点宽松",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "violence_1_limit": {
+            "description": "血腥暴力：轻度",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "violence_2_limit": {
+            "description": "血腥暴力：严重；不能比轻度宽松",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -59204,6 +59282,7 @@
       "UserSettingsDto": {
         "properties": {
           "content_limit": {
+            "description": "四个档位里最严的一项",
             "enum": [
               "NEVER_SHOW_NSFW_CONTENT",
               "SHOW_WITH_SPOILER",
@@ -59213,10 +59292,50 @@
           },
           "hide_otome": {
             "type": "boolean"
+          },
+          "sexual_1_limit": {
+            "description": "成人内容：露点",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "sexual_2_limit": {
+            "description": "成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "violence_1_limit": {
+            "description": "血腥暴力：轻度",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
+          },
+          "violence_2_limit": {
+            "description": "血腥暴力：严重",
+            "enum": [
+              "NEVER_SHOW_NSFW_CONTENT",
+              "SHOW_WITH_SPOILER",
+              "JUST_SHOW"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "content_limit",
+          "sexual_1_limit",
+          "sexual_2_limit",
+          "violence_1_limit",
+          "violence_2_limit",
           "hide_otome"
         ],
         "type": "object"

@@ -1,17 +1,24 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { ref, toValue } from 'vue'
+import { ref } from 'vue'
 import { useGallery } from '../../app/features/galgame/useGallery'
+import type { HikariImageSafety } from '../../app/utils/media/image'
+import { imageLimit } from '../../app/utils/media/image'
 
 const state = vi.hoisted(() => ({ limit: 'show' as 'show' | 'blur' | 'block' }))
 const revealed = ref<string[]>([])
 
 vi.mock('../../app/features/nsfw/composables/useNsfwPolicy', () => ({
   useNsfwPolicy: () => ({
-    shouldMaskNsfw: (nsfw: unknown) => state.limit !== 'show' && Boolean(toValue(nsfw)),
-    canReveal: {
-      get value() {
-        return state.limit === 'blur'
-      },
+    limitOf: (safety: HikariImageSafety) => {
+      const limit = (
+        { show: 'JUST_SHOW', blur: 'SHOW_WITH_SPOILER', block: 'NEVER_SHOW_NSFW_CONTENT' } as const
+      )[state.limit]
+      return imageLimit(safety, {
+        sexual_1_limit: limit,
+        sexual_2_limit: limit,
+        violence_1_limit: limit,
+        violence_2_limit: limit,
+      })
     },
   }),
 }))

@@ -1,4 +1,5 @@
 import { isRecord } from '#shared/utils/record'
+import type { CurrentUser } from '~/types/auth'
 export {
   HIKARI_IMAGE_PRESETS,
   isHttpUrl,
@@ -53,6 +54,33 @@ export const RATING_LABELS = {
   violence: ['无', '轻度', '严重'],
 } as const
 
+export type ContentLimit = CurrentUser['content_limit']
+
+export type ContentLimits = Pick<
+  CurrentUser,
+  'sexual_1_limit' | 'sexual_2_limit' | 'violence_1_limit' | 'violence_2_limit'
+>
+
+export const CONTENT_LIMIT_ORDER = [
+  'NEVER_SHOW_NSFW_CONTENT',
+  'SHOW_WITH_SPOILER',
+  'JUST_SHOW',
+] as const satisfies readonly ContentLimit[]
+
+export function strictestLimit(...limits: ContentLimit[]): ContentLimit {
+  return CONTENT_LIMIT_ORDER[Math.min(...limits.map(limit => CONTENT_LIMIT_ORDER.indexOf(limit)))]!
+}
+
+export function imageLimit(safety: HikariImageSafety, limits: ContentLimits): ContentLimit {
+  return strictestLimit(
+    'JUST_SHOW',
+    ...(safety.sexual >= 1 ? [limits.sexual_1_limit] : []),
+    ...(safety.sexual >= 2 || safety.nsfw ? [limits.sexual_2_limit] : []),
+    ...(safety.violence >= 1 ? [limits.violence_1_limit] : []),
+    ...(safety.violence >= 2 ? [limits.violence_2_limit] : []),
+  )
+}
+
 export function imageSourceSrc(source: HikariImageSource): string | null | undefined {
   if (typeof source === 'string' || source == null) return source
 
@@ -75,11 +103,6 @@ export function imageSourceSafety(source: HikariImageSource): HikariImageSafety 
       readScore(readField(media, 'violence')),
     ),
   }
-}
-
-export function imageSourceNsfw(source: HikariImageSource): boolean {
-  const safety = imageSourceSafety(source)
-  return safety.nsfw || safety.sexual > 0 || safety.violence > 0
 }
 
 export function imageSourceSize(source: HikariImageSource): HikariImageSize | undefined {

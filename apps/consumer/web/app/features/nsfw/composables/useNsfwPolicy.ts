@@ -1,35 +1,28 @@
 import type { MaybeRefOrGetter } from 'vue'
 import { toValue } from 'vue'
-import type { CurrentUser } from '~/types/auth'
+import type { ContentLimits, HikariImageSafety } from '~/utils/media/image'
+import { imageLimit } from '~/utils/media/image'
 
-type UserContentLimit = CurrentUser['content_limit']
-
-export const DEFAULT_CONTENT_LIMIT: UserContentLimit = 'NEVER_SHOW_NSFW_CONTENT'
-export const NEVER_SHOW_NSFW: UserContentLimit = 'NEVER_SHOW_NSFW_CONTENT'
-export const SHOW_NSFW_WITH_SPOILER: UserContentLimit = 'SHOW_WITH_SPOILER'
-export const JUST_SHOW_NSFW: UserContentLimit = 'JUST_SHOW'
-
-function hasNsfw(value: MaybeRefOrGetter<boolean | null | undefined>) {
-  return toValue(value) === true
+const GUEST_LIMITS: ContentLimits = {
+  sexual_1_limit: 'NEVER_SHOW_NSFW_CONTENT',
+  sexual_2_limit: 'NEVER_SHOW_NSFW_CONTENT',
+  violence_1_limit: 'NEVER_SHOW_NSFW_CONTENT',
+  violence_2_limit: 'NEVER_SHOW_NSFW_CONTENT',
 }
 
 export function useNsfwPolicy() {
   const auth = useAuthStore()
-  const contentLimit = computed<UserContentLimit>(
-    () => auth.user?.content_limit ?? DEFAULT_CONTENT_LIMIT,
-  )
+  const limits = computed<ContentLimits>(() => auth.user ?? GUEST_LIMITS)
 
   function shouldBlockNsfw(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {
-    return hasNsfw(nsfw) && contentLimit.value === NEVER_SHOW_NSFW
+    return toValue(nsfw) === true && limits.value.sexual_2_limit === 'NEVER_SHOW_NSFW_CONTENT'
   }
 
-  function shouldMaskNsfw(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {
-    return hasNsfw(nsfw) && contentLimit.value !== JUST_SHOW_NSFW
+  function limitOf(safety: HikariImageSafety) {
+    return imageLimit(safety, limits.value)
   }
 
-  const canReveal = computed(() => contentLimit.value === SHOW_NSFW_WITH_SPOILER)
-
-  return { contentLimit, shouldBlockNsfw, shouldMaskNsfw, canReveal }
+  return { shouldBlockNsfw, limitOf }
 }
 
 export function useNsfwDetailGate(nsfw: MaybeRefOrGetter<boolean | null | undefined>) {

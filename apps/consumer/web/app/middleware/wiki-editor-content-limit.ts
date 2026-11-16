@@ -1,5 +1,4 @@
 import { useAuthSession } from '~/features/auth/composables/useAuthSession'
-import { NEVER_SHOW_NSFW } from '~/features/nsfw/composables/useNsfwPolicy'
 
 const CONFIRM_PATH = '/create/wiki/content-limit'
 const FALLBACK_PATH = '/create/wiki/new'
@@ -12,7 +11,7 @@ export default defineNuxtRouteMiddleware(async to => {
 
   await ensureLoaded()
 
-  if (!auth.user || auth.user.content_limit !== NEVER_SHOW_NSFW) return
+  if (!auth.user || auth.user.sexual_2_limit !== 'NEVER_SHOW_NSFW_CONTENT') return
 
   return navigateTo({
     path: CONFIRM_PATH,

@@ -2,7 +2,7 @@ import type { LightboxItem } from '@hina-ui/vue'
 import { useNsfwPolicy } from '~/features/nsfw/composables/useNsfwPolicy'
 import { useNsfwReveal } from '~/features/nsfw/composables/useNsfwReveal'
 import type { HikariImageMediaSource } from '~/utils/media/image'
-import { imageSourceNsfw, resolveImageUrl } from '~/utils/media/image'
+import { imageSourceSafety, resolveImageUrl } from '~/utils/media/image'
 
 type Picture = HikariImageMediaSource & { id: number; src: string }
 
@@ -10,7 +10,7 @@ export function useGallery(
   source: () => { images: Picture[]; cover: Picture | null; title: string },
 ) {
   const config = useRuntimeConfig()
-  const { shouldMaskNsfw, canReveal } = useNsfwPolicy()
+  const { limitOf } = useNsfwPolicy()
   const { revealed } = useNsfwReveal()
   const loaded = ref(false)
   const open = ref(false)
@@ -18,8 +18,9 @@ export function useGallery(
 
   function viewable(image: Picture | null) {
     if (!image) return false
-    if (!shouldMaskNsfw(imageSourceNsfw(image))) return true
-    return canReveal.value && revealed.value.includes(image.src)
+    const limit = limitOf(imageSourceSafety(image))
+    if (limit === 'JUST_SHOW') return true
+    return limit === 'SHOW_WITH_SPOILER' && revealed.value.includes(image.src)
   }
 
   const pictures = computed(() => {

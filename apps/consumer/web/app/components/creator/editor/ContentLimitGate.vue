@@ -1,10 +1,6 @@
 <script setup lang="ts">
   import { Alert, Button, Inline, Panel, Stack } from '@hina-ui/vue'
   import { ArrowLeft, Check, ShieldAlert } from '@lucide/vue'
-  import {
-    NEVER_SHOW_NSFW,
-    SHOW_NSFW_WITH_SPOILER,
-  } from '~/features/nsfw/composables/useNsfwPolicy'
 
   const props = defineProps<{
     redirectTo: string
@@ -14,7 +10,9 @@
   const submitting = ref(false)
   const nav = usePageNav()
 
-  const canEnter = computed(() => !!auth.user && auth.user.content_limit !== NEVER_SHOW_NSFW)
+  const canEnter = computed(
+    () => !!auth.user && auth.user.sexual_2_limit !== 'NEVER_SHOW_NSFW_CONTENT',
+  )
 
   watch(
     () => canEnter.value && nav.current(),
@@ -25,14 +23,20 @@
   )
 
   async function enableAndContinue() {
-    if (submitting.value) return
+    if (submitting.value || !auth.user) return
 
     submitting.value = true
 
     try {
       await hikariRequest<'/api/v3/user/me/settings', 'patch'>('/api/v3/user/me/settings', {
         method: 'PATCH',
-        body: { content_limit: SHOW_NSFW_WITH_SPOILER },
+        body: {
+          sexual_1_limit:
+            auth.user.sexual_1_limit === 'NEVER_SHOW_NSFW_CONTENT'
+              ? 'SHOW_WITH_SPOILER'
+              : auth.user.sexual_1_limit,
+          sexual_2_limit: 'SHOW_WITH_SPOILER',
+        },
       })
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
@@ -55,8 +59,8 @@
     <template #icon><ShieldAlert /></template>
     <Stack gap="md">
       <Alert tone="warning">
-        确认后会将内容显示等级切换为「显示但带模糊遮罩」。编辑器内的搜索、关联和详情不再被 NSFW
-        门禁过滤（图片仍按模糊遮罩处理）。
+        确认后，成人内容中设为「不显示」的档位改为「模糊」。编辑器内的搜索、关联和详情不再过滤 NSFW
+        条目，图片仍按显示设置处理。
       </Alert>
 
       <Inline gap="sm">

@@ -8,5 +8,5 @@
 </script>
 
 <template>
-  <SpaceSettingPreferencePanel :content-limit="me.content_limit" :hide-otome="me.hide_otome" />
+  <SpaceSettingPreferencePanel :limits="me" :hide-otome="me.hide_otome" />
 </template>
