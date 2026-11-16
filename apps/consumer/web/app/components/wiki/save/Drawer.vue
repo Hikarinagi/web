@@ -15,7 +15,11 @@
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { useSaveFlow, type EditResult } from '~/features/wiki/composables/useSaveFlow'
   import { problemsOf } from '~/features/wiki/editor/problems'
-  import { saveSchema } from '~/features/wiki/schemas/save.schema'
+  import {
+    contradictingSchema,
+    saveSchema,
+    type ContradictingValues,
+  } from '~/features/wiki/schemas/save.schema'
 
   defineOptions({ name: 'WikiSaveDrawer' })
 
@@ -24,6 +28,7 @@
   const route = useRoute()
   const flow = useSaveFlow(editor, result => emit('saved', result))
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
+  const sources = useTemplateRef<InstanceType<typeof Form>>('sources')
   const conflicting = ref(false)
 
   onDeactivated(() => {
@@ -48,6 +53,16 @@
     note: editor.draft.value.note,
     url: editor.draft.value.basis.url,
   }))
+  const contradicting = computed<ContradictingValues>(() => {
+    const draft = editor.draft.value
+    return Object.fromEntries(
+      Object.entries(draft.removed).flatMap(([id, reason]) =>
+        reason === 'CONTRADICTED'
+          ? [[id, draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }]]
+          : [],
+      ),
+    )
+  })
   const blocked = computed(
     () =>
       problems.value.length > 0 ||
@@ -63,11 +78,13 @@
 
   async function submit() {
     if (blocked.value) return
+    await sources.value?.submit()
+    if (sources.value?.invalid) return
     if (flow.check.value?.conflicts.length) {
       conflicting.value = true
       return
     }
-    if (await flow.save()) open.value = false
+    if (await flow.save(errors => sources.value?.setErrors(errors))) open.value = false
   }
 
   async function resolved() {
@@ -85,7 +102,14 @@
           <Link v-if="preview" :as="NuxtLink" :to="preview" class="text-sm">预览游戏页</Link>
         </Inline>
         <WikiSaveProblems :problems="problems" :check="flow.check.value" />
-        <WikiSaveChanges />
+        <Form
+          ref="sources"
+          :values="contradicting"
+          :rules="contradictingSchema"
+          :disabled="flow.saving.value"
+        >
+          <WikiSaveChanges />
+        </Form>
       </Stack>
     </template>
     <template #footer>

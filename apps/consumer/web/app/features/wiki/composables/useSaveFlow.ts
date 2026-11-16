@@ -1,5 +1,7 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 import type { EntryEditor } from '~/features/wiki/composables/useEntryEditor'
+import { contradictingErrors } from '~/features/wiki/editor/draft'
+import { getFieldErrors } from '~/utils/api/error'
 
 type EditCheck = ApiData<'/api/v3/wiki/edits/checks', 'post'>
 export type EditResult = ApiData<'/api/v3/wiki/edits', 'post'>
@@ -51,10 +53,11 @@ export function useSaveFlow(
     }
   }
 
-  async function save() {
+  async function save(rejected?: (errors: Record<string, string>) => void) {
     saving.value = true
+    const sent = body()
     try {
-      const result = await hikariRequest('/api/v3/wiki/edits', { method: 'POST', body: body() })
+      const result = await hikariRequest('/api/v3/wiki/edits', { method: 'POST', body: sent })
       if (watching.value)
         await Promise.all(
           result.entries.map(id =>
@@ -71,7 +74,8 @@ export function useSaveFlow(
       await nav.query({ save: null, undone: null, saved: String(result.edit_id) }, 'replace')
       await saved(result)
       return true
-    } catch {
+    } catch (error) {
+      rejected?.(contradictingErrors(sent.operations, getFieldErrors(error)))
       return false
     } finally {
       saving.value = false

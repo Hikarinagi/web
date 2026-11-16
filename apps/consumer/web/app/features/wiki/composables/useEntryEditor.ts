@@ -103,8 +103,8 @@ export function useEntryEditor(page: {
       )
       const stale =
         stored.added.some(item => !owners.has(item.entry)) ||
-        [stored.changed, stored.removed, stored.moved, stored.positions].some(map =>
-          Object.keys(map).some(id => !kept.has(Number(id))),
+        [stored.changed, stored.removed, stored.contradicting, stored.moved, stored.positions].some(
+          map => Object.keys(map).some(id => !kept.has(Number(id))),
         ) ||
         stored.restored.some(id => !kept.has(id)) ||
         Object.keys(stored.rated).some(id => !media.has(Number(id))) ||
@@ -116,6 +116,7 @@ export function useEntryEditor(page: {
         current.added = current.added.filter(item => owners.has(item.entry))
         current.changed = known(current.changed) as EditorDraft['changed']
         current.removed = known(current.removed) as EditorDraft['removed']
+        current.contradicting = known(current.contradicting) as EditorDraft['contradicting']
         current.moved = known(current.moved) as EditorDraft['moved']
         current.positions = known(current.positions) as EditorDraft['positions']
         current.restored = current.restored.filter(id => kept.has(id))
@@ -209,7 +210,15 @@ export function useEntryEditor(page: {
     },
     reason(id: number, reason: DeprecationReason) {
       const entry = ownerOf(id)
-      if (entry !== undefined) edit(entry, current => (current.removed[id] = reason))
+      if (entry === undefined) return
+      edit(entry, current => {
+        current.removed[id] = reason
+        if (reason !== 'CONTRADICTED') current.contradicting = omit(current.contradicting, id)
+      })
+    },
+    contradict(id: number, source: EditorDraft['contradicting'][number]) {
+      const entry = ownerOf(id)
+      if (entry !== undefined) edit(entry, current => (current.contradicting[id] = source))
     },
     revert(id: number) {
       const entry = ownerOf(id)
@@ -223,6 +232,7 @@ export function useEntryEditor(page: {
         for (const item of media) if (item !== undefined) current.rated = omit(current.rated, item)
         current.changed = omit(current.changed, id)
         current.removed = omit(current.removed, id)
+        current.contradicting = omit(current.contradicting, id)
         current.moved = omit(current.moved, id)
         current.positions = omit(current.positions, id)
         current.restored = current.restored.filter(item => item !== id)

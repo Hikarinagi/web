@@ -90,6 +90,10 @@
         class="w-48"
         @update:model-value="choose"
       />
+      <WikiSaveSource
+        v-if="row.state === 'removed' && row.reason === 'CONTRADICTED'"
+        :id="row.id"
+      />
     </Stack>
     <Button
       variant="link"

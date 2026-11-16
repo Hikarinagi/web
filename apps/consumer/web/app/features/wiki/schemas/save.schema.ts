@@ -15,3 +15,24 @@ export const saveSchema = v.object({
 })
 
 export type SaveValues = v.InferOutput<typeof saveSchema>
+
+export const contradictingSchema = v.record(
+  v.string('来源应为文本'),
+  v.object({
+    url: v.pipe(
+      v.string('网址应为文本'),
+      v.trim(),
+      v.nonEmpty('请填写来源网址'),
+      v.maxLength(2000, '网址不能超过 2000 个字符'),
+      v.check(value => !value || /^https?:\/\//i.test(value), '网址应以 http:// 或 https:// 开头'),
+    ),
+    excerpt: v.pipe(
+      v.string('摘录应为文本'),
+      v.trim(),
+      v.nonEmpty('请填写摘录'),
+      v.maxLength(5000, '摘录不能超过 5000 字'),
+    ),
+  }),
+)
+
+export type ContradictingValues = v.InferOutput<typeof contradictingSchema>

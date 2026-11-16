@@ -59,6 +59,7 @@ export interface EditorDraft {
   added: AddedValue[]
   changed: Record<number, ValueDraft>
   removed: Record<number, DeprecationReason | null>
+  contradicting: Record<number, { url: string; excerpt: string }>
   restored: number[]
   moved: Record<number, number>
   positions: Record<number, number>
@@ -76,6 +77,7 @@ export function emptyDraft(): EditorDraft {
     added: [],
     changed: {},
     removed: {},
+    contradicting: {},
     restored: [],
     moved: {},
     positions: {},
@@ -282,8 +284,22 @@ export function operationsOf(
       ...(diff.is_public ? { is_public: after.is_public } : {}),
     })
   }
-  for (const [key, reason] of Object.entries(draft.removed))
-    if (reason) operations.push({ op: 'deprecate', statement: Number(key), reason })
+  for (const [key, reason] of Object.entries(draft.removed)) {
+    if (!reason) continue
+    const source = reason === 'CONTRADICTED' ? draft.contradicting[Number(key)] : undefined
+    operations.push({
+      op: 'deprecate',
+      statement: Number(key),
+      reason,
+      ...(source
+        ? {
+            citations: [
+              { method: 'EXCERPT', url: source.url.trim(), excerpt: source.excerpt.trim() },
+            ],
+          }
+        : {}),
+    })
+  }
   for (const id of draft.restored) operations.push({ op: 'restore', statement: id })
   for (const [key, target] of Object.entries(draft.moved))
     operations.push({
@@ -295,4 +311,18 @@ export function operationsOf(
     operations.push({ op: 'rate', media: Number(key), ...rating })
   for (const entry of draft.detached) operations.push({ op: 'detach', entry })
   return operations
+}
+
+export function contradictingErrors(
+  operations: EditOperation[],
+  errors: Record<string, string>,
+): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(errors).flatMap(([field, message]) => {
+      const [, index, part] =
+        field.match(/^operations\.(\d+)\.citations\.\d+\.(url|excerpt)$/) ?? []
+      const operation = operations[Number(index)]
+      return operation?.op === 'deprecate' ? [[`${operation.statement}.${part}`, message]] : []
+    }),
+  )
 }

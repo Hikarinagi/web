@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   changeCount,
+  contradictingErrors,
   emptyDraft,
   emptyValue,
   operationsOf,
@@ -111,6 +112,52 @@ describe('operationsOf', () => {
     expect(hidden).toMatchObject({ op: 'add', is_public: false })
     expect(modify).toEqual({ op: 'modify', statement: 31, is_public: false })
     expect(changeCount(draft)).toBe(3)
+  })
+
+  it('sends the contradicting excerpt with a value deleted as wrong and leaves it off other reasons', () => {
+    const draft = emptyDraft()
+    draft.removed[11] = 'CONTRADICTED'
+    draft.contradicting[11] = {
+      url: ' https://project-navel.com/tsukiniyorisou/outline.html ',
+      excerpt: ' 略称は「つり乙」 ',
+    }
+    expect(operationsOf(draft, index)).toEqual([
+      {
+        op: 'deprecate',
+        statement: 11,
+        reason: 'CONTRADICTED',
+        citations: [
+          {
+            method: 'EXCERPT',
+            url: 'https://project-navel.com/tsukiniyorisou/outline.html',
+            excerpt: '略称は「つり乙」',
+          },
+        ],
+      },
+    ])
+    draft.removed[11] = 'DUPLICATE'
+    expect(operationsOf(draft, index)).toEqual([
+      { op: 'deprecate', statement: 11, reason: 'DUPLICATE' },
+    ])
+  })
+})
+
+describe('contradictingErrors', () => {
+  it('puts what the server says of a contradicting source on the input of that value', () => {
+    const operations = operationsOf(
+      { ...emptyDraft(), removed: { 11: 'DUPLICATE', 12: 'CONTRADICTED' } },
+      index,
+    )
+    expect(
+      contradictingErrors(operations, {
+        'operations.1.citations.0.excerpt': '所附网页中未找到这段摘录',
+        'operations.0.citations.0.url': '无法读取所附网页',
+        note: '编辑说明不能超过 500 字',
+      }),
+    ).toEqual({
+      '12.excerpt': '所附网页中未找到这段摘录',
+      '11.url': '无法读取所附网页',
+    })
   })
 })
 
