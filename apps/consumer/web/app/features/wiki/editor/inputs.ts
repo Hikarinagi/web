@@ -40,8 +40,6 @@ export function mediaDraft(media: {
   }
 }
 
-export const RATING_LEVELS = ['无', '轻度', '明显'] as const
-
 const pad = (value: number) => String(value).padStart(2, '0')
 
 export function dateInput(date: string | null, precision: Precision | null): string {

@@ -5642,8 +5642,8 @@ packages:
     resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==}
     engines: {node: '>=20'}
 
-  isomorphic-git@1.44.14:
-    resolution: {integrity: sha512-ZSVmLOUvzjnUrPBEpVcVOZ6w4N6NSFte2CEZ4ruTYpEIb19iwykPs7lgmh+y9+3qwmDgQePcOQzsMShcSrW5jA==}
+  isomorphic-git@1.44.15:
+    resolution: {integrity: sha512-jm7drCsGNOuyAKCKiZ9n0WtGImsEjfTbms0HxLHJF3H8A+luGSerLnVFeAo/gADjF8PrdLzmO/p2G/0IqjNwig==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -9922,7 +9922,7 @@ snapshots:
       git-url-parse: 16.1.0
       h3: 1.15.11
       hookable: 5.5.3
-      isomorphic-git: 1.44.14
+      isomorphic-git: 1.44.15
       jiti: 2.7.0
       json-schema-to-typescript-lite: 15.0.0
       mdast-util-to-hast: 13.2.2
@@ -15081,7 +15081,7 @@ snapshots:
 
   isexe@4.0.0: {}
 
-  isomorphic-git@1.44.14:
+  isomorphic-git@1.44.15:
     dependencies:
       async-lock: 1.5.0
       clean-git-ref: 2.0.1

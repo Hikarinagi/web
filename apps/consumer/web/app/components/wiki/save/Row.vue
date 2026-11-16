@@ -2,8 +2,8 @@
   import { Button, Inline, Select, Stack, Text } from '@hina-ui/vue'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { DeprecationReason, ValueDraft } from '~/features/wiki/editor/draft'
-  import { RATING_LEVELS } from '~/features/wiki/editor/inputs'
   import type { ReviewRow } from '~/features/wiki/editor/review'
+  import { RATING_LABELS } from '~/utils/media/image'
   import {
     DEPRECATION_REASONS,
     LONG_PROPERTIES,
@@ -44,7 +44,8 @@
   function choose(value: string | number | null | undefined) {
     if (value) editor.reason(props.row.id, String(value) as DeprecationReason)
   }
-  const level = (value: number | null) => (value === null ? '未分级' : RATING_LEVELS[value])
+  const level = (field: keyof typeof RATING_LABELS, value: number | null) =>
+    value === null ? '未分级' : RATING_LABELS[field][value]
   const NOTES: Partial<Record<ReviewRow['state'], string>> = {
     restored: '恢复',
     moved_out: '移到另一个条目',
@@ -76,9 +77,10 @@
       <Text v-if="linked" size="xs" tone="muted">关联到 {{ linked }}</Text>
       <Text v-if="NOTES[row.state]" size="xs" tone="muted">{{ NOTES[row.state] }}</Text>
       <Text v-if="row.rating" size="xs" tone="muted">
-        成人内容 {{ level(row.rating.before.sexual) }} →
-        {{ level(row.rating.after.sexual) }}，血腥暴力 {{ level(row.rating.before.violence) }} →
-        {{ level(row.rating.after.violence) }}
+        成人内容 {{ level('sexual', row.rating.before.sexual) }} →
+        {{ level('sexual', row.rating.after.sexual) }}，血腥暴力
+        {{ level('violence', row.rating.before.violence) }} →
+        {{ level('violence', row.rating.after.violence) }}
       </Text>
       <Select
         v-if="row.state === 'removed'"

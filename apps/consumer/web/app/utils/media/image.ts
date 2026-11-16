@@ -48,6 +48,11 @@ export interface HikariImageSafety {
   violence: number
 }
 
+export const RATING_LABELS = {
+  sexual: ['无', '露点', '性行为'],
+  violence: ['无', '轻度', '严重'],
+} as const
+
 export function imageSourceSrc(source: HikariImageSource): string | null | undefined {
   if (typeof source === 'string' || source == null) return source
 

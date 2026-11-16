@@ -2,7 +2,8 @@
   import { AspectRatio, FileUpload, Inline, Select, Stack, Tag, Text } from '@hina-ui/vue'
   import { uploadImage } from '~/components/media-library/lib/upload'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
-  import { mediaDraft, RATING_LEVELS } from '~/features/wiki/editor/inputs'
+  import { mediaDraft } from '~/features/wiki/editor/inputs'
+  import { RATING_LABELS } from '~/utils/media/image'
 
   defineOptions({ name: 'WikiFieldImage' })
 
@@ -16,7 +17,8 @@
   const model = defineModel<ValueDraft>({ required: true })
 
   const uploading = ref(false)
-  const levels = RATING_LEVELS.map((label, value) => ({ value, label }))
+  const sexualLevels = RATING_LABELS.sexual.map((label, value) => ({ value, label }))
+  const violenceLevels = RATING_LABELS.violence.map((label, value) => ({ value, label }))
 
   async function upload(files: File | File[] | null) {
     const file = Array.isArray(files) ? files[0] : files
@@ -61,7 +63,7 @@
         <Text size="xs" tone="muted">成人内容</Text>
         <Select
           :model-value="rating.sexual"
-          :options="levels"
+          :options="sexualLevels"
           size="sm"
           placeholder="未分级"
           aria-label="成人内容"
@@ -72,7 +74,7 @@
         <Text size="xs" tone="muted">血腥暴力</Text>
         <Select
           :model-value="rating.violence"
-          :options="levels"
+          :options="violenceLevels"
           size="sm"
           placeholder="未分级"
           aria-label="血腥暴力"
@@ -106,7 +108,7 @@
         <Text as="span" size="sm" tone="muted">成人内容</Text>
         <Select
           :model-value="rating.sexual"
-          :options="levels"
+          :options="sexualLevels"
           aria-label="成人内容"
           placeholder="未分级"
           class="w-28"
@@ -115,7 +117,7 @@
         <Text as="span" size="sm" tone="muted">血腥暴力</Text>
         <Select
           :model-value="rating.violence"
-          :options="levels"
+          :options="violenceLevels"
           aria-label="血腥暴力"
           placeholder="未分级"
           class="w-28"
