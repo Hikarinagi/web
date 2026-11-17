@@ -50,8 +50,8 @@ export interface HikariImageSafety {
 }
 
 export const RATING_LABELS = {
-  sexual: ['无', '露点', '性行为'],
-  violence: ['无', '轻度', '严重'],
+  sexual: ['无', '轻度', '重度'],
+  violence: ['无', '轻度', '重度'],
 } as const
 
 export type ContentLimit = CurrentUser['content_limit']

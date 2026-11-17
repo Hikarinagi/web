@@ -55,10 +55,12 @@
     <template #actions>
       <Question title="图片显示" aria-label="查看图片显示说明">
         <List>
+          <ListItem>成人内容：轻度为裸露，重度为性爱场景。</ListItem>
+          <ListItem>血腥暴力：轻度为不写实的打斗与流血，重度为写实或残忍的暴力。</ListItem>
           <ListItem>设为「模糊」的图片，点开后可以查看；设为「不显示」的图片无法点开。</ListItem>
           <ListItem>分级为「无」的图片总是直接显示。</ListItem>
           <ListItem>
-            未分级的图片和标为 NSFW 的作品，按「成人内容：性行为」处理；该项设为「不显示」时，NSFW
+            未分级的图片和标为 NSFW 的作品，按「成人内容：重度」处理；该项设为「不显示」时，NSFW
             作品不出现在列表、搜索与动态中。
           </ListItem>
           <ListItem>同一类中，高一档的处理不能比低一档宽松。</ListItem>

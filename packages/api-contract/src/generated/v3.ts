@@ -27117,12 +27117,12 @@ export interface components {
             /** @enum {string} */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
             /**
-             * @description 成人内容：露点
+             * @description 成人内容：轻度
              * @enum {string}
              */
             sexual_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片
+             * @description 成人内容：重度；也用于标为 nsfw 的作品与未分级的图片
              * @enum {string}
              */
             sexual_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
@@ -27136,7 +27136,7 @@ export interface components {
              */
             violence_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 血腥暴力：严重
+             * @description 血腥暴力：重度
              * @enum {string}
              */
             violence_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
@@ -30130,12 +30130,12 @@ export interface components {
             content_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             hide_otome?: boolean;
             /**
-             * @description 成人内容：露点
+             * @description 成人内容：轻度
              * @enum {string}
              */
             sexual_1_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片，不能比露点宽松
+             * @description 成人内容：重度；也用于标为 nsfw 的作品与未分级的图片，不能比轻度宽松
              * @enum {string}
              */
             sexual_2_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
@@ -30145,7 +30145,7 @@ export interface components {
              */
             violence_1_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 血腥暴力：严重；不能比轻度宽松
+             * @description 血腥暴力：重度；不能比轻度宽松
              * @enum {string}
              */
             violence_2_limit?: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
@@ -30752,12 +30752,12 @@ export interface components {
             content_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             hide_otome: boolean;
             /**
-             * @description 成人内容：露点
+             * @description 成人内容：轻度
              * @enum {string}
              */
             sexual_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 成人内容：性行为；也用于标为 nsfw 的作品与未分级的图片
+             * @description 成人内容：重度；也用于标为 nsfw 的作品与未分级的图片
              * @enum {string}
              */
             sexual_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
@@ -30767,7 +30767,7 @@ export interface components {
              */
             violence_1_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
             /**
-             * @description 血腥暴力：严重
+             * @description 血腥暴力：重度
              * @enum {string}
              */
             violence_2_limit: "NEVER_SHOW_NSFW_CONTENT" | "SHOW_WITH_SPOILER" | "JUST_SHOW";
