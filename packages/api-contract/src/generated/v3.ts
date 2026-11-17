@@ -19523,16 +19523,20 @@ export interface components {
             };
         };
         DiscoveryCountersDto: {
+            /** @description 内容有变的来源记录数 */
+            changed: number;
             date_changes: number;
             doubtful: number;
             failed: number;
+            /** @description 来源已不再列出的来源记录数 */
+            gone: number;
+            /** @description 新登记的线索数 */
+            leads: number;
             new: number;
             new_volumes: number;
             on_site: number;
             out_of_scope: number;
             read: number;
-            /** @description 当天变更记录过多而跳过的日期 */
-            skipped_days: string[];
             waiting: number;
         };
         DiscoveryDateChangeDto: {

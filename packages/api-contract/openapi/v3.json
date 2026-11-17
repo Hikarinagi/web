@@ -15204,6 +15204,10 @@
       },
       "DiscoveryCountersDto": {
         "properties": {
+          "changed": {
+            "description": "内容有变的来源记录数",
+            "type": "number"
+          },
           "date_changes": {
             "type": "number"
           },
@@ -15211,6 +15215,14 @@
             "type": "number"
           },
           "failed": {
+            "type": "number"
+          },
+          "gone": {
+            "description": "来源已不再列出的来源记录数",
+            "type": "number"
+          },
+          "leads": {
+            "description": "新登记的线索数",
             "type": "number"
           },
           "new": {
@@ -15228,13 +15240,6 @@
           "read": {
             "type": "number"
           },
-          "skipped_days": {
-            "description": "当天变更记录过多而跳过的日期",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
           "waiting": {
             "type": "number"
           }
@@ -15249,7 +15254,9 @@
           "date_changes",
           "new_volumes",
           "failed",
-          "skipped_days"
+          "changed",
+          "gone",
+          "leads"
         ],
         "type": "object"
       },
