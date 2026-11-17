@@ -15179,8 +15179,8 @@
             "enum": [
               "PERSON",
               "CHARACTER",
-              "MANGA",
               "LIGHT_NOVEL",
+              "MANGA",
               "GALGAME",
               "PRODUCER",
               "LIGHT_NOVEL_VOLUME",
@@ -29742,6 +29742,38 @@
         ],
         "type": "object"
       },
+      "LookupEndedDto": {
+        "properties": {
+          "ended_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupEnd"
+              }
+            ],
+            "nullable": true
+          },
+          "entry": {
+            "$ref": "#/components/schemas/LookupEntryDto"
+          },
+          "id": {
+            "type": "number"
+          },
+          "state": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WikiLookupState"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "entry",
+          "state",
+          "ended_by"
+        ],
+        "type": "object"
+      },
       "LookupEntryCardDto": {
         "properties": {
           "cover": {
@@ -30281,6 +30313,107 @@
         ],
         "type": "object"
       },
+      "LookupProblemCountsDto": {
+        "properties": {
+          "fault": {
+            "type": "number"
+          },
+          "refusal": {
+            "type": "number"
+          },
+          "site": {
+            "type": "number"
+          },
+          "unreported": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unreported",
+          "site",
+          "refusal",
+          "fault"
+        ],
+        "type": "object"
+      },
+      "LookupProblemDto": {
+        "properties": {
+          "fault": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupFaultDto"
+              }
+            ],
+            "description": "Given for failed model requests"
+          },
+          "kind": {
+            "description": "A lookup that ran out of time or calls or failed before it reported, a site that failed or gave no text and is not excluded, a reason submitted items were not written, or failed model requests of one provider",
+            "enum": [
+              "unreported",
+              "site",
+              "refusal",
+              "fault"
+            ],
+            "type": "string"
+          },
+          "lookup": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupEndedDto"
+              }
+            ],
+            "description": "Given for an unreported lookup"
+          },
+          "refusal": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupRefusalDto"
+              }
+            ],
+            "description": "Given for a refusal reason"
+          },
+          "site": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupSiteDto"
+              }
+            ],
+            "description": "Given for a site"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "type": "object"
+      },
+      "LookupProblemsDto": {
+        "properties": {
+          "counts": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LookupProblemCountsDto"
+              }
+            ],
+            "description": "Problems of each kind in the period, whichever kind is asked for"
+          },
+          "items": {
+            "description": "Unreported lookups, the latest ended first, then sites, refusals and faults",
+            "items": {
+              "$ref": "#/components/schemas/LookupProblemDto"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
+          }
+        },
+        "required": [
+          "items",
+          "meta",
+          "counts"
+        ],
+        "type": "object"
+      },
       "LookupQueueDto": {
         "properties": {
           "items": {
@@ -30289,8 +30422,8 @@
             },
             "type": "array"
           },
-          "more": {
-            "type": "boolean"
+          "meta": {
+            "$ref": "#/components/schemas/PageMetaDto"
           },
           "types": {
             "description": "Entry types the task claims",
@@ -30303,7 +30436,7 @@
         "required": [
           "types",
           "items",
-          "more"
+          "meta"
         ],
         "type": "object"
       },
@@ -50440,6 +50573,68 @@
           "created_at",
           "confirmed_at",
           "retired_at"
+        ],
+        "type": "object"
+      },
+      "SiteNoteItemDto": {
+        "properties": {
+          "confirmed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "excluded": {
+            "description": "An operator has excluded the site",
+            "type": "boolean"
+          },
+          "host": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "lookup": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SiteNoteLookupDto"
+              }
+            ],
+            "description": "Lookup, search for new works or check of a lead that last wrote the note",
+            "nullable": true,
+            "type": "object"
+          },
+          "retired_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "user": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "Operator who last rewrote it",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "host",
+          "text",
+          "lookup",
+          "user",
+          "created_at",
+          "confirmed_at",
+          "retired_at",
+          "excluded"
         ],
         "type": "object"
       },
@@ -77490,6 +77685,83 @@
         ]
       }
     },
+    "/api/v3/admin/wiki/lookups/problems": {
+      "get": {
+        "operationId": "AdminLookupController_getProblems",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "task_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "description": "Count what happened at or after this time; omit for all time",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only problems of this kind",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "enum": [
+                "unreported",
+                "site",
+                "refusal",
+                "fault"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LookupProblemsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
     "/api/v3/admin/wiki/lookups/{id}": {
       "get": {
         "operationId": "AdminLookupController_getById",
@@ -78063,20 +78335,20 @@
           },
           {
             "in": "query",
-            "name": "offset",
-            "required": false,
+            "name": "page",
+            "required": true,
             "schema": {
-              "default": 0,
-              "minimum": 0,
+              "default": 1,
+              "minimum": 1,
               "type": "number"
             }
           },
           {
             "in": "query",
-            "name": "limit",
-            "required": false,
+            "name": "page_size",
+            "required": true,
             "schema": {
-              "default": 50,
+              "default": 10,
               "maximum": 100,
               "minimum": 1,
               "type": "number"
@@ -78781,16 +79053,50 @@
     "/api/v3/admin/wiki/sites/exclusions": {
       "get": {
         "operationId": "AdminSiteExclusionController_getList",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/SiteExclusionDto"
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/SiteExclusionDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
                   },
-                  "type": "array"
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },
@@ -78908,7 +79214,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/SiteNoteDto"
+                        "$ref": "#/components/schemas/SiteNoteItemDto"
                       },
                       "type": "array"
                     },

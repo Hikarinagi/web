@@ -5989,6 +5989,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/lookups/problems": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLookupController_getProblems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/wiki/lookups/{id}": {
         parameters: {
             query?: never;
@@ -19501,7 +19517,7 @@ export interface components {
         DirectEditDto: {
             resource_id: number;
             /** @enum {string} */
-            resource_type: "PERSON" | "CHARACTER" | "MANGA" | "LIGHT_NOVEL" | "GALGAME" | "PRODUCER" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
+            resource_type: "PERSON" | "CHARACTER" | "LIGHT_NOVEL" | "MANGA" | "GALGAME" | "PRODUCER" | "LIGHT_NOVEL_VOLUME" | "MANGA_VOLUME" | "MANGA_CHAPTER" | "TAG";
             snapshot: {
                 [key: string]: unknown;
             };
@@ -23110,6 +23126,12 @@ export interface components {
             reverted_at: string | null;
             summary: string;
         };
+        LookupEndedDto: {
+            ended_by: components["schemas"]["WikiLookupEnd"] | null;
+            entry: components["schemas"]["LookupEntryDto"];
+            id: number;
+            state: components["schemas"]["WikiLookupState"];
+        };
         LookupEntryCardDto: {
             /** @description Cover of a game or a series */
             cover: string | null;
@@ -23254,9 +23276,37 @@ export interface components {
             text: string;
             url: string;
         };
+        LookupProblemCountsDto: {
+            fault: number;
+            refusal: number;
+            site: number;
+            unreported: number;
+        };
+        LookupProblemDto: {
+            /** @description Given for failed model requests */
+            fault?: components["schemas"]["LookupFaultDto"];
+            /**
+             * @description A lookup that ran out of time or calls or failed before it reported, a site that failed or gave no text and is not excluded, a reason submitted items were not written, or failed model requests of one provider
+             * @enum {string}
+             */
+            kind: "unreported" | "site" | "refusal" | "fault";
+            /** @description Given for an unreported lookup */
+            lookup?: components["schemas"]["LookupEndedDto"];
+            /** @description Given for a refusal reason */
+            refusal?: components["schemas"]["LookupRefusalDto"];
+            /** @description Given for a site */
+            site?: components["schemas"]["LookupSiteDto"];
+        };
+        LookupProblemsDto: {
+            /** @description Problems of each kind in the period, whichever kind is asked for */
+            counts: components["schemas"]["LookupProblemCountsDto"];
+            /** @description Unreported lookups, the latest ended first, then sites, refusals and faults */
+            items: components["schemas"]["LookupProblemDto"][];
+            meta: components["schemas"]["PageMetaDto"];
+        };
         LookupQueueDto: {
             items: components["schemas"]["LookupQueueItemDto"][];
-            more: boolean;
+            meta: components["schemas"]["PageMetaDto"];
             /** @description Entry types the task claims */
             types: components["schemas"]["EntryType"][];
         };
@@ -28487,6 +28537,23 @@ export interface components {
             confirmed_at: string;
             /** Format: date-time */
             created_at: string;
+            host: string;
+            id: number;
+            /** @description Lookup, search for new works or check of a lead that last wrote the note */
+            lookup: components["schemas"]["SiteNoteLookupDto"] | null;
+            /** Format: date-time */
+            retired_at: string | null;
+            text: string;
+            /** @description Operator who last rewrote it */
+            user: components["schemas"]["UserRefDto"] | null;
+        };
+        SiteNoteItemDto: {
+            /** Format: date-time */
+            confirmed_at: string;
+            /** Format: date-time */
+            created_at: string;
+            /** @description An operator has excluded the site */
+            excluded: boolean;
             host: string;
             id: number;
             /** @description Lookup, search for new works or check of a lead that last wrote the note */
@@ -41261,6 +41328,33 @@ export interface operations {
             };
         };
     };
+    AdminLookupController_getProblems: {
+        parameters: {
+            query: {
+                task_id?: number;
+                /** @description Count what happened at or after this time; omit for all time */
+                from?: string;
+                /** @description Only problems of this kind */
+                kind?: "unreported" | "site" | "refusal" | "fault";
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LookupProblemsDto"];
+                };
+            };
+        };
+    };
     AdminLookupController_getById: {
         parameters: {
             query?: never;
@@ -41596,8 +41690,8 @@ export interface operations {
                 type: components["schemas"]["EntryType"];
                 /** @description Only entries the bot looks up for this reason */
                 reason?: "fresh" | "new" | "hot" | "gap";
-                offset?: number;
-                limit?: number;
+                page: number;
+                page_size: number;
             };
             header?: never;
             path?: never;
@@ -42026,7 +42120,10 @@ export interface operations {
     };
     AdminSiteExclusionController_getList: {
         parameters: {
-            query?: never;
+            query: {
+                page: number;
+                page_size: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -42038,7 +42135,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SiteExclusionDto"][];
+                    "application/json": {
+                        items: components["schemas"]["SiteExclusionDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -42107,7 +42207,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["SiteNoteDto"][];
+                        items: components["schemas"]["SiteNoteItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
