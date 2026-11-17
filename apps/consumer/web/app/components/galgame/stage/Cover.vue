@@ -11,7 +11,6 @@
     covers: GalgameCover[]
     products: GalgamePageData['products']
     mine: CoverVoteState | null
-    nsfw: boolean
     title: string
     zoomable: boolean
   }>()
@@ -40,7 +39,7 @@
         class="w-(--stage-cover-width)"
       />
     </Card>
-    <NsfwControl :images="[cover]" :nsfw="nsfw" class="absolute bottom-2 left-2" />
+    <NsfwControl :images="[cover]" class="absolute bottom-2 left-2" />
     <GalgameCoverVoteEntry
       :galgame-id="galgameId"
       :covers="covers"

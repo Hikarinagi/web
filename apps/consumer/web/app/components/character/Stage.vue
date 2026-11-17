@@ -43,15 +43,10 @@
         <CharacterPortrait
           v-if="view.image"
           :image="view.image"
-          :nsfw="view.nsfw"
           :alt="character.name"
           class="mx-auto w-60 shrink-0 lg:mx-0 lg:w-(--char-image)"
         >
-          <NsfwControl
-            :images="[view.image, work?.cover]"
-            :nsfw="view.nsfw"
-            class="absolute bottom-2 left-2"
-          />
+          <NsfwControl :images="[view.image, work?.cover]" class="absolute bottom-2 left-2" />
         </CharacterPortrait>
         <Stack gap="md" class="min-w-0 flex-1 self-start">
           <Inline v-if="work" gap="sm" align="center" :wrap="false" class="min-w-0">
@@ -63,7 +58,6 @@
               <HikariImage
                 :src="work.cover"
                 :alt="work.title"
-                :nsfw="work.nsfw"
                 :ratio="7 / 10"
                 preset="thumbnail"
                 image-class="object-cover"

@@ -27,7 +27,6 @@ export interface WorkCardItem {
   cv: { id: number; name: string }[] | null
   subtitle: string | null
   aspect: 'galgame' | 'light_novel' | 'manga'
-  nsfw: boolean
 }
 
 export interface VoiceCardItem {

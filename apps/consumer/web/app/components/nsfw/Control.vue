@@ -7,9 +7,7 @@
   import { imageSourceSafety, imageSourceSrc } from '~/utils/media/image'
 
   defineOptions({ name: 'NsfwControl', inheritAttrs: false })
-  const props = withDefaults(defineProps<{ images: HikariImageSource[]; nsfw?: boolean }>(), {
-    nsfw: false,
-  })
+  const props = defineProps<{ images: HikariImageSource[] }>()
 
   const auth = useAuthStore()
   const { requireLogin } = useAuthGate()
@@ -20,8 +18,7 @@
     props.images.flatMap(image => {
       const source = imageSourceSrc(image)
       if (!source) return []
-      const safety = imageSourceSafety(image)
-      const limit = limitOf({ ...safety, nsfw: props.nsfw || safety.nsfw })
+      const limit = limitOf(imageSourceSafety(image))
       return limit === 'JUST_SHOW' ? [] : [{ source, limit }]
     }),
   )

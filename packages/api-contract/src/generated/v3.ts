@@ -18365,7 +18365,7 @@ export interface components {
             height: number | null;
             hips: number | null;
             id: number;
-            image: components["schemas"]["MediaAssetDto"] | null;
+            image: components["schemas"]["RatedMediaAssetDto"] | null;
             intro: string;
             labels: components["schemas"]["EntityLabelDto"][];
             name: string;
@@ -18451,7 +18451,7 @@ export interface components {
         };
         CharacterPreviewDto: {
             id: number;
-            image: components["schemas"]["MediaAssetDto"] | null;
+            image: components["schemas"]["RatedMediaAssetDto"] | null;
             name: string;
             trans_name: string | null;
         };
@@ -24862,7 +24862,7 @@ export interface components {
             volume_number: number | null;
         };
         MangaVolumeWantedDto: {
-            cover: components["schemas"]["MediaAssetDto"] | null;
+            cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
             name_cn: string | null;
@@ -27679,15 +27679,15 @@ export interface components {
             height: number | null;
             /** @description 媒体资源 ID */
             id: number;
-            /** @description 是否为NSFW 内容 */
+            /** @description 图片未分级时为 true，与所属作品的 NSFW 标记无关 */
             nsfw: boolean;
-            /** @description 色情内容分级，0 为安全 */
+            /** @description 色情内容分级，0 为安全，未分级时为 0 */
             sexual: number;
             /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
             /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
             thumb_hash: string | null;
-            /** @description 暴力内容分级，0 为安全 */
+            /** @description 暴力内容分级，0 为安全，未分级时为 0 */
             violence: number;
             /** @description 图片宽度，单位像素 */
             width: number | null;
@@ -28342,15 +28342,15 @@ export interface components {
             height: number | null;
             /** @description 媒体资源 ID */
             id: number;
-            /** @description 是否为NSFW 内容 */
+            /** @description 图片未分级时为 true，与所属作品的 NSFW 标记无关 */
             nsfw: boolean;
-            /** @description 色情内容分级，0 为安全 */
+            /** @description 色情内容分级，0 为安全，未分级时为 0 */
             sexual: number;
             /** @description 图片地址，开放接口返回可直接访问的完整 URL */
             src: string;
             /** @description ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览 */
             thumb_hash: string | null;
-            /** @description 暴力内容分级，0 为安全 */
+            /** @description 暴力内容分级，0 为安全，未分级时为 0 */
             violence: number;
             votes: number;
             /** @description 图片宽度，单位像素 */

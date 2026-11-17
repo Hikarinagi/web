@@ -30,7 +30,6 @@ export interface HikariImageMediaSource {
 
 export interface HikariImageRelationSource {
   media?: HikariImageMediaSource | null
-  nsfw?: boolean | null
   sexual?: number | null
   violence?: number | null
 }
@@ -44,7 +43,7 @@ export type HikariImageSource =
   string | HikariImageMediaSource | HikariImageRelationSource | null | undefined
 
 export interface HikariImageSafety {
-  nsfw: boolean
+  unrated: boolean
   sexual: number
   violence: number
 }
@@ -75,7 +74,7 @@ export function imageLimit(safety: HikariImageSafety, limits: ContentLimits): Co
   return strictestLimit(
     'JUST_SHOW',
     ...(safety.sexual >= 1 ? [limits.sexual_1_limit] : []),
-    ...(safety.sexual >= 2 || safety.nsfw ? [limits.sexual_2_limit] : []),
+    ...(safety.sexual >= 2 || safety.unrated ? [limits.sexual_2_limit] : []),
     ...(safety.violence >= 1 ? [limits.violence_1_limit] : []),
     ...(safety.violence >= 2 ? [limits.violence_2_limit] : []),
   )
@@ -88,12 +87,13 @@ export function imageSourceSrc(source: HikariImageSource): string | null | undef
 }
 
 export function imageSourceSafety(source: HikariImageSource): HikariImageSafety {
-  if (typeof source === 'string' || source == null) return { nsfw: false, sexual: 0, violence: 0 }
+  if (typeof source === 'string' || source == null)
+    return { unrated: false, sexual: 0, violence: 0 }
   const media = readMedia(source)
 
   return {
-    nsfw:
-      Boolean(readField(source, 'nsfw') || readField(media, 'nsfw')) ||
+    unrated:
+      readField(media ?? source, 'nsfw') === true ||
       [source, media].some(
         item => readField(item, 'sexual') === null || readField(item, 'violence') === null,
       ),

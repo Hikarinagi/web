@@ -56,13 +56,20 @@ describe('imageLimit', () => {
     expect(limitOf({ media: { src: 'a.webp', sexual: null, violence: 0 } })).toBe(
       'SHOW_WITH_SPOILER',
     )
+    expect(limitOf({ src: 'a.webp', nsfw: true, sexual: 0, violence: 0 })).toBe('SHOW_WITH_SPOILER')
   })
 
-  it('treats an image of a work marked nsfw as the sexual act level', () => {
-    expect(limitOf({ src: 'a.webp', nsfw: true, sexual: 0, violence: 0 })).toBe('SHOW_WITH_SPOILER')
-    expect(limitOf({ media: { src: 'a.webp', sexual: 0, violence: 2 }, nsfw: true })).toBe(
-      'NEVER_SHOW_NSFW_CONTENT',
+  it('treats an image rated 2 as the sexual act level', () => {
+    expect(limitOf({ src: 'a.webp', sexual: 2, violence: 0 })).toBe('SHOW_WITH_SPOILER')
+    expect(limitOf({ media: { src: 'a.webp', nsfw: false, sexual: 2, violence: 0 } })).toBe(
+      'SHOW_WITH_SPOILER',
     )
+  })
+
+  it('shows an image rated 0 of a work marked nsfw', () => {
+    const cover = { media: { src: 'a.webp', nsfw: false, sexual: 0, violence: 0 }, nsfw: true }
+    expect(limitOf(cover)).toBe('JUST_SHOW')
+    expect(imageSourceSafety(cover)).toEqual({ unrated: false, sexual: 0, violence: 0 })
   })
 
   it('matches the single setting of an existing user when all four levels hold it', () => {

@@ -15,7 +15,6 @@ export interface Appearance {
   title: string
   path: string
   cover: HikariImageSource
-  nsfw: boolean
   date: string | null
   label: string | null
   group: string | null
@@ -78,7 +77,6 @@ export function appearancesOf(data: Lists): Appearance[] {
       ...facts(item, 'galgame', item.galgame.id),
       title: item.galgame.trans_title || item.galgame.origin_title,
       cover: topVotedMedia(item.galgame.covers),
-      nsfw: item.galgame.nsfw,
       date: item.galgame.release_date,
       voices: item.voices,
     })),
@@ -86,7 +84,6 @@ export function appearancesOf(data: Lists): Appearance[] {
       ...facts(item, 'light-novel', item.light_novel.id),
       title: item.light_novel.name_cn || item.light_novel.name,
       cover: topVotedMedia(item.light_novel.covers),
-      nsfw: item.light_novel.nsfw,
       date: item.light_novel.publication_date,
       voices: [],
     })),
@@ -94,7 +91,6 @@ export function appearancesOf(data: Lists): Appearance[] {
       ...facts(item, 'manga', item.manga.id),
       title: item.manga.name_cn || item.manga.name,
       cover: topVotedMedia(item.manga.covers),
-      nsfw: item.manga.nsfw,
       date: item.manga.publication_date,
       voices: [],
     })),
@@ -153,7 +149,6 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
   const source = work && told(work) ? work : (near ?? character)
   return {
     image: work?.image ?? character.image,
-    nsfw: work?.nsfw ?? false,
     profile,
     intro: source.trans_intro || source.intro,
     original: !source.trans_intro,

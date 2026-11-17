@@ -95,7 +95,6 @@
         >
           <NsfwControl
             :images="[cover, ...volumes.map(volume => volume.cover)]"
-            :nsfw="manga.nsfw"
             class="absolute bottom-2 left-3"
           />
         </EntryBookCover>

@@ -26,7 +26,6 @@
         : props.hit.type === 'manga'
           ? 'manga'
           : 'light_novel',
-    nsfw: props.hit.cover?.nsfw ?? false,
   }))
 </script>
 

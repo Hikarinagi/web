@@ -140,15 +140,21 @@ describe('HikariImage', () => {
     )
   })
 
-  it('treats the nsfw prop of a work as the sexual act level', () => {
+  it('treats an unrated image as the sexual act level', () => {
     limit = 'blur'
     violence = 'JUST_SHOW'
-    const props = mount(HikariImage, {
-      props: { src: { src: 'media/a.webp', thumb_hash: HASH }, nsfw: true },
-    })
-      .getComponent(Image)
-      .props()
-    expect(props.src).toMatch(/^data:image\/png;base64,/)
+    expect(
+      render({ src: 'media/a.webp', thumb_hash: HASH, sexual: null, violence: null }).src,
+    ).toMatch(/^data:image\/png;base64,/)
+  })
+
+  it('shows an image rated 0 of a work marked nsfw', () => {
+    limit = 'block'
+    const cover = {
+      media: { src: 'media/a.webp', thumb_hash: HASH, nsfw: false, sexual: 0, violence: 0 },
+      nsfw: true,
+    }
+    expect(render(cover).src).toContain('media/a.webp')
   })
 
   it('shows the fallback when an image the viewer may not reveal cannot be blurred', () => {

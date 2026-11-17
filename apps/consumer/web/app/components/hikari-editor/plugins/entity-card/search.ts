@@ -26,7 +26,6 @@ interface PickedDisplay {
   subtitle: string | null
   cover: HikariImageSource
   meta: string | null
-  nsfw: boolean
 }
 
 // Discriminated union by `kind`:让 EntityCardSearch 的 insertItem 可以 switch + exhaustive
@@ -100,7 +99,6 @@ function galgameMap(raw: Schemas['GalgameSummaryDto']): PickedFor<'galgame'> {
       subtitle,
       cover,
       meta: joinMeta(['Galgame', yearOf(raw.release_date as string | null), topProducerName]),
-      nsfw: raw.nsfw,
     },
     summary,
   }
@@ -127,7 +125,6 @@ function lightNovelMap(raw: Schemas['LightNovelSummaryDto']): PickedFor<'light_n
       subtitle,
       cover,
       meta: joinMeta(['轻小说', yearOf(raw.publication_date as string | null), raw.author?.name]),
-      nsfw: raw.nsfw,
     },
     summary,
   }
@@ -164,7 +161,6 @@ function lightNovelVolumeMap(
       subtitle: series,
       cover,
       meta: joinMeta(['轻小说卷', volumeTag, yearOf(raw.publication_date as string | null)]),
-      nsfw: raw.series.nsfw,
     },
     summary,
   }
@@ -191,7 +187,6 @@ function mangaMap(raw: Schemas['MangaSummaryDto']): PickedFor<'manga'> {
       subtitle,
       cover,
       meta: joinMeta(['漫画', yearOf(raw.publication_date as string | null)]),
-      nsfw: raw.nsfw,
     },
     summary,
   }
@@ -205,7 +200,7 @@ function personMap(raw: Schemas['EntitySummaryDto']): PickedFor<'person'> {
   return {
     kind: 'person',
     entity_id: raw.id,
-    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '人物', nsfw: false },
+    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '人物' },
     summary,
   }
 }
@@ -218,7 +213,7 @@ function producerMap(raw: Schemas['EntitySummaryDto']): PickedFor<'producer'> {
   return {
     kind: 'producer',
     entity_id: raw.id,
-    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '厂商', nsfw: false },
+    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '厂商' },
     summary,
   }
 }
@@ -231,7 +226,7 @@ function characterMap(raw: Schemas['EntitySummaryDto']): PickedFor<'character'> 
   return {
     kind: 'character',
     entity_id: raw.id,
-    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '角色', nsfw: false },
+    display: { title: raw.name, subtitle: null, cover: raw.cover, meta: '角色' },
     summary,
   }
 }
@@ -253,7 +248,6 @@ function articleMap(raw: Schemas['ArticleSummaryDto']): PickedFor<'article'> {
       subtitle: raw.creator ? displayName(raw.creator) : null,
       cover: raw.cover?.src ?? null,
       meta: joinMeta(['文章', sectionName]),
-      nsfw: false,
     },
     summary,
   }
@@ -277,7 +271,6 @@ function postMap(raw: Schemas['PostSummaryDto']): PickedFor<'post'> {
       subtitle: raw.creator ? displayName(raw.creator) : null,
       cover: cover?.src ?? null,
       meta: joinMeta(['图文', sectionName]),
-      nsfw: false,
     },
     summary,
   }
@@ -292,7 +285,6 @@ function galgameRateMap(raw: Schemas['GalgameRateCardSummaryResDto']): PickedFor
       subtitle: null,
       cover: raw.galgame_cover,
       meta: joinMeta(['Galgame 评分', raw.rate != null ? `${raw.rate} 分` : null]),
-      nsfw: raw.galgame_nsfw,
     },
     summary: raw,
   }
@@ -309,7 +301,6 @@ function lightNovelRateMap(
       subtitle: null,
       cover: raw.light_novel_cover,
       meta: joinMeta(['轻小说评分', raw.rate != null ? `${raw.rate} 分` : null]),
-      nsfw: raw.light_novel_nsfw,
     },
     summary: raw,
   }
@@ -324,7 +315,6 @@ function mangaRateMap(raw: Schemas['MangaRateCardSummaryResDto']): PickedFor<'ma
       subtitle: null,
       cover: raw.manga_cover,
       meta: joinMeta(['漫画评分', raw.rate != null ? `${raw.rate} 分` : null]),
-      nsfw: raw.manga_nsfw,
     },
     summary: raw,
   }

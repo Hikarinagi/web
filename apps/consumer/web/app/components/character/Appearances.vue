@@ -79,7 +79,6 @@
           <HikariImage
             :src="item.cover"
             :alt="item.title"
-            :nsfw="item.nsfw"
             :ratio="7 / 10"
             preset="thumbnail"
             image-class="object-cover"
@@ -90,7 +89,6 @@
           v-if="item.image"
           :src="item.image"
           :alt="`${item.title} 中的${character.name}`"
-          :nsfw="item.nsfw"
           :ratio="1"
           :processing="{ gravity: 'face' }"
           preset="thumbnail"

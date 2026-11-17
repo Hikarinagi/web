@@ -16,7 +16,6 @@
     <HikariImage
       :src="entity.display.cover"
       :alt="entity.display.title"
-      :nsfw="entity.display.nsfw"
       preset="small"
       class="size-10 shrink-0 overflow-hidden rounded-sm bg-inset"
       image-class="size-full object-cover"

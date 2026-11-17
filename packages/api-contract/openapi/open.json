@@ -4168,11 +4168,11 @@
             "type": "number"
           },
           "nsfw": {
-            "description": "是否为NSFW 内容",
+            "description": "图片未分级时为 true，与所属作品的 NSFW 标记无关",
             "type": "boolean"
           },
           "sexual": {
-            "description": "色情内容分级，0 为安全",
+            "description": "色情内容分级，0 为安全，未分级时为 0",
             "type": "number"
           },
           "src": {
@@ -4185,7 +4185,7 @@
             "type": "string"
           },
           "violence": {
-            "description": "暴力内容分级，0 为安全",
+            "description": "暴力内容分级，0 为安全，未分级时为 0",
             "type": "number"
           },
           "width": {

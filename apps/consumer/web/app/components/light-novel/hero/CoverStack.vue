@@ -7,7 +7,6 @@
     volumes: LightNovelPageData['volumes']
     fallback: LightNovelPageData['light_novel']['covers'][number]['media'] | null
     title: string
-    nsfw: boolean
   }>()
 
   const covers = computed(() => {
@@ -41,7 +40,7 @@
       class="absolute! inset-0 translate-x-1.5 -translate-y-1.5 brightness-90 lg:translate-x-2 lg:-translate-y-2"
     />
     <EntryBookCover :media="front" :alt="`${title} 封面`" preload class="shadow-2xl">
-      <NsfwControl :images="allCovers" :nsfw="nsfw" class="absolute bottom-2 left-3" />
+      <NsfwControl :images="allCovers" class="absolute bottom-2 left-3" />
     </EntryBookCover>
   </Stack>
 </template>

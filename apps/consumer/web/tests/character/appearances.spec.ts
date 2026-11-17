@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import type { ContentLimits } from '~/utils/media/image'
+import { imageLimit, imageSourceSafety } from '~/utils/media/image'
 import {
   appearancesOf,
   characterPath,
@@ -186,6 +188,32 @@ describe('viewOf', () => {
       intro: 'zh',
       original: false,
     })
+  })
+
+  it('falls back to the image of the character with its own rating', () => {
+    const limits: ContentLimits = {
+      sexual_1_limit: 'JUST_SHOW',
+      sexual_2_limit: 'SHOW_WITH_SPOILER',
+      violence_1_limit: 'JUST_SHOW',
+      violence_2_limit: 'JUST_SHOW',
+    }
+    const image = (fields: { nsfw: boolean; sexual: number }) => ({
+      id: 7,
+      src: 'characters/7.webp',
+      width: null,
+      height: null,
+      thumb_hash: null,
+      violence: 0,
+      ...fields,
+    })
+    const list = appearancesOf(lists([game(1, '2001-01-01')]))
+    const limitOf = (fields: { nsfw: boolean; sexual: number }) => {
+      const own = { ...character, image: image(fields) } as Parameters<typeof viewOf>[0]
+      return imageLimit(imageSourceSafety(viewOf(own, list, list[0] ?? null).image), limits)
+    }
+    expect(limitOf({ nsfw: false, sexual: 0 })).toBe('JUST_SHOW')
+    expect(limitOf({ nsfw: true, sexual: 0 })).toBe('SHOW_WITH_SPOILER')
+    expect(limitOf({ nsfw: false, sexual: 2 })).toBe('SHOW_WITH_SPOILER')
   })
 })
 

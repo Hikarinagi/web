@@ -4,7 +4,7 @@
   import { imageSourceSize, imageSourceSrc } from '~/utils/media/image'
 
   defineOptions({ name: 'CharacterPortrait' })
-  const props = defineProps<{ image: HikariImageSource; nsfw: boolean; alt: string }>()
+  const props = defineProps<{ image: HikariImageSource; alt: string }>()
 
   const size = computed(() => imageSourceSize(props.image))
   const ratio = computed(() => (size.value ? size.value.width / size.value.height : 5 / 6))
@@ -29,7 +29,6 @@
         :key="imageSourceSrc(image) ?? ''"
         :src="image"
         :alt="alt"
-        :nsfw="nsfw"
         :ratio="ratio"
         :processing="{ width: 640, quality: 86, format: 'auto' }"
         :preview="zoomable"

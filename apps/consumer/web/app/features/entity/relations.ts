@@ -59,7 +59,6 @@ function galgameCard(
     cv,
     subtitle: null,
     aspect: 'galgame',
-    nsfw: galgame.nsfw,
   }
 }
 
@@ -73,7 +72,6 @@ function lightNovelCard(lightNovel: LightNovelSummary, rolePill: string | null):
     cv: null,
     subtitle: null,
     aspect: 'light_novel',
-    nsfw: lightNovel.nsfw,
   }
 }
 
@@ -87,7 +85,6 @@ function mangaCard(manga: MangaSummary, rolePill: string | null): WorkCardItem {
     cv: null,
     subtitle: null,
     aspect: 'manga',
-    nsfw: manga.nsfw,
   }
 }
 

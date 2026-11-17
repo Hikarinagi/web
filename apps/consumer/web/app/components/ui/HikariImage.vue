@@ -45,9 +45,6 @@
       preview?: boolean
       previewSize?: HikariImageSize
       draggable?: boolean
-      nsfw?: boolean
-      sexual?: number
-      violence?: number
     }>(),
     {
       src: '',
@@ -64,9 +61,6 @@
       preload: false,
       preview: false,
       previewSize: undefined,
-      nsfw: false,
-      sexual: 0,
-      violence: 0,
     },
   )
 
@@ -81,14 +75,7 @@
   const { limitOf } = useNsfwPolicy()
   const { revealed } = useNsfwReveal()
   const sourceSrc = computed(() => imageSourceSrc(props.src))
-  const limit = computed(() => {
-    const safety = imageSourceSafety(props.src)
-    return limitOf({
-      nsfw: props.nsfw || safety.nsfw,
-      sexual: Math.max(props.sexual, safety.sexual),
-      violence: Math.max(props.violence, safety.violence),
-    })
-  })
+  const limit = computed(() => limitOf(imageSourceSafety(props.src)))
   const blurNsfw = computed(
     () =>
       limit.value !== 'JUST_SHOW' &&
