@@ -23328,7 +23328,7 @@ export interface components {
             /** @description Never looked up */
             never: boolean;
             /**
-             * @description Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
+             * @description Why the bot looks this entry up: a work released within the recent period, an entry made lately and not imported, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
              * @enum {string|null}
              */
             reason: "fresh" | "new" | "hot" | "gap" | null;
@@ -27543,7 +27543,7 @@ export interface components {
             /** @description Never looked up */
             never: boolean;
             /**
-             * @description Why the bot looks this entry up: a work released within the recent period, a person or organization made lately, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
+             * @description Why the bot looks this entry up: a work released within the recent period, an entry made lately and not imported, a work among the most viewed, or a work lacking basic facts; null when it is in none of these
              * @enum {string|null}
              */
             reason: "fresh" | "new" | "hot" | "gap" | null;

@@ -19,7 +19,7 @@ importers:
     dependencies:
       '@bbob/parser':
         specifier: ^4.4.1
-        version: 4.4.1
+        version: 4.5.0
       '@bprogress/core':
         specifier: ^1.3.4
         version: 1.3.4
@@ -712,14 +712,14 @@ packages:
     resolution: {integrity: sha512-uXt6qt2f5G61jZwNIzK1RKu7l5Xjt1VXtPPOGuVveha9fxbx0QM94U1kM4pFZKTRLjWK+X8vmwjwbIemJjiQTA==}
     engines: {node: ^22.18.0 || >=24.11.0}
 
-  '@bbob/parser@4.4.1':
-    resolution: {integrity: sha512-Hs6caDSsY5zJdZZpj7ohTz4hQZGKPL+ZgZy+qbgDtfD9WV2YGxFGtXQf7PBu/aIRKOrkGgbCQxDYWlCEyONi9w==}
+  '@bbob/parser@4.5.0':
+    resolution: {integrity: sha512-OQyIvFd+kVyEu9XXw4zGP18jSts/yxIRRSUScBV8LsQ6ldNUX31le7UFSeek01mJJr0hPrcrtcG4ZWZNppc64w==}
 
-  '@bbob/plugin-helper@4.4.1':
-    resolution: {integrity: sha512-vTjwNiiIHhihyD41DuxrUFVCuGPr1EB1fXvy5+HHnmcvWmOH5BzPSgSEs+KCdpWF+hIDMAho2toAHiDmYurCJQ==}
+  '@bbob/plugin-helper@4.5.0':
+    resolution: {integrity: sha512-zxCAaqcX0/Zd3oSgFqcqVYm5DyYEXVdTzrbXogmwJLbMLMxqYyT1qbpPdniGwEkvutodZgDssM/8oDmSaYw0oA==}
 
-  '@bbob/types@4.4.1':
-    resolution: {integrity: sha512-IDu7H3J9yMQG0U//0X4Akbbm3SOIKfeLmgPHO4s3s+WPsl+AeGb6dy4XBFLEDcDIN/N3f8WPibhIjLr0gFQ7Fg==}
+  '@bbob/types@4.5.0':
+    resolution: {integrity: sha512-sK///MEcmjnwCc7w/O6KFR2R4ZFXnx4rJmtVxbv1O2G4SgXm2F0pSubiQXOz+7hhVzFPwv7+TlQBZ+e1qFC9gg==}
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
@@ -4460,8 +4460,8 @@ packages:
     resolution: {integrity: sha512-AZL67abkUzIuvcHqk7c09cezpGNcxUxU4Ioi/05xHk4DQeTkWmGYftIE6ctU6AEt+Gn4n1lDStOtj7FKycP71A==}
     engines: {node: '>=8'}
 
-  csstype@3.2.3:
-    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+  csstype@3.2.4:
+    resolution: {integrity: sha512-PoKaoPzQapnEoqUSnHx1u6W6ku8CVEgKsnpmmzU3m1nwkidpPBQ8V/Zq2+bWNrsOKoKLwTGdbx6xF7BXP1zLVQ==}
 
   data-urls@3.0.2:
     resolution: {integrity: sha512-Jy/tj3ldjZJo63sVAvg6LHt2mHvl4V6AgRAmNDtLdm7faqtsx+aJG42rsyCo9JCoRVKwPFzKlIPx3DIibwSIaQ==}
@@ -8873,16 +8873,16 @@ snapshots:
       '@babel/helper-string-parser': 8.1.2
       '@babel/helper-validator-identifier': 8.0.6
 
-  '@bbob/parser@4.4.1':
+  '@bbob/parser@4.5.0':
     dependencies:
-      '@bbob/plugin-helper': 4.4.1
-      '@bbob/types': 4.4.1
+      '@bbob/plugin-helper': 4.5.0
+      '@bbob/types': 4.5.0
 
-  '@bbob/plugin-helper@4.4.1':
+  '@bbob/plugin-helper@4.5.0':
     dependencies:
-      '@bbob/types': 4.4.1
+      '@bbob/types': 4.5.0
 
-  '@bbob/types@4.4.1': {}
+  '@bbob/types@4.5.0': {}
 
   '@bcoe/v8-coverage@0.2.3': {}
 
@@ -12947,7 +12947,7 @@ snapshots:
       '@vue/reactivity': 3.5.45
       '@vue/runtime-core': 3.5.45
       '@vue/shared': 3.5.45
-      csstype: 3.2.3
+      csstype: 3.2.4
 
   '@vue/server-renderer@3.5.45':
     dependencies:
@@ -13682,7 +13682,7 @@ snapshots:
     dependencies:
       cssom: 0.3.8
 
-  csstype@3.2.3: {}
+  csstype@3.2.4: {}
 
   data-urls@3.0.2:
     dependencies:
