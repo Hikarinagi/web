@@ -59891,6 +59891,7 @@
           "OPERATOR",
           "TIME",
           "CALLS",
+          "OUTAGE",
           "ERROR"
         ],
         "type": "string"
@@ -59915,6 +59916,7 @@
       "WikiLookupState": {
         "enum": [
           "RUNNING",
+          "PAUSED",
           "FINISHED",
           "HALTED",
           "FAILED"

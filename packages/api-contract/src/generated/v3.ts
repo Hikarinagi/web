@@ -30855,13 +30855,13 @@ export interface components {
         /** @enum {string} */
         WikiLookupCallState: "RUNNING" | "OK" | "FAILED";
         /** @enum {string} */
-        WikiLookupEnd: "SELF" | "OPERATOR" | "TIME" | "CALLS" | "ERROR";
+        WikiLookupEnd: "SELF" | "OPERATOR" | "TIME" | "CALLS" | "OUTAGE" | "ERROR";
         /** @enum {string} */
         WikiLookupKind: "ENTRY" | "LEAD" | "SCOUT";
         /** @enum {string} */
         WikiLookupOutcome: "WRITTEN" | "PRESENT" | "NOT_FOUND" | "UNSURE";
         /** @enum {string} */
-        WikiLookupState: "RUNNING" | "FINISHED" | "HALTED" | "FAILED";
+        WikiLookupState: "RUNNING" | "PAUSED" | "FINISHED" | "HALTED" | "FAILED";
         WikiRulesDto: {
             /** @description 附录 A 记录细则（Markdown） */
             appendix: string;
