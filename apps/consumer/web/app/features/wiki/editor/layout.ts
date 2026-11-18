@@ -32,10 +32,6 @@ export const WIDE_PROPERTIES: readonly Property[] = [
   'EXTERNAL_LINK',
 ]
 
-export const FIELD_LABELS: Partial<Record<EntryType, Partial<Record<Property, string>>>> = {
-  GAME: { CREDIT: '译者' },
-}
-
 export const PANEL_PROPERTIES: readonly Property[] = ['CREDIT', 'COVER', 'IMAGE', 'SAMPLE_IMAGE']
 
 export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
@@ -46,7 +42,7 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
     },
     { title: '介绍', properties: ['GENRE_TEXT', 'ORIGINAL_INTRO', 'CHINESE_INTRO'] },
     LINKS,
-    { title: '非官方汉化', properties: ['CREDIT'] },
+    { title: '制作信息', properties: ['CREDIT'] },
   ],
   PRODUCT: [
     {

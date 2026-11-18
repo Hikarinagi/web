@@ -1,14 +1,18 @@
 <script setup lang="ts">
   import { FormLayout, Panel } from '@hina-ui/vue'
-  import type { EditableEntry, EntryDefinition } from '~/features/wiki/editor/draft'
+  import type {
+    EditableEntry,
+    EntryDefinition,
+    PropertyDefinition,
+  } from '~/features/wiki/editor/draft'
   import {
-    FIELD_LABELS,
     groupsOf,
     PANEL_PROPERTIES,
     WIDE_PROPERTIES,
     type PropertyGroup,
   } from '~/features/wiki/editor/layout'
   import { ELSEWHERE } from '~/features/wiki/editor/parts'
+  import { codeLabel } from '~/features/wiki/values'
 
   defineOptions({ name: 'WikiEditorForm' })
 
@@ -30,19 +34,26 @@
   )
   const panel = (group: PropertyGroup) => {
     const property = group.properties[0]!
-    return group.properties.length === 1 &&
-      PANEL_PROPERTIES.includes(property) &&
-      !FIELD_LABELS[props.entry.type]?.[property]
+    return group.properties.length === 1 && PANEL_PROPERTIES.includes(property)
       ? properties.value.get(property)
       : undefined
   }
+  const notesOf = (definition: PropertyDefinition) =>
+    Object.entries(definition.code_notes).map(([code, text]) => ({
+      term: codeLabel(definition.property, code),
+      text,
+    }))
 </script>
 
 <template>
   <template v-for="group in groups" :key="group.title">
     <Panel v-if="panel(group)" :title="group.title">
       <template v-if="panel(group)!.clauses.length" #actions>
-        <WikiFieldRule :label="group.title" :clauses="panel(group)!.clauses" />
+        <WikiFieldRule
+          :label="group.title"
+          :clauses="panel(group)!.clauses"
+          :notes="notesOf(panel(group)!)"
+        />
       </template>
       <WikiFieldProperty bare :entry="entry.id" :definition="panel(group)!" />
     </Panel>
@@ -57,7 +68,6 @@
           :key="property"
           :entry="entry.id"
           :definition="properties.get(property)!"
-          :label="FIELD_LABELS[entry.type]?.[property]"
           :class="columns && WIDE_PROPERTIES.includes(property) ? 'sm:col-span-2' : undefined"
         />
       </FormLayout>

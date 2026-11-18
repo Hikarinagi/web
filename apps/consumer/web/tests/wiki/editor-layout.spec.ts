@@ -11,6 +11,13 @@ describe('groupsOf', () => {
     ])
   })
 
+  it('edits the credits of a game, its developer among them, as its own section', () => {
+    expect(groupsOf('GAME', ['TITLE', 'CREDIT'])).toEqual([
+      { title: '标题', properties: ['TITLE'] },
+      { title: '制作信息', properties: ['CREDIT'] },
+    ])
+  })
+
   it('keeps the properties the system maintains out of the form', () => {
     const groups = groupsOf('APPEARANCE', ['WORK', 'CHARACTER', 'LABEL', 'LABEL_NUMBER'])
     expect(groups.flatMap(group => group.properties)).toEqual(['WORK', 'LABEL'])

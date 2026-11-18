@@ -64,6 +64,28 @@ describe('operationsOf', () => {
     expect(modify!.value).toMatchObject({ text: '夏野こおり', code: 'VOICE', target: 9 })
   })
 
+  it('records a developer on the game and withdraws the same developer from a release in one edit', () => {
+    const developer = statement({
+      id: 31,
+      property: 'CREDIT',
+      text: 'Navel',
+      code: 'DEVELOPER',
+      target: { id: 400, type: 'ORGANIZATION', label: 'Navel' },
+    })
+    const draft = emptyDraft()
+    draft.added.push({ id: -1, entry: 5, property: 'CREDIT', value: valueOf(developer) })
+    draft.removed[31] = 'WRONG_ENTRY'
+    expect(operationsOf(draft, new Map([[31, { entry: 7, statement: developer }]]))).toEqual([
+      expect.objectContaining({
+        op: 'add',
+        entry: 5,
+        property: 'CREDIT',
+        value: expect.objectContaining({ text: 'Navel', code: 'DEVELOPER', target: 400 }),
+      }),
+      { op: 'deprecate', statement: 31, reason: 'WRONG_ENTRY' },
+    ])
+  })
+
   it('creates a new entry by reference and points values at it', () => {
     const draft = emptyDraft()
     draft.created.push({ id: -1, type: 'PRODUCT' })

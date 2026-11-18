@@ -46423,6 +46423,13 @@
             },
             "type": "array"
           },
+          "code_notes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "How a code is recorded on this entry type, keyed by code",
+            "type": "object"
+          },
           "codes": {
             "items": {
               "type": "string"
@@ -46606,6 +46613,7 @@
           "required",
           "qualifiers",
           "codes",
+          "code_notes",
           "optional_code",
           "targets",
           "reading",

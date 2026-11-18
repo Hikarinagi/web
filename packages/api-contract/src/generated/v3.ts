@@ -27610,6 +27610,10 @@ export interface components {
             cardinality: "single" | "multiple" | "single_per_period";
             /** @description Clauses of the cataloging rules that govern this property */
             clauses: string[];
+            /** @description How a code is recorded on this entry type, keyed by code */
+            code_notes: {
+                [key: string]: string;
+            };
             codes: string[] | null;
             /** @description Name of the property */
             label: string;
