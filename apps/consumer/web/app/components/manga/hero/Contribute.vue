@@ -25,7 +25,7 @@
     variant="soft"
     tone="neutral"
     size="sm"
-    class="self-center lg:self-start"
+    class="self-start"
     @click="open = true"
   >
     <template #icon><BookUp /></template>
