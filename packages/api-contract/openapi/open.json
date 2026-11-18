@@ -78,6 +78,291 @@
         ],
         "type": "object"
       },
+      "BatchGalgameRateDto": {
+        "properties": {
+          "items": {
+            "description": "要写入的记录，1 至 100 条",
+            "items": {
+              "$ref": "#/components/schemas/BatchGalgameRateItemDto"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "BatchGalgameRateItemDto": {
+        "properties": {
+          "galgame_id": {
+            "description": "Galgame ID",
+            "minimum": 1,
+            "type": "number"
+          },
+          "is_spoiler": {
+            "description": "短评是否含剧透",
+            "type": "boolean"
+          },
+          "rate": {
+            "description": "总评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "description": "角色评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "description": "短评正文",
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "rate_direction": {
+            "description": "演出评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_music": {
+            "description": "音乐评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_scenario": {
+            "description": "剧本评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_system": {
+            "description": "系统评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_visual": {
+            "description": "CG 评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "description": "标记状态",
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
+          "time_to_finish_minutes": {
+            "description": "通关耗时，单位分钟",
+            "maximum": 525600,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "galgame_id"
+        ],
+        "type": "object"
+      },
+      "BatchLightNovelRateDto": {
+        "properties": {
+          "items": {
+            "description": "要写入的记录，1 至 100 条",
+            "items": {
+              "$ref": "#/components/schemas/BatchLightNovelRateItemDto"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "BatchLightNovelRateItemDto": {
+        "properties": {
+          "is_spoiler": {
+            "description": "短评是否含剧透",
+            "type": "boolean"
+          },
+          "light_novel_id": {
+            "description": "轻小说 ID",
+            "minimum": 1,
+            "type": "number"
+          },
+          "rate": {
+            "description": "总评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_character": {
+            "description": "角色评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "description": "短评正文",
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "rate_illustration": {
+            "description": "插画评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_pacing": {
+            "description": "节奏评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_plot": {
+            "description": "剧情评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_worldview": {
+            "description": "世界观评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_writing": {
+            "description": "文笔评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "description": "标记状态",
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          },
+          "time_to_finish_minutes": {
+            "description": "阅读耗时，单位分钟",
+            "maximum": 525600,
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "light_novel_id"
+        ],
+        "type": "object"
+      },
+      "BatchMangaRateDto": {
+        "properties": {
+          "items": {
+            "description": "要写入的记录，1 至 100 条",
+            "items": {
+              "$ref": "#/components/schemas/BatchMangaRateItemDto"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "BatchMangaRateItemDto": {
+        "properties": {
+          "is_spoiler": {
+            "description": "短评是否含剧透",
+            "type": "boolean"
+          },
+          "manga_id": {
+            "description": "漫画 ID",
+            "minimum": 1,
+            "type": "number"
+          },
+          "rate": {
+            "description": "总评分",
+            "maximum": 10,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "rate_content": {
+            "description": "短评正文",
+            "maxLength": 5000,
+            "type": "string"
+          },
+          "status": {
+            "description": "标记状态",
+            "enum": [
+              "GOING",
+              "COMPLETED",
+              "ON_HOLD",
+              "DROPPED",
+              "PLAN"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "status_private": {
+            "description": "状态标记仅自己可见",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "manga_id"
+        ],
+        "type": "object"
+      },
       "CatalogEventKind": {
         "description": "upsert 后应重读资源详情；delete 表示资源已不可见；merge 表示资源并入 merged_to_id",
         "enum": [
@@ -446,6 +731,60 @@
           "RELEASED": "已发售"
         }
       },
+      "GalgameRateBatchResultDto": {
+        "properties": {
+          "items": {
+            "description": "各条的结果，顺序与请求一致",
+            "items": {
+              "$ref": "#/components/schemas/GalgameRateBatchResultItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "GalgameRateBatchResultItemDto": {
+        "properties": {
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RateBatchErrorDto"
+              }
+            ],
+            "description": "失败原因，成功时为 null",
+            "nullable": true,
+            "type": "object"
+          },
+          "galgame_id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "ok": {
+            "description": "是否写入成功",
+            "type": "boolean"
+          },
+          "rate": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameRateDetailDto"
+              }
+            ],
+            "description": "写入后的记录，失败时为 null",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "galgame_id",
+          "ok",
+          "rate",
+          "error"
+        ],
+        "type": "object"
+      },
       "GalgameRateDetailDto": {
         "properties": {
           "created_at": {
@@ -793,6 +1132,60 @@
         ],
         "type": "object"
       },
+      "LightNovelRateBatchResultDto": {
+        "properties": {
+          "items": {
+            "description": "各条的结果，顺序与请求一致",
+            "items": {
+              "$ref": "#/components/schemas/LightNovelRateBatchResultItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "LightNovelRateBatchResultItemDto": {
+        "properties": {
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RateBatchErrorDto"
+              }
+            ],
+            "description": "失败原因，成功时为 null",
+            "nullable": true,
+            "type": "object"
+          },
+          "light_novel_id": {
+            "description": "轻小说 ID",
+            "type": "number"
+          },
+          "ok": {
+            "description": "是否写入成功",
+            "type": "boolean"
+          },
+          "rate": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightNovelRateDetailDto"
+              }
+            ],
+            "description": "写入后的记录，失败时为 null",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "light_novel_id",
+          "ok",
+          "rate",
+          "error"
+        ],
+        "type": "object"
+      },
       "LightNovelRateDetailDto": {
         "properties": {
           "created_at": {
@@ -1120,6 +1513,60 @@
           "MAGAZINE": "连载杂志",
           "PUBLISHER": "出版社"
         }
+      },
+      "MangaRateBatchResultDto": {
+        "properties": {
+          "items": {
+            "description": "各条的结果，顺序与请求一致",
+            "items": {
+              "$ref": "#/components/schemas/MangaRateBatchResultItemDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "MangaRateBatchResultItemDto": {
+        "properties": {
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RateBatchErrorDto"
+              }
+            ],
+            "description": "失败原因，成功时为 null",
+            "nullable": true,
+            "type": "object"
+          },
+          "manga_id": {
+            "description": "漫画 ID",
+            "type": "number"
+          },
+          "ok": {
+            "description": "是否写入成功",
+            "type": "boolean"
+          },
+          "rate": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaRateDetailDto"
+              }
+            ],
+            "description": "写入后的记录，失败时为 null",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "manga_id",
+          "ok",
+          "rate",
+          "error"
+        ],
+        "type": "object"
       },
       "MangaRateDetailDto": {
         "properties": {
@@ -4035,6 +4482,52 @@
         ],
         "type": "object"
       },
+      "RateBatchErrorDto": {
+        "properties": {
+          "code": {
+            "description": "错误码，与单条写入失败时返回的 error.code 相同",
+            "type": "string"
+          },
+          "field_errors": {
+            "description": "字段错误，没有时为空数组",
+            "items": {
+              "$ref": "#/components/schemas/RateBatchFieldErrorDto"
+            },
+            "type": "array"
+          },
+          "message": {
+            "description": "错误说明",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "field_errors"
+        ],
+        "type": "object"
+      },
+      "RateBatchFieldErrorDto": {
+        "properties": {
+          "code": {
+            "description": "校验规则代码",
+            "type": "string"
+          },
+          "field": {
+            "description": "出错的字段",
+            "type": "string"
+          },
+          "message": {
+            "description": "错误说明",
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "message"
+        ],
+        "type": "object"
+      },
       "RateDimensionDto": {
         "properties": {
           "key": {
@@ -6151,6 +6644,42 @@
         ]
       }
     },
+    "/v3/user/me/rates/galgames/batch": {
+      "post": {
+        "description": "每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。",
+        "operationId": "user.rate.galgame.batch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchGalgameRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameRateBatchResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "批量记录 Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
     "/v3/user/me/rates/galgames/{id}": {
       "delete": {
         "operationId": "user.rate.galgame.withdraw",
@@ -6210,6 +6739,7 @@
         ]
       },
       "put": {
+        "description": "只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想玩）时不能带有评分。",
         "operationId": "user.rate.galgame.upsert",
         "parameters": [
           {
@@ -6244,6 +6774,42 @@
           }
         },
         "summary": "记录 Galgame 的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/v3/user/me/rates/light-novels/batch": {
+      "post": {
+        "description": "每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。",
+        "operationId": "user.rate.light-novel.batch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchLightNovelRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LightNovelRateBatchResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "批量记录轻小说的状态与评分",
         "tags": [
           "open-user-rate"
         ],
@@ -6311,6 +6877,7 @@
         ]
       },
       "put": {
+        "description": "只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想读）时不能带有评分。",
         "operationId": "user.rate.light-novel.upsert",
         "parameters": [
           {
@@ -6345,6 +6912,42 @@
           }
         },
         "summary": "记录轻小说的状态与评分",
+        "tags": [
+          "open-user-rate"
+        ],
+        "x-hikari-scopes": [
+          "status:write"
+        ]
+      }
+    },
+    "/v3/user/me/rates/mangas/batch": {
+      "post": {
+        "description": "每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。",
+        "operationId": "user.rate.manga.batch",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchMangaRateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MangaRateBatchResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "批量记录漫画的状态与评分",
         "tags": [
           "open-user-rate"
         ],
@@ -6412,6 +7015,7 @@
         ]
       },
       "put": {
+        "description": "只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想读）时不能带有评分。",
         "operationId": "user.rate.manga.upsert",
         "parameters": [
           {

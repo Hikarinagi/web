@@ -12120,6 +12120,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/open/user/me/rates/galgames/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 批量记录 Galgame 的状态与评分
+         * @description 每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。
+         */
+        post: operations["user.rate.galgame.batch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/open/user/me/rates/galgames/{id}": {
         parameters: {
             query?: never;
@@ -12129,11 +12149,34 @@ export interface paths {
         };
         /** Galgame 的状态与评分 */
         get: operations["user.rate.galgame.get"];
-        /** 记录 Galgame 的状态与评分 */
+        /**
+         * 记录 Galgame 的状态与评分
+         * @description 只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想玩）时不能带有评分。
+         */
         put: operations["user.rate.galgame.upsert"];
         post?: never;
         /** 撤回 Galgame 的记录 */
         delete: operations["user.rate.galgame.withdraw"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates/light-novels/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 批量记录轻小说的状态与评分
+         * @description 每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。
+         */
+        post: operations["user.rate.light-novel.batch"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -12148,11 +12191,34 @@ export interface paths {
         };
         /** 轻小说的状态与评分 */
         get: operations["user.rate.light-novel.get"];
-        /** 记录轻小说的状态与评分 */
+        /**
+         * 记录轻小说的状态与评分
+         * @description 只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想读）时不能带有评分。
+         */
         put: operations["user.rate.light-novel.upsert"];
         post?: never;
         /** 撤回轻小说的记录 */
         delete: operations["user.rate.light-novel.withdraw"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/open/user/me/rates/mangas/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 批量记录漫画的状态与评分
+         * @description 每次 1 至 100 条，同一作品不能重复出现。各条按请求顺序逐条写入，规则与单条写入相同，某条失败不影响其余各条，结果按请求顺序返回。
+         */
+        post: operations["user.rate.manga.batch"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -12167,7 +12233,10 @@ export interface paths {
         };
         /** 漫画的状态与评分 */
         get: operations["user.rate.manga.get"];
-        /** 记录漫画的状态与评分 */
+        /**
+         * 记录漫画的状态与评分
+         * @description 只更新请求体中出现的字段，未出现的字段保留原值，可为空的字段传入 null 即可清空。状态为 PLAN（想读）时不能带有评分。
+         */
         put: operations["user.rate.manga.upsert"];
         post?: never;
         /** 撤回漫画的记录 */
@@ -18204,6 +18273,97 @@ export interface components {
             entry_id: number;
             revision: number;
         };
+        BatchGalgameRateDto: {
+            /** @description 要写入的记录，1 至 100 条 */
+            items: components["schemas"]["BatchGalgameRateItemDto"][];
+        };
+        BatchGalgameRateItemDto: {
+            /** @description Galgame ID */
+            galgame_id: number;
+            /** @description 短评是否含剧透 */
+            is_spoiler?: boolean;
+            /** @description 总评分 */
+            rate?: number | null;
+            /** @description 角色评分 */
+            rate_character?: number | null;
+            /** @description 短评正文 */
+            rate_content?: string;
+            /** @description 演出评分 */
+            rate_direction?: number | null;
+            /** @description 音乐评分 */
+            rate_music?: number | null;
+            /** @description 剧本评分 */
+            rate_scenario?: number | null;
+            /** @description 系统评分 */
+            rate_system?: number | null;
+            /** @description CG 评分 */
+            rate_visual?: number | null;
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
+            status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
+            /** @description 通关耗时，单位分钟 */
+            time_to_finish_minutes?: number;
+        };
+        BatchLightNovelRateDto: {
+            /** @description 要写入的记录，1 至 100 条 */
+            items: components["schemas"]["BatchLightNovelRateItemDto"][];
+        };
+        BatchLightNovelRateItemDto: {
+            /** @description 短评是否含剧透 */
+            is_spoiler?: boolean;
+            /** @description 轻小说 ID */
+            light_novel_id: number;
+            /** @description 总评分 */
+            rate?: number | null;
+            /** @description 角色评分 */
+            rate_character?: number | null;
+            /** @description 短评正文 */
+            rate_content?: string;
+            /** @description 插画评分 */
+            rate_illustration?: number | null;
+            /** @description 节奏评分 */
+            rate_pacing?: number | null;
+            /** @description 剧情评分 */
+            rate_plot?: number | null;
+            /** @description 世界观评分 */
+            rate_worldview?: number | null;
+            /** @description 文笔评分 */
+            rate_writing?: number | null;
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
+            status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
+            /** @description 阅读耗时，单位分钟 */
+            time_to_finish_minutes?: number;
+        };
+        BatchMangaRateDto: {
+            /** @description 要写入的记录，1 至 100 条 */
+            items: components["schemas"]["BatchMangaRateItemDto"][];
+        };
+        BatchMangaRateItemDto: {
+            /** @description 短评是否含剧透 */
+            is_spoiler?: boolean;
+            /** @description 漫画 ID */
+            manga_id: number;
+            /** @description 总评分 */
+            rate?: number | null;
+            /** @description 短评正文 */
+            rate_content?: string;
+            /**
+             * @description 标记状态
+             * @enum {string|null}
+             */
+            status?: "GOING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "PLAN" | null;
+            /** @description 状态标记仅自己可见 */
+            status_private?: boolean;
+        };
         BotCreatedDto: {
             id: number;
         };
@@ -21554,6 +21714,20 @@ export interface components {
             /** @enum {string|null} */
             role: "DEVELOPER" | "PUBLISHER" | "LOCALIZER" | null;
         };
+        GalgameRateBatchResultDto: {
+            /** @description 各条的结果，顺序与请求一致 */
+            items: components["schemas"]["GalgameRateBatchResultItemDto"][];
+        };
+        GalgameRateBatchResultItemDto: {
+            /** @description 失败原因，成功时为 null */
+            error: components["schemas"]["RateBatchErrorDto"] | null;
+            /** @description Galgame ID */
+            galgame_id: number;
+            /** @description 是否写入成功 */
+            ok: boolean;
+            /** @description 写入后的记录，失败时为 null */
+            rate: components["schemas"]["GalgameRateDetailDto"] | null;
+        };
         GalgameRateCardSummaryResDto: {
             galgame_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             galgame_id: number;
@@ -22484,6 +22658,20 @@ export interface components {
             volume_count: number;
             /** @description 有封面的卷中已发售的最新一卷的封面 */
             volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
+        };
+        LightNovelRateBatchResultDto: {
+            /** @description 各条的结果，顺序与请求一致 */
+            items: components["schemas"]["LightNovelRateBatchResultItemDto"][];
+        };
+        LightNovelRateBatchResultItemDto: {
+            /** @description 失败原因，成功时为 null */
+            error: components["schemas"]["RateBatchErrorDto"] | null;
+            /** @description 轻小说 ID */
+            light_novel_id: number;
+            /** @description 是否写入成功 */
+            ok: boolean;
+            /** @description 写入后的记录，失败时为 null */
+            rate: components["schemas"]["LightNovelRateDetailDto"] | null;
         };
         LightNovelRateCardSummaryResDto: {
             id: number;
@@ -24323,6 +24511,20 @@ export interface components {
             tags: string[];
             /** @description 有封面的卷中已发售的最新一卷的封面 */
             volume_cover: components["schemas"]["RatedMediaAssetDto"] | null;
+        };
+        MangaRateBatchResultDto: {
+            /** @description 各条的结果，顺序与请求一致 */
+            items: components["schemas"]["MangaRateBatchResultItemDto"][];
+        };
+        MangaRateBatchResultItemDto: {
+            /** @description 失败原因，成功时为 null */
+            error: components["schemas"]["RateBatchErrorDto"] | null;
+            /** @description 漫画 ID */
+            manga_id: number;
+            /** @description 是否写入成功 */
+            ok: boolean;
+            /** @description 写入后的记录，失败时为 null */
+            rate: components["schemas"]["MangaRateDetailDto"] | null;
         };
         MangaRateCardSummaryResDto: {
             id: number;
@@ -27592,6 +27794,22 @@ export interface components {
             failed: number;
             stuck: number;
             waiting: number;
+        };
+        RateBatchErrorDto: {
+            /** @description 错误码，与单条写入失败时返回的 error.code 相同 */
+            code: string;
+            /** @description 字段错误，没有时为空数组 */
+            field_errors: components["schemas"]["RateBatchFieldErrorDto"][];
+            /** @description 错误说明 */
+            message: string;
+        };
+        RateBatchFieldErrorDto: {
+            /** @description 校验规则代码 */
+            code?: string;
+            /** @description 出错的字段 */
+            field: string;
+            /** @description 错误说明 */
+            message: string;
         };
         RateDimensionDto: {
             /** @description 评分维度标识 */
@@ -52014,6 +52232,29 @@ export interface operations {
             };
         };
     };
+    "user.rate.galgame.batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchGalgameRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameRateBatchResultDto"];
+                };
+            };
+        };
+    };
     "user.rate.galgame.get": {
         parameters: {
             query?: never;
@@ -52079,6 +52320,29 @@ export interface operations {
             };
         };
     };
+    "user.rate.light-novel.batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchLightNovelRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LightNovelRateBatchResultDto"];
+                };
+            };
+        };
+    };
     "user.rate.light-novel.get": {
         parameters: {
             query?: never;
@@ -52141,6 +52405,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    "user.rate.manga.batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchMangaRateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaRateBatchResultDto"];
+                };
             };
         };
     };
