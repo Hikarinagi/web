@@ -86,7 +86,8 @@ export function collectingNumbers(items: ContentsItem[]): Set<number> {
     items
       .filter(item => item.collecting && mangaReadingUnit(item.chapter_type) === 'chapter')
       .map(chapterValue)
-      .filter(Number.isInteger),
+      .filter(Number.isFinite)
+      .map(Math.floor),
   )
 }
 
@@ -96,7 +97,7 @@ export function chapterCells(
   collecting: ReadonlySet<number> = new Set(),
 ): ContentsCell[] {
   const finite = chapters.map(chapterValue).filter(Number.isFinite)
-  const whole = new Set(finite.filter(Number.isInteger))
+  const whole = new Set(finite.map(Math.floor))
   const first = finite.length ? Math.ceil(Math.min(...finite)) : 0
   const last = finite.length ? Math.floor(Math.max(...finite)) : -1
   const cells: ContentsCell[] = []

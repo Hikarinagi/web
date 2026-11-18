@@ -101,6 +101,21 @@ describe('chapter ranges and cells', () => {
     ).toEqual(['38', '39', '39.5', 'gap 40', '41', '041'])
   })
 
+  it('takes a chapter split into parts as present instead of a gap', () => {
+    const chapters = [
+      item(43),
+      item(441, { chapter_number: '44.1' }),
+      item(442, { chapter_number: '44.2' }),
+      item(451, { chapter_number: '45.1' }),
+      item(47),
+    ]
+    expect(
+      chapterCells(chapters, null).map(cell =>
+        cell.kind === 'gap' ? `gap ${cell.number}` : cell.item.chapter_number,
+      ),
+    ).toEqual(['43', '44.1', '44.2', '45.1', 'gap 46', '47'])
+  })
+
   it('puts chapters without a numeric number into the last range', () => {
     const chapters = [...long, item(999, { chapter_number: 'web版' })]
     expect(chapterCells(chapters, '1').at(-1)).toMatchObject({ kind: 'item', key: 'item-999' })
@@ -125,14 +140,14 @@ describe('chapter ranges and cells', () => {
       item(30, { ...pending, chapter_type: 'VOLUME', chapter_number: '3', volume_number: 3 }),
     ]
     const collecting = collectingNumbers(items)
-    expect([...collecting]).toEqual([2, 4, 7])
+    expect([...collecting]).toEqual([2, 4, 5, 7])
     expect(
       chapterCells(contentsUnits(items).chapter, null, collecting).map(cell =>
         cell.kind === 'gap'
           ? `gap ${cell.number}${cell.collecting ? ' collecting' : ''}`
           : cell.item.chapter_number,
       ),
-    ).toEqual(['1', 'gap 2 collecting', 'gap 3', 'gap 4 collecting', 'gap 5', '6'])
+    ).toEqual(['1', 'gap 2 collecting', 'gap 3', 'gap 4 collecting', 'gap 5 collecting', '6'])
   })
 })
 
