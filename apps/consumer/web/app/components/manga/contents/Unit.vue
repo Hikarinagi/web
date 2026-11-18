@@ -14,8 +14,9 @@
       signedIn: boolean
       desc?: boolean
       variant?: ContentsVariant
+      collecting?: ReadonlySet<number>
     }>(),
-    { currentPage: 0, desc: false, variant: 'page' },
+    { currentPage: 0, desc: false, variant: 'page', collecting: () => new Set<number>() },
   )
   const emit = defineEmits<{ select: [item: ContentsItem] }>()
   const range = defineModel<string | null>('range', { default: null })
@@ -32,6 +33,7 @@
     :signed-in="signedIn"
     :desc="desc"
     :variant="variant"
+    :collecting="collecting"
     @select="emit('select', $event)"
   />
   <MangaContentsVolumeGrid

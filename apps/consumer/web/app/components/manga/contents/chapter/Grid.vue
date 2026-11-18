@@ -18,8 +18,9 @@
       signedIn: boolean
       desc?: boolean
       variant?: ContentsVariant
+      collecting?: ReadonlySet<number>
     }>(),
-    { currentPage: 0, desc: false, variant: 'page' },
+    { currentPage: 0, desc: false, variant: 'page', collecting: () => new Set<number>() },
   )
   const emit = defineEmits<{ select: [item: ContentsItem] }>()
   const range = defineModel<string | null>('range', { default: null })
@@ -33,7 +34,7 @@
   )
 
   function cellsOf(key: string | null) {
-    const cells = chapterCells(props.chapters, key)
+    const cells = chapterCells(props.chapters, key, props.collecting)
     return props.desc ? cells.reverse() : cells
   }
 </script>

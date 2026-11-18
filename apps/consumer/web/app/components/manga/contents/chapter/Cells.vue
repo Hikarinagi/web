@@ -41,7 +41,7 @@
         as="span"
         align="center"
         gap="none"
-        :aria-label="`第 ${cell.number} 话，暂无`"
+        :aria-label="`第 ${cell.number} 话，${cell.collecting ? '收录中' : '暂无'}`"
         :class="
           cn(
             'rounded-lg border border-dashed border-line-strong px-1',
@@ -50,7 +50,7 @@
         "
       >
         <Text as="span" size="sm" tone="disabled" class="tabular-nums">{{ cell.number }}</Text>
-        <Text as="span" size="xs" tone="disabled">暂无</Text>
+        <Text as="span" size="xs" tone="disabled">{{ cell.collecting ? '收录中' : '暂无' }}</Text>
       </Stack>
       <MangaContentsChapterCell
         v-else

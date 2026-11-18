@@ -18,8 +18,9 @@
       signedIn: boolean
       desc?: boolean
       variant?: ContentsVariant
+      collecting?: ReadonlySet<number>
     }>(),
-    { currentPage: 0, desc: false, variant: 'page' },
+    { currentPage: 0, desc: false, variant: 'page', collecting: () => new Set<number>() },
   )
   const emit = defineEmits<{ select: [item: ContentsItem] }>()
   const unit = defineModel<MangaReadingUnit>('unit', { required: true })
@@ -54,6 +55,7 @@
         :signed-in="signedIn"
         :desc="desc"
         :variant="variant"
+        :collecting="collecting"
         class="pt-4"
         @select="emit('select', $event)"
       />
@@ -70,6 +72,7 @@
     :signed-in="signedIn"
     :desc="desc"
     :variant="variant"
+    :collecting="collecting"
     @select="emit('select', $event)"
   />
 </template>

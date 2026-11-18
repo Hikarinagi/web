@@ -23590,6 +23590,8 @@ export interface components {
         MangaChapterRelationDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
+            /** @description 源站已有、页面仍在等待或正在自动采集 */
+            collecting: boolean;
             /** @description 卷先取单行本条目的封面，其次取本章的封面，都没有时取所属系列的封面 */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /**
@@ -49474,6 +49476,8 @@ export interface operations {
             query?: {
                 /** @description 还返回没有页面且不等待自动采集的章节 */
                 wanted?: boolean;
+                /** @description 还返回没有页面、仍在等待或正在自动采集的章节 */
+                collecting?: boolean;
             };
             header?: never;
             path: {

@@ -1,6 +1,7 @@
 import {
   chapterCells,
   chapterRanges,
+  collectingNumbers,
   contentsUnits,
   continueTarget,
   defaultUnit,
@@ -24,6 +25,7 @@ function item(id: number, over: Partial<ContentsItem> = {}): ContentsItem {
     created_at: '2026-01-01T00:00:00.000Z',
     cover: null,
     readable: true,
+    collecting: false,
     guest_readable: true,
     editable: false,
     ...over,
@@ -107,8 +109,30 @@ describe('chapter ranges and cells', () => {
 
   it('keeps the cells of the chosen range only', () => {
     const cells = chapterCells([...long.slice(0, 99), ...long.slice(100)], '0')
-    expect(cells.at(-1)).toEqual({ kind: 'gap', key: 'gap-100', number: 100 })
+    expect(cells.at(-1)).toEqual({ kind: 'gap', key: 'gap-100', number: 100, collecting: false })
     expect(cells).toHaveLength(100)
+  })
+
+  it('marks gaps whose chapters are still being collected', () => {
+    const pending = { readable: false, collecting: true, page_count: 0 }
+    const items = [
+      item(1),
+      item(2, pending),
+      item(4, { ...pending, chapter_number: '004' }),
+      item(5, { ...pending, chapter_number: '5.5' }),
+      item(6),
+      item(7, pending),
+      item(30, { ...pending, chapter_type: 'VOLUME', chapter_number: '3', volume_number: 3 }),
+    ]
+    const collecting = collectingNumbers(items)
+    expect([...collecting]).toEqual([2, 4, 7])
+    expect(
+      chapterCells(contentsUnits(items).chapter, null, collecting).map(cell =>
+        cell.kind === 'gap'
+          ? `gap ${cell.number}${cell.collecting ? ' collecting' : ''}`
+          : cell.item.chapter_number,
+      ),
+    ).toEqual(['1', 'gap 2 collecting', 'gap 3', 'gap 4 collecting', 'gap 5', '6'])
   })
 })
 

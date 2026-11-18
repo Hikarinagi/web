@@ -20,7 +20,8 @@ export interface ContentsRange {
 }
 
 export type ContentsCell =
-  { kind: 'item'; key: string; item: ContentsItem } | { kind: 'gap'; key: string; number: number }
+  | { kind: 'item'; key: string; item: ContentsItem }
+  | { kind: 'gap'; key: string; number: number; collecting: boolean }
 
 export const CONTENTS_RANGE_SIZE = 100
 export const CONTENTS_NEW_MS = 7 * 24 * 60 * 60 * 1000
@@ -80,7 +81,20 @@ export function rangeOfItem(item: ContentsItem, ranges: ContentsRange[]): string
   return ranges[Math.min(index, ranges.length - 1)]?.key ?? null
 }
 
-export function chapterCells(chapters: ContentsItem[], range: string | null): ContentsCell[] {
+export function collectingNumbers(items: ContentsItem[]): Set<number> {
+  return new Set(
+    items
+      .filter(item => item.collecting && mangaReadingUnit(item.chapter_type) === 'chapter')
+      .map(chapterValue)
+      .filter(Number.isInteger),
+  )
+}
+
+export function chapterCells(
+  chapters: ContentsItem[],
+  range: string | null,
+  collecting: ReadonlySet<number> = new Set(),
+): ContentsCell[] {
   const finite = chapters.map(chapterValue).filter(Number.isFinite)
   const whole = new Set(finite.filter(Number.isInteger))
   const first = finite.length ? Math.ceil(Math.min(...finite)) : 0
@@ -90,7 +104,14 @@ export function chapterCells(chapters: ContentsItem[], range: string | null): Co
   for (const item of chapters) {
     const value = chapterValue(item)
     while (next < value && next <= last) {
-      if (!whole.has(next)) cells.push({ kind: 'gap', key: `gap-${next}`, number: next })
+      if (!whole.has(next)) {
+        cells.push({
+          kind: 'gap',
+          key: `gap-${next}`,
+          number: next,
+          collecting: collecting.has(next),
+        })
+      }
       next += 1
     }
     cells.push({ kind: 'item', key: `item-${item.id}`, item })

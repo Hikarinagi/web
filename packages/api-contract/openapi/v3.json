@@ -31521,6 +31521,10 @@
               }
             ]
           },
+          "collecting": {
+            "description": "源站已有、页面仍在等待或正在自动采集",
+            "type": "boolean"
+          },
           "cover": {
             "allOf": [
               {
@@ -31590,6 +31594,7 @@
           "created_at",
           "cover",
           "readable",
+          "collecting",
           "guest_readable",
           "editable"
         ],
@@ -91995,6 +92000,16 @@
             "description": "还返回没有页面且不等待自动采集的章节",
             "in": "query",
             "name": "wanted",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "还返回没有页面、仍在等待或正在自动采集的章节",
+            "in": "query",
+            "name": "collecting",
             "required": false,
             "schema": {
               "default": false,

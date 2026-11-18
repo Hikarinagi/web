@@ -3,6 +3,7 @@
   import { ArrowDownUp } from '@lucide/vue'
   import { MANGA_READING_UNITS, mangaChapterLabel } from '@hikarinagi/shared'
   import {
+    collectingNumbers,
     contentsStatus,
     recentChapters,
     type ContentsItem,
@@ -29,6 +30,7 @@
     if (!text || props.finished || !props.latestChapterAt) return text
     return `${text} · ${timeFromNow(props.latestChapterAt)}`
   })
+  const collecting = computed(() => collectingNumbers(props.chapters))
   const editable = computed(() => props.chapters.some(item => item.editable))
   const editing = ref(false)
   const target = ref<ContentsItem | null>(null)
@@ -115,6 +117,7 @@
       :read-ids="readIds"
       :signed-in="signedIn"
       :desc="desc"
+      :collecting="collecting"
       @select="select"
     />
 

@@ -22,7 +22,10 @@ async function handler(event: H3Event) {
     contributors,
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/mangas/{id}', { path: { id } }),
-    fetchBackendData(event, '/api/v3/mangas/{id}/chapters', { path: { id } }),
+    fetchBackendData(event, '/api/v3/mangas/{id}/chapters', {
+      path: { id },
+      query: { collecting: true },
+    }),
     fetchBackendData(event, '/api/v3/mangas/{id}/volumes', { path: { id } }),
     fetchBackendData(event, '/api/v3/mangas/{id}/people', { path: { id } }),
     fetchBackendData(event, '/api/v3/mangas/{id}/producers', { path: { id } }),

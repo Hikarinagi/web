@@ -12,7 +12,7 @@
   const open = ref(false)
   const next = computed(() => {
     const numbers = props.chapters
-      .filter(chapter => chapter.chapter_type === 'SERIALIZATION')
+      .filter(chapter => chapter.readable && chapter.chapter_type === 'SERIALIZATION')
       .map(chapter => Number(chapter.chapter_number))
       .filter(Number.isFinite)
     return numbers.length ? String(Math.floor(Math.max(...numbers)) + 1) : ''
