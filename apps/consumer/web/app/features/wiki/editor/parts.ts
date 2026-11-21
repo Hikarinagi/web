@@ -30,7 +30,7 @@ export function partOf(owner: EntryType, type: EntryType, property: Property): s
   if (type === 'APPEARANCE') return 'cast'
   if (owner === 'GAME') {
     if (type === 'PRODUCT') return 'releases'
-    if (property === 'SAMPLE_IMAGE') return 'images'
+    if (property === 'SAMPLE_IMAGE' || property === 'TITLE_LOGO') return 'images'
     if (RELATIONS.includes(property)) return 'relations'
     return 'basic'
   }
@@ -41,7 +41,7 @@ export function partOf(owner: EntryType, type: EntryType, property: Property): s
 }
 
 export const ELSEWHERE: Partial<Record<EntryType, readonly Property[]>> = {
-  GAME: ['SAMPLE_IMAGE', 'GAME_RELATION', 'ADAPTATION'],
+  GAME: ['SAMPLE_IMAGE', 'TITLE_LOGO', 'GAME_RELATION', 'ADAPTATION'],
   SERIES: ['SERIES_RELATION', 'ADAPTATION', 'CREDIT'],
   APPEARANCE: ['APPEARANCE_RELATION'],
   ORGANIZATION: ['PARENT', 'MEMBER'],

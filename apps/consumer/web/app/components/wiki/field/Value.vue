@@ -28,6 +28,7 @@
     table?: boolean
     card?: boolean
     ratio?: number
+    contain?: boolean
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const route = useRoute()
@@ -181,6 +182,7 @@
           :label="label"
           :card="card"
           :ratio="ratio"
+          :contain="contain"
           :rating="rating"
           @rate="next => value.media && editor.rate(item.id, value.media, next)"
         >

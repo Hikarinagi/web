@@ -109,6 +109,29 @@ describe('operationsOf', () => {
     expect(changeCount(draft)).toBe(2)
   })
 
+  it('sends a title logo uploaded for a language as an image value with that language', () => {
+    const media = { id: 70, src: 'images/logo.webp', width: 751, height: 390 }
+    const logo = statement({ id: 41, property: 'TITLE_LOGO', media } as Partial<EntryStatement>)
+    const draft = emptyDraft()
+    draft.added.push({
+      id: -1,
+      entry: 5,
+      property: 'TITLE_LOGO',
+      value: { ...emptyValue(), media: { ...media, id: 71 }, language: 'zh-Hans' },
+    })
+    draft.changed[41] = { ...valueOf(logo), language: 'en' }
+    expect(operationsOf(draft, new Map([[41, { entry: 5, statement: logo }]]))).toEqual([
+      expect.objectContaining({
+        op: 'add',
+        entry: 5,
+        property: 'TITLE_LOGO',
+        value: expect.objectContaining({ media_id: 71, text: null }),
+        qualifiers: expect.objectContaining({ language: 'zh-Hans' }),
+      }),
+      { op: 'modify', statement: 41, qualifiers: { language: 'en' } },
+    ])
+  })
+
   it('leaves a value set back to what it was out of the edit', () => {
     const draft = emptyDraft()
     draft.changed[11] = valueOf(alias)

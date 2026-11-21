@@ -12,6 +12,7 @@
     rating: { sexual: number | null; violence: number | null }
     card?: boolean
     ratio?: number
+    contain?: boolean
   }>()
   const emit = defineEmits<{ rate: [rating: { sexual: number; violence: number }] }>()
   const model = defineModel<ValueDraft>({ required: true })
@@ -52,7 +53,7 @@
         preset="small"
         preview
         class="size-full"
-        image-class="size-full object-cover"
+        :image-class="contain ? 'size-full object-contain p-2' : 'size-full object-cover'"
       />
       <Tag v-if="!model.is_public" tone="warning" size="sm" class="absolute top-1 left-1">
         未公开

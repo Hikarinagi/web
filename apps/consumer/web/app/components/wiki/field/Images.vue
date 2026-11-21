@@ -16,9 +16,12 @@
   }>()
   const editor = inject(ENTRY_EDITOR)!
   const uploading = ref(false)
-  const single = computed(() => props.definition.cardinality === 'single')
+  const single = computed(
+    () => props.definition.cardinality === 'single' && !props.definition.qualifiers.length,
+  )
+  const logo = computed(() => props.definition.property === 'TITLE_LOGO')
   const ratio = computed(() =>
-    props.definition.property === 'SAMPLE_IMAGE'
+    props.definition.property === 'SAMPLE_IMAGE' || logo.value
       ? 16 / 9
       : props.definition.property === 'IMAGE'
         ? 1
@@ -59,6 +62,7 @@
         :label="label"
         card
         :ratio="ratio"
+        :contain="logo"
         :up="item.id > 0 && index > 0 && (view.values[index - 1]?.id ?? 0) > 0"
         :down="item.id > 0 && (view.values[index + 1]?.id ?? 0) > 0"
       />

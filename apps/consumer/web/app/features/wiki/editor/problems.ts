@@ -85,9 +85,9 @@ export function problemsOf(
       }
       for (const item of view.values)
         if (item.state === 'removed' && !item.reason) add('请选择删除原因', item.id)
-      if (definition.property === 'COVER' && touched) {
+      if ((definition.property === 'COVER' || definition.property === 'TITLE_LOGO') && touched) {
         const languages = live.map(item => item.value.language ?? '')
-        if (new Set(languages).size < languages.length) add('同一语言有两张封面')
+        if (new Set(languages).size < languages.length) add(`同一语言有两张${definition.label}`)
       }
     }
   }

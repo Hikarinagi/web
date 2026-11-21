@@ -11673,6 +11673,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -12446,6 +12447,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -17506,6 +17508,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -17958,6 +17961,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -18936,6 +18940,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -19193,6 +19198,7 @@
           "INTRO",
           "GENRE_TEXT",
           "SAMPLE_IMAGE",
+          "TITLE_LOGO",
           "WEBSITE",
           "JAN",
           "ISBN",
@@ -19499,6 +19505,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -20967,6 +20974,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -22852,6 +22860,13 @@
             },
             "type": "array"
           },
+          "logos": {
+            "description": "标题徽标，每种语言一张",
+            "items": {
+              "$ref": "#/components/schemas/GalgameLogoDto"
+            },
+            "type": "array"
+          },
           "nsfw": {
             "type": "boolean"
           },
@@ -22979,6 +22994,7 @@
           "external_links",
           "steam_apps",
           "images",
+          "logos",
           "nsfw",
           "status",
           "views",
@@ -23676,6 +23692,28 @@
         "required": [
           "id",
           "name"
+        ],
+        "type": "object"
+      },
+      "GalgameLogoDto": {
+        "properties": {
+          "language": {
+            "description": "标题徽标上文字的语言；为空表示作品原文的语言",
+            "nullable": true,
+            "type": "string"
+          },
+          "media": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatedMediaAssetDto"
+              }
+            ],
+            "description": "透明背景的标题徽标图片"
+          }
+        },
+        "required": [
+          "language",
+          "media"
         ],
         "type": "object"
       },
@@ -41769,6 +41807,13 @@
             },
             "type": "array"
           },
+          "logos": {
+            "description": "标题徽标：透明背景的作品标题图，每种语言一张",
+            "items": {
+              "$ref": "#/components/schemas/OpenGalgameLogoDto"
+            },
+            "type": "array"
+          },
           "nsfw": {
             "description": "是否为NSFW 内容",
             "type": "boolean"
@@ -41881,6 +41926,7 @@
           "aliases",
           "covers",
           "images",
+          "logos",
           "release_date",
           "release_date_precision",
           "release_date_tbd",
@@ -42032,6 +42078,52 @@
           "name",
           "label",
           "url"
+        ],
+        "type": "object"
+      },
+      "OpenGalgameLogoDto": {
+        "properties": {
+          "height": {
+            "description": "图片高度，单位像素",
+            "nullable": true,
+            "type": "number"
+          },
+          "language": {
+            "description": "标题徽标上文字的语言；为空表示作品原文的语言",
+            "nullable": true,
+            "type": "string"
+          },
+          "sexual": {
+            "description": "色情内容分级，0 为安全",
+            "type": "number"
+          },
+          "thumb_hash": {
+            "description": "ThumbHash 占位图编码（base64），图片加载前用来绘制模糊预览",
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "description": "完整图片 URL",
+            "type": "string"
+          },
+          "violence": {
+            "description": "暴力内容分级，0 为安全",
+            "type": "number"
+          },
+          "width": {
+            "description": "图片宽度，单位像素",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "url",
+          "width",
+          "height",
+          "thumb_hash",
+          "sexual",
+          "violence",
+          "language"
         ],
         "type": "object"
       },
@@ -44983,6 +45075,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -46502,6 +46595,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -46642,6 +46736,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -46832,6 +46927,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -51882,6 +51978,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -55631,6 +55728,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",
@@ -55782,6 +55880,7 @@
               "INTRO",
               "GENRE_TEXT",
               "SAMPLE_IMAGE",
+              "TITLE_LOGO",
               "WEBSITE",
               "JAN",
               "ISBN",

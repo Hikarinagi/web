@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { Card, Heading, Inline, Link, Rating, Section, Stack, Text } from '@hina-ui/vue'
+  import { Card, Inline, Rating, Section, Stack, Text } from '@hina-ui/vue'
   import { CalendarDays, Languages, MonitorSmartphone } from '@lucide/vue'
-  import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import { platformLabel } from '~/features/galgame/platforms'
   import { useGalgameCover } from '~/features/galgame/useCoverVote'
@@ -24,13 +23,6 @@
   const soft = computed(
     () => !images.value.length && (cover.value?.width ?? 0) <= (cover.value?.height ?? 0),
   )
-  const brand = computed(() => props.data.display.brands[0] ?? null)
-  const subtitle = computed(() => {
-    const { display, galgame } = props.data
-    if (display.original_title && display.original_title !== props.title)
-      return { text: display.original_title, lang: 'ja' }
-    return galgame.en_title ? { text: galgame.en_title, lang: 'en' } : null
-  })
   const meta = computed(() => {
     const { display } = props.data
     return [
@@ -97,30 +89,7 @@
     >
       <Inline align="end" justify="between" gap="xl" :wrap="false">
         <Stack gap="md" class="min-w-0 flex-1 lg:gap-5">
-          <Stack gap="xs">
-            <Link
-              v-if="brand?.producer_id"
-              :as="NuxtLink"
-              :to="`/producers/${brand.producer_id}`"
-              tone="neutral"
-              class="self-start text-sm font-medium text-fg/80 lg:text-base"
-              lang="ja"
-            >
-              {{ brand.text }}
-            </Link>
-            <Text v-else-if="brand" size="sm" weight="medium" class="text-fg/80" lang="ja">
-              {{ brand.text }}
-            </Text>
-            <Heading
-              :level="1"
-              class="text-4xl leading-tight font-bold tracking-tight text-fg lg:text-6xl"
-            >
-              {{ title }}
-            </Heading>
-            <Text v-if="subtitle" tone="muted" class="text-base lg:text-xl" :lang="subtitle.lang">
-              {{ subtitle.text }}
-            </Text>
-          </Stack>
+          <GalgameStageTitle :data="data" :title="title" />
 
           <Stack gap="xs" class="sm:flex-row sm:flex-wrap sm:gap-x-5">
             <Inline v-for="item in meta" :key="item.text" gap="sm" align="center" :wrap="false">

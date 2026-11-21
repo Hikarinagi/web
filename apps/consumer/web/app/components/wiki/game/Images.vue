@@ -22,6 +22,9 @@
   const samples = computed(() =>
     editor.definitions.value.get('GAME')?.properties.find(item => item.property === 'SAMPLE_IMAGE'),
   )
+  const logo = computed(() =>
+    editor.definitions.value.get('GAME')?.properties.find(item => item.property === 'TITLE_LOGO'),
+  )
 </script>
 
 <template>
@@ -54,6 +57,12 @@
         </Text>
       </Card>
     </SimpleGrid>
+  </Panel>
+  <Panel v-if="logo" title="标题徽标">
+    <template v-if="logo.clauses.length" #actions>
+      <WikiFieldRule label="标题徽标" :clauses="logo.clauses" />
+    </template>
+    <WikiFieldProperty bare :entry="game.id" :definition="logo" label="标题徽标" />
   </Panel>
   <Panel v-if="samples" title="示例 CG 与截图">
     <template v-if="samples.clauses.length" #actions>

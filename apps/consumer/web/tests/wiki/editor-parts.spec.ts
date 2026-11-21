@@ -7,6 +7,7 @@ describe('partOf', () => {
   it('puts each value of a game tab under the part that shows it', () => {
     expect(partOf('GAME', 'GAME', 'TITLE')).toBe('basic')
     expect(partOf('GAME', 'GAME', 'SAMPLE_IMAGE')).toBe('images')
+    expect(partOf('GAME', 'GAME', 'TITLE_LOGO')).toBe('images')
     expect(partOf('GAME', 'PRODUCT', 'COVER')).toBe('releases')
     expect(partOf('GAME', 'PRODUCT', 'PRICE')).toBe('releases')
     expect(partOf('GAME', 'APPEARANCE', 'LABEL')).toBe('cast')

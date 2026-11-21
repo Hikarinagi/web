@@ -56,6 +56,41 @@ describe('problemsOf', () => {
     ])
   })
 
+  it('stops two title logos of one language and passes one for each language', () => {
+    const game = {
+      type: 'GAME',
+      label: '游戏',
+      properties: [
+        {
+          property: 'TITLE_LOGO',
+          label: '标题徽标',
+          shape: 'image',
+          cardinality: 'single',
+          qualifiers: ['language'],
+          required: false,
+        },
+      ],
+    } as unknown as EntryDefinition
+    const logo = (id: number, language: string | null) => ({
+      id,
+      entry: 3,
+      property: 'TITLE_LOGO' as const,
+      value: { ...emptyValue(), media: { id, src: `images/${id}.webp` }, language },
+    })
+    const check = (draft: ReturnType<typeof emptyDraft>) =>
+      problemsOf(
+        draft,
+        [{ id: 3, type: 'GAME', entry: { id: 3, statements: [] } }],
+        new Map([['GAME' as const, game]]),
+        new Map(),
+      ).map(item => item.message)
+    const draft = emptyDraft()
+    draft.added.push(logo(-1, null) as never, logo(-2, 'zh-Hans') as never)
+    expect(check(draft)).toEqual([])
+    draft.added.push(logo(-3, 'zh-Hans') as never)
+    expect(check(draft)).toEqual(['同一语言有两张标题徽标'])
+  })
+
   it('passes a change that only fixes a value', () => {
     const draft = emptyDraft()
     draft.changed[11] = { ...emptyValue(), text: '初回限定版' }
