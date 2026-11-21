@@ -64,6 +64,8 @@
       case 'workbench.approved':
       case 'workbench.rejected':
       case 'workbench.stale':
+      case 'workbench.held':
+      case 'workbench.resumed':
         return Languages
       case 'achievement.unlock':
         return Shirt

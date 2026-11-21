@@ -4,10 +4,12 @@
     Dialog,
     Form,
     FormField,
+    Inline,
     Input,
     SegmentedControl,
     Select,
     Stack,
+    Switch,
   } from '@hina-ui/vue'
   import { volumeOptions } from '~/features/contribute/manga-options'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
@@ -17,6 +19,7 @@
     mangaChapterInfoSchema,
     mangaVolumeInfoSchema,
     type MangaChapterInfoValues,
+    type MangaVolumeInfoValues,
   } from '~/features/workbench/manga/schemas/manga.schema'
   import { getFieldErrors } from '~/utils/api/error'
 
@@ -24,9 +27,18 @@
     defineProps<{
       project: Pick<
         BackendMangaProject,
-        'id' | 'mode' | 'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_id'
+        | 'id'
+        | 'mode'
+        | 'scope'
+        | 'chapter_type'
+        | 'chapter_number'
+        | 'chapter_name'
+        | 'volume_id'
+        | 'part'
+        | 'part_count'
+        | 'alternate'
       > & { series: { id: number } }
-      purpose?: 'edit' | 'approve' | 'correct'
+      purpose?: 'edit' | 'approve' | 'correct' | 'resume'
     }>(),
     { purpose: 'edit' },
   )
@@ -39,25 +51,36 @@
   ]
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
-  const values = reactive<MangaChapterInfoValues & { scope: BackendMangaProject['scope'] }>({
+  const values = reactive<
+    MangaChapterInfoValues &
+      Pick<MangaVolumeInfoValues, 'part' | 'part_count'> & { scope: BackendMangaProject['scope'] }
+  >({
     scope: 'CHAPTER',
     chapter_type: 'SERIALIZATION',
     chapter_number: '',
     chapter_name: '',
     volume_id: null,
+    part: null,
+    part_count: null,
   })
+  const alternate = ref(false)
+  const reviewing = computed(() => props.purpose !== 'edit')
   const wholeVolume = computed(() => values.scope === 'VOLUME')
   const { chapters, volumes, claims, published, loading } = useMangaTargets(() =>
     visible.value ? props.project.series.id : null,
   )
+  const others = computed(() => ({
+    claims: claims.value.filter(claim => claim.id !== props.project.id),
+    published: published.value.filter(project => project.id !== props.project.id),
+  }))
   const choices = computed(() =>
     wholeVolume.value
       ? volumeOptions(
           volumes.value,
           chapters.value,
-          claims.value.filter(claim => claim.id !== props.project.id),
-          props.purpose === 'correct'
-            ? { published: published.value, upload: props.project.mode === 'UPLOAD' }
+          others.value.claims,
+          props.purpose === 'correct' || props.purpose === 'resume'
+            ? { published: others.value.published, upload: props.project.mode === 'UPLOAD' }
             : {},
         ).filter(option => typeof option.value === 'number')
       : volumes.value.map(volume => ({
@@ -75,6 +98,9 @@
     values.chapter_number = props.project.chapter_number ?? ''
     values.chapter_name = props.project.chapter_name ?? ''
     values.volume_id = props.project.volume_id
+    values.part = props.project.part
+    values.part_count = props.project.part_count
+    alternate.value = props.project.alternate
   })
 
   async function onSubmit() {
@@ -82,7 +108,12 @@
     submitting.value = true
     try {
       const body = wholeVolume.value
-        ? { scope: values.scope, volume_id: values.volume_id ?? null }
+        ? {
+            scope: values.scope,
+            volume_id: values.volume_id ?? null,
+            part: values.part ?? null,
+            part_count: values.part == null ? null : (values.part_count ?? null),
+          }
         : {
             scope: values.scope,
             chapter_type: values.chapter_type,
@@ -90,24 +121,28 @@
             chapter_name: values.chapter_name?.trim() || null,
             volume_id: values.volume_id ?? null,
           }
+      const path = { project_id: props.project.id }
+      const decided = { ...body, alternate: alternate.value }
       if (props.purpose === 'approve') {
         await hikariRequest('/api/v3/manga-projects/{project_id}/approve', {
           method: 'post',
-          path: { project_id: props.project.id },
-          body,
+          path,
+          body: decided,
+        })
+      } else if (props.purpose === 'resume') {
+        await hikariRequest('/api/v3/manga-projects/{project_id}/resume', {
+          method: 'post',
+          path,
+          body: decided,
         })
       } else if (props.purpose === 'correct') {
         await hikariRequest('/api/v3/manga-projects/{project_id}/placement', {
           method: 'put',
-          path: { project_id: props.project.id },
-          body,
+          path,
+          body: decided,
         })
       } else {
-        await hikariRequest('/api/v3/manga-projects/{project_id}', {
-          method: 'patch',
-          path: { project_id: props.project.id },
-          body,
-        })
+        await hikariRequest('/api/v3/manga-projects/{project_id}', { method: 'patch', path, body })
       }
       visible.value = false
       emit('saved')
@@ -122,7 +157,15 @@
 <template>
   <Dialog
     v-model:open="visible"
-    :title="purpose === 'edit' ? (wholeVolume ? '编辑卷信息' : '编辑话信息') : '修正归类'"
+    :title="
+      purpose === 'resume'
+        ? '重新指定卷与部分'
+        : purpose === 'edit'
+          ? wholeVolume
+            ? '编辑卷信息'
+            : '编辑话信息'
+          : '修正归类'
+    "
     size="sm"
     :locked="submitting"
   >
@@ -170,6 +213,22 @@
               :placeholder="wholeVolume ? '选择单行本' : '未归入'"
             />
           </FormField>
+          <ContributeMangaPartField
+            v-if="wholeVolume"
+            v-model:part="values.part"
+            v-model:count="values.part_count"
+            :volume="volumes.find(volume => volume.id === values.volume_id)"
+            :claims="others.claims"
+            :published="others.published"
+          />
+          <FormField v-if="reviewing" name="alternate">
+            <Inline gap="xs" align="center" :wrap="false">
+              <Switch v-model="alternate">设为替代来源</Switch>
+              <Question title="替代来源" aria-label="查看替代来源的说明">
+                这一卷或这一话已有其他投稿发布的内容时，只有设为替代来源的投稿才能发布到这里。替代来源与已有内容并存，读者看到哪一份由选源决定。
+              </Question>
+            </Inline>
+          </FormField>
         </Stack>
       </Form>
     </template>
@@ -179,7 +238,7 @@
         取消
       </Button>
       <Button :loading="submitting" @click="form?.submit()">
-        {{ purpose === 'approve' ? '保存并通过' : '保存' }}
+        {{ purpose === 'approve' ? '保存并通过' : purpose === 'resume' ? '保存并恢复' : '保存' }}
       </Button>
     </template>
   </Dialog>

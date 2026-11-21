@@ -12,7 +12,6 @@
   import { chapterOptions, firstFree, NEW_TARGET } from '~/features/contribute/manga-options'
   import { useMangaSearch } from '~/features/contribute/useMangaSearch'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
-  import { useVolumeTarget } from '~/features/contribute/useVolumeTarget'
   import { LANGUAGE_OPTIONS } from '~/features/galgame/labels'
   import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
   import {
@@ -47,9 +46,7 @@
   const target = shallowRef<MangaTarget | null>(props.series)
   const fixed = computed(() => props.chapterId != null || props.volumeId != null)
   const { search, results, loading: searching } = useMangaSearch()
-  const { chapters, volumes, claims, published } = useMangaTargets(() =>
-    fixed.value ? null : (target.value?.id ?? null),
-  )
+  const { chapters, volumes, claims, published } = useMangaTargets(() => target.value?.id ?? null)
   const values = reactive<CreateMangaProjectValues>({
     mode: props.mode ?? 'UPLOAD',
     scope: props.volumeId != null ? 'VOLUME' : (props.scope ?? 'CHAPTER'),
@@ -58,6 +55,8 @@
     chapter_number: props.newChapter ?? '',
     chapter_name: '',
     volume_id: props.volumeId ?? null,
+    part: null,
+    part_count: null,
     source_lang: 'zh-Hans',
     target_lang: 'zh-Hans',
   })
@@ -73,22 +72,6 @@
       values.chapter_id = value === NEW_TARGET ? null : Number(value)
     },
   })
-  const {
-    createOpen,
-    choices: volumeChoices,
-    nextNumber,
-    model: volume,
-    replaced,
-    onCreated,
-  } = useVolumeTarget({
-    volumes,
-    chapters,
-    claims,
-    published,
-    values,
-    fixed: () => fixed.value,
-  })
-
   watch(
     () => values.mode,
     mode => {
@@ -119,6 +102,8 @@
           ...(wholeVolume.value
             ? {
                 volume_id: values.volume_id ?? undefined,
+                part: values.part ?? null,
+                part_count: values.part == null ? null : (values.part_count ?? null),
               }
             : {
                 chapter_id: values.chapter_id ?? undefined,
@@ -174,28 +159,19 @@
       <FormField v-if="!fixed && target" name="scope" label="范围" required>
         <SegmentedControl v-model="values.scope" :options="SCOPE_OPTIONS" />
       </FormField>
-      <template v-if="wholeVolume">
-        <FormField
-          v-if="!fixed && target"
-          name="volume_id"
-          label="单行本"
-          required
-          :description="
-            replaced === null
-              ? undefined
-              : `已收录：${replaced} 页。审核通过后，你上传的版本将替换现有版本。`
-          "
-        >
-          <Select v-model="volume" :options="volumeChoices" placeholder="选择单行本" />
-        </FormField>
-        <ContributeMangaVolumeCreateDialog
-          v-if="target"
-          v-model:open="createOpen"
-          :series="target"
-          :volume-number="nextNumber"
-          @created="onCreated"
-        />
-      </template>
+      <ContributeMangaVolumeFields
+        v-if="wholeVolume && target"
+        v-model:volume-id="values.volume_id"
+        v-model:part="values.part"
+        v-model:count="values.part_count"
+        :series="target"
+        :mode="values.mode"
+        :fixed="fixed"
+        :volumes="volumes"
+        :chapters="chapters"
+        :claims="claims"
+        :published="published"
+      />
       <template v-else>
         <FormField v-if="!fixed && target" name="chapter_id" label="章节" required>
           <Select v-model="chapter" :options="chapterChoices" />

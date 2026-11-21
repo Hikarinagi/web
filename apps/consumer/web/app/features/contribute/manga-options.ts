@@ -1,9 +1,10 @@
-import { mangaChapterLabel } from '@hikarinagi/shared'
+import { mangaChapterLabel, mangaChapterNumber } from '@hikarinagi/shared'
 import { belongsTo } from '~/features/manga/volumes'
 import { getMangaVolumeLabel } from '~/utils/media/manga'
 import type { MangaTargetChapter, MangaTargetClaim, MangaTargetVolume } from './manga-target'
 
 export const NEW_TARGET = 'new'
+export const WHOLE_VOLUME = 0
 
 export interface TargetOption {
   value: number | typeof NEW_TARGET
@@ -12,6 +13,8 @@ export interface TargetOption {
   disabled?: boolean
   pages?: number
 }
+
+const ownerName = (project: MangaTargetClaim) => project.owner.nickname || project.owner.name
 
 export function chapterOptions(
   chapters: MangaTargetChapter[],
@@ -45,37 +48,108 @@ export function volumeOptions(
   return [
     ...volumes.map(volume => {
       const label = getMangaVolumeLabel(volume)
-      const claim = claimed.find(claim => belongsTo(claim, volume))
+      const range = volume.chapters
+        ? volume.chapters.first === volume.chapters.last
+          ? `第 ${mangaChapterNumber(volume.chapters.first)} 话`
+          : `第 ${mangaChapterNumber(volume.chapters.first)} 至 ${mangaChapterNumber(volume.chapters.last)} 话`
+        : null
+      const contents = [
+        range,
+        ...volume.editions.map(edition =>
+          edition.title ? `${edition.title}：${edition.note}` : edition.note,
+        ),
+      ].filter(Boolean)
+      const note = (state?: string) =>
+        [contents.join('；'), state].filter(Boolean).join('。') || undefined
+      const claim = claimed.find(item => item.part === null && belongsTo(item, volume))
       if (claim) {
-        const who = claim.owner.nickname || claim.owner.name
-        return { value: volume.id, label, description: `${who} 正在上传`, disabled: true }
-      }
-      const content = filled.find(chapter => belongsTo(chapter, volume))
-      if (!content) return { value: volume.id, label }
-      const upload = uploaded.find(project => belongsTo(project, volume))
-      if (!context.upload) {
-        return { value: volume.id, label, description: '已收录', disabled: true }
-      }
-      if (upload?.owner.id === context.viewerId) {
         return {
           value: volume.id,
           label,
-          description: '由你上传。请在『我的投稿』中更新',
+          description: note(`${ownerName(claim)} 正在上传`),
+          disabled: true,
+        }
+      }
+      const content = filled.find(chapter => belongsTo(chapter, volume))
+      if (content && !context.upload) {
+        return { value: volume.id, label, description: note('已收录'), disabled: true }
+      }
+      const upload = uploaded.find(project => project.part === null && belongsTo(project, volume))
+      if (upload && upload.owner.id === context.viewerId) {
+        return {
+          value: volume.id,
+          label,
+          description: note('由你上传。请在『我的投稿』中更新'),
           disabled: true,
         }
       }
       if (upload) {
-        const who = upload.owner.nickname || upload.owner.name
-        return { value: volume.id, label, description: `由 ${who} 上传`, disabled: true }
+        return {
+          value: volume.id,
+          label,
+          description: note(`由 ${ownerName(upload)} 上传`),
+          disabled: true,
+        }
       }
+      const parts = [...claimed, ...uploaded]
+        .filter(project => project.part !== null && belongsTo(project, volume))
+        .map(project => project.part!)
+        .sort((a, b) => a - b)
+      if (parts.length) {
+        return {
+          value: volume.id,
+          label,
+          description: note(`第 ${[...new Set(parts)].join('、')} 部分已有投稿`),
+        }
+      }
+      if (!content) return { value: volume.id, label, description: note() }
       return {
         value: volume.id,
         label,
-        description: `已收录 · ${content.page_count} 页`,
+        description: note(`已收录 ${content.page_count} 页`),
         pages: content.page_count,
       }
     }),
     { value: NEW_TARGET, label: '新建这一卷的条目…' },
+  ]
+}
+
+export function partOptions(
+  count: number,
+  volume: MangaTargetVolume | undefined,
+  projects: { claims: MangaTargetClaim[]; published: MangaTargetClaim[]; selfId?: number },
+): TargetOption[] {
+  const editions = volume?.editions.length === count ? volume.editions : []
+  const holderOf = (part: number, list: MangaTargetClaim[]) =>
+    volume
+      ? list.find(
+          project =>
+            project.scope === 'VOLUME' &&
+            project.part === part &&
+            project.id !== projects.selfId &&
+            belongsTo(project, volume),
+        )
+      : undefined
+  return [
+    { value: WHOLE_VOLUME, label: '整卷' },
+    ...Array.from({ length: count }, (_, index) => {
+      const part = index + 1
+      const claim = holderOf(part, projects.claims)
+      const upload = holderOf(part, projects.published)
+      const edition = editions[index]
+      return {
+        value: part,
+        label: `第 ${part} 部分`,
+        description: claim
+          ? `${ownerName(claim)} 正在上传`
+          : upload
+            ? `由 ${ownerName(upload)} 上传`
+            : edition
+              ? `${edition.title ?? ''}${edition.title ? '：' : ''}${edition.note}`
+              : undefined,
+        disabled: Boolean(claim || upload),
+      }
+    }),
   ]
 }
 

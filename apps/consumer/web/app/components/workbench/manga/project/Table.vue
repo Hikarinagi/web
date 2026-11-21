@@ -16,7 +16,7 @@
     title: string
     icon?: Component
     emptyText: string
-    purpose: 'mine' | 'review'
+    purpose: 'mine' | 'review' | 'held'
   }>()
   const page = defineModel<number>('page', { required: true })
   const emit = defineEmits<{ changed: [] }>()
@@ -29,6 +29,7 @@
   const correctOpen = ref(false)
   const rejecting = ref<Row | null>(null)
   const rejectOpen = ref(false)
+  const reviewing = computed(() => props.purpose !== 'mine')
 
   function correct(row: Row) {
     correcting.value = row
@@ -96,17 +97,19 @@
             accessor: (row: Row) => String(row.progress.pages),
             cellClass: 'tabular-nums',
           },
-          { key: 'check', label: '检查' },
+          props.purpose === 'held'
+            ? { key: 'held_from', label: '原状态' }
+            : { key: 'check', label: '检查' },
           { key: 'owner', label: '发起人' },
         ]),
     {
       key: 'last_activity_at',
-      label: props.purpose === 'mine' ? '最近更新' : '提交时间',
+      label: props.purpose === 'review' ? '提交时间' : '最近更新',
       field: 'last_activity_at',
       format: value => timeFormat(value as string),
       cellClass: 'text-muted',
     },
-    ...(props.purpose === 'review' ? [{ key: 'actions', label: '', pin: 'end' as const }] : []),
+    ...(reviewing.value ? [{ key: 'actions', label: '', pin: 'end' as const }] : []),
   ])
 
   function open(row: Row) {
@@ -170,12 +173,18 @@
     <template #cell-status="{ row }">
       <WorkbenchProjectStatusTag :status="row.status" />
     </template>
+    <template #cell-held_from="{ row }">
+      <WorkbenchProjectStatusTag v-if="row.held_from" :status="row.held_from" />
+    </template>
     <template #cell-owner="{ row }">
       <UserName :user="row.owner" :handle="false" class="py-2 text-sm" />
     </template>
     <template #cell-actions="{ row }">
+      <Inline v-if="purpose === 'held'" justify="end" class="py-1" @click.stop>
+        <Button size="sm" @click="correct(row)">处理</Button>
+      </Inline>
       <Inline
-        v-if="row.mode === 'TRANSLATION'"
+        v-else-if="row.mode === 'TRANSLATION'"
         gap="xs"
         :wrap="false"
         justify="end"
@@ -201,7 +210,7 @@
     v-if="correcting"
     v-model:visible="correctOpen"
     :project="correcting"
-    purpose="approve"
+    :purpose="purpose === 'held' ? 'resume' : 'approve'"
     @saved="emit('changed')"
   />
   <WorkbenchProjectRejectDialog

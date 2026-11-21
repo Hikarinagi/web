@@ -22,9 +22,10 @@ export function useMangaTargets(seriesId: () => number | null) {
           query: { wanted: true },
           toast: false,
         }).catch(() => null),
-        hikariRequest('/api/v3/mangas/{id}/volumes', { path: { id }, toast: false }).catch(
-          () => null,
-        ),
+        hikariRequest('/api/v3/mangas/{id}/volumes/contents', {
+          path: { id },
+          toast: false,
+        }).catch(() => null),
         hikariRequest('/api/v3/manga-projects', {
           query: { series_id: id, status: ['ACTIVE', 'REVIEW'], page: 1, page_size: 50 },
           toast: false,

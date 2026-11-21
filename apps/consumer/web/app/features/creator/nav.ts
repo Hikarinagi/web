@@ -1,5 +1,6 @@
 import { WIKI_PERMISSIONS, WORKBENCH_PERMISSIONS, type PermissionCheck } from '@hikarinagi/shared'
 import {
+  BookAlert,
   BookCheck,
   BookImage,
   BookOpenText,
@@ -81,6 +82,12 @@ export const CREATOR_NAV: CreatorNavGroup[] = [
         label: '漫画投稿审核',
         to: '/create/manga-review',
         icon: BookImage,
+        permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
+      },
+      {
+        label: '待处理的漫画投稿',
+        to: '/create/manga-held',
+        icon: BookAlert,
         permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
       },
     ],

@@ -10293,6 +10293,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-projects/{project_id}/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["MangaProjectController_resume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-projects/{project_id}/review": {
         parameters: {
             query?: never;
@@ -11021,6 +11037,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MangaController_getVolumes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/volumes/contents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaController_getVolumeContents"];
         put?: never;
         post?: never;
         delete?: never;
@@ -18099,10 +18131,16 @@ export interface components {
             voices: components["schemas"]["VoiceDto"][];
         };
         ApproveMangaProjectDto: {
+            /** @description 设为替代来源：与这一卷或这一话已发布的其他投稿并存，由选源决定显示哪一份 */
+            alternate?: boolean;
             chapter_name?: string | null;
             chapter_number?: string | null;
             /** @enum {string} */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /** @description 整卷投稿的第几部分 */
+            part?: number | null;
+            /** @description 这一卷共分几部分 */
+            part_count?: number | null;
             /**
              * @description 只有尚未对应到章节的项目可以改
              * @enum {string}
@@ -19258,6 +19296,10 @@ export interface components {
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
+            /** @description 整卷投稿只含这一卷的一部分时填写第几部分，与 part_count 一起填写 */
+            part?: number | null;
+            /** @description 这一卷共分几部分 */
+            part_count?: number | null;
             /**
              * @description 一话或整卷，缺省为一话
              * @enum {string}
@@ -24285,6 +24327,8 @@ export interface components {
             status: components["schemas"]["MangaProjectCheckStatus"];
         };
         MangaProjectDto: {
+            /** @description 是否设为替代来源 */
+            alternate: boolean;
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
             chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
@@ -24294,6 +24338,11 @@ export interface components {
             chapter_type: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** Format: date-time */
             created_at: string;
+            /**
+             * @description 转为待处理之前的状态
+             * @enum {string|null}
+             */
+            held_from: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD" | null;
             id: number;
             /** Format: date-time */
             last_activity_at: string;
@@ -24303,6 +24352,10 @@ export interface components {
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
             page_count: number;
+            /** @description 整卷投稿的第几部分，整卷为空 */
+            part: number | null;
+            /** @description 这一卷共分几部分 */
+            part_count: number | null;
             /** Format: date-time */
             published_at: string | null;
             /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
@@ -24315,7 +24368,7 @@ export interface components {
             series: components["schemas"]["MangaSummaryDto"];
             source_lang: string;
             /** @enum {string} */
-            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD";
             /** Format: date-time */
             submitted_at: string | null;
             target_lang: string | null;
@@ -24330,20 +24383,9 @@ export interface components {
             volume_number: number | null;
             withdrawn_count: number;
         };
-        MangaProjectInfoDto: {
-            chapter_name?: string | null;
-            chapter_number?: string | null;
-            /** @enum {string} */
-            chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /**
-             * @description 只有尚未对应到章节的项目可以改
-             * @enum {string}
-             */
-            scope?: "CHAPTER" | "VOLUME";
-            /** @description 单行本条目 */
-            volume_id?: number | null;
-        };
         MangaProjectListEntryDto: {
+            /** @description 是否设为替代来源 */
+            alternate: boolean;
             /** @description 随投稿新建条目的审核批次 */
             batch_id: string | null;
             chapter: components["schemas"]["MangaProjectChapterRefDto"] | null;
@@ -24355,12 +24397,21 @@ export interface components {
             check: components["schemas"]["MangaProjectCheckSummaryDto"] | null;
             /** Format: date-time */
             created_at: string;
+            /**
+             * @description 转为待处理之前的状态
+             * @enum {string|null}
+             */
+            held_from: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD" | null;
             id: number;
             /** Format: date-time */
             last_activity_at: string;
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
+            /** @description 整卷投稿的第几部分，整卷为空 */
+            part: number | null;
+            /** @description 这一卷共分几部分 */
+            part_count: number | null;
             /** @description 归类是否完整，不完整时不能通过 */
             placement_complete: boolean;
             /** @description 前几页的图片地址 */
@@ -24376,7 +24427,7 @@ export interface components {
             series: components["schemas"]["MangaSummaryDto"];
             source_lang: string;
             /** @enum {string} */
-            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED";
+            status: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD";
             /** Format: date-time */
             submitted_at: string | null;
             target_lang: string | null;
@@ -25014,6 +25065,23 @@ export interface components {
             batch_size: number;
             enabled: boolean;
         };
+        MangaVolumeChapterRangeDto: {
+            /** @description 这一卷收录的话数 */
+            count: number;
+            /** @description 这一卷收录的第一话 */
+            first: string;
+            /** @description 这一卷收录的最后一话 */
+            last: string;
+        };
+        MangaVolumeContentsDto: {
+            chapters: components["schemas"]["MangaVolumeChapterRangeDto"] | null;
+            /** @description 记在这一卷下、注明了所收部分的出版版本，如只收一部分的电子版分册 */
+            editions: components["schemas"]["MangaVolumePartialEditionDto"][];
+            id: number;
+            name: string | null;
+            name_cn: string | null;
+            volume_number: number | null;
+        };
         MangaVolumeDetailDto: {
             bangumi_book_id: number | null;
             chapter_count: number | null;
@@ -25053,6 +25121,13 @@ export interface components {
             updated_at: string;
             views: number;
             volume_number: number | null;
+        };
+        MangaVolumePartialEditionDto: {
+            /** @description 出版版本条目 */
+            entry_id: number;
+            /** @description 维基注明的所收部分 */
+            note: string;
+            title: string | null;
         };
         MangaVolumeRelationDto: {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
@@ -30319,6 +30394,10 @@ export interface components {
             chapter_number?: string | null;
             /** @enum {string} */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /** @description 整卷投稿的第几部分 */
+            part?: number | null;
+            /** @description 这一卷共分几部分 */
+            part_count?: number | null;
             /**
              * @description 只有尚未对应到章节的项目可以改
              * @enum {string}
@@ -48569,7 +48648,7 @@ export interface operations {
                 series_id?: number;
                 /** @description 按团队筛选 */
                 team_id?: number;
-                status?: ("DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED")[];
+                status?: ("DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD")[];
                 mode?: "UPLOAD" | "TRANSLATION";
                 /** @description 只看我参与的项目 */
                 mine?: boolean;
@@ -48997,7 +49076,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["MangaProjectInfoDto"];
+                "application/json": components["schemas"]["ApproveMangaProjectDto"];
             };
         };
         responses: {
@@ -49073,6 +49152,29 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MangaProjectDto"];
                 };
+            };
+        };
+    };
+    MangaProjectController_resume: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApproveMangaProjectDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -50290,6 +50392,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaVolumeRelationDto"][];
+                };
+            };
+        };
+    };
+    MangaController_getVolumeContents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MangaVolumeContentsDto"][];
                 };
             };
         };

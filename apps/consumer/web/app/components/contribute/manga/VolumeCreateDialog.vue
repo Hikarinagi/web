@@ -10,11 +10,15 @@
     Stack,
     Text,
   } from '@hina-ui/vue'
-  import type { MangaTarget } from '~/features/contribute/manga-target'
+  import type { MangaTarget, MangaTargetVolume } from '~/features/contribute/manga-target'
   import { useVolumeCreate } from '~/features/contribute/useVolumeCreate'
   import { getMangaVolumeLabel } from '~/utils/media/manga'
 
-  const props = defineProps<{ series: MangaTarget; volumeNumber: number | null }>()
+  const props = defineProps<{
+    series: MangaTarget
+    volumeNumber: number | null
+    volumes: MangaTargetVolume[]
+  }>()
   const open = defineModel<boolean>('open', { required: true })
   const emit = defineEmits<{ created: [volume: { id: number; label: string }] }>()
 
@@ -22,6 +26,7 @@
     { value: 'isbn', label: '通过 ISBN 新建' },
     { value: 'manual', label: '手动填写' },
   ]
+  const { confirm } = useHikariConfirm()
   const flow = useVolumeCreate(() => props.series)
   const { method, isbn, number, title, draft, notice, loading, saving } = flow
   const values = computed(() => {
@@ -32,8 +37,21 @@
       )?.value?.text
     return { number: found('VOLUME_NUMBER') ?? null, title: found('TITLE') ?? null }
   })
-  const ready = computed(() =>
-    method.value === 'isbn' ? Boolean(draft.value?.operations.length) : Boolean(title.value.trim()),
+  const shown = computed(() =>
+    method.value === 'isbn' ? values.value : { number: number.value, title: title.value },
+  )
+  const taken = computed(() => {
+    const value = shown.value.number?.trim()
+    return value && props.volumes.some(volume => String(volume.volume_number) === value)
+      ? value
+      : null
+  })
+  const ready = computed(
+    () =>
+      !taken.value &&
+      (method.value === 'isbn'
+        ? Boolean(draft.value?.operations.length)
+        : Boolean(title.value.trim())),
   )
 
   watch(open, next => {
@@ -43,19 +61,25 @@
   })
 
   async function create() {
+    const label = getMangaVolumeLabel({
+      volume_number: shown.value.number ? Number(shown.value.number) || null : null,
+      name: shown.value.title,
+      name_cn: null,
+    })
     const id = await flow.create()
     if (id === null) return
-    const shown =
-      method.value === 'isbn' ? values.value : { number: number.value, title: title.value }
-    emit('created', {
-      id,
-      label: getMangaVolumeLabel({
-        volume_number: shown.number ? Number(shown.number) || null : null,
-        name: shown.title,
-        name_cn: null,
-      }),
-    })
+    emit('created', { id, label })
     open.value = false
+  }
+
+  function submit() {
+    confirm({
+      title: '确认新建这一卷',
+      description: `维基已收录这部作品的 ${props.volumes.length} 卷。只收一卷中一部分的电子版分册不另建卷，应选择其内容所在的卷，并填写是第几部分。`,
+      confirmText: '新建',
+      cancelText: '返回',
+      onConfirm: create,
+    })
   }
 </script>
 
@@ -98,13 +122,18 @@
             <Input v-model="title" lang="ja" />
           </FormField>
         </template>
+        <Alert
+          :open="Boolean(taken)"
+          tone="warning"
+          :title="`维基已收录第 ${taken} 卷，请从列表中选择。`"
+        />
       </Stack>
     </template>
     <template #footer>
       <Button variant="ghost" tone="neutral" :disabled="saving" @click="open = false">
         取消
       </Button>
-      <Button :loading="saving" :disabled="!ready" @click="create()">创建并选中</Button>
+      <Button :loading="saving" :disabled="!ready" @click="submit()">创建并选中</Button>
     </template>
   </Dialog>
 </template>

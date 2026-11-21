@@ -18,6 +18,25 @@ const chapterNameField = v.pipe(
 
 const volumeIdField = v.nullish(v.number('单行本应为数字'))
 
+const partField = v.nullish(v.number('第几部分应为数字'))
+
+const partCountField = v.nullish(
+  v.pipe(
+    v.number('共几部分应为数字'),
+    v.integer('共几部分应为整数'),
+    v.minValue(2, '共几部分至少为 2'),
+    v.maxValue(50, '共几部分不能超过 50'),
+  ),
+)
+
+function partCounted(input: { part?: number | null; part_count?: number | null }) {
+  return input.part == null || input.part_count != null
+}
+
+function partWithin(input: { part?: number | null; part_count?: number | null }) {
+  return input.part == null || input.part_count == null || input.part <= input.part_count
+}
+
 function serialNeedsNumber(input: { chapter_type?: string; chapter_number?: string | null }) {
   return input.chapter_type !== 'SERIALIZATION' || !!input.chapter_number?.trim()
 }
@@ -35,9 +54,17 @@ export const createMangaProjectSchema = v.pipe(
     chapter_number: chapterNumberField,
     chapter_name: chapterNameField,
     volume_id: volumeIdField,
+    part: partField,
+    part_count: partCountField,
     source_lang: v.pipe(v.string('请选择原文语言'), v.nonEmpty('请选择原文语言')),
     target_lang: v.nullish(v.string('译文语言应为文本'), ''),
   }),
+  v.forward(v.partialCheck([['part'], ['part_count']], partCounted, '请填写共几部分'), [
+    'part_count',
+  ]),
+  v.forward(v.partialCheck([['part'], ['part_count']], partWithin, '第几部分不能大于共几部分'), [
+    'part',
+  ]),
   v.forward(
     v.partialCheck(
       [['scope'], ['chapter_id'], ['chapter_type'], ['chapter_number']],
@@ -98,14 +125,26 @@ export const mangaChapterInfoSchema = v.pipe(
   ]),
 )
 
-export const mangaVolumeInfoSchema = v.object({
-  chapter_type: v.optional(v.string('类型应为文本')),
-  chapter_number: chapterNumberField,
-  chapter_name: chapterNameField,
-  volume_id: v.number('请选择单行本'),
-})
+export const mangaVolumeInfoSchema = v.pipe(
+  v.object({
+    chapter_type: v.optional(v.string('类型应为文本')),
+    chapter_number: chapterNumberField,
+    chapter_name: chapterNameField,
+    volume_id: v.number('请选择单行本'),
+    part: partField,
+    part_count: partCountField,
+  }),
+  v.forward(v.partialCheck([['part'], ['part_count']], partCounted, '请填写共几部分'), [
+    'part_count',
+  ]),
+  v.forward(v.partialCheck([['part'], ['part_count']], partWithin, '第几部分不能大于共几部分'), [
+    'part',
+  ]),
+)
 
 export type MangaChapterInfoValues = v.InferOutput<typeof mangaChapterInfoSchema>
+
+export type MangaVolumeInfoValues = v.InferOutput<typeof mangaVolumeInfoSchema>
 
 export const importLabelPlusSchema = v.object({
   file: v.custom<File | null>(

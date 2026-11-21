@@ -9269,6 +9269,10 @@
       },
       "ApproveMangaProjectDto": {
         "properties": {
+          "alternate": {
+            "description": "设为替代来源：与这一卷或这一话已发布的其他投稿并存，由选源决定显示哪一份",
+            "type": "boolean"
+          },
           "chapter_name": {
             "maxLength": 200,
             "nullable": true,
@@ -9287,6 +9291,20 @@
               "VOLUME"
             ],
             "type": "string"
+          },
+          "part": {
+            "description": "整卷投稿的第几部分",
+            "maximum": 50,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "part_count": {
+            "description": "这一卷共分几部分",
+            "maximum": 50,
+            "minimum": 2,
+            "nullable": true,
+            "type": "number"
           },
           "scope": {
             "description": "只有尚未对应到章节的项目可以改",
@@ -14035,6 +14053,20 @@
               "TRANSLATION"
             ],
             "type": "string"
+          },
+          "part": {
+            "description": "整卷投稿只含这一卷的一部分时填写第几部分，与 part_count 一起填写",
+            "maximum": 50,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "part_count": {
+            "description": "这一卷共分几部分",
+            "maximum": 50,
+            "minimum": 2,
+            "nullable": true,
+            "type": "number"
           },
           "scope": {
             "description": "一话或整卷，缺省为一话",
@@ -33875,6 +33907,10 @@
       },
       "MangaProjectDto": {
         "properties": {
+          "alternate": {
+            "description": "是否设为替代来源",
+            "type": "boolean"
+          },
           "batch_id": {
             "description": "随投稿新建条目的审核批次",
             "nullable": true,
@@ -33910,6 +33946,20 @@
             "format": "date-time",
             "type": "string"
           },
+          "held_from": {
+            "description": "转为待处理之前的状态",
+            "enum": [
+              "DRAFT",
+              "ACTIVE",
+              "REVIEW",
+              "PUBLISHED",
+              "STALE",
+              "ARCHIVED",
+              "HELD"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "type": "number"
           },
@@ -33932,6 +33982,16 @@
             "$ref": "#/components/schemas/UserRefDto"
           },
           "page_count": {
+            "type": "number"
+          },
+          "part": {
+            "description": "整卷投稿的第几部分，整卷为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "part_count": {
+            "description": "这一卷共分几部分",
+            "nullable": true,
             "type": "number"
           },
           "published_at": {
@@ -33970,7 +34030,8 @@
               "REVIEW",
               "PUBLISHED",
               "STALE",
-              "ARCHIVED"
+              "ARCHIVED",
+              "HELD"
             ],
             "type": "string"
           },
@@ -34057,6 +34118,10 @@
           "chapter_name",
           "volume_number",
           "volume_id",
+          "part",
+          "part_count",
+          "alternate",
+          "held_from",
           "submitted_at",
           "withdrawn_count",
           "batch_id",
@@ -34077,46 +34142,12 @@
         ],
         "type": "object"
       },
-      "MangaProjectInfoDto": {
-        "properties": {
-          "chapter_name": {
-            "maxLength": 200,
-            "nullable": true,
-            "type": "string"
-          },
-          "chapter_number": {
-            "maxLength": 20,
-            "nullable": true,
-            "type": "string"
-          },
-          "chapter_type": {
-            "enum": [
-              "SERIALIZATION",
-              "EXTRA",
-              "ONESHOT",
-              "VOLUME"
-            ],
-            "type": "string"
-          },
-          "scope": {
-            "description": "只有尚未对应到章节的项目可以改",
-            "enum": [
-              "CHAPTER",
-              "VOLUME"
-            ],
-            "type": "string"
-          },
-          "volume_id": {
-            "description": "单行本条目",
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "type": "object"
-      },
       "MangaProjectListEntryDto": {
         "properties": {
+          "alternate": {
+            "description": "是否设为替代来源",
+            "type": "boolean"
+          },
           "batch_id": {
             "description": "随投稿新建条目的审核批次",
             "nullable": true,
@@ -34162,6 +34193,20 @@
             "format": "date-time",
             "type": "string"
           },
+          "held_from": {
+            "description": "转为待处理之前的状态",
+            "enum": [
+              "DRAFT",
+              "ACTIVE",
+              "REVIEW",
+              "PUBLISHED",
+              "STALE",
+              "ARCHIVED",
+              "HELD"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "type": "number"
           },
@@ -34178,6 +34223,16 @@
           },
           "owner": {
             "$ref": "#/components/schemas/UserRefDto"
+          },
+          "part": {
+            "description": "整卷投稿的第几部分，整卷为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "part_count": {
+            "description": "这一卷共分几部分",
+            "nullable": true,
+            "type": "number"
           },
           "placement_complete": {
             "description": "归类是否完整，不完整时不能通过",
@@ -34224,7 +34279,8 @@
               "REVIEW",
               "PUBLISHED",
               "STALE",
-              "ARCHIVED"
+              "ARCHIVED",
+              "HELD"
             ],
             "type": "string"
           },
@@ -34280,6 +34336,10 @@
           "chapter_name",
           "volume_number",
           "volume_id",
+          "part",
+          "part_count",
+          "alternate",
+          "held_from",
           "submitted_at",
           "withdrawn_count",
           "batch_id",
@@ -36670,6 +36730,72 @@
         ],
         "type": "object"
       },
+      "MangaVolumeChapterRangeDto": {
+        "properties": {
+          "count": {
+            "description": "这一卷收录的话数",
+            "type": "number"
+          },
+          "first": {
+            "description": "这一卷收录的第一话",
+            "type": "string"
+          },
+          "last": {
+            "description": "这一卷收录的最后一话",
+            "type": "string"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "count"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeContentsDto": {
+        "properties": {
+          "chapters": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeChapterRangeDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "editions": {
+            "description": "记在这一卷下、注明了所收部分的出版版本，如只收一部分的电子版分册",
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumePartialEditionDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "nullable": true,
+            "type": "string"
+          },
+          "name_cn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "volume_number": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "volume_number",
+          "name",
+          "name_cn",
+          "chapters",
+          "editions"
+        ],
+        "type": "object"
+      },
       "MangaVolumeDetailDto": {
         "properties": {
           "bangumi_book_id": {
@@ -36845,6 +36971,28 @@
           "updated_at",
           "revised_at",
           "manga"
+        ],
+        "type": "object"
+      },
+      "MangaVolumePartialEditionDto": {
+        "properties": {
+          "entry_id": {
+            "description": "出版版本条目",
+            "type": "number"
+          },
+          "note": {
+            "description": "维基注明的所收部分",
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry_id",
+          "title",
+          "note"
         ],
         "type": "object"
       },
@@ -57520,6 +57668,20 @@
               "VOLUME"
             ],
             "type": "string"
+          },
+          "part": {
+            "description": "整卷投稿的第几部分",
+            "maximum": 50,
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "part_count": {
+            "description": "这一卷共分几部分",
+            "maximum": 50,
+            "minimum": 2,
+            "nullable": true,
+            "type": "number"
           },
           "scope": {
             "description": "只有尚未对应到章节的项目可以改",
@@ -90557,7 +90719,8 @@
                   "REVIEW",
                   "PUBLISHED",
                   "STALE",
-                  "ARCHIVED"
+                  "ARCHIVED",
+                  "HELD"
                 ],
                 "type": "string"
               },
@@ -91259,7 +91422,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MangaProjectInfoDto"
+                "$ref": "#/components/schemas/ApproveMangaProjectDto"
               }
             }
           },
@@ -91370,6 +91533,39 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaProject"
+        ]
+      }
+    },
+    "/api/v3/manga-projects/{project_id}/resume": {
+      "post": {
+        "operationId": "MangaProjectController_resume",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveMangaProjectDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
             "description": ""
           }
         },
@@ -93562,6 +93758,39 @@
                 "schema": {
                   "items": {
                     "$ref": "#/components/schemas/MangaVolumeRelationDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
+    "/api/v3/mangas/{id}/volumes/contents": {
+      "get": {
+        "operationId": "MangaController_getVolumeContents",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MangaVolumeContentsDto"
                   },
                   "type": "array"
                 }
