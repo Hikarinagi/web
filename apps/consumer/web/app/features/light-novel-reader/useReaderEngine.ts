@@ -259,7 +259,7 @@ export function useReaderEngine(options: {
       }
       if (scrolled) created.controller.suspend()
       created.controller.mount(options.host.value)
-      const shown = scrolled ? await createView(created.reader, initialLocator) : null
+      const shown = scrolled ? await createView(created.reader, created.initialLocator) : null
       if (id !== generation || !options.host.value) {
         shown?.dispose()
         created.controller.dispose()

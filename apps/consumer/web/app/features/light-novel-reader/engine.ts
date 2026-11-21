@@ -3,6 +3,7 @@ import {
   type Reader,
   type ReaderLocator,
   type ReaderMargin,
+  type ReaderOptions,
   type ReaderShardedPublication,
   type ReaderHostFontFace,
   type ReaderSpreadMode,
@@ -92,7 +93,7 @@ export async function createStack(options: {
   prepare: (reader: Reader) => Promise<void>
 }) {
   const canvas = document.createElement('canvas')
-  const reader = await createReader(options.publication, canvas, {
+  const config: ReaderOptions = {
     width: options.size.width,
     height: options.size.height,
     margin: options.margin,
@@ -104,7 +105,17 @@ export async function createStack(options: {
     lineHeight: options.lineHeight,
     lineHeightForce: true,
     pinnedFontPolicy: { schemaVersion: 1, faces: [options.face] },
-    initialLocator: options.initialLocator,
+  }
+  let initialLocator = options.initialLocator
+  const reader = await createReader(options.publication, canvas, {
+    ...config,
+    initialLocator,
+  }).catch((error: unknown) => {
+    if (!initialLocator || (error as { code?: unknown } | null)?.code !== 'invalid-locator') {
+      throw error
+    }
+    initialLocator = undefined
+    return createReader(options.publication, canvas, config)
   })
   try {
     await options.prepare(reader)
@@ -114,7 +125,7 @@ export async function createStack(options: {
       annotationStorage: options.annotations,
       paintPage: options.paintPage,
     })
-    return { reader, controller, canvas }
+    return { reader, controller, canvas, initialLocator }
   } catch (error) {
     await reader.dispose()
     throw error
