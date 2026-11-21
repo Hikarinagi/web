@@ -23697,10 +23697,26 @@
       },
       "GalgameLogoDto": {
         "properties": {
+          "dark": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "深色主题下的显示方式：原图、反色或不显示；未设置时为不显示"
+          },
           "language": {
             "description": "标题徽标上文字的语言；为空表示作品原文的语言",
             "nullable": true,
             "type": "string"
+          },
+          "light": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "浅色主题下的显示方式：原图、反色或不显示；未设置时为不显示"
           },
           "media": {
             "allOf": [
@@ -23713,7 +23729,9 @@
         },
         "required": [
           "language",
-          "media"
+          "media",
+          "light",
+          "dark"
         ],
         "type": "object"
       },
@@ -29862,6 +29880,15 @@
           "name"
         ],
         "type": "object"
+      },
+      "LogoDisplay": {
+        "description": "浅色主题下的显示方式：原图、反色或不显示；未设置时为不显示",
+        "enum": [
+          "ORIGINAL",
+          "INVERTED",
+          "HIDDEN"
+        ],
+        "type": "string"
       },
       "LookupCallDto": {
         "properties": {
@@ -55550,6 +55577,112 @@
         ],
         "type": "object"
       },
+      "TitleLogoDisplayDto": {
+        "properties": {
+          "dark": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "深色主题下的显示方式"
+          },
+          "light": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "浅色主题下的显示方式"
+          },
+          "media_id": {
+            "description": "徽标图片的媒体资源编号",
+            "type": "number"
+          },
+          "set_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "最后设置的人",
+            "nullable": true,
+            "type": "object"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "media_id",
+          "light",
+          "dark",
+          "set_by",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "TitleLogoDto": {
+        "properties": {
+          "display": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TitleLogoDisplayDto"
+              }
+            ],
+            "description": "显示方式；尚未设置时为空，读者端按不显示对待",
+            "nullable": true,
+            "type": "object"
+          },
+          "game": {
+            "$ref": "#/components/schemas/TitleLogoGameDto"
+          },
+          "id": {
+            "description": "标题徽标的记录编号",
+            "type": "number"
+          },
+          "language": {
+            "description": "徽标上文字的语言；为空表示作品原文的语言",
+            "nullable": true,
+            "type": "string"
+          },
+          "media": {
+            "$ref": "#/components/schemas/MediaAssetDto"
+          }
+        },
+        "required": [
+          "id",
+          "game",
+          "language",
+          "media",
+          "display"
+        ],
+        "type": "object"
+      },
+      "TitleLogoGameDto": {
+        "properties": {
+          "entry_id": {
+            "description": "游戏条目编号",
+            "type": "number"
+          },
+          "galgame_id": {
+            "description": "读者端游戏编号",
+            "nullable": true,
+            "type": "number"
+          },
+          "title": {
+            "description": "条目标题",
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry_id",
+          "galgame_id",
+          "title"
+        ],
+        "type": "object"
+      },
       "TodoCountDto": {
         "properties": {
           "count": {
@@ -59533,6 +59666,31 @@
           "messages",
           "chat",
           "notifications"
+        ],
+        "type": "object"
+      },
+      "UpdateTitleLogoDto": {
+        "properties": {
+          "dark": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "深色主题下的显示方式"
+          },
+          "light": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogoDisplay"
+              }
+            ],
+            "description": "浅色主题下的显示方式"
+          }
+        },
+        "required": [
+          "light",
+          "dark"
         ],
         "type": "object"
       },
@@ -78164,6 +78322,113 @@
         ],
         "responses": {
           "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/logos": {
+      "get": {
+        "operationId": "AdminTitleLogoController_getList",
+        "parameters": [
+          {
+            "description": "只列出尚未设置显示方式的徽标",
+            "in": "query",
+            "name": "unset",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/TitleLogoDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Admin Wiki"
+        ]
+      }
+    },
+    "/api/v3/admin/wiki/logos/{media_id}": {
+      "patch": {
+        "operationId": "AdminTitleLogoController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "media_id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTitleLogoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitleLogoDisplayDto"
+                }
+              }
+            },
             "description": ""
           }
         },

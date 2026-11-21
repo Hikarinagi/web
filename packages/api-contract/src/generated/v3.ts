@@ -5925,6 +5925,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/wiki/logos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminTitleLogoController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/wiki/logos/{media_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["AdminTitleLogoController_update"];
+        trace?: never;
+    };
     "/api/v3/admin/wiki/logs": {
         parameters: {
             query?: never;
@@ -21682,8 +21714,12 @@ export interface components {
             name: string;
         };
         GalgameLogoDto: {
+            /** @description 深色主题下的显示方式：原图、反色或不显示；未设置时为不显示 */
+            dark: components["schemas"]["LogoDisplay"];
             /** @description 标题徽标上文字的语言；为空表示作品原文的语言 */
             language: string | null;
+            /** @description 浅色主题下的显示方式：原图、反色或不显示；未设置时为不显示 */
+            light: components["schemas"]["LogoDisplay"];
             /** @description 透明背景的标题徽标图片 */
             media: components["schemas"]["RatedMediaAssetDto"];
         };
@@ -23271,6 +23307,11 @@ export interface components {
             id: number;
             name: string;
         };
+        /**
+         * @description 浅色主题下的显示方式：原图、反色或不显示；未设置时为不显示
+         * @enum {string}
+         */
+        LogoDisplay: "ORIGINAL" | "INVERTED" | "HIDDEN";
         LookupCallDto: {
             /** @description A few fields of the output, by tool: counts of results, the page number and title of an opened page, the label of a read entry, the results of a submit */
             digest: {
@@ -29863,6 +29904,36 @@ export interface components {
             query: string;
             service: components["schemas"]["AiSearchService"];
         };
+        TitleLogoDisplayDto: {
+            /** @description 深色主题下的显示方式 */
+            dark: components["schemas"]["LogoDisplay"];
+            /** @description 浅色主题下的显示方式 */
+            light: components["schemas"]["LogoDisplay"];
+            /** @description 徽标图片的媒体资源编号 */
+            media_id: number;
+            /** @description 最后设置的人 */
+            set_by: components["schemas"]["UserRefDto"] | null;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        TitleLogoDto: {
+            /** @description 显示方式；尚未设置时为空，读者端按不显示对待 */
+            display: components["schemas"]["TitleLogoDisplayDto"] | null;
+            game: components["schemas"]["TitleLogoGameDto"];
+            /** @description 标题徽标的记录编号 */
+            id: number;
+            /** @description 徽标上文字的语言；为空表示作品原文的语言 */
+            language: string | null;
+            media: components["schemas"]["MediaAssetDto"];
+        };
+        TitleLogoGameDto: {
+            /** @description 游戏条目编号 */
+            entry_id: number;
+            /** @description 读者端游戏编号 */
+            galgame_id: number | null;
+            /** @description 条目标题 */
+            title: string;
+        };
         TodoCountDto: {
             count: number;
             kind: components["schemas"]["WikiTodoKind"];
@@ -30878,6 +30949,12 @@ export interface components {
             private_replies?: ("checkin" | "me" | "help")[];
             settings_poll_seconds: number;
             verification: components["schemas"]["TelegramVerificationInputDto"];
+        };
+        UpdateTitleLogoDto: {
+            /** @description 深色主题下的显示方式 */
+            dark: components["schemas"]["LogoDisplay"];
+            /** @description 浅色主题下的显示方式 */
+            light: components["schemas"]["LogoDisplay"];
         };
         UpdateTranslationTeamDto: {
             /** @description 头像的媒体资源 ID */
@@ -41554,6 +41631,58 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    AdminTitleLogoController_getList: {
+        parameters: {
+            query: {
+                /** @description 只列出尚未设置显示方式的徽标 */
+                unset?: boolean;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["TitleLogoDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminTitleLogoController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                media_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTitleLogoDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TitleLogoDisplayDto"];
+                };
             };
         };
     };
