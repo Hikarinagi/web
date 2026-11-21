@@ -10785,6 +10785,16 @@
             "nullable": true,
             "type": "string"
           },
+          "gender_label": {
+            "description": "显示用的性别：照录的性别归为女、男或其他",
+            "enum": [
+              "女",
+              "男",
+              "其他"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "height": {
             "nullable": true,
             "type": "string"
@@ -10805,6 +10815,7 @@
           "weight",
           "measurements",
           "gender",
+          "gender_label",
           "blood_type"
         ],
         "type": "object"
@@ -10883,6 +10894,16 @@
             "type": "string"
           },
           "gender": {
+            "nullable": true,
+            "type": "string"
+          },
+          "gender_label": {
+            "description": "显示用的性别：照录的性别归为女、男或其他",
+            "enum": [
+              "女",
+              "男",
+              "其他"
+            ],
             "nullable": true,
             "type": "string"
           },
@@ -10981,6 +11002,7 @@
           "en_intro",
           "image",
           "gender",
+          "gender_label",
           "blood_type",
           "birthday_month",
           "birthday_day",

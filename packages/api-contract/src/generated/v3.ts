@@ -18537,6 +18537,11 @@ export interface components {
             birthday: string | null;
             blood_type: string | null;
             gender: string | null;
+            /**
+             * @description 显示用的性别：照录的性别归为女、男或其他
+             * @enum {string|null}
+             */
+            gender_label: "女" | "男" | "其他" | null;
             height: string | null;
             measurements: string | null;
             weight: string | null;
@@ -18560,6 +18565,11 @@ export interface components {
             en_intro: string | null;
             en_name: string | null;
             gender: string | null;
+            /**
+             * @description 显示用的性别：照录的性别归为女、男或其他
+             * @enum {string|null}
+             */
+            gender_label: "女" | "男" | "其他" | null;
             height: number | null;
             hips: number | null;
             id: number;

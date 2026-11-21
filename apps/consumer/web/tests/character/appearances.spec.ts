@@ -16,6 +16,7 @@ import {
 
 const blankProfile = {
   gender: null,
+  gender_label: null,
   age: null,
   birthday: null,
   height: null,
@@ -65,7 +66,8 @@ const character = {
   intro: 'base',
   trans_intro: null,
   image: null,
-  gender: '女',
+  gender: '♀',
+  gender_label: '女',
   blood_type: 'O',
   profile: { age: null, birthday: '9月4日', height: '140cm', weight: null, measurements: null },
 } as unknown as Parameters<typeof viewOf>[0]
@@ -159,7 +161,24 @@ describe('viewOf', () => {
       lists([game(1, '2001-01-01', { profile: { ...blankProfile, height: '150cm' } })]),
     )
     const view = viewOf(character, list, list[0] ?? null)
-    expect(view.profile).toMatchObject({ height: '150cm', birthday: '9月4日', gender: '女' })
+    expect(view.profile).toMatchObject({
+      height: '150cm',
+      birthday: '9月4日',
+      gender: '♀',
+      gender_label: '女',
+    })
+  })
+
+  it('takes the gender a work records over that of the character', () => {
+    const list = appearancesOf(
+      lists([
+        game(1, '2001-01-01', { profile: { ...blankProfile, gender: '雄', gender_label: '男' } }),
+      ]),
+    )
+    expect(viewOf(character, list, list[0] ?? null).profile).toMatchObject({
+      gender: '雄',
+      gender_label: '男',
+    })
   })
 
   it('borrows the intro of the nearest work and says which one', () => {
@@ -279,6 +298,12 @@ describe('profileRows', () => {
       { label: '生日', value: '9 月 4 日' },
       { label: '身高', value: '140 cm' },
       { label: '三围', value: 'B68 W51 H72' },
+    ])
+  })
+
+  it('shows the gender grouped for display, not the wording the source used', () => {
+    expect(profileRows({ ...blankProfile, gender: '♀', gender_label: '女' })).toEqual([
+      { label: '性别', value: '女' },
     ])
   })
 })

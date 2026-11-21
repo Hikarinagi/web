@@ -46,7 +46,7 @@ export function entityImage(kind: EntityKind, entity: EntityDetail): EntityMedia
 }
 
 export function entityGender(entity: EntityDetail): string | null {
-  return 'gender' in entity ? (entity.gender ?? null) : null
+  return 'gender_label' in entity ? entity.gender_label : null
 }
 
 export function entityHeroMeta(kind: EntityKind, entity: EntityDetail): string | null {

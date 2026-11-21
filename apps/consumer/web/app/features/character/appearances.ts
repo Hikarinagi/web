@@ -134,6 +134,7 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
   const base: Profile = {
     ...character.profile,
     gender: character.gender,
+    gender_label: character.gender_label,
     blood_type: character.blood_type,
   }
   const profile = Object.fromEntries(
@@ -158,7 +159,7 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
 
 export function profileRows(profile: Profile) {
   return [
-    { label: '性别', value: profile.gender },
+    { label: '性别', value: profile.gender_label },
     { label: '生日', value: profile.birthday?.replace(/^(\d+)月(\d+)日$/, '$1 月 $2 日') },
     { label: '年龄', value: profile.age },
     { label: '身高', value: profile.height?.replace(/(\d+)cm$/, '$1 cm') },
