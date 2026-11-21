@@ -390,14 +390,14 @@ importers:
         version: 7.10.1(@opentelemetry/api@1.10.0)
       bullmq-otel:
         specifier: '*'
-        version: 2.0.1(bullmq@5.81.5)
+        version: 2.0.1(bullmq@5.81.6)
     devDependencies:
       '@types/node':
         specifier: ^22.20.3
         version: 22.20.5
       bullmq:
         specifier: ^5.81.5
-        version: 5.81.5
+        version: 5.81.6
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -4112,8 +4112,8 @@ packages:
     peerDependencies:
       bullmq: '>=6.0.0'
 
-  bullmq@5.81.5:
-    resolution: {integrity: sha512-pW7pFc/X+9AEIx91TWTdIpZ1icfbJnA0unsyzD7VICjCUw8a3qedSjej5dxxn6LjfM1kr2jvalOCGbCmoA5Kxg==}
+  bullmq@5.81.6:
+    resolution: {integrity: sha512-LkOmfh8Fer/8ZuLGiGtU0rc9h9kHNpE7s1dy40vARv/yp6VhUfLCj7vwAYYJPdTxQ/FRNXQB+47npr+MUPyg2w==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       redis: '>=5.0.0'
@@ -5648,8 +5648,8 @@ packages:
     resolution: {integrity: sha512-FFUtZMpoZ8RqHS3XeXEmHWLA4thH+ZxCv2lOiPIn1Xc7CxrqhWzNSDzD+/chS/zbYezmiwWLdQC09JdQKmthOw==}
     engines: {node: '>=20'}
 
-  isomorphic-git@1.44.17:
-    resolution: {integrity: sha512-jVTvfct/ZDqutRKOWSnTTLtbkKSXlvV5bWOkRpW143tsDfUxZsnNqSPq8BgNpsviuD9OuQ/1Sz8reNb/+daVSQ==}
+  isomorphic-git@1.44.18:
+    resolution: {integrity: sha512-+VgjSGkpuLHG/R8oYcPsRUCcr0ppbCfm3Eiws94I69Xzq8tc1Ar40ahngU52niIYejuTtWrbs/o0padH4SxKqQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -5850,8 +5850,8 @@ packages:
     resolution: {integrity: sha512-Smw4xcfIQ5LVjAOuJCvN/zIodzA/BBSsluuoSykP+lUvScIi4U6RJLfwHet5cxFnCswUjISV8oAXaqaJDY3chg==}
     engines: {node: '>= 0.8'}
 
-  js-tokens@10.0.0:
-    resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
+  js-tokens@10.0.1:
+    resolution: {integrity: sha512-XMt+uh+yEs6srFvEb/pEe4IMvbtoXVdNxF7lZFU+I9sdWI641L97L+gXQMTGm1x3RjPUVizNVjHueclXr0U7sw==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -7583,8 +7583,8 @@ packages:
   structured-clone-es@2.0.1:
     resolution: {integrity: sha512-10ZL5r77LhknxlP1FBiCW+VdnuWOEFLdSS2SKtjyEV+L4qP1hUEIMIZW94LC3jKxRmT/Dj7KkD1mqh/IY6lhKQ==}
 
-  superjson@2.2.6:
-    resolution: {integrity: sha512-H+ue8Zo4vJmV2nRjpx86P35lzwDT3nItnIsocgumgr0hHMQ+ZGq5vrERg9kJBo5AWGmxZDhzDo+WVIJqkB0cGA==}
+  superjson@2.2.7:
+    resolution: {integrity: sha512-QK/H+tosbovdRvIuGqcWn8g3IxPZY7B8ZPowCAmWsV8bPvCk+bGMlZt90C4AxZjnzMO2WBRDacr1+0i1AOy/5g==}
     engines: {node: '>=16'}
 
   supports-color@10.2.2:
@@ -8300,18 +8300,18 @@ packages:
       jsdom:
         optional: true
 
-  vscode-jsonrpc@10.0.0:
-    resolution: {integrity: sha512-USSfxg0vDIpTQqlQBGxF3mBARyoS8cU7LHLpbYNh6dOJt32dlskxPWB0Irrh5TllTmyf7oNLAvqDqzklbwwnpA==}
+  vscode-jsonrpc@10.0.1:
+    resolution: {integrity: sha512-fGdu32Sp4GeSQ2twML46WPMB6cFfIJ4Vdx1K5s/WPzUYdShVPCGKscYltn5hiNz748xKNJdBHgocAvuN48tLGw==}
     engines: {node: '>=14.17.0'}
 
-  vscode-languageserver-protocol@3.18.5:
-    resolution: {integrity: sha512-FW4fBMzZ99N8xeob4py0l050wgCoRgTpEq5Xcsb9lM1bc29UKGR/wSV+4knaqFxssFHajy7OzNiKP/m3U1ZEuA==}
+  vscode-languageserver-protocol@3.18.6:
+    resolution: {integrity: sha512-Ocoa4g/vyB66ZFkIKApV8/FTjQ+EYeOVDkq/nzw9SmfX+L6Ikl5KtL5AjmSAQ7nhqfud1ojiVuy+drHdvAlgUg==}
 
   vscode-languageserver-textdocument@1.0.16:
     resolution: {integrity: sha512-qeNEuOi9a3qkqRf7Gfez2WL2VwlBTLCNekHBGO9kxPVUp9XuY15yfTJ9jwvOwKI0I2MhUUfZq95NSp+LK1CLQg==}
 
-  vscode-languageserver-types@3.18.5:
-    resolution: {integrity: sha512-kPd6+JQNz3HMJvjKlqUxERSlZHAntl/aGpsk7ImwIh0ewDKDcjgAEyVSYciPiOJD3ftbK9IrfiqUeTZLSbCizw==}
+  vscode-languageserver-types@3.18.6:
+    resolution: {integrity: sha512-DEDtik4YupS+nOg4JxqJ2H5ec/m4tTD9a5mGcBVGYkQKZQo1AIF3ZToiP8+A0kUzyhyqX5dMnPDEnhtmzts7GA==}
 
   vscode-uri@3.2.0:
     resolution: {integrity: sha512-m2gXo3bn0G1kT9InzMf07fTbqMbGtyckj3bH5ktLO+1Ssv+yiATZ4dhwaQv9UZWxJh6E9IFGnQyjgWVDWVBDrg==}
@@ -9913,7 +9913,7 @@ snapshots:
       git-url-parse: 16.1.0
       h3: 1.15.11
       hookable: 5.5.3
-      isomorphic-git: 1.44.17
+      isomorphic-git: 1.44.18
       jiti: 2.7.0
       json-schema-to-typescript-lite: 15.0.0
       mdast-util-to-hast: 13.2.2
@@ -10723,7 +10723,7 @@ snapshots:
       exsolve: 1.2.0
       generic-names: 4.0.0
       get-port-please: 3.2.0
-      js-tokens: 10.0.0
+      js-tokens: 10.0.1
       knitwork: 1.3.0
       mocked-exports: 0.1.1
       my-bad: 0.2.12(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1))
@@ -10790,7 +10790,7 @@ snapshots:
       exsolve: 1.2.0
       generic-names: 4.0.0
       get-port-please: 3.2.0
-      js-tokens: 10.0.0
+      js-tokens: 10.0.1
       knitwork: 1.3.0
       mocked-exports: 0.1.1
       my-bad: 0.2.12(vite@8.3.8(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1))
@@ -12773,7 +12773,7 @@ snapshots:
   '@volar/language-service@2.4.30(typescript@5.9.3)':
     dependencies:
       '@volar/language-core': 2.4.30
-      vscode-languageserver-protocol: 3.18.5
+      vscode-languageserver-protocol: 3.18.6
       vscode-languageserver-textdocument: 1.0.16
       vscode-uri: 3.2.0
     optionalDependencies:
@@ -12782,7 +12782,7 @@ snapshots:
   '@volar/language-service@2.4.30(typescript@6.0.3)':
     dependencies:
       '@volar/language-core': 2.4.30
-      vscode-languageserver-protocol: 3.18.5
+      vscode-languageserver-protocol: 3.18.6
       vscode-languageserver-textdocument: 1.0.16
       vscode-uri: 3.2.0
     optionalDependencies:
@@ -12899,7 +12899,7 @@ snapshots:
       mitt: 3.0.1
       perfect-debounce: 1.0.0
       speakingurl: 14.0.1
-      superjson: 2.2.6
+      superjson: 2.2.7
 
   '@vue/devtools-kit@8.2.1':
     dependencies:
@@ -13342,13 +13342,13 @@ snapshots:
 
   builtin-modules@5.5.0: {}
 
-  bullmq-otel@2.0.1(bullmq@5.81.5):
+  bullmq-otel@2.0.1(bullmq@5.81.6):
     dependencies:
       '@opentelemetry/api': 1.10.0
-      bullmq: 5.81.5
+      bullmq: 5.81.6
       tslib: 2.9.1
 
-  bullmq@5.81.5:
+  bullmq@5.81.6:
     dependencies:
       cron-parser: 4.9.0
       ioredis: 5.11.1
@@ -15083,7 +15083,7 @@ snapshots:
 
   isexe@4.0.0: {}
 
-  isomorphic-git@1.44.17:
+  isomorphic-git@1.44.18:
     dependencies:
       async-lock: 1.5.0
       clean-git-ref: 2.0.1
@@ -15508,7 +15508,7 @@ snapshots:
 
   js-string-escape@1.0.1: {}
 
-  js-tokens@10.0.0: {}
+  js-tokens@10.0.1: {}
 
   js-tokens@4.0.0: {}
 
@@ -18176,7 +18176,7 @@ snapshots:
 
   strip-literal@4.0.0:
     dependencies:
-      js-tokens: 10.0.0
+      js-tokens: 10.0.1
 
   strnum@2.5.1:
     dependencies:
@@ -18188,7 +18188,7 @@ snapshots:
 
   structured-clone-es@2.0.1: {}
 
-  superjson@2.2.6:
+  superjson@2.2.7:
     dependencies:
       copy-anything: 4.1.5
 
@@ -19160,16 +19160,16 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vscode-jsonrpc@10.0.0: {}
+  vscode-jsonrpc@10.0.1: {}
 
-  vscode-languageserver-protocol@3.18.5:
+  vscode-languageserver-protocol@3.18.6:
     dependencies:
-      vscode-jsonrpc: 10.0.0
-      vscode-languageserver-types: 3.18.5
+      vscode-jsonrpc: 10.0.1
+      vscode-languageserver-types: 3.18.6
 
   vscode-languageserver-textdocument@1.0.16: {}
 
-  vscode-languageserver-types@3.18.5: {}
+  vscode-languageserver-types@3.18.6: {}
 
   vscode-uri@3.2.0: {}
 

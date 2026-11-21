@@ -68,6 +68,15 @@
       shownOn.value.dark && repeated ? 'dark:sr-only' : 'dark:not-sr-only',
     )
   })
+  const logoBox = computed(() => {
+    const { width, height } = logo.value?.media ?? {}
+    return width && height
+      ? {
+          ratio: width / height,
+          style: { '--logo-w': `${width}px`, '--logo-ratio': width / height },
+        }
+      : null
+  })
   const logoProcessing = { width: 960, quality: 90, fit: 'scale-down', format: 'auto' } as const
 </script>
 
@@ -95,8 +104,22 @@
       :lazy="false"
       :skeleton="false"
       :thumbhash="false"
-      :class="cn('my-1 w-fit max-w-full', logoClass)"
-      image-class="h-auto max-h-20 w-auto max-w-full object-left lg:max-h-32 lg:max-w-lg"
+      :ratio="logoBox?.ratio"
+      :style="logoBox?.style"
+      :class="
+        cn(
+          'my-1 max-w-full',
+          logoBox
+            ? 'w-[min(var(--logo-w),100%,calc(var(--logo-ratio)*var(--spacing)*20))] lg:w-[min(var(--logo-w),100%,var(--container-lg),calc(var(--logo-ratio)*var(--spacing)*32))]'
+            : 'w-fit',
+          logoClass,
+        )
+      "
+      :image-class="
+        logoBox
+          ? 'size-full object-contain object-left'
+          : 'h-auto max-h-20 w-auto max-w-full object-left lg:max-h-32 lg:max-w-lg'
+      "
     />
     <Heading :level="1" :class="cn('leading-tight font-bold tracking-tight text-fg', headingClass)">
       {{ title }}
