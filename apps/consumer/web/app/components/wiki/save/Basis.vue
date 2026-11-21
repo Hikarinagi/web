@@ -76,6 +76,7 @@
       </Inline>
       <FileUpload
         v-if="basis.media.length < 20"
+        :model-value="[]"
         variant="button"
         multiple
         :accept="IMAGE_TYPES.join(',')"

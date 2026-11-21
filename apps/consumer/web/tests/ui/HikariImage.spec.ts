@@ -50,8 +50,8 @@ describe('HikariImage', () => {
     vi.unstubAllGlobals()
   })
 
-  function render(src: HikariImageSource) {
-    return mount(HikariImage, { props: { src } }).getComponent(Image).props()
+  function render(src: HikariImageSource, spoiler?: boolean) {
+    return mount(HikariImage, { props: { src, spoiler } }).getComponent(Image).props()
   }
 
   it('hands the thumb hash to Image for an ordinary image', () => {
@@ -108,6 +108,14 @@ describe('HikariImage', () => {
     const props = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: null, violence: null })
     expect(props.src).toMatch(/^data:image\/png;base64,/)
     expect(render({ src: 'media/b.webp', sexual: 0, violence: 0 }).src).toContain('media/b.webp')
+  })
+
+  it('shows the real image whatever its rating where the spoiler is turned off', () => {
+    limit = 'block'
+    const unrated = render({ src: 'media/a.webp', thumb_hash: HASH, sexual: null }, false)
+    expect(unrated.src).toContain('media/a.webp')
+    expect(unrated.src).not.toContain('blur')
+    expect(render({ src: 'media/b.webp', sexual: 2 }, false).src).not.toContain('blur')
   })
 
   it('shows only the thumb hash to a viewer who may not reveal the image', () => {

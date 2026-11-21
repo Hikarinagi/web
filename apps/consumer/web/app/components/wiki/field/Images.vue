@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Empty, FileUpload, SimpleGrid, Stack } from '@hina-ui/vue'
-  import { IMAGE_TYPES, uploadImage } from '~/components/media-library/lib/upload'
+  import { IMAGE_TYPES, isAcceptedImage, uploadImage } from '~/components/media-library/lib/upload'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { emptyValue, type PropertyDefinition } from '~/features/wiki/editor/draft'
   import { mediaDraft } from '~/features/wiki/editor/inputs'
@@ -47,10 +47,22 @@
       uploading.value = false
     }
   }
+
+  const area = useTemplateRef('area')
+  const hovered = useElementHover(() => area.value?.$el)
+  useEventListener('paste', (event: ClipboardEvent) => {
+    if (uploading.value || !hovered.value) return
+    const target = event.target instanceof HTMLElement ? event.target : null
+    if (target?.isContentEditable || target?.closest('input, textarea')) return
+    const files = Array.from(event.clipboardData?.files ?? []).filter(isAcceptedImage)
+    if (!files.length) return
+    event.preventDefault()
+    void upload(single.value ? files.slice(0, 1) : files)
+  })
 </script>
 
 <template>
-  <Stack gap="md">
+  <Stack ref="area" gap="md">
     <Empty v-if="!view.values.length" :title="`暂无${label}`" />
     <SimpleGrid v-else :min="single ? '12rem' : '13rem'" gap="md">
       <WikiFieldValue
@@ -68,11 +80,14 @@
       />
     </SimpleGrid>
     <FileUpload
+      :model-value="single ? null : []"
       :multiple="!single"
       :accept="IMAGE_TYPES.join(',')"
       :loading="uploading"
       :list="false"
       @update:model-value="upload"
-    />
+    >
+      拖拽或粘贴图片到此处，也可点击选择
+    </FileUpload>
   </Stack>
 </template>

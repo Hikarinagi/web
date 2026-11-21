@@ -40,6 +40,7 @@
       ratio?: number
       skeleton?: boolean
       thumbhash?: boolean
+      spoiler?: boolean
       preset?: HikariImagePresetName
       processing?: HikariImageProcessing
       preload?: boolean | { fetchPriority: 'high' | 'low' | 'auto' }
@@ -58,6 +59,7 @@
       ratio: undefined,
       skeleton: true,
       thumbhash: true,
+      spoiler: true,
       preset: undefined,
       processing: undefined,
       preload: false,
@@ -80,6 +82,7 @@
   const limit = computed(() => limitOf(imageSourceSafety(props.src)))
   const blurNsfw = computed(
     () =>
+      props.spoiler &&
       limit.value !== 'JUST_SHOW' &&
       !(limit.value === 'SHOW_WITH_SPOILER' && revealed.value.includes(sourceSrc.value ?? '')),
   )

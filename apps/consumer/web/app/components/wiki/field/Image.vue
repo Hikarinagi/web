@@ -52,6 +52,7 @@
         :alt="label"
         preset="small"
         preview
+        :spoiler="false"
         class="size-full"
         :image-class="contain ? 'size-full object-contain p-2' : 'size-full object-cover'"
       />
@@ -92,6 +93,7 @@
       :alt="label"
       preset="small"
       preview
+      :spoiler="false"
       class="size-24 shrink-0 overflow-hidden rounded-md"
       image-class="size-full object-cover"
     />
