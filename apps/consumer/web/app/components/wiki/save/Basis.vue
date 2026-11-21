@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { CloseButton, FileUpload, Inline, Input, Stack } from '@hina-ui/vue'
   import { ImagePlus } from '@lucide/vue'
-  import { uploadImage } from '~/components/media-library/lib/upload'
+  import { IMAGE_TYPES, uploadImage } from '~/components/media-library/lib/upload'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
 
   defineOptions({ name: 'WikiSaveBasis' })
@@ -78,7 +78,7 @@
         v-if="basis.media.length < 20"
         variant="button"
         multiple
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        :accept="IMAGE_TYPES.join(',')"
         :loading="uploading"
         :list="false"
         @update:model-value="upload"

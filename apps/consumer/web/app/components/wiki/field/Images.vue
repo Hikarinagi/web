@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Empty, FileUpload, SimpleGrid, Stack } from '@hina-ui/vue'
-  import { uploadImage } from '~/components/media-library/lib/upload'
+  import { IMAGE_TYPES, uploadImage } from '~/components/media-library/lib/upload'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { emptyValue, type PropertyDefinition } from '~/features/wiki/editor/draft'
   import { mediaDraft } from '~/features/wiki/editor/inputs'
@@ -69,7 +69,7 @@
     </SimpleGrid>
     <FileUpload
       :multiple="!single"
-      accept="image/jpeg,image/png,image/webp,image/gif"
+      :accept="IMAGE_TYPES.join(',')"
       :loading="uploading"
       :list="false"
       @update:model-value="upload"

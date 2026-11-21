@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { FileUpload } from '@hina-ui/vue'
   import { ImagePlus } from '@lucide/vue'
+  import { IMAGE_TYPES } from './lib/upload'
 
   defineProps<{ uploading?: boolean }>()
   const emit = defineEmits<{ files: [files: File[]] }>()
@@ -17,7 +18,7 @@
     multiple
     :list="false"
     :loading="uploading"
-    accept="image/jpeg,image/png,image/webp,image/gif"
+    :accept="IMAGE_TYPES.join(',')"
     class="aspect-square"
     @drop.stop
     @update:model-value="onPicked"

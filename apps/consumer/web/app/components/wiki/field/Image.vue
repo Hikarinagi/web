@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { AspectRatio, FileUpload, Inline, Select, Stack, Tag, Text } from '@hina-ui/vue'
-  import { uploadImage } from '~/components/media-library/lib/upload'
+  import { IMAGE_TYPES, uploadImage } from '~/components/media-library/lib/upload'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
   import { mediaDraft } from '~/features/wiki/editor/inputs'
   import { RATING_LABELS } from '~/utils/media/image'
@@ -98,7 +98,7 @@
     <Stack gap="sm" class="min-w-0">
       <FileUpload
         variant="button"
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        :accept="IMAGE_TYPES.join(',')"
         :loading="uploading"
         :list="false"
         @update:model-value="upload"

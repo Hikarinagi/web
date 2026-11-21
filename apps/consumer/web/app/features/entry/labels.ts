@@ -46,8 +46,6 @@ export const CREDIT_ROLE_LABELS: Record<string, string> = {
   OTHER: '其他',
 }
 
-export const ORGANIZATION_ROLES = ['DEVELOPER', 'PUBLISHER', 'LOCALIZER']
-
 export const SONG_ROLES = ['LYRICS', 'COMPOSITION', 'ARRANGEMENT', 'VOCALS']
 
 export const SONG_KIND_LABELS: Record<string, string> = {

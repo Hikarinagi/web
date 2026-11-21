@@ -1,10 +1,10 @@
 import { toast } from '@hina-ui/vue'
 import type { MediaValue } from '../types'
 
-const ACCEPT = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+export const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']
 
 export function isAcceptedImage(source: File | Blob): boolean {
-  return ACCEPT.includes(source.type)
+  return IMAGE_TYPES.includes(source.type)
 }
 
 let limitPromise: Promise<number | null> | null = null
