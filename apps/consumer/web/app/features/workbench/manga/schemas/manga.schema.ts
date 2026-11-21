@@ -18,23 +18,34 @@ const chapterNameField = v.pipe(
 
 const volumeIdField = v.nullish(v.number('单行本应为数字'))
 
-const partField = v.nullish(v.number('第几部分应为数字'))
+const partField = v.nullish(
+  v.pipe(v.number('第几册应为数字'), v.integer('第几册应为整数'), v.minValue(1, '第几册至少为 1')),
+)
 
 const partCountField = v.nullish(
   v.pipe(
-    v.number('共几部分应为数字'),
-    v.integer('共几部分应为整数'),
-    v.minValue(2, '共几部分至少为 2'),
-    v.maxValue(50, '共几部分不能超过 50'),
+    v.number('共几册应为数字'),
+    v.integer('共几册应为整数'),
+    v.minValue(2, '共几册至少为 2'),
+    v.maxValue(50, '共几册不能超过 50'),
   ),
 )
 
-function partCounted(input: { part?: number | null; part_count?: number | null }) {
-  return input.part == null || input.part_count != null
+function splitHasPart(input: { scope?: string; part?: number | null }) {
+  return input.scope !== 'SPLIT' || input.part != null
 }
 
-function partWithin(input: { part?: number | null; part_count?: number | null }) {
-  return input.part == null || input.part_count == null || input.part <= input.part_count
+function splitHasCount(input: { scope?: string; part_count?: number | null }) {
+  return input.scope !== 'SPLIT' || input.part_count != null
+}
+
+function splitWithin(input: { scope?: string; part?: number | null; part_count?: number | null }) {
+  return (
+    input.scope !== 'SPLIT' ||
+    input.part == null ||
+    input.part_count == null ||
+    input.part <= input.part_count
+  )
 }
 
 function serialNeedsNumber(input: { chapter_type?: string; chapter_number?: string | null }) {
@@ -48,7 +59,7 @@ function extraNeedsName(input: { chapter_type?: string; chapter_name?: string | 
 export const createMangaProjectSchema = v.pipe(
   v.object({
     mode: v.picklist(['UPLOAD', 'TRANSLATION'], '请选择投稿类型'),
-    scope: v.picklist(['CHAPTER', 'VOLUME'], '请选择投稿范围'),
+    scope: v.picklist(['CHAPTER', 'VOLUME', 'SPLIT'], '请选择投稿范围'),
     chapter_id: v.nullish(v.number('话应为数字')),
     chapter_type: v.picklist(CHAPTER_TYPES, '请选择类型'),
     chapter_number: chapterNumberField,
@@ -59,12 +70,14 @@ export const createMangaProjectSchema = v.pipe(
     source_lang: v.pipe(v.string('请选择原文语言'), v.nonEmpty('请选择原文语言')),
     target_lang: v.nullish(v.string('译文语言应为文本'), ''),
   }),
-  v.forward(v.partialCheck([['part'], ['part_count']], partCounted, '请填写共几部分'), [
+  v.forward(v.partialCheck([['scope'], ['part']], splitHasPart, '请填写第几册'), ['part']),
+  v.forward(v.partialCheck([['scope'], ['part_count']], splitHasCount, '请填写共几册'), [
     'part_count',
   ]),
-  v.forward(v.partialCheck([['part'], ['part_count']], partWithin, '第几部分不能大于共几部分'), [
-    'part',
-  ]),
+  v.forward(
+    v.partialCheck([['scope'], ['part'], ['part_count']], splitWithin, '第几册不能大于共几册'),
+    ['part'],
+  ),
   v.forward(
     v.partialCheck(
       [['scope'], ['chapter_id'], ['chapter_type'], ['chapter_number']],
@@ -84,7 +97,7 @@ export const createMangaProjectSchema = v.pipe(
   v.forward(
     v.partialCheck(
       [['scope'], ['volume_id']],
-      input => input.scope !== 'VOLUME' || input.volume_id != null,
+      input => input.scope === 'CHAPTER' || input.volume_id != null,
       '请选择单行本',
     ),
     ['volume_id'],
@@ -127,6 +140,7 @@ export const mangaChapterInfoSchema = v.pipe(
 
 export const mangaVolumeInfoSchema = v.pipe(
   v.object({
+    scope: v.picklist(['VOLUME', 'SPLIT'], '请选择投稿范围'),
     chapter_type: v.optional(v.string('类型应为文本')),
     chapter_number: chapterNumberField,
     chapter_name: chapterNameField,
@@ -134,12 +148,14 @@ export const mangaVolumeInfoSchema = v.pipe(
     part: partField,
     part_count: partCountField,
   }),
-  v.forward(v.partialCheck([['part'], ['part_count']], partCounted, '请填写共几部分'), [
+  v.forward(v.partialCheck([['scope'], ['part']], splitHasPart, '请填写第几册'), ['part']),
+  v.forward(v.partialCheck([['scope'], ['part_count']], splitHasCount, '请填写共几册'), [
     'part_count',
   ]),
-  v.forward(v.partialCheck([['part'], ['part_count']], partWithin, '第几部分不能大于共几部分'), [
-    'part',
-  ]),
+  v.forward(
+    v.partialCheck([['scope'], ['part'], ['part_count']], splitWithin, '第几册不能大于共几册'),
+    ['part'],
+  ),
 )
 
 export type MangaChapterInfoValues = v.InferOutput<typeof mangaChapterInfoSchema>

@@ -37,6 +37,7 @@
   const SCOPE_OPTIONS = [
     { value: 'CHAPTER', label: '一话' },
     { value: 'VOLUME', label: '整卷' },
+    { value: 'SPLIT', label: '电子分册' },
   ]
   const CHINESE_OPTIONS = LANGUAGE_OPTIONS.filter(option => option.value.startsWith('zh'))
 
@@ -61,7 +62,12 @@
     target_lang: 'zh-Hans',
   })
   const translation = computed(() => values.mode === 'TRANSLATION')
-  const wholeVolume = computed(() => values.scope === 'VOLUME')
+  const wholeVolume = computed(() => values.scope !== 'CHAPTER')
+  const scopeOptions = computed(() =>
+    props.volumeId != null
+      ? SCOPE_OPTIONS.filter(option => option.value !== 'CHAPTER')
+      : SCOPE_OPTIONS,
+  )
   const mangaOptions = computed(() =>
     results.value.map(item => ({ value: item.id, label: item.name_cn || item.name })),
   )
@@ -98,12 +104,12 @@
         body: {
           series_id: target.value.id,
           mode: values.mode,
-          scope: values.scope,
+          scope: wholeVolume.value ? 'VOLUME' : 'CHAPTER',
           ...(wholeVolume.value
             ? {
                 volume_id: values.volume_id ?? undefined,
-                part: values.part ?? null,
-                part_count: values.part == null ? null : (values.part_count ?? null),
+                part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
+                part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
               }
             : {
                 chapter_id: values.chapter_id ?? undefined,
@@ -156,8 +162,8 @@
           @update:model-value="pick"
         />
       </FormField>
-      <FormField v-if="!fixed && target" name="scope" label="范围" required>
-        <SegmentedControl v-model="values.scope" :options="SCOPE_OPTIONS" />
+      <FormField v-if="target && chapterId == null" name="scope" label="范围" required>
+        <SegmentedControl v-model="values.scope" :options="scopeOptions" />
       </FormField>
       <ContributeMangaVolumeFields
         v-if="wholeVolume && target"
@@ -166,6 +172,7 @@
         v-model:count="values.part_count"
         :series="target"
         :mode="values.mode"
+        :split="values.scope === 'SPLIT'"
         :fixed="fixed"
         :volumes="volumes"
         :chapters="chapters"

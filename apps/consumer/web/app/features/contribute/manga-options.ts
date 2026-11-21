@@ -4,7 +4,6 @@ import { getMangaVolumeLabel } from '~/utils/media/manga'
 import type { MangaTargetChapter, MangaTargetClaim, MangaTargetVolume } from './manga-target'
 
 export const NEW_TARGET = 'new'
-export const WHOLE_VOLUME = 0
 
 export interface TargetOption {
   value: number | typeof NEW_TARGET
@@ -79,7 +78,7 @@ export function volumeOptions(
         return {
           value: volume.id,
           label,
-          description: note('由你上传。请在『我的投稿』中更新'),
+          description: note('由你上传，请在「我的投稿」中更新'),
           disabled: true,
         }
       }
@@ -99,7 +98,7 @@ export function volumeOptions(
         return {
           value: volume.id,
           label,
-          description: note(`第 ${[...new Set(parts)].join('、')} 部分已有投稿`),
+          description: note(`第 ${[...new Set(parts)].join('、')} 册已有投稿`),
         }
       }
       if (!content) return { value: volume.id, label, description: note() }
@@ -110,46 +109,7 @@ export function volumeOptions(
         pages: content.page_count,
       }
     }),
-    { value: NEW_TARGET, label: '新建这一卷的条目…' },
-  ]
-}
-
-export function partOptions(
-  count: number,
-  volume: MangaTargetVolume | undefined,
-  projects: { claims: MangaTargetClaim[]; published: MangaTargetClaim[]; selfId?: number },
-): TargetOption[] {
-  const editions = volume?.editions.length === count ? volume.editions : []
-  const holderOf = (part: number, list: MangaTargetClaim[]) =>
-    volume
-      ? list.find(
-          project =>
-            project.scope === 'VOLUME' &&
-            project.part === part &&
-            project.id !== projects.selfId &&
-            belongsTo(project, volume),
-        )
-      : undefined
-  return [
-    { value: WHOLE_VOLUME, label: '整卷' },
-    ...Array.from({ length: count }, (_, index) => {
-      const part = index + 1
-      const claim = holderOf(part, projects.claims)
-      const upload = holderOf(part, projects.published)
-      const edition = editions[index]
-      return {
-        value: part,
-        label: `第 ${part} 部分`,
-        description: claim
-          ? `${ownerName(claim)} 正在上传`
-          : upload
-            ? `由 ${ownerName(upload)} 上传`
-            : edition
-              ? `${edition.title ?? ''}${edition.title ? '：' : ''}${edition.note}`
-              : undefined,
-        disabled: Boolean(claim || upload),
-      }
-    }),
+    { value: NEW_TARGET, label: '新建单行本…' },
   ]
 }
 

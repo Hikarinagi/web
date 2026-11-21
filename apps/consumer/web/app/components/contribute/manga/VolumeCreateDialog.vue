@@ -26,7 +26,6 @@
     { value: 'isbn', label: '通过 ISBN 新建' },
     { value: 'manual', label: '手动填写' },
   ]
-  const { confirm } = useHikariConfirm()
   const flow = useVolumeCreate(() => props.series)
   const { method, isbn, number, title, draft, notice, loading, saving } = flow
   const values = computed(() => {
@@ -71,20 +70,10 @@
     emit('created', { id, label })
     open.value = false
   }
-
-  function submit() {
-    confirm({
-      title: '确认新建这一卷',
-      description: `维基已收录这部作品的 ${props.volumes.length} 卷。只收一卷中一部分的电子版分册不另建卷，应选择其内容所在的卷，并填写是第几部分。`,
-      confirmText: '新建',
-      cancelText: '返回',
-      onConfirm: create,
-    })
-  }
 </script>
 
 <template>
-  <Dialog v-model:open="open" title="新建单行本条目" size="md" :locked="saving || loading">
+  <Dialog v-model:open="open" title="新建单行本" size="md" :locked="saving || loading">
     <template #content>
       <Stack gap="md">
         <Inline gap="sm" align="center" justify="between">
@@ -125,7 +114,7 @@
         <Alert
           :open="Boolean(taken)"
           tone="warning"
-          :title="`维基已收录第 ${taken} 卷，请从列表中选择。`"
+          :title="`第 ${taken} 卷已存在，请在单行本列表中选择。`"
         />
       </Stack>
     </template>
@@ -133,7 +122,7 @@
       <Button variant="ghost" tone="neutral" :disabled="saving" @click="open = false">
         取消
       </Button>
-      <Button :loading="saving" :disabled="!ready" @click="submit()">创建并选中</Button>
+      <Button :loading="saving" :disabled="!ready" @click="create()">创建并选中</Button>
     </template>
   </Dialog>
 </template>

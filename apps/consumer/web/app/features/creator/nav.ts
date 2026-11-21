@@ -85,7 +85,7 @@ export const CREATOR_NAV: CreatorNavGroup[] = [
         permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
       },
       {
-        label: '待处理的漫画投稿',
+        label: '已暂停的漫画投稿',
         to: '/create/manga-held',
         icon: BookAlert,
         permission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,

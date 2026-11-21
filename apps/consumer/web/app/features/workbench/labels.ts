@@ -7,7 +7,7 @@ export const PROJECT_STATUS_META: Record<string, { label: string; tone: Tone }> 
   PUBLISHED: { label: '已发布', tone: 'success' },
   STALE: { label: '已停滞', tone: 'danger' },
   ARCHIVED: { label: '已归档', tone: 'neutral' },
-  HELD: { label: '待处理', tone: 'warning' },
+  HELD: { label: '已暂停', tone: 'warning' },
 }
 
 export const PROJECT_MODE_LABEL: Record<string, string> = {

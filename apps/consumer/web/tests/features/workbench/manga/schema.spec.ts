@@ -53,16 +53,24 @@ describe('createMangaProjectSchema', () => {
     expect(issues(createMangaProjectSchema, { ...base, scope: 'VOLUME' })).toEqual(['请选择单行本'])
   })
 
-  it('按部分投稿时要填共几部分，第几部分不能超过它', () => {
-    const volume = { ...base, scope: 'VOLUME', volume_id: 3 }
-    expect(issues(createMangaProjectSchema, { ...volume, part: 2, part_count: 2 })).toEqual([])
-    expect(issues(createMangaProjectSchema, { ...volume, part: 2 })).toEqual(['请填写共几部分'])
-    expect(issues(createMangaProjectSchema, { ...volume, part: 3, part_count: 2 })).toEqual([
-      '第几部分不能大于共几部分',
+  it('电子分册要选单行本、填第几册与共几册，第几册不能超过共几册', () => {
+    const split = { ...base, scope: 'SPLIT', volume_id: 3 }
+    expect(issues(createMangaProjectSchema, { ...split, part: 2, part_count: 2 })).toEqual([])
+    expect(
+      issues(createMangaProjectSchema, { ...base, scope: 'SPLIT', part: 1, part_count: 2 }),
+    ).toEqual(['请选择单行本'])
+    expect(issues(createMangaProjectSchema, { ...split, part: 2 })).toEqual(['请填写共几册'])
+    expect(issues(createMangaProjectSchema, { ...split, part_count: 2 })).toEqual(['请填写第几册'])
+    expect(issues(createMangaProjectSchema, { ...split, part: 3, part_count: 2 })).toEqual([
+      '第几册不能大于共几册',
     ])
-    expect(issues(createMangaProjectSchema, { ...volume, part: 1, part_count: 1 })).toEqual([
-      '共几部分至少为 2',
+    expect(issues(createMangaProjectSchema, { ...split, part: 1, part_count: 1 })).toEqual([
+      '共几册至少为 2',
     ])
+  })
+
+  it('整卷投稿不要求第几册', () => {
+    expect(issues(createMangaProjectSchema, { ...base, scope: 'VOLUME', volume_id: 3 })).toEqual([])
   })
 })
 
@@ -103,9 +111,15 @@ describe('章节信息表单', () => {
   })
 
   it('整卷必须选单行本', () => {
-    expect(issues(mangaVolumeInfoSchema, { volume_id: null })).toEqual(['请选择单行本'])
-    expect(issues(mangaVolumeInfoSchema, { volume_id: 2 })).toEqual([])
-    expect(issues(mangaVolumeInfoSchema, { volume_id: 2, part: 1, part_count: 2 })).toEqual([])
-    expect(issues(mangaVolumeInfoSchema, { volume_id: 2, part: 1 })).toEqual(['请填写共几部分'])
+    expect(issues(mangaVolumeInfoSchema, { scope: 'VOLUME', volume_id: null })).toEqual([
+      '请选择单行本',
+    ])
+    expect(issues(mangaVolumeInfoSchema, { scope: 'VOLUME', volume_id: 2 })).toEqual([])
+    expect(
+      issues(mangaVolumeInfoSchema, { scope: 'SPLIT', volume_id: 2, part: 1, part_count: 2 }),
+    ).toEqual([])
+    expect(issues(mangaVolumeInfoSchema, { scope: 'SPLIT', volume_id: 2, part: 1 })).toEqual([
+      '请填写共几册',
+    ])
   })
 })

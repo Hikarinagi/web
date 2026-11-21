@@ -6,7 +6,7 @@
   definePageMeta({
     layout: 'creator',
     floatingToolbar: false,
-    title: '待处理的漫画投稿',
+    title: '已暂停的漫画投稿',
     middleware: ['auth', 'creator-permission'],
     requiredPermission: WORKBENCH_PERMISSIONS.REVIEW_MANGA,
   })
@@ -25,11 +25,11 @@
     v-else-if="data"
     v-model:page="page"
     purpose="held"
-    title="待处理的漫画投稿"
+    title="已暂停的漫画投稿"
     :icon="BookAlert"
     :list="data.projects"
     :loading="pending"
-    empty-text="没有待处理的投稿"
+    empty-text="没有已暂停的投稿"
     @changed="refresh"
   />
 </template>

@@ -4,7 +4,6 @@
     Dialog,
     Form,
     FormField,
-    Inline,
     Input,
     SegmentedControl,
     Select,
@@ -48,12 +47,15 @@
   const SCOPE_OPTIONS = [
     { value: 'CHAPTER', label: '一话' },
     { value: 'VOLUME', label: '整卷' },
+    { value: 'SPLIT', label: '电子分册' },
   ]
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const values = reactive<
     MangaChapterInfoValues &
-      Pick<MangaVolumeInfoValues, 'part' | 'part_count'> & { scope: BackendMangaProject['scope'] }
+      Pick<MangaVolumeInfoValues, 'part' | 'part_count'> & {
+        scope: 'CHAPTER' | MangaVolumeInfoValues['scope']
+      }
   >({
     scope: 'CHAPTER',
     chapter_type: 'SERIALIZATION',
@@ -65,7 +67,7 @@
   })
   const alternate = ref(false)
   const reviewing = computed(() => props.purpose !== 'edit')
-  const wholeVolume = computed(() => values.scope === 'VOLUME')
+  const wholeVolume = computed(() => values.scope !== 'CHAPTER')
   const { chapters, volumes, claims, published, loading } = useMangaTargets(() =>
     visible.value ? props.project.series.id : null,
   )
@@ -92,7 +94,12 @@
   watch(visible, next => {
     if (!next) return
     form.value?.reset()
-    values.scope = props.project.scope
+    values.scope =
+      props.project.scope === 'CHAPTER'
+        ? 'CHAPTER'
+        : props.project.part != null
+          ? 'SPLIT'
+          : 'VOLUME'
     values.chapter_type =
       props.project.chapter_type === 'VOLUME' ? 'SERIALIZATION' : props.project.chapter_type
     values.chapter_number = props.project.chapter_number ?? ''
@@ -109,13 +116,13 @@
     try {
       const body = wholeVolume.value
         ? {
-            scope: values.scope,
+            scope: 'VOLUME' as const,
             volume_id: values.volume_id ?? null,
-            part: values.part ?? null,
-            part_count: values.part == null ? null : (values.part_count ?? null),
+            part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
+            part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
           }
         : {
-            scope: values.scope,
+            scope: 'CHAPTER' as const,
             chapter_type: values.chapter_type,
             chapter_number: values.chapter_number?.trim() || null,
             chapter_name: values.chapter_name?.trim() || null,
@@ -159,7 +166,7 @@
     v-model:open="visible"
     :title="
       purpose === 'resume'
-        ? '重新指定卷与部分'
+        ? '恢复投稿'
         : purpose === 'edit'
           ? wholeVolume
             ? '编辑卷信息'
@@ -214,20 +221,18 @@
             />
           </FormField>
           <ContributeMangaPartField
-            v-if="wholeVolume"
+            v-if="values.scope === 'SPLIT'"
             v-model:part="values.part"
             v-model:count="values.part_count"
             :volume="volumes.find(volume => volume.id === values.volume_id)"
-            :claims="others.claims"
-            :published="others.published"
           />
-          <FormField v-if="reviewing" name="alternate">
-            <Inline gap="xs" align="center" :wrap="false">
-              <Switch v-model="alternate">设为替代来源</Switch>
-              <Question title="替代来源" aria-label="查看替代来源的说明">
-                这一卷或这一话已有其他投稿发布的内容时，只有设为替代来源的投稿才能发布到这里。替代来源与已有内容并存，读者看到哪一份由选源决定。
-              </Question>
-            </Inline>
+          <FormField
+            v-if="reviewing"
+            name="alternate"
+            description="这一卷或这一话已有其他投稿的内容时，开启后两份内容并存，不替换已有内容。"
+            description-placement="control"
+          >
+            <Switch v-model="alternate">与已有内容并存</Switch>
           </FormField>
         </Stack>
       </Form>

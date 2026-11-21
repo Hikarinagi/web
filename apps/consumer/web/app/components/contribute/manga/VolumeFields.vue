@@ -12,6 +12,7 @@
   const props = defineProps<{
     series: MangaTarget
     mode: CreateMangaProjectValues['mode']
+    split: boolean
     fixed: boolean
     volumes: MangaTargetVolume[]
     chapters: MangaTargetChapter[]
@@ -37,22 +38,21 @@
   <FormField
     v-if="!fixed"
     name="volume_id"
-    label="单行本"
+    :label="split ? '所属单行本' : '单行本'"
     required
     :description="
-      replaced === null || part != null
+      replaced === null || split
         ? undefined
-        : `已收录：${replaced} 页。审核通过后，你上传的版本将替换现有版本。`
+        : `已收录 ${replaced} 页。审核通过后，你上传的版本将替换现有版本。`
     "
   >
     <Select v-model="model" :options="choices" placeholder="选择单行本" />
   </FormField>
   <ContributeMangaPartField
+    v-if="split"
     v-model:part="part"
     v-model:count="count"
     :volume="volume"
-    :claims="claims"
-    :published="published"
   />
   <ContributeMangaVolumeCreateDialog
     v-model:open="createOpen"

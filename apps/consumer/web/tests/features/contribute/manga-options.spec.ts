@@ -3,9 +3,7 @@ import {
   chapterOptions,
   firstFree,
   NEW_TARGET,
-  partOptions,
   volumeOptions,
-  WHOLE_VOLUME,
 } from '~/features/contribute/manga-options'
 import type {
   MangaTargetChapter,
@@ -118,7 +116,7 @@ describe('volumeOptions', () => {
       { value: 12, label: '第 2 卷', description: 'ichi 正在上传', disabled: true },
       { value: 13, label: '第 3 卷', description: 'ichi 正在上传', disabled: true },
       { value: 14, label: '第 4 卷' },
-      { value: NEW_TARGET, label: '新建这一卷的条目…' },
+      { value: NEW_TARGET, label: '新建单行本…' },
     ])
   })
 
@@ -163,46 +161,8 @@ describe('volumeOptions', () => {
       },
     )
     expect(options.slice(0, 2)).toEqual([
-      { value: 13, label: '第 3 卷', description: '第 17 至 24 话。第 1 部分已有投稿' },
+      { value: 13, label: '第 3 卷', description: '第 17 至 24 话。第 1 册已有投稿' },
       { value: 14, label: '第 4 卷', description: 'ni 正在上传', disabled: true },
-    ])
-  })
-})
-
-describe('partOptions', () => {
-  const third = volume({
-    id: 13,
-    volume_number: 3,
-    editions: [
-      edition('隠し部屋（5）', '第 17 至 20 话'),
-      edition('隠し部屋（6）', '第 21 至 24 话'),
-    ],
-  })
-
-  it('部分数与电子版分册数一致时按顺序对应，别人占着的部分不可选，自己的不算', () => {
-    const options = partOptions(2, third, {
-      claims: [claim({ id: 7, scope: 'VOLUME', volume_id: 13, part: 2, part_count: 2 })],
-      published: [claim({ id: 8, scope: 'VOLUME', volume_id: 13, part: 1, part_count: 2 })],
-      selfId: 8,
-    })
-    expect(options).toEqual([
-      { value: WHOLE_VOLUME, label: '整卷' },
-      {
-        value: 1,
-        label: '第 1 部分',
-        description: '隠し部屋（5）：第 17 至 20 话',
-        disabled: false,
-      },
-      { value: 2, label: '第 2 部分', description: 'ichi 正在上传', disabled: true },
-    ])
-  })
-
-  it('部分数与分册数不一致时不对应分册，没有部分数时只能选整卷', () => {
-    expect(
-      partOptions(3, third, { claims: [], published: [] }).map(item => item.description),
-    ).toEqual([undefined, undefined, undefined, undefined])
-    expect(partOptions(0, third, { claims: [], published: [] })).toEqual([
-      { value: WHOLE_VOLUME, label: '整卷' },
     ])
   })
 })

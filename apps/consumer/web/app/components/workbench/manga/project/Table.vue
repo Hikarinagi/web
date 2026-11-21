@@ -98,7 +98,7 @@
             cellClass: 'tabular-nums',
           },
           props.purpose === 'held'
-            ? { key: 'held_from', label: '原状态' }
+            ? { key: 'held_from', label: '暂停前状态' }
             : { key: 'check', label: '检查' },
           { key: 'owner', label: '发起人' },
         ]),
