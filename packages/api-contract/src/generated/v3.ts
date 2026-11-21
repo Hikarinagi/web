@@ -16040,6 +16040,8 @@ export interface components {
             flags: components["schemas"]["EntryFlagsDto"] | null;
             id: number;
             label: string;
+            /** @description Title logo counts; only for games */
+            logos: components["schemas"]["EntryLogoCountDto"] | null;
             protection: components["schemas"]["EntryProtection"] | null;
             /** @description The reader page */
             resource: components["schemas"]["EntryResourceDto"] | null;
@@ -20532,6 +20534,12 @@ export interface components {
             manga: boolean;
             nsfw: boolean;
             otome: boolean;
+        };
+        EntryLogoCountDto: {
+            /** @description Title logos of the game */
+            total: number;
+            /** @description Title logos whose display is not set */
+            unset: number;
         };
         EntryLookupDto: {
             matches: components["schemas"]["EntryRefDto"][];
@@ -41267,6 +41275,8 @@ export interface operations {
                 type?: components["schemas"]["EntryType"];
                 /** @description Entry name or number */
                 q?: string;
+                /** @description Only games with a title logo whose display is not set */
+                logo_unset?: boolean;
                 page: number;
                 page_size: number;
             };
@@ -41639,6 +41649,8 @@ export interface operations {
             query: {
                 /** @description 只列出尚未设置显示方式的徽标 */
                 unset?: boolean;
+                /** @description 只列出这个游戏条目的徽标 */
+                entry_id?: number;
                 page: number;
                 page_size: number;
             };

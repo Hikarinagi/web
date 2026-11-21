@@ -619,6 +619,16 @@
           "label": {
             "type": "string"
           },
+          "logos": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EntryLogoCountDto"
+              }
+            ],
+            "description": "Title logo counts; only for games",
+            "nullable": true,
+            "type": "object"
+          },
           "protection": {
             "allOf": [
               {
@@ -661,6 +671,7 @@
           "revision",
           "protection",
           "flags",
+          "logos",
           "resource"
         ],
         "type": "object"
@@ -18876,6 +18887,23 @@
           "otome",
           "audience",
           "manga"
+        ],
+        "type": "object"
+      },
+      "EntryLogoCountDto": {
+        "properties": {
+          "total": {
+            "description": "Title logos of the game",
+            "type": "number"
+          },
+          "unset": {
+            "description": "Title logos whose display is not set",
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "unset"
         ],
         "type": "object"
       },
@@ -77684,6 +77712,15 @@
             }
           },
           {
+            "description": "Only games with a title logo whose display is not set",
+            "in": "query",
+            "name": "logo_unset",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "in": "query",
             "name": "page",
             "required": true,
@@ -78341,6 +78378,16 @@
             "required": false,
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "description": "只列出这个游戏条目的徽标",
+            "in": "query",
+            "name": "entry_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
             }
           },
           {
