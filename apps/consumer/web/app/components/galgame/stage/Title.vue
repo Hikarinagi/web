@@ -94,6 +94,7 @@
       :processing="logoProcessing"
       :lazy="false"
       :skeleton="false"
+      :thumbhash="false"
       :class="cn('my-1 w-fit max-w-full', logoClass)"
       image-class="h-auto max-h-20 w-auto max-w-full object-left lg:max-h-32 lg:max-w-lg"
     />

@@ -39,6 +39,7 @@
       rootMargin?: string
       ratio?: number
       skeleton?: boolean
+      thumbhash?: boolean
       preset?: HikariImagePresetName
       processing?: HikariImageProcessing
       preload?: boolean | { fetchPriority: 'high' | 'low' | 'auto' }
@@ -56,6 +57,7 @@
       rootMargin: '200px 0px',
       ratio: undefined,
       skeleton: true,
+      thumbhash: true,
       preset: undefined,
       processing: undefined,
       preload: false,
@@ -142,7 +144,7 @@
     () => Boolean(fallbackSrc.value) && resolvedSrc.value === fallbackSrc.value,
   )
   const placeholder = computed(() =>
-    blurNsfw.value || isFallbackImage.value ? undefined : thumbHash.value,
+    !props.thumbhash || blurNsfw.value || isFallbackImage.value ? undefined : thumbHash.value,
   )
   const resolvedImageClass = computed(() =>
     isFallbackImage.value ? props.fallbackImageClass : props.imageClass,
