@@ -2,6 +2,7 @@
   import { Heading, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
+  import { stageLogo } from '~/features/galgame/logo'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'GalgameStageTitle' })
@@ -19,20 +20,15 @@
       return { text: display.original_title, lang: 'ja' }
     return galgame.en_title ? { text: galgame.en_title, lang: 'en' } : null
   })
-  const logo = computed(() => {
-    const { logos, origin_lang } = props.data.galgame
-    const shown = logos.filter(item => item.light !== 'HIDDEN' || item.dark !== 'HIDDEN')
-    return (
-      shown.find(item => item.language === 'zh-Hans') ??
-      shown.find(item => (item.language ?? origin_lang) === origin_lang) ??
-      null
-    )
-  })
-  const shownOn = computed(() => ({
-    light: Boolean(logo.value && logo.value.light !== 'HIDDEN'),
-    dark: Boolean(logo.value && logo.value.dark !== 'HIDDEN'),
-  }))
+  const shown = computed(() => stageLogo(props.data.galgame.logos, props.data.galgame.origin_lang))
+  const logo = computed(() => shown.value.logo)
   const chinese = computed(() => logo.value?.language === 'zh-Hans')
+  const brandClass = computed(() =>
+    cn(
+      shown.value.light && 'hidden',
+      shown.value.dark ? 'dark:hidden' : shown.value.light && 'dark:block',
+    ),
+  )
 
   const logoClass = computed(() => {
     if (!logo.value) return ''
@@ -57,15 +53,15 @@
       hidden: 'dark:sr-only',
     }
     return cn(
-      light[shownOn.value.light ? beside : 'plain'],
-      dark[shownOn.value.dark ? beside : 'plain'],
+      light[shown.value.light ? beside : 'plain'],
+      dark[shown.value.dark ? beside : 'plain'],
     )
   })
   const subtitleClass = computed(() => {
     const repeated = !chinese.value && translated.value
     return cn(
-      shownOn.value.light && repeated && 'sr-only',
-      shownOn.value.dark && repeated ? 'dark:sr-only' : 'dark:not-sr-only',
+      shown.value.light && repeated && 'sr-only',
+      shown.value.dark && repeated ? 'dark:sr-only' : 'dark:not-sr-only',
     )
   })
   const logoBox = computed(() => {
@@ -87,12 +83,18 @@
       :as="NuxtLink"
       :to="`/producers/${brand.producer_id}`"
       tone="neutral"
-      class="self-start text-sm font-medium text-fg/80 lg:text-base"
+      :class="cn('self-start text-sm font-medium text-fg/80 lg:text-base', brandClass)"
       lang="ja"
     >
       {{ brand.text }}
     </Link>
-    <Text v-else-if="brand" size="sm" weight="medium" class="text-fg/80" lang="ja">
+    <Text
+      v-else-if="brand"
+      size="sm"
+      weight="medium"
+      :class="cn('text-fg/80', brandClass)"
+      lang="ja"
+    >
       {{ brand.text }}
     </Text>
     <HikariImage
@@ -101,7 +103,6 @@
       alt=""
       fit="contain"
       :processing="logoProcessing"
-      :lazy="false"
       :skeleton="false"
       :thumbhash="false"
       :ratio="logoBox?.ratio"

@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import { Card, Inline, Rating, Section, Stack, Text } from '@hina-ui/vue'
-  import { CalendarDays, Languages, MonitorSmartphone } from '@lucide/vue'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { platformLabel } from '~/features/galgame/platforms'
   import { useGalgameCover } from '~/features/galgame/useCoverVote'
 
   defineOptions({ name: 'GalgameStage' })
@@ -23,14 +21,6 @@
   const soft = computed(
     () => !images.value.length && (cover.value?.width ?? 0) <= (cover.value?.height ?? 0),
   )
-  const meta = computed(() => {
-    const { display } = props.data
-    return [
-      { icon: CalendarDays, text: display.release?.text ?? '' },
-      { icon: MonitorSmartphone, text: display.platforms.map(platformLabel).join('、') },
-      { icon: Languages, text: props.languages.join('、') },
-    ].filter(item => item.text)
-  })
   const stats = computed(() => props.data.rate_stats)
   const backdropProcessing = computed(() =>
     soft.value
@@ -91,12 +81,7 @@
         <Stack gap="md" class="min-w-0 flex-1 lg:gap-5">
           <GalgameStageTitle :data="data" :title="title" />
 
-          <Stack gap="xs" class="sm:flex-row sm:flex-wrap sm:gap-x-5">
-            <Inline v-for="item in meta" :key="item.text" gap="sm" align="center" :wrap="false">
-              <component :is="item.icon" class="size-4 shrink-0 text-muted" />
-              <Text size="sm" class="text-fg/90">{{ item.text }}</Text>
-            </Inline>
-          </Stack>
+          <GalgameStageMeta :data="data" :languages="languages" />
 
           <Inline v-if="stats.average !== null" gap="md" align="center" :wrap="false">
             <Text class="text-5xl leading-none font-semibold tracking-tight text-fg tabular-nums">

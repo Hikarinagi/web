@@ -48,6 +48,10 @@ function render(logos: ReturnType<typeof logoOf>[], title = '转生魔王大人�
   return {
     logo: image.exists() ? { src: image.attributes('src'), classes: image.classes() } : null,
     heading: wrapper.findComponent(Heading).classes(),
+    brand: wrapper
+      .findAll('p, span')
+      .find(node => node.text() === 'くまのみソフト')!
+      .classes(),
     subtitle: wrapper
       .findAll('p, span')
       .find(node => node.text().startsWith('転生'))!
@@ -57,10 +61,23 @@ function render(logos: ReturnType<typeof logoOf>[], title = '转生魔王大人�
 
 describe('GalgameStageTitle', () => {
   it('shows the written title when the game has no title logo', () => {
-    const { logo, heading, subtitle } = render([])
+    const { logo, heading, subtitle, brand } = render([])
     expect(logo).toBeNull()
     expect(heading).toEqual(expect.arrayContaining(['text-4xl', 'lg:text-6xl']))
     expect(subtitle).not.toContain('sr-only')
+    expect(brand).not.toEqual(expect.arrayContaining(['hidden']))
+    expect(brand).not.toEqual(expect.arrayContaining(['dark:hidden']))
+  })
+
+  it('leaves the brand above the title only on a theme that shows no logo', () => {
+    expect(render([logoOf(null, 'ORIGINAL', 'ORIGINAL')]).brand).toEqual(
+      expect.arrayContaining(['hidden', 'dark:hidden']),
+    )
+    const lightOnly = render([logoOf(null, 'ORIGINAL', 'HIDDEN')]).brand
+    expect(lightOnly).toEqual(expect.arrayContaining(['hidden', 'dark:block']))
+    const darkOnly = render([logoOf(null, 'HIDDEN', 'ORIGINAL')]).brand
+    expect(darkOnly).toContain('dark:hidden')
+    expect(darkOnly).not.toContain('hidden')
   })
 
   it('takes the simplified Chinese logo first and shows it on each theme as set', () => {
