@@ -293,6 +293,8 @@ html.dark {
   --stage-top-shade: 10rem;
   --stage-cover-width: 15rem;
   --stage-thumb-width: 7.5rem;
+  --stage-logo-height: 8rem;
+  --stage-logo-width: 100%;
   --stage-veil: var(--tone-soft);
   --stage-control: color-mix(in oklab, var(--stage-veil) 90%, var(--hn-fg-default));
   --rail-left: 15rem;
@@ -516,6 +518,19 @@ html.dark {
 
 .hikari-hero-veil-soft::after {
   background-image: var(--hikari-veil-soft);
+}
+
+@media (width >= 40rem) {
+  :root {
+    --stage-logo-height: 11rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :root {
+    --stage-logo-height: min(14rem, 30svh);
+    --stage-logo-width: 36rem;
+  }
 }
 
 @media (width < 48rem) {

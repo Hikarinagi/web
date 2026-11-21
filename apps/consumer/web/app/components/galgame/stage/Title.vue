@@ -111,7 +111,7 @@
         cn(
           'my-1 max-w-full',
           logoBox
-            ? 'w-[min(var(--logo-w),100%,calc(var(--logo-ratio)*var(--spacing)*20))] lg:w-[min(var(--logo-w),100%,var(--container-lg),calc(var(--logo-ratio)*var(--spacing)*32))]'
+            ? 'w-[min(var(--logo-w),100%,var(--stage-logo-width),calc(var(--logo-ratio)*var(--stage-logo-height)))]'
             : 'w-fit',
           logoClass,
         )
@@ -119,7 +119,7 @@
       :image-class="
         logoBox
           ? 'size-full object-contain object-left'
-          : 'h-auto max-h-20 w-auto max-w-full object-left lg:max-h-32 lg:max-w-lg'
+          : 'h-auto max-h-(--stage-logo-height) w-auto max-w-[min(100%,var(--stage-logo-width))] object-left'
       "
     />
     <Heading :level="1" :class="cn('leading-tight font-bold tracking-tight text-fg', headingClass)">
