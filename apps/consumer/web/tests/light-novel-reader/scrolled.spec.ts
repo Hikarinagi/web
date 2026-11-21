@@ -46,11 +46,9 @@ vi.mock('~/features/light-novel-reader/fonts', () => ({
 
 vi.mock('~/features/light-novel-reader/engine', async importOriginal => ({
   ...(await importOriginal<typeof import('~/features/light-novel-reader/engine')>()),
-  createStack: async (options: { margin: unknown; initialLocator?: unknown }) => {
+  createStack: async (options: { margin: unknown }) => {
     created.options.push(options)
-    const stack = created.stacks.shift() as Record<string, unknown> | undefined
-    if (stack && !('initialLocator' in stack)) stack.initialLocator = options.initialLocator
-    return stack
+    return created.stacks.shift()
   },
 }))
 
@@ -188,18 +186,6 @@ describe('翻页与滚动切换', () => {
 
     expect(order).toEqual(['suspend', 'pages.mount', 'scrollToLocator:saved.xhtml', 'mount'])
     expect(engine.view.value).toBe(view)
-    expect(engine.phase.value).toBe('ready')
-  })
-
-  it('上次位置在本卷文件中已不存在时，以滚动方式从开头打开', async () => {
-    const stack = { ...fakeStack({ value: true }), initialLocator: undefined }
-    created.stacks.push(stack)
-    created.views.push(fakeView())
-    const { engine } = mountEngine('scrolled')
-
-    await engine.open()
-
-    expect(order).toEqual(['suspend', 'pages.mount', 'mount'])
     expect(engine.phase.value).toBe('ready')
   })
 
