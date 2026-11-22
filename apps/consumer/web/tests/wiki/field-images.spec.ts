@@ -11,14 +11,14 @@ vi.mock('../../app/components/media-library/lib/upload', async importOriginal =>
 
 const image = (name: string) => new File(['x'], name, { type: 'image/png' })
 
-function render() {
-  const editor = { add: vi.fn(), set: vi.fn() }
+function render(property = 'TITLE_LOGO', type = 'GAME') {
+  const editor = { add: vi.fn(), set: vi.fn(), typeOf: () => type }
   const wrapper = mount(WikiFieldImages, {
     attachTo: document.body,
     props: {
       entry: 7,
       definition: {
-        property: 'TITLE_LOGO',
+        property,
         cardinality: 'single',
         qualifiers: ['LANGUAGE'],
       } as never,
@@ -55,6 +55,23 @@ describe('WikiFieldImages', () => {
     expect(uploadImage.mock.calls.map(([file]) => file.name)).toEqual(['a.png', 'bb.png'])
     expect(editor.add).toHaveBeenCalledTimes(2)
     wrapper.unmount()
+  })
+
+  it('asks to cut the empty margin only of the image of an appearance', async () => {
+    const appearance = render('IMAGE', 'APPEARANCE')
+    await pick(appearance.wrapper, [image('a.png')])
+    appearance.wrapper.unmount()
+    const person = render('IMAGE', 'PERSON')
+    await pick(person.wrapper, [image('b.png')])
+    person.wrapper.unmount()
+    const logo = render()
+    await pick(logo.wrapper, [image('c.png')])
+    logo.wrapper.unmount()
+    expect(uploadImage.mock.calls.map(([file, options]) => [file.name, options.trim])).toEqual([
+      ['a.png', true],
+      ['b.png', false],
+      ['c.png', false],
+    ])
   })
 
   it('uploads an image pasted while the pointer is over the field', async () => {

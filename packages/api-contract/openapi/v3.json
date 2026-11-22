@@ -103416,7 +103416,17 @@
     "/api/v3/uploads/images": {
       "post": {
         "operationId": "UploadController_upload",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Cut the empty margin of a transparent or single-color background",
+            "in": "query",
+            "name": "trim",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {

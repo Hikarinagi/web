@@ -20,6 +20,9 @@
     () => props.definition.cardinality === 'single' && !props.definition.qualifiers.length,
   )
   const logo = computed(() => props.definition.property === 'TITLE_LOGO')
+  const trim = computed(
+    () => props.definition.property === 'IMAGE' && editor.typeOf(props.entry) === 'APPEARANCE',
+  )
   const ratio = computed(() =>
     props.definition.property === 'SAMPLE_IMAGE' || logo.value
       ? 16 / 9
@@ -36,7 +39,7 @@
     uploading.value = true
     try {
       for (const file of list) {
-        const uploaded = await uploadImage(file)
+        const uploaded = await uploadImage(file, { trim: trim.value })
         if (!uploaded) continue
         const media = mediaDraft(uploaded)
         const first = live.value[0]

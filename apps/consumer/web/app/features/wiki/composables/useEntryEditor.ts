@@ -163,6 +163,13 @@ export function useEntryEditor(page: {
     definitions,
     versions: computed(() => toValue(page.versions) ?? []),
     members,
+    typeOf(entry: number) {
+      return (
+        entries.value.get(entry)?.type ??
+        draft.value.created.find(item => item.id === entry)?.type ??
+        null
+      )
+    },
     property(entry: number, property: Property) {
       return propertyOf(
         entries.value.get(entry) ?? null,

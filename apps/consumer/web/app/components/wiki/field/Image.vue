@@ -13,6 +13,7 @@
     card?: boolean
     ratio?: number
     contain?: boolean
+    trim?: boolean
   }>()
   const emit = defineEmits<{ rate: [rating: { sexual: number; violence: number }] }>()
   const model = defineModel<ValueDraft>({ required: true })
@@ -26,7 +27,7 @@
     if (!file) return
     uploading.value = true
     try {
-      const media = await uploadImage(file)
+      const media = await uploadImage(file, { trim: props.trim })
       if (media) model.value = { ...model.value, media: mediaDraft(media) }
     } finally {
       uploading.value = false

@@ -31,7 +31,10 @@ export async function validateImage(source: File | Blob): Promise<boolean> {
   return true
 }
 
-export async function uploadImage(source: File | Blob): Promise<MediaValue | null> {
+export async function uploadImage(
+  source: File | Blob,
+  options: { trim?: boolean } = {},
+): Promise<MediaValue | null> {
   if (!(await validateImage(source))) return null
 
   const form = new FormData()
@@ -40,6 +43,7 @@ export async function uploadImage(source: File | Blob): Promise<MediaValue | nul
     const result = await hikariRequest('/api/v3/uploads/images', {
       method: 'POST',
       body: form,
+      query: options.trim ? { trim: true } : undefined,
     })
     return { id: result.id, src: result.src, width: result.width, height: result.height }
   } catch {

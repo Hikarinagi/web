@@ -55754,7 +55754,10 @@ export interface operations {
     };
     UploadController_upload: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Cut the empty margin of a transparent or single-color background */
+                trim?: boolean;
+            };
             header?: never;
             path?: never;
             cookie?: never;

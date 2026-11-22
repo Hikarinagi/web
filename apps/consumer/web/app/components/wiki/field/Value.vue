@@ -184,6 +184,7 @@
           :ratio="ratio"
           :contain="contain"
           :rating="rating"
+          :trim="definition.property === 'IMAGE' && editor.typeOf(entry) === 'APPEARANCE'"
           @rate="next => value.media && editor.rate(item.id, value.media, next)"
         >
           <template #menu><WikiFieldMenu v-bind="menu" v-on="actions" /></template>
