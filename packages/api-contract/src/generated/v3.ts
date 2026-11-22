@@ -3173,6 +3173,38 @@ export interface paths {
         patch: operations["AdminPromoBannerController_update"];
         trace?: never;
     };
+    "/api/v3/admin/promotions/galgames": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminPromoGalgameController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/promotions/galgames/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminPromoGalgameController_pick"];
+        post?: never;
+        delete: operations["AdminPromoGalgameController_unpick"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/promotions/nav-items": {
         parameters: {
             query?: never;
@@ -16907,6 +16939,29 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
         };
+        AdminPromoGalgameDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            /** @description 是否放在游戏频道首屏 */
+            picked: boolean;
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
         AdminPromoNavItemDto: {
             /** Format: date-time */
             created_at: string;
@@ -21659,12 +21714,14 @@ export interface components {
             feed: components["schemas"]["GalgameFeedDto"];
             /** @description 本周热门 */
             hot: components["schemas"]["GalgameShowcaseItemDto"][];
+            /** @description 首屏精选，按发售日排列 */
+            picks: components["schemas"]["GalgamePickItemDto"][];
             /** @description 在玩人数最多 */
             playing: components["schemas"]["GalgameMetricItemDto"][];
             /** @description 评分最高 */
             rated: components["schemas"]["GalgameMetricItemDto"][];
             /** @description 发售日程 */
-            schedule: components["schemas"]["GalgameShowcaseItemDto"][];
+            schedule: components["schemas"]["GalgameScheduleItemDto"][];
             similar: components["schemas"]["GalgameSimilarRowDto"][];
             /** @description 东八区今天的日期 */
             today: string;
@@ -21787,6 +21844,32 @@ export interface components {
             type: string[];
             updated_at: string;
             web_url: string;
+        };
+        GalgamePickItemDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            /** @description 作品原文的语言 */
+            language: string | null;
+            logos: components["schemas"]["GalgameLogoDto"][];
+            maker: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            platforms: string[];
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 译名 */
+            trans_title: string | null;
         };
         GalgamePopularProducerDto: {
             galgame_count: number;
@@ -22073,6 +22156,29 @@ export interface components {
          * @enum {string}
          */
         GalgameRelationType: "SEQUEL" | "PREQUEL" | "SIDE_STORY" | "MAIN_STORY" | "VARIANT" | "MAIN_VERSION" | "COLLECTION" | "COLLECTED_WORK" | "SAME_UNIVERSE" | "DIFFERENT_ADAPTATION" | "EXPANSION" | "REMAKE" | "ORIGINAL" | "FAN_DISC" | "MAIN_GAME" | "SAME_SERIES";
+        GalgameScheduleItemDto: {
+            /** @description 封面列表，按得票数由高到低排序 */
+            covers: components["schemas"]["GalgameCoverRelationDto"][];
+            /** @description Galgame ID */
+            id: number;
+            maker: string | null;
+            /** @description 是否为NSFW 内容 */
+            nsfw: boolean;
+            /** @description 原名 */
+            origin_title: string;
+            platforms: string[];
+            /** @description 相关厂商 */
+            producers: components["schemas"]["GalgameSummaryProducerRelationDto"][];
+            /**
+             * Format: date-time
+             * @description 发行日期
+             */
+            release_date: string | null;
+            /** @description 发行日期的精度 */
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 译名 */
+            trans_title: string | null;
+        };
         GalgameShowcaseItemDto: {
             /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["GalgameCoverRelationDto"][];
@@ -37203,6 +37309,63 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AdminPromoBannerDto"];
                 };
+            };
+        };
+    };
+    AdminPromoGalgameController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPromoGalgameDto"][];
+                };
+            };
+        };
+    };
+    AdminPromoGalgameController_pick: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminPromoGalgameController_unpick: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

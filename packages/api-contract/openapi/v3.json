@@ -4386,6 +4386,72 @@
         ],
         "type": "object"
       },
+      "AdminPromoGalgameDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "picked": {
+            "description": "是否放在游戏频道首屏",
+            "type": "boolean"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "picked"
+        ],
+        "type": "object"
+      },
       "AdminPromoNavItemDto": {
         "properties": {
           "created_at": {
@@ -23518,6 +23584,13 @@
             },
             "type": "array"
           },
+          "picks": {
+            "description": "首屏精选，按发售日排列",
+            "items": {
+              "$ref": "#/components/schemas/GalgamePickItemDto"
+            },
+            "type": "array"
+          },
           "playing": {
             "description": "在玩人数最多",
             "items": {
@@ -23535,7 +23608,7 @@
           "schedule": {
             "description": "发售日程",
             "items": {
-              "$ref": "#/components/schemas/GalgameShowcaseItemDto"
+              "$ref": "#/components/schemas/GalgameScheduleItemDto"
             },
             "type": "array"
           },
@@ -23552,6 +23625,7 @@
         },
         "required": [
           "today",
+          "picks",
           "schedule",
           "hot",
           "similar",
@@ -23986,6 +24060,92 @@
           "web_url",
           "updated_at",
           "publisher"
+        ],
+        "type": "object"
+      },
+      "GalgamePickItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "language": {
+            "description": "作品原文的语言",
+            "nullable": true,
+            "type": "string"
+          },
+          "logos": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameLogoDto"
+            },
+            "type": "array"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms",
+          "language",
+          "logos"
         ],
         "type": "object"
       },
@@ -25130,6 +25290,79 @@
           "SAME_SERIES"
         ],
         "type": "string"
+      },
+      "GalgameScheduleItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms"
+        ],
+        "type": "object"
       },
       "GalgameShowcaseItemDto": {
         "properties": {
@@ -71045,6 +71278,74 @@
                 }
               }
             },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/galgames": {
+      "get": {
+        "operationId": "AdminPromoGalgameController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoGalgameDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/galgames/{id}": {
+      "delete": {
+        "operationId": "AdminPromoGalgameController_unpick",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      },
+      "put": {
+        "operationId": "AdminPromoGalgameController_pick",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
             "description": ""
           }
         },

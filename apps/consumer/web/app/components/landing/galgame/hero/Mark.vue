@@ -9,7 +9,7 @@
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
   import { GALGAME_STATUS_ICON } from '~/features/rate/status-icon'
 
-  defineOptions({ name: 'LandingReleaseMark' })
+  defineOptions({ name: 'LandingGalgameHeroMark' })
   const props = defineProps<{ galgameId: number }>()
 
   const auth = useAuthStore()
