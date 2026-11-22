@@ -40,9 +40,11 @@
     <Text size="sm"> {{ entry.protection?.reason }}{{ until ? `，到 ${until} 为止` : '' }} </Text>
   </Alert>
   <Alert :open="entry.deleted" tone="danger" title="条目已删除">
-    <Button v-if="patrol" variant="link" size="sm" @click="nav.query({ panel: 'delete' })">
-      恢复条目
-    </Button>
+    <template v-if="patrol" #actions>
+      <Button variant="soft" tone="danger" size="sm" @click="nav.query({ panel: 'delete' })">
+        恢复条目
+      </Button>
+    </template>
   </Alert>
   <WikiEditorProtect v-model:open="protecting" :entry="entry" @done="emit('changed')" />
   <WikiEditorDelete v-model:open="deleting" :entry="entry" @done="emit('changed')" />

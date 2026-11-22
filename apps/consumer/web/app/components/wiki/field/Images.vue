@@ -20,8 +20,12 @@
     () => props.definition.cardinality === 'single' && !props.definition.qualifiers.length,
   )
   const logo = computed(() => props.definition.property === 'TITLE_LOGO')
-  const trim = computed(
-    () => props.definition.property === 'IMAGE' && editor.typeOf(props.entry) === 'APPEARANCE',
+  const trim = computed(() =>
+    logo.value
+      ? 'logo'
+      : props.definition.property === 'IMAGE' && editor.typeOf(props.entry) === 'APPEARANCE'
+        ? 'portrait'
+        : undefined,
   )
   const ratio = computed(() =>
     props.definition.property === 'SAMPLE_IMAGE' || logo.value

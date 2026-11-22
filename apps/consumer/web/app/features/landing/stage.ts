@@ -30,8 +30,17 @@ export function useAlignTo(
     if (!box || !el) return
     const from = box.getBoundingClientRect()
     const to = el.getBoundingClientRect()
-    if (axis === 'x') box.scrollLeft += to.left - from.left - 16
-    else box.scrollTop += to.top - from.top - 8
+    const inner = box.firstElementChild instanceof HTMLElement ? box.firstElementChild : box
+    const pad = (side: 'paddingLeft' | 'paddingTop') =>
+      parseFloat(getComputedStyle(box)[side]) +
+      (inner === box ? 0 : parseFloat(getComputedStyle(inner)[side]))
+    if (axis === 'x') {
+      if (to.right <= from.right) return
+      box.scrollLeft += to.left - from.left - pad('paddingLeft')
+    } else {
+      if (to.bottom <= from.bottom) return
+      box.scrollTop += to.top - from.top - pad('paddingTop')
+    }
   }
   watch(viewport, box => box && requestAnimationFrame(() => requestAnimationFrame(align)), {
     immediate: true,

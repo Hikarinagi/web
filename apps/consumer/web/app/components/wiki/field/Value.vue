@@ -184,7 +184,13 @@
           :ratio="ratio"
           :contain="contain"
           :rating="rating"
-          :trim="definition.property === 'IMAGE' && editor.typeOf(entry) === 'APPEARANCE'"
+          :trim="
+            definition.property === 'TITLE_LOGO'
+              ? 'logo'
+              : definition.property === 'IMAGE' && editor.typeOf(entry) === 'APPEARANCE'
+                ? 'portrait'
+                : undefined
+          "
           @rate="next => value.media && editor.rate(item.id, value.media, next)"
         >
           <template #menu><WikiFieldMenu v-bind="menu" v-on="actions" /></template>

@@ -13,7 +13,7 @@
     card?: boolean
     ratio?: number
     contain?: boolean
-    trim?: boolean
+    trim?: 'portrait' | 'logo'
   }>()
   const emit = defineEmits<{ rate: [rating: { sexual: number; violence: number }] }>()
   const model = defineModel<ValueDraft>({ required: true })

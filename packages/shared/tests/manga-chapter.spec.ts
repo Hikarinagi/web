@@ -66,6 +66,36 @@ describe('mangaChapterLabel', () => {
     )
   })
 
+  it('names the splits a volume holds until all of them are in', () => {
+    expect(
+      mangaChapterLabel({
+        ...item(10, 'VOLUME', { volume_number: 3 }),
+        parts: { held: [1], count: 2 },
+      }),
+    ).toBe('第 3 卷（第 1 册，共 2 册）')
+    expect(
+      mangaChapterLabel({
+        ...item(11, 'VOLUME', { volume_number: 4 }),
+        parts: { held: [1, 2], count: 3 },
+      }),
+    ).toBe('第 4 卷（第 1 至 2 册，共 3 册）')
+    expect(
+      mangaChapterLabel({
+        ...item(12, 'VOLUME', { title: '外传' }),
+        parts: { held: [2], count: 4 },
+      }),
+    ).toBe('外传（第 2 册，共 4 册）')
+    expect(
+      mangaChapterLabel({
+        ...item(14, 'VOLUME', { volume_number: 5 }),
+        parts: { held: [1, 3], count: 3 },
+      }),
+    ).toBe('第 5 卷（第 1、3 册，共 3 册）')
+    expect(mangaChapterLabel({ ...item(13, 'VOLUME', { volume_number: 3 }), parts: null })).toBe(
+      '第 3 卷',
+    )
+  })
+
   it('treats one-shots as chapters', () => {
     expect(mangaReadingUnit('ONESHOT')).toBe('chapter')
     expect(mangaChapterLabel(item(9, 'ONESHOT', { chapter_number: '2' }))).toBe('第 2 话')

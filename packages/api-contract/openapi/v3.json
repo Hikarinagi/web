@@ -4463,6 +4463,332 @@
         ],
         "type": "object"
       },
+      "AdminPromoSlideCandidateDto": {
+        "properties": {
+          "added": {
+            "description": "已经是轮播项",
+            "type": "boolean"
+          },
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "missing": {
+            "description": "用作品自己的资料做轮播项时缺的资料",
+            "items": {
+              "enum": [
+                "LOGO",
+                "IMAGE",
+                "INTRO"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms",
+          "added",
+          "missing"
+        ],
+        "type": "object"
+      },
+      "AdminPromoSlideDto": {
+        "properties": {
+          "action_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "banner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "运营指定的横幅图",
+            "nullable": true,
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "created_by": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "description": {
+            "nullable": true,
+            "type": "string"
+          },
+          "end_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "galgame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdminPromoSlideWorkDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "is_ad": {
+            "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoSlideKind"
+              }
+            ]
+          },
+          "link": {
+            "nullable": true,
+            "type": "string"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "missing": {
+            "description": "作品轮播项缺的资料：标题徽标、横幅图、文案；缺任一项时不在首页显示",
+            "items": {
+              "enum": [
+                "LOGO",
+                "IMAGE",
+                "INTRO"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "open_in_new": {
+            "type": "boolean"
+          },
+          "position": {
+            "type": "number"
+          },
+          "start_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "galgame",
+          "banner",
+          "logo",
+          "title",
+          "description",
+          "action_label",
+          "link",
+          "open_in_new",
+          "is_ad",
+          "position",
+          "is_active",
+          "start_at",
+          "end_at",
+          "missing",
+          "created_by",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "AdminPromoSlideWorkDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "entry_id": {
+            "description": "游戏条目编号",
+            "type": "number"
+          },
+          "genre": {
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "images": {
+            "description": "可公开的示例 CG",
+            "items": {
+              "$ref": "#/components/schemas/RatedMediaAssetDto"
+            },
+            "type": "array"
+          },
+          "intro": {
+            "description": "简介开头，中文简介优先",
+            "nullable": true,
+            "type": "string"
+          },
+          "logos": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameLogoDto"
+            },
+            "type": "array"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms",
+          "entry_id",
+          "logos",
+          "images",
+          "intro",
+          "genre"
+        ],
+        "type": "object"
+      },
       "AdminReleaseNoteDto": {
         "properties": {
           "id": {
@@ -11702,6 +12028,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -11728,6 +12055,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -12476,6 +12804,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -12502,6 +12831,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -14672,6 +15002,78 @@
         "required": [
           "label",
           "link"
+        ],
+        "type": "object"
+      },
+      "CreatePromoSlideDto": {
+        "properties": {
+          "action_label": {
+            "maxLength": 20,
+            "nullable": true,
+            "type": "string"
+          },
+          "banner_id": {
+            "description": "横幅图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "description": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "end_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "galgame_id": {
+            "description": "作品轮播项的游戏",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "is_ad": {
+            "type": "boolean"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoSlideKind"
+              }
+            ]
+          },
+          "link": {
+            "description": "站内路径或 http(s) 网址",
+            "maxLength": 500,
+            "nullable": true,
+            "pattern": "^(\\/(?!\\/)|https?:\\/\\/)",
+            "type": "string"
+          },
+          "logo_id": {
+            "description": "自定义轮播项的标题图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "open_in_new": {
+            "type": "boolean"
+          },
+          "start_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 100,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind"
         ],
         "type": "object"
       },
@@ -17537,6 +17939,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -17563,6 +17966,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -17626,6 +18030,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -17678,6 +18083,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -17990,6 +18396,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -18016,6 +18423,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -18039,7 +18447,8 @@
               "duplicate",
               "incomplete",
               "relation_pair",
-              "version_scope"
+              "version_scope",
+              "set_series"
             ],
             "type": "string"
           },
@@ -18103,6 +18512,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18756,6 +19166,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18791,6 +19202,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18986,6 +19398,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -19012,6 +19425,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -19244,6 +19658,7 @@
           "MEDIUM",
           "PUBLICATION_STATUS",
           "VOLUME_NUMBER",
+          "VOLUME_COUNT",
           "ORDER",
           "BOOK_FORMAT",
           "PAGE_COUNT",
@@ -19270,6 +19685,7 @@
           "PROTAGONIST",
           "CAPTURABLE",
           "SERIES",
+          "VOLUME_SET",
           "INCLUDED_VOLUME",
           "INCLUDED_GAME",
           "WORK",
@@ -19408,6 +19824,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19551,6 +19968,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -19577,6 +19995,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -19602,6 +20021,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19695,6 +20115,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19774,6 +20195,7 @@
           "PRODUCT",
           "SERIES",
           "VOLUME",
+          "VOLUME_SET",
           "BOOK",
           "PERSON",
           "ORGANIZATION",
@@ -21020,6 +21442,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -21046,6 +21469,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -23535,13 +23959,20 @@
           "schedule": {
             "description": "发售日程",
             "items": {
-              "$ref": "#/components/schemas/GalgameShowcaseItemDto"
+              "$ref": "#/components/schemas/GalgameScheduleItemDto"
             },
             "type": "array"
           },
           "similar": {
             "items": {
               "$ref": "#/components/schemas/GalgameSimilarRowDto"
+            },
+            "type": "array"
+          },
+          "slides": {
+            "description": "首屏轮播，按运营排定的顺序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSlideDto"
             },
             "type": "array"
           },
@@ -23552,6 +23983,7 @@
         },
         "required": [
           "today",
+          "slides",
           "schedule",
           "hot",
           "similar",
@@ -25131,6 +25563,79 @@
         ],
         "type": "string"
       },
+      "GalgameScheduleItemDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms"
+        ],
+        "type": "object"
+      },
       "GalgameShowcaseItemDto": {
         "properties": {
           "covers": {
@@ -25233,6 +25738,179 @@
         "required": [
           "ref",
           "items"
+        ],
+        "type": "object"
+      },
+      "GalgameSlideDto": {
+        "properties": {
+          "action_label": {
+            "description": "自定义轮播项的按钮文字",
+            "nullable": true,
+            "type": "string"
+          },
+          "banner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "横幅图：运营指定的图，或作品的第一张公开示例 CG"
+          },
+          "description": {
+            "description": "首屏文案：运营填写的文案，或作品简介的开头",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "is_ad": {
+            "description": "是否标出「广告」",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "自定义轮播项的跳转地址",
+            "nullable": true,
+            "type": "string"
+          },
+          "logo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "自定义轮播项的标题图",
+            "nullable": true,
+            "type": "object"
+          },
+          "open_in_new": {
+            "type": "boolean"
+          },
+          "title": {
+            "description": "自定义轮播项的标题",
+            "nullable": true,
+            "type": "string"
+          },
+          "work": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalgameSlideWorkDto"
+              }
+            ],
+            "description": "作品轮播项的作品",
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "is_ad",
+          "banner",
+          "description",
+          "work",
+          "title",
+          "logo",
+          "action_label",
+          "link",
+          "open_in_new"
+        ],
+        "type": "object"
+      },
+      "GalgameSlideWorkDto": {
+        "properties": {
+          "covers": {
+            "description": "封面列表，按得票数由高到低排序",
+            "items": {
+              "$ref": "#/components/schemas/GalgameCoverRelationDto"
+            },
+            "type": "array"
+          },
+          "genre": {
+            "description": "作品自述的类型，如「恋爱ADV」",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "description": "Galgame ID",
+            "type": "number"
+          },
+          "language": {
+            "description": "作品原文的语言",
+            "nullable": true,
+            "type": "string"
+          },
+          "logos": {
+            "items": {
+              "$ref": "#/components/schemas/GalgameLogoDto"
+            },
+            "type": "array"
+          },
+          "maker": {
+            "nullable": true,
+            "type": "string"
+          },
+          "nsfw": {
+            "description": "是否为NSFW 内容",
+            "type": "boolean"
+          },
+          "origin_title": {
+            "description": "原名",
+            "type": "string"
+          },
+          "platforms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "price": {
+            "description": "各版本中最低的日元价格",
+            "nullable": true,
+            "type": "string"
+          },
+          "producers": {
+            "description": "相关厂商",
+            "items": {
+              "$ref": "#/components/schemas/GalgameSummaryProducerRelationDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "description": "发行日期",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "description": "发行日期的精度",
+            "nullable": true
+          },
+          "trans_title": {
+            "description": "译名",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "origin_title",
+          "trans_title",
+          "covers",
+          "nsfw",
+          "release_date",
+          "release_date_precision",
+          "producers",
+          "maker",
+          "platforms",
+          "language",
+          "logos",
+          "price",
+          "genre"
         ],
         "type": "object"
       },
@@ -32048,6 +32726,26 @@
         ],
         "type": "object"
       },
+      "MangaChapterPartsDto": {
+        "properties": {
+          "count": {
+            "description": "这一卷共分几册",
+            "type": "number"
+          },
+          "held": {
+            "description": "已经能读的册，按册号从小到大",
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "held",
+          "count"
+        ],
+        "type": "object"
+      },
       "MangaChapterRelationDto": {
         "properties": {
           "chapter_number": {
@@ -32098,6 +32796,16 @@
           "page_count": {
             "type": "number"
           },
+          "parts": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterPartsDto"
+              }
+            ],
+            "description": "整卷只到了电子分册的前几册时，能读的是哪几册；整卷齐全或不是分册时为空",
+            "nullable": true,
+            "type": "object"
+          },
           "publication_date": {
             "format": "date-time",
             "nullable": true,
@@ -32133,6 +32841,7 @@
           "page_count",
           "created_at",
           "cover",
+          "parts",
           "readable",
           "collecting",
           "guest_readable",
@@ -33851,6 +34560,16 @@
           "page_count": {
             "type": "number"
           },
+          "parts": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterPartsDto"
+              }
+            ],
+            "description": "整卷只到了电子分册的前几册时，能读的是哪几册",
+            "nullable": true,
+            "type": "object"
+          },
           "title": {
             "nullable": true,
             "type": "string"
@@ -33867,7 +34586,8 @@
           "volume_number",
           "title",
           "ordinal",
-          "page_count"
+          "page_count",
+          "parts"
         ],
         "type": "object"
       },
@@ -35309,6 +36029,16 @@
           "page_count": {
             "type": "number"
           },
+          "parts": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaChapterPartsDto"
+              }
+            ],
+            "description": "整卷只到了电子分册的前几册时，能读的是哪几册",
+            "nullable": true,
+            "type": "object"
+          },
           "title": {
             "nullable": true,
             "type": "string"
@@ -35325,7 +36055,8 @@
           "volume_number",
           "title",
           "ordinal",
-          "page_count"
+          "page_count",
+          "parts"
         ],
         "type": "object"
       },
@@ -37184,6 +37915,95 @@
           "publication_date_precision",
           "page_count",
           "sort_key"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeSetDto": {
+        "properties": {
+          "id": {
+            "description": "版本套的条目 ID",
+            "type": "number"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "版本套的名称，未记录时为空",
+            "nullable": true,
+            "type": "string"
+          },
+          "original": {
+            "description": "是否为原版，即首卷发售最早的一套",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "首卷发售日",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "volume_count": {
+            "description": "已收录的卷数",
+            "type": "number"
+          },
+          "volumes": {
+            "description": "按卷序排列",
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeRelationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "original",
+          "volume_count",
+          "publication_date",
+          "publication_date_precision",
+          "publication_status",
+          "publishers",
+          "labels",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeSetProducerDto": {
+        "properties": {
+          "id": {
+            "description": "厂商 ID，组织条目没有对应厂商时为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
         ],
         "type": "object"
       },
@@ -45110,6 +45930,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -45148,6 +45969,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -45174,6 +45996,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -46608,6 +47431,13 @@
         ],
         "type": "object"
       },
+      "PromoSlideKind": {
+        "enum": [
+          "GALGAME",
+          "CUSTOM"
+        ],
+        "type": "string"
+      },
       "ProofreadMangaTranslationDto": {
         "properties": {
           "text": {
@@ -46668,6 +47498,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -46694,6 +47525,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -46809,6 +47641,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -46835,6 +47668,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -46899,6 +47733,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -47000,6 +47835,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -47026,6 +47862,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -49224,6 +50061,22 @@
         },
         "required": [
           "page_ids"
+        ],
+        "type": "object"
+      },
+      "ReorderPromoSlidesDto": {
+        "properties": {
+          "ids": {
+            "description": "轮播项编号，按播放顺序排列",
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 500,
+            "type": "array"
+          }
+        },
+        "required": [
+          "ids"
         ],
         "type": "object"
       },
@@ -52051,6 +52904,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -52077,6 +52931,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -55907,6 +56762,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -55933,6 +56789,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -56059,6 +56916,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -56085,6 +56943,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -59156,6 +60015,62 @@
             "type": "number"
           },
           "start_at": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UpdatePromoSlideDto": {
+        "properties": {
+          "action_label": {
+            "maxLength": 20,
+            "nullable": true,
+            "type": "string"
+          },
+          "banner_id": {
+            "description": "横幅图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "description": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "end_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "is_ad": {
+            "type": "boolean"
+          },
+          "link": {
+            "description": "站内路径或 http(s) 网址",
+            "maxLength": 500,
+            "nullable": true,
+            "pattern": "^(\\/(?!\\/)|https?:\\/\\/)",
+            "type": "string"
+          },
+          "logo_id": {
+            "description": "自定义轮播项的标题图",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "open_in_new": {
+            "type": "boolean"
+          },
+          "start_at": {
+            "nullable": true,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 100,
             "nullable": true,
             "type": "string"
           }
@@ -71229,6 +72144,205 @@
         ]
       }
     },
+    "/api/v3/admin/promotions/slides": {
+      "get": {
+        "operationId": "AdminPromoSlideController_getList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      },
+      "post": {
+        "operationId": "AdminPromoSlideController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePromoSlideDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/slides/candidates": {
+      "get": {
+        "operationId": "AdminPromoSlideController_getCandidates",
+        "parameters": [
+          {
+            "description": "标题或游戏编号；不填时列出近期发售的作品",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideCandidateDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/slides/order": {
+      "put": {
+        "operationId": "AdminPromoSlideController_reorder",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReorderPromoSlidesDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/slides/{id}": {
+      "delete": {
+        "operationId": "AdminPromoSlideController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminPromoSlideController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePromoSlideDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminPromoSlideDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
     "/api/v3/admin/reader/download/policy": {
       "get": {
         "operationId": "AdminDownloadPolicyController_get",
@@ -77122,7 +78236,26 @@
     "/api/v3/admin/uploads/images": {
       "post": {
         "operationId": "AdminUploadController_upload",
-        "parameters": [],
+        "parameters": [
+          {
+            "description": "Cut the empty margin of a transparent or single-color background",
+            "in": "query",
+            "name": "trim",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "The image is a title logo: cut its transparent edges flush to the title",
+            "in": "query",
+            "name": "logo",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -93849,6 +94982,39 @@
         ]
       }
     },
+    "/api/v3/mangas/{id}/sets": {
+      "get": {
+        "operationId": "MangaController_getSets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MangaVolumeSetDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
     "/api/v3/mangas/{id}/tags": {
       "get": {
         "operationId": "MangaController_getTags",
@@ -103425,6 +104591,15 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "description": "The image is a title logo: cut its transparent edges flush to the title",
+            "in": "query",
+            "name": "logo",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "requestBody": {
@@ -107319,6 +108494,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -108625,6 +109801,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -109022,6 +110199,7 @@
                   "PRODUCT",
                   "SERIES",
                   "VOLUME",
+                  "VOLUME_SET",
                   "BOOK",
                   "PERSON",
                   "ORGANIZATION",
@@ -109812,6 +110990,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",

@@ -9,7 +9,7 @@
   import { useGalgameRate } from '~/features/galgame/useGalgameRate'
   import { GALGAME_STATUS_ICON } from '~/features/rate/status-icon'
 
-  defineOptions({ name: 'LandingReleaseMark' })
+  defineOptions({ name: 'LandingGalgameHeroMark' })
   const props = defineProps<{ galgameId: number }>()
 
   const auth = useAuthStore()
@@ -40,6 +40,7 @@
     :status-private="rate.statusPrivate.value"
     :options="options"
     :busy="rate.pending.value"
+    tone="neutral"
     @select="(value, priv) => rate.setStatus(value as GalgameRateStatus, priv)"
     @clear="rate.remove"
     @privacy="rate.setPrivacy"

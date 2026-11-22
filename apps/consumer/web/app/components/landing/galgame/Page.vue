@@ -30,16 +30,21 @@
 <template>
   <Stack gap="none" class="-mt-(--app-header-height) pb-16">
     <VisuallyHidden as="h1">Galgame</VisuallyHidden>
-    <LandingReleaseStage v-if="data.schedule.length" :items="data.schedule" :today="data.today" />
+    <LandingGalgameHero v-if="data.slides.length" :items="data.slides" :today="data.today" />
     <Stack
       gap="none"
       :class="
         cn(
           'mx-auto w-full max-w-(--entry-container) gap-12 px-4 lg:px-6',
-          !data.schedule.length && 'pt-(--landing-stage-top)',
+          !data.slides.length && 'pt-(--landing-stage-top)',
         )
       "
     >
+      <LandingGalgameCalendarBoard
+        v-if="data.schedule.length"
+        :items="data.schedule"
+        :today="data.today"
+      />
       <LandingSection v-if="data.hot.length" title="本周热门">
         <LandingPodiumGame :items="data.hot" />
       </LandingSection>

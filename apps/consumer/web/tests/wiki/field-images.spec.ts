@@ -57,7 +57,7 @@ describe('WikiFieldImages', () => {
     wrapper.unmount()
   })
 
-  it('asks to cut the empty margin only of the image of an appearance', async () => {
+  it('asks to cut the margin of the image of an appearance and the edges of a title logo', async () => {
     const appearance = render('IMAGE', 'APPEARANCE')
     await pick(appearance.wrapper, [image('a.png')])
     appearance.wrapper.unmount()
@@ -68,9 +68,9 @@ describe('WikiFieldImages', () => {
     await pick(logo.wrapper, [image('c.png')])
     logo.wrapper.unmount()
     expect(uploadImage.mock.calls.map(([file, options]) => [file.name, options.trim])).toEqual([
-      ['a.png', true],
-      ['b.png', false],
-      ['c.png', false],
+      ['a.png', 'portrait'],
+      ['b.png', undefined],
+      ['c.png', 'logo'],
     ])
   })
 

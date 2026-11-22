@@ -33,7 +33,7 @@ export async function validateImage(source: File | Blob): Promise<boolean> {
 
 export async function uploadImage(
   source: File | Blob,
-  options: { trim?: boolean } = {},
+  options: { trim?: 'portrait' | 'logo' } = {},
 ): Promise<MediaValue | null> {
   if (!(await validateImage(source))) return null
 
@@ -43,7 +43,12 @@ export async function uploadImage(
     const result = await hikariRequest('/api/v3/uploads/images', {
       method: 'POST',
       body: form,
-      query: options.trim ? { trim: true } : undefined,
+      query:
+        options.trim === 'logo'
+          ? { logo: true }
+          : options.trim === 'portrait'
+            ? { trim: true }
+            : undefined,
     })
     return { id: result.id, src: result.src, width: result.width, height: result.height }
   } catch {
