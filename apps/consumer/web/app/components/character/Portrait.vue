@@ -32,6 +32,8 @@
         :ratio="ratio"
         :processing="{ width: 640, quality: 86, format: 'auto' }"
         :preview="zoomable"
+        :thumbhash="false"
+        :skeleton="false"
         preload
         class="absolute! inset-x-0 bottom-0 mx-auto mix-blend-multiply"
         :style="{ width: `${Math.min(1, (ratio * 6) / 5) * 100}%` }"
