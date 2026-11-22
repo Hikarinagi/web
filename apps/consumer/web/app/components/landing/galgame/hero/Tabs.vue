@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { Card, Inline, Ripple } from '@hina-ui/vue'
+  import { Card, Inline, Ripple, Stack } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
+  import { useCentered } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
   import { cn } from '~/utils/cn'
 
@@ -23,15 +24,22 @@
     })),
   )
   const shotProcessing = { width: 240, quality: 82, fit: 'cover' } as const
+  const track = useTemplateRef<{ viewport?: HTMLElement | null }>('track')
+
+  useCentered(
+    () => track.value?.viewport,
+    () => props.selected,
+  )
 </script>
 
 <template>
-  <ScrollRail>
-    <Inline gap="sm" justify="center" :wrap="false" class="mx-auto w-max p-1 sm:gap-3">
+  <ScrollRail ref="track" class="-mx-2">
+    <Inline gap="sm" justify="center" :wrap="false" class="mx-auto w-max px-1 py-2 sm:gap-3">
       <Card
         v-for="({ item, title, shot }, index) in tabs"
         :key="item.id"
         v-tooltip="title"
+        :data-stage-item="index"
         as="button"
         type="button"
         :padded="false"
@@ -41,26 +49,44 @@
         @click="emit('select', index)"
       >
         <Ripple />
-        <HikariImage
-          :src="shot"
-          alt=""
-          :lazy="false"
-          :processing="shotProcessing"
+        <Stack
+          gap="none"
           :class="
             cn(
-              'size-full overflow-hidden rounded-md transition-opacity',
-              index !== selected && 'opacity-45 hover:opacity-80',
+              'relative size-full transition-transform duration-300',
+              index === selected && 'scale-105',
             )
           "
-          image-class="size-full object-cover"
-        />
-        <LandingPickRing
-          v-if="index === selected"
-          :running="cycling"
-          :paused="paused"
-          :cycle="item.id"
-          @done="emit('advance')"
-        />
+        >
+          <HikariImage
+            :src="shot"
+            alt=""
+            :lazy="false"
+            :processing="shotProcessing"
+            :class="
+              cn(
+                'size-full overflow-hidden rounded-md transition-opacity duration-300',
+                index !== selected && 'opacity-45 hover:opacity-80',
+              )
+            "
+            image-class="size-full object-cover"
+          />
+        </Stack>
+        <Transition
+          enter-active-class="transition-opacity duration-300"
+          enter-from-class="opacity-0"
+          leave-active-class="transition-opacity duration-300"
+          leave-to-class="opacity-0"
+        >
+          <Stack v-if="index === selected" gap="none" class="pointer-events-none absolute inset-0">
+            <LandingPickRing
+              :running="cycling"
+              :paused="paused"
+              :cycle="item.id"
+              @done="emit('advance')"
+            />
+          </Stack>
+        </Transition>
       </Card>
     </Inline>
   </ScrollRail>

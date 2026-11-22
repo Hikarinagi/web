@@ -306,7 +306,7 @@ html.dark {
   --card-review: 20rem;
   --tag-rows-height: 18rem;
   --landing-stage-top: calc(var(--app-header-height) + 1.5rem);
-  --landing-banner-basis: calc(100% - 2rem);
+  --landing-banner-basis: calc(100% - 2rem + var(--landing-banner-gap));
   --landing-banner-gap: 0.75rem;
   --landing-banner-height: 34rem;
   --landing-logo-height: 4.5rem;
@@ -522,7 +522,6 @@ html.dark {
 @media (width >= 40rem) {
   :root {
     --stage-logo-height: 11rem;
-    --landing-banner-basis: calc(100% - 4rem);
     --landing-logo-height: 6rem;
   }
 }
@@ -531,7 +530,9 @@ html.dark {
   :root {
     --stage-logo-height: min(14rem, 30svh);
     --stage-logo-width: 36rem;
-    --landing-banner-basis: min(calc(var(--entry-container) - 3rem), calc(100% - 8rem));
+    --landing-banner-basis: calc(
+      min(var(--entry-container), 100%) - 3rem + var(--landing-banner-gap)
+    );
     --landing-banner-gap: 1.5rem;
     --landing-banner-height: min(34rem, 64svh);
     --landing-logo-height: min(8rem, 14svh);
