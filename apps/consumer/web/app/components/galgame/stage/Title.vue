@@ -2,7 +2,7 @@
   import { Heading, Link, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
-  import { logoClass, stageLogo } from '~/features/galgame/logo'
+  import { stageLogo } from '~/features/galgame/logo'
   import { cn } from '~/utils/cn'
 
   defineOptions({ name: 'GalgameStageTitle' })
@@ -30,7 +30,20 @@
     ),
   )
 
-  const logoTone = computed(() => (logo.value ? logoClass(logo.value) : ''))
+  const logoClass = computed(() => {
+    if (!logo.value) return ''
+    const light = {
+      ORIGINAL: 'block',
+      INVERTED: 'block invert hue-rotate-180',
+      HIDDEN: 'hidden',
+    }[logo.value.light]
+    const dark = {
+      ORIGINAL: 'dark:block dark:invert-0 dark:hue-rotate-0',
+      INVERTED: 'dark:block dark:invert dark:hue-rotate-180',
+      HIDDEN: 'dark:hidden',
+    }[logo.value.dark]
+    return cn(light, dark)
+  })
   const headingClass = computed(() => {
     const beside = chinese.value === translated.value ? 'hidden' : 'small'
     const light = { plain: 'text-4xl lg:text-6xl', small: 'text-xl lg:text-3xl', hidden: 'sr-only' }
@@ -100,7 +113,7 @@
           logoBox
             ? 'w-[min(var(--logo-w),100%,var(--stage-logo-width),calc(var(--logo-ratio)*var(--stage-logo-height)))]'
             : 'w-fit',
-          logoTone,
+          logoClass,
         )
       "
       :image-class="

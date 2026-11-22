@@ -13,19 +13,3 @@ export function stageLogo<T extends { language: string | null; light: string; da
     dark: Boolean(logo && logo.dark !== 'HIDDEN'),
   }
 }
-
-const LIGHT = {
-  ORIGINAL: 'block',
-  INVERTED: 'block invert hue-rotate-180',
-  HIDDEN: 'hidden',
-}
-
-const DARK = {
-  ORIGINAL: 'dark:block dark:invert-0 dark:hue-rotate-0',
-  INVERTED: 'dark:block dark:invert dark:hue-rotate-180',
-  HIDDEN: 'dark:hidden',
-}
-
-export function logoClass(logo: { light: keyof typeof LIGHT; dark: keyof typeof DARK }) {
-  return `${LIGHT[logo.light]} ${DARK[logo.dark]}`
-}

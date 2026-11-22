@@ -125,17 +125,6 @@
   --animate-mobile-nav-in: mobile-nav-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-mobile-nav-out: mobile-nav-out 0.12s cubic-bezier(0.4, 0, 1, 1);
   --animate-stage-ring: stage-ring 12s linear forwards;
-  --animate-landing-progress: landing-progress 7s linear forwards;
-
-  @keyframes landing-progress {
-    0% {
-      transform: scaleX(0);
-    }
-
-    100% {
-      transform: scaleX(1);
-    }
-  }
 
   @keyframes stage-ring {
     0% {
@@ -317,10 +306,6 @@ html.dark {
   --card-review: 20rem;
   --tag-rows-height: 18rem;
   --landing-stage-top: calc(var(--app-header-height) + 1.5rem);
-  --landing-shelf-height: 15rem;
-  --landing-title-height: 5rem;
-  --landing-info-height: 14rem;
-  --landing-shelf-fade: linear-gradient(to right, #000 calc(100% - 6rem), transparent);
   --landing-strip-cover: 6rem;
   --landing-feature-cover: 13rem;
   --landing-feature-cover-sm: 8rem;
@@ -538,8 +523,6 @@ html.dark {
 @media (width >= 40rem) {
   :root {
     --stage-logo-height: 11rem;
-    --landing-shelf-height: 18rem;
-    --landing-title-height: 6rem;
   }
 }
 
@@ -547,9 +530,6 @@ html.dark {
   :root {
     --stage-logo-height: min(14rem, 30svh);
     --stage-logo-width: 36rem;
-    --landing-shelf-height: min(22rem, 36svh);
-    --landing-title-height: min(8rem, 13svh);
-    --landing-info-height: min(17rem, 32svh);
   }
 }
 

@@ -79,7 +79,6 @@ export const ENTRY_GROUPS: Record<EntryType, PropertyGroup[]> = {
     LINKS,
   ],
   VOLUME: [{ title: '卷', properties: ['TITLE', 'VOLUME_NUMBER', 'ORDER', 'INTRO', 'SERIES'] }],
-  VOLUME_SET: [],
   BOOK: [
     {
       title: '出版版本',
