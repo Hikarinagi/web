@@ -17041,6 +17041,8 @@ export interface components {
             created_at: string;
             created_by: components["schemas"]["UserRefDto"] | null;
             description: string | null;
+            /** @description 停留的秒数；为空时按默认时长 */
+            duration_seconds: number | null;
             /** Format: date-time */
             end_at: string | null;
             galgame: components["schemas"]["AdminPromoSlideWorkDto"] | null;
@@ -19676,6 +19678,8 @@ export interface components {
             /** @description 横幅图 */
             banner_id?: number | null;
             description?: string | null;
+            /** @description 停留的秒数，3 到 120；为空时按默认时长 */
+            duration_seconds?: number | null;
             end_at?: string | null;
             /** @description 作品轮播项的游戏 */
             galgame_id?: number | null;
@@ -22314,6 +22318,8 @@ export interface components {
             banner: components["schemas"]["MediaAssetDto"];
             /** @description 首屏文案：运营填写的文案，或作品简介的开头 */
             description: string | null;
+            /** @description 这一项停留的秒数；为空时按首屏的默认时长 */
+            duration_seconds: number | null;
             id: number;
             /** @description 是否标出「广告」 */
             is_ad: boolean;
@@ -31129,6 +31135,8 @@ export interface components {
             /** @description 横幅图 */
             banner_id?: number | null;
             description?: string | null;
+            /** @description 停留的秒数，3 到 120；为空时按默认时长 */
+            duration_seconds?: number | null;
             end_at?: string | null;
             is_active?: boolean;
             is_ad?: boolean;

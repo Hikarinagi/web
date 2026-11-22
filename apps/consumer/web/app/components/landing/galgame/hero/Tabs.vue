@@ -83,6 +83,7 @@
               :running="cycling"
               :paused="paused"
               :cycle="item.id"
+              :seconds="item.duration_seconds"
               @done="emit('advance')"
             />
           </Stack>

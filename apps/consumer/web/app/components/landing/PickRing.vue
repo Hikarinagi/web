@@ -1,8 +1,16 @@
 <script setup lang="ts">
+  import { cn } from '~/utils/cn'
+
   defineOptions({ name: 'LandingPickRing' })
   const props = withDefaults(
-    defineProps<{ running: boolean; paused: boolean; cycle: string | number; round?: string }>(),
-    { round: 'var(--radius-lg)' },
+    defineProps<{
+      running: boolean
+      paused: boolean
+      cycle: string | number
+      round?: string
+      seconds?: number | null
+    }>(),
+    { round: 'var(--radius-lg)', seconds: null },
   )
   const emit = defineEmits<{ done: [] }>()
 
@@ -11,6 +19,9 @@
     height: 'calc(100% - 2px)',
     rx: props.round,
   }))
+  const timed = computed(() =>
+    props.seconds ? { ...shape.value, animationDuration: `${props.seconds}s` } : shape.value,
+  )
 </script>
 
 <template>
@@ -20,7 +31,7 @@
       :key="cycle"
       x="1"
       y="1"
-      :style="shape"
+      :style="timed"
       fill="none"
       stroke-width="2"
       pathLength="1"

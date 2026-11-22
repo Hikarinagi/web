@@ -4587,6 +4587,11 @@
             "nullable": true,
             "type": "string"
           },
+          "duration_seconds": {
+            "description": "停留的秒数；为空时按默认时长",
+            "nullable": true,
+            "type": "number"
+          },
           "end_at": {
             "format": "date-time",
             "nullable": true,
@@ -4674,6 +4679,7 @@
           "link",
           "open_in_new",
           "is_ad",
+          "duration_seconds",
           "position",
           "is_active",
           "start_at",
@@ -15022,6 +15028,13 @@
             "maxLength": 300,
             "nullable": true,
             "type": "string"
+          },
+          "duration_seconds": {
+            "description": "停留的秒数，3 到 120；为空时按默认时长",
+            "maximum": 120,
+            "minimum": 3,
+            "nullable": true,
+            "type": "number"
           },
           "end_at": {
             "nullable": true,
@@ -25737,6 +25750,11 @@
             "nullable": true,
             "type": "string"
           },
+          "duration_seconds": {
+            "description": "这一项停留的秒数；为空时按首屏的默认时长",
+            "nullable": true,
+            "type": "number"
+          },
           "id": {
             "type": "number"
           },
@@ -25781,6 +25799,7 @@
         "required": [
           "id",
           "is_ad",
+          "duration_seconds",
           "banner",
           "description",
           "work",
@@ -60014,6 +60033,13 @@
             "maxLength": 300,
             "nullable": true,
             "type": "string"
+          },
+          "duration_seconds": {
+            "description": "停留的秒数，3 到 120；为空时按默认时长",
+            "maximum": 120,
+            "minimum": 3,
+            "nullable": true,
+            "type": "number"
           },
           "end_at": {
             "nullable": true,
