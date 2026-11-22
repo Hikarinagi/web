@@ -373,13 +373,8 @@ html.dark {
   --manga-cover-sm: 7rem;
   --volume-cover: 15rem;
   --volume-cover-sm: 11rem;
-  --calendar-ruler-height: 13rem;
-  --calendar-ruler-col: minmax(2.125rem, 1fr);
-  --calendar-date-rail: 7.25rem;
-  --calendar-spot-cover: 16.5rem;
-  --calendar-spot-text: 34em;
-  --calendar-shelf-height: 13.5rem;
-  --calendar-shelf-height-sm: 9.375rem;
+  --calendar-day-col: minmax(2.25rem, 1fr);
+  --calendar-anchor: calc(var(--app-header-height) + 6rem);
   --ranking-container: 64rem;
   --ranking-rank: 4.75rem;
   --ranking-rank-sm: 3.25rem;

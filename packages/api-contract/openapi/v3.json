@@ -22930,15 +22930,6 @@
       },
       "GalgameCalendarItemDto": {
         "properties": {
-          "age_rating": {
-            "enum": [
-              "ALL_AGES",
-              "R15",
-              "R18"
-            ],
-            "nullable": true,
-            "type": "string"
-          },
           "covers": {
             "description": "封面列表，按得票数由高到低排序",
             "items": {
@@ -22949,18 +22940,6 @@
           "id": {
             "description": "Galgame ID",
             "type": "number"
-          },
-          "images": {
-            "description": "可公开的示例 CG，至多四张",
-            "items": {
-              "$ref": "#/components/schemas/RatedMediaAssetDto"
-            },
-            "type": "array"
-          },
-          "intro": {
-            "description": "简介的开头",
-            "nullable": true,
-            "type": "string"
           },
           "maker": {
             "nullable": true,
@@ -23024,10 +23003,7 @@
           "producers",
           "maker",
           "platforms",
-          "age_rating",
-          "price",
-          "images",
-          "intro"
+          "price"
         ],
         "type": "object"
       },

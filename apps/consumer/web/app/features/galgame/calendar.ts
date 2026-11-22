@@ -1,5 +1,4 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { topVotedMedia } from '~/utils/media/image'
 
 type CalendarItem = ApiData<'/api/v3/landing/galgames/calendar', 'get'>['items'][number]
 
@@ -39,9 +38,4 @@ export function calendarDays<
     days.set(date, [...(days.get(date) ?? []), item])
   }
   return [...days].map(([date, list]) => ({ date, list }))
-}
-
-export function coverRatio(item: Pick<CalendarItem, 'covers'>) {
-  const media = topVotedMedia(item.covers)
-  return media?.width && media.height ? media.width / media.height : 3 / 4
 }

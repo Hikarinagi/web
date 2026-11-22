@@ -21583,16 +21583,10 @@ export interface components {
             today: string;
         };
         GalgameCalendarItemDto: {
-            /** @enum {string|null} */
-            age_rating: "ALL_AGES" | "R15" | "R18" | null;
             /** @description 封面列表，按得票数由高到低排序 */
             covers: components["schemas"]["GalgameCoverRelationDto"][];
             /** @description Galgame ID */
             id: number;
-            /** @description 可公开的示例 CG，至多四张 */
-            images: components["schemas"]["RatedMediaAssetDto"][];
-            /** @description 简介的开头 */
-            intro: string | null;
             maker: string | null;
             /** @description 是否为NSFW 内容 */
             nsfw: boolean;
