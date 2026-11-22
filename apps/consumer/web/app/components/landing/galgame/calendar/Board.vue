@@ -40,7 +40,7 @@
       gap="xl"
       align="start"
       :wrap="false"
-      class="-mx-4 [scrollbar-width:none] overflow-x-auto px-4 pb-2 lg:-mx-6 lg:px-6"
+      class="-mx-4 snap-x snap-mandatory scroll-px-4 [scrollbar-width:none] overflow-x-auto px-4 pb-2 lg:-mx-6 lg:scroll-px-6 lg:px-6"
     >
       <LandingGalgameCalendarDay
         v-for="(day, position) in days"

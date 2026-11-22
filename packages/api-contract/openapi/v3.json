@@ -11768,6 +11768,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -11794,6 +11795,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -12542,6 +12544,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -12568,6 +12571,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -17603,6 +17607,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -17629,6 +17634,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -17692,6 +17698,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -17744,6 +17751,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18056,6 +18064,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -18082,6 +18091,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -18105,7 +18115,8 @@
               "duplicate",
               "incomplete",
               "relation_pair",
-              "version_scope"
+              "version_scope",
+              "set_series"
             ],
             "type": "string"
           },
@@ -18169,6 +18180,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18822,6 +18834,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -18857,6 +18870,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19052,6 +19066,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -19078,6 +19093,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -19310,6 +19326,7 @@
           "MEDIUM",
           "PUBLICATION_STATUS",
           "VOLUME_NUMBER",
+          "VOLUME_COUNT",
           "ORDER",
           "BOOK_FORMAT",
           "PAGE_COUNT",
@@ -19336,6 +19353,7 @@
           "PROTAGONIST",
           "CAPTURABLE",
           "SERIES",
+          "VOLUME_SET",
           "INCLUDED_VOLUME",
           "INCLUDED_GAME",
           "WORK",
@@ -19474,6 +19492,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19617,6 +19636,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -19643,6 +19663,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -19668,6 +19689,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19761,6 +19783,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -19840,6 +19863,7 @@
           "PRODUCT",
           "SERIES",
           "VOLUME",
+          "VOLUME_SET",
           "BOOK",
           "PERSON",
           "ORGANIZATION",
@@ -21086,6 +21110,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -21112,6 +21137,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -37420,6 +37446,95 @@
         ],
         "type": "object"
       },
+      "MangaVolumeSetDto": {
+        "properties": {
+          "id": {
+            "description": "版本套的条目 ID",
+            "type": "number"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "版本套的名称，未记录时为空",
+            "nullable": true,
+            "type": "string"
+          },
+          "original": {
+            "description": "是否为原版，即首卷发售最早的一套",
+            "type": "boolean"
+          },
+          "publication_date": {
+            "description": "首卷发售日",
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "publication_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "publication_status": {
+            "description": "出版状态编码",
+            "nullable": true,
+            "type": "string"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "volume_count": {
+            "description": "已收录的卷数",
+            "type": "number"
+          },
+          "volumes": {
+            "description": "按卷序排列",
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeRelationDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "original",
+          "volume_count",
+          "publication_date",
+          "publication_date_precision",
+          "publication_status",
+          "publishers",
+          "labels",
+          "volumes"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeSetProducerDto": {
+        "properties": {
+          "id": {
+            "description": "厂商 ID，组织条目没有对应厂商时为空",
+            "nullable": true,
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
       "MangaVolumeWantedDto": {
         "properties": {
           "cover": {
@@ -45343,6 +45458,7 @@
               "PRODUCT",
               "SERIES",
               "VOLUME",
+              "VOLUME_SET",
               "BOOK",
               "PERSON",
               "ORGANIZATION",
@@ -45381,6 +45497,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -45407,6 +45524,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -46901,6 +47019,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -46927,6 +47046,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -47042,6 +47162,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -47068,6 +47189,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -47132,6 +47254,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -47233,6 +47356,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -47259,6 +47383,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -52284,6 +52409,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -52310,6 +52436,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -56140,6 +56267,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -56166,6 +56294,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -56292,6 +56421,7 @@
               "MEDIUM",
               "PUBLICATION_STATUS",
               "VOLUME_NUMBER",
+              "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
               "PAGE_COUNT",
@@ -56318,6 +56448,7 @@
               "PROTAGONIST",
               "CAPTURABLE",
               "SERIES",
+              "VOLUME_SET",
               "INCLUDED_VOLUME",
               "INCLUDED_GAME",
               "WORK",
@@ -94150,6 +94281,39 @@
         ]
       }
     },
+    "/api/v3/mangas/{id}/sets": {
+      "get": {
+        "operationId": "MangaController_getSets",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MangaVolumeSetDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
     "/api/v3/mangas/{id}/tags": {
       "get": {
         "operationId": "MangaController_getTags",
@@ -107620,6 +107784,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -108926,6 +109091,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",
@@ -109323,6 +109489,7 @@
                   "PRODUCT",
                   "SERIES",
                   "VOLUME",
+                  "VOLUME_SET",
                   "BOOK",
                   "PERSON",
                   "ORGANIZATION",
@@ -110113,6 +110280,7 @@
                 "PRODUCT",
                 "SERIES",
                 "VOLUME",
+                "VOLUME_SET",
                 "BOOK",
                 "PERSON",
                 "ORGANIZATION",

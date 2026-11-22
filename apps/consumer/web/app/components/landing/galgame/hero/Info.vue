@@ -38,14 +38,14 @@
 </script>
 
 <template>
-  <Stack gap="md" class="min-w-0">
+  <Stack gap="md" justify="end" class="min-h-(--landing-info-height) min-w-0">
     <Inline gap="sm" align="center" class="min-h-(--landing-line)">
       <Text v-if="date" size="sm" weight="semibold" class="tabular-nums">
         {{ dayLabel(date) }} {{ weekdayLabel(date) }}
       </Text>
       <Tag v-if="countdown" :tone="countdown.tone" pill>{{ countdown.text }}</Tag>
     </Inline>
-    <Stack gap="none" justify="end" class="h-(--landing-title-height) min-w-0">
+    <Stack gap="none" class="min-w-0">
       <HikariImage
         v-if="shown.logo"
         :key="shown.logo.media.src"
@@ -55,7 +55,7 @@
         :processing="logoProcessing"
         :skeleton="false"
         :thumbhash="false"
-        :class="cn('h-full max-w-full self-start', logoClass(shown.logo))"
+        :class="cn('h-(--landing-title-height) max-w-full self-start', logoClass(shown.logo))"
         image-class="size-full object-contain object-bottom-left"
       />
       <Heading

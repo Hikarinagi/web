@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Inline, Stack, Text } from '@hina-ui/vue'
+  import { useScroll } from '@vueuse/core'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
   import { dayLabel } from '~/features/landing/labels'
@@ -33,6 +34,15 @@
     }),
   )
   const row = useTemplateRef<{ $el: HTMLElement }>('row')
+  const viewport = computed(() => row.value?.$el ?? null)
+  const { arrivedState } = useScroll(viewport)
+  const { width } = useElementSize(viewport)
+  const more = computed(
+    () =>
+      width.value > 0 &&
+      !arrivedState.right &&
+      (viewport.value?.scrollWidth ?? 0) > (viewport.value?.clientWidth ?? 0),
+  )
   useReveal(
     () => row.value?.$el,
     () => props.items[props.index]?.id ?? 0,
@@ -47,7 +57,12 @@
     gap="lg"
     align="end"
     :wrap="false"
-    class="-mx-4 [scrollbar-width:none] overflow-x-auto px-4 pt-6 pb-2 lg:mx-0 lg:px-0"
+    :class="
+      cn(
+        '-mx-4 [scrollbar-width:none] overflow-x-auto px-4 pt-6 pb-2 lg:mx-0 lg:px-0',
+        more && 'mask-(--landing-shelf-fade)',
+      )
+    "
   >
     <Stack
       v-for="({ item, work, date, ratio }, position) in shelf"
@@ -63,8 +78,8 @@
           cn(
             'block origin-bottom rounded-lg transition duration-300 ease-out',
             position === index
-              ? '-translate-y-2 scale-105 shadow-2xl'
-              : 'opacity-60 saturate-50 hover:opacity-100 hover:saturate-100',
+              ? '-translate-y-3 scale-105 shadow-2xl'
+              : 'shadow-md hover:-translate-y-1 dark:brightness-75 dark:hover:brightness-100',
           )
         "
         @mouseenter="emit('select', position)"

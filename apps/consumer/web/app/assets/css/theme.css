@@ -319,6 +319,8 @@ html.dark {
   --landing-stage-top: calc(var(--app-header-height) + 1.5rem);
   --landing-shelf-height: 15rem;
   --landing-title-height: 5rem;
+  --landing-info-height: 14rem;
+  --landing-shelf-fade: linear-gradient(to right, #000 calc(100% - 6rem), transparent);
   --landing-strip-cover: 6rem;
   --landing-feature-cover: 13rem;
   --landing-feature-cover-sm: 8rem;
@@ -547,6 +549,7 @@ html.dark {
     --stage-logo-width: 36rem;
     --landing-shelf-height: min(22rem, 36svh);
     --landing-title-height: min(8rem, 13svh);
+    --landing-info-height: min(17rem, 32svh);
   }
 }
 

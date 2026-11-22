@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <Stack gap="sm" class="w-60 shrink-0">
+  <Stack gap="sm" class="w-60 shrink-0 snap-start">
     <Inline gap="sm" align="baseline" :wrap="false" class="border-b border-line pb-2">
       <Text size="2xl" weight="semibold" class="leading-none tabular-nums">{{ date }}</Text>
       <Text size="sm" tone="muted">{{ month }} 月 {{ weekdayLabel(day.date) }}</Text>
