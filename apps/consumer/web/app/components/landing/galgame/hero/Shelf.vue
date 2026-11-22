@@ -4,7 +4,7 @@
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
   import { dayLabel } from '~/features/landing/labels'
-  import { useReveal } from '~/features/landing/stage'
+  import { useAlignTo, useReveal } from '~/features/landing/stage'
   import { galgameWork } from '~/features/landing/works'
   import { cn } from '~/utils/cn'
   import { topVotedMedia } from '~/utils/media/image'
@@ -42,6 +42,14 @@
       width.value > 0 &&
       !arrivedState.right &&
       (viewport.value?.scrollWidth ?? 0) > (viewport.value?.clientWidth ?? 0),
+  )
+  useAlignTo(
+    () => row.value?.$el,
+    () =>
+      row.value?.$el.querySelector<HTMLElement>(
+        `[data-stage-item="${props.items[props.index]?.id}"]`,
+      ),
+    'x',
   )
   useReveal(
     () => row.value?.$el,
