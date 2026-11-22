@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Card, Inline, Link, Stack, Text } from '@hina-ui/vue'
+  import { Card, Inline, Ripple, Stack, Text } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import { dayText } from '~/features/entry/date'
@@ -19,34 +19,22 @@
 </script>
 
 <template>
-  <Card :padded="false">
+  <Card :as="NuxtLink" :to="to" :padded="false" class="hn-state-layer hn-interactive hn-press-lg">
+    <Ripple />
     <Inline gap="lg" align="start" :wrap="false" class="p-3">
-      <NuxtLink
-        :to="to"
-        class="block w-24 shrink-0 hn-interactive rounded-md lg:w-28"
-        :aria-label="work.title"
-      >
-        <HikariImage
-          :src="work.cover"
-          :alt="work.title"
-          :ratio="7 / 10"
-          :processing="{ width: 240, quality: 80, fit: 'cover', format: 'auto' }"
-          image-class="object-cover"
-          class="w-full overflow-hidden rounded-md bg-white ring-1 ring-black/5"
-        />
-      </NuxtLink>
+      <HikariImage
+        :src="work.cover"
+        :alt="work.title"
+        :ratio="7 / 10"
+        :processing="{ width: 240, quality: 80, fit: 'cover', format: 'auto' }"
+        image-class="object-cover"
+        class="w-24 shrink-0 overflow-hidden rounded-md bg-white ring-1 ring-black/5 lg:w-28"
+      />
       <Stack gap="xs" class="min-w-0 flex-1 py-0.5">
-        <Text size="xs" :class="cn('tabular-nums', upcoming ? 'text-accent-text' : 'text-muted')">
+        <Text size="xs" :tone="upcoming ? 'accent' : 'muted'" class="tabular-nums">
           {{ work.date ? dayText(work.date) : '日期不详' }}{{ upcoming ? ' 发售' : '' }}
         </Text>
-        <Link
-          :as="NuxtLink"
-          :to="to"
-          tone="neutral"
-          class="line-clamp-2 leading-snug font-semibold"
-        >
-          {{ work.title }}
-        </Link>
+        <Text weight="semibold" class="line-clamp-2 leading-snug">{{ work.title }}</Text>
         <Text v-if="work.original !== work.title" size="xs" tone="muted" truncate lang="ja">
           {{ work.original }}
         </Text>

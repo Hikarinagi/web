@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import {
+    Center,
     IconButton,
     Inline,
-    Link,
+    Ripple,
     SimpleGrid,
     Stack,
     Tabs,
@@ -58,99 +59,107 @@
         </TabsTrigger>
       </TabsList>
     </Tabs>
-    <SimpleGrid min="min(30rem, 100%)" gap="none" class="-mx-3 gap-x-4">
+    <SimpleGrid min="min(30rem, 100%)" gap="none" class="-mx-3 gap-x-4 gap-y-1">
       <Inline
         v-for="item in listed"
         :key="item.key"
-        gap="sm"
+        gap="xs"
         align="center"
         :wrap="false"
-        class="min-w-0 rounded-lg p-2 pl-3 transition-colors duration-(--hn-duration-fast)"
-        :class="item.key === selected ? 'bg-accent-soft/40' : 'hover:bg-subtle'"
+        class="min-w-0"
       >
-        <Text size="sm" tone="muted" class="w-10 shrink-0 tabular-nums">
-          {{ yearOf(item.date) }}
-        </Text>
-        <NuxtLink
+        <Inline
+          :as="NuxtLink"
           :to="item.path"
-          class="block w-10 shrink-0 hn-interactive rounded-sm"
-          :aria-label="item.title"
+          gap="sm"
+          align="center"
+          :wrap="false"
+          :aria-current="item.key === selected || undefined"
+          class="hn-state-layer min-w-0 flex-1 hn-interactive overflow-hidden rounded-lg p-2 pl-3 outline-(length:--hn-focus-ring-width) outline-offset-(--hn-focus-ring-offset) outline-solid hn-press-lg"
+          :class="item.key === selected ? 'outline-(--hn-focus-ring)' : 'outline-transparent'"
         >
+          <Ripple />
+          <Text size="sm" tone="muted" class="w-10 shrink-0 tabular-nums">
+            {{ yearOf(item.date) }}
+          </Text>
           <HikariImage
             :src="item.cover"
             :alt="item.title"
             :ratio="7 / 10"
             preset="thumbnail"
             image-class="object-cover"
-            class="w-full overflow-hidden rounded-sm bg-subtle ring-1 ring-black/5"
+            class="w-10 shrink-0 overflow-hidden rounded-sm bg-subtle ring-1 ring-black/5"
           />
-        </NuxtLink>
-        <HikariImage
-          v-if="item.image"
-          :src="item.image"
-          :alt="`${item.title} 中的${character.name}`"
-          :ratio="1"
-          :processing="{ gravity: 'face' }"
-          preset="thumbnail"
-          image-class="object-cover object-top"
-          class="w-12 shrink-0 overflow-hidden rounded-md bg-white ring-1 ring-black/5"
-        />
-        <Stack gap="none" class="ml-1 min-w-0 flex-1">
-          <Inline gap="sm" align="baseline" :wrap="false" class="min-w-0">
-            <Link
-              :as="NuxtLink"
-              :to="item.path"
-              tone="neutral"
-              class="truncate font-medium"
-              lang="ja"
-            >
-              {{ item.title }}
-            </Link>
-            <Text v-if="item.kind !== 'galgame'" as="span" size="xs" tone="muted" class="shrink-0">
-              {{ KIND_LABELS[item.kind] }}
+          <HikariImage
+            v-if="item.image"
+            :src="item.image"
+            :alt="`${item.title} 中的${character.name}`"
+            :ratio="1"
+            :processing="{ gravity: 'face' }"
+            preset="thumbnail"
+            image-class="object-cover object-top"
+            class="w-12 shrink-0 overflow-hidden rounded-md bg-white ring-1 ring-black/5"
+          />
+          <Stack gap="none" class="ml-1 min-w-0 flex-1">
+            <Inline gap="sm" align="baseline" :wrap="false" class="min-w-0">
+              <Text as="span" weight="medium" truncate lang="ja">{{ item.title }}</Text>
+              <Text
+                v-if="item.kind !== 'galgame'"
+                as="span"
+                size="xs"
+                tone="muted"
+                class="shrink-0"
+              >
+                {{ KIND_LABELS[item.kind] }}
+              </Text>
+              <Tag v-if="item.capturable" tone="accent" size="sm" class="shrink-0">可攻略</Tag>
+              <Tag v-if="item.protagonist" tone="neutral" size="sm" class="shrink-0">主人公</Tag>
+            </Inline>
+            <Text v-if="notes(item)" size="xs" tone="muted" class="truncate" lang="ja">
+              {{ notes(item) }}
             </Text>
-            <Tag v-if="item.capturable" tone="accent" size="sm" class="shrink-0">可攻略</Tag>
-            <Tag v-if="item.protagonist" tone="neutral" size="sm" class="shrink-0">主人公</Tag>
-          </Inline>
-          <Text v-if="notes(item)" size="xs" tone="muted" class="truncate" lang="ja">
-            {{ notes(item) }}
-          </Text>
-          <Inline
-            v-if="item.voices.length"
-            gap="none"
-            align="baseline"
-            :wrap="false"
-            class="min-w-0 gap-x-2 overflow-hidden"
-          >
-            <Text as="span" size="xs" tone="muted">CV</Text>
-            <template v-for="voice in item.voices" :key="voice.text">
-              <Link
-                v-if="voice.person_id"
-                :as="NuxtLink"
-                :to="`/people/${voice.person_id}`"
-                tone="neutral"
-                class="shrink-0 text-xs text-muted"
+            <Inline
+              v-if="item.voices.length"
+              gap="none"
+              align="baseline"
+              :wrap="false"
+              class="min-w-0 gap-x-2 overflow-hidden"
+            >
+              <Text as="span" size="xs" tone="muted">CV</Text>
+              <Text
+                v-for="voice in item.voices"
+                :key="voice.text"
+                as="span"
+                size="xs"
+                tone="muted"
+                class="shrink-0"
                 lang="ja"
               >
                 {{ voice.text }}
-              </Link>
-              <Text v-else as="span" size="xs" tone="muted" class="shrink-0" lang="ja">
-                {{ voice.text }}
               </Text>
-            </template>
-          </Inline>
-        </Stack>
-        <IconButton
-          v-if="item.key !== selected"
-          label="切换至此作品"
-          variant="ghost"
-          tone="neutral"
-          size="sm"
-          class="shrink-0"
-          @click="$emit('show', item.key)"
-        >
-          <ArrowUpToLine />
-        </IconButton>
+            </Inline>
+          </Stack>
+        </Inline>
+        <Center class="size-(--hn-control-h-sm) shrink-0">
+          <Transition
+            enter-active-class="transition-opacity duration-(--hn-duration-fast) ease-(--hn-ease-enter)"
+            enter-from-class="opacity-0"
+            leave-active-class="transition-opacity duration-(--hn-duration-exit) ease-(--hn-ease-exit)"
+            leave-to-class="opacity-0"
+          >
+            <Center v-if="item.key !== selected">
+              <IconButton
+                label="切换至此作品"
+                variant="ghost"
+                tone="neutral"
+                size="sm"
+                @click="$emit('show', item.key)"
+              >
+                <ArrowUpToLine />
+              </IconButton>
+            </Center>
+          </Transition>
+        </Center>
       </Inline>
     </SimpleGrid>
   </Stack>

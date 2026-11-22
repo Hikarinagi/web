@@ -14,7 +14,9 @@
   import { ExternalLink, Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
+  import { LOGO_PROCESSING, logoRatio } from '~/features/org/logo'
   import { KIND_PATHS, workMonth, type OrgWork } from '~/features/org/works'
+  import type { HikariImageSize } from '~/utils/media/image'
 
   defineOptions({ name: 'OrgHeader' })
   const props = defineProps<{
@@ -26,10 +28,8 @@
   }>()
   defineEmits<{ group: [code: string] }>()
 
-  const ratio = computed(() => {
-    const logo = props.producer.logo
-    return logo?.width && logo.height ? Math.min(Math.max(logo.width / logo.height, 1), 2.4) : 1
-  })
+  const loaded = ref<HikariImageSize | null>(null)
+  const ratio = computed(() => logoRatio(props.producer.logo, loaded.value))
   const intro = computed(() => props.producer.trans_intro || props.producer.intro)
 </script>
 
@@ -47,9 +47,10 @@
         <HikariImage
           :src="producer.logo"
           :alt="`${producer.name}的标志`"
-          preset="thumbnail"
+          :processing="LOGO_PROCESSING"
+          fit="contain"
           class="size-full"
-          image-class="object-contain"
+          @load="size => (loaded = size)"
         />
       </Center>
 
