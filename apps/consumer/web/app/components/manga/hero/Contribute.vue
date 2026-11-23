@@ -1,22 +1,10 @@
 <script setup lang="ts">
   import { BookUp } from '@lucide/vue'
-  import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
 
   defineOptions({ name: 'MangaHeroContribute' })
-  const props = defineProps<{
-    mangaId: number
-    title: string
-    chapters: MangaPageData['chapters']
-  }>()
+  defineProps<{ mangaId: number; title: string }>()
 
   const open = ref(false)
-  const next = computed(() => {
-    const numbers = props.chapters
-      .filter(chapter => chapter.readable && chapter.chapter_type === 'SERIALIZATION')
-      .map(chapter => Number(chapter.chapter_number))
-      .filter(Number.isFinite)
-    return numbers.length ? String(Math.floor(Math.max(...numbers)) + 1) : ''
-  })
 </script>
 
 <template>
@@ -29,12 +17,7 @@
     @click="open = true"
   >
     <template #icon><BookUp /></template>
-    投稿章节
+    投稿
   </Button>
-  <ContributeMangaStartDialog
-    v-model:open="open"
-    :series="{ id: mangaId, title }"
-    scope="CHAPTER"
-    :new-chapter="next"
-  />
+  <ContributeMangaStartDialog v-model:open="open" :series="{ id: mangaId, title }" />
 </template>

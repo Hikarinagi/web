@@ -1,12 +1,19 @@
 import { mangaChapterHeading } from '@hikarinagi/shared'
 import { topVotedMedia } from '~/utils/media/image'
 import type { BackendMangaProjectListItem } from './manga'
+import { placementHeading } from './placement'
 
 type Series = BackendMangaProjectListItem['series']
 
 type Episode = Pick<
   BackendMangaProjectListItem,
-  'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_number'
+  | 'scope'
+  | 'chapter_type'
+  | 'chapter_number'
+  | 'chapter_name'
+  | 'volume_number'
+  | 'placement'
+  | 'placement_complete'
 >
 
 export function seriesTitle(series: Series): string {
@@ -18,6 +25,11 @@ export function seriesHead(series: Series): { title: string; cover: string | nul
 }
 
 export function projectEpisode(project: Episode): string {
+  if (!project.placement_complete) {
+    return project.placement && project.placement.kind !== 'unknown'
+      ? `${placementHeading(project.placement)}（待确认）`
+      : '位置待定'
+  }
   return mangaChapterHeading({
     chapter_type: project.scope === 'VOLUME' ? 'VOLUME' : project.chapter_type,
     chapter_number: project.chapter_number,

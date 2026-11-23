@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Drawer, Splitter, SplitterHandle, SplitterPanel } from '@hina-ui/vue'
+  import { Drawer, Splitter, SplitterHandle, SplitterPanel, toast } from '@hina-ui/vue'
   import { useMediaQuery } from '@vueuse/core'
   import { projectEpisode, seriesTitle } from '~/features/workbench/manga/series'
   import { useReviewKeys } from '~/features/workbench/manga/review/useReviewKeys'
@@ -21,6 +21,26 @@
   const asideOpen = ref(false)
   const rejectOpen = ref(false)
   const placementOpen = ref(false)
+  const placementPurpose = ref<'correct' | 'approve'>('correct')
+
+  function place(purpose: 'correct' | 'approve') {
+    placementPurpose.value = purpose
+    placementOpen.value = true
+  }
+
+  function approve() {
+    if (props.data.project.placement_complete) review.approve()
+    else place('approve')
+  }
+
+  async function placed() {
+    if (placementPurpose.value === 'correct') {
+      emit('refresh')
+      return
+    }
+    toast.success('已通过并发布')
+    await navigateTo('/create/manga-review')
+  }
 
   useReviewKeys(review.state, {
     note: review.startNote,
@@ -39,7 +59,7 @@
     :narrow="!wide"
     :approving="review.approving.value"
     @reject="rejectOpen = true"
-    @approve="review.approve"
+    @approve="approve"
     @aside="asideOpen = true"
   />
   <Splitter v-if="wide" auto-save-id="workbench-manga-review" class="min-h-0 flex-1">
@@ -52,7 +72,7 @@
         :rerunning="review.rerunning.value"
         class="h-full border-l border-line"
         @rerun="review.rerun"
-        @correct="placementOpen = true"
+        @correct="place('correct')"
       />
     </SplitterPanel>
   </Splitter>
@@ -63,7 +83,7 @@
       <WorkbenchMangaReviewSideAside
         :rerunning="review.rerunning.value"
         @rerun="review.rerun"
-        @correct="placementOpen = true"
+        @correct="place('correct')"
         @navigate="asideOpen = false"
       />
     </template>
@@ -73,7 +93,7 @@
   <WorkbenchMangaProjectInfoDialog
     v-model:visible="placementOpen"
     :project="data.project"
-    purpose="correct"
-    @saved="emit('refresh')"
+    :purpose="placementPurpose"
+    @saved="placed"
   />
 </template>

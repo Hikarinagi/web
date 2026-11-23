@@ -19558,10 +19558,12 @@ export interface components {
              * @enum {string}
              */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /** @description 投稿者照书上填写的卷号或话号，例如「3」「第 17 至 20 话」；只作判断位置的提示 */
+            hint?: string | null;
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
             /**
-             * @description 一话或整卷，缺省为一话
+             * @description 按话或按卷；不给出位置时，提交审核时由系统判断放在哪里
              * @enum {string}
              */
             scope?: "CHAPTER" | "VOLUME";
@@ -19579,7 +19581,7 @@ export interface components {
              */
             target_lang?: "ja" | "zh-Hans" | "zh-Hant" | "en" | "ko" | "ru";
             team_id?: number | null;
-            /** @description 单行本条目；整卷投稿必选，单话可选填所属单行本 */
+            /** @description 单行本条目；按卷投稿必选，按话可选填所属单行本 */
             volume_id?: number | null;
         };
         CreateNovelChapterDto: {
@@ -24690,6 +24692,14 @@ export interface components {
             paused: boolean;
             queues: components["schemas"]["MangaQueueStatusDto"][];
         };
+        MangaPlaceEvidenceDto: {
+            /** @description 看到了什么 */
+            note: string;
+            /** @description 投稿文件的第几页 */
+            page: number | null;
+            /** @description 对上的维基卷 */
+            wiki_volume: number | null;
+        };
         MangaProducerRelationDto: {
             /** @description 新的职责或关系编码 */
             code: string;
@@ -24771,6 +24781,8 @@ export interface components {
              * @enum {string|null}
              */
             held_from: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD" | null;
+            /** @description 投稿者照书上填写的卷号或话号 */
+            hint: string | null;
             id: number;
             /** Format: date-time */
             last_activity_at: string;
@@ -24780,12 +24792,16 @@ export interface components {
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
             page_count: number;
+            /** @description 系统对这份文件放在哪里的判断 */
+            placement: components["schemas"]["MangaProjectPlacementDto"] | null;
+            /** @description 是否已确定放在哪一卷或哪一话，未确定时不能通过 */
+            placement_complete: boolean;
             /** Format: date-time */
             published_at: string | null;
             /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
             replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
-             * @description 一话或整卷
+             * @description 按话或按卷
              * @enum {string}
              */
             scope: "CHAPTER" | "VOLUME";
@@ -24826,12 +24842,16 @@ export interface components {
              * @enum {string|null}
              */
             held_from: "DRAFT" | "ACTIVE" | "REVIEW" | "PUBLISHED" | "STALE" | "ARCHIVED" | "HELD" | null;
+            /** @description 投稿者照书上填写的卷号或话号 */
+            hint: string | null;
             id: number;
             /** Format: date-time */
             last_activity_at: string;
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
+            /** @description 系统对这份文件放在哪里的判断 */
+            placement: components["schemas"]["MangaProjectPlacementDto"] | null;
             /** @description 归类是否完整，不完整时不能通过 */
             placement_complete: boolean;
             /** @description 前几页的图片地址 */
@@ -24840,7 +24860,7 @@ export interface components {
             /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
             replaces: components["schemas"]["MangaProjectReplacesDto"] | null;
             /**
-             * @description 一话或整卷
+             * @description 按话或按卷
              * @enum {string}
              */
             scope: "CHAPTER" | "VOLUME";
@@ -24889,6 +24909,44 @@ export interface components {
             /** @description 0 未处理、10 已标注、20 已翻译、30 已嵌字 */
             state: number;
             width: number;
+        };
+        MangaProjectPlacementDto: {
+            /** @description 是否已按此放好 */
+            applied: boolean;
+            /** @enum {string} */
+            confidence: "high" | "medium" | "low";
+            /** @description 书上印的版本字样 */
+            edition: string | null;
+            evidence: components["schemas"]["MangaPlaceEvidenceDto"][];
+            /** @description 第一话 */
+            first: number | null;
+            /** @description 与投稿者填写的卷号或话号是否一致；未填写或无从比较时为空 */
+            hint_agrees: boolean | null;
+            /**
+             * @description 一卷、连续的几话、番外，或未能判断
+             * @enum {string}
+             */
+            kind: "volume" | "chapters" | "extra" | "unknown";
+            /** @description 最后一话 */
+            last: number | null;
+            /**
+             * @description 没有按此放好的原因
+             * @enum {string|null}
+             */
+            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "failed" | null;
+            /** @description 维基卷所在的版本套 */
+            set_entry_id: number | null;
+            /** @description 版本套不是原版时的名称 */
+            set_name: string | null;
+            /**
+             * @description 封面比对或模型看图
+             * @enum {string}
+             */
+            source: "mechanical" | "model";
+            /** @description 书上印的卷号 */
+            volume: number | null;
+            /** @description 对上的维基卷 */
+            wiki_volume: number | null;
         };
         MangaProjectProgressDto: {
             /** @description 页数 */
@@ -30893,6 +30951,8 @@ export interface components {
             chapter_number?: string | null;
             /** @enum {string} */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
+            /** @description 投稿者照书上填写的卷号或话号；只作判断位置的提示 */
+            hint?: string | null;
             /**
              * @description 只有尚未对应到章节的项目可以改
              * @enum {string}

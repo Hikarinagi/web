@@ -26,42 +26,19 @@ function extraNeedsName(input: { chapter_type?: string; chapter_name?: string | 
   return input.chapter_type === 'SERIALIZATION' || !!input.chapter_name?.trim()
 }
 
+const hintField = v.pipe(
+  v.nullish(v.string('卷号或话号应为文本'), ''),
+  v.trim(),
+  v.maxLength(40, '卷号或话号不能超过 40 个字符'),
+)
+
 export const createMangaProjectSchema = v.pipe(
   v.object({
     mode: v.picklist(['UPLOAD', 'TRANSLATION'], '请选择投稿类型'),
-    scope: v.picklist(['CHAPTER', 'VOLUME'], '请选择投稿范围'),
-    chapter_id: v.nullish(v.number('话应为数字')),
-    chapter_type: v.picklist(CHAPTER_TYPES, '请选择类型'),
-    chapter_number: chapterNumberField,
-    chapter_name: chapterNameField,
-    volume_id: volumeIdField,
+    hint: hintField,
     source_lang: v.pipe(v.string('请选择原文语言'), v.nonEmpty('请选择原文语言')),
     target_lang: v.nullish(v.string('译文语言应为文本'), ''),
   }),
-  v.forward(
-    v.partialCheck(
-      [['scope'], ['chapter_id'], ['chapter_type'], ['chapter_number']],
-      input => input.scope !== 'CHAPTER' || input.chapter_id != null || serialNeedsNumber(input),
-      '请填写话数',
-    ),
-    ['chapter_number'],
-  ),
-  v.forward(
-    v.partialCheck(
-      [['scope'], ['chapter_id'], ['chapter_type'], ['chapter_name']],
-      input => input.scope !== 'CHAPTER' || input.chapter_id != null || extraNeedsName(input),
-      '请填写标题',
-    ),
-    ['chapter_name'],
-  ),
-  v.forward(
-    v.partialCheck(
-      [['scope'], ['volume_id']],
-      input => input.scope === 'CHAPTER' || input.volume_id != null,
-      '请选择单行本',
-    ),
-    ['volume_id'],
-  ),
   v.forward(
     v.partialCheck(
       [['mode'], ['target_lang']],
@@ -81,6 +58,10 @@ export const createMangaProjectSchema = v.pipe(
 )
 
 export type CreateMangaProjectValues = v.InferOutput<typeof createMangaProjectSchema>
+
+export const mangaHintSchema = v.object({ hint: hintField })
+
+export type MangaHintValues = v.InferOutput<typeof mangaHintSchema>
 
 export const mangaChapterInfoSchema = v.pipe(
   v.object({

@@ -7,7 +7,7 @@
 
   const { confirm } = useHikariConfirm()
   const membersOpen = ref(false)
-  const infoOpen = ref(false)
+  const hintOpen = ref(false)
   const chapterOpen = ref(false)
   const importOpen = ref(false)
   const uploadOpen = ref(false)
@@ -38,10 +38,9 @@
 
   function open(action: string) {
     if (action === 'upload') uploadOpen.value = true
-    else if (action === 'chapter-info') {
-      if (props.project.status === 'PUBLISHED') chapterOpen.value = true
-      else infoOpen.value = true
-    } else if (action === 'series-info')
+    else if (action === 'hint') hintOpen.value = true
+    else if (action === 'chapter-info') chapterOpen.value = true
+    else if (action === 'series-info')
       void navigateTo(`/create/edit/manga/${props.project.series.id}`, {
         open: { target: '_blank' },
       })
@@ -71,8 +70,8 @@
 
 <template>
   <WorkbenchMemberDialog v-model:open="membersOpen" kind="manga" :project="project" />
-  <WorkbenchMangaProjectInfoDialog
-    v-model:visible="infoOpen"
+  <WorkbenchMangaProjectHintDialog
+    v-model:visible="hintOpen"
     :project="project"
     @saved="emit('refresh')"
   />

@@ -193,7 +193,7 @@
       >
         <Button size="sm" variant="ghost" @click="correct(row)">修正</Button>
         <Button size="sm" variant="ghost" tone="danger" @click="reject(row)">驳回</Button>
-        <Inline v-tooltip="row.placement_complete ? null : '归类不完整，请先修正'" as="span">
+        <Inline v-tooltip="row.placement_complete ? null : '还没有确定位置，请先修正'" as="span">
           <Button
             size="sm"
             :disabled="!row.placement_complete"

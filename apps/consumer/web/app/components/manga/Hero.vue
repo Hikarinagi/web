@@ -161,12 +161,7 @@
           :progress="progress"
           :favorited="favorited ?? false"
         />
-        <MangaHeroContribute
-          v-if="!finished"
-          :manga-id="manga.id"
-          :title="title"
-          :chapters="chapters"
-        />
+        <MangaHeroContribute v-if="!finished" :manga-id="manga.id" :title="title" />
       </Stack>
 
       <Stack

@@ -14,7 +14,9 @@
     id: props.volume.manga.id,
     title: props.volume.manga.name_cn || props.volume.manga.name,
   }))
-  const target = computed(() => ({ id: props.volume.id, label: getMangaVolumeTitle(props.volume) }))
+  const hint = computed(() =>
+    props.volume.volume_number == null ? undefined : `第 ${props.volume.volume_number} 卷`,
+  )
 </script>
 
 <template>
@@ -25,7 +27,7 @@
   <ContributeMangaStartDialog
     v-model:open="open"
     :series="series"
-    :volume="target"
-    scope="VOLUME"
+    :heading="getMangaVolumeTitle(volume)"
+    :hint="hint"
   />
 </template>

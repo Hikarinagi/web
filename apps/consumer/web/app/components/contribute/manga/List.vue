@@ -28,8 +28,8 @@
   const items = computed<Item[]>(() => (searching.value ? results.value : listed.value))
   const starting = shallowRef<{
     series: MangaTarget
-    chapter: { id: number; label: string } | null
-    volume: { id: number; label: string } | null
+    heading: string | null
+    hint?: string
   } | null>(null)
   const open = ref(false)
 
@@ -56,10 +56,13 @@
 
   function pick(item: Item) {
     if (!requireLogin()) return
+    const numbered = isChapter(item)
+      ? item.chapter_type === 'SERIALIZATION' && !!item.chapter_number
+      : isVolume(item) && item.volume_number != null
     starting.value = {
       series: { id: wanted(item) ? item.series.id : item.id, title: series(item) },
-      chapter: isChapter(item) ? { id: item.id, label: mangaChapterLabel(item) } : null,
-      volume: isVolume(item) ? { id: item.id, label: getMangaVolumeLabel(item) } : null,
+      heading: subtitle(item),
+      hint: numbered ? (subtitle(item) ?? undefined) : undefined,
     }
     open.value = true
   }
@@ -104,8 +107,7 @@
     v-if="starting"
     v-model:open="open"
     :series="starting.series"
-    :chapter="starting.chapter"
-    :volume="starting.volume"
-    :scope="starting.volume ? 'VOLUME' : undefined"
+    :heading="starting.heading"
+    :hint="starting.hint"
   />
 </template>

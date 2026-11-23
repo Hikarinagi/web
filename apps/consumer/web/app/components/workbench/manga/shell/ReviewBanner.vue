@@ -40,6 +40,7 @@
   <Alert :open="member && project.status === 'REVIEW'" tone="info" :closable="false">
     正在审核中。在审核完成之前你无法进行更改。
   </Alert>
+  <WorkbenchMangaShellPlacement :project="project" />
   <Alert :open="rejected" tone="warning" :closable="false" title="审核员退回了此投稿">
     <Stack gap="sm">
       <Text v-if="review?.reasons.length" size="sm">{{ review.reasons.join('；') }}</Text>

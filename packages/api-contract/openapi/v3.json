@@ -14437,6 +14437,12 @@
             ],
             "type": "string"
           },
+          "hint": {
+            "description": "投稿者照书上填写的卷号或话号，例如「3」「第 17 至 20 话」；只作判断位置的提示",
+            "maxLength": 40,
+            "nullable": true,
+            "type": "string"
+          },
           "mode": {
             "enum": [
               "UPLOAD",
@@ -14445,7 +14451,7 @@
             "type": "string"
           },
           "scope": {
-            "description": "一话或整卷，缺省为一话",
+            "description": "按话或按卷；不给出位置时，提交审核时由系统判断放在哪里",
             "enum": [
               "CHAPTER",
               "VOLUME"
@@ -14492,7 +14498,7 @@
             "type": "number"
           },
           "volume_id": {
-            "description": "单行本条目；整卷投稿必选，单话可选填所属单行本",
+            "description": "单行本条目；按卷投稿必选，按话可选填所属单行本",
             "minimum": 1,
             "nullable": true,
             "type": "number"
@@ -34671,6 +34677,30 @@
         ],
         "type": "object"
       },
+      "MangaPlaceEvidenceDto": {
+        "properties": {
+          "note": {
+            "description": "看到了什么",
+            "type": "string"
+          },
+          "page": {
+            "description": "投稿文件的第几页",
+            "nullable": true,
+            "type": "number"
+          },
+          "wiki_volume": {
+            "description": "对上的维基卷",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "wiki_volume",
+          "note"
+        ],
+        "type": "object"
+      },
       "MangaProducerRelationDto": {
         "properties": {
           "code": {
@@ -34978,6 +35008,11 @@
             "nullable": true,
             "type": "string"
           },
+          "hint": {
+            "description": "投稿者照书上填写的卷号或话号",
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "type": "number"
           },
@@ -35002,6 +35037,20 @@
           "page_count": {
             "type": "number"
           },
+          "placement": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectPlacementDto"
+              }
+            ],
+            "description": "系统对这份文件放在哪里的判断",
+            "nullable": true,
+            "type": "object"
+          },
+          "placement_complete": {
+            "description": "是否已确定放在哪一卷或哪一话，未确定时不能通过",
+            "type": "boolean"
+          },
           "published_at": {
             "format": "date-time",
             "nullable": true,
@@ -35018,7 +35067,7 @@
             "type": "object"
           },
           "scope": {
-            "description": "一话或整卷",
+            "description": "按话或按卷",
             "enum": [
               "CHAPTER",
               "VOLUME"
@@ -35127,6 +35176,8 @@
           "volume_number",
           "volume_id",
           "alternate",
+          "hint",
+          "placement",
           "held_from",
           "submitted_at",
           "withdrawn_count",
@@ -35139,6 +35190,7 @@
           "last_activity_at",
           "created_at",
           "replaces",
+          "placement_complete",
           "machine_label_percent",
           "published_at",
           "page_count",
@@ -35213,6 +35265,11 @@
             "nullable": true,
             "type": "string"
           },
+          "hint": {
+            "description": "投稿者照书上填写的卷号或话号",
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "type": "number"
           },
@@ -35229,6 +35286,16 @@
           },
           "owner": {
             "$ref": "#/components/schemas/UserRefDto"
+          },
+          "placement": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaProjectPlacementDto"
+              }
+            ],
+            "description": "系统对这份文件放在哪里的判断",
+            "nullable": true,
+            "type": "object"
           },
           "placement_complete": {
             "description": "归类是否完整，不完整时不能通过",
@@ -35255,7 +35322,7 @@
             "type": "object"
           },
           "scope": {
-            "description": "一话或整卷",
+            "description": "按话或按卷",
             "enum": [
               "CHAPTER",
               "VOLUME"
@@ -35333,6 +35400,8 @@
           "volume_number",
           "volume_id",
           "alternate",
+          "hint",
+          "placement",
           "held_from",
           "submitted_at",
           "withdrawn_count",
@@ -35470,6 +35539,116 @@
           "done_count",
           "machine_count",
           "assisted_count"
+        ],
+        "type": "object"
+      },
+      "MangaProjectPlacementDto": {
+        "properties": {
+          "applied": {
+            "description": "是否已按此放好",
+            "type": "boolean"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "type": "string"
+          },
+          "edition": {
+            "description": "书上印的版本字样",
+            "nullable": true,
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/MangaPlaceEvidenceDto"
+            },
+            "type": "array"
+          },
+          "first": {
+            "description": "第一话",
+            "nullable": true,
+            "type": "number"
+          },
+          "hint_agrees": {
+            "description": "与投稿者填写的卷号或话号是否一致；未填写或无从比较时为空",
+            "nullable": true,
+            "type": "boolean"
+          },
+          "kind": {
+            "description": "一卷、连续的几话、番外，或未能判断",
+            "enum": [
+              "volume",
+              "chapters",
+              "extra",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "last": {
+            "description": "最后一话",
+            "nullable": true,
+            "type": "number"
+          },
+          "problem": {
+            "description": "没有按此放好的原因",
+            "enum": [
+              "no_volume",
+              "several",
+              "extra",
+              "taken",
+              "refused",
+              "failed"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "set_entry_id": {
+            "description": "维基卷所在的版本套",
+            "nullable": true,
+            "type": "number"
+          },
+          "set_name": {
+            "description": "版本套不是原版时的名称",
+            "nullable": true,
+            "type": "string"
+          },
+          "source": {
+            "description": "封面比对或模型看图",
+            "enum": [
+              "mechanical",
+              "model"
+            ],
+            "type": "string"
+          },
+          "volume": {
+            "description": "书上印的卷号",
+            "nullable": true,
+            "type": "number"
+          },
+          "wiki_volume": {
+            "description": "对上的维基卷",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "volume",
+          "first",
+          "last",
+          "edition",
+          "wiki_volume",
+          "set_entry_id",
+          "set_name",
+          "confidence",
+          "evidence",
+          "source",
+          "applied",
+          "hint_agrees",
+          "problem"
         ],
         "type": "object"
       },
@@ -58966,6 +59145,12 @@
               "ONESHOT",
               "VOLUME"
             ],
+            "type": "string"
+          },
+          "hint": {
+            "description": "投稿者照书上填写的卷号或话号；只作判断位置的提示",
+            "maxLength": 40,
+            "nullable": true,
             "type": "string"
           },
           "scope": {

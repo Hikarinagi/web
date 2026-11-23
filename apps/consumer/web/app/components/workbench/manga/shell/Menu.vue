@@ -20,11 +20,7 @@
     (props.project.viewer_capabilities as readonly string[]).includes(capability)
   const owner = computed(() => props.project.viewer_role === 'OWNER')
   const translation = computed(() => props.project.mode === 'TRANSLATION')
-  const wholeVolume = computed(() =>
-    props.project.status === 'PUBLISHED'
-      ? props.project.chapter?.chapter_type === 'VOLUME'
-      : props.project.scope === 'VOLUME',
-  )
+  const wholeVolume = computed(() => props.project.chapter?.chapter_type === 'VOLUME')
 </script>
 
 <template>
@@ -38,7 +34,14 @@
         上传页面
       </DropdownMenuItem>
       <DropdownMenuItem
-        v-if="editable && can('manage') && (project.status !== 'PUBLISHED' || project.chapter)"
+        v-if="editable && can('manage') && project.status !== 'PUBLISHED'"
+        @select="emit('select', 'hint')"
+      >
+        <template #icon><Pencil /></template>
+        书上的卷号或话号
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        v-else-if="editable && can('manage') && project.chapter"
         @select="emit('select', 'chapter-info')"
       >
         <template #icon><Pencil /></template>

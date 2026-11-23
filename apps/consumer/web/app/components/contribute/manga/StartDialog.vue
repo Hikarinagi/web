@@ -6,12 +6,10 @@
   withDefaults(
     defineProps<{
       series: MangaTarget
-      chapter?: { id: number; label: string } | null
-      volume?: { id: number; label: string } | null
-      scope?: 'CHAPTER' | 'VOLUME'
-      newChapter?: string
+      heading?: string | null
+      hint?: string
     }>(),
-    { chapter: null, volume: null, scope: undefined, newChapter: undefined },
+    { heading: null, hint: undefined },
   )
   const open = defineModel<boolean>('open', { required: true })
 
@@ -20,23 +18,15 @@
 </script>
 
 <template>
-  <Dialog
-    v-model:open="open"
-    :title="chapter?.label ?? volume?.label ?? series.title"
-    size="sm"
-    :locked="submitting"
-  >
+  <Dialog v-model:open="open" :title="heading ?? series.title" size="sm" :locked="submitting">
     <template #content>
       <Stack gap="lg">
-        <Text v-if="chapter || volume" weight="medium">{{ series.title }}</Text>
+        <Text v-if="heading" weight="medium">{{ series.title }}</Text>
         <StartForm
           ref="form"
-          :key="`${series.id}-${chapter?.id ?? 'chapter'}-${volume?.id ?? 'volume'}`"
+          :key="`${series.id}-${hint ?? ''}`"
           :series="series"
-          :chapter-id="chapter?.id ?? null"
-          :volume-id="volume?.id ?? null"
-          :scope="scope"
-          :new-chapter="newChapter"
+          :hint="hint"
           lock-series
         />
       </Stack>

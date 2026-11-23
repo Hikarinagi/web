@@ -24,22 +24,15 @@
     if (props.tasks.some(task => task.status === 'PENDING' || task.status === 'RUNNING')) {
       return '页面任务完成后可提交'
     }
-    const project = props.project
-    if (!project.chapter) {
-      if (project.scope === 'VOLUME' && project.volume_id === null) return '请先选择单行本'
-      if (project.scope === 'CHAPTER' && project.chapter_type === 'SERIALIZATION') {
-        if (!project.chapter_number) return '请先填写话数'
-      } else if (project.scope === 'CHAPTER' && !project.chapter_name) {
-        return '请先填写标题'
-      }
-    }
     const missing = props.pages.filter(page => !page.rendered_url).length
     return translation.value && missing > 0 ? `${missing} 页仍然没有成品图` : ''
   })
   const submitHint = computed(() =>
-    props.project.replaces
-      ? `审核通过后，上传的图片将替换${projectEpisode(props.project)}现有的 ${props.project.replaces.page_count} 页。`
-      : undefined,
+    !props.project.placement_complete
+      ? '提交后，系统会根据封面、目录和标题页判断这份文件放在哪一卷或哪几话，再交给审核员。'
+      : props.project.replaces
+        ? `审核通过后，上传的图片将替换${projectEpisode(props.project)}现有的 ${props.project.replaces.page_count} 页。`
+        : undefined,
   )
 </script>
 

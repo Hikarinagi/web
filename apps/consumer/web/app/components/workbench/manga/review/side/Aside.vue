@@ -7,7 +7,7 @@
 
 <template>
   <ScrollArea class="bg-canvas">
-    <Stack as="aside" gap="lg" class="p-4" aria-label="检查、批注和归类">
+    <Stack as="aside" gap="lg" class="p-4" aria-label="检查、批注和位置">
       <WorkbenchMangaReviewSideChecks
         :rerunning="rerunning"
         @rerun="emit('rerun')"
