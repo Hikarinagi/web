@@ -30,14 +30,20 @@ const CONTENTS_RECENT_MS = 45 * 24 * 60 * 60 * 1000
 const CONTENTS_RECENT_COUNT = 4
 const CONTENTS_BULK_DAY = 10
 
-export function contentsUnits(items: ContentsItem[], set: number | null = null): ContentsUnits {
+export function contentsUnits(
+  items: ContentsItem[],
+  sets: { id: number; original: boolean }[] = [],
+): ContentsUnits {
   const units: ContentsUnits = { chapter: [], volume: [], extra: [] }
   for (const item of items) {
-    const unit = mangaReadingUnit(item.chapter_type)
-    if (!item.readable || (unit === 'volume' && set !== null && volumeSetKey(item) !== set))
-      continue
-    units[unit].push(item)
+    if (item.readable) units[mangaReadingUnit(item.chapter_type)].push(item)
   }
+  const ranks = new Map(sets.map((set, index) => [set.original ? 0 : set.id, index]))
+  const rank = (item: ContentsItem) => {
+    const key = volumeSetKey(item)
+    return key === 0 ? -1 : (ranks.get(key) ?? sets.length)
+  }
+  units.volume.sort((a, b) => rank(a) - rank(b))
   return units
 }
 
@@ -147,9 +153,11 @@ export function continueTarget(
   if (!unit) {
     return { id: progress.chapter.id, label: mangaChapterLabel(progress.chapter), resume: true }
   }
-  const list = units[unit]
-  const index = list.findIndex(item => item.id === progress.chapter.id)
-  const current = list[index]!
+  const current = units[unit].find(item => item.id === progress.chapter.id)!
+  const list = units[unit].filter(
+    item => unit !== 'volume' || volumeSetKey(item) === volumeSetKey(current),
+  )
+  const index = list.indexOf(current)
   const target = readIds.has(current.id) ? (list[index + 1] ?? current) : current
   return { id: target.id, label: mangaChapterLabel(target), resume: true }
 }
@@ -157,11 +165,14 @@ export function continueTarget(
 export function contentsStatus(units: ContentsUnits, finished: boolean): string | null {
   const unit = units.chapter.length ? 'chapter' : units.volume.length ? 'volume' : null
   if (!unit) return null
-  const last = units[unit].at(-1)!
+  const key = volumeSetKey(units.volume[0] ?? {})
+  const list =
+    unit === 'chapter' ? units.chapter : units.volume.filter(item => volumeSetKey(item) === key)
+  const last = list.at(-1)!
   if (finished) {
     return unit === 'chapter'
       ? `全 ${mangaChapterNumber(last.chapter_number ?? '')} 话`
-      : `全 ${last.volume_number ?? units.volume.length} 卷`
+      : `全 ${last.volume_number ?? list.length} 卷`
   }
   return `更新至 ${mangaChapterLabel({ ...last, ordinal: 1 })}`
 }

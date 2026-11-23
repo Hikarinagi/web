@@ -9640,20 +9640,6 @@
             ],
             "type": "string"
           },
-          "part": {
-            "description": "整卷投稿的第几部分",
-            "maximum": 50,
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          },
-          "part_count": {
-            "description": "这一卷共分几部分",
-            "maximum": 50,
-            "minimum": 2,
-            "nullable": true,
-            "type": "number"
-          },
           "scope": {
             "description": "只有尚未对应到章节的项目可以改",
             "enum": [
@@ -14435,20 +14421,6 @@
               "TRANSLATION"
             ],
             "type": "string"
-          },
-          "part": {
-            "description": "整卷投稿只含这一卷的一部分时填写第几部分，与 part_count 一起填写",
-            "maximum": 50,
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          },
-          "part_count": {
-            "description": "这一卷共分几部分",
-            "maximum": 50,
-            "minimum": 2,
-            "nullable": true,
-            "type": "number"
           },
           "scope": {
             "description": "一话或整卷，缺省为一话",
@@ -29782,13 +29754,6 @@
           "download_times": {
             "type": "number"
           },
-          "editions": {
-            "description": "记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列",
-            "items": {
-              "$ref": "#/components/schemas/VolumeEditionDto"
-            },
-            "type": "array"
-          },
           "entry_id": {
             "description": "条目 ID",
             "type": "number"
@@ -29956,7 +29921,6 @@
           "online_reading_translation",
           "epub_provider",
           "volume_set",
-          "editions",
           "views",
           "read_times",
           "download_times",
@@ -32912,26 +32876,6 @@
         ],
         "type": "object"
       },
-      "MangaChapterPartsDto": {
-        "properties": {
-          "count": {
-            "description": "这一卷共分几册",
-            "type": "number"
-          },
-          "held": {
-            "description": "已经能读的册，按册号从小到大",
-            "items": {
-              "type": "number"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "held",
-          "count"
-        ],
-        "type": "object"
-      },
       "MangaChapterRelationDto": {
         "properties": {
           "chapter_number": {
@@ -32982,16 +32926,6 @@
           "page_count": {
             "type": "number"
           },
-          "parts": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterPartsDto"
-              }
-            ],
-            "description": "整卷只到了电子分册的前几册时，能读的是哪几册；整卷齐全或不是分册时为空",
-            "nullable": true,
-            "type": "object"
-          },
           "publication_date": {
             "format": "date-time",
             "nullable": true,
@@ -33038,7 +32972,6 @@
           "page_count",
           "created_at",
           "cover",
-          "parts",
           "readable",
           "collecting",
           "guest_readable",
@@ -34757,16 +34690,6 @@
           "page_count": {
             "type": "number"
           },
-          "parts": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterPartsDto"
-              }
-            ],
-            "description": "整卷只到了电子分册的前几册时，能读的是哪几册",
-            "nullable": true,
-            "type": "object"
-          },
           "title": {
             "nullable": true,
             "type": "string"
@@ -34794,7 +34717,6 @@
           "title",
           "ordinal",
           "page_count",
-          "parts",
           "volume_set"
         ],
         "type": "object"
@@ -35027,16 +34949,6 @@
           "page_count": {
             "type": "number"
           },
-          "part": {
-            "description": "整卷投稿的第几部分，整卷为空",
-            "nullable": true,
-            "type": "number"
-          },
-          "part_count": {
-            "description": "这一卷共分几部分",
-            "nullable": true,
-            "type": "number"
-          },
           "published_at": {
             "format": "date-time",
             "nullable": true,
@@ -35161,8 +35073,6 @@
           "chapter_name",
           "volume_number",
           "volume_id",
-          "part",
-          "part_count",
           "alternate",
           "held_from",
           "submitted_at",
@@ -35267,16 +35177,6 @@
           "owner": {
             "$ref": "#/components/schemas/UserRefDto"
           },
-          "part": {
-            "description": "整卷投稿的第几部分，整卷为空",
-            "nullable": true,
-            "type": "number"
-          },
-          "part_count": {
-            "description": "这一卷共分几部分",
-            "nullable": true,
-            "type": "number"
-          },
           "placement_complete": {
             "description": "归类是否完整，不完整时不能通过",
             "type": "boolean"
@@ -35379,8 +35279,6 @@
           "chapter_name",
           "volume_number",
           "volume_id",
-          "part",
-          "part_count",
           "alternate",
           "held_from",
           "submitted_at",
@@ -36237,16 +36135,6 @@
           "page_count": {
             "type": "number"
           },
-          "parts": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/MangaChapterPartsDto"
-              }
-            ],
-            "description": "整卷只到了电子分册的前几册时，能读的是哪几册",
-            "nullable": true,
-            "type": "object"
-          },
           "title": {
             "nullable": true,
             "type": "string"
@@ -36274,7 +36162,6 @@
           "title",
           "ordinal",
           "page_count",
-          "parts",
           "volume_set"
         ],
         "type": "object"
@@ -37839,13 +37726,6 @@
             "nullable": true,
             "type": "object"
           },
-          "editions": {
-            "description": "记在这一卷下、注明了所收部分的出版版本，如只收一部分的电子版分册",
-            "items": {
-              "$ref": "#/components/schemas/MangaVolumePartialEditionDto"
-            },
-            "type": "array"
-          },
           "id": {
             "type": "number"
           },
@@ -37867,8 +37747,7 @@
           "volume_number",
           "name",
           "name_cn",
-          "chapters",
-          "editions"
+          "chapters"
         ],
         "type": "object"
       },
@@ -37904,13 +37783,6 @@
             "description": "显示用的封面，本卷没有封面时为所属系列的封面",
             "nullable": true,
             "type": "object"
-          },
-          "editions": {
-            "description": "记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列",
-            "items": {
-              "$ref": "#/components/schemas/VolumeEditionDto"
-            },
-            "type": "array"
           },
           "entry_id": {
             "description": "条目 ID",
@@ -38032,7 +37904,6 @@
           "price_tax_included",
           "publisher",
           "chapter_count",
-          "editions",
           "summary",
           "summary_cn",
           "publication_date",
@@ -38047,28 +37918,6 @@
           "updated_at",
           "revised_at",
           "manga"
-        ],
-        "type": "object"
-      },
-      "MangaVolumePartialEditionDto": {
-        "properties": {
-          "entry_id": {
-            "description": "出版版本条目",
-            "type": "number"
-          },
-          "note": {
-            "description": "维基注明的所收部分",
-            "type": "string"
-          },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "entry_id",
-          "title",
-          "note"
         ],
         "type": "object"
       },
@@ -59040,20 +58889,6 @@
             ],
             "type": "string"
           },
-          "part": {
-            "description": "整卷投稿的第几部分",
-            "maximum": 50,
-            "minimum": 1,
-            "nullable": true,
-            "type": "number"
-          },
-          "part_count": {
-            "description": "这一卷共分几部分",
-            "maximum": 50,
-            "minimum": 2,
-            "nullable": true,
-            "type": "number"
-          },
           "scope": {
             "description": "只有尚未对应到章节的项目可以改",
             "enum": [
@@ -61942,95 +61777,6 @@
           "chinese_name",
           "image",
           "versions"
-        ],
-        "type": "object"
-      },
-      "VolumeEditionDto": {
-        "properties": {
-          "currency": {
-            "nullable": true,
-            "type": "string"
-          },
-          "entry_id": {
-            "description": "出版版本条目 ID",
-            "type": "number"
-          },
-          "format": {
-            "description": "出版形态编码：TANKOBON、BUNKO、SPECIAL、DIGITAL、REVISED、EXPANDED、OMNIBUS、BOXED_SET、TRANSLATION",
-            "nullable": true,
-            "type": "string"
-          },
-          "isbn": {
-            "nullable": true,
-            "type": "string"
-          },
-          "labels": {
-            "items": {
-              "$ref": "#/components/schemas/VolumeSetProducerDto"
-            },
-            "type": "array"
-          },
-          "page_count": {
-            "nullable": true,
-            "type": "number"
-          },
-          "part": {
-            "description": "维基照录的所收部分，如只收这一卷一部分的电子分册；收录整卷时为空",
-            "nullable": true,
-            "type": "string"
-          },
-          "price": {
-            "nullable": true,
-            "type": "number"
-          },
-          "publishers": {
-            "items": {
-              "$ref": "#/components/schemas/VolumeSetProducerDto"
-            },
-            "type": "array"
-          },
-          "release_date": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "release_date_precision": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/DatePrecision"
-              }
-            ],
-            "nullable": true
-          },
-          "release_status": {
-            "description": "发售状态编码：PLANNED、RELEASED、CANCELLED",
-            "nullable": true,
-            "type": "string"
-          },
-          "tax_included": {
-            "nullable": true,
-            "type": "boolean"
-          },
-          "title": {
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "entry_id",
-          "title",
-          "format",
-          "part",
-          "isbn",
-          "publishers",
-          "labels",
-          "release_date",
-          "release_date_precision",
-          "release_status",
-          "price",
-          "currency",
-          "tax_included",
-          "page_count"
         ],
         "type": "object"
       },

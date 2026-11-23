@@ -20,7 +20,7 @@
     mangaId: number
     title: string
     chapters: MangaPageData['chapters']
-    setKey: number | null
+    sets: MangaPageData['sets']
     myRate: MangaPageData['my_rate']
     progress: MangaPageData['progress']
     favorited: boolean
@@ -28,7 +28,7 @@
 
   const pickerTitle = computed(() => `将「${props.title}」添加到收藏夹`)
 
-  const units = computed(() => contentsUnits(props.chapters, props.setKey))
+  const units = computed(() => contentsUnits(props.chapters, props.sets))
   const latest = computed(() => units.value.chapter.at(-1) ?? null)
   const first = computed(() => units.value.chapter[0] ?? null)
   const target = computed(() =>

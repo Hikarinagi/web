@@ -1,6 +1,4 @@
-import { effectScope, ref } from 'vue'
-import { shelfSets, type LightNovelVolumeSet } from '~/features/light-novel/sets'
-import { useShelfSet } from '~/features/light-novel/useShelfSet'
+import { shelfGroups, type LightNovelVolumeSet } from '~/features/light-novel/sets'
 
 type Volume = LightNovelVolumeSet['volumes'][number]
 
@@ -35,52 +33,27 @@ const original = (readable: boolean) =>
 const reissue = (readable: boolean) =>
   set(61, { name: '新装版' }, [volume(11, readable), volume(12, false), volume(13, false)])
 
-describe('shelfSets', () => {
-  it('offers only the sets that have a volume to read, named with their volume count', () => {
-    expect(shelfSets([original(true), reissue(true)])).toEqual([
-      { value: 60, label: '電撃文庫 2 卷', key: 0, original: true },
-      { value: 61, label: '新装版 3 卷', key: 61, original: false },
+describe('shelfGroups', () => {
+  const shelf = (sets: LightNovelVolumeSet[]) =>
+    shelfGroups({
+      volumes: sets.find(item => item.original)?.volumes ?? [volume(99, false)],
+      sets,
+    }).map(group => [group.key, group.name, group.original, group.items.map(item => item.id)])
+
+  it('lists every set that has a volume to read, the original first', () => {
+    expect(shelf([original(true), reissue(true)])).toEqual([
+      [60, '電撃文庫', true, [1, 2]],
+      [61, '新装版', false, [11, 12, 13]],
     ])
-    expect(shelfSets([original(false), reissue(true)]).map(option => option.value)).toEqual([61])
-    expect(shelfSets([original(false), reissue(false)])).toEqual([])
-  })
-})
-
-describe('useShelfSet', () => {
-  function setup(sets: LightNovelVolumeSet[], chosen: number | null = null) {
-    const volumes = sets.find(item => item.original)?.volumes ?? [volume(99, false)]
-    const choice = ref<number | null>(chosen)
-    const scope = effectScope()
-    const shelf = scope.run(() => useShelfSet(() => ({ volumes, sets }), choice))!
-    return { shelf, choice, scope }
-  }
-
-  it('shows the original set when both sets have volumes to read, and the chosen one after a switch', () => {
-    const { shelf, choice } = setup([original(true), reissue(true)])
-    expect(shelf.model.value).toBe(60)
-    expect(shelf.volumes.value.map(item => item.id)).toEqual([1, 2])
-    shelf.model.value = 61
-    expect(choice.value).toBe(61)
-    expect(shelf.volumes.value.map(item => item.id)).toEqual([11, 12, 13])
   })
 
-  it('shows the only set with volumes to read even when it is not the original', () => {
-    const { shelf } = setup([original(false), reissue(true)])
-    expect(shelf.options.value).toHaveLength(1)
-    expect(shelf.model.value).toBe(61)
-    expect(shelf.volumes.value.map(item => item.id)).toEqual([11, 12, 13])
+  it('lists the only set with volumes to read even when it is not the original', () => {
+    expect(shelf([original(false), reissue(true)])).toEqual([[61, '新装版', false, [11, 12, 13]]])
+    expect(shelf([original(true), reissue(false)])).toEqual([[60, '電撃文庫', true, [1, 2]]])
   })
 
-  it('ignores a chosen set that has nothing to read', () => {
-    const { shelf } = setup([original(true), reissue(false)], 61)
-    expect(shelf.model.value).toBe(60)
-    expect(shelf.volumes.value.map(item => item.id)).toEqual([1, 2])
-  })
-
-  it('falls back on the volumes of the original set when no set has anything to read', () => {
-    expect(
-      setup([original(false), reissue(false)]).shelf.volumes.value.map(item => item.id),
-    ).toEqual([1, 2])
-    expect(setup([]).shelf.volumes.value.map(item => item.id)).toEqual([99])
+  it('falls back on the volumes of the work when no set has anything to read', () => {
+    expect(shelf([original(false), reissue(false)])).toEqual([[0, '', true, [1, 2]]])
+    expect(shelf([])).toEqual([[0, '', true, [99]]])
   })
 })

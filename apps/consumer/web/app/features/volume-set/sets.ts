@@ -11,26 +11,15 @@ export interface VolumeDrawerRow {
   meta: string
 }
 
-export interface VolumeSetOption {
-  value: number
-  label: string
+export interface VolumeGroup<T> {
   key: number
+  name: string
   original: boolean
+  items: T[]
 }
 
-type VolumeSetSource = VolumeSetNameSource & { id: number; volume_count: number }
-
-export function volumeSetLabel(set: VolumeSetSource) {
+export function volumeSetLabel(set: VolumeSetNameSource & { volume_count: number }) {
   return `${volumeSetName(set)} ${set.volume_count} 卷`
-}
-
-export function volumeSetOption(set: VolumeSetSource): VolumeSetOption {
-  return {
-    value: set.id,
-    label: volumeSetLabel(set),
-    key: set.original ? 0 : set.id,
-    original: set.original,
-  }
 }
 
 export function volumeDrawerMeta(volume: { publication_date: string | null; isbn: string | null }) {
@@ -40,16 +29,4 @@ export function volumeDrawerMeta(volume: { publication_date: string | null; isbn
   ]
     .filter(Boolean)
     .join('，')
-}
-
-export function chosenSetOption(
-  options: VolumeSetOption[],
-  chosen: number | null | undefined,
-): VolumeSetOption | null {
-  return (
-    options.find(item => item.value === chosen) ??
-    options.find(item => item.original) ??
-    options[0] ??
-    null
-  )
 }

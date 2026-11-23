@@ -81,9 +81,6 @@
           </LineClamp>
           <WorkIntro v-else :edit-to="getRevisionEditPath('light-novel-volume', volumeId)" />
         </Stack>
-        <Stack v-if="data.volume.editions.length" gap="md">
-          <EntryVolumeEditions :editions="data.volume.editions" />
-        </Stack>
         <Stack v-if="data.volumes.length" gap="md">
           <LightNovelVolumeSeriesStrip
             :volumes="data.volumes"

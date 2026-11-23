@@ -4,8 +4,7 @@
   import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { monthText } from '~/features/entry/date'
-  import { useShelfSet } from '~/features/light-novel/useShelfSet'
-  import { useRouteSet } from '~/features/volume-set/composables/useSetChoice'
+  import { shelfGroups } from '~/features/light-novel/sets'
   import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
 
   const props = defineProps<{
@@ -31,7 +30,7 @@
       : '',
   )
   const cover = computed(() => getLightNovelCover(props.lightNovel))
-  const { volumes: shown } = useShelfSet(() => props, useRouteSet())
+  const shown = computed(() => shelfGroups(props)[0]!.items)
   const every = computed(() =>
     props.sets.length ? props.sets.flatMap(set => set.volumes) : props.volumes,
   )

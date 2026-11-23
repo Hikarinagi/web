@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { Button, Inline } from '@hina-ui/vue'
   import { BookOpen } from '@lucide/vue'
-  import { mangaPartsLabel } from '@hikarinagi/shared'
   import { NuxtLink } from '#components'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
   import { chaptersInVolume, wholeVolumeOf } from '~/features/manga/volumes'
@@ -23,7 +22,6 @@
     if (whole.value?.readable) return whole.value
     return scoped.value.find(chapter => chapter.readable) ?? null
   })
-  const parts = computed(() => (start.value === whole.value ? whole.value?.parts : null) ?? null)
   const continuing = computed(
     () =>
       !!start.value &&
@@ -44,7 +42,7 @@
   <Inline gap="sm" align="center">
     <Button v-if="readPath" :as="NuxtLink" :to="readPath" class="w-full sm:w-auto">
       <template #icon><BookOpen /></template>
-      {{ continuing ? '继续阅读' : parts ? `阅读本卷（${mangaPartsLabel(parts)}）` : '阅读本卷' }}
+      {{ continuing ? '继续阅读' : '阅读本卷' }}
     </Button>
     <Button v-else-if="upcoming" disabled class="w-full sm:w-auto">
       <template #icon><BookOpen /></template>

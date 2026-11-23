@@ -4,18 +4,12 @@ export type MangaChapterKind = 'SERIALIZATION' | 'EXTRA' | 'ONESHOT' | 'VOLUME'
 
 export type MangaReadingUnit = 'chapter' | 'volume' | 'extra'
 
-export interface MangaChapterParts {
-  held: number[]
-  count: number
-}
-
 export interface MangaChapterLabelSource {
   chapter_type: MangaChapterKind
   chapter_number: string | null
   volume_number: number | null
   title: string | null
   ordinal?: number | null
-  parts?: MangaChapterParts | null
   volume_set?: VolumeSetRef | null
 }
 
@@ -58,17 +52,12 @@ function suffix(ordinal: number | null | undefined): string {
   return ordinal && ordinal > 1 ? `（${ordinal}）` : ''
 }
 
-export function mangaPartsLabel(parts: MangaChapterParts): string {
-  const names = parts.count === 2 ? ['上', '下'] : parts.count === 3 ? ['上', '中', '下'] : null
-  return parts.held.map(part => names?.[part - 1] ?? `${part}/${parts.count}`).join('、')
-}
-
 export function mangaChapterLabel(item: MangaChapterLabelSource): string {
   const title = item.title?.trim()
   const unit = mangaReadingUnit(item.chapter_type)
   if (unit === 'volume') {
     const set = item.volume_set && !item.volume_set.original ? `${item.volume_set.name} ` : ''
-    const tail = `${suffix(item.ordinal)}${item.parts ? `（${mangaPartsLabel(item.parts)}）` : ''}`
+    const tail = suffix(item.ordinal)
     if (item.volume_number != null) return `${set}第 ${item.volume_number} 卷${tail}`
     return `${set}${title || '单行本'}${tail}`
   }

@@ -4,7 +4,6 @@
   import type { MangaReadingUnit } from '@hikarinagi/shared'
   import type { ContentsItem, ContentsUnits } from '~/features/manga/contents'
   import { useContentsDesc } from '~/features/manga/composables/useContents'
-  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
   defineOptions({ name: 'MangaReaderDirectory' })
 
@@ -12,7 +11,6 @@
     narrow: boolean
     dark: boolean
     units: ContentsUnits
-    sets: VolumeSetOption[]
     status: string | null
     currentId: number | null
     currentPage: number
@@ -23,7 +21,6 @@
   const open = defineModel<boolean>('open', { required: true })
   const unit = defineModel<MangaReadingUnit>('unit', { required: true })
   const range = defineModel<string | null>('range', { default: null })
-  const set = defineModel<number | null>('set', { default: null })
 
   const desc = useContentsDesc()
   const scroller = useTemplateRef<InstanceType<typeof ScrollArea>>('scroller')
@@ -48,8 +45,6 @@
     v-model:open="open"
     v-model:unit="unit"
     v-model:range="range"
-    v-model:set="set"
-    :sets="sets"
     :units="units"
     :status="status"
     :current-id="currentId"
@@ -86,8 +81,6 @@
           <MangaContentsBrowser
             v-model:unit="unit"
             v-model:range="range"
-            v-model:set="set"
-            :sets="sets"
             :units="units"
             :current-id="currentId"
             :current-page="currentPage"

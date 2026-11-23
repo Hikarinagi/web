@@ -18371,10 +18371,6 @@ export interface components {
             chapter_number?: string | null;
             /** @enum {string} */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /** @description 整卷投稿的第几部分 */
-            part?: number | null;
-            /** @description 这一卷共分几部分 */
-            part_count?: number | null;
             /**
              * @description 只有尚未对应到章节的项目可以改
              * @enum {string}
@@ -19542,10 +19538,6 @@ export interface components {
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
-            /** @description 整卷投稿只含这一卷的一部分时填写第几部分，与 part_count 一起填写 */
-            part?: number | null;
-            /** @description 这一卷共分几部分 */
-            part_count?: number | null;
             /**
              * @description 一话或整卷，缺省为一话
              * @enum {string}
@@ -23417,8 +23409,6 @@ export interface components {
             /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             download_times: number;
-            /** @description 记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列 */
-            editions: components["schemas"]["VolumeEditionDto"][];
             /** @description 条目 ID */
             entry_id: number;
             /** @description 当前电子书由用户投稿并通过审核时为投稿者，其他来源为空 */
@@ -24222,12 +24212,6 @@ export interface components {
             dropped_sources: number;
             moved_sources: number;
         };
-        MangaChapterPartsDto: {
-            /** @description 这一卷共分几册 */
-            count: number;
-            /** @description 已经能读的册，按册号从小到大 */
-            held: number[];
-        };
         MangaChapterRelationDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
@@ -24248,8 +24232,6 @@ export interface components {
             /** @description 同一单位内同号或同名的第几项，从 1 开始 */
             ordinal: number;
             page_count: number;
-            /** @description 整卷只到了电子分册的前几册时，能读的是哪几册；整卷齐全或不是分册时为空 */
-            parts: components["schemas"]["MangaChapterPartsDto"] | null;
             /** Format: date-time */
             publication_date: string | null;
             readable: boolean;
@@ -24699,8 +24681,6 @@ export interface components {
             /** @description 同一单位内同号或同名的第几项，从 1 开始 */
             ordinal: number;
             page_count: number;
-            /** @description 整卷只到了电子分册的前几册时，能读的是哪几册 */
-            parts: components["schemas"]["MangaChapterPartsDto"] | null;
             title: string | null;
             volume_number: number | null;
             /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
@@ -24771,10 +24751,6 @@ export interface components {
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
             page_count: number;
-            /** @description 整卷投稿的第几部分，整卷为空 */
-            part: number | null;
-            /** @description 这一卷共分几部分 */
-            part_count: number | null;
             /** Format: date-time */
             published_at: string | null;
             /** @description 目标卷或话当前生效的版本不是投稿且含有页面时，通过后将被替换 */
@@ -24827,10 +24803,6 @@ export interface components {
             /** @enum {string} */
             mode: "UPLOAD" | "TRANSLATION";
             owner: components["schemas"]["UserRefDto"];
-            /** @description 整卷投稿的第几部分，整卷为空 */
-            part: number | null;
-            /** @description 这一卷共分几部分 */
-            part_count: number | null;
             /** @description 归类是否完整，不完整时不能通过 */
             placement_complete: boolean;
             /** @description 前几页的图片地址 */
@@ -25091,8 +25063,6 @@ export interface components {
             /** @description 同一单位内同号或同名的第几项，从 1 开始 */
             ordinal: number;
             page_count: number;
-            /** @description 整卷只到了电子分册的前几册时，能读的是哪几册 */
-            parts: components["schemas"]["MangaChapterPartsDto"] | null;
             title: string | null;
             volume_number: number | null;
             /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
@@ -25500,8 +25470,6 @@ export interface components {
         };
         MangaVolumeContentsDto: {
             chapters: components["schemas"]["MangaVolumeChapterRangeDto"] | null;
-            /** @description 记在这一卷下、注明了所收部分的出版版本，如只收一部分的电子版分册 */
-            editions: components["schemas"]["MangaVolumePartialEditionDto"][];
             id: number;
             name: string | null;
             name_cn: string | null;
@@ -25515,8 +25483,6 @@ export interface components {
             created_at: string;
             /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
-            /** @description 记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列 */
-            editions: components["schemas"]["VolumeEditionDto"][];
             /** @description 条目 ID */
             entry_id: number;
             id: number;
@@ -25547,13 +25513,6 @@ export interface components {
             updated_at: string;
             views: number;
             volume_number: number | null;
-        };
-        MangaVolumePartialEditionDto: {
-            /** @description 出版版本条目 */
-            entry_id: number;
-            /** @description 维基注明的所收部分 */
-            note: string;
-            title: string | null;
         };
         MangaVolumeRelationDto: {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
@@ -30900,10 +30859,6 @@ export interface components {
             chapter_number?: string | null;
             /** @enum {string} */
             chapter_type?: "SERIALIZATION" | "EXTRA" | "ONESHOT" | "VOLUME";
-            /** @description 整卷投稿的第几部分 */
-            part?: number | null;
-            /** @description 这一卷共分几部分 */
-            part_count?: number | null;
             /**
              * @description 只有尚未对应到章节的项目可以改
              * @enum {string}
@@ -31670,27 +31625,6 @@ export interface components {
             text: string;
             /** @description Products the voice applies to; empty for every version */
             versions: components["schemas"]["VersionRefDto"][];
-        };
-        VolumeEditionDto: {
-            currency: string | null;
-            /** @description 出版版本条目 ID */
-            entry_id: number;
-            /** @description 出版形态编码：TANKOBON、BUNKO、SPECIAL、DIGITAL、REVISED、EXPANDED、OMNIBUS、BOXED_SET、TRANSLATION */
-            format: string | null;
-            isbn: string | null;
-            labels: components["schemas"]["VolumeSetProducerDto"][];
-            page_count: number | null;
-            /** @description 维基照录的所收部分，如只收这一卷一部分的电子分册；收录整卷时为空 */
-            part: string | null;
-            price: number | null;
-            publishers: components["schemas"]["VolumeSetProducerDto"][];
-            /** Format: date-time */
-            release_date: string | null;
-            release_date_precision: components["schemas"]["DatePrecision"] | null;
-            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED */
-            release_status: string | null;
-            tax_included: boolean | null;
-            title: string | null;
         };
         VolumeSetProducerDto: {
             /** @description 厂商 ID，组织条目没有对应厂商时为空 */

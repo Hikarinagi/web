@@ -13,7 +13,6 @@ import {
   type ContentsItem,
 } from '~/features/manga/contents'
 import { contentsPlace } from '~/features/manga/composables/useContents'
-import { useContentsSet } from '~/features/manga/composables/useContentsSet'
 
 export function useReaderItems(data: () => MangaReadPageData) {
   const auth = useAuthStore()
@@ -27,9 +26,7 @@ export function useReaderItems(data: () => MangaReadPageData) {
   const heading = computed(() => mangaChapterHeading(chapter.value))
   const serializing = computed(() => manifest.value.manga.serial_status === 'SERIALIZING')
 
-  const chosenSet = ref<number | null>(chapter.value.volume_set?.id ?? null)
-  const sets = useContentsSet(() => data(), chosenSet)
-  const units = computed(() => contentsUnits(data().chapters, sets.key.value))
+  const units = computed(() => contentsUnits(data().chapters, data().sets))
   const readIds = computed(() => new Set(data().progress?.read_chapter_ids ?? []))
   const progressPage = computed(() =>
     data().progress?.chapter.id === chapter.value.id ? (data().progress?.page ?? 0) : 0,
@@ -93,8 +90,6 @@ export function useReaderItems(data: () => MangaReadPageData) {
     label,
     heading,
     serializing,
-    setOptions: sets.options,
-    setModel: sets.model,
     units,
     readIds,
     progressPage,

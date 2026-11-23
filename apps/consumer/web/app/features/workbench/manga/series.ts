@@ -6,13 +6,7 @@ type Series = BackendMangaProjectListItem['series']
 
 type Episode = Pick<
   BackendMangaProjectListItem,
-  | 'scope'
-  | 'chapter_type'
-  | 'chapter_number'
-  | 'chapter_name'
-  | 'volume_number'
-  | 'part'
-  | 'part_count'
+  'scope' | 'chapter_type' | 'chapter_number' | 'chapter_name' | 'volume_number'
 >
 
 export function seriesTitle(series: Series): string {
@@ -24,15 +18,12 @@ export function seriesHead(series: Series): { title: string; cover: string | nul
 }
 
 export function projectEpisode(project: Episode): string {
-  const heading = mangaChapterHeading({
+  return mangaChapterHeading({
     chapter_type: project.scope === 'VOLUME' ? 'VOLUME' : project.chapter_type,
     chapter_number: project.chapter_number,
     volume_number: project.volume_number,
     title: project.chapter_name,
   })
-  return project.part
-    ? `${heading}第 ${project.part} 部分（共 ${project.part_count} 部分）`
-    : heading
 }
 
 export function projectTitle(project: Episode & { series: Series }): string {

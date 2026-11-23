@@ -18,7 +18,6 @@
     mangaChapterInfoSchema,
     mangaVolumeInfoSchema,
     type MangaChapterInfoValues,
-    type MangaVolumeInfoValues,
   } from '~/features/workbench/manga/schemas/manga.schema'
   import { getFieldErrors } from '~/utils/api/error'
 
@@ -33,8 +32,6 @@
         | 'chapter_number'
         | 'chapter_name'
         | 'volume_id'
-        | 'part'
-        | 'part_count'
         | 'alternate'
       > & { series: { id: number } }
       purpose?: 'edit' | 'approve' | 'correct' | 'resume'
@@ -46,23 +43,16 @@
 
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
-  const values = reactive<
-    MangaChapterInfoValues &
-      Pick<MangaVolumeInfoValues, 'part' | 'part_count'> & {
-        scope: 'CHAPTER' | MangaVolumeInfoValues['scope']
-      }
-  >({
+  const values = reactive<MangaChapterInfoValues & { scope: BackendMangaProject['scope'] }>({
     scope: 'CHAPTER',
     chapter_type: 'SERIALIZATION',
     chapter_number: '',
     chapter_name: '',
     volume_id: null,
-    part: null,
-    part_count: null,
   })
   const alternate = ref(false)
   const reviewing = computed(() => props.purpose !== 'edit')
-  const wholeVolume = computed(() => values.scope !== 'CHAPTER')
+  const wholeVolume = computed(() => values.scope === 'VOLUME')
   const { chapters, volumes, sets, setId, claims, published, loading } = useMangaTargets(
     () => (visible.value ? props.project.series.id : null),
     () => props.project.volume_id,
@@ -90,19 +80,12 @@
   watch(visible, next => {
     if (!next) return
     form.value?.reset()
-    values.scope =
-      props.project.scope === 'CHAPTER'
-        ? 'CHAPTER'
-        : props.project.part != null
-          ? 'SPLIT'
-          : 'VOLUME'
+    values.scope = props.project.scope
     values.chapter_type =
       props.project.chapter_type === 'VOLUME' ? 'SERIALIZATION' : props.project.chapter_type
     values.chapter_number = props.project.chapter_number ?? ''
     values.chapter_name = props.project.chapter_name ?? ''
     values.volume_id = props.project.volume_id
-    values.part = props.project.part
-    values.part_count = props.project.part_count
     alternate.value = props.project.alternate
   })
 
@@ -115,8 +98,6 @@
             scope: 'VOLUME' as const,
             volume_id: values.volume_id ?? null,
             set_entry_id: setId.value,
-            part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
-            part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
           }
         : {
             scope: 'CHAPTER' as const,
@@ -219,12 +200,6 @@
               :placeholder="wholeVolume ? '选择单行本' : '未归入'"
             />
           </FormField>
-          <ContributeMangaPartField
-            v-if="values.scope === 'SPLIT'"
-            v-model:part="values.part"
-            v-model:count="values.part_count"
-            :volume="volumes.find(volume => volume.id === values.volume_id)"
-          />
           <FormField
             v-if="reviewing"
             name="alternate"

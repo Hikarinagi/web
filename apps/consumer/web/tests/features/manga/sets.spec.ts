@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { contentsUnits, type ContentsItem } from '~/features/manga/contents'
-import { contentsSetKey, contentsSets, type MangaVolumeSet } from '~/features/manga/sets'
+import {
+  contentsStatus,
+  contentsUnits,
+  continueTarget,
+  type ContentsItem,
+  type ContentsProgress,
+} from '~/features/manga/contents'
+import { contentsGroups, type MangaVolumeSet } from '~/features/manga/sets'
 import { volumeSetLabel } from '~/features/volume-set/sets'
 
 const original = { id: 69, name: 'ジャンプコミックス', original: true }
@@ -55,55 +61,67 @@ describe('volumeSetLabel', () => {
   })
 })
 
-describe('contentsSets', () => {
-  it('offers only the sets that have a readable volume, in the order of the sets', () => {
-    const options = contentsSets(
-      [
-        volume(1, reissue),
-        volume(2, original),
-        volume(3, { id: 71, name: '新装版', original: false }, { readable: false }),
-        { ...volume(4, null), chapter_type: 'SERIALIZATION' } as ContentsItem,
-      ],
-      sets,
+const renewed = { id: 71, name: '新装版', original: false }
+
+describe('contentsUnits by set', () => {
+  it('keeps every readable volume, the original set first and the others in the order of the sets', () => {
+    const items = [
+      { ...volume(9, null), chapter_type: 'SERIALIZATION', chapter_number: '1' } as ContentsItem,
+      volume(1, renewed),
+      volume(2, reissue),
+      volume(3, original),
+      volume(4, null),
+      volume(5, reissue, { readable: false }),
+    ]
+    expect(contentsUnits(items, sets).volume.map(item => item.id)).toEqual([3, 4, 2, 1])
+    expect(contentsUnits(items, sets).chapter.map(item => item.id)).toEqual([9])
+    expect(contentsUnits(items).volume.map(item => item.id)).toEqual([3, 4, 1, 2])
+  })
+})
+
+describe('contentsGroups', () => {
+  it('groups the volumes by set, names each group and counts a volume of no set as the original', () => {
+    const groups = contentsGroups(
+      contentsUnits([volume(1, reissue), volume(2, original), volume(3, null)], sets).volume,
     )
-    expect(options).toEqual([
-      { value: 69, label: 'ジャンプコミックス 31 卷', key: 0, original: true },
-      { value: 70, label: '完全版 24 卷', key: 70, original: false },
+    expect(
+      groups.map(({ key, name, original, items }) => [key, name, original, items.length]),
+    ).toEqual([
+      [0, 'ジャンプコミックス', true, 2],
+      [70, '完全版', false, 1],
     ])
   })
 
-  it('counts a volume of no set as one of the original set', () => {
-    expect(contentsSets([volume(1, null)], sets).map(option => option.value)).toEqual([69])
-    expect(contentsSets([volume(1, null)], [])).toEqual([])
+  it('makes one group when only one set has volumes, and names a group with no set', () => {
+    expect(contentsGroups([volume(1, reissue)]).map(group => [group.name, group.original])).toEqual(
+      [['完全版', false]],
+    )
+    expect(contentsGroups([volume(1, null)]).map(group => [group.name, group.original])).toEqual([
+      ['原版', true],
+    ])
+    expect(contentsGroups([])).toEqual([])
   })
 })
 
-describe('contentsSetKey', () => {
-  const options = contentsSets([volume(1, reissue), volume(2, original)], sets)
+describe('reading across sets', () => {
+  const units = contentsUnits(
+    [volume(1, original), volume(2, original), volume(11, reissue), volume(12, reissue)],
+    sets,
+  )
+  const progress = (id: number) =>
+    ({ chapter: { id }, page: 3, read_chapter_ids: [] }) as unknown as ContentsProgress
 
-  it('keeps the chosen set, otherwise picks the original', () => {
-    expect(contentsSetKey(options, 70)).toBe(70)
-    expect(contentsSetKey(options, null)).toBe(0)
-    expect(contentsSetKey(options, 999)).toBe(0)
+  it('continues with the next volume of the same set and never crosses into another set', () => {
+    expect(continueTarget(units, progress(1), new Set([1]))).toMatchObject({ id: 2 })
+    expect(continueTarget(units, progress(2), new Set([2]))).toMatchObject({ id: 2 })
+    expect(continueTarget(units, progress(11), new Set([11]))).toMatchObject({ id: 12 })
+    expect(continueTarget(units, null, new Set())).toMatchObject({ id: 1, resume: false })
   })
 
-  it('picks the only set that has volumes to read, and filters nothing without sets', () => {
-    expect(contentsSetKey(contentsSets([volume(1, reissue)], sets), null)).toBe(70)
-    expect(contentsSetKey([], null)).toBeNull()
-  })
-})
-
-describe('contentsUnits by set', () => {
-  it('keeps the volumes of the chosen set and every chapter', () => {
-    const items = [
-      { ...volume(9, null), chapter_type: 'SERIALIZATION', chapter_number: '1' } as ContentsItem,
-      volume(1, original),
-      volume(2, reissue),
-      volume(3, null),
-    ]
-    expect(contentsUnits(items, 70).volume.map(item => item.id)).toEqual([2])
-    expect(contentsUnits(items, 0).volume.map(item => item.id)).toEqual([1, 3])
-    expect(contentsUnits(items, 0).chapter.map(item => item.id)).toEqual([9])
-    expect(contentsUnits(items).volume.map(item => item.id)).toEqual([1, 2, 3])
+  it('describes the first set in the status', () => {
+    expect(contentsStatus(units, true)).toBe('全 2 卷')
+    expect(contentsStatus(contentsUnits([volume(11, reissue)], sets), false)).toBe(
+      '更新至 完全版 第 11 卷',
+    )
   })
 })

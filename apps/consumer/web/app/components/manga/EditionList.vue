@@ -22,7 +22,7 @@
       text: ['出版社', '发售日', 'ISBN', '价格', '语言']
         .map(key => edition.fields[key])
         .filter(Boolean)
-        .join(' · '),
+        .join('，'),
     })),
   )
 </script>
@@ -38,10 +38,10 @@
     <CollapsibleContent>
       <Stack as="ul" gap="none" class="gap-1">
         <Text v-for="row in rows" :key="row.label" as="li" size="xs" class="min-w-0">
-          {{ row.label }}
-          <Text v-if="row.text" as="span" size="xs" tone="muted" class="wrap-anywhere">
-            · {{ row.text }}
-          </Text>
+          {{ row.label
+          }}<Text v-if="row.text" as="span" size="xs" tone="muted" class="wrap-anywhere"
+            >，{{ row.text }}</Text
+          >
         </Text>
       </Stack>
     </CollapsibleContent>

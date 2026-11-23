@@ -1,25 +1,24 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { mangaReadingUnit, volumeSetKey } from '@hikarinagi/shared'
-import { chosenSetOption, volumeSetOption, type VolumeSetOption } from '~/features/volume-set/sets'
+import { volumeSetKey, volumeSetName } from '@hikarinagi/shared'
+import type { VolumeGroup } from '~/features/volume-set/sets'
 import type { ContentsItem } from './contents'
 
 export type MangaVolumeSet = ApiData<'/api/v3/mangas/{id}/sets', 'get'>[number]
 
-export function contentsSets(
-  items: Pick<ContentsItem, 'chapter_type' | 'readable' | 'volume_set'>[],
-  sets: MangaVolumeSet[],
-): VolumeSetOption[] {
-  const held = new Set(
-    items
-      .filter(item => item.readable && mangaReadingUnit(item.chapter_type) === 'volume')
-      .map(volumeSetKey),
-  )
-  return sets.map(volumeSetOption).filter(option => held.has(option.key))
-}
-
-export function contentsSetKey(
-  options: VolumeSetOption[],
-  chosen: number | null | undefined,
-): number | null {
-  return chosenSetOption(options, chosen)?.key ?? null
+export function contentsGroups(volumes: ContentsItem[]): VolumeGroup<ContentsItem>[] {
+  const groups = new Map<number, ContentsItem[]>()
+  for (const item of volumes) {
+    const key = volumeSetKey(item)
+    const items = groups.get(key)
+    if (items) items.push(item)
+    else groups.set(key, [item])
+  }
+  return [...groups].map(([key, items]) => ({
+    key,
+    name:
+      items.find(item => item.volume_set)?.volume_set?.name ??
+      volumeSetName({ name: null, original: true, labels: [], publishers: [] }),
+    original: key === 0,
+    items,
+  }))
 }

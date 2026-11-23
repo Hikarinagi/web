@@ -36,7 +36,6 @@ function volume(overrides: Partial<MangaTargetVolume> & { id: number }): MangaTa
     name: null,
     name_cn: null,
     chapters: null,
-    editions: [],
     ...overrides,
   }
 }
@@ -48,14 +47,10 @@ function claim(overrides: Partial<MangaTargetClaim>): MangaTargetClaim {
     chapter: null,
     volume_id: null,
     volume_number: null,
-    part: null,
-    part_count: null,
     owner: { id: 1, name: 'ichi', nickname: null },
     ...overrides,
   } as MangaTargetClaim
 }
-
-const edition = (title: string, note: string) => ({ entry_id: 1, title, note })
 
 describe('chapterOptions', () => {
   it('只列没有内容的单话，进行中的不可选，末尾是新章节', () => {
@@ -120,34 +115,22 @@ describe('volumeOptions', () => {
     ])
   })
 
-  it('列出每一卷收录的话数与注明了所收部分的电子版分册', () => {
+  it('列出每一卷收录的话数', () => {
     const options = volumeOptions(
       [
-        volume({
-          id: 13,
-          volume_number: 3,
-          chapters: { first: '017', last: '24', count: 8 },
-          editions: [
-            edition('隠し部屋（5）', '第 17 至 20 话'),
-            edition('隠し部屋（6）', '第 21 至 24 话'),
-          ],
-        }),
+        volume({ id: 13, volume_number: 3, chapters: { first: '017', last: '24', count: 8 } }),
         volume({ id: 14, volume_number: 4, chapters: { first: '25', last: '25', count: 1 } }),
       ],
       [],
       [],
     )
     expect(options.slice(0, 2)).toEqual([
-      {
-        value: 13,
-        label: '第 3 卷',
-        description: '第 17 至 24 话；隠し部屋（5）：第 17 至 20 话；隠し部屋（6）：第 21 至 24 话',
-      },
+      { value: 13, label: '第 3 卷', description: '第 17 至 24 话' },
       { value: 14, label: '第 4 卷', description: '第 25 话' },
     ])
   })
 
-  it('只有部分投稿的卷仍可选，注明哪些部分已有投稿；整卷投稿占着的卷不可选', () => {
+  it('已有别人上传的整卷不可选，注明上传者；有人正在上传的卷不可选', () => {
     const options = volumeOptions(
       [
         volume({ id: 13, volume_number: 3, chapters: { first: '17', last: '24', count: 8 } }),
@@ -155,13 +138,10 @@ describe('volumeOptions', () => {
       ],
       [chapter({ id: 5, chapter_type: 'VOLUME', volume_id: 13, page_count: 44 })],
       [claim({ scope: 'VOLUME', volume_id: 14, owner: { id: 2, name: 'ni', nickname: null } })],
-      {
-        upload: true,
-        published: [claim({ scope: 'VOLUME', volume_id: 13, part: 1, part_count: 2 })],
-      },
+      { upload: true, published: [claim({ scope: 'VOLUME', volume_id: 13 })] },
     )
     expect(options.slice(0, 2)).toEqual([
-      { value: 13, label: '第 3 卷', description: '第 17 至 24 话。第 1 册已有投稿' },
+      { value: 13, label: '第 3 卷', description: '第 17 至 24 话。由 ichi 上传', disabled: true },
       { value: 14, label: '第 4 卷', description: 'ni 正在上传', disabled: true },
     ])
   })

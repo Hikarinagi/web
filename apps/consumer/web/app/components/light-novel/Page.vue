@@ -5,9 +5,8 @@
   import { usePageTone } from '~/features/entry/usePageTone'
   import { tagRoute } from '~/features/light-novel/explore'
   import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
+  import { shelfGroups } from '~/features/light-novel/sets'
   import { useLightNovelRate } from '~/features/light-novel/useLightNovelRate'
-  import { useShelfSet } from '~/features/light-novel/useShelfSet'
-  import { useRouteSet } from '~/features/volume-set/composables/useSetChoice'
   import { topVotedMedia } from '~/utils/media/image'
   import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
@@ -16,14 +15,10 @@
   const props = defineProps<{ data: LightNovelPageData; lightNovelId: number }>()
 
   const title = computed(() => getLightNovelTitle(props.data.light_novel))
-  const {
-    volumes: shelfVolumes,
-    model: shelfSet,
-    options: shelfOptions,
-  } = useShelfSet(() => props.data, useRouteSet())
+  const shelf = computed(() => shelfGroups(props.data))
   const hash = computed(() => {
     const cover =
-      shelfVolumes.value.at(-1)?.display_cover ?? getLightNovelCover(props.data.light_novel)
+      shelf.value[0]!.items.at(-1)?.display_cover ?? getLightNovelCover(props.data.light_novel)
     return cover?.thumb_hash ?? null
   })
   usePageTone(hash, { paper: true })
@@ -107,13 +102,8 @@
       class="mx-auto w-full max-w-(--entry-container) px-4 pb-16 lg:grid lg:grid-cols-[minmax(0,1fr)_var(--rail-right)] lg:items-start lg:gap-10 lg:px-6"
     >
       <Stack gap="none" class="min-w-0 gap-12">
-        <Stack v-if="shelfVolumes.length" gap="md">
-          <LightNovelShelf
-            v-model:set="shelfSet"
-            :volumes="shelfVolumes"
-            :sets="shelfOptions"
-            :progress="data.progress"
-          />
+        <Stack v-if="shelf.some(group => group.items.length)" gap="md">
+          <LightNovelShelf :groups="shelf" :progress="data.progress" />
         </Stack>
         <Stack v-if="characters.length" gap="md"
           ><EntryCharacters

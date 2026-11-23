@@ -66,36 +66,6 @@ describe('mangaChapterLabel', () => {
     )
   })
 
-  it('names the splits a volume holds until all of them are in', () => {
-    expect(
-      mangaChapterLabel({
-        ...item(10, 'VOLUME', { volume_number: 3 }),
-        parts: { held: [1], count: 2 },
-      }),
-    ).toBe('第 3 卷（上）')
-    expect(
-      mangaChapterLabel({
-        ...item(11, 'VOLUME', { volume_number: 4 }),
-        parts: { held: [1, 2], count: 3 },
-      }),
-    ).toBe('第 4 卷（上、中）')
-    expect(
-      mangaChapterLabel({
-        ...item(12, 'VOLUME', { title: '外传' }),
-        parts: { held: [2], count: 4 },
-      }),
-    ).toBe('外传（2/4）')
-    expect(
-      mangaChapterLabel({
-        ...item(14, 'VOLUME', { volume_number: 5 }),
-        parts: { held: [1, 3], count: 3 },
-      }),
-    ).toBe('第 5 卷（上、下）')
-    expect(mangaChapterLabel({ ...item(13, 'VOLUME', { volume_number: 3 }), parts: null })).toBe(
-      '第 3 卷',
-    )
-  })
-
   it('puts the name of another set before a volume and leaves a volume of the original bare', () => {
     const reissue = { id: 70, name: '完全版', original: false }
     expect(
@@ -111,9 +81,8 @@ describe('mangaChapterLabel', () => {
       mangaChapterLabel({
         ...item(17, 'VOLUME', { title: '総集編' }),
         volume_set: reissue,
-        parts: { held: [1], count: 2 },
       }),
-    ).toBe('完全版 総集編（上）')
+    ).toBe('完全版 総集編')
     expect(
       mangaChapterLabel({
         ...item(18, 'SERIALIZATION', { chapter_number: '3' }),

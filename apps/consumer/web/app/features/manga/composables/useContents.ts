@@ -9,6 +9,7 @@ import {
   type ContentsProgress,
   type ContentsUnits,
 } from '~/features/manga/contents'
+import type { MangaVolumeSet } from '~/features/manga/sets'
 
 export function useContentsDesc() {
   return useLocalStorage('hikari-manga-contents-desc', false, { initOnMounted: true })
@@ -28,13 +29,13 @@ export function useContents(
     mangaId: number
     chapters: ContentsItem[]
     progress: ContentsProgress | null | undefined
-    set?: number | null
+    sets?: MangaVolumeSet[]
   },
 ) {
   const auth = useAuthStore()
   const { requireLogin } = useAuthGate()
 
-  const units = computed(() => contentsUnits(source().chapters, source().set ?? null))
+  const units = computed(() => contentsUnits(source().chapters, source().sets))
   const readIds = computed(() => new Set(source().progress?.read_chapter_ids ?? []))
   const currentId = computed(() => {
     const id = source().progress?.chapter.id ?? null

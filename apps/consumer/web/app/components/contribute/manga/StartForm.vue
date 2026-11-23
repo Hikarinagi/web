@@ -54,13 +54,11 @@
     chapter_number: props.newChapter ?? '',
     chapter_name: '',
     volume_id: props.volumeId ?? null,
-    part: null,
-    part_count: null,
     source_lang: 'zh-Hans',
     target_lang: 'zh-Hans',
   })
   const translation = computed(() => values.mode === 'TRANSLATION')
-  const wholeVolume = computed(() => values.scope !== 'CHAPTER')
+  const wholeVolume = computed(() => values.scope === 'VOLUME')
   const scopeOptions = computed(() =>
     props.volumeId != null
       ? MANGA_SCOPE_OPTIONS.filter(option => option.value !== 'CHAPTER')
@@ -102,13 +100,11 @@
         body: {
           series_id: target.value.id,
           mode: values.mode,
-          scope: wholeVolume.value ? 'VOLUME' : 'CHAPTER',
+          scope: values.scope,
           ...(wholeVolume.value
             ? {
                 volume_id: values.volume_id ?? undefined,
                 set_entry_id: setId.value ?? undefined,
-                part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
-                part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
               }
             : {
                 chapter_id: values.chapter_id ?? undefined,
@@ -168,11 +164,8 @@
         v-if="wholeVolume && target"
         v-model:set-id="setId"
         v-model:volume-id="values.volume_id"
-        v-model:part="values.part"
-        v-model:count="values.part_count"
         :series="target"
         :mode="values.mode"
-        :split="values.scope === 'SPLIT'"
         :fixed="fixed"
         :sets="sets"
         :volumes="volumes"

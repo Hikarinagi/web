@@ -22,19 +22,17 @@
   import { NuxtLink } from '#components'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { dayText, monthText } from '~/features/entry/date'
-  import type { VolumeSetOption } from '~/features/volume-set/sets'
+  import type { VolumeGroup } from '~/features/volume-set/sets'
   import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
-  type Volume = LightNovelPageData['volumes'][number]
+  type Volume = LightNovelPageData['sets'][number]['volumes'][number]
 
   defineOptions({ name: 'LightNovelShelf' })
   const props = defineProps<{
-    volumes: Volume[]
-    sets: VolumeSetOption[]
+    groups: VolumeGroup<Volume>[]
     progress: LightNovelPageData['progress']
   }>()
-  const set = defineModel<number | null>('set', { required: true })
 
   const VIEWS = [
     { value: 'grid', label: '封面' },
@@ -42,7 +40,8 @@
   ]
   const view = ref('grid')
   const desc = ref(false)
-  const ordered = computed(() => (desc.value ? [...props.volumes].reverse() : props.volumes))
+  const count = computed(() => props.groups.reduce((sum, group) => sum + group.items.length, 0))
+  const ordered = (volumes: Volume[]) => (desc.value ? [...volumes].reverse() : volumes)
   const current = computed(() => props.progress?.continue_volume_id ?? null)
   const progressMap = computed(
     () => new Map((props.progress?.progresses ?? []).map(item => [item.volume_id, item])),
@@ -64,7 +63,7 @@
 </script>
 
 <template>
-  <EntrySectionHead id="shelf" title="书架" :count="volumes.length">
+  <EntrySectionHead id="shelf" title="书架" :count="count">
     <template #actions>
       <Inline gap="xs" align="center" :wrap="false">
         <IconButton
@@ -80,131 +79,141 @@
       </Inline>
     </template>
   </EntrySectionHead>
-  <EntrySetSwitch v-if="sets.length" v-model="set" :options="sets" />
 
-  <Grid
-    v-if="view === 'grid'"
-    :cols="3"
-    gap="none"
-    class="gap-x-4 gap-y-6 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6"
-  >
-    <Stack
-      v-for="volume in ordered"
-      :key="volume.id"
-      gap="sm"
-      :class="volume.online_reading_available ? undefined : 'opacity-50'"
-    >
-      <NuxtLink
-        :to="`/light-novel-volumes/${volume.id}`"
-        class="relative block hn-interactive rounded-md"
-        :aria-label="label(volume)"
-      >
-        <EntryBookCover
-          :media="volume.display_cover"
-          :alt="`${label(volume)}封面`"
-          :class="
-            current === volume.id
-              ? 'ring-2 ring-accent ring-offset-2 ring-offset-(--hn-bg-canvas)'
-              : undefined
-          "
-        />
-        <Tag
-          v-if="current === volume.id"
-          tone="accent"
-          variant="solid"
-          class="absolute top-2 left-3"
-        >
-          在读
-        </Tag>
-        <Progress
-          v-if="percent(volume) > 0"
-          :value="percent(volume)"
-          size="sm"
-          :tone="percent(volume) === 100 ? 'success' : 'accent'"
-          class="absolute inset-x-0 bottom-0"
-        />
-      </NuxtLink>
-      <Inline gap="xs" align="center" justify="between" :wrap="false">
-        <Stack gap="none" class="min-w-0">
-          <Text size="sm" weight="medium" truncate class="tabular-nums">{{ label(volume) }}</Text>
-          <Text size="xs" tone="muted" class="tabular-nums">
-            {{ monthText(volume.publication_date) }}
-          </Text>
-        </Stack>
-        <IconButton
-          v-if="volume.online_reading_available"
-          :label="readLabel(volume)"
-          size="sm"
-          variant="ghost"
-          tone="neutral"
-          class="hidden sm:inline-flex"
-          @click="read(volume)"
-        >
-          <BookOpen />
-        </IconButton>
+  <Stack gap="xl">
+    <Stack v-for="group in groups" :key="group.key" gap="md">
+      <Inline v-if="groups.length > 1" gap="sm" align="baseline">
+        <Text weight="medium">{{ group.name }}</Text>
+        <Text size="sm" tone="muted" class="tabular-nums">{{ group.items.length }} 卷</Text>
       </Inline>
-    </Stack>
-  </Grid>
-
-  <Card v-else :padded="false">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>卷次</TableHead>
-          <TableHead>书名</TableHead>
-          <TableHead>发售日</TableHead>
-          <TableHead align="end">页数</TableHead>
-          <TableHead>ISBN</TableHead>
-          <TableHead align="end"><VisuallyHidden>操作</VisuallyHidden></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow v-for="volume in ordered" :key="volume.id">
-          <TableCell class="whitespace-nowrap tabular-nums">
-            <Inline gap="sm" align="center" :wrap="false">
-              {{ label(volume) }}
-              <Tag v-if="current === volume.id" tone="accent">在读</Tag>
-            </Inline>
-          </TableCell>
-          <TableCell class="max-w-xs">
-            <Inline gap="sm" align="center" :wrap="false">
-              <HikariImage
-                v-if="volume.display_cover"
-                :src="volume.display_cover"
-                alt=""
-                :ratio="7 / 10"
-                preset="thumbnail"
-                class="w-7 shrink-0 rounded-xs"
-              />
-              <Link
-                :as="NuxtLink"
-                :to="`/light-novel-volumes/${volume.id}`"
-                tone="neutral"
-                class="truncate"
-                lang="ja"
-              >
-                {{ getLightNovelVolumeTitle(volume) }}
-              </Link>
-            </Inline>
-          </TableCell>
-          <TableCell class="whitespace-nowrap tabular-nums">
-            {{ dayText(volume.publication_date) }}
-          </TableCell>
-          <TableCell align="end" class="tabular-nums">{{ volume.pages ?? '' }}</TableCell>
-          <TableCell class="tabular-nums">{{ volume.isbn }}</TableCell>
-          <TableCell align="end">
-            <Button
+      <Text v-else-if="!group.original" size="sm" tone="muted">书架中的卷为{{ group.name }}</Text>
+      <Grid
+        v-if="view === 'grid'"
+        :cols="3"
+        gap="none"
+        class="gap-x-4 gap-y-6 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6"
+      >
+        <Stack
+          v-for="volume in ordered(group.items)"
+          :key="volume.id"
+          gap="sm"
+          :class="volume.online_reading_available ? undefined : 'opacity-50'"
+        >
+          <NuxtLink
+            :to="`/light-novel-volumes/${volume.id}`"
+            class="relative block hn-interactive rounded-md"
+            :aria-label="label(volume)"
+          >
+            <EntryBookCover
+              :media="volume.display_cover"
+              :alt="`${label(volume)}封面`"
+              :class="
+                current === volume.id
+                  ? 'ring-2 ring-accent ring-offset-2 ring-offset-(--hn-bg-canvas)'
+                  : undefined
+              "
+            />
+            <Tag
+              v-if="current === volume.id"
+              tone="accent"
+              variant="solid"
+              class="absolute top-2 left-3"
+            >
+              在读
+            </Tag>
+            <Progress
+              v-if="percent(volume) > 0"
+              :value="percent(volume)"
+              size="sm"
+              :tone="percent(volume) === 100 ? 'success' : 'accent'"
+              class="absolute inset-x-0 bottom-0"
+            />
+          </NuxtLink>
+          <Inline gap="xs" align="center" justify="between" :wrap="false">
+            <Stack gap="none" class="min-w-0">
+              <Text size="sm" weight="medium" truncate class="tabular-nums">{{
+                label(volume)
+              }}</Text>
+              <Text size="xs" tone="muted" class="tabular-nums">
+                {{ monthText(volume.publication_date) }}
+              </Text>
+            </Stack>
+            <IconButton
               v-if="volume.online_reading_available"
+              :label="readLabel(volume)"
               size="sm"
               variant="ghost"
               tone="neutral"
+              class="hidden sm:inline-flex"
               @click="read(volume)"
             >
-              阅读
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  </Card>
+              <BookOpen />
+            </IconButton>
+          </Inline>
+        </Stack>
+      </Grid>
+
+      <Card v-else :padded="false">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>卷次</TableHead>
+              <TableHead>书名</TableHead>
+              <TableHead>发售日</TableHead>
+              <TableHead align="end">页数</TableHead>
+              <TableHead>ISBN</TableHead>
+              <TableHead align="end"><VisuallyHidden>操作</VisuallyHidden></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="volume in ordered(group.items)" :key="volume.id">
+              <TableCell class="whitespace-nowrap tabular-nums">
+                <Inline gap="sm" align="center" :wrap="false">
+                  {{ label(volume) }}
+                  <Tag v-if="current === volume.id" tone="accent">在读</Tag>
+                </Inline>
+              </TableCell>
+              <TableCell class="max-w-xs">
+                <Inline gap="sm" align="center" :wrap="false">
+                  <HikariImage
+                    v-if="volume.display_cover"
+                    :src="volume.display_cover"
+                    alt=""
+                    :ratio="7 / 10"
+                    preset="thumbnail"
+                    class="w-7 shrink-0 rounded-xs"
+                  />
+                  <Link
+                    :as="NuxtLink"
+                    :to="`/light-novel-volumes/${volume.id}`"
+                    tone="neutral"
+                    class="truncate"
+                    lang="ja"
+                  >
+                    {{ getLightNovelVolumeTitle(volume) }}
+                  </Link>
+                </Inline>
+              </TableCell>
+              <TableCell class="whitespace-nowrap tabular-nums">
+                {{ dayText(volume.publication_date) }}
+              </TableCell>
+              <TableCell align="end" class="tabular-nums">{{ volume.pages ?? '' }}</TableCell>
+              <TableCell class="tabular-nums">{{ volume.isbn }}</TableCell>
+              <TableCell align="end">
+                <Button
+                  v-if="volume.online_reading_available"
+                  size="sm"
+                  variant="ghost"
+                  tone="neutral"
+                  @click="read(volume)"
+                >
+                  阅读
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Card>
+    </Stack>
+  </Stack>
 </template>
