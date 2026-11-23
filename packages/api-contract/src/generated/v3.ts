@@ -29807,6 +29807,8 @@ export interface components {
             params: {
                 [key: string]: number;
             };
+            /** @description Why the program starts nothing and holds what it was doing at the moment, such as a fault of the page rendering service; null while nothing holds it back */
+            paused: string | null;
             program: string;
             properties: components["schemas"]["TaskPropertiesDto"][];
             /** @description Edits allowed per rate window */

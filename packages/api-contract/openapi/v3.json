@@ -54605,6 +54605,11 @@
             "description": "Parameters of the program, defaults filled in",
             "type": "object"
           },
+          "paused": {
+            "description": "Why the program starts nothing and holds what it was doing at the moment, such as a fault of the page rendering service; null while nothing holds it back",
+            "nullable": true,
+            "type": "string"
+          },
           "program": {
             "type": "string"
           },
@@ -54649,6 +54654,7 @@
           "enabled",
           "trial_limit",
           "stopped_reason",
+          "paused",
           "enabled_by",
           "enabled_at",
           "budget_weight",
