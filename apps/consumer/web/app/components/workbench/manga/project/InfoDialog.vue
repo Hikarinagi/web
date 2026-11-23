@@ -12,7 +12,7 @@
   } from '@hina-ui/vue'
   import { volumeOptions } from '~/features/contribute/manga-options'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
-  import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
+  import { MANGA_CHAPTER_TYPE_OPTIONS, MANGA_SCOPE_OPTIONS } from '~/features/workbench/labels'
   import type { BackendMangaProject } from '~/features/workbench/manga/manga'
   import {
     mangaChapterInfoSchema,
@@ -44,11 +44,6 @@
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ saved: [] }>()
 
-  const SCOPE_OPTIONS = [
-    { value: 'CHAPTER', label: '一话' },
-    { value: 'VOLUME', label: '整卷' },
-    { value: 'SPLIT', label: '电子分册' },
-  ]
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const submitting = ref(false)
   const values = reactive<
@@ -68,8 +63,9 @@
   const alternate = ref(false)
   const reviewing = computed(() => props.purpose !== 'edit')
   const wholeVolume = computed(() => values.scope !== 'CHAPTER')
-  const { chapters, volumes, claims, published, loading } = useMangaTargets(() =>
-    visible.value ? props.project.series.id : null,
+  const { chapters, volumes, sets, setId, claims, published, loading } = useMangaTargets(
+    () => (visible.value ? props.project.series.id : null),
+    () => props.project.volume_id,
   )
   const others = computed(() => ({
     claims: claims.value.filter(claim => claim.id !== props.project.id),
@@ -118,6 +114,7 @@
         ? {
             scope: 'VOLUME' as const,
             volume_id: values.volume_id ?? null,
+            set_entry_id: setId.value,
             part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
             part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
           }
@@ -127,6 +124,7 @@
             chapter_number: values.chapter_number?.trim() || null,
             chapter_name: values.chapter_name?.trim() || null,
             volume_id: values.volume_id ?? null,
+            set_entry_id: values.volume_id ? setId.value : null,
           }
       const path = { project_id: props.project.id }
       const decided = { ...body, alternate: alternate.value }
@@ -186,7 +184,7 @@
       >
         <Stack gap="md">
           <FormField name="scope" label="范围">
-            <SegmentedControl v-model="values.scope" :options="SCOPE_OPTIONS" />
+            <SegmentedControl v-model="values.scope" :options="MANGA_SCOPE_OPTIONS" />
           </FormField>
           <FormField v-if="!wholeVolume" name="chapter_type" label="类型" required>
             <SegmentedControl v-model="values.chapter_type" :options="MANGA_CHAPTER_TYPE_OPTIONS" />
@@ -207,6 +205,7 @@
           >
             <Input v-model="values.chapter_name" />
           </FormField>
+          <ContributeMangaSetField v-model="setId" :sets="sets" />
           <FormField
             name="volume_id"
             :label="wholeVolume ? '单行本' : '所属单行本'"

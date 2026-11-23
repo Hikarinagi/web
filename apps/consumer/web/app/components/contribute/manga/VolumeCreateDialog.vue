@@ -16,6 +16,7 @@
 
   const props = defineProps<{
     series: MangaTarget
+    setId: number | null
     volumeNumber: number | null
     volumes: MangaTargetVolume[]
   }>()
@@ -26,7 +27,10 @@
     { value: 'isbn', label: '通过 ISBN 新建' },
     { value: 'manual', label: '手动填写' },
   ]
-  const flow = useVolumeCreate(() => props.series)
+  const flow = useVolumeCreate(
+    () => props.series,
+    () => props.setId,
+  )
   const { method, isbn, number, title, draft, notice, loading, saving } = flow
   const values = computed(() => {
     const found = (property: string) =>

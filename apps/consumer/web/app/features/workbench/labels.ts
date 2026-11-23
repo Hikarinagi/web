@@ -72,6 +72,12 @@ export const MODERATION_STATUS_META: Record<string, { label: string; tone: Tone 
   FAILED: { label: '审核出错', tone: 'danger' },
 }
 
+export const MANGA_SCOPE_OPTIONS = [
+  { value: 'CHAPTER', label: '一话' },
+  { value: 'VOLUME', label: '整卷' },
+  { value: 'SPLIT', label: '电子分册' },
+]
+
 export const MANGA_CHAPTER_TYPE_OPTIONS = [
   { value: 'SERIALIZATION', label: '单话' },
   { value: 'EXTRA', label: '番外' },

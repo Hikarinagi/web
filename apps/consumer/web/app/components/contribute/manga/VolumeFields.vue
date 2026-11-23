@@ -4,6 +4,7 @@
     MangaTarget,
     MangaTargetChapter,
     MangaTargetClaim,
+    MangaTargetSet,
     MangaTargetVolume,
   } from '~/features/contribute/manga-target'
   import { useVolumeTarget } from '~/features/contribute/useVolumeTarget'
@@ -14,11 +15,13 @@
     mode: CreateMangaProjectValues['mode']
     split: boolean
     fixed: boolean
+    sets: MangaTargetSet[]
     volumes: MangaTargetVolume[]
     chapters: MangaTargetChapter[]
     claims: MangaTargetClaim[]
     published: MangaTargetClaim[]
   }>()
+  const setId = defineModel<number | null>('setId', { required: true })
   const volumeId = defineModel<number | null | undefined>('volumeId', { required: true })
   const part = defineModel<number | null | undefined>('part', { required: true })
   const count = defineModel<number | null | undefined>('count', { required: true })
@@ -35,6 +38,7 @@
 </script>
 
 <template>
+  <ContributeMangaSetField v-if="!fixed" v-model="setId" :sets="sets" />
   <FormField
     v-if="!fixed"
     name="volume_id"
@@ -57,6 +61,7 @@
   <ContributeMangaVolumeCreateDialog
     v-model:open="createOpen"
     :series="series"
+    :set-id="setId"
     :volume-number="nextNumber"
     :volumes="volumes"
     @created="onCreated"

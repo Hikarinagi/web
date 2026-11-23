@@ -2229,6 +2229,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/manga/source-links/{id}/set": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["AdminMangaSourceLinkController_assignSet"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/manga/source-links/{id}/split": {
         parameters: {
             query?: never;
@@ -16480,6 +16496,7 @@ export interface components {
             reason: components["schemas"]["MangaSourceReviewReason"] | null;
             /** Format: date-time */
             reviewed_at: string | null;
+            set_entry_id: number | null;
             source_authors: components["schemas"]["AdminMangaSourceAuthorDto"][];
             source_key: string;
             source_series_id: string;
@@ -18347,6 +18364,8 @@ export interface components {
              * @enum {string}
              */
             scope?: "CHAPTER" | "VOLUME";
+            /** @description 单行本所在的版本套；填写时单行本必须属于这一套 */
+            set_entry_id?: number | null;
             /** @description 单行本条目 */
             volume_id?: number | null;
         };
@@ -19517,6 +19536,8 @@ export interface components {
              */
             scope?: "CHAPTER" | "VOLUME";
             series_id: number;
+            /** @description 单行本所在的版本套；填写时单行本必须属于这一套 */
+            set_entry_id?: number | null;
             /**
              * @description 图源或原文的语言
              * @enum {string}
@@ -30822,6 +30843,8 @@ export interface components {
              * @enum {string}
              */
             scope?: "CHAPTER" | "VOLUME";
+            /** @description 单行本所在的版本套；填写时单行本必须属于这一套 */
+            set_entry_id?: number | null;
             team_id?: number | null;
             /** @description 单行本条目 */
             volume_id?: number | null;
@@ -31216,6 +31239,10 @@ export interface components {
         };
         UpdateSourceLinkGroupsDto: {
             groups: string[];
+        };
+        UpdateSourceLinkSetDto: {
+            /** @description 来源对应的版本套，必须属于来源所关联的作品；为空时按原版那一套挂卷 */
+            set_entry_id: number | null;
         };
         UpdateTagDto: {
             aliases?: string[];
@@ -35841,6 +35868,31 @@ export interface operations {
                 };
                 content: {
                     "image/*": string;
+                };
+            };
+        };
+    };
+    AdminMangaSourceLinkController_assignSet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSourceLinkSetDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMangaSourceLinkDetailDto"];
                 };
             };
         };
@@ -51056,7 +51108,10 @@ export interface operations {
     };
     MangaController_getVolumeContents: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description 列出这一版本套的卷；不填时列出原版那一套 */
+                set_entry_id?: number;
+            };
             header?: never;
             path: {
                 id: number;

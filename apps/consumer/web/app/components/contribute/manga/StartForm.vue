@@ -13,7 +13,7 @@
   import { useMangaSearch } from '~/features/contribute/useMangaSearch'
   import { useMangaTargets } from '~/features/contribute/useMangaTargets'
   import { LANGUAGE_OPTIONS } from '~/features/galgame/labels'
-  import { MANGA_CHAPTER_TYPE_OPTIONS } from '~/features/workbench/labels'
+  import { MANGA_CHAPTER_TYPE_OPTIONS, MANGA_SCOPE_OPTIONS } from '~/features/workbench/labels'
   import {
     createMangaProjectSchema,
     type CreateMangaProjectValues,
@@ -34,11 +34,6 @@
     { value: 'UPLOAD', label: '上传' },
     { value: 'TRANSLATION', label: '翻译' },
   ]
-  const SCOPE_OPTIONS = [
-    { value: 'CHAPTER', label: '一话' },
-    { value: 'VOLUME', label: '整卷' },
-    { value: 'SPLIT', label: '电子分册' },
-  ]
   const CHINESE_OPTIONS = LANGUAGE_OPTIONS.filter(option => option.value.startsWith('zh'))
 
   const { requireLogin } = useAuthGate()
@@ -47,7 +42,10 @@
   const target = shallowRef<MangaTarget | null>(props.series)
   const fixed = computed(() => props.chapterId != null || props.volumeId != null)
   const { search, results, loading: searching } = useMangaSearch()
-  const { chapters, volumes, claims, published } = useMangaTargets(() => target.value?.id ?? null)
+  const { chapters, volumes, sets, setId, claims, published } = useMangaTargets(
+    () => target.value?.id ?? null,
+    () => props.volumeId ?? null,
+  )
   const values = reactive<CreateMangaProjectValues>({
     mode: props.mode ?? 'UPLOAD',
     scope: props.volumeId != null ? 'VOLUME' : (props.scope ?? 'CHAPTER'),
@@ -65,8 +63,8 @@
   const wholeVolume = computed(() => values.scope !== 'CHAPTER')
   const scopeOptions = computed(() =>
     props.volumeId != null
-      ? SCOPE_OPTIONS.filter(option => option.value !== 'CHAPTER')
-      : SCOPE_OPTIONS,
+      ? MANGA_SCOPE_OPTIONS.filter(option => option.value !== 'CHAPTER')
+      : MANGA_SCOPE_OPTIONS,
   )
   const mangaOptions = computed(() =>
     results.value.map(item => ({ value: item.id, label: item.name_cn || item.name })),
@@ -108,6 +106,7 @@
           ...(wholeVolume.value
             ? {
                 volume_id: values.volume_id ?? undefined,
+                set_entry_id: setId.value ?? undefined,
                 part: values.scope === 'SPLIT' ? (values.part ?? null) : null,
                 part_count: values.scope === 'SPLIT' ? (values.part_count ?? null) : null,
               }
@@ -167,6 +166,7 @@
       </FormField>
       <ContributeMangaVolumeFields
         v-if="wholeVolume && target"
+        v-model:set-id="setId"
         v-model:volume-id="values.volume_id"
         v-model:part="values.part"
         v-model:count="values.part_count"
@@ -174,6 +174,7 @@
         :mode="values.mode"
         :split="values.scope === 'SPLIT'"
         :fixed="fixed"
+        :sets="sets"
         :volumes="volumes"
         :chapters="chapters"
         :claims="claims"

@@ -2,7 +2,7 @@ import type { ApiData } from '@hikarinagi/api-contract/v3'
 import type { EditOperation } from '~/features/wiki/editor/draft'
 import { isApiError } from '~/utils/api/error'
 
-export function useVolumeCreate(series: () => { id: number }) {
+export function useVolumeCreate(series: () => { id: number }, set: () => number | null) {
   const method = ref<'isbn' | 'manual'>('isbn')
   const isbn = ref('')
   const number = ref('')
@@ -73,7 +73,13 @@ export function useVolumeCreate(series: () => { id: number }) {
   }
 
   const operations = async (): Promise<{ operations: EditOperation[] }> => {
-    if (method.value === 'isbn' && draft.value) return { operations: draft.value.operations }
+    const shelf = set()
+    const placed: EditOperation[] =
+      shelf === null
+        ? []
+        : [{ op: 'add', entry_ref: 'v', property: 'VOLUME_SET', value: { target: shelf } }]
+    if (method.value === 'isbn' && draft.value)
+      return { operations: [...draft.value.operations, ...placed] }
     const target = await seriesEntry()
     return {
       operations: [
@@ -90,6 +96,7 @@ export function useVolumeCreate(series: () => { id: number }) {
               },
             ]
           : []),
+        ...placed,
       ],
     }
   }

@@ -2180,6 +2180,10 @@
             "nullable": true,
             "type": "string"
           },
+          "set_entry_id": {
+            "nullable": true,
+            "type": "number"
+          },
           "source_authors": {
             "items": {
               "$ref": "#/components/schemas/AdminMangaSourceAuthorDto"
@@ -2214,6 +2218,7 @@
         "required": [
           "id",
           "manga_id",
+          "set_entry_id",
           "source_key",
           "source_series_id",
           "matched_by",
@@ -9657,6 +9662,12 @@
             ],
             "type": "string"
           },
+          "set_entry_id": {
+            "description": "单行本所在的版本套；填写时单行本必须属于这一套",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
           "volume_id": {
             "description": "单行本条目",
             "minimum": 1,
@@ -14449,6 +14460,12 @@
           },
           "series_id": {
             "minimum": 1,
+            "type": "number"
+          },
+          "set_entry_id": {
+            "description": "单行本所在的版本套；填写时单行本必须属于这一套",
+            "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "source_lang": {
@@ -58827,6 +58844,12 @@
             ],
             "type": "string"
           },
+          "set_entry_id": {
+            "description": "单行本所在的版本套；填写时单行本必须属于这一套",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
           "team_id": {
             "minimum": 1,
             "nullable": true,
@@ -60361,6 +60384,20 @@
         },
         "required": [
           "groups"
+        ],
+        "type": "object"
+      },
+      "UpdateSourceLinkSetDto": {
+        "properties": {
+          "set_entry_id": {
+            "description": "来源对应的版本套，必须属于来源所关联的作品；为空时按原版那一套挂卷",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "set_entry_id"
         ],
         "type": "object"
       },
@@ -69221,6 +69258,46 @@
                 "schema": {
                   "format": "binary",
                   "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/manga"
+        ]
+      }
+    },
+    "/api/v3/admin/manga/source-links/{id}/set": {
+      "put": {
+        "operationId": "AdminMangaSourceLinkController_assignSet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSourceLinkSetDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMangaSourceLinkDetailDto"
                 }
               }
             },
@@ -95381,6 +95458,16 @@
             "name": "id",
             "required": true,
             "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "列出这一版本套的卷；不填时列出原版那一套",
+            "in": "query",
+            "name": "set_entry_id",
+            "required": false,
+            "schema": {
+              "minimum": 1,
               "type": "number"
             }
           }
