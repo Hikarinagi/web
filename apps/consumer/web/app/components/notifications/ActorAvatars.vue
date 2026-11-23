@@ -66,6 +66,7 @@
       case 'workbench.stale':
       case 'workbench.held':
       case 'workbench.resumed':
+      case 'workbench.remounted':
         return Languages
       case 'achievement.unlock':
         return Shirt
