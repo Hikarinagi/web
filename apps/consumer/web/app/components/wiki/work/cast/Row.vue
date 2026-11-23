@@ -97,17 +97,7 @@
       </Stack>
     </TableCell>
     <TableCell class="py-2.5 align-top">
-      <Stack gap="xs">
-        <WikiFieldName v-model="cast.actor.value" label="配音" placeholder="配音演员" />
-        <WikiFieldBefore
-          v-if="cast.touched('CREDIT') && cast.field('CREDIT')"
-          :view="cast.view('CREDIT')"
-          :definition="cast.field('CREDIT')!"
-        />
-        <Text v-if="cast.more.value" size="xs" tone="muted">
-          另有 {{ cast.more.value }} 个配音
-        </Text>
-      </Stack>
+      <WikiWorkCastVoices :appearance="appearance" />
     </TableCell>
     <TableCell class="py-2.5 align-top">
       <Stack gap="xs">

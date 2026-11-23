@@ -83,6 +83,7 @@
         >
           CV
           <template v-for="(voice, index) in voices" :key="index">
+            <template v-if="index">、</template>
             <Link
               v-if="voice.personId"
               :as="NuxtLink"

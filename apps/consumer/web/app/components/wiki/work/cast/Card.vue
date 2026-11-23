@@ -56,14 +56,7 @@
             :definition="cast.field('LABEL')!"
           />
         </Stack>
-        <Stack gap="xs">
-          <WikiFieldName v-model="cast.actor.value" label="配音" placeholder="配音演员" />
-          <WikiFieldBefore
-            v-if="cast.touched('CREDIT') && cast.field('CREDIT')"
-            :view="cast.view('CREDIT')"
-            :definition="cast.field('CREDIT')!"
-          />
-        </Stack>
+        <WikiWorkCastVoices :appearance="appearance" />
         <Inline gap="sm" align="center" :wrap="false">
           <Select
             :model-value="cast.role.value"

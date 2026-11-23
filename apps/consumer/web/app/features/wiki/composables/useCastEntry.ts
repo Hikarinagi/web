@@ -19,8 +19,8 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
   const general = (property: Fact) =>
     live(property).find(item => !item.value.versions.length) ?? null
   const voices = computed(() => live('CREDIT').filter(item => item.value.code === 'VOICE'))
+  type Voice = (typeof voices.value)[number]
   const label = computed(() => live('LABEL')[0] ?? null)
-  const voice = computed(() => voices.value[0] ?? null)
   const image = computed(() => live('IMAGE')[0]?.value.media ?? null)
   const created = computed(() => id.value < 0)
   const touched = (property: Tracked) =>
@@ -74,18 +74,21 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
     set: text =>
       write('LABEL', label.value, { ...(label.value?.value ?? emptyValue()), text: text || null }),
   })
-  const actor = computed({
-    get: () => ({
-      text: voice.value?.value.text ?? null,
-      target: voice.value?.value.target ?? null,
-    }),
-    set: next =>
-      write('CREDIT', voice.value, {
-        ...(voice.value?.value ?? emptyValue()),
-        ...next,
-        code: 'VOICE',
-      }),
-  })
+  function setVoice(
+    voice: Voice | null,
+    next: Pick<ValueDraft, 'text' | 'target'>,
+    versions: ValueDraft['versions'] = [],
+  ) {
+    write('CREDIT', voice, {
+      ...(voice?.value ?? { ...emptyValue(), versions }),
+      ...next,
+      code: 'VOICE',
+    })
+  }
+
+  function setVersions(voice: Voice, versions: ValueDraft['versions']) {
+    editor.set(voice.id, { ...voice.value, versions })
+  }
   const role = computed({
     get: () => general('CAST_ROLE')?.value.code ?? null,
     set: code => {
@@ -106,13 +109,14 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
     dirty,
     hinted,
     name,
-    actor,
+    setVoice,
+    setVersions,
+    removeVoice: (voice: Voice) => editor.remove(voice.id),
     role,
     protagonist: mark('PROTAGONIST'),
     capturable: mark('CAPTURABLE'),
     partialProtagonist: partial('PROTAGONIST'),
     partialCapturable: partial('CAPTURABLE'),
     others: computed(() => Math.max(live('LABEL').length - 1, 0)),
-    more: computed(() => Math.max(voices.value.length - 1, 0)),
   }
 }
