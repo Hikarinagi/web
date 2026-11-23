@@ -3729,6 +3729,13 @@
             "nullable": true,
             "type": "string"
           },
+          "sets": {
+            "description": "作品的各版本套，原版在前",
+            "items": {
+              "$ref": "#/components/schemas/VolumeSetRefDto"
+            },
+            "type": "array"
+          },
           "volumes": {
             "items": {
               "$ref": "#/components/schemas/AdminNovelWorkVolumeDto"
@@ -3745,6 +3752,7 @@
           "primary_source_key",
           "located_at",
           "available_sources",
+          "sets",
           "links",
           "volumes"
         ],
@@ -3840,6 +3848,11 @@
             ],
             "type": "string"
           },
+          "set_entry_id": {
+            "description": "来源所属的版本套，为空时按原版那一套对齐分卷",
+            "nullable": true,
+            "type": "number"
+          },
           "source_key": {
             "type": "string"
           },
@@ -3865,6 +3878,7 @@
         },
         "required": [
           "id",
+          "set_entry_id",
           "source_key",
           "source_series_id",
           "source_title",
@@ -3902,6 +3916,11 @@
             "nullable": true,
             "type": "string"
           },
+          "set_entry_id": {
+            "description": "分卷所在的版本套",
+            "nullable": true,
+            "type": "number"
+          },
           "sources": {
             "items": {
               "$ref": "#/components/schemas/AdminNovelWorkVolumeSourceDto"
@@ -3915,6 +3934,7 @@
         },
         "required": [
           "id",
+          "set_entry_id",
           "volume_number",
           "name",
           "name_cn",
@@ -12034,6 +12054,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -12810,6 +12831,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -14572,6 +14594,12 @@
         "properties": {
           "light_novel_id": {
             "minimum": 1,
+            "type": "number"
+          },
+          "set_entry_id": {
+            "description": "关联到作品的哪一套，必须属于该作品；不填时关联原版那一套",
+            "minimum": 1,
+            "nullable": true,
             "type": "number"
           },
           "source": {
@@ -17944,6 +17972,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -18401,6 +18430,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -19403,6 +19433,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -19663,6 +19694,7 @@
           "VOLUME_COUNT",
           "ORDER",
           "BOOK_FORMAT",
+          "EDITION",
           "PAGE_COUNT",
           "TRIM_SIZE",
           "NAME",
@@ -19973,6 +20005,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -21447,6 +21480,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -30238,6 +30272,24 @@
       },
       "LightNovelVolumeSetDto": {
         "properties": {
+          "edition": {
+            "description": "版本类别编码，未记录时为空",
+            "enum": [
+              "TANKOBON",
+              "COMPLETE",
+              "REVISED",
+              "BUNKO",
+              "DELUXE",
+              "DIGITAL",
+              "SPLIT",
+              "WIDE",
+              "REPRINT",
+              "COLOR",
+              "OMNIBUS"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "description": "版本套的条目 ID",
             "type": "number"
@@ -30297,6 +30349,7 @@
         "required": [
           "id",
           "name",
+          "edition",
           "original",
           "volume_count",
           "publication_date",
@@ -37999,6 +38052,24 @@
       },
       "MangaVolumeSetDto": {
         "properties": {
+          "edition": {
+            "description": "版本类别编码，未记录时为空",
+            "enum": [
+              "TANKOBON",
+              "COMPLETE",
+              "REVISED",
+              "BUNKO",
+              "DELUXE",
+              "DIGITAL",
+              "SPLIT",
+              "WIDE",
+              "REPRINT",
+              "COLOR",
+              "OMNIBUS"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "description": "版本套的条目 ID",
             "type": "number"
@@ -38058,6 +38129,7 @@
         "required": [
           "id",
           "name",
+          "edition",
           "original",
           "volume_count",
           "publication_date",
@@ -46034,6 +46106,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -47563,6 +47636,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -47706,6 +47780,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -47900,6 +47975,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -52980,6 +53056,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -56844,6 +56921,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -56998,6 +57076,7 @@
               "VOLUME_COUNT",
               "ORDER",
               "BOOK_FORMAT",
+              "EDITION",
               "PAGE_COUNT",
               "TRIM_SIZE",
               "NAME",
@@ -59366,6 +59445,20 @@
           "retry_base_ms",
           "retry_cap_ms",
           "chapter_pace_ms"
+        ],
+        "type": "object"
+      },
+      "UpdateNovelSourceLinkSetDto": {
+        "properties": {
+          "set_entry_id": {
+            "description": "来源对应的版本套，必须属于来源所关联的作品；为空时按原版那一套对齐分卷",
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "set_entry_id"
         ],
         "type": "object"
       },
@@ -61799,12 +61892,30 @@
       },
       "VolumeSetRefDto": {
         "properties": {
+          "edition": {
+            "description": "版本类别编码，未记录时为空",
+            "enum": [
+              "TANKOBON",
+              "COMPLETE",
+              "REVISED",
+              "BUNKO",
+              "DELUXE",
+              "DIGITAL",
+              "SPLIT",
+              "WIDE",
+              "REPRINT",
+              "COLOR",
+              "OMNIBUS"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
           "id": {
             "description": "版本套的条目 ID",
             "type": "number"
           },
           "name": {
-            "description": "版本的显示名称：版本套的名称，未记名称时依次取文库名、出版社名，都没有时为原版或其他版本",
+            "description": "版本的显示名称：版本类别的中文名，未记版本类别时依次取版本套的名称、文库名、出版社名，都没有时为原版或其他版本",
             "type": "string"
           },
           "original": {
@@ -61815,7 +61926,8 @@
         "required": [
           "id",
           "name",
-          "original"
+          "original",
+          "edition"
         ],
         "type": "object"
       },
@@ -70863,6 +70975,46 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminNovelSourceLinkResultDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/novel-source"
+        ]
+      }
+    },
+    "/api/v3/admin/novel-source/source-links/{id}/set": {
+      "put": {
+        "operationId": "AdminNovelSourceLinkController_assignSet",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNovelSourceLinkSetDto"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {

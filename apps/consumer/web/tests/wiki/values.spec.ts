@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { qualifierText, relationPhrase, valueText } from '~/features/wiki/values'
+import { codeLabel, qualifierText, relationPhrase, valueText } from '~/features/wiki/values'
+
+describe('codeLabel', () => {
+  it('names the edition of a volume set in Chinese', () => {
+    expect(codeLabel('EDITION', 'COMPLETE')).toBe('完全版')
+    expect(codeLabel('EDITION', 'DIGITAL')).toBe('电子单行本')
+    expect(valueText({ property: 'EDITION', code: 'SPLIT' })).toBe('分册版')
+  })
+})
 
 describe('valueText', () => {
   it('names the song of a song credit and whether it is a theme or insert song', () => {

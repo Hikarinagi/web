@@ -9,8 +9,8 @@ import {
 import { contentsGroups, type MangaVolumeSet } from '~/features/manga/sets'
 import { volumeSetLabel } from '~/features/volume-set/sets'
 
-const original = { id: 69, name: 'ジャンプコミックス', original: true }
-const reissue = { id: 70, name: '完全版', original: false }
+const original = { id: 69, name: 'ジャンプコミックス', original: true, edition: null }
+const reissue = { id: 70, name: '完全版', original: false, edition: 'COMPLETE' }
 
 function volume(id: number, set: ContentsItem['volume_set'], over: Partial<ContentsItem> = {}) {
   return {
@@ -32,6 +32,7 @@ function set(id: number, over: Partial<MangaVolumeSet> = {}): MangaVolumeSet {
   return {
     id,
     name: null,
+    edition: null,
     original: false,
     volume_count: 24,
     publication_date: null,
@@ -46,7 +47,7 @@ function set(id: number, over: Partial<MangaVolumeSet> = {}): MangaVolumeSet {
 
 const sets = [
   set(69, { original: true, volume_count: 31, labels: [{ id: 1, name: 'ジャンプコミックス' }] }),
-  set(70, { name: '完全版' }),
+  set(70, { name: 'ジャンプ・コミックスデラックス', edition: 'COMPLETE' }),
   set(71, { name: '新装版', volume_count: 20 }),
 ]
 
@@ -54,6 +55,7 @@ describe('volumeSetLabel', () => {
   it('names a set the way the contribution form does and counts its volumes', () => {
     expect(volumeSetLabel(sets[0]!)).toBe('ジャンプコミックス 31 卷')
     expect(volumeSetLabel(sets[1]!)).toBe('完全版 24 卷')
+    expect(volumeSetLabel(sets[2]!)).toBe('新装版 20 卷')
     expect(volumeSetLabel(set(72, { publishers: [{ id: 2, name: '集英社' }] }))).toBe(
       '集英社 24 卷',
     )
@@ -61,7 +63,7 @@ describe('volumeSetLabel', () => {
   })
 })
 
-const renewed = { id: 71, name: '新装版', original: false }
+const renewed = { id: 71, name: '新装版', original: false, edition: null }
 
 describe('contentsUnits by set', () => {
   it('keeps every readable volume, the original set first and the others in the order of the sets', () => {

@@ -1,3 +1,4 @@
+import { VOLUME_SET_EDITION_CN } from '@hikarinagi/shared'
 import type { WikiProperty } from './values'
 
 export const CODE_LABELS: Partial<Record<WikiProperty, Record<string, string>>> = {
@@ -22,6 +23,7 @@ export const CODE_LABELS: Partial<Record<WikiProperty, Record<string, string>>> 
     BOXED_SET: '套装',
     TRANSLATION: '官方译本',
   },
+  EDITION: VOLUME_SET_EDITION_CN,
   ORGANIZATION_TYPE: {
     COMPANY: '公司',
     BRAND: '品牌',

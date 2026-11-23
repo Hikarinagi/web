@@ -17,7 +17,7 @@ export function contentsGroups(volumes: ContentsItem[]): VolumeGroup<ContentsIte
     key,
     name:
       items.find(item => item.volume_set)?.volume_set?.name ??
-      volumeSetName({ name: null, original: true, labels: [], publishers: [] }),
+      volumeSetName({ name: null, edition: null, original: true, labels: [], publishers: [] }),
     original: key === 0,
     items,
   }))

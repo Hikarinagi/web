@@ -13,6 +13,7 @@ function set(
   return {
     id,
     name: null,
+    edition: null,
     original: false,
     volume_count: volumes.length,
     publication_date: null,
@@ -31,7 +32,11 @@ const original = (readable: boolean) =>
     volume(2, false),
   ])
 const reissue = (readable: boolean) =>
-  set(61, { name: '新装版' }, [volume(11, readable), volume(12, false), volume(13, false)])
+  set(61, { name: '角川文庫', edition: 'REVISED' }, [
+    volume(11, readable),
+    volume(12, false),
+    volume(13, false),
+  ])
 
 describe('shelfGroups', () => {
   const shelf = (sets: LightNovelVolumeSet[]) =>
