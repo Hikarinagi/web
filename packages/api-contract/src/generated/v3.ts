@@ -43880,7 +43880,7 @@ export interface operations {
         parameters: {
             query: {
                 /** @description AI 用途 */
-                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "wiki_image_check" | "entry_check" | "wiki_agent" | "wiki_scout" | "wiki_lead";
+                scene: "novel_translate" | "manga_translate" | "manga_vision" | "moderation" | "image_moderation" | "epub_judge" | "telegram_chat" | "telegram_private" | "novel_volume_align" | "novel_content_gate" | "manga_credit_check" | "manga_chapter_plan" | "manga_place" | "wiki_image_check" | "entry_check" | "wiki_agent" | "wiki_scout" | "wiki_lead";
                 /** @description 只列出能识别图片的模型 */
                 vision?: boolean;
             };

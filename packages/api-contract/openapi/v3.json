@@ -82894,6 +82894,7 @@
                 "novel_content_gate",
                 "manga_credit_check",
                 "manga_chapter_plan",
+                "manga_place",
                 "wiki_image_check",
                 "entry_check",
                 "wiki_agent",
