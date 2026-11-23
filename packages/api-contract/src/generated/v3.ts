@@ -22632,6 +22632,10 @@ export interface components {
             title: string | null;
             /** @description 话的类型：serialization、extra、oneshot、volume */
             type: string;
+            /** @description 整卷的卷号 */
+            volume_number: number | null;
+            /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
+            volume_set: components["schemas"]["MangaVolumeSetRefDto"] | null;
         };
         LandingReasonDto: {
             /** @enum {string} */
@@ -24200,6 +24204,8 @@ export interface components {
             /** @description 所属单行本条目 */
             volume_id: number | null;
             volume_number: number | null;
+            /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
+            volume_set: components["schemas"]["MangaVolumeSetRefDto"] | null;
         };
         MangaChapterStatusDto: {
             done: number;
@@ -24643,6 +24649,8 @@ export interface components {
             parts: components["schemas"]["MangaChapterPartsDto"] | null;
             title: string | null;
             volume_number: number | null;
+            /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
+            volume_set: components["schemas"]["MangaVolumeSetRefDto"] | null;
         };
         MangaProgressDto: {
             chapter: components["schemas"]["MangaProgressChapterDto"];
@@ -25033,6 +25041,8 @@ export interface components {
             parts: components["schemas"]["MangaChapterPartsDto"] | null;
             title: string | null;
             volume_number: number | null;
+            /** @description 整卷所属的版本套；不是整卷或单行本没有归入版本套时为空 */
+            volume_set: components["schemas"]["MangaVolumeSetRefDto"] | null;
         };
         MangaReaderDto: {
             chapter: components["schemas"]["MangaReaderChapterDto"];
@@ -25224,6 +25234,8 @@ export interface components {
             current_chapter_title: string | null;
             current_chapter_type: components["schemas"]["MangaChapterType"];
             current_volume_number: number | null;
+            /** @description 当前项为整卷时所属的版本套；不是整卷或单行本没有归入版本套时为空 */
+            current_volume_set: components["schemas"]["MangaVolumeSetRefDto"] | null;
             first_chapter_id: number | null;
             is_finished: boolean;
             is_latest: boolean;
@@ -25449,7 +25461,8 @@ export interface components {
             created_at: string;
             /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
-            editions: components["schemas"]["MangaEditionDto"][] | null;
+            /** @description 记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列 */
+            editions: components["schemas"]["MangaVolumeEditionDto"][];
             /** @description 条目 ID */
             entry_id: number;
             id: number;
@@ -25480,6 +25493,27 @@ export interface components {
             updated_at: string;
             views: number;
             volume_number: number | null;
+        };
+        MangaVolumeEditionDto: {
+            currency: string | null;
+            /** @description 出版版本条目 ID */
+            entry_id: number;
+            /** @description 出版形态编码：TANKOBON、BUNKO、SPECIAL、DIGITAL、REVISED、EXPANDED、OMNIBUS、BOXED_SET、TRANSLATION */
+            format: string | null;
+            isbn: string | null;
+            labels: components["schemas"]["MangaVolumeSetProducerDto"][];
+            page_count: number | null;
+            /** @description 维基照录的所收部分，如只收这一卷一部分的电子分册；收录整卷时为空 */
+            part: string | null;
+            price: number | null;
+            publishers: components["schemas"]["MangaVolumeSetProducerDto"][];
+            /** Format: date-time */
+            release_date: string | null;
+            release_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description 发售状态编码：PLANNED、RELEASED、CANCELLED */
+            release_status: string | null;
+            tax_included: boolean | null;
+            title: string | null;
         };
         MangaVolumePartialEditionDto: {
             /** @description 出版版本条目 */
@@ -25529,6 +25563,14 @@ export interface components {
             /** @description 厂商 ID，组织条目没有对应厂商时为空 */
             id: number | null;
             name: string;
+        };
+        MangaVolumeSetRefDto: {
+            /** @description 版本套的条目 ID */
+            id: number;
+            /** @description 版本的显示名称：版本套的名称，未记名称时依次取文库名、出版社名，都没有时为原版或其他版本 */
+            name: string;
+            /** @description 是否为原版，即首卷发售最早的一套 */
+            original: boolean;
         };
         MangaVolumeWantedDto: {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;

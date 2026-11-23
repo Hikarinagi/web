@@ -39,6 +39,8 @@
             type: item.current_chapter_type,
             number: item.current_chapter_number,
             title: item.current_chapter_title,
+            volume_number: item.current_volume_number,
+            volume_set: item.current_volume_set,
           }),
           note: `上次阅读：${since(item.last_read)}`,
           progress: item.total_chapters

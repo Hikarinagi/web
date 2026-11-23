@@ -4,6 +4,7 @@ import {
   mangaChapterLabel,
   mangaChapterNumber,
   mangaReadingUnit,
+  mangaSetKey,
   type MangaReadingUnit,
 } from '@hikarinagi/shared'
 
@@ -29,10 +30,12 @@ const CONTENTS_RECENT_MS = 45 * 24 * 60 * 60 * 1000
 const CONTENTS_RECENT_COUNT = 4
 const CONTENTS_BULK_DAY = 10
 
-export function contentsUnits(items: ContentsItem[]): ContentsUnits {
+export function contentsUnits(items: ContentsItem[], set: number | null = null): ContentsUnits {
   const units: ContentsUnits = { chapter: [], volume: [], extra: [] }
   for (const item of items) {
-    if (item.readable) units[mangaReadingUnit(item.chapter_type)].push(item)
+    const unit = mangaReadingUnit(item.chapter_type)
+    if (!item.readable || (unit === 'volume' && set !== null && mangaSetKey(item) !== set)) continue
+    units[unit].push(item)
   }
   return units
 }

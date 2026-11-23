@@ -8,6 +8,7 @@
   defineProps<{
     volumes: MangaVolumePageData['volumes']
     current: number
+    set: MangaVolumePageData['set_name']
   }>()
 
   const area = useTemplateRef<InstanceType<typeof ScrollArea>>('area')
@@ -30,7 +31,11 @@
 </script>
 
 <template>
-  <EntrySectionHead id="series" title="同系列" :count="volumes.length" />
+  <EntrySectionHead id="series" title="同系列" :count="volumes.length">
+    <template v-if="set" #actions>
+      <Text size="sm" tone="muted" truncate class="min-w-0">{{ set }}</Text>
+    </template>
+  </EntrySectionHead>
   <ScrollArea ref="area" direction="horizontal" :wheel-redirect="false" class="-mx-4 lg:-mx-2">
     <Inline gap="md" align="end" :wrap="false" class="w-max px-4 pt-2 pb-3 lg:px-2">
       <NuxtLink

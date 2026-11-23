@@ -211,6 +211,8 @@
       v-model:open="items.directoryOpen.value"
       v-model:unit="items.directoryUnit.value"
       v-model:range="items.directoryRange.value"
+      v-model:set="items.setModel.value"
+      :sets="items.setOptions.value"
       :narrow="narrow"
       :dark="!light"
       :units="items.units.value"

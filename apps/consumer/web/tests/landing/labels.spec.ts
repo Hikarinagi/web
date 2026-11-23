@@ -34,6 +34,30 @@ describe('landing labels', () => {
     expect(chapterLabel(null)).toBe('')
   })
 
+  it('names a whole volume by its volume number and the set it belongs to unless that is the original', () => {
+    const volume = (set: { id: number; name: string; original: boolean } | null) => ({
+      type: 'volume',
+      number: null,
+      title: null,
+      volume_number: 3,
+      volume_set: set,
+    })
+    expect(chapterLabel(volume(null))).toBe('第 3 卷')
+    expect(chapterLabel(volume({ id: 1, name: 'ジャンプコミックス', original: true }))).toBe(
+      '第 3 卷',
+    )
+    expect(chapterLabel(volume({ id: 2, name: '完全版', original: false }))).toBe('完全版 第 3 卷')
+    expect(
+      chapterLabel({
+        type: 'VOLUME',
+        number: null,
+        title: '総集編',
+        volume_number: null,
+        volume_set: { id: 2, name: '完全版', original: false },
+      }),
+    ).toBe('完全版 総集編')
+  })
+
   it('names a volume by its number or title and prices in yen', () => {
     expect(volumeLabel({ number: '4', title: '第四卷' })).toBe('第 4 卷')
     expect(volumeLabel({ number: '上', title: null })).toBe('上')

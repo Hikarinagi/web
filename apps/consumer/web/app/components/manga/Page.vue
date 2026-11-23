@@ -3,6 +3,7 @@
   import type { EntryReview } from '~/components/entry/Reviews.vue'
   import { entryRating } from '~/features/entry/rating'
   import { usePageTone } from '~/features/entry/usePageTone'
+  import { useContentsSet, useRouteSet } from '~/features/manga/composables/useContentsSet'
   import { tagRoute } from '~/features/manga/explore'
   import { MANGA_STATUS_LABEL, type MangaRateStatus } from '~/features/manga/rate'
   import { useMangaRate } from '~/features/manga/useMangaRate'
@@ -60,6 +61,12 @@
       : [],
   )
 
+  const {
+    options: setOptions,
+    key: setKey,
+    model: setModel,
+  } = useContentsSet(() => props.data, useRouteSet())
+
   const rateCtl = useMangaRate(props.mangaId, props.data.my_rate)
   const rateOpen = ref(false)
 </script>
@@ -74,6 +81,7 @@
       :producers="data.producers"
       :my-rate="data.my_rate"
       :progress="data.progress"
+      :sets="data.sets"
       :favorited="data.favorite?.favorited ?? false"
       :rating="rating"
     />
@@ -89,8 +97,11 @@
           </LineClamp>
         </Stack>
         <MangaContentsPanel
+          v-model:set="setModel"
           :manga-id="data.manga.id"
           :chapters="data.chapters"
+          :set-options="setOptions"
+          :set-key="setKey"
           :progress="data.progress"
           :finished="data.manga.serial_status === 'FINISHED'"
           :latest-chapter-at="data.manga.latest_chapter_at"
@@ -116,6 +127,7 @@
           :people="data.people"
           :producers="data.producers"
           :volumes="data.volumes"
+          :sets="data.sets"
         />
         <MangaEditionList v-if="data.manga.editions?.length" :editions="data.manga.editions" />
         <EntryTags

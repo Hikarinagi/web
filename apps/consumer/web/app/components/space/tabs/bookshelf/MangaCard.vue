@@ -31,6 +31,7 @@
       volume_number: props.item.current_volume_number,
       title: props.item.current_chapter_title,
       ordinal: props.item.current_chapter_ordinal,
+      volume_set: props.item.current_volume_set,
     }),
   )
 

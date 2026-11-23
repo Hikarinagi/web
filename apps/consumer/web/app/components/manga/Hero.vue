@@ -4,6 +4,7 @@
   import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
   import { dayText } from '~/features/entry/date'
+  import { useContentsSet, useRouteSet } from '~/features/manga/composables/useContentsSet'
   import { contentsStatus, contentsUnits } from '~/features/manga/contents'
   import { mangaSerialStatusLabel, mangaStaffRoleLabel } from '~/features/manga/labels'
   import { getMangaCover, getMangaTitle } from '~/utils/media/manga'
@@ -18,6 +19,7 @@
     producers: MangaPageData['producers']
     myRate: MangaPageData['my_rate']
     progress: MangaPageData['progress']
+    sets: MangaPageData['sets']
     favorited?: boolean
     rating?: EntryRating
   }>()
@@ -32,8 +34,9 @@
   const front = computed(() => strip.value.at(-1)?.cover ?? cover.value)
   const finished = computed(() => props.manga.serial_status === 'FINISHED')
   const statusLabel = computed(() => mangaSerialStatusLabel(props.manga.serial_status))
+  const { key: setKey } = useContentsSet(() => props, useRouteSet())
   const update = computed(() => {
-    const text = contentsStatus(contentsUnits(props.chapters), finished.value)
+    const text = contentsStatus(contentsUnits(props.chapters, setKey.value), finished.value)
     return text?.replace('更新至 ', '更新至')
   })
   const credits = computed(() =>
@@ -155,6 +158,7 @@
           :manga-id="manga.id"
           :title="title"
           :chapters="chapters"
+          :set-key="setKey"
           :my-rate="myRate"
           :progress="progress"
           :favorited="favorited ?? false"

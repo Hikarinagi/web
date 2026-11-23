@@ -28,12 +28,13 @@ export function useContents(
     mangaId: number
     chapters: ContentsItem[]
     progress: ContentsProgress | null | undefined
+    set?: number | null
   },
 ) {
   const auth = useAuthStore()
   const { requireLogin } = useAuthGate()
 
-  const units = computed(() => contentsUnits(source().chapters))
+  const units = computed(() => contentsUnits(source().chapters, source().set ?? null))
   const readIds = computed(() => new Set(source().progress?.read_chapter_ids ?? []))
   const currentId = computed(() => {
     const id = source().progress?.chapter.id ?? null

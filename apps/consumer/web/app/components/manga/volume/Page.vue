@@ -86,11 +86,15 @@
           :chapters="data.chapters"
           :progress="data.progress"
         />
-        <Stack gap="md">
-          <MangaVolumeEditions :volume="data.volume" :producers="data.producers" />
+        <Stack v-if="data.volume.editions.length" gap="md">
+          <MangaVolumeEditions :editions="data.volume.editions" />
         </Stack>
         <Stack v-if="data.volumes.length" gap="md">
-          <MangaVolumeSeriesStrip :volumes="data.volumes" :current="data.volume.id" />
+          <MangaVolumeSeriesStrip
+            :volumes="data.volumes"
+            :current="data.volume.id"
+            :set="data.set_name"
+          />
         </Stack>
       </Stack>
       <Stack as="aside" gap="xl" class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]">

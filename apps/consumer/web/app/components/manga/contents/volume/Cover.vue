@@ -18,10 +18,10 @@
   )
   const emit = defineEmits<{ select: [item: ContentsItem] }>()
 
-  const label = computed(() => mangaChapterLabel(props.item))
+  const label = computed(() => mangaChapterLabel({ ...props.item, volume_set: null }))
   const aria = computed(() =>
     [
-      mangaChapterHeading(props.item),
+      mangaChapterHeading({ ...props.item, volume_set: null }),
       props.read ? '已读' : '',
       props.current ? `读到第 ${props.currentPage} 页` : '',
       props.locked ? '需要登录' : '',

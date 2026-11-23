@@ -7,7 +7,7 @@
 
   defineOptions({ name: 'MangaVolumeDrawer' })
 
-  const props = defineProps<{ volumes: MangaPageData['volumes'] }>()
+  const props = defineProps<{ volumes: MangaPageData['volumes']; set?: string }>()
   const open = defineModel<boolean>('open', { required: true })
 
   const rows = computed(() =>
@@ -23,14 +23,19 @@
           entry.isbn ? `ISBN ${entry.isbn}` : '',
         ]
           .filter(Boolean)
-          .join(' · '),
+          .join('，'),
       }
     }),
   )
 </script>
 
 <template>
-  <Drawer v-model:open="open" title="单行本" :description="`${volumes.length} 卷`" size="md">
+  <Drawer
+    v-model:open="open"
+    title="单行本"
+    :description="set ? `${set} ${volumes.length} 卷` : `${volumes.length} 卷`"
+    size="md"
+  >
     <template #content>
       <Stack gap="none" class="-mx-(--hn-panel-p)">
         <Inline

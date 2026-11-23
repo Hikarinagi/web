@@ -10,19 +10,23 @@
     type ContentsProgress,
   } from '~/features/manga/contents'
   import { useContents } from '~/features/manga/composables/useContents'
+  import type { ContentsSetOption } from '~/features/manga/sets'
 
   defineOptions({ name: 'MangaContentsPanel' })
 
   const props = defineProps<{
     mangaId: number
     chapters: ContentsItem[]
+    setOptions: ContentsSetOption[]
+    setKey: number | null
     progress: ContentsProgress | null | undefined
     finished: boolean
     latestChapterAt: string | null
   }>()
   const emit = defineEmits<{ refresh: [] }>()
+  const set = defineModel<number | null>('set', { required: true })
 
-  const contents = useContents(() => props)
+  const contents = useContents(() => ({ ...props, set: props.setKey }))
   const { units, readIds, currentId, currentPage, signedIn, unit, range, desc } = contents
 
   const status = computed(() => {
@@ -111,6 +115,8 @@
     <MangaContentsBrowser
       v-model:unit="unit"
       v-model:range="range"
+      v-model:set="set"
+      :sets="setOptions"
       :units="units"
       :current-id="currentId"
       :current-page="currentPage"

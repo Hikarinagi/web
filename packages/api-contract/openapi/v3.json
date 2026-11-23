@@ -26926,14 +26926,31 @@
           "type": {
             "description": "话的类型：serialization、extra、oneshot、volume",
             "type": "string"
+          },
+          "volume_number": {
+            "description": "整卷的卷号",
+            "nullable": true,
+            "type": "number"
+          },
+          "volume_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeSetRefDto"
+              }
+            ],
+            "description": "整卷所属的版本套；不是整卷或单行本没有归入版本套时为空",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
           "id",
           "type",
           "number",
+          "volume_number",
           "title",
-          "at"
+          "at",
+          "volume_set"
         ],
         "type": "object"
       },
@@ -32839,6 +32856,16 @@
           "volume_number": {
             "nullable": true,
             "type": "number"
+          },
+          "volume_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeSetRefDto"
+              }
+            ],
+            "description": "整卷所属的版本套；不是整卷或单行本没有归入版本套时为空",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -32847,6 +32874,7 @@
           "chapter_number",
           "volume_number",
           "volume_id",
+          "volume_set",
           "title",
           "ordinal",
           "publication_date",
@@ -34589,6 +34617,16 @@
           "volume_number": {
             "nullable": true,
             "type": "number"
+          },
+          "volume_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeSetRefDto"
+              }
+            ],
+            "description": "整卷所属的版本套；不是整卷或单行本没有归入版本套时为空",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -34599,7 +34637,8 @@
           "title",
           "ordinal",
           "page_count",
-          "parts"
+          "parts",
+          "volume_set"
         ],
         "type": "object"
       },
@@ -36058,6 +36097,16 @@
           "volume_number": {
             "nullable": true,
             "type": "number"
+          },
+          "volume_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeSetRefDto"
+              }
+            ],
+            "description": "整卷所属的版本套；不是整卷或单行本没有归入版本套时为空",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -36068,7 +36117,8 @@
           "title",
           "ordinal",
           "page_count",
-          "parts"
+          "parts",
+          "volume_set"
         ],
         "type": "object"
       },
@@ -36812,6 +36862,16 @@
             "nullable": true,
             "type": "number"
           },
+          "current_volume_set": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MangaVolumeSetRefDto"
+              }
+            ],
+            "description": "当前项为整卷时所属的版本套；不是整卷或单行本没有归入版本套时为空",
+            "nullable": true,
+            "type": "object"
+          },
           "first_chapter_id": {
             "nullable": true,
             "type": "number"
@@ -36863,6 +36923,7 @@
           "current_chapter_number",
           "current_volume_number",
           "current_chapter_title",
+          "current_volume_set",
           "current_chapter_ordinal",
           "current_chapter_index",
           "first_chapter_id",
@@ -37688,10 +37749,10 @@
             "type": "object"
           },
           "editions": {
+            "description": "记在这一卷下的全部出版版本，首次发售的在前，其余按发售日排列",
             "items": {
-              "$ref": "#/components/schemas/MangaEditionDto"
+              "$ref": "#/components/schemas/MangaVolumeEditionDto"
             },
-            "nullable": true,
             "type": "array"
           },
           "entry_id": {
@@ -37829,6 +37890,95 @@
           "updated_at",
           "revised_at",
           "manga"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeEditionDto": {
+        "properties": {
+          "currency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "entry_id": {
+            "description": "出版版本条目 ID",
+            "type": "number"
+          },
+          "format": {
+            "description": "出版形态编码：TANKOBON、BUNKO、SPECIAL、DIGITAL、REVISED、EXPANDED、OMNIBUS、BOXED_SET、TRANSLATION",
+            "nullable": true,
+            "type": "string"
+          },
+          "isbn": {
+            "nullable": true,
+            "type": "string"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "page_count": {
+            "nullable": true,
+            "type": "number"
+          },
+          "part": {
+            "description": "维基照录的所收部分，如只收这一卷一部分的电子分册；收录整卷时为空",
+            "nullable": true,
+            "type": "string"
+          },
+          "price": {
+            "nullable": true,
+            "type": "number"
+          },
+          "publishers": {
+            "items": {
+              "$ref": "#/components/schemas/MangaVolumeSetProducerDto"
+            },
+            "type": "array"
+          },
+          "release_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "release_date_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
+          "release_status": {
+            "description": "发售状态编码：PLANNED、RELEASED、CANCELLED",
+            "nullable": true,
+            "type": "string"
+          },
+          "tax_included": {
+            "nullable": true,
+            "type": "boolean"
+          },
+          "title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "entry_id",
+          "title",
+          "format",
+          "part",
+          "isbn",
+          "publishers",
+          "labels",
+          "release_date",
+          "release_date_precision",
+          "release_status",
+          "price",
+          "currency",
+          "tax_included",
+          "page_count"
         ],
         "type": "object"
       },
@@ -38016,6 +38166,28 @@
         "required": [
           "id",
           "name"
+        ],
+        "type": "object"
+      },
+      "MangaVolumeSetRefDto": {
+        "properties": {
+          "id": {
+            "description": "版本套的条目 ID",
+            "type": "number"
+          },
+          "name": {
+            "description": "版本的显示名称：版本套的名称，未记名称时依次取文库名、出版社名，都没有时为原版或其他版本",
+            "type": "string"
+          },
+          "original": {
+            "description": "是否为原版，即首卷发售最早的一套",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "original"
         ],
         "type": "object"
       },

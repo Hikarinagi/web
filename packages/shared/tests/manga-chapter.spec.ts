@@ -96,6 +96,32 @@ describe('mangaChapterLabel', () => {
     )
   })
 
+  it('puts the name of another set before a volume and leaves a volume of the original bare', () => {
+    const reissue = { id: 70, name: '完全版', original: false }
+    expect(
+      mangaChapterLabel({ ...item(15, 'VOLUME', { volume_number: 3 }), volume_set: reissue }),
+    ).toBe('完全版 第 3 卷')
+    expect(
+      mangaChapterLabel({
+        ...item(16, 'VOLUME', { volume_number: 3 }),
+        volume_set: { id: 69, name: 'ジャンプコミックス', original: true },
+      }),
+    ).toBe('第 3 卷')
+    expect(
+      mangaChapterLabel({
+        ...item(17, 'VOLUME', { title: '総集編' }),
+        volume_set: reissue,
+        parts: { held: [1], count: 2 },
+      }),
+    ).toBe('完全版 総集編（第 1 册，共 2 册）')
+    expect(
+      mangaChapterLabel({
+        ...item(18, 'SERIALIZATION', { chapter_number: '3' }),
+        volume_set: reissue,
+      }),
+    ).toBe('第 3 话')
+  })
+
   it('treats one-shots as chapters', () => {
     expect(mangaReadingUnit('ONESHOT')).toBe('chapter')
     expect(mangaChapterLabel(item(9, 'ONESHOT', { chapter_number: '2' }))).toBe('第 2 话')
@@ -113,6 +139,15 @@ describe('mangaChapterHeading', () => {
     expect(mangaChapterHeading(item(3, 'EXTRA', { title: '番外篇' }))).toBe('番外篇')
     expect(mangaChapterHeading(item(4, 'SERIALIZATION', { chapter_number: '3' }))).toBe('第 3 话')
   })
+
+  it('does not repeat the title of an unnumbered volume of another set', () => {
+    expect(
+      mangaChapterHeading({
+        ...item(5, 'VOLUME', { title: '総集編' }),
+        volume_set: { id: 70, name: '完全版', original: false },
+      }),
+    ).toBe('完全版 総集編')
+  })
 })
 
 describe('mangaChapterCompare', () => {
@@ -129,6 +164,19 @@ describe('mangaChapterCompare', () => {
     expect([...list].sort(mangaChapterCompare).map(entry => entry.id)).toEqual([
       7, 4, 3, 5, 2, 6, 1,
     ])
+  })
+
+  it('keeps the volumes of the original set ahead and the volumes of each other set together', () => {
+    const original = { id: 69, original: true }
+    const reissue = { id: 70, original: false }
+    const list = [
+      { ...item(1, 'VOLUME', { volume_number: 1 }), volume_set: reissue },
+      { ...item(2, 'VOLUME', { volume_number: 2 }), volume_set: original },
+      { ...item(3, 'VOLUME', { volume_number: 1 }), volume_set: original },
+      { ...item(4, 'VOLUME', { volume_number: 2 }), volume_set: reissue },
+      item(5, 'VOLUME', { volume_number: 3 }),
+    ]
+    expect([...list].sort(mangaChapterCompare).map(entry => entry.id)).toEqual([3, 2, 5, 1, 4])
   })
 })
 
@@ -148,6 +196,17 @@ describe('mangaChapterOrdinals', () => {
     expect(ordinals.get(4)).toBe(2)
     expect(ordinals.get(5)).toBe(1)
     expect(ordinals.get(6)).toBe(1)
+  })
+
+  it('counts a volume number once in each set', () => {
+    const ordinals = mangaChapterOrdinals([
+      { ...item(1, 'VOLUME', { volume_number: 1 }), volume_set: { id: 69, original: true } },
+      { ...item(2, 'VOLUME', { volume_number: 1 }), volume_set: { id: 70, original: false } },
+      { ...item(3, 'VOLUME', { volume_number: 1, sort_key: 9 }), volume_set: null },
+    ])
+    expect(ordinals.get(1)).toBe(1)
+    expect(ordinals.get(2)).toBe(1)
+    expect(ordinals.get(3)).toBe(2)
   })
 })
 

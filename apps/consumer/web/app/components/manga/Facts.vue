@@ -25,10 +25,10 @@
     people: MangaPageData['people']
     producers: MangaPageData['producers']
     volumes: MangaPageData['volumes']
+    sets: MangaPageData['sets']
   }>()
 
   const COLLAPSED = 3
-  const volumesOpen = ref(false)
   const allAliases = ref(false)
   const aliases = computed(() =>
     allAliases.value ? props.manga.other_names : props.manga.other_names.slice(0, COLLAPSED),
@@ -53,7 +53,6 @@
       },
     ].filter(group => group.items.length),
   )
-  const lastVolume = computed(() => props.volumes.findLast(volume => volume.publication_date))
   const book = computed(() =>
     [
       props.manga.pages ? `${props.manga.pages} 页` : '',
@@ -143,18 +142,10 @@
       <DescriptionTerm>状态</DescriptionTerm>
       <DescriptionDetails>{{ mangaSerialStatusLabel(manga.serial_status) }}</DescriptionDetails>
     </template>
-    <template v-if="volumes.length">
+    <template v-if="volumes.length || sets.length > 1">
       <DescriptionTerm>单行本</DescriptionTerm>
       <DescriptionDetails>
-        <Stack gap="none">
-          <HnButton variant="link" size="sm" class="self-start" @click="volumesOpen = true">
-            {{ volumes.length }} 卷
-          </HnButton>
-          <Text v-if="lastVolume" as="span" size="sm" tone="muted" class="tabular-nums">
-            最新一卷 {{ dayText(lastVolume.publication_date) }}
-          </Text>
-        </Stack>
-        <MangaVolumeDrawer v-model:open="volumesOpen" :volumes="volumes" />
+        <MangaFactsVolumes :volumes="volumes" :sets="sets" />
       </DescriptionDetails>
     </template>
     <template v-if="book">

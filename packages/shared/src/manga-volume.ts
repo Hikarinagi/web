@@ -1,3 +1,31 @@
+export interface MangaVolumeSetRef {
+  id: number
+  name: string
+  original: boolean
+}
+
+export interface MangaSetNameSource {
+  name: string | null
+  original: boolean
+  labels: { name: string }[]
+  publishers: { name: string }[]
+}
+
+export function mangaSetName(set: MangaSetNameSource): string {
+  return (
+    set.name ||
+    set.labels[0]?.name ||
+    set.publishers[0]?.name ||
+    (set.original ? '原版' : '其他版本')
+  )
+}
+
+export function mangaSetKey(item: {
+  volume_set?: Pick<MangaVolumeSetRef, 'id' | 'original'> | null
+}): number {
+  return item.volume_set && !item.volume_set.original ? item.volume_set.id : 0
+}
+
 export interface MangaVolumeNumberSource {
   id: number
   volume_number: number | null

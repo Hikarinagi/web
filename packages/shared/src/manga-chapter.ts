@@ -1,3 +1,5 @@
+import { mangaSetKey, type MangaVolumeSetRef } from './manga-volume'
+
 export type MangaChapterKind = 'SERIALIZATION' | 'EXTRA' | 'ONESHOT' | 'VOLUME'
 
 export type MangaReadingUnit = 'chapter' | 'volume' | 'extra'
@@ -14,6 +16,7 @@ export interface MangaChapterLabelSource {
   title: string | null
   ordinal?: number | null
   parts?: MangaChapterParts | null
+  volume_set?: MangaVolumeSetRef | null
 }
 
 export interface MangaChapterOrderSource {
@@ -22,6 +25,7 @@ export interface MangaChapterOrderSource {
   chapter_number: string | null
   volume_number: number | null
   sort_key: number
+  volume_set?: Pick<MangaVolumeSetRef, 'id' | 'original'> | null
 }
 
 export const MANGA_READING_UNITS: readonly MangaReadingUnit[] = ['chapter', 'volume', 'extra']
@@ -68,9 +72,10 @@ export function mangaChapterLabel(item: MangaChapterLabelSource): string {
   const title = item.title?.trim()
   const unit = mangaReadingUnit(item.chapter_type)
   if (unit === 'volume') {
+    const set = item.volume_set && !item.volume_set.original ? `${item.volume_set.name} ` : ''
     const tail = `${suffix(item.ordinal)}${item.parts ? `（${mangaPartsLabel(item.parts)}）` : ''}`
-    if (item.volume_number != null) return `第 ${item.volume_number} 卷${tail}`
-    return `${title || '单行本'}${tail}`
+    if (item.volume_number != null) return `${set}第 ${item.volume_number} 卷${tail}`
+    return `${set}${title || '单行本'}${tail}`
   }
   if (unit === 'chapter' && item.chapter_number) {
     return `第 ${mangaChapterNumber(item.chapter_number)} 话${suffix(item.ordinal)}`
@@ -82,7 +87,7 @@ export function mangaChapterHeading(item: MangaChapterLabelSource): string {
   const label = mangaChapterLabel(item)
   const title = item.title?.trim()
   if (!title || mangaReadingUnit(item.chapter_type) === 'extra') return label
-  if (label.startsWith(title)) return label
+  if (mangaChapterLabel({ ...item, volume_set: null }).startsWith(title)) return label
   return `${label} · ${title}`
 }
 
@@ -109,7 +114,8 @@ export function mangaChapterCompare(
     unitA === 'chapter'
       ? within(numeric(a.chapter_number), numeric(b.chapter_number))
       : unitA === 'volume'
-        ? within(
+        ? within(mangaSetKey(a), mangaSetKey(b)) ||
+          within(
             a.volume_number ?? Number.POSITIVE_INFINITY,
             b.volume_number ?? Number.POSITIVE_INFINITY,
           )
@@ -122,7 +128,8 @@ function ordinalKey(item: MangaChapterOrderSource & { title: string | null }): s
   if (unit === 'chapter' && item.chapter_number) {
     return `chapter:${mangaChapterNumber(item.chapter_number)}`
   }
-  if (unit === 'volume' && item.volume_number != null) return `volume:${item.volume_number}`
+  if (unit === 'volume' && item.volume_number != null)
+    return `volume:${mangaSetKey(item)}:${item.volume_number}`
   return `${unit}:title:${item.title?.trim() ?? ''}`
 }
 

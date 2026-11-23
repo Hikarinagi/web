@@ -1,4 +1,5 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
+import { mangaChapterLabel } from '@hikarinagi/shared'
 
 type LandingReason = ApiData<'/api/v3/landing/galgames/feed', 'get'>['items'][number]['reason']
 type LandingChapter = NonNullable<
@@ -47,15 +48,27 @@ export function yenLabel(amount: string) {
 }
 
 export function chapterLabel(
-  chapter: Pick<LandingChapter, 'type' | 'number' | 'title'> | null | undefined,
+  chapter:
+    | (Pick<LandingChapter, 'type' | 'number' | 'title'> &
+        Partial<Pick<LandingChapter, 'volume_number' | 'volume_set'>>)
+    | null
+    | undefined,
 ) {
   if (!chapter) return ''
   const type = chapter.type.toLowerCase()
   const number = chapter.number?.replace(/^0+(?=\d)/, '') ?? null
+  if (type === 'volume')
+    return mangaChapterLabel({
+      chapter_type: 'VOLUME',
+      chapter_number: null,
+      volume_number:
+        chapter.volume_number ?? (number && /^\d+$/.test(number) ? Number(number) : null),
+      title: chapter.title,
+      volume_set: chapter.volume_set ?? null,
+    })
   if (type === 'serialization' && number)
     return /^\d+(\.\d+)?$/.test(number) ? `第 ${number} 话` : number
   if (chapter.title) return chapter.title
-  if (type === 'volume' && number) return `第 ${number} 卷`
   return type === 'extra' ? '番外' : ''
 }
 

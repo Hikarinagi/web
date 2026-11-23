@@ -6,6 +6,7 @@
     type MangaReadingUnit,
   } from '@hikarinagi/shared'
   import type { ContentsItem, ContentsUnits, ContentsVariant } from '~/features/manga/contents'
+  import type { ContentsSetOption } from '~/features/manga/sets'
 
   defineOptions({ name: 'MangaContentsBrowser' })
 
@@ -19,12 +20,20 @@
       desc?: boolean
       variant?: ContentsVariant
       collecting?: ReadonlySet<number>
+      sets?: ContentsSetOption[]
     }>(),
-    { currentPage: 0, desc: false, variant: 'page', collecting: () => new Set<number>() },
+    {
+      currentPage: 0,
+      desc: false,
+      variant: 'page',
+      collecting: () => new Set<number>(),
+      sets: () => [],
+    },
   )
   const emit = defineEmits<{ select: [item: ContentsItem] }>()
   const unit = defineModel<MangaReadingUnit>('unit', { required: true })
   const range = defineModel<string | null>('range', { default: null })
+  const set = defineModel<number | null>('set', { default: null })
 
   const available = computed(() => MANGA_READING_UNITS.filter(key => props.units[key].length))
 </script>
@@ -47,6 +56,8 @@
     <TabsContent v-for="key in available" :key="key" :value="key">
       <MangaContentsUnit
         v-model:range="range"
+        v-model:set="set"
+        :sets="sets"
         :unit="key"
         :units="units"
         :current-id="currentId"
@@ -64,6 +75,8 @@
   <MangaContentsUnit
     v-else-if="available[0]"
     v-model:range="range"
+    v-model:set="set"
+    :sets="sets"
     :unit="available[0]"
     :units="units"
     :current-id="currentId"

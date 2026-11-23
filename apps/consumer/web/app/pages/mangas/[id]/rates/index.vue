@@ -31,6 +31,7 @@
       :producers="data.producers"
       :my-rate="data.my_rate"
       :progress="data.progress"
+      :sets="data.sets"
       :favorited="data.favorite?.favorited ?? false"
     />
 
