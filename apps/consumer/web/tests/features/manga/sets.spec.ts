@@ -1,11 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { contentsUnits, type ContentsItem } from '~/features/manga/contents'
-import {
-  contentsSetKey,
-  contentsSets,
-  volumeSetLabel,
-  type MangaVolumeSet,
-} from '~/features/manga/sets'
+import { contentsSetKey, contentsSets, type MangaVolumeSet } from '~/features/manga/sets'
+import { volumeSetLabel } from '~/features/volume-set/sets'
 
 const original = { id: 69, name: 'ジャンプコミックス', original: true }
 const reissue = { id: 70, name: '完全版', original: false }

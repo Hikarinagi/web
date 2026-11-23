@@ -35,7 +35,7 @@
       const entry = progress.get(volume.id)
       return {
         id: String(volume.id),
-        name: nameOf(volume),
+        name: nameOf({ ...volume, volume_set: null }),
         readable: volume.online_reading_available,
         state: !volume.online_reading_available
           ? '暂无 EPUB'

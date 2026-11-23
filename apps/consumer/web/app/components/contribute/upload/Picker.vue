@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { Button, Combobox, Inline, Stack, Text } from '@hina-ui/vue'
   import { useDeskSize } from '~/features/contribute/useDeskSize'
-  import type { IntakeSuggestion, IntakeVolume } from '~/features/contribute/useNovelIntake'
+  import type { IntakeVolume } from '~/features/contribute/useNovelIntake'
   import { useVolumeSearch } from '~/features/contribute/useVolumeSearch'
   import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
-  const props = defineProps<{ filename: string; suggestion: IntakeSuggestion | null }>()
+  const props = defineProps<{ filename: string; suggestion: IntakeVolume | null }>()
   const emit = defineEmits<{ pick: [volume: IntakeVolume] }>()
 
   const { control, field, caption } = useDeskSize()

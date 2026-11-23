@@ -10,13 +10,13 @@
     TableRow,
     Text,
   } from '@hina-ui/vue'
-  import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
+  import type { components } from '@hikarinagi/api-contract/v3'
   import { dayText, monthText } from '~/features/entry/date'
   import { volumePrice } from '~/features/light-novel-volume/price'
   import { CODE_LABELS } from '~/features/wiki/codes'
 
-  defineOptions({ name: 'MangaVolumeEditions' })
-  const props = defineProps<{ editions: MangaVolumePageData['volume']['editions'] }>()
+  defineOptions({ name: 'EntryVolumeEditions' })
+  const props = defineProps<{ editions: components['schemas']['VolumeEditionDto'][] }>()
 
   const rows = computed(() =>
     props.editions.map(edition => ({
@@ -67,7 +67,7 @@
               </Text>
             </Stack>
           </TableCell>
-          <TableCell lang="ja" class="whitespace-nowrap">{{ row.publishers }}</TableCell>
+          <TableCell lang="ja" class="min-w-32">{{ row.publishers }}</TableCell>
           <TableCell class="whitespace-nowrap tabular-nums">{{ row.isbn }}</TableCell>
           <TableCell class="whitespace-nowrap tabular-nums">{{ row.date }}</TableCell>
           <TableCell align="end" class="tabular-nums">{{ row.pages }}</TableCell>

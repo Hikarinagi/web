@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   chapterLabel,
   dayLabel,
+  novelReading,
   reasonLabel,
   relativeDay,
   volumeLabel,
@@ -63,6 +64,35 @@ describe('landing labels', () => {
     expect(volumeLabel({ number: '上', title: null })).toBe('上')
     expect(volumeLabel({ number: null, title: '短編集' })).toBe('短編集')
     expect(yenLabel('8800')).toBe('8,800 日元')
+  })
+
+  it('puts the name of another set before the number of a light novel volume', () => {
+    const reissue = { name: '新装版', original: false }
+    expect(volumeLabel({ number: '2', title: '溜息', volume_set: reissue })).toBe('新装版 第 2 卷')
+    expect(volumeLabel({ number: '上', title: null, volume_set: reissue })).toBe('新装版 上')
+    expect(
+      volumeLabel({ number: '2', title: null, volume_set: { name: '電撃文庫', original: true } }),
+    ).toBe('第 2 卷')
+  })
+
+  it('tells how far a reader is in a light novel, without the total of the original set for another set', () => {
+    const item = {
+      current_volume_number: 3,
+      total_volumes: 12,
+      current_volume_title: '第三巻',
+      current_volume_set: null,
+    } as Parameters<typeof novelReading>[0]
+    expect(novelReading(item)).toEqual({ note: '读到第 3 卷，共 12 卷', progress: 0.25 })
+    expect(
+      novelReading({
+        ...item,
+        current_volume_set: { id: 61, name: '新装版', original: false },
+      }),
+    ).toEqual({ note: '读到新装版 第 3 卷', progress: undefined })
+    expect(novelReading({ ...item, current_volume_number: null })).toEqual({
+      note: '第三巻',
+      progress: undefined,
+    })
   })
 
   it('explains each recommendation in the words of its source', () => {

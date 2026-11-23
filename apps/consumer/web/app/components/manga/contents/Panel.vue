@@ -10,14 +10,14 @@
     type ContentsProgress,
   } from '~/features/manga/contents'
   import { useContents } from '~/features/manga/composables/useContents'
-  import type { ContentsSetOption } from '~/features/manga/sets'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
   defineOptions({ name: 'MangaContentsPanel' })
 
   const props = defineProps<{
     mangaId: number
     chapters: ContentsItem[]
-    setOptions: ContentsSetOption[]
+    setOptions: VolumeSetOption[]
     setKey: number | null
     progress: ContentsProgress | null | undefined
     finished: boolean

@@ -1,5 +1,5 @@
 import type { SelectItems } from '@hina-ui/vue'
-import { mangaSetName } from '@hikarinagi/shared'
+import { volumeSetName } from '@hikarinagi/shared'
 import { getMangaVolumeLabel } from '~/utils/media/manga'
 
 export function useVolumeOptions(seriesId: MaybeRefOrGetter<number | null>) {
@@ -30,7 +30,7 @@ export function useVolumeOptions(seriesId: MaybeRefOrGetter<number | null>) {
         list.map(volume => ({ value: volume.id, label: getMangaVolumeLabel(volume) }))
       options.value =
         sets.length > 1
-          ? sets.map(set => ({ label: mangaSetName(set), options: choices(set.volumes) }))
+          ? sets.map(set => ({ label: volumeSetName(set), options: choices(set.volumes) }))
           : choices(volumes)
       loading.value = false
     },

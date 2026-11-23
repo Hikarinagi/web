@@ -87,7 +87,7 @@
           :progress="data.progress"
         />
         <Stack v-if="data.volume.editions.length" gap="md">
-          <MangaVolumeEditions :editions="data.volume.editions" />
+          <EntryVolumeEditions :editions="data.volume.editions" />
         </Stack>
         <Stack v-if="data.volumes.length" gap="md">
           <MangaVolumeSeriesStrip

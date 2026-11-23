@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { FormField, Select } from '@hina-ui/vue'
-  import { mangaSetName } from '@hikarinagi/shared'
+  import { volumeSetName } from '@hikarinagi/shared'
   import type { MangaTargetSet } from '~/features/contribute/manga-target'
 
   const props = defineProps<{ sets: MangaTargetSet[] }>()
@@ -9,7 +9,7 @@
   const options = computed(() =>
     props.sets.map(set => ({
       value: set.id,
-      label: mangaSetName(set),
+      label: volumeSetName(set),
       description: `共 ${set.volume_count} 卷`,
     })),
   )

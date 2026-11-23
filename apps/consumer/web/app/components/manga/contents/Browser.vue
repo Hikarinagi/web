@@ -6,7 +6,7 @@
     type MangaReadingUnit,
   } from '@hikarinagi/shared'
   import type { ContentsItem, ContentsUnits, ContentsVariant } from '~/features/manga/contents'
-  import type { ContentsSetOption } from '~/features/manga/sets'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
   defineOptions({ name: 'MangaContentsBrowser' })
 
@@ -20,7 +20,7 @@
       desc?: boolean
       variant?: ContentsVariant
       collecting?: ReadonlySet<number>
-      sets?: ContentsSetOption[]
+      sets?: VolumeSetOption[]
     }>(),
     {
       currentPage: 0,

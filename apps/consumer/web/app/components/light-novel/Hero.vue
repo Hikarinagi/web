@@ -4,11 +4,14 @@
   import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { monthText } from '~/features/entry/date'
+  import { useShelfSet } from '~/features/light-novel/useShelfSet'
+  import { useRouteSet } from '~/features/volume-set/composables/useSetChoice'
   import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
 
   const props = defineProps<{
     lightNovel: LightNovelPageData['light_novel']
     volumes: LightNovelPageData['volumes']
+    sets: LightNovelPageData['sets']
     people: LightNovelPageData['people']
     producers: LightNovelPageData['producers']
     myRate: LightNovelPageData['my_rate']
@@ -28,9 +31,13 @@
       : '',
   )
   const cover = computed(() => getLightNovelCover(props.lightNovel))
-  const latest = computed(() => props.volumes.at(-1)?.display_cover ?? cover.value)
-  const first = computed(() => props.volumes.find(volume => volume.publication_date))
-  const last = computed(() => props.volumes.findLast(volume => volume.publication_date))
+  const { volumes: shown } = useShelfSet(() => props, useRouteSet())
+  const every = computed(() =>
+    props.sets.length ? props.sets.flatMap(set => set.volumes) : props.volumes,
+  )
+  const latest = computed(() => shown.value.at(-1)?.display_cover ?? cover.value)
+  const first = computed(() => shown.value.find(volume => volume.publication_date))
+  const last = computed(() => shown.value.findLast(volume => volume.publication_date))
   const finished = computed(() => props.lightNovel.novel_status === 'FINISHED')
   const statusLabel = computed(() =>
     props.lightNovel.novel_status ? getNovelStatusLabel(props.lightNovel.novel_status) : '',
@@ -83,7 +90,7 @@
       class="mx-auto grid w-full max-w-(--entry-container) grid-cols-[auto_minmax(0,1fr)] gap-x-5 gap-y-6 px-4 pt-[calc(var(--app-header-height)+1.5rem)] pb-10 [grid-template-areas:'cover_title'_'body_body'_'rating_rating'] lg:grid-cols-[auto_minmax(0,1fr)_var(--rail-right)] lg:gap-x-10 lg:gap-y-5 lg:px-6 lg:pt-[calc(var(--app-header-height)+3rem)] lg:pb-16 lg:[grid-template-areas:'cover_title_rating'_'cover_body_rating']"
     >
       <LightNovelHeroCoverStack
-        :volumes="volumes"
+        :volumes="shown"
         :fallback="cover"
         :title="title"
         class="self-end [grid-area:cover] lg:self-start"
@@ -92,8 +99,8 @@
       <Stack gap="sm" class="min-w-0 self-end [grid-area:title] lg:self-start lg:pt-4">
         <Inline gap="sm" align="center">
           <Tag v-if="statusLabel" :tone="finished ? 'success' : 'info'">{{ statusLabel }}</Tag>
-          <Text v-if="volumes.length" size="sm" tone="muted" class="tabular-nums">
-            全 {{ volumes.length }} 卷
+          <Text v-if="shown.length" size="sm" tone="muted" class="tabular-nums">
+            全 {{ shown.length }} 卷
           </Text>
           <Text v-if="first && last" size="sm" tone="muted" class="hidden tabular-nums sm:inline">
             {{ monthText(first.publication_date) }}至 {{ monthText(last.publication_date) }}
@@ -150,7 +157,8 @@
         <LightNovelHeroCta
           :light-novel-id="lightNovel.id"
           :title="title"
-          :volumes="volumes"
+          :volumes="shown"
+          :every="every"
           :my-rate="myRate"
           :favorited="favorited"
           :progress="progress"

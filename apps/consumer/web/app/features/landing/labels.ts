@@ -1,10 +1,12 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { mangaChapterLabel } from '@hikarinagi/shared'
+import { mangaChapterLabel, type VolumeSetRef } from '@hikarinagi/shared'
+import { getLightNovelVolumeLabel } from '~/utils/media/light-novel'
 
 type LandingReason = ApiData<'/api/v3/landing/galgames/feed', 'get'>['items'][number]['reason']
 type LandingChapter = NonNullable<
   ApiData<'/api/v3/landing/mangas', 'get'>['hot'][number]['chapter']
 >
+type NovelReading = ApiData<'/api/v3/reader/me/reading', 'get'>['items'][number]
 
 export type LandingKind = 'galgame' | 'light_novel' | 'manga'
 
@@ -72,9 +74,29 @@ export function chapterLabel(
   return type === 'extra' ? '番外' : ''
 }
 
-export function volumeLabel(volume: { title: string | null; number: string | null }) {
-  if (volume.number && /^\d+(\.\d+)?$/.test(volume.number)) return `第 ${volume.number} 卷`
-  return volume.title ?? volume.number ?? ''
+export function volumeLabel(volume: {
+  title: string | null
+  number: string | null
+  volume_set?: Pick<VolumeSetRef, 'name' | 'original'> | null
+}) {
+  const set = volume.volume_set && !volume.volume_set.original ? `${volume.volume_set.name} ` : ''
+  if (volume.number && /^\d+(\.\d+)?$/.test(volume.number)) return `${set}第 ${volume.number} 卷`
+  return volume.title ?? (volume.number ? `${set}${volume.number}` : '')
+}
+
+export function novelReading(item: NovelReading) {
+  const number = item.current_volume_number
+  if (number && item.current_volume_set?.original === false)
+    return {
+      note: `读到${getLightNovelVolumeLabel({ volume_label: null, volume_number: number, volume_set: item.current_volume_set })}`,
+      progress: undefined,
+    }
+  if (number && item.total_volumes)
+    return {
+      note: `读到第 ${number} 卷，共 ${item.total_volumes} 卷`,
+      progress: Math.min(1, number / item.total_volumes),
+    }
+  return { note: item.current_volume_title ?? '', progress: undefined }
 }
 
 export function reasonLabel(reason: LandingReason, kind: LandingKind) {

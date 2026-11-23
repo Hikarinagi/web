@@ -81,11 +81,15 @@
           </LineClamp>
           <WorkIntro v-else :edit-to="getRevisionEditPath('light-novel-volume', volumeId)" />
         </Stack>
-        <Stack gap="md">
-          <LightNovelVolumeEditions :volume="data.volume" :producers="data.producers" />
+        <Stack v-if="data.volume.editions.length" gap="md">
+          <EntryVolumeEditions :editions="data.volume.editions" />
         </Stack>
         <Stack v-if="data.volumes.length" gap="md">
-          <LightNovelVolumeSeriesStrip :volumes="data.volumes" :current="data.volume.id" />
+          <LightNovelVolumeSeriesStrip
+            :volumes="data.volumes"
+            :current="data.volume.id"
+            :set="data.set_name"
+          />
         </Stack>
       </Stack>
       <Stack as="aside" gap="xl" class="lg:sticky lg:top-[calc(var(--app-header-height)+1.5rem)]">

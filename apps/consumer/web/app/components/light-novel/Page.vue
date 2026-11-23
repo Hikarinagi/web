@@ -6,6 +6,8 @@
   import { tagRoute } from '~/features/light-novel/explore'
   import { LIGHT_NOVEL_STATUS_LABEL, type LightNovelRateStatus } from '~/features/light-novel/rate'
   import { useLightNovelRate } from '~/features/light-novel/useLightNovelRate'
+  import { useShelfSet } from '~/features/light-novel/useShelfSet'
+  import { useRouteSet } from '~/features/volume-set/composables/useSetChoice'
   import { topVotedMedia } from '~/utils/media/image'
   import { getLightNovelCover, getLightNovelTitle } from '~/utils/media/light-novel'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
@@ -14,9 +16,14 @@
   const props = defineProps<{ data: LightNovelPageData; lightNovelId: number }>()
 
   const title = computed(() => getLightNovelTitle(props.data.light_novel))
+  const {
+    volumes: shelfVolumes,
+    model: shelfSet,
+    options: shelfOptions,
+  } = useShelfSet(() => props.data, useRouteSet())
   const hash = computed(() => {
     const cover =
-      props.data.volumes.at(-1)?.display_cover ?? getLightNovelCover(props.data.light_novel)
+      shelfVolumes.value.at(-1)?.display_cover ?? getLightNovelCover(props.data.light_novel)
     return cover?.thumb_hash ?? null
   })
   usePageTone(hash, { paper: true })
@@ -86,6 +93,7 @@
     <LightNovelHero
       :light-novel="data.light_novel"
       :volumes="data.volumes"
+      :sets="data.sets"
       :people="data.people"
       :producers="data.producers"
       :my-rate="data.my_rate"
@@ -99,8 +107,13 @@
       class="mx-auto w-full max-w-(--entry-container) px-4 pb-16 lg:grid lg:grid-cols-[minmax(0,1fr)_var(--rail-right)] lg:items-start lg:gap-10 lg:px-6"
     >
       <Stack gap="none" class="min-w-0 gap-12">
-        <Stack v-if="data.volumes.length" gap="md">
-          <LightNovelShelf :volumes="data.volumes" :progress="data.progress" />
+        <Stack v-if="shelfVolumes.length" gap="md">
+          <LightNovelShelf
+            v-model:set="shelfSet"
+            :volumes="shelfVolumes"
+            :sets="shelfOptions"
+            :progress="data.progress"
+          />
         </Stack>
         <Stack v-if="characters.length" gap="md"
           ><EntryCharacters
@@ -124,6 +137,7 @@
         <LightNovelFacts
           :light-novel="data.light_novel"
           :volumes="data.volumes"
+          :sets="data.sets"
           :people="data.people"
           :producers="data.producers"
         />

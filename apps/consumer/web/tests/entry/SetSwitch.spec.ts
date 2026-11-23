@@ -1,17 +1,17 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import SetSwitch from '../../app/components/manga/contents/SetSwitch.vue'
-import type { ContentsSetOption } from '~/features/manga/sets'
+import SetSwitch from '../../app/components/entry/SetSwitch.vue'
+import type { VolumeSetOption } from '~/features/volume-set/sets'
 
-const original: ContentsSetOption = {
+const original: VolumeSetOption = {
   value: 69,
   label: 'ジャンプコミックス 31 卷',
   key: 0,
   original: true,
 }
-const reissue: ContentsSetOption = { value: 70, label: '完全版 24 卷', key: 70, original: false }
+const reissue: VolumeSetOption = { value: 70, label: '完全版 24 卷', key: 70, original: false }
 
-describe('MangaContentsSetSwitch', () => {
+describe('EntrySetSwitch', () => {
   it('switches between the sets that have volumes to read, named 版本', async () => {
     const wrapper = mount(SetSwitch, {
       props: {

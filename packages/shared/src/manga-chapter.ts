@@ -1,4 +1,4 @@
-import { mangaSetKey, type MangaVolumeSetRef } from './manga-volume'
+import { volumeSetKey, type VolumeSetRef } from './volume-set'
 
 export type MangaChapterKind = 'SERIALIZATION' | 'EXTRA' | 'ONESHOT' | 'VOLUME'
 
@@ -16,7 +16,7 @@ export interface MangaChapterLabelSource {
   title: string | null
   ordinal?: number | null
   parts?: MangaChapterParts | null
-  volume_set?: MangaVolumeSetRef | null
+  volume_set?: VolumeSetRef | null
 }
 
 export interface MangaChapterOrderSource {
@@ -25,7 +25,7 @@ export interface MangaChapterOrderSource {
   chapter_number: string | null
   volume_number: number | null
   sort_key: number
-  volume_set?: Pick<MangaVolumeSetRef, 'id' | 'original'> | null
+  volume_set?: Pick<VolumeSetRef, 'id' | 'original'> | null
 }
 
 export const MANGA_READING_UNITS: readonly MangaReadingUnit[] = ['chapter', 'volume', 'extra']
@@ -114,7 +114,7 @@ export function mangaChapterCompare(
     unitA === 'chapter'
       ? within(numeric(a.chapter_number), numeric(b.chapter_number))
       : unitA === 'volume'
-        ? within(mangaSetKey(a), mangaSetKey(b)) ||
+        ? within(volumeSetKey(a), volumeSetKey(b)) ||
           within(
             a.volume_number ?? Number.POSITIVE_INFINITY,
             b.volume_number ?? Number.POSITIVE_INFINITY,
@@ -129,7 +129,7 @@ function ordinalKey(item: MangaChapterOrderSource & { title: string | null }): s
     return `chapter:${mangaChapterNumber(item.chapter_number)}`
   }
   if (unit === 'volume' && item.volume_number != null)
-    return `volume:${mangaSetKey(item)}:${item.volume_number}`
+    return `volume:${volumeSetKey(item)}:${item.volume_number}`
   return `${unit}:title:${item.title?.trim() ?? ''}`
 }
 

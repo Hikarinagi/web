@@ -44,6 +44,7 @@
     <LightNovelHero
       :light-novel="data.light_novel"
       :volumes="data.volumes"
+      :sets="data.sets"
       :people="data.people"
       :producers="data.producers"
       :my-rate="data.my_rate"

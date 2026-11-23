@@ -17,7 +17,7 @@ export function volumeLabel(volume: Parameters<typeof getLightNovelVolumeTitle>[
 }
 
 export function volumeNote(volume: WantedVolume) {
-  return `${volume.readers} 位读者已读完${volumeLabel(volume.previous)}`
+  return `${volume.readers} 位读者已读完${volumeLabel({ ...volume.previous, volume_set: volume.volume_set })}`
 }
 
 export function chapterNote(chapter: WantedChapter) {

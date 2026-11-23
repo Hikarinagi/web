@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { Inline, SegmentedControl, Text } from '@hina-ui/vue'
-  import type { ContentsSetOption } from '~/features/manga/sets'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
-  defineOptions({ name: 'MangaContentsSetSwitch' })
+  defineOptions({ name: 'EntrySetSwitch' })
 
-  defineProps<{ options: ContentsSetOption[] }>()
+  defineProps<{ options: VolumeSetOption[] }>()
   const set = defineModel<number | null>({ required: true })
 </script>
 

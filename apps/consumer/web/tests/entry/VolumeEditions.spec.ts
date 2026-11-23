@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import Editions from '../../app/components/manga/volume/Editions.vue'
-import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
+import type { components } from '@hikarinagi/api-contract/v3'
+import Editions from '../../app/components/entry/VolumeEditions.vue'
 
-type Edition = MangaVolumePageData['volume']['editions'][number]
+type Edition = components['schemas']['VolumeEditionDto']
 
 const edition = (over: Partial<Edition>): Edition => ({
   entry_id: 1,
@@ -23,7 +23,7 @@ const edition = (over: Partial<Edition>): Edition => ({
   ...over,
 })
 
-describe('MangaVolumeEditions', () => {
+describe('EntryVolumeEditions', () => {
   it('lists every edition of the volume with its form, the part a split covers and its details', () => {
     const wrapper = mount(Editions, {
       props: {
@@ -75,5 +75,40 @@ describe('MangaVolumeEditions', () => {
     expect(rows[1]).toContain('2020 年 1 月')
     expect(rows[1]).not.toContain('1 日')
     expect(rows[2]).toContain('官方译本')
+  })
+
+  it('lists the editions of a light novel volume, bunko and translation alike', () => {
+    const wrapper = mount(Editions, {
+      props: {
+        editions: [
+          edition({
+            entry_id: 21,
+            title: '涼宮ハルヒの憂鬱',
+            format: 'BUNKO',
+            isbn: '9784044292010',
+            labels: [{ id: 3, name: '角川スニーカー文庫' }],
+            release_date: '2003-06-10T00:00:00.000Z',
+            release_date_precision: 'DAY',
+            page_count: 304,
+          }),
+          edition({ entry_id: 22, title: '凉宫春日的忧郁', format: 'TRANSLATION' }),
+        ],
+      },
+      global: {
+        stubs: {
+          EntrySectionHead: {
+            props: ['title', 'count'],
+            template: '<h2>{{ title }} {{ count }}</h2>',
+          },
+        },
+      },
+    })
+    expect(wrapper.get('h2').text()).toBe('出版版本 2')
+    const rows = wrapper.findAll('tbody tr').map(row => row.text())
+    expect(rows[0]).toContain('文库本')
+    expect(rows[0]).toContain('角川スニーカー文庫')
+    expect(rows[0]).toContain('2003 年 6 月 10 日')
+    expect(rows[1]).toContain('凉宫春日的忧郁')
+    expect(rows[1]).toContain('官方译本')
   })
 })

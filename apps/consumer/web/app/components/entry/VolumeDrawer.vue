@@ -2,47 +2,23 @@
   import { AspectRatio, Center, Drawer, Inline, Stack, Text } from '@hina-ui/vue'
   import { BookImage } from '@lucide/vue'
   import { NuxtLink } from '#components'
-  import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
-  import { effectiveVolumeNumber } from '~/features/manga/volumes'
+  import type { VolumeDrawerRow } from '~/features/volume-set/sets'
 
-  defineOptions({ name: 'MangaVolumeDrawer' })
+  defineOptions({ name: 'EntryVolumeDrawer' })
 
-  const props = defineProps<{ volumes: MangaPageData['volumes']; set?: string }>()
+  defineProps<{ title: string; description: string; rows: VolumeDrawerRow[] }>()
   const open = defineModel<boolean>('open', { required: true })
-
-  const rows = computed(() =>
-    props.volumes.map(entry => {
-      const number = effectiveVolumeNumber(entry, props.volumes)
-      const name = entry.name_cn || entry.name || ''
-      return {
-        entry,
-        label: number != null ? `第 ${number} 卷` : name || '单行本',
-        name: number != null ? name : '',
-        meta: [
-          timeFormat(entry.publication_date, TimeFormatEnum.YYYY_MM_DD),
-          entry.isbn ? `ISBN ${entry.isbn}` : '',
-        ]
-          .filter(Boolean)
-          .join('，'),
-      }
-    }),
-  )
 </script>
 
 <template>
-  <Drawer
-    v-model:open="open"
-    title="单行本"
-    :description="set ? `${set} ${volumes.length} 卷` : `${volumes.length} 卷`"
-    size="md"
-  >
+  <Drawer v-model:open="open" :title="title" :description="description" size="md">
     <template #content>
       <Stack gap="none" class="-mx-(--hn-panel-p)">
         <Inline
           v-for="row in rows"
-          :key="row.entry.id"
+          :key="row.id"
           :as="NuxtLink"
-          :to="`/manga-volumes/${row.entry.id}`"
+          :to="row.to"
           gap="md"
           :wrap="false"
           class="hn-state-layer hn-interactive border-b border-line px-(--hn-panel-p) py-3"
@@ -52,7 +28,7 @@
             class="w-12 shrink-0 overflow-hidden rounded-md ring-1 ring-line"
           >
             <HikariImage
-              :src="row.entry.display_cover"
+              :src="row.cover"
               :alt="row.label"
               class="size-full"
               image-class="object-cover"

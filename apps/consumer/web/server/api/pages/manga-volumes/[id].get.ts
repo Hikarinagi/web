@@ -1,5 +1,5 @@
 import { getRouterParam, type H3Event } from 'h3'
-import { mangaSetName } from '@hikarinagi/shared'
+import { volumeSetName } from '@hikarinagi/shared'
 import { fetchBackendData } from '../../../utils/backend-api'
 import { definePageBffHandler } from '../../../utils/page-bff'
 
@@ -29,7 +29,7 @@ async function handler(event: H3Event) {
   return {
     volume,
     volumes,
-    set_name: set && sets.length > 1 ? mangaSetName(set) : null,
+    set_name: set && sets.length > 1 ? volumeSetName(set) : null,
     chapters,
     people,
     producers,

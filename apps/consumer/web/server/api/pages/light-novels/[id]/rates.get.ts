@@ -8,6 +8,7 @@ async function handler(event: H3Event) {
   const [
     light_novel,
     volumes,
+    sets,
     people,
     producers,
     my_rate,
@@ -19,6 +20,7 @@ async function handler(event: H3Event) {
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/light-novels/{id}', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/volumes', { path: { id } }),
+    fetchBackendData(event, '/api/v3/light-novels/{id}/sets', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/people', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/producers', { path: { id } }),
     fetchBackendData(event, '/api/v3/light-novels/{id}/rate', { path: { id } }).catch(() => null),
@@ -39,6 +41,7 @@ async function handler(event: H3Event) {
   return {
     light_novel,
     volumes,
+    sets,
     people,
     producers,
     my_rate,

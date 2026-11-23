@@ -20,6 +20,7 @@
     lightNovelId: number
     title: string
     volumes: LightNovelPageData['volumes']
+    every: LightNovelPageData['volumes']
     myRate: LightNovelRate | null
     favorited: boolean
     progress: LightNovelPageData['progress']
@@ -47,7 +48,7 @@
     const cid = props.progress?.continue_volume_id
     if (!cid) return null
     const entry = props.progress?.progresses.find(item => item.volume_id === cid)
-    const volume = props.volumes.find(item => item.id === cid)
+    const volume = props.every.find(item => item.id === cid)
     if (!entry || !volume) return null
     return {
       volumeId: cid,

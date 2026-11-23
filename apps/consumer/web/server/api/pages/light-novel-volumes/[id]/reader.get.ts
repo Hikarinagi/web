@@ -25,13 +25,18 @@ async function handler(event: H3Event) {
   const volume = await fetchBackendData(event, '/api/v3/light-novel-volumes/{id}', {
     path: { id },
   })
-  const [light_novel, volumes, reader] = await Promise.all([
+  const [light_novel, sets, reader] = await Promise.all([
     fetchBackendData(event, '/api/v3/light-novels/{id}', { path: { id: volume.series_id } }),
-    fetchBackendData(event, '/api/v3/light-novels/{id}/volumes', {
+    fetchBackendData(event, '/api/v3/light-novels/{id}/sets', {
       path: { id: volume.series_id },
     }),
     readerState(event, id, volume.series_id),
   ])
+  const volumes =
+    sets.find(item => item.volumes.some(entry => entry.id === volume.id))?.volumes ??
+    (await fetchBackendData(event, '/api/v3/light-novels/{id}/volumes', {
+      path: { id: volume.series_id },
+    }))
 
   return { volume, light_novel, volumes, reader }
 }

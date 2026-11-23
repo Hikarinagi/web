@@ -2,7 +2,7 @@
   import { Stack } from '@hina-ui/vue'
   import type { MangaReadingUnit } from '@hikarinagi/shared'
   import type { ContentsItem, ContentsUnits, ContentsVariant } from '~/features/manga/contents'
-  import type { ContentsSetOption } from '~/features/manga/sets'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
   defineOptions({ name: 'MangaContentsUnit' })
 
@@ -17,7 +17,7 @@
       desc?: boolean
       variant?: ContentsVariant
       collecting?: ReadonlySet<number>
-      sets?: ContentsSetOption[]
+      sets?: VolumeSetOption[]
     }>(),
     {
       currentPage: 0,
@@ -47,7 +47,7 @@
     @select="emit('select', $event)"
   />
   <Stack v-else-if="unit === 'volume'" gap="md">
-    <MangaContentsSetSwitch v-if="sets.length" v-model="set" :options="sets" />
+    <EntrySetSwitch v-if="sets.length" v-model="set" :options="sets" />
     <MangaContentsVolumeGrid
       :volumes="units.volume"
       :current-id="currentId"

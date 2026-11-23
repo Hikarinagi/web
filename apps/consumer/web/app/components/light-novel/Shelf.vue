@@ -22,6 +22,7 @@
   import { NuxtLink } from '#components'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
   import { dayText, monthText } from '~/features/entry/date'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
   import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
 
@@ -30,8 +31,10 @@
   defineOptions({ name: 'LightNovelShelf' })
   const props = defineProps<{
     volumes: Volume[]
+    sets: VolumeSetOption[]
     progress: LightNovelPageData['progress']
   }>()
+  const set = defineModel<number | null>('set', { required: true })
 
   const VIEWS = [
     { value: 'grid', label: '封面' },
@@ -50,7 +53,7 @@
     return entry.finished ? 100 : Math.min(100, Math.max(0, entry.percentage))
   }
   const label = (volume: Volume) =>
-    getLightNovelVolumeLabel(volume) ?? getLightNovelVolumeTitle(volume)
+    getLightNovelVolumeLabel({ ...volume, volume_set: null }) ?? getLightNovelVolumeTitle(volume)
   const readLabel = (volume: Volume) => {
     const base = volume.online_reading_is_collection ? 'EPUB 合集' : 'EPUB'
     const quality = volume.online_reading_translation
@@ -77,6 +80,7 @@
       </Inline>
     </template>
   </EntrySectionHead>
+  <EntrySetSwitch v-if="sets.length" v-model="set" :options="sets" />
 
   <Grid
     v-if="view === 'grid'"

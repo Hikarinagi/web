@@ -5,8 +5,7 @@ import { isTerminalStatus, type EpubReview } from '~/features/light-novel-volume
 import { readEpubMeta } from './epub-meta'
 
 type IdentifyFile = components['schemas']['EpubIdentifyFileDto']
-export type IntakeVolume = components['schemas']['LightNovelVolumeSummaryDto']
-export type IntakeSuggestion = components['schemas']['LightNovelVolumeListItemDto']
+export type IntakeVolume = components['schemas']['LightNovelVolumeListItemDto']
 export type IntakeVerdict =
   components['schemas']['EpubIdentificationDto']['verdict'] | 'unreadable' | 'oversize'
 
@@ -16,7 +15,7 @@ export interface IntakeItem {
   stage: 'reading' | 'identifying' | 'ready' | 'uploading' | 'submitted' | 'failed'
   verdict: IntakeVerdict | null
   volume: IntakeVolume | null
-  suggestion: IntakeSuggestion | null
+  suggestion: IntakeVolume | null
   review: EpubReview | null
   error: string | null
 }

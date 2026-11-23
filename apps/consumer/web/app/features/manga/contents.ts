@@ -4,7 +4,7 @@ import {
   mangaChapterLabel,
   mangaChapterNumber,
   mangaReadingUnit,
-  mangaSetKey,
+  volumeSetKey,
   type MangaReadingUnit,
 } from '@hikarinagi/shared'
 
@@ -34,7 +34,8 @@ export function contentsUnits(items: ContentsItem[], set: number | null = null):
   const units: ContentsUnits = { chapter: [], volume: [], extra: [] }
   for (const item of items) {
     const unit = mangaReadingUnit(item.chapter_type)
-    if (!item.readable || (unit === 'volume' && set !== null && mangaSetKey(item) !== set)) continue
+    if (!item.readable || (unit === 'volume' && set !== null && volumeSetKey(item) !== set))
+      continue
     units[unit].push(item)
   }
   return units

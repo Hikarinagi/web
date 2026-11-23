@@ -17,6 +17,7 @@
   const props = defineProps<{
     lightNovel: LightNovelPageData['light_novel']
     volumes: LightNovelPageData['volumes']
+    sets: LightNovelPageData['sets']
     people: LightNovelPageData['people']
     producers: LightNovelPageData['producers']
   }>()
@@ -51,12 +52,17 @@
     }
     return [...map].map(([label, items]) => ({ label, items }))
   })
-  const first = computed(() => props.volumes.find(volume => volume.publication_date))
-  const last = computed(() => props.volumes.findLast(volume => volume.publication_date))
+  const several = computed(() => props.sets.length > 1)
+  const first = computed(() =>
+    several.value ? undefined : props.volumes.find(volume => volume.publication_date),
+  )
+  const last = computed(() =>
+    several.value ? undefined : props.volumes.findLast(volume => volume.publication_date),
+  )
   const status = computed(() =>
     [
       props.lightNovel.novel_status ? getNovelStatusLabel(props.lightNovel.novel_status) : '',
-      props.volumes.length ? `全 ${props.volumes.length} 卷` : '',
+      props.volumes.length && !several.value ? `全 ${props.volumes.length} 卷` : '',
     ]
       .filter(Boolean)
       .join('，'),
@@ -107,6 +113,12 @@
     <template v-if="status">
       <DescriptionTerm>状态</DescriptionTerm>
       <DescriptionDetails>{{ status }}</DescriptionDetails>
+    </template>
+    <template v-if="several">
+      <DescriptionTerm>单行本</DescriptionTerm>
+      <DescriptionDetails>
+        <LightNovelFactsVolumes :sets="sets" />
+      </DescriptionDetails>
     </template>
     <template v-if="first">
       <DescriptionTerm>首卷</DescriptionTerm>

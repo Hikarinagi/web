@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Stack, VisuallyHidden } from '@hina-ui/vue'
   import type { LightNovelsPageData } from '~~/server/api/pages/light-novels.get'
-  import { dayLabel, volumeLabel } from '~/features/landing/labels'
+  import { dayLabel, novelReading, volumeLabel } from '~/features/landing/labels'
   import { novelWork } from '~/features/landing/works'
 
   defineOptions({ name: 'LandingLightNovelPage' })
@@ -33,14 +33,7 @@
             cover: item.current_volume_cover,
           },
           to: `/light-novel-volumes/${item.current_volume_id}/read`,
-          note:
-            item.current_volume_number && item.total_volumes
-              ? `读到第 ${item.current_volume_number} 卷，共 ${item.total_volumes} 卷`
-              : (item.current_volume_title ?? ''),
-          progress:
-            item.current_volume_number && item.total_volumes
-              ? Math.min(1, item.current_volume_number / item.total_volumes)
-              : undefined,
+          ...novelReading(item),
         })),
       },
     ].filter(row => row.items.length),

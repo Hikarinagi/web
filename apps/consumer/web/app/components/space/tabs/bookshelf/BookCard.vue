@@ -3,6 +3,7 @@
   import { NuxtLink } from '#components'
   import { Play, RotateCcw } from '@lucide/vue'
   import type { SpaceBookshelfItem } from '~/features/space/space'
+  import { getLightNovelVolumeLabel } from '~/utils/media/light-novel'
   import { timeFromNow } from '~/utils/time-format'
 
   defineOptions({ name: 'SpaceTabsBookshelfBookCard' })
@@ -17,7 +18,13 @@
 
   const statusLine = computed(() => {
     const i = props.item
-    const vol = i.current_volume_number ? `第 ${i.current_volume_number} 卷` : null
+    const vol = i.current_volume_number
+      ? getLightNovelVolumeLabel({
+          volume_label: null,
+          volume_number: i.current_volume_number,
+          volume_set: i.current_volume_set,
+        })
+      : null
     const segments: string[] = []
     if (i.is_finished) {
       segments.push(vol ? `已读完 · ${vol}` : '已读完')

@@ -1,42 +1,25 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
-import { mangaReadingUnit, mangaSetKey, mangaSetName } from '@hikarinagi/shared'
+import { mangaReadingUnit, volumeSetKey } from '@hikarinagi/shared'
+import { chosenSetOption, volumeSetOption, type VolumeSetOption } from '~/features/volume-set/sets'
 import type { ContentsItem } from './contents'
 
 export type MangaVolumeSet = ApiData<'/api/v3/mangas/{id}/sets', 'get'>[number]
 
-export interface ContentsSetOption {
-  value: number
-  label: string
-  key: number
-  original: boolean
-}
-
-export function volumeSetLabel(set: MangaVolumeSet) {
-  return `${mangaSetName(set)} ${set.volume_count} 卷`
-}
-
 export function contentsSets(
   items: Pick<ContentsItem, 'chapter_type' | 'readable' | 'volume_set'>[],
   sets: MangaVolumeSet[],
-): ContentsSetOption[] {
+): VolumeSetOption[] {
   const held = new Set(
     items
       .filter(item => item.readable && mangaReadingUnit(item.chapter_type) === 'volume')
-      .map(mangaSetKey),
+      .map(volumeSetKey),
   )
-  return sets.flatMap(set => {
-    const key = set.original ? 0 : set.id
-    return held.has(key)
-      ? [{ value: set.id, label: volumeSetLabel(set), key, original: set.original }]
-      : []
-  })
+  return sets.map(volumeSetOption).filter(option => held.has(option.key))
 }
 
 export function contentsSetKey(
-  options: ContentsSetOption[],
+  options: VolumeSetOption[],
   chosen: number | null | undefined,
 ): number | null {
-  const option =
-    options.find(item => item.value === chosen) ?? options.find(item => item.original) ?? options[0]
-  return option?.key ?? null
+  return chosenSetOption(options, chosen)?.key ?? null
 }

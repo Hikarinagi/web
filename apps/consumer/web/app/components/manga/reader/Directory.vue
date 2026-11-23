@@ -4,7 +4,7 @@
   import type { MangaReadingUnit } from '@hikarinagi/shared'
   import type { ContentsItem, ContentsUnits } from '~/features/manga/contents'
   import { useContentsDesc } from '~/features/manga/composables/useContents'
-  import type { ContentsSetOption } from '~/features/manga/sets'
+  import type { VolumeSetOption } from '~/features/volume-set/sets'
 
   defineOptions({ name: 'MangaReaderDirectory' })
 
@@ -12,7 +12,7 @@
     narrow: boolean
     dark: boolean
     units: ContentsUnits
-    sets: ContentsSetOption[]
+    sets: VolumeSetOption[]
     status: string | null
     currentId: number | null
     currentPage: number
