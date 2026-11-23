@@ -14,8 +14,8 @@
     :wrap="false"
     class="scroll-mt-(--sticky-top)"
   >
-    <Inline gap="sm" align="baseline" :wrap="false">
-      <Heading :level="2" size="xl">{{ title }}</Heading>
+    <Inline gap="sm" align="baseline" :wrap="false" class="shrink-0">
+      <Heading :level="2" size="xl" class="whitespace-nowrap">{{ title }}</Heading>
       <Text v-if="count !== undefined" tone="muted" class="tabular-nums">{{ count }}</Text>
     </Inline>
     <slot name="actions" />

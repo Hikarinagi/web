@@ -59,13 +59,8 @@ function suffix(ordinal: number | null | undefined): string {
 }
 
 export function mangaPartsLabel(parts: MangaChapterParts): string {
-  const first = parts.held[0]
-  const last = parts.held[parts.held.length - 1]
-  const held =
-    parts.held.length > 1 && last - first + 1 === parts.held.length
-      ? `${first} 至 ${last}`
-      : parts.held.join('、')
-  return `第 ${held} 册，共 ${parts.count} 册`
+  const names = parts.count === 2 ? ['上', '下'] : parts.count === 3 ? ['上', '中', '下'] : null
+  return parts.held.map(part => names?.[part - 1] ?? `${part}/${parts.count}`).join('、')
 }
 
 export function mangaChapterLabel(item: MangaChapterLabelSource): string {

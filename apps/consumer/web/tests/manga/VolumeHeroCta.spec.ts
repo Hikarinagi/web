@@ -42,8 +42,9 @@ const text = (parts: Chapter['parts']) =>
 
 describe('MangaVolumeHeroCta', () => {
   it('names the splits a volume holds instead of offering the whole volume', () => {
-    expect(text({ held: [1], count: 2 })).toContain('阅读第 1 册，共 2 册')
-    expect(text({ held: [1, 2], count: 3 })).toContain('阅读第 1 至 2 册，共 3 册')
+    expect(text({ held: [1], count: 2 })).toContain('阅读本卷（上）')
+    expect(text({ held: [1, 2], count: 3 })).toContain('阅读本卷（上、中）')
+    expect(text({ held: [2], count: 4 })).toContain('阅读本卷（2/4）')
   })
 
   it('offers the whole volume once every split is in', () => {

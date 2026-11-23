@@ -42,7 +42,7 @@
       </Stack>
 
       <Stack v-if="nextLabel && !nextLocked" gap="sm" class="w-full">
-        <Button size="lg" block @click="emit('next')">下一{{ noun }} · {{ nextLabel }}</Button>
+        <Button size="lg" block @click="emit('next')">下一{{ noun }}：{{ nextLabel }}</Button>
         <Text size="sm" tone="muted">翻页继续</Text>
       </Stack>
       <Stack v-else-if="nextLabel" gap="sm" class="w-full">

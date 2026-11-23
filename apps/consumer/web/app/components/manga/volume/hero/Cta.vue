@@ -44,7 +44,7 @@
   <Inline gap="sm" align="center">
     <Button v-if="readPath" :as="NuxtLink" :to="readPath" class="w-full sm:w-auto">
       <template #icon><BookOpen /></template>
-      {{ continuing ? '继续阅读' : parts ? `阅读${mangaPartsLabel(parts)}` : '阅读本卷' }}
+      {{ continuing ? '继续阅读' : parts ? `阅读本卷（${mangaPartsLabel(parts)}）` : '阅读本卷' }}
     </Button>
     <Button v-else-if="upcoming" disabled class="w-full sm:w-auto">
       <template #icon><BookOpen /></template>

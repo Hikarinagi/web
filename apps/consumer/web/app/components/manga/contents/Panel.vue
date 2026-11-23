@@ -32,7 +32,7 @@
   const status = computed(() => {
     const text = contentsStatus(units.value, props.finished)
     if (!text || props.finished || !props.latestChapterAt) return text
-    return `${text} · ${timeFromNow(props.latestChapterAt)}`
+    return `${text}，${timeFromNow(props.latestChapterAt)}`
   })
   const collecting = computed(() => collectingNumbers(props.chapters))
   const editable = computed(() => props.chapters.some(item => item.editable))
@@ -60,8 +60,10 @@
   <Stack v-if="!empty" gap="md">
     <EntrySectionHead id="chapters" title="目录">
       <template #actions>
-        <Inline gap="sm" :wrap="false">
-          <Text v-if="status" size="sm" tone="muted" class="tabular-nums">{{ status }}</Text>
+        <Inline gap="sm" :wrap="false" class="min-w-0">
+          <Text v-if="status" size="sm" tone="muted" truncate class="min-w-0 tabular-nums">
+            {{ status }}
+          </Text>
           <IconButton
             :label="desc ? '正序' : '倒序'"
             size="sm"

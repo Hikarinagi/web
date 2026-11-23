@@ -37,7 +37,7 @@ export function useReaderItems(data: () => MangaReadPageData) {
   const status = computed(() => {
     const text = contentsStatus(units.value, !serializing.value)
     const at = manifest.value.manga.latest_chapter_at
-    return text && serializing.value && at ? `${text} · ${timeFromNow(at)}` : text
+    return text && serializing.value && at ? `${text}，${timeFromNow(at)}` : text
   })
   const continueChapters = computed(
     () => unit.value === 'volume' && !manifest.value.next_chapter && units.value.chapter.length > 0,
