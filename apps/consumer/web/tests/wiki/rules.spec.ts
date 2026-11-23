@@ -5,7 +5,7 @@ import { parseRules, sectionName } from '~/features/wiki/rules'
 
 const main = [
   '# Hikarinagi 收录与编目规则',
-  '第 22 版。2026 年 11 月 4 日发布，自发布之日起实施。',
+  '2026 年 11 月 15 日发布，2026 年 11 月 23 日修订。',
   '## 1　收录范围',
   '1.1　游戏只收录 galgame，依 A.2.1 判定。',
   '1.2　轻小说收录：',
@@ -22,9 +22,9 @@ const appendix = [
 describe('parseRules', () => {
   const book = parseRules([main, appendix], markdown => markdown)
 
-  it('reads the edition, the sections and the clauses with what follows them', () => {
+  it('reads the note under the title, the sections and the clauses with what follows them', () => {
     expect(book.title).toBe('Hikarinagi 收录与编目规则')
-    expect(book.edition).toBe('第 22 版。2026 年 11 月 4 日发布，自发布之日起实施。')
+    expect(book.note).toBe('2026 年 11 月 15 日发布，2026 年 11 月 23 日修订。')
     expect(book.sections.map(item => [item.id, item.title, item.level])).toEqual([
       ['1', '收录范围', 2],
       ['附录 A（规范性）', '记录细则', 2],
@@ -42,8 +42,13 @@ describe('parseRules', () => {
         join(process.cwd(), '../../../services/api/src/modules/wiki/rules', name),
         'utf8',
       )
-    const rules = parseRules([read('main.md'), read('appendix.md')], markdown => markdown)
-    expect(rules.edition).toMatch(/^第 \d+ 版/)
+    const rules = parseRules(
+      [read('main.md'), read('appendix.md'), read('amendments.md')],
+      markdown => markdown,
+    )
+    expect(rules.note).toMatch(/^\d{4} 年 \d+ 月 \d+ 日发布，/)
+    expect(rules.sections.find(item => item.title === '修订说明')?.level).toBe(2)
+    expect(rules.sections.at(-1)?.title).toMatch(/^\d{4} 年 \d+ 月 \d+ 日$/)
     const ids = new Set(rules.clauses.map(item => item.id))
     expect(ids.size).toBe(rules.clauses.length)
     for (const id of ['1.1', '6.3', 'A.2.1.6', 'A.6.6.1', 'A.13.8']) expect(ids.has(id)).toBe(true)

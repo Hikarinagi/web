@@ -62065,6 +62065,10 @@
       },
       "WikiRulesDto": {
         "properties": {
+          "amendments": {
+            "description": "修订说明，按修订日期列出每次改动的条文（Markdown）",
+            "type": "string"
+          },
           "appendix": {
             "description": "附录 A 记录细则（Markdown）",
             "type": "string"
@@ -62076,7 +62080,8 @@
         },
         "required": [
           "main",
-          "appendix"
+          "appendix",
+          "amendments"
         ],
         "type": "object"
       },

@@ -9,8 +9,8 @@ let book: RuleBook | null = null
 
 async function handler(event: H3Event): Promise<RuleBook> {
   if (book) return book
-  const { main, appendix } = await fetchBackendData(event, '/api/v3/wiki/rules')
-  book = parseRules([main, appendix], text => markdown.render(text))
+  const { main, appendix, amendments } = await fetchBackendData(event, '/api/v3/wiki/rules')
+  book = parseRules([main, appendix, amendments], text => markdown.render(text))
   return book
 }
 

@@ -15,7 +15,7 @@ export interface RuleSection {
 
 export interface RuleBook {
   title: string
-  edition: string
+  note: string
   sections: RuleSection[]
   clauses: RuleClause[]
 }
@@ -32,7 +32,7 @@ export function parseRules(documents: string[], render: (markdown: string) => st
   const sections: RuleSection[] = []
   const bodies = new Map<string, string[]>()
   let title = ''
-  let edition = ''
+  let note = ''
   let section: RuleSection | null = null
   let clause: string | null = null
   for (const document of documents) {
@@ -53,8 +53,8 @@ export function parseRules(documents: string[], render: (markdown: string) => st
         clause = null
         continue
       }
-      if (!edition && /^第 \d+ 版/.test(block)) {
-        edition = block
+      if (!note && !section) {
+        note = block
         continue
       }
       const id = CLAUSE.exec(block)?.[1]
@@ -85,5 +85,5 @@ export function parseRules(documents: string[], render: (markdown: string) => st
     }),
   )
   for (const item of sections) item.intro = item.intro ? render(linked(item.intro)) : ''
-  return { title, edition, sections, clauses }
+  return { title, note, sections, clauses }
 }

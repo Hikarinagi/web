@@ -31717,6 +31717,8 @@ export interface components {
         /** @enum {string} */
         WikiLookupState: "RUNNING" | "PAUSED" | "FINISHED" | "HALTED" | "FAILED";
         WikiRulesDto: {
+            /** @description 修订说明，按修订日期列出每次改动的条文（Markdown） */
+            amendments: string;
             /** @description 附录 A 记录细则（Markdown） */
             appendix: string;
             /** @description 收录与编目规则正文（Markdown） */

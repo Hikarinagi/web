@@ -97,7 +97,7 @@
         <Stack gap="lg" @click="follow">
           <Stack gap="xs">
             <Heading :level="2" size="md">{{ book.title }}</Heading>
-            <Text size="sm" tone="muted">{{ book.edition }}</Text>
+            <Text size="sm" tone="muted">{{ book.note }}</Text>
           </Stack>
           <Stack gap="sm" class="lg:hidden">
             <SearchInput v-model="search" placeholder="查找条文" />
