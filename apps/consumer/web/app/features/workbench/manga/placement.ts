@@ -4,13 +4,15 @@ import type { BackendMangaProject } from './manga'
 export type MangaPlacement = NonNullable<BackendMangaProject['placement']>
 
 const PROBLEM_TEXT: Record<NonNullable<MangaPlacement['problem']>, string> = {
+  unknown: '看不出位置',
+  mismatch: '与填写的不一致',
+  unsure: '依据不足',
   no_volume: '维基里没有对应的卷',
   several: '收录了几话',
-  extra: '看不出番外的标题',
+  extra: '番外没有标题',
   taken: '这一卷或这一话已有其他投稿',
   refused: '这个位置无法放入',
   moved: '与已发布的位置不符',
-  flawed: '文件有问题',
   failed: '未能确定位置',
   unsettled: '未能确定位置',
   unreadable: '图片无法读取',
@@ -61,7 +63,7 @@ export function placementOutcome(placement: MangaPlacement): string {
   if (placement.applied) return '已确定'
   const reasons = [
     placement.problem ? PROBLEM_TEXT[placement.problem] : null,
-    placement.hint_agrees === false ? '与投稿者填写的不一致' : null,
+    placement.flaws.length ? `文件有 ${placement.flaws.length} 处问题` : null,
   ].filter(Boolean)
   return reasons.length ? `${reasons.join('，')}，待审核员确定` : '待审核员确定'
 }

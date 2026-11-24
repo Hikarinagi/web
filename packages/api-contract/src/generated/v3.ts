@@ -24672,7 +24672,7 @@ export interface components {
              * @description 其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整
              * @enum {string}
              */
-            kind: "ad" | "qr_code" | "foreign" | "incomplete";
+            kind: "qr_code" | "foreign" | "incomplete";
             /** @description 写给投稿者的说明 */
             note: string;
             /** @description 投稿文件的第几页 */
@@ -24916,7 +24916,7 @@ export interface components {
              * @description 没有按此放好的原因
              * @enum {string|null}
              */
-            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "moved" | "flawed" | "failed" | "unsettled" | "unreadable" | null;
+            problem: "unknown" | "mismatch" | "unsure" | "no_volume" | "several" | "extra" | "taken" | "refused" | "moved" | "failed" | "unsettled" | "unreadable" | null;
             /** @description 维基卷所在的版本套 */
             set_entry_id: number | null;
             /** @description 版本套不是原版时的名称 */

@@ -34708,7 +34708,6 @@
           "kind": {
             "description": "其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整",
             "enum": [
-              "ad",
               "qr_code",
               "foreign",
               "incomplete"
@@ -35637,13 +35636,15 @@
           "problem": {
             "description": "没有按此放好的原因",
             "enum": [
+              "unknown",
+              "mismatch",
+              "unsure",
               "no_volume",
               "several",
               "extra",
               "taken",
               "refused",
               "moved",
-              "flawed",
               "failed",
               "unsettled",
               "unreadable"
