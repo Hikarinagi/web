@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { Inline, Text } from '@hina-ui/vue'
+  import { Inline, Tag, Text } from '@hina-ui/vue'
   import type { components } from '@hikarinagi/api-contract/v3'
+  import { PROJECT_STATUS_META } from '~/features/workbench/labels'
+  import { projectStatusLabel } from '~/features/workbench/manga/labels'
   import type {
     BackendMangaPage,
     BackendMangaProject,
@@ -13,8 +15,15 @@
     pages: BackendMangaPage[]
     regions: BackendMangaRegion[]
     online: components['schemas']['UserRefDto'][]
+    returned: boolean
   }>()
 
+  const label = computed(() => projectStatusLabel(props.project, props.returned))
+  const tone = computed(() =>
+    label.value === '已退回'
+      ? 'warning'
+      : (PROJECT_STATUS_META[props.project.status]?.tone ?? 'neutral'),
+  )
   const translation = computed(() => props.project.mode === 'TRANSLATION')
   const totals = computed(() => tally(props.regions))
   const rendered = computed(() => props.pages.filter(page => page.rendered_url).length)
@@ -22,6 +31,7 @@
 
 <template>
   <Inline gap="md" align="center" :wrap="false" class="min-w-0">
+    <Tag size="sm" :tone="tone" class="shrink-0">{{ label }}</Tag>
     <WorkbenchEditorStats
       v-if="translation && pages.length"
       :done="totals.done"

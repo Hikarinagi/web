@@ -74,23 +74,11 @@ export const MANGA_PROJECT_STATUS_LABEL: Record<string, string> = {
   ARCHIVED: '已归档',
 }
 
-export function projectStatusLabel(project: { status: string; mode: string }): string {
+export function projectStatusLabel(
+  project: { status: string; mode: string },
+  returned: boolean,
+): string {
+  if (returned && project.status !== 'REVIEW') return '已退回'
   if (project.status === 'ACTIVE' && project.mode === 'UPLOAD') return '上传中'
   return MANGA_PROJECT_STATUS_LABEL[project.status] ?? project.status
-}
-
-export function projectSteps(project: { status: string; mode: string }): {
-  labels: string[]
-  current: number
-} {
-  const labels = [project.mode === 'TRANSLATION' ? '翻译' : '上传', '提交审核', '发布']
-  const current =
-    project.status === 'PUBLISHED'
-      ? 2
-      : project.status === 'REVIEW'
-        ? 1
-        : project.status === 'ARCHIVED'
-          ? -1
-          : 0
-  return { labels, current }
 }

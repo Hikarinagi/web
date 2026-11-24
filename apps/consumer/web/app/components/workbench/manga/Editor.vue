@@ -71,10 +71,9 @@
   watch(mode, value => {
     if (value === 'typeset') layer.value = 'typeset'
   })
+  const returned = computed(() => props.data.review?.status === 'REJECTED')
   const banner = computed(
-    () =>
-      !!project.value.viewer_role &&
-      (project.value.status === 'REVIEW' || props.data.review?.status === 'REJECTED'),
+    () => !!project.value.viewer_role && (project.value.status === 'REVIEW' || returned.value),
   )
 
   const series = computed(() => seriesTitle(project.value.series))
@@ -112,12 +111,12 @@
     :replaces="!!project.replaces"
   >
     <template #status>
-      <WorkbenchMangaShellSteps :project="project" />
       <WorkbenchMangaShellStatus
         :project="project"
         :pages="data.pages"
         :regions="all"
         :online="online"
+        :returned="returned"
       />
     </template>
     <IconButton
@@ -239,6 +238,7 @@
         :pages="data.pages"
         :regions="all"
         :online="online"
+        :returned="returned"
       />
     </template>
   </Drawer>
