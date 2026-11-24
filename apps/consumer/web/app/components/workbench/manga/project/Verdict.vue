@@ -15,12 +15,12 @@
 
 <template>
   <DescriptionList orientation="horizontal">
-    <DescriptionTerm>系统判定</DescriptionTerm>
+    <DescriptionTerm>建议位置</DescriptionTerm>
     <DescriptionDetails v-if="project.placement">
       {{ placementHeading(project.placement) }}（{{ placementMethod(project.placement) }}）
     </DescriptionDetails>
     <DescriptionDetails v-else-if="project.status === 'REVIEW' && !project.placement_complete">
-      正在判断
+      确定中
     </DescriptionDetails>
     <DescriptionDetails v-else>无</DescriptionDetails>
     <template v-if="project.placement">

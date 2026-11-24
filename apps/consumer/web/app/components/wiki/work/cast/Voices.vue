@@ -28,43 +28,54 @@
 </script>
 
 <template>
-  <Stack gap="xs">
-    <Inline v-for="voice in original" :key="voice.id" gap="xs" align="center" :wrap="false">
+  <Stack gap="md">
+    <Stack v-for="voice in original" :key="voice.id" gap="xs">
+      <Text size="xs" tone="muted">原版</Text>
+      <Inline gap="xs" align="start" :wrap="false">
+        <WikiFieldName
+          :model-value="{ text: voice.value.text, target: voice.value.target }"
+          label="配音"
+          placeholder="配音演员"
+          class="min-w-0 flex-1"
+          @update:model-value="next => cast.setVoice(voice, next)"
+        />
+        <IconButton
+          v-if="original.length > 1"
+          label="删除这条配音"
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          @click="cast.removeVoice(voice)"
+        >
+          <X />
+        </IconButton>
+      </Inline>
+    </Stack>
+    <Stack v-if="!original.length" gap="xs">
+      <Text size="xs" tone="muted">原版</Text>
       <WikiFieldName
-        :model-value="{ text: voice.value.text, target: voice.value.target }"
+        :model-value="blank"
         label="配音"
         placeholder="配音演员"
-        class="min-w-0 flex-1"
-        @update:model-value="next => cast.setVoice(voice, next)"
+        @update:model-value="next => cast.setVoice(null, next)"
       />
-      <IconButton
-        v-if="original.length > 1"
-        label="删除这条配音"
-        variant="ghost"
-        tone="neutral"
-        size="sm"
-        @click="cast.removeVoice(voice)"
-      >
-        <X />
-      </IconButton>
-    </Inline>
-    <WikiFieldName
-      v-if="!original.length"
-      :model-value="blank"
-      label="配音"
-      placeholder="配音演员"
-      @update:model-value="next => cast.setVoice(null, next)"
-    />
+    </Stack>
     <Stack v-for="voice in others" :key="voice.id" gap="xs">
-      <Inline gap="xs" align="center" :wrap="false">
-        <MultiSelect
-          :model-value="voice.value.versions.map(item => item.id)"
-          :options="options"
-          aria-label="所属版本"
-          placeholder="选择版本"
-          size="sm"
+      <MultiSelect
+        :model-value="voice.value.versions.map(item => item.id)"
+        :options="options"
+        aria-label="所属版本"
+        placeholder="选择版本"
+        size="sm"
+        @update:model-value="ids => cast.setVersions(voice, chosen(ids))"
+      />
+      <Inline gap="xs" align="start" :wrap="false">
+        <WikiFieldName
+          :model-value="{ text: voice.value.text, target: voice.value.target }"
+          label="配音"
+          placeholder="配音演员"
           class="min-w-0 flex-1"
-          @update:model-value="ids => cast.setVersions(voice, chosen(ids))"
+          @update:model-value="next => cast.setVoice(voice, next)"
         />
         <IconButton
           label="删除这条配音"
@@ -76,26 +87,20 @@
           <X />
         </IconButton>
       </Inline>
-      <WikiFieldName
-        :model-value="{ text: voice.value.text, target: voice.value.target }"
-        label="配音"
-        placeholder="配音演员"
-        @update:model-value="next => cast.setVoice(voice, next)"
-      />
     </Stack>
     <Stack v-if="adding" gap="xs">
       <MultiSelect
         v-model="picked"
         :options="options"
         aria-label="所属版本"
-        placeholder="先选择版本"
+        placeholder="选择版本"
         size="sm"
       />
       <WikiFieldName
         v-if="picked.length"
         :model-value="blank"
         label="配音"
-        placeholder="这些版本的配音演员"
+        placeholder="配音演员"
         @update:model-value="add"
       />
     </Stack>
@@ -106,11 +111,8 @@
       class="self-start"
       @click="adding = true"
     >
-      其他版本另有配音
+      添加其他版本的配音
     </Button>
-    <Text v-if="!options.length && others.length" size="xs" tone="muted">
-      本作还没有记录发行版本
-    </Text>
     <WikiFieldBefore
       v-if="cast.touched('CREDIT') && cast.field('CREDIT')"
       :view="cast.view('CREDIT')"

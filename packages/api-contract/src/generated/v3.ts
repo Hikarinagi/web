@@ -10261,22 +10261,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v3/manga-projects/{project_id}/baseline-pages": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MangaProjectController_getBaselinePages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v3/manga-projects/{project_id}/check": {
         parameters: {
             query?: never;
@@ -10286,7 +10270,7 @@ export interface paths {
         };
         get: operations["MangaProjectController_getCheck"];
         put?: never;
-        post: operations["MangaProjectController_rerunCheck"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -10366,22 +10350,6 @@ export interface paths {
         };
         get?: never;
         put: operations["MangaProjectPageController_reorder"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v3/manga-projects/{project_id}/placement": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["MangaProjectController_correct"];
         post?: never;
         delete?: never;
         options?: never;
@@ -24189,15 +24157,6 @@ export interface components {
             failed_chapters: number;
             pending_links: number;
         };
-        MangaBaselinePageDto: {
-            byte_size: number | null;
-            height: number | null;
-            id: number;
-            page_number: number;
-            /** @description 图片的限时访问地址 */
-            url: string;
-            width: number | null;
-        };
         MangaCardSummaryResDto: {
             author_name: string | null;
             id: number;
@@ -24700,6 +24659,17 @@ export interface components {
             /** @description 对上的维基卷 */
             wiki_volume: number | null;
         };
+        MangaPlaceFlawDto: {
+            /**
+             * @description 其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整
+             * @enum {string}
+             */
+            kind: "watermark" | "ad" | "qr_code" | "foreign" | "incomplete";
+            /** @description 写给投稿者的说明 */
+            note: string;
+            /** @description 投稿文件的第几页 */
+            page: number;
+        };
         MangaProducerRelationDto: {
             /** @description 新的职责或关系编码 */
             code: string;
@@ -24814,6 +24784,7 @@ export interface components {
             target_lang: string | null;
             team: components["schemas"]["TranslationTeamSummaryDto"] | null;
             viewer_capabilities: ("manage" | "label" | "translate" | "proofread" | "redraw" | "typeset" | "finalize")[];
+            /** @description 查看者能否审核这份投稿；上传投稿由系统审核，始终为 false */
             viewer_reviewer: boolean;
             /** @enum {string|null} */
             viewer_role: "OWNER" | "MANAGER" | "TRANSLATOR" | "PROOFREADER" | "TYPESETTER" | "REDRAWER" | "REVIEWER" | null;
@@ -24918,8 +24889,12 @@ export interface components {
             /** @description 书上印的版本字样 */
             edition: string | null;
             evidence: components["schemas"]["MangaPlaceEvidenceDto"][];
+            /** @description 连续几次因文件本身的原因未能判断，重新提交时清零 */
+            failures?: number;
             /** @description 第一话 */
             first: number | null;
+            /** @description 看图检查发现的问题 */
+            flaws: components["schemas"]["MangaPlaceFlawDto"][];
             /** @description 与投稿者填写的卷号或话号是否一致；未填写或无从比较时为空 */
             hint_agrees: boolean | null;
             /**
@@ -24933,7 +24908,7 @@ export interface components {
              * @description 没有按此放好的原因
              * @enum {string|null}
              */
-            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "failed" | null;
+            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "flawed" | "failed" | "unsettled" | "unreadable" | null;
             /** @description 维基卷所在的版本套 */
             set_entry_id: number | null;
             /** @description 版本套不是原版时的名称 */
@@ -24943,6 +24918,8 @@ export interface components {
              * @enum {string}
              */
             source: "mechanical" | "model";
+            /** @description 番外的标题 */
+            title: string | null;
             /** @description 书上印的卷号 */
             volume: number | null;
             /** @description 对上的维基卷 */
@@ -49661,49 +49638,7 @@ export interface operations {
             };
         };
     };
-    MangaProjectController_getBaselinePages: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaBaselinePageDto"][];
-                };
-            };
-        };
-    };
     MangaProjectController_getCheck: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectCheckDto"];
-                };
-            };
-        };
-    };
-    MangaProjectController_rerunCheck: {
         parameters: {
             query?: never;
             header?: never;
@@ -49935,31 +49870,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaProjectPageDto"][];
-                };
-            };
-        };
-    };
-    MangaProjectController_correct: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                project_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ApproveMangaProjectDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MangaProjectDto"];
                 };
             };
         };

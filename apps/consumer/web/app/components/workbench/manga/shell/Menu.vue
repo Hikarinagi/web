@@ -38,7 +38,7 @@
         @select="emit('select', 'hint')"
       >
         <template #icon><Pencil /></template>
-        书上的卷号或话号
+        填写卷号或话号
       </DropdownMenuItem>
       <DropdownMenuItem
         v-else-if="editable && can('manage') && project.chapter"

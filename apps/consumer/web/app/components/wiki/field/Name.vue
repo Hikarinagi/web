@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import {
     Autocomplete,
-    Avatar,
     Button,
     DropdownMenu,
     DropdownMenuItem,
@@ -128,9 +127,6 @@
       @update:model-value="input"
       @select="pick"
     >
-      <template v-if="target" #leading>
-        <Avatar :name="target.label.replace(/\s/g, '')" size="sm" />
-      </template>
       <template #trailing>
         <DropdownMenu v-if="target" align="end">
           <IconButton :label="`${props.label}的更多操作`" variant="ghost" tone="neutral" size="xs">
@@ -172,7 +168,7 @@
       </template>
     </Autocomplete>
     <Text v-if="differs && target" size="xs" tone="muted">
-      关联到
+      即
       <Link :as="NuxtLink" :to="`/entries/${target.id}/edit`" lang="ja">{{ target.label }}</Link>
     </Text>
     <Inline v-if="unknown && target" gap="sm" align="baseline">

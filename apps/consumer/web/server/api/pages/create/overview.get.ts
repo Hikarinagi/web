@@ -21,7 +21,9 @@ async function handler(event: H3Event) {
       query: { unpatrolled: true, page: 1, page_size: 1 },
     }),
     fetchBackendData(event, '/api/v3/novel-projects', { query: review }),
-    fetchBackendData(event, '/api/v3/manga-projects', { query: review }),
+    fetchBackendData(event, '/api/v3/manga-projects', {
+      query: { ...review, mode: 'TRANSLATION' as const },
+    }),
     fetchBackendData(event, '/api/v3/novel-projects', { query: mine }),
     fetchBackendData(event, '/api/v3/manga-projects', { query: mine }),
   ])

@@ -5,7 +5,7 @@ import { readPage } from '~~/server/utils/page-query'
 
 async function handler(event: H3Event) {
   const projects = await fetchBackendData(event, '/api/v3/manga-projects', {
-    query: { page: readPage(event), page_size: 20, status: ['HELD'] },
+    query: { page: readPage(event), page_size: 20, status: ['HELD'], mode: 'TRANSLATION' },
   })
   return { projects }
 }

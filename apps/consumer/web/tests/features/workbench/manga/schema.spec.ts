@@ -10,53 +10,27 @@ const issues = (schema: Parameters<typeof v.safeParse>[0], input: unknown) =>
   (v.safeParse(schema, input).issues ?? []).map(issue => issue.message)
 
 describe('createMangaProjectSchema', () => {
-  const base = {
-    mode: 'UPLOAD',
-    scope: 'CHAPTER',
-    chapter_id: null,
-    chapter_type: 'SERIALIZATION',
-    source_lang: 'zh-Hans',
-  }
+  const base = { mode: 'UPLOAD', source_lang: 'zh-Hans' }
 
-  it('连载的新章节必须有话数', () => {
-    expect(
-      issues(createMangaProjectSchema, { ...base, chapter_number: ' ', chapter_name: '' }),
-    ).toEqual(['请填写话数'])
-    expect(issues(createMangaProjectSchema, { ...base, chapter_name: '再会' })).toEqual([
-      '请填写话数',
+  it('卷号或话号可以不填，填了也不限写法', () => {
+    expect(issues(createMangaProjectSchema, base)).toEqual([])
+    expect(issues(createMangaProjectSchema, { ...base, hint: null })).toEqual([])
+    expect(issues(createMangaProjectSchema, { ...base, hint: '第 17 至 20 话' })).toEqual([])
+    expect(issues(createMangaProjectSchema, { ...base, hint: 'x'.repeat(41) })).toEqual([
+      '卷号或话号不能超过 40 个字符',
     ])
-    expect(issues(createMangaProjectSchema, { ...base, chapter_number: '12' })).toEqual([])
-    expect(issues(createMangaProjectSchema, { ...base, chapter_number: '12.5' })).toEqual([])
   })
 
-  it('番外与单篇必须有标题，选已有章节时不要求', () => {
+  it('翻译必须选与原文不同的译文语言', () => {
+    expect(issues(createMangaProjectSchema, { ...base, mode: 'TRANSLATION' })).toEqual([
+      '请选择译文语言',
+    ])
     expect(
-      issues(createMangaProjectSchema, { ...base, chapter_type: 'EXTRA', chapter_name: '番外篇' }),
+      issues(createMangaProjectSchema, { ...base, mode: 'TRANSLATION', target_lang: 'zh-Hans' }),
+    ).toEqual(['译文语言不能与原文语言相同'])
+    expect(
+      issues(createMangaProjectSchema, { ...base, mode: 'TRANSLATION', target_lang: 'ja' }),
     ).toEqual([])
-    expect(
-      issues(createMangaProjectSchema, { ...base, chapter_type: 'ONESHOT', chapter_name: '' }),
-    ).toEqual(['请填写标题'])
-    expect(
-      issues(createMangaProjectSchema, { ...base, chapter_type: 'EXTRA', chapter_number: '12.5' }),
-    ).toEqual(['请填写标题'])
-    expect(issues(createMangaProjectSchema, { ...base, chapter_id: 7 })).toEqual([])
-  })
-
-  it('话数只收数字', () => {
-    expect(issues(createMangaProjectSchema, { ...base, chapter_number: '3卷' })).toEqual([
-      '话数只填数字，例如 12 或 12.5',
-    ])
-  })
-
-  it('整卷范围必须选单行本', () => {
-    expect(issues(createMangaProjectSchema, { ...base, scope: 'VOLUME', volume_id: 3 })).toEqual([])
-    expect(issues(createMangaProjectSchema, { ...base, scope: 'VOLUME' })).toEqual(['请选择单行本'])
-  })
-
-  it('投稿范围只有一话与整卷', () => {
-    expect(issues(createMangaProjectSchema, { ...base, scope: 'SPLIT', volume_id: 3 })).toEqual([
-      '请选择投稿范围',
-    ])
   })
 })
 

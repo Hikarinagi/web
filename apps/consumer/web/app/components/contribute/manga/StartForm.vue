@@ -112,13 +112,8 @@
           @update:model-value="pick"
         />
       </FormField>
-      <FormField
-        name="hint"
-        label="书上的卷号或话号"
-        description="选填。提交审核时，系统会根据封面、目录和标题页判断这份文件放在哪一卷或哪几话。"
-        description-placement="control"
-      >
-        <Input v-model="values.hint" placeholder="例如：3、第 17 至 20 话" />
+      <FormField name="hint" label="卷号或话号">
+        <Input v-model="values.hint" placeholder="例如：第 3 卷、第 17 至 20 话" />
       </FormField>
       <FormLayout :columns="translation ? 2 : 1">
         <FormField name="source_lang" :label="translation ? '原文语言' : '图源语言'" required>

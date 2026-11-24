@@ -113,11 +113,7 @@
   ])
 
   function open(row: Row) {
-    void navigateTo(
-      props.purpose === 'review' && row.mode === 'UPLOAD'
-        ? `/create/manga-review/${row.id}`
-        : `/create/manga/${row.id}`,
-    )
+    void navigateTo(`/create/manga/${row.id}`)
   }
 </script>
 
@@ -183,14 +179,7 @@
       <Inline v-if="purpose === 'held'" justify="end" class="py-1" @click.stop>
         <Button size="sm" @click="correct(row)">处理</Button>
       </Inline>
-      <Inline
-        v-else-if="row.mode === 'TRANSLATION'"
-        gap="xs"
-        :wrap="false"
-        justify="end"
-        class="py-1"
-        @click.stop
-      >
+      <Inline v-else gap="xs" :wrap="false" justify="end" class="py-1" @click.stop>
         <Button size="sm" variant="ghost" @click="correct(row)">修正</Button>
         <Button size="sm" variant="ghost" tone="danger" @click="reject(row)">驳回</Button>
         <Inline v-tooltip="row.placement_complete ? null : '还没有确定位置，请先修正'" as="span">

@@ -41,7 +41,7 @@
 </script>
 
 <template>
-  <Dialog v-model:open="visible" title="书上的卷号或话号" size="sm" :locked="submitting">
+  <Dialog v-model:open="visible" title="卷号或话号" size="sm" :locked="submitting">
     <template #content>
       <Form
         ref="form"
@@ -50,13 +50,8 @@
         :disabled="submitting"
         @submit="onSubmit"
       >
-        <FormField
-          name="hint"
-          label="卷号或话号"
-          description="选填。提交审核时，系统会根据封面、目录和标题页判断这份文件放在哪一卷或哪几话。"
-          description-placement="control"
-        >
-          <Input v-model="values.hint" placeholder="例如：3、第 17 至 20 话" />
+        <FormField name="hint" label="卷号或话号">
+          <Input v-model="values.hint" placeholder="例如：第 3 卷、第 17 至 20 话" />
         </FormField>
       </Form>
     </template>

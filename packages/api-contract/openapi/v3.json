@@ -32688,41 +32688,6 @@
         ],
         "type": "object"
       },
-      "MangaBaselinePageDto": {
-        "properties": {
-          "byte_size": {
-            "nullable": true,
-            "type": "number"
-          },
-          "height": {
-            "nullable": true,
-            "type": "number"
-          },
-          "id": {
-            "type": "number"
-          },
-          "page_number": {
-            "type": "number"
-          },
-          "url": {
-            "description": "图片的限时访问地址",
-            "type": "string"
-          },
-          "width": {
-            "nullable": true,
-            "type": "number"
-          }
-        },
-        "required": [
-          "id",
-          "page_number",
-          "width",
-          "height",
-          "byte_size",
-          "url"
-        ],
-        "type": "object"
-      },
       "MangaCardSummaryResDto": {
         "properties": {
           "author_name": {
@@ -34701,6 +34666,35 @@
         ],
         "type": "object"
       },
+      "MangaPlaceFlawDto": {
+        "properties": {
+          "kind": {
+            "description": "其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整",
+            "enum": [
+              "watermark",
+              "ad",
+              "qr_code",
+              "foreign",
+              "incomplete"
+            ],
+            "type": "string"
+          },
+          "note": {
+            "description": "写给投稿者的说明",
+            "type": "string"
+          },
+          "page": {
+            "description": "投稿文件的第几页",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "page",
+          "note"
+        ],
+        "type": "object"
+      },
       "MangaProducerRelationDto": {
         "properties": {
           "code": {
@@ -35126,6 +35120,7 @@
             "type": "array"
           },
           "viewer_reviewer": {
+            "description": "查看者能否审核这份投稿；上传投稿由系统审核，始终为 false",
             "type": "boolean"
           },
           "viewer_role": {
@@ -35567,10 +35562,21 @@
             },
             "type": "array"
           },
+          "failures": {
+            "description": "连续几次因文件本身的原因未能判断，重新提交时清零",
+            "type": "number"
+          },
           "first": {
             "description": "第一话",
             "nullable": true,
             "type": "number"
+          },
+          "flaws": {
+            "description": "看图检查发现的问题",
+            "items": {
+              "$ref": "#/components/schemas/MangaPlaceFlawDto"
+            },
+            "type": "array"
           },
           "hint_agrees": {
             "description": "与投稿者填写的卷号或话号是否一致；未填写或无从比较时为空",
@@ -35600,7 +35606,10 @@
               "extra",
               "taken",
               "refused",
-              "failed"
+              "flawed",
+              "failed",
+              "unsettled",
+              "unreadable"
             ],
             "nullable": true,
             "type": "string"
@@ -35623,6 +35632,11 @@
             ],
             "type": "string"
           },
+          "title": {
+            "description": "番外的标题",
+            "nullable": true,
+            "type": "string"
+          },
           "volume": {
             "description": "书上印的卷号",
             "nullable": true,
@@ -35640,11 +35654,13 @@
           "first",
           "last",
           "edition",
+          "title",
           "wiki_volume",
           "set_entry_id",
           "set_name",
           "confidence",
           "evidence",
+          "flaws",
           "source",
           "applied",
           "hint_agrees",
@@ -93075,70 +93091,9 @@
         ]
       }
     },
-    "/api/v3/manga-projects/{project_id}/baseline-pages": {
-      "get": {
-        "operationId": "MangaProjectController_getBaselinePages",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/MangaBaselinePageDto"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
-        ]
-      }
-    },
     "/api/v3/manga-projects/{project_id}/check": {
       "get": {
         "operationId": "MangaProjectController_getCheck",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaProjectCheckDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
-        ]
-      },
-      "post": {
-        "operationId": "MangaProjectController_rerunCheck",
         "parameters": [
           {
             "in": "path",
@@ -93515,46 +93470,6 @@
         },
         "tags": [
           "MangaProjectPage"
-        ]
-      }
-    },
-    "/api/v3/manga-projects/{project_id}/placement": {
-      "put": {
-        "operationId": "MangaProjectController_correct",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "project_id",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ApproveMangaProjectDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MangaProjectDto"
-                }
-              }
-            },
-            "description": ""
-          }
-        },
-        "tags": [
-          "MangaProject"
         ]
       }
     },

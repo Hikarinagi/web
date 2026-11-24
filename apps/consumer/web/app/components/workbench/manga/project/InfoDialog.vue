@@ -37,7 +37,7 @@
       | 'placement'
       | 'placement_complete'
     > & { series: { id: number } }
-    purpose: 'approve' | 'correct' | 'resume'
+    purpose: 'approve' | 'resume'
   }>()
   const visible = defineModel<boolean>('visible', { required: true })
   const emit = defineEmits<{ saved: [] }>()
@@ -120,13 +120,8 @@
       const request = { method: 'post' as const, path: { project_id: props.project.id }, body }
       if (props.purpose === 'approve') {
         await hikariRequest('/api/v3/manga-projects/{project_id}/approve', request)
-      } else if (props.purpose === 'resume') {
-        await hikariRequest('/api/v3/manga-projects/{project_id}/resume', request)
       } else {
-        await hikariRequest('/api/v3/manga-projects/{project_id}/placement', {
-          ...request,
-          method: 'put',
-        })
+        await hikariRequest('/api/v3/manga-projects/{project_id}/resume', request)
       }
       visible.value = false
       emit('saved')
@@ -206,7 +201,7 @@
         取消
       </Button>
       <Button :loading="submitting" @click="form?.submit()">
-        {{ purpose === 'approve' ? '保存并通过' : purpose === 'resume' ? '保存并恢复' : '保存' }}
+        {{ purpose === 'approve' ? '保存并通过' : '保存并恢复' }}
       </Button>
     </template>
   </Dialog>

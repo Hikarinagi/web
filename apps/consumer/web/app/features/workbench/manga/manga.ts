@@ -20,16 +20,6 @@ export type BackendMangaNote = NonNullable<
 >['notes'][number]
 
 export type MangaNoteRect = NonNullable<BackendMangaNote['rect']>
-
-export type BackendMangaCheck = NonNullable<
-  ApiData<'/api/v3/manga-projects/{project_id}/check', 'get'>
->
-
-export type BackendMangaBaselinePage = ApiData<
-  '/api/v3/manga-projects/{project_id}/baseline-pages',
-  'get'
->[number]
-
 export type MangaRegionChange = {
   project_id: number
   page_id: number | null
