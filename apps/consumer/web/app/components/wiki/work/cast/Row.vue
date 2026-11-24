@@ -90,7 +90,7 @@
             placeholder="名字"
             aria-label="名字"
             lang="ja"
-            class="min-w-0 flex-1"
+            class="min-w-40 flex-1"
           />
         </Inline>
         <WikiWorkCastNotes :appearance="appearance" :twins="twins" class="pl-11" />

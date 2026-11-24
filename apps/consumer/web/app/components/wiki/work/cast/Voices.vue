@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Button, IconButton, Inline, MultiSelect, Stack, Text } from '@hina-ui/vue'
+  import { Button, IconButton, Inline, Stack, Text } from '@hina-ui/vue'
   import { X } from '@lucide/vue'
   import type { ValueDraft } from '~/features/wiki/editor/draft'
 
@@ -8,17 +8,13 @@
   const props = defineProps<{ appearance: number }>()
   const cast = useCastEntry(() => props.appearance)
   const versions = computed(() => cast.editor.versions.value)
-  const options = computed(() =>
-    versions.value.map(item => ({ value: item.id, label: item.label })),
-  )
   const original = computed(() => cast.voices.value.filter(voice => !voice.value.versions.length))
   const others = computed(() => cast.voices.value.filter(voice => voice.value.versions.length))
   const adding = ref(false)
   const picked = ref<number[]>([])
   const blank = { text: null, target: null }
 
-  const chosen = (ids: (string | number)[]) =>
-    versions.value.filter(item => ids.map(Number).includes(item.id))
+  const chosen = (ids: number[]) => versions.value.filter(item => ids.includes(item.id))
 
   function add(next: Pick<ValueDraft, 'text' | 'target'>) {
     cast.setVoice(null, next, chosen(picked.value))
@@ -61,12 +57,9 @@
       />
     </Stack>
     <Stack v-for="voice in others" :key="voice.id" gap="xs">
-      <MultiSelect
+      <WikiWorkCastVersions
         :model-value="voice.value.versions.map(item => item.id)"
-        :options="options"
-        aria-label="所属版本"
-        placeholder="选择版本"
-        size="sm"
+        :versions="versions"
         @update:model-value="ids => cast.setVersions(voice, chosen(ids))"
       />
       <Inline gap="xs" align="start" :wrap="false">
@@ -89,13 +82,7 @@
       </Inline>
     </Stack>
     <Stack v-if="adding" gap="xs">
-      <MultiSelect
-        v-model="picked"
-        :options="options"
-        aria-label="所属版本"
-        placeholder="选择版本"
-        size="sm"
-      />
+      <WikiWorkCastVersions v-model="picked" :versions="versions" />
       <WikiFieldName
         v-if="picked.length"
         :model-value="blank"
@@ -105,7 +92,7 @@
       />
     </Stack>
     <Button
-      v-else-if="options.length"
+      v-else-if="versions.length"
       variant="link"
       size="sm"
       class="self-start"

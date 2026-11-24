@@ -12021,6 +12021,13 @@
             "description": "Whether the value is recorded as a public record (A.9.5.5)",
             "type": "boolean"
           },
+          "names": {
+            "description": "Names of the entry the value points at, as the citation check compared them",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "property": {
             "enum": [
               "TITLE",
@@ -12104,6 +12111,16 @@
               "DEPRECATED"
             ],
             "type": "string"
+          },
+          "volume": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CheckedVolumeDto"
+              }
+            ],
+            "description": "Series names and volume number of the volume the value points at, as the citation check compared them",
+            "nullable": true,
+            "type": "object"
           }
         },
         "required": [
@@ -12112,7 +12129,27 @@
           "property",
           "status",
           "is_public",
-          "citations"
+          "citations",
+          "names",
+          "volume"
+        ],
+        "type": "object"
+      },
+      "CheckedVolumeDto": {
+        "properties": {
+          "number": {
+            "type": "number"
+          },
+          "series": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "series",
+          "number"
         ],
         "type": "object"
       },

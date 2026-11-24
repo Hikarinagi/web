@@ -18968,11 +18968,19 @@ export interface components {
             entry_id: number;
             /** @description Whether the value is recorded as a public record (A.9.5.5) */
             is_public: boolean;
+            /** @description Names of the entry the value points at, as the citation check compared them */
+            names: string[];
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "TITLE_LOGO" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "VOLUME_COUNT" | "ORDER" | "BOOK_FORMAT" | "EDITION" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "VOLUME_SET" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             statement_id: number;
             /** @enum {string} */
             status: "ACTIVE" | "DEPRECATED";
+            /** @description Series names and volume number of the volume the value points at, as the citation check compared them */
+            volume: components["schemas"]["CheckedVolumeDto"] | null;
+        };
+        CheckedVolumeDto: {
+            number: number;
+            series: string[];
         };
         CitationSummaryDto: {
             accessed_at: string | null;

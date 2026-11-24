@@ -57,14 +57,14 @@
           />
         </Stack>
         <WikiWorkCastVoices :appearance="appearance" />
-        <Inline gap="sm" align="center" :wrap="false">
+        <Inline gap="sm" align="center">
           <Select
             :model-value="cast.role.value"
             :options="roles"
             aria-label="定位"
             placeholder="定位"
             clearable
-            class="w-28 shrink-0"
+            class="w-36 shrink-0"
             @update:model-value="value => (cast.role.value = value ? String(value) : null)"
           />
           <template v-if="game">

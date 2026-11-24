@@ -32,14 +32,14 @@
       />
       <CloseButton label="去掉读音" @click="drop('reading')" />
     </Inline>
-    <Inline v-if="extras.includes('song')" gap="sm" align="center" :wrap="false">
+    <Inline v-if="extras.includes('song')" gap="sm" align="center">
       <Text as="span" size="sm" tone="muted" class="w-16 shrink-0">歌曲</Text>
       <Input
         :model-value="model.song ?? ''"
         aria-label="歌名"
         placeholder="歌名"
         lang="ja"
-        class="min-w-0 flex-1"
+        class="min-w-40 flex-1"
         @update:model-value="value => patch({ song: String(value) })"
       />
       <Select
