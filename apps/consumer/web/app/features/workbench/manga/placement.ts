@@ -9,6 +9,7 @@ const PROBLEM_TEXT: Record<NonNullable<MangaPlacement['problem']>, string> = {
   extra: '看不出番外的标题',
   taken: '这一卷或这一话已有其他投稿',
   refused: '这个位置无法放入',
+  moved: '与已发布的位置不符',
   flawed: '文件有问题',
   failed: '未能确定位置',
   unsettled: '未能确定位置',

@@ -24908,7 +24908,7 @@ export interface components {
              * @description 没有按此放好的原因
              * @enum {string|null}
              */
-            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "flawed" | "failed" | "unsettled" | "unreadable" | null;
+            problem: "no_volume" | "several" | "extra" | "taken" | "refused" | "moved" | "flawed" | "failed" | "unsettled" | "unreadable" | null;
             /** @description 维基卷所在的版本套 */
             set_entry_id: number | null;
             /** @description 版本套不是原版时的名称 */
