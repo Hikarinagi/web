@@ -34671,7 +34671,6 @@
           "kind": {
             "description": "其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整",
             "enum": [
-              "watermark",
               "ad",
               "qr_code",
               "foreign",

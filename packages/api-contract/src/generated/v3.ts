@@ -24664,7 +24664,7 @@ export interface components {
              * @description 其他组或网站的水印、广告页、二维码、不属于这部作品的页、文件不完整
              * @enum {string}
              */
-            kind: "watermark" | "ad" | "qr_code" | "foreign" | "incomplete";
+            kind: "ad" | "qr_code" | "foreign" | "incomplete";
             /** @description 写给投稿者的说明 */
             note: string;
             /** @description 投稿文件的第几页 */
