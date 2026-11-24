@@ -43,7 +43,7 @@
   <WorkbenchMangaShellPlacement :project="project" />
   <Alert :open="rejected" tone="warning" :closable="false" title="投稿已退回">
     <Stack gap="sm">
-      <Text v-if="review?.reasons.length" size="sm">{{ review.reasons.join('；') }}</Text>
+      <Text v-for="reason in review?.reasons ?? []" :key="reason" size="sm">{{ reason }}</Text>
       <template v-if="notes.length">
         <Text size="xs" tone="muted">已处理 {{ resolved }} 条批注（共 {{ notes.length }} 条）</Text>
         <ScrollArea class="max-h-40">

@@ -4,10 +4,10 @@
     AtSign,
     Bell,
     BookOpen,
+    BookUp,
     CopyCheck,
     GitPullRequest,
     Heart,
-    Languages,
     Megaphone,
     MessageCircle,
     Shirt,
@@ -67,7 +67,7 @@
       case 'workbench.held':
       case 'workbench.resumed':
       case 'workbench.remounted':
-        return Languages
+        return BookUp
       case 'achievement.unlock':
         return Shirt
       default:
