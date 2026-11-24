@@ -30,7 +30,7 @@ export function placementHeading(placement: MangaPlacement): string {
   const number = (value: number | null) => mangaChapterNumber(String(value ?? ''))
   if (placement.kind === 'volume') {
     const edition = placement.set_name ?? placement.edition
-    return `${edition ?? ''}第 ${placement.volume} 卷`
+    return `${edition ?? ''}${placement.volume === null ? '单行本' : `第 ${placement.volume} 卷`}`
   }
   if (placement.kind === 'chapters') {
     return placement.first === placement.last
