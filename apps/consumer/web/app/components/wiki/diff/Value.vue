@@ -65,6 +65,13 @@
     </Text>
     <WikiDiffText v-else :before="shown.before" :after="shown.after" />
     <Text v-if="note" size="xs" tone="muted">{{ note }}</Text>
+    <Text
+      v-if="removed(after) && !removed(before) && after?.deprecation_note"
+      size="xs"
+      tone="muted"
+    >
+      说明：{{ after.deprecation_note }}
+    </Text>
     <Text v-if="kept" size="xs" tone="danger">此后已有新的修改，此处保持不变</Text>
     <Text v-if="sources" size="xs" tone="muted">
       来源：{{ sources.before || '无' }} → {{ sources.after || '无' }}
