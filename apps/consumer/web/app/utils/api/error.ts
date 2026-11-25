@@ -94,6 +94,8 @@ function formatDetails(details: Record<string, unknown> | undefined): string {
     .join('\n')
 }
 
+const shownToasts = new Map<string, number>()
+
 export function showApiErrorToast(error: HikariApiError) {
   if (!import.meta.client) return
   if (isMaintenanceError(error)) {
@@ -102,6 +104,11 @@ export function showApiErrorToast(error: HikariApiError) {
   }
 
   const detail = formatDetails(error.details)
+  const key = `${error.message}\n${detail}`
+  const now = Date.now()
+  if (now - (shownToasts.get(key) ?? 0) < 3000) return
+  if (shownToasts.size > 50) shownToasts.clear()
+  shownToasts.set(key, now)
   toast.danger(error.message, { description: detail || undefined })
 }
 

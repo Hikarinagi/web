@@ -1,10 +1,30 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { toast } from '@hina-ui/vue'
 import {
   abortErrorOf,
   isAbortError,
   isMaintenanceError,
   normalizeApiError,
+  showApiErrorToast,
 } from '../../app/utils/api/error'
+
+describe('showApiErrorToast', () => {
+  it('shows the same failure once when several requests fail with it at the same time', () => {
+    const danger = vi.spyOn(toast, 'danger').mockImplementation(() => '' as never)
+    const failure = () =>
+      normalizeApiError(
+        Object.assign(new Error('[GET] "/api/v3/x": 502'), { status: 502, data: '<html></html>' }),
+      )
+
+    showApiErrorToast(failure())
+    showApiErrorToast(failure())
+    showApiErrorToast(failure())
+
+    expect(danger).toHaveBeenCalledTimes(1)
+    expect(danger).toHaveBeenCalledWith('服务暂时不可用，请稍后重试', { description: undefined })
+    danger.mockRestore()
+  })
+})
 
 function fetchError(status: number, body: unknown) {
   return Object.assign(new Error(`[PATCH] "/x": ${status}`), { status, data: body })
