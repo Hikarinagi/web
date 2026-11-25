@@ -17876,6 +17876,13 @@
           "summary": {
             "nullable": true,
             "type": "string"
+          },
+          "withdrawn": {
+            "description": "Values the edit added or changed on this entry that a later edit withdrew and that stay withdrawn",
+            "items": {
+              "$ref": "#/components/schemas/WithdrawalDto"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -17884,7 +17891,8 @@
           "revision",
           "summary",
           "reverted_at",
-          "comparison"
+          "comparison",
+          "withdrawn"
         ],
         "type": "object"
       },
@@ -19791,16 +19799,6 @@
               }
             ]
           },
-          "report": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/EntryPropertyReportDto"
-              }
-            ],
-            "description": "What the latest lookup that reported on the property concluded",
-            "nullable": true,
-            "type": "object"
-          },
           "values": {
             "description": "Values the entry has now",
             "items": {
@@ -19812,37 +19810,7 @@
         "required": [
           "property",
           "label",
-          "values",
-          "report"
-        ],
-        "type": "object"
-      },
-      "EntryPropertyReportDto": {
-        "properties": {
-          "ended_at": {
-            "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          },
-          "lookup_id": {
-            "type": "number"
-          },
-          "note": {
-            "type": "string"
-          },
-          "outcome": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/WikiLookupOutcome"
-              }
-            ]
-          }
-        },
-        "required": [
-          "outcome",
-          "note",
-          "lookup_id",
-          "ended_at"
+          "values"
         ],
         "type": "object"
       },
@@ -31025,6 +30993,7 @@
             "type": "string"
           },
           "edits": {
+            "description": "Edits the lookup saved, from its batch, the earliest first",
             "items": {
               "$ref": "#/components/schemas/LookupEditDto"
             },
@@ -31049,16 +31018,6 @@
           "error": {
             "nullable": true,
             "type": "string"
-          },
-          "goal": {
-            "additionalProperties": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "description": "Properties the lookup was asked to fill, by entry type",
-            "type": "object"
           },
           "halted_by": {
             "allOf": [
@@ -31092,22 +31051,18 @@
           "model": {
             "type": "string"
           },
-          "outcomes": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/LookupOutcomesDto"
-              }
-            ],
-            "description": "Report items of the lookup by outcome"
-          },
           "output_tokens": {
             "type": "number"
           },
-          "reports": {
-            "items": {
-              "$ref": "#/components/schemas/LookupReportDto"
-            },
-            "type": "array"
+          "remaining": {
+            "description": "What the bot left for the next lookup; null when it left nothing or did not report",
+            "nullable": true,
+            "type": "string"
+          },
+          "report": {
+            "description": "The report the bot ended with: what it found wrong, what it changed, what it left and why",
+            "nullable": true,
+            "type": "string"
           },
           "routes": {
             "description": "Model providers the lookup called",
@@ -31153,14 +31108,13 @@
           "cost_usd",
           "input_tokens",
           "output_tokens",
-          "outcomes",
+          "remaining",
           "items",
-          "goal",
           "model",
           "error",
           "halted_by",
           "due_at",
-          "reports",
+          "report",
           "messages",
           "edits",
           "suggestions",
@@ -31408,16 +31362,13 @@
             ],
             "description": "Submitted items of the lookup by result"
           },
-          "outcomes": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/LookupOutcomesDto"
-              }
-            ],
-            "description": "Report items of the lookup by outcome"
-          },
           "output_tokens": {
             "type": "number"
+          },
+          "remaining": {
+            "description": "What the bot left for the next lookup; null when it left nothing or did not report",
+            "nullable": true,
+            "type": "string"
           },
           "started_at": {
             "format": "date-time",
@@ -31450,7 +31401,7 @@
           "cost_usd",
           "input_tokens",
           "output_tokens",
-          "outcomes",
+          "remaining",
           "items",
           "current"
         ],
@@ -31503,29 +31454,6 @@
         "required": [
           "name",
           "type"
-        ],
-        "type": "object"
-      },
-      "LookupOutcomesDto": {
-        "properties": {
-          "not_found": {
-            "type": "number"
-          },
-          "present": {
-            "type": "number"
-          },
-          "unsure": {
-            "type": "number"
-          },
-          "written": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "written",
-          "present",
-          "not_found",
-          "unsure"
         ],
         "type": "object"
       },
@@ -32021,8 +31949,10 @@
           "id": {
             "type": "number"
           },
-          "outcomes": {
-            "$ref": "#/components/schemas/LookupOutcomesDto"
+          "remaining": {
+            "description": "What the lookup left for the next one; null when it left nothing",
+            "nullable": true,
+            "type": "string"
           },
           "state": {
             "allOf": [
@@ -32037,7 +31967,7 @@
           "state",
           "ended_by",
           "ended_at",
-          "outcomes"
+          "remaining"
         ],
         "type": "object"
       },
@@ -32081,42 +32011,6 @@
           "count",
           "last_at",
           "lookups"
-        ],
-        "type": "object"
-      },
-      "LookupReportDto": {
-        "properties": {
-          "entry": {
-            "$ref": "#/components/schemas/LookupEntryDto"
-          },
-          "id": {
-            "type": "number"
-          },
-          "note": {
-            "type": "string"
-          },
-          "outcome": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/WikiLookupOutcome"
-              }
-            ]
-          },
-          "property": {
-            "type": "string"
-          },
-          "property_label": {
-            "description": "Name of the property as shown to people",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "entry",
-          "property",
-          "property_label",
-          "outcome",
-          "note"
         ],
         "type": "object"
       },
@@ -39876,6 +39770,90 @@
         "required": [
           "target_type",
           "count"
+        ],
+        "type": "object"
+      },
+      "MyEditSummaryDto": {
+        "properties": {
+          "applied_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "basis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EditBasisDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "batch": {
+            "$ref": "#/components/schemas/EditBatchRefDto"
+          },
+          "clause": {
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editor": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "entries": {
+            "description": "The first entries the edit touched, and those within the entry asked for",
+            "items": {
+              "$ref": "#/components/schemas/EditPartDto"
+            },
+            "type": "array"
+          },
+          "entry_count": {
+            "description": "Entries the edit touched",
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "patrolled_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "reverted_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "withdrawn": {
+            "description": "Values the edit added or changed that a later edit withdrew and that stay withdrawn",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "editor",
+          "batch",
+          "summary",
+          "note",
+          "basis",
+          "clause",
+          "created_at",
+          "applied_at",
+          "patrolled_at",
+          "reverted_at",
+          "entry_count",
+          "entries",
+          "withdrawn"
         ],
         "type": "object"
       },
@@ -48652,16 +48630,8 @@
             "nullable": true,
             "type": "string"
           },
-          "requested_goal": {
-            "description": "Properties the pending request is limited to; null when it covers everything",
-            "items": {
-              "$ref": "#/components/schemas/TaskPropertiesDto"
-            },
-            "nullable": true,
-            "type": "array"
-          },
           "requested_note": {
-            "description": "Message that goes with the request",
+            "description": "Note that goes with the request",
             "nullable": true,
             "type": "string"
           },
@@ -48703,7 +48673,6 @@
           "held_reason",
           "running",
           "last",
-          "requested_goal",
           "requested_note",
           "running_lookup_id"
         ],
@@ -50736,30 +50705,6 @@
         ],
         "type": "string"
       },
-      "RequestGoalDto": {
-        "properties": {
-          "properties": {
-            "items": {
-              "$ref": "#/components/schemas/EntryProperty"
-            },
-            "maxItems": 100,
-            "minItems": 1,
-            "type": "array"
-          },
-          "type": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/EntryType"
-              }
-            ]
-          }
-        },
-        "required": [
-          "type",
-          "properties"
-        ],
-        "type": "object"
-      },
       "RequestLookupsDto": {
         "properties": {
           "entry_ids": {
@@ -50768,14 +50713,6 @@
               "type": "number"
             },
             "maxItems": 500,
-            "type": "array"
-          },
-          "goal": {
-            "description": "Look up only these properties this time; omitted, everything the task covers is looked up",
-            "items": {
-              "$ref": "#/components/schemas/RequestGoalDto"
-            },
-            "maxItems": 20,
             "type": "array"
           },
           "links": {
@@ -50788,7 +50725,7 @@
             "type": "array"
           },
           "note": {
-            "description": "Handed to the bot as a message from the operator when the lookup starts",
+            "description": "Why the entry is asked for, given to the bot in its task as the request of the operator",
             "maxLength": 2000,
             "type": "string"
           },
@@ -62265,15 +62202,6 @@
         ],
         "type": "string"
       },
-      "WikiLookupOutcome": {
-        "enum": [
-          "WRITTEN",
-          "PRESENT",
-          "NOT_FOUND",
-          "UNSURE"
-        ],
-        "type": "string"
-      },
       "WikiLookupState": {
         "enum": [
           "RUNNING",
@@ -62416,6 +62344,82 @@
           "REJECTED"
         ],
         "type": "string"
+      },
+      "WithdrawalDto": {
+        "properties": {
+          "edit_id": {
+            "description": "The later edit that withdrew the value",
+            "type": "number"
+          },
+          "editor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserRefDto"
+              }
+            ],
+            "description": "Who made the later edit"
+          },
+          "note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "CONTRADICTED",
+              "WRONG_ENTRY",
+              "DUPLICATE",
+              "RESCHEDULED",
+              "BAD_SOURCE",
+              "REVERTED"
+            ],
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "description": "Sources that contradict the value",
+            "items": {
+              "$ref": "#/components/schemas/WithdrawalSourceDto"
+            },
+            "type": "array"
+          },
+          "statement_id": {
+            "description": "The value the edit added or changed",
+            "type": "number"
+          },
+          "withdrawn_at": {
+            "description": "When the later edit was applied",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "statement_id",
+          "reason",
+          "note",
+          "sources",
+          "edit_id",
+          "editor",
+          "withdrawn_at"
+        ],
+        "type": "object"
+      },
+      "WithdrawalSourceDto": {
+        "properties": {
+          "excerpt": {
+            "nullable": true,
+            "type": "string"
+          },
+          "url": {
+            "description": "The page that contradicts the value",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "excerpt"
+        ],
+        "type": "object"
       },
       "WorkCardDto": {
         "properties": {
@@ -80344,9 +80348,9 @@
             }
           },
           {
-            "description": "Only lookups whose report holds an unsure item",
+            "description": "Only lookups that left something for the next one",
             "in": "query",
-            "name": "unsure",
+            "name": "remaining",
             "required": false,
             "schema": {
               "type": "boolean"
@@ -109639,7 +109643,7 @@
                   "properties": {
                     "items": {
                       "items": {
-                        "$ref": "#/components/schemas/EditSummaryDto"
+                        "$ref": "#/components/schemas/MyEditSummaryDto"
                       },
                       "type": "array"
                     },

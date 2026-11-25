@@ -39,7 +39,11 @@
       这一部分已于 {{ revisionTime(part.reverted_at) }} 撤销
     </Text>
     <Card v-if="part.comparison" :padded="false" class="overflow-hidden">
-      <WikiDiffTable :comparison="part.comparison" :names="kind?.properties ?? {}" />
+      <WikiDiffTable
+        :comparison="part.comparison"
+        :names="kind?.properties ?? {}"
+        :withdrawn="part.withdrawn"
+      />
     </Card>
   </Stack>
 </template>

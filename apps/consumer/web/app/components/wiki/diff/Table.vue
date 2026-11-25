@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Empty, Inline, Stack, Text } from '@hina-ui/vue'
-  import type { RevisionComparison } from '~/features/wiki/changes'
+  import type { RevisionComparison, Withdrawal } from '~/features/wiki/changes'
 
   defineOptions({ name: 'WikiDiffTable' })
 
@@ -9,6 +9,7 @@
     names: Record<string, string>
     reverse?: boolean
     kept?: number[]
+    withdrawn?: Withdrawal[]
   }>()
 
   const target = (id: number | null) =>
@@ -25,6 +26,7 @@
             before: props.reverse ? after : before,
             after: props.reverse ? before : after,
             kept: id !== undefined && Boolean(props.kept?.includes(id)),
+            withdrawal: props.withdrawn?.find(item => item.statement_id === after?.id) ?? null,
           }
         }),
       })),
@@ -79,6 +81,7 @@
           :before="row.before"
           :after="row.after"
           :kept="row.kept"
+          :withdrawal="row.withdrawal"
         />
       </Stack>
     </Inline>

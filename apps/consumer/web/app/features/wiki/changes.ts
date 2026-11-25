@@ -3,6 +3,7 @@ import type { ApiData, components } from '@hikarinagi/api-contract/v3'
 export type WikiChange = ApiData<'/api/v3/wiki/changes', 'get'>['items'][number]
 export type RevisionComparison = components['schemas']['RevisionComparisonDto']
 export type EditBasis = components['schemas']['EditBasisDto']
+export type Withdrawal = components['schemas']['WithdrawalDto']
 
 export function changeLines(
   change: Pick<WikiChange, 'summary' | 'entries'>,

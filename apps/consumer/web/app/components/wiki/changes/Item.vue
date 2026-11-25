@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { Checkbox, Inline, Stack, Text } from '@hina-ui/vue'
+  import { Checkbox, Inline, Stack, Tag, Text } from '@hina-ui/vue'
+  import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
   import { revisionTime } from '~/features/entry/time'
   import { changeLines, changeTitle, type WikiChange } from '~/features/wiki/changes'
@@ -8,7 +9,7 @@
   defineOptions({ name: 'WikiChangesItem' })
 
   const props = defineProps<{
-    change: WikiChange
+    change: WikiChange | ApiData<'/api/v3/user/me/wiki/edits', 'get'>['items'][number]
     to: string
     active?: boolean
     selectable?: boolean
@@ -16,6 +17,7 @@
   const selected = defineModel<boolean>('selected', { default: false })
 
   const title = computed(() => changeTitle(props.change))
+  const withdrawn = computed(() => ('withdrawn' in props.change ? props.change.withdrawn : 0))
   const summary = computed(
     () =>
       props.change.note ??
@@ -52,6 +54,9 @@
       </Inline>
       <Text size="sm" lang="ja" truncate>{{ title }}</Text>
       <Text size="xs" tone="muted" class="line-clamp-2">{{ summary }}</Text>
+      <Tag v-if="withdrawn" tone="warning" class="self-start">
+        其中 {{ withdrawn }} 个值已被作废
+      </Tag>
     </Stack>
   </Inline>
 </template>

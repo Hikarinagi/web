@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { Stack, Text } from '@hina-ui/vue'
+  import type { Withdrawal } from '~/features/wiki/changes'
   import {
     DEPRECATION_REASONS,
     LONG_PROPERTIES,
@@ -17,6 +18,7 @@
     before: ComparedStatement | null
     after: ComparedStatement | null
     kept?: boolean
+    withdrawal?: Withdrawal | null
   }>()
 
   const describe = (statement: ComparedStatement | null) => {
@@ -32,7 +34,7 @@
   const note = computed(() => {
     const reason = props.after?.deprecation_reason
     if (removed(props.after) && !removed(props.before))
-      return reason ? `已删除，${DEPRECATION_REASONS[reason] ?? reason}` : '已删除'
+      return reason ? `已作废，理由：${DEPRECATION_REASONS[reason] ?? reason}` : '已作废'
     if (removed(props.before) && !removed(props.after)) return '已恢复'
     return null
   })
@@ -76,5 +78,6 @@
     <Text v-if="sources" size="xs" tone="muted">
       来源：{{ sources.before || '无' }} → {{ sources.after || '无' }}
     </Text>
+    <WikiDiffWithdrawal v-if="withdrawal" :withdrawal="withdrawal" />
   </Stack>
 </template>

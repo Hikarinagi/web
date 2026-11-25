@@ -20666,6 +20666,8 @@ export interface components {
             reverted_at: string | null;
             revision: number | null;
             summary: string | null;
+            /** @description Values the edit added or changed on this entry that a later edit withdrew and that stay withdrawn */
+            withdrawn: components["schemas"]["WithdrawalDto"][];
         };
         EditMangaChapterDto: {
             chapter_number?: string | null;
@@ -21054,17 +21056,8 @@ export interface components {
             /** @description Name of the property as shown to people */
             label: string;
             property: components["schemas"]["EntryProperty"];
-            /** @description What the latest lookup that reported on the property concluded */
-            report: components["schemas"]["EntryPropertyReportDto"] | null;
             /** @description Values the entry has now */
             values: components["schemas"]["EntryValueDto"][];
-        };
-        EntryPropertyReportDto: {
-            /** Format: date-time */
-            ended_at: string | null;
-            lookup_id: number;
-            note: string;
-            outcome: components["schemas"]["WikiLookupOutcome"];
         };
         /** @enum {string} */
         EntryProtection: "LOCKED";
@@ -23944,16 +23937,13 @@ export interface components {
              * @description When the entry is due again
              */
             due_at: string | null;
+            /** @description Edits the lookup saved, from its batch, the earliest first */
             edits: components["schemas"]["LookupEditDto"][];
             /** Format: date-time */
             ended_at: string | null;
             ended_by: components["schemas"]["WikiLookupEnd"] | null;
             entry: components["schemas"]["LookupEntryCardDto"];
             error: string | null;
-            /** @description Properties the lookup was asked to fill, by entry type */
-            goal: {
-                [key: string]: string[];
-            };
             halted_by: components["schemas"]["UserRefDto"] | null;
             id: number;
             input_tokens: number;
@@ -23961,10 +23951,11 @@ export interface components {
             items: components["schemas"]["LookupItemsDto"];
             messages: components["schemas"]["LookupMessageDto"][];
             model: string;
-            /** @description Report items of the lookup by outcome */
-            outcomes: components["schemas"]["LookupOutcomesDto"];
             output_tokens: number;
-            reports: components["schemas"]["LookupReportDto"][];
+            /** @description What the bot left for the next lookup; null when it left nothing or did not report */
+            remaining: string | null;
+            /** @description The report the bot ended with: what it found wrong, what it changed, what it left and why */
+            report: string | null;
             /** @description Model providers the lookup called */
             routes: components["schemas"]["LookupRouteDto"][];
             /** Format: date-time */
@@ -24038,9 +24029,9 @@ export interface components {
             input_tokens: number;
             /** @description Submitted items of the lookup by result */
             items: components["schemas"]["LookupItemsDto"];
-            /** @description Report items of the lookup by outcome */
-            outcomes: components["schemas"]["LookupOutcomesDto"];
             output_tokens: number;
+            /** @description What the bot left for the next lookup; null when it left nothing or did not report */
+            remaining: string | null;
             /** Format: date-time */
             started_at: string;
             state: components["schemas"]["WikiLookupState"];
@@ -24060,12 +24051,6 @@ export interface components {
             /** @description Name the call gave the entry */
             name: string;
             type: components["schemas"]["EntryType"];
-        };
-        LookupOutcomesDto: {
-            not_found: number;
-            present: number;
-            unsure: number;
-            written: number;
         };
         LookupOverviewDto: {
             /** @description Cost of the lookups ended in the period */
@@ -24204,7 +24189,8 @@ export interface components {
             ended_at: string | null;
             ended_by: components["schemas"]["WikiLookupEnd"] | null;
             id: number;
-            outcomes: components["schemas"]["LookupOutcomesDto"];
+            /** @description What the lookup left for the next one; null when it left nothing */
+            remaining: string | null;
             state: components["schemas"]["WikiLookupState"];
         };
         LookupRefDto: {
@@ -24218,15 +24204,6 @@ export interface components {
             /** @description The latest lookups refused for it */
             lookups: components["schemas"]["LookupRefDto"][];
             reason: string;
-        };
-        LookupReportDto: {
-            entry: components["schemas"]["LookupEntryDto"];
-            id: number;
-            note: string;
-            outcome: components["schemas"]["WikiLookupOutcome"];
-            property: string;
-            /** @description Name of the property as shown to people */
-            property_label: string;
         };
         LookupRouteDto: {
             failed: number;
@@ -26240,6 +26217,29 @@ export interface components {
         ModerationTargetCountDto: {
             count: number;
             target_type: string;
+        };
+        MyEditSummaryDto: {
+            /** Format: date-time */
+            applied_at: string | null;
+            basis: components["schemas"]["EditBasisDto"] | null;
+            batch: components["schemas"]["EditBatchRefDto"];
+            clause: string | null;
+            /** Format: date-time */
+            created_at: string;
+            editor: components["schemas"]["UserRefDto"];
+            /** @description The first entries the edit touched, and those within the entry asked for */
+            entries: components["schemas"]["EditPartDto"][];
+            /** @description Entries the edit touched */
+            entry_count: number;
+            id: number;
+            note: string | null;
+            /** Format: date-time */
+            patrolled_at: string | null;
+            /** Format: date-time */
+            reverted_at: string | null;
+            summary: string;
+            /** @description Values the edit added or changed that a later edit withdrew and that stay withdrawn */
+            withdrawn: number;
         };
         MyPointRecordItemDto: {
             /** @enum {string} */
@@ -28563,9 +28563,7 @@ export interface components {
              * @description Asked to be looked up first at
              */
             requested_at: string | null;
-            /** @description Properties the pending request is limited to; null when it covers everything */
-            requested_goal: components["schemas"]["TaskPropertiesDto"][] | null;
-            /** @description Message that goes with the request */
+            /** @description Note that goes with the request */
             requested_note: string | null;
             /** @description Operator who asked for it */
             requester: components["schemas"]["UserRefDto"] | null;
@@ -29087,17 +29085,11 @@ export interface components {
         };
         /** @enum {string} */
         ReportStatus: "PENDING" | "RESOLVED" | "REJECTED";
-        RequestGoalDto: {
-            properties: components["schemas"]["EntryProperty"][];
-            type: components["schemas"]["EntryType"];
-        };
         RequestLookupsDto: {
             entry_ids?: number[];
-            /** @description Look up only these properties this time; omitted, everything the task covers is looked up */
-            goal?: components["schemas"]["RequestGoalDto"][];
             /** @description Links to entry pages or to the reader pages of games, series, people and organizations */
             links?: string[];
-            /** @description Handed to the bot as a message from the operator when the lookup starts */
+            /** @description Why the entry is asked for, given to the bot in its task as the request of the operator */
             note?: string;
             task_id: number;
         };
@@ -31978,8 +31970,6 @@ export interface components {
         /** @enum {string} */
         WikiLookupKind: "ENTRY" | "LEAD" | "SCOUT";
         /** @enum {string} */
-        WikiLookupOutcome: "WRITTEN" | "PRESENT" | "NOT_FOUND" | "UNSURE";
-        /** @enum {string} */
         WikiLookupState: "RUNNING" | "PAUSED" | "FINISHED" | "HALTED" | "FAILED";
         WikiRulesDto: {
             /** @description 修订说明，按修订日期列出每次改动的条文（Markdown） */
@@ -32023,6 +32013,29 @@ export interface components {
         WikiTodoKind: "SUGGESTED_EDIT" | "NEW_BOOK_PLACEMENT" | "NEW_GAME_PLACEMENT" | "POSSIBLE_DUPLICATE" | "CONSTRAINT_VIOLATION" | "SOURCE_MISMATCH" | "CLUE" | "DOWNSTREAM_DIFF" | "APPEARANCE_LABEL_CONFLICT" | "CHARACTER_GROUP_CANDIDATE" | "CREDIT_LINK_CANDIDATE" | "IDENTIFIER_CONFLICT" | "IMPORTED_NEEDS_SOURCE";
         /** @enum {string} */
         WikiTodoStatus: "OPEN" | "DONE" | "REJECTED";
+        WithdrawalDto: {
+            /** @description The later edit that withdrew the value */
+            edit_id: number;
+            /** @description Who made the later edit */
+            editor: components["schemas"]["UserRefDto"];
+            note: string | null;
+            /** @enum {string|null} */
+            reason: "CONTRADICTED" | "WRONG_ENTRY" | "DUPLICATE" | "RESCHEDULED" | "BAD_SOURCE" | "REVERTED" | null;
+            /** @description Sources that contradict the value */
+            sources: components["schemas"]["WithdrawalSourceDto"][];
+            /** @description The value the edit added or changed */
+            statement_id: number;
+            /**
+             * Format: date-time
+             * @description When the later edit was applied
+             */
+            withdrawn_at: string;
+        };
+        WithdrawalSourceDto: {
+            excerpt: string | null;
+            /** @description The page that contradicts the value */
+            url: string | null;
+        };
         WorkCardDto: {
             aliases: string[];
             average_rate: number | null;
@@ -42640,8 +42653,8 @@ export interface operations {
                 type?: components["schemas"]["EntryType"];
                 /** @description Only lookups with submitted items that were not written */
                 refused?: boolean;
-                /** @description Only lookups whose report holds an unsure item */
-                unsure?: boolean;
+                /** @description Only lookups that left something for the next one */
+                remaining?: boolean;
                 /** @description Part of the entry label, or the entry id */
                 q?: string;
                 /** @description Started at or after this time */
@@ -59245,7 +59258,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        items: components["schemas"]["EditSummaryDto"][];
+                        items: components["schemas"]["MyEditSummaryDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
