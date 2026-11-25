@@ -179,10 +179,12 @@ export function normalizeApiError(error: unknown) {
   }
 
   if (isFetchErrorLike(error)) {
+    const headers = isRecord(error) && isRecord(error.response) ? error.response.headers : null
+    const challenged = headers instanceof Headers && headers.get('cf-mitigated') === 'challenge'
     return new HikariApiError({
       status: getErrorStatus(error, HIKARI_BIZ_CODE.COMMON_SERVICE_UNAVAILABLE),
       code: HIKARI_BIZ_CODE.COMMON_SERVICE_UNAVAILABLE,
-      message: getErrorMessage(error) ?? '服务暂时不可用',
+      message: challenged ? '需要完成安全验证，请刷新页面' : '服务暂时不可用，请稍后重试',
       cause: error,
       retryable: true,
     })

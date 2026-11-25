@@ -23,6 +23,27 @@ describe('normalizeApiError', () => {
     expect(err.message).toBe('校验失败')
   })
 
+  it('says in plain words what went wrong when the response is not the contract, a Cloudflare challenge among them', () => {
+    const challenge = Object.assign(new Error('[GET] "/api/v3/x": 403'), {
+      status: 403,
+      data: '<!DOCTYPE html><title>Just a moment...</title>',
+      response: { headers: new Headers({ 'cf-mitigated': 'challenge' }) },
+    })
+    const gateway = Object.assign(new Error('[GET] "/api/v3/x": 502'), {
+      status: 502,
+      data: '<html>Bad Gateway</html>',
+    })
+
+    expect(normalizeApiError(challenge)).toMatchObject({
+      status: 403,
+      message: '需要完成安全验证，请刷新页面',
+    })
+    expect(normalizeApiError(gateway)).toMatchObject({
+      status: 502,
+      message: '服务暂时不可用，请稍后重试',
+    })
+  })
+
   it('still surfaces the message for a code the frontend does not recognize', () => {
     const err = normalizeApiError(
       fetchError(422, {
