@@ -60,6 +60,7 @@ export interface EditorDraft {
   changed: Record<number, ValueDraft>
   removed: Record<number, DeprecationReason | null>
   contradicting: Record<number, { url: string; excerpt: string }>
+  searched: Record<number, string>
   restored: number[]
   moved: Record<number, number>
   positions: Record<number, number>
@@ -78,6 +79,7 @@ export function emptyDraft(): EditorDraft {
     changed: {},
     removed: {},
     contradicting: {},
+    searched: {},
     restored: [],
     moved: {},
     positions: {},
@@ -287,10 +289,12 @@ export function operationsOf(
   for (const [key, reason] of Object.entries(draft.removed)) {
     if (!reason) continue
     const source = reason === 'CONTRADICTED' ? draft.contradicting[Number(key)] : undefined
+    const searched = reason === 'BAD_SOURCE' ? draft.searched[Number(key)]?.trim() : undefined
     operations.push({
       op: 'deprecate',
       statement: Number(key),
       reason,
+      ...(searched ? { note: searched } : {}),
       ...(source
         ? {
             citations: [

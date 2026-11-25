@@ -103,9 +103,14 @@ export function useEntryEditor(page: {
       )
       const stale =
         stored.added.some(item => !owners.has(item.entry)) ||
-        [stored.changed, stored.removed, stored.contradicting, stored.moved, stored.positions].some(
-          map => Object.keys(map).some(id => !kept.has(Number(id))),
-        ) ||
+        [
+          stored.changed,
+          stored.removed,
+          stored.contradicting,
+          stored.searched,
+          stored.moved,
+          stored.positions,
+        ].some(map => Object.keys(map).some(id => !kept.has(Number(id)))) ||
         stored.restored.some(id => !kept.has(id)) ||
         Object.keys(stored.rated).some(id => !media.has(Number(id))) ||
         stored.detached.some(id => !owners.has(id))
@@ -117,6 +122,7 @@ export function useEntryEditor(page: {
         current.changed = known(current.changed) as EditorDraft['changed']
         current.removed = known(current.removed) as EditorDraft['removed']
         current.contradicting = known(current.contradicting) as EditorDraft['contradicting']
+        current.searched = known(current.searched) as EditorDraft['searched']
         current.moved = known(current.moved) as EditorDraft['moved']
         current.positions = known(current.positions) as EditorDraft['positions']
         current.restored = current.restored.filter(id => kept.has(id))
@@ -221,11 +227,16 @@ export function useEntryEditor(page: {
       edit(entry, current => {
         current.removed[id] = reason
         if (reason !== 'CONTRADICTED') current.contradicting = omit(current.contradicting, id)
+        if (reason !== 'BAD_SOURCE') current.searched = omit(current.searched, id)
       })
     },
     contradict(id: number, source: EditorDraft['contradicting'][number]) {
       const entry = ownerOf(id)
       if (entry !== undefined) edit(entry, current => (current.contradicting[id] = source))
+    },
+    search(id: number, places: string) {
+      const entry = ownerOf(id)
+      if (entry !== undefined) edit(entry, current => (current.searched[id] = places))
     },
     revert(id: number) {
       const entry = ownerOf(id)
@@ -240,6 +251,7 @@ export function useEntryEditor(page: {
         current.changed = omit(current.changed, id)
         current.removed = omit(current.removed, id)
         current.contradicting = omit(current.contradicting, id)
+        current.searched = omit(current.searched, id)
         current.moved = omit(current.moved, id)
         current.positions = omit(current.positions, id)
         current.restored = current.restored.filter(item => item !== id)

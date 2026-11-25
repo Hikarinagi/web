@@ -16,9 +16,9 @@
   import { useSaveFlow, type EditResult } from '~/features/wiki/composables/useSaveFlow'
   import { problemsOf } from '~/features/wiki/editor/problems'
   import {
-    contradictingSchema,
+    evidenceSchema,
     saveSchema,
-    type ContradictingValues,
+    type EvidenceValues,
   } from '~/features/wiki/schemas/save.schema'
 
   defineOptions({ name: 'WikiSaveDrawer' })
@@ -53,13 +53,15 @@
     note: editor.draft.value.note,
     url: editor.draft.value.basis.url,
   }))
-  const contradicting = computed<ContradictingValues>(() => {
+  const evidence = computed<EvidenceValues>(() => {
     const draft = editor.draft.value
     return Object.fromEntries(
-      Object.entries(draft.removed).flatMap(([id, reason]) =>
+      Object.entries(draft.removed).flatMap(([id, reason]): [string, EvidenceValues[string]][] =>
         reason === 'CONTRADICTED'
-          ? [[id, draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }]]
-          : [],
+          ? [[id, { reason, ...(draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }) }]]
+          : reason === 'BAD_SOURCE'
+            ? [[id, { reason, searched: draft.searched[Number(id)] ?? '' }]]
+            : [],
       ),
     )
   })
@@ -104,8 +106,8 @@
         <WikiSaveProblems :problems="problems" :check="flow.check.value" />
         <Form
           ref="sources"
-          :values="contradicting"
-          :rules="contradictingSchema"
+          :values="evidence"
+          :rules="evidenceSchema"
           :disabled="flow.saving.value"
         >
           <WikiSaveChanges />
@@ -130,7 +132,14 @@
                 @update:model-value="value => editor.note(String(value))"
               />
             </FormField>
-            <FormField name="url"><WikiSaveBasis /></FormField>
+            <FormField
+              name="url"
+              label="依据"
+              description="请填写信息所在的网址，或上传截图。没有来源的内容，日后若无法查证，可能会被作废。"
+              description-placement="control"
+            >
+              <WikiSaveBasis />
+            </FormField>
           </Stack>
         </Form>
         <Inline gap="sm" align="center" :wrap="false">

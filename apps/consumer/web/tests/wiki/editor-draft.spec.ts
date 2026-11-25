@@ -185,6 +185,20 @@ describe('operationsOf', () => {
       { op: 'deprecate', statement: 11, reason: 'DUPLICATE' },
     ])
   })
+
+  it('sends the places searched with a value deleted as unverifiable', () => {
+    const draft = emptyDraft()
+    draft.removed[11] = 'BAD_SOURCE'
+    draft.searched[11] = ' 官网、Steam 商店页与发售公告均无此名称 '
+    expect(operationsOf(draft, index)).toEqual([
+      {
+        op: 'deprecate',
+        statement: 11,
+        reason: 'BAD_SOURCE',
+        note: '官网、Steam 商店页与发售公告均无此名称',
+      },
+    ])
+  })
 })
 
 describe('contradictingErrors', () => {

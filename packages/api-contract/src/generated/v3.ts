@@ -7157,6 +7157,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/characters/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CharacterController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/characters/{id}/contributors": {
         parameters: {
             query?: never;
@@ -7181,6 +7197,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["CharacterController_getGalgames"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/characters/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CharacterController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -9333,6 +9365,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novel-volumes/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelVolumeController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novel-volumes/{id}/contributors": {
         parameters: {
             query?: never;
@@ -9391,6 +9439,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["LightNovelVolumeController_reportEpub"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novel-volumes/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelVolumeController_getHistory"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -9669,6 +9733,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/light-novels/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/light-novels/{id}/contributors": {
         parameters: {
             query?: never;
@@ -9677,6 +9757,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["LightNovelController_getContributors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/light-novels/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LightNovelController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -10613,6 +10709,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/manga-volumes/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaVolumeController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/manga-volumes/{id}/contributors": {
         parameters: {
             query?: never;
@@ -10621,6 +10733,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MangaVolumeController_getContributors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/manga-volumes/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaVolumeController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -10821,6 +10949,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/mangas/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/mangas/{id}/contributors": {
         parameters: {
             query?: never;
@@ -10829,6 +10973,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["MangaController_getContributors"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/mangas/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MangaController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12454,6 +12614,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/people/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/people/{id}/contributors": {
         parameters: {
             query?: never;
@@ -12478,6 +12654,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["PersonController_getGalgames"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/people/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PersonController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12854,6 +13046,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/producers/{id}/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_compare"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/producers/{id}/contributors": {
         parameters: {
             query?: never;
@@ -12878,6 +13086,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["ProducerController_getGalgames"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/producers/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProducerController_getHistory"];
         put?: never;
         post?: never;
         delete?: never;
@@ -22509,15 +22733,6 @@ export interface components {
             from: components["schemas"]["HistoryRevisionDto"];
             to: components["schemas"]["HistoryRevisionDto"];
         };
-        HistoryEditDto: {
-            /** Format: date-time */
-            created_at: string;
-            /** @description Entries the edit changed */
-            entries: components["schemas"]["ProductRefDto"][];
-            id: number;
-            reverted: boolean;
-            summary: string;
-        };
         HistoryRevisionDto: {
             /** Format: date-time */
             created_at: string;
@@ -22526,19 +22741,24 @@ export interface components {
             summary: string;
         };
         HistoryRowDto: {
-            /** @description Batch of the folded edits; null for a revision of the old site */
+            /** @description Batch the edit was made in; null for a revision of the old site */
             batch_id: number | null;
+            /** @description Summary of the batch, to label the edits made together; null when it has none */
+            batch_summary: string | null;
             /** Format: date-time */
             created_at: string;
             editor: components["schemas"]["UserRefDto"];
-            /** @description Edits of one batch folded into the row */
-            edits: components["schemas"]["HistoryEditDto"][];
+            /** @description Entries of the page the edit changed */
+            entries: components["schemas"]["ProductRefDto"][];
             /** @description Imported from the old site; cannot be reverted */
             imported: boolean;
             note: string | null;
+            /** @description Revision of the page just before the edit, to compare the edit against; null for the first revision of the page or a revision of the old site */
+            previous: number | null;
             reverted: boolean;
             /** @description Revision to view or compare; null for a revision of the old site */
             revision: number | null;
+            /** @description Summary of the edit itself */
             summary: string;
         };
         HoldLookupsDto: {
@@ -29634,7 +29854,7 @@ export interface components {
             comment_id: number | null;
             id: number | null;
             /** @enum {string} */
-            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm" | "novel_project" | "manga_project";
+            kind: "galgame" | "light_novel" | "light_novel_volume" | "manga" | "person" | "producer" | "character" | "post" | "article" | "galgame_rate" | "light_novel_rate" | "manga_rate" | "change_request" | "decoration" | "dm" | "novel_project" | "manga_project" | "wiki_edit";
             work_id: number | null;
         };
         TagAdminItemDto: {
@@ -44333,6 +44553,31 @@ export interface operations {
             };
         };
     };
+    CharacterController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     CharacterController_getContributors: {
         parameters: {
             query?: never;
@@ -44377,6 +44622,33 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["CharacterGalgameRelationDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    CharacterController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -48080,6 +48352,31 @@ export interface operations {
             };
         };
     };
+    LightNovelVolumeController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     LightNovelVolumeController_getContributors: {
         parameters: {
             query?: never;
@@ -48171,6 +48468,33 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    LightNovelVolumeController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
             };
         };
     };
@@ -48626,6 +48950,31 @@ export interface operations {
             };
         };
     };
+    LightNovelController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     LightNovelController_getContributors: {
         parameters: {
             query?: never;
@@ -48643,6 +48992,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelContributorsDto"];
+                };
+            };
+        };
+    };
+    LightNovelController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -50326,6 +50702,31 @@ export interface operations {
             };
         };
     };
+    MangaVolumeController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     MangaVolumeController_getContributors: {
         parameters: {
             query?: never;
@@ -50343,6 +50744,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaContributorsDto"];
+                };
+            };
+        };
+    };
+    MangaVolumeController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -50636,6 +51064,31 @@ export interface operations {
             };
         };
     };
+    MangaController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     MangaController_getContributors: {
         parameters: {
             query?: never;
@@ -50653,6 +51106,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MangaContributorsDto"];
+                };
+            };
+        };
+    };
+    MangaController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
                 };
             };
         };
@@ -53514,6 +53994,31 @@ export interface operations {
             };
         };
     };
+    PersonController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     PersonController_getContributors: {
         parameters: {
             query?: never;
@@ -53558,6 +54063,33 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["PersonGalgameRelationDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    PersonController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };
@@ -54295,6 +54827,31 @@ export interface operations {
             };
         };
     };
+    ProducerController_compare: {
+        parameters: {
+            query: {
+                /** @description 0 compares the first revision with an empty entry */
+                from: number;
+                to: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HistoryComparisonDto"];
+                };
+            };
+        };
+    };
     ProducerController_getContributors: {
         parameters: {
             query?: never;
@@ -54338,6 +54895,33 @@ export interface operations {
                 content: {
                     "application/json": {
                         items: components["schemas"]["ProducerGalgameRelationDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    ProducerController_getHistory: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["HistoryRowDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
                 };

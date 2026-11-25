@@ -21,10 +21,11 @@
 </script>
 
 <template>
-  <GalgameHistoryComparison
+  <EntryHistoryComparison
     v-if="data"
-    :galgame-id="galgameId"
-    :display="data.display"
+    resource="galgame"
+    :resource-id="galgameId"
+    :title="data.display.title"
     :comparison="data.comparison"
   />
 </template>

@@ -52,7 +52,7 @@ importers:
         version: 1.7.16(tailwindcss@4.3.5)(typescript@6.0.3)(vue@3.5.46(typescript@6.0.3))
       '@lucide/vue':
         specifier: ^1.14.0
-        version: 1.79.0(vue@3.5.46(typescript@6.0.3))
+        version: 1.80.0(vue@3.5.46(typescript@6.0.3))
       '@nuxt/content':
         specifier: ^3.16.0
         version: 3.17.0(@nuxt/schema@4.7.0)(@oxc-project/types@0.156.0)(confbox@0.3.2)(dotenv@17.4.2)(esbuild@0.27.7)(giget@3.3.1)(magic-string@1.4.5)(magicast@0.5.5)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.19)(rollup@4.68.8)(valibot@1.5.0(typescript@6.0.3))(vite@8.3.8(@types/node@22.20.5)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1))
@@ -197,6 +197,9 @@ importers:
       embla-carousel-vue:
         specifier: ^8.6.0
         version: 8.6.0(vue@3.5.46(typescript@6.0.3))
+      entities:
+        specifier: ^9.0.0
+        version: 9.0.0
       eslint:
         specifier: ^9.39.4
         version: 9.39.5(jiti@2.7.0)
@@ -1531,8 +1534,8 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  '@lucide/vue@1.79.0':
-    resolution: {integrity: sha512-Qe9DrDeNmIPbClkaOzUC9gW0czx1J3YFmk8ua7CDEByY/JZ7CB4v1s9Ps6lLbuxOSQVLnC8LBei+lS9qI5X0iw==}
+  '@lucide/vue@1.80.0':
+    resolution: {integrity: sha512-vNJr1C3Jx8yUkdTXFYx1iMQ73wkK/opZlTl6mLpvBykXdf5TE9alpfbLfGC4gzrkPV5Ra+YRsUS4TVGJFPASCA==}
     peerDependencies:
       vue: '>=3.0.1'
 
@@ -3286,8 +3289,8 @@ packages:
   '@types/esrecurse@4.3.1':
     resolution: {integrity: sha512-xJBAbDifo5hpffDBuHl0Y8ywswbiAp/Wi7Y/GtAgSlZyIABppyurxVueOPE8LUQOxdlgi6Zqce7uoEpqNTeiUw==}
 
-  '@types/estree@1.0.10':
-    resolution: {integrity: sha512-lTyOMnOcmRBzdCv6/4zUZCrEhV0xrqQiUZBZtVcbmLHBXKLnN8q89v/wKRF/Q0HbwVsqbIG3o5HDoFl9sduM+g==}
+  '@types/estree@1.0.11':
+    resolution: {integrity: sha512-YBdNe5JcjYR0sPhJW1QIeRCmI11YhYvaRuGCs9+WCeTTb+Yhb2BE2XMe5/wAqF10FK5g3+q1PDhQABfT7aX0gg==}
 
   '@types/graceful-fs@4.1.9':
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
@@ -8974,7 +8977,7 @@ snapshots:
 
   '@es-joy/jsdoccomment@0.86.0':
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
       '@typescript-eslint/types': 8.74.0
       comment-parser: 1.4.6
       esquery: 1.7.0
@@ -9277,7 +9280,7 @@ snapshots:
       '@floating-ui/vue': 1.1.11(vue@3.5.46(typescript@6.0.3))
       '@internationalized/date': 3.12.4
       '@internationalized/number': 3.6.9
-      '@lucide/vue': 1.79.0(vue@3.5.46(typescript@6.0.3))
+      '@lucide/vue': 1.80.0(vue@3.5.46(typescript@6.0.3))
       '@tanstack/vue-table': 9.3.1(vue@3.5.46(typescript@6.0.3))
       '@tanstack/vue-virtual': 3.13.54(vue@3.5.46(typescript@6.0.3))
       '@vueuse/core': 12.8.2(typescript@6.0.3)
@@ -9688,7 +9691,7 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@lucide/vue@1.79.0(vue@3.5.46(typescript@6.0.3))':
+  '@lucide/vue@1.80.0(vue@3.5.46(typescript@6.0.3))':
     dependencies:
       vue: 3.5.46(typescript@6.0.3)
 
@@ -11654,7 +11657,7 @@ snapshots:
 
   '@rollup/pluginutils@5.5.1(rollup@4.68.8)':
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
       estree-walker: 2.0.2
       picomatch: 4.0.7
     optionalDependencies:
@@ -12241,7 +12244,7 @@ snapshots:
 
   '@types/esrecurse@4.3.1': {}
 
-  '@types/estree@1.0.10': {}
+  '@types/estree@1.0.11': {}
 
   '@types/graceful-fs@4.1.9':
     dependencies:
@@ -14038,7 +14041,7 @@ snapshots:
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
@@ -14067,7 +14070,7 @@ snapshots:
       '@humanfs/node': 0.16.8
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.3
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
       ajv: 6.15.0
       chalk: 4.1.2
       cross-spawn: 7.0.6
@@ -14123,7 +14126,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
 
   esutils@2.0.3: {}
 
@@ -14961,7 +14964,7 @@ snapshots:
 
   is-reference@1.2.1:
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
 
   is-regex@1.2.1:
     dependencies:
@@ -15442,7 +15445,7 @@ snapshots:
 
   jsdoc-type-pratt-parser@9.5.0:
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
 
   jsdom@20.0.3:
     dependencies:
@@ -17683,7 +17686,7 @@ snapshots:
 
   rollup@4.68.8:
     dependencies:
-      '@types/estree': 1.0.10
+      '@types/estree': 1.0.11
     optionalDependencies:
       '@rollup/rollup-android-arm-eabi': 4.68.8
       '@rollup/rollup-android-arm64': 4.68.8

@@ -1,3 +1,5 @@
+import { decodeHTML } from 'entities'
+
 export interface SteamLanguage {
   name: string
   full_audio: boolean
@@ -129,7 +131,9 @@ const cachedApp = defineCachedFunction(
       name,
       url: `https://store.steampowered.com/app/${appId}/`,
       header_image: data.header_image ?? '',
-      short_description: data.short_description ?? '',
+      short_description: decodeHTML((data.short_description ?? '').replace(/<[^>]*>/g, ' '))
+        .replace(/\s+/g, ' ')
+        .trim(),
       release_date: data.release_date?.coming_soon ? '即将推出' : (data.release_date?.date ?? ''),
       developers: data.developers ?? [],
       publishers: data.publishers ?? [],

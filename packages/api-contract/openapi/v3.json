@@ -26517,38 +26517,6 @@
         ],
         "type": "object"
       },
-      "HistoryEditDto": {
-        "properties": {
-          "created_at": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "entries": {
-            "description": "Entries the edit changed",
-            "items": {
-              "$ref": "#/components/schemas/ProductRefDto"
-            },
-            "type": "array"
-          },
-          "id": {
-            "type": "number"
-          },
-          "reverted": {
-            "type": "boolean"
-          },
-          "summary": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "created_at",
-          "summary",
-          "reverted",
-          "entries"
-        ],
-        "type": "object"
-      },
       "HistoryRevisionDto": {
         "properties": {
           "created_at": {
@@ -26576,9 +26544,14 @@
       "HistoryRowDto": {
         "properties": {
           "batch_id": {
-            "description": "Batch of the folded edits; null for a revision of the old site",
+            "description": "Batch the edit was made in; null for a revision of the old site",
             "nullable": true,
             "type": "number"
+          },
+          "batch_summary": {
+            "description": "Summary of the batch, to label the edits made together; null when it has none",
+            "nullable": true,
+            "type": "string"
           },
           "created_at": {
             "format": "date-time",
@@ -26587,10 +26560,10 @@
           "editor": {
             "$ref": "#/components/schemas/UserRefDto"
           },
-          "edits": {
-            "description": "Edits of one batch folded into the row",
+          "entries": {
+            "description": "Entries of the page the edit changed",
             "items": {
-              "$ref": "#/components/schemas/HistoryEditDto"
+              "$ref": "#/components/schemas/ProductRefDto"
             },
             "type": "array"
           },
@@ -26602,6 +26575,11 @@
             "nullable": true,
             "type": "string"
           },
+          "previous": {
+            "description": "Revision of the page just before the edit, to compare the edit against; null for the first revision of the page or a revision of the old site",
+            "nullable": true,
+            "type": "number"
+          },
           "reverted": {
             "type": "boolean"
           },
@@ -26611,11 +26589,13 @@
             "type": "number"
           },
           "summary": {
+            "description": "Summary of the edit itself",
             "type": "string"
           }
         },
         "required": [
           "revision",
+          "previous",
           "created_at",
           "editor",
           "summary",
@@ -26623,7 +26603,8 @@
           "reverted",
           "imported",
           "batch_id",
-          "edits"
+          "batch_summary",
+          "entries"
         ],
         "type": "object"
       },
@@ -53946,7 +53927,8 @@
               "decoration",
               "dm",
               "novel_project",
-              "manga_project"
+              "manga_project",
+              "wiki_edit"
             ],
             "type": "string"
           },
@@ -83710,6 +83692,55 @@
         ]
       }
     },
+    "/api/v3/characters/{id}/comparison": {
+      "get": {
+        "operationId": "CharacterController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Character"
+        ]
+      }
+    },
     "/api/v3/characters/{id}/contributors": {
       "get": {
         "operationId": "CharacterController_getContributors",
@@ -83804,6 +83835,72 @@
                     "items": {
                       "items": {
                         "$ref": "#/components/schemas/CharacterGalgameRelationDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Character"
+        ]
+      }
+    },
+    "/api/v3/characters/{id}/history": {
+      "get": {
+        "operationId": "CharacterController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
                       },
                       "type": "array"
                     },
@@ -90244,6 +90341,55 @@
         ]
       }
     },
+    "/api/v3/light-novel-volumes/{id}/comparison": {
+      "get": {
+        "operationId": "LightNovelVolumeController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelVolume"
+        ]
+      }
+    },
     "/api/v3/light-novel-volumes/{id}/contributors": {
       "get": {
         "operationId": "LightNovelVolumeController_getContributors",
@@ -90386,6 +90532,72 @@
         },
         "responses": {
           "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovelVolume"
+        ]
+      }
+    },
+    "/api/v3/light-novel-volumes/{id}/history": {
+      "get": {
+        "operationId": "LightNovelVolumeController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
             "description": ""
           }
         },
@@ -91303,6 +91515,55 @@
         ]
       }
     },
+    "/api/v3/light-novels/{id}/comparison": {
+      "get": {
+        "operationId": "LightNovelController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovel"
+        ]
+      }
+    },
     "/api/v3/light-novels/{id}/contributors": {
       "get": {
         "operationId": "LightNovelController_getContributors",
@@ -91322,6 +91583,72 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LightNovelContributorsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "LightNovel"
+        ]
+      }
+    },
+    "/api/v3/light-novels/{id}/history": {
+      "get": {
+        "operationId": "LightNovelController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },
@@ -94185,6 +94512,55 @@
         ]
       }
     },
+    "/api/v3/manga-volumes/{id}/comparison": {
+      "get": {
+        "operationId": "MangaVolumeController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaVolume"
+        ]
+      }
+    },
     "/api/v3/manga-volumes/{id}/contributors": {
       "get": {
         "operationId": "MangaVolumeController_getContributors",
@@ -94204,6 +94580,72 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MangaContributorsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "MangaVolume"
+        ]
+      }
+    },
+    "/api/v3/manga-volumes/{id}/history": {
+      "get": {
+        "operationId": "MangaVolumeController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },
@@ -94841,6 +95283,55 @@
         ]
       }
     },
+    "/api/v3/mangas/{id}/comparison": {
+      "get": {
+        "operationId": "MangaController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
     "/api/v3/mangas/{id}/contributors": {
       "get": {
         "operationId": "MangaController_getContributors",
@@ -94860,6 +95351,72 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MangaContributorsDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Manga"
+        ]
+      }
+    },
+    "/api/v3/mangas/{id}/history": {
+      "get": {
+        "operationId": "MangaController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
                 }
               }
             },
@@ -99848,6 +100405,55 @@
         ]
       }
     },
+    "/api/v3/people/{id}/comparison": {
+      "get": {
+        "operationId": "PersonController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Person"
+        ]
+      }
+    },
     "/api/v3/people/{id}/contributors": {
       "get": {
         "operationId": "PersonController_getContributors",
@@ -99942,6 +100548,72 @@
                     "items": {
                       "items": {
                         "$ref": "#/components/schemas/PersonGalgameRelationDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Person"
+        ]
+      }
+    },
+    "/api/v3/people/{id}/history": {
+      "get": {
+        "operationId": "PersonController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
                       },
                       "type": "array"
                     },
@@ -101289,6 +101961,55 @@
         ]
       }
     },
+    "/api/v3/producers/{id}/comparison": {
+      "get": {
+        "operationId": "ProducerController_compare",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "0 compares the first revision with an empty entry",
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryComparisonDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
     "/api/v3/producers/{id}/contributors": {
       "get": {
         "operationId": "ProducerController_getContributors",
@@ -101375,6 +102096,72 @@
                     "items": {
                       "items": {
                         "$ref": "#/components/schemas/ProducerGalgameRelationDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "Producer"
+        ]
+      }
+    },
+    "/api/v3/producers/{id}/history": {
+      "get": {
+        "operationId": "ProducerController_getHistory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryRowDto"
                       },
                       "type": "array"
                     },

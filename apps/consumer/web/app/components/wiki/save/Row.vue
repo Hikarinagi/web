@@ -96,6 +96,10 @@
         v-if="row.state === 'removed' && row.reason === 'CONTRADICTED'"
         :id="row.id"
       />
+      <WikiSaveSearched
+        v-else-if="row.state === 'removed' && row.reason === 'BAD_SOURCE'"
+        :id="row.id"
+      />
     </Stack>
     <Button
       variant="link"

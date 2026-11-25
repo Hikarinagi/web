@@ -56,6 +56,11 @@ export function notificationTarget(
   if (target.kind === 'change_request') {
     return '/create/wiki/changes?f=mine'
   }
+  if (target.kind === 'wiki_edit') {
+    if (target.id == null) return null
+    const list = source?.template_key === 'wiki.entry_changed' ? '?f=watched' : ''
+    return `/create/wiki/changes/${target.id}${list}`
+  }
 
   const rate = RATE_ROUTE[target.kind]
   if (rate) {

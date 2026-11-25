@@ -1,28 +1,18 @@
 <script setup lang="ts">
   import type { GalgameHistoryPageData } from '~~/server/api/pages/galgames/[id]/revisions/index.get'
+  import { useHistoryPage } from '~/features/entry/useHistoryPage'
 
   definePageMeta({
     container: 'full',
   })
 
   const route = useRoute()
-  const rawId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-  const galgameId = Number(rawId)
-  const page = ref(Number(route.query.page) || 1)
+  const galgameId = Number(route.params.id)
 
-  const { data, pending } = await useHikariApiData<GalgameHistoryPageData>(
-    () => `/api/pages/galgames/${galgameId}/revisions?page=${page.value}`,
-    { fatal: true },
+  const { data, page, pending } = await useHistoryPage<GalgameHistoryPageData>(
+    `galgames/${galgameId}`,
   )
   await redirectIfMerged(data)
-
-  watch(
-    () => route.query.page,
-    raw => {
-      const next = Number(Array.isArray(raw) ? raw[0] : raw) || 1
-      if (page.value !== next) page.value = next
-    },
-  )
 
   useHikariSeoMeta({
     title: () => (data.value ? [data.value.display.title, '修订历史'] : '修订历史'),
@@ -30,12 +20,15 @@
 </script>
 
 <template>
-  <GalgameHistory
+  <EntryHistoryList
     v-if="data"
     v-model:page="page"
-    :galgame-id="galgameId"
-    :display="data.display"
+    resource="galgame"
+    :resource-id="galgameId"
+    :title="data.display.title"
+    :subtitle="data.display.original_title"
     :history="data.history"
     :loading="pending"
+    snapshots
   />
 </template>
