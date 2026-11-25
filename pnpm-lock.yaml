@@ -336,13 +336,13 @@ importers:
     dependencies:
       '@fastify/otel':
         specifier: '*'
-        version: 1.0.1(@opentelemetry/api@1.10.0)
+        version: 1.0.2(@opentelemetry/api@1.10.0)
       '@hikarinagi/shared':
         specifier: workspace:*
         version: link:../shared
       '@nestjs/schedule':
         specifier: '*'
-        version: 12.0.4(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.6.1(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))
+        version: 12.0.4(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.6.2(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))
       '@opentelemetry/api':
         specifier: ^1.9.1
         version: 1.10.0
@@ -1175,8 +1175,8 @@ packages:
   '@fastify/accept-negotiator@2.1.2':
     resolution: {integrity: sha512-LV7MZqTwXTEt3GxBT6BU8ACztWnv++hSkMEsP3usIHiI0tA4F5EO4THhDCOr5J/ginM9DCnLCmZ6u3JLA9x8Iw==}
 
-  '@fastify/otel@1.0.1':
-    resolution: {integrity: sha512-gTZ7YShjZfZ7ngTBUhKdnUsDxsQT8MnMuIFwDh5n0QykQwfe5h9wvcXAWZjg8RNHwW0xKxugyMun5ZsD7r88JQ==}
+  '@fastify/otel@1.0.2':
+    resolution: {integrity: sha512-sMvyfFh6rPLqgzsNVyvZLHU4afp7hk59ESOMsG2P0UsKjElMURvbYkVNeCnvBqn5WF23ejBmfnkcr1Jacsj2uw==}
     engines: {node: '>=22.15.0'}
     peerDependencies:
       '@opentelemetry/api': '>=1.10.0 <1.11.0'
@@ -1592,8 +1592,8 @@ packages:
       '@emnapi/core': ^1.7.1 || 2.0.0-beta.2 || 2.0.0-beta.3
       '@emnapi/runtime': ^1.7.1 || 2.0.0-beta.2 || 2.0.0-beta.3
 
-  '@nestjs/common@12.6.1':
-    resolution: {integrity: sha512-GvSltcBO7nB3oVcddzt9BLfgk3Bvw5sG9OvnJjnTv0slMoUsokC8JaLKR0S6XO3eEsRXTBuyJLJgapuuGOU+EA==}
+  '@nestjs/common@12.6.2':
+    resolution: {integrity: sha512-pCJOaWNCTeRtd4B8V3/F95OOvO+1d1+VypTUqe1Mf+pBqKnPRjNWv7FUvNOe2k3D4xivi/1Kl0Nnl16bBCjJGA==}
     peerDependencies:
       class-transformer: '>=0.4.1'
       class-validator: '>=0.13.2'
@@ -1605,8 +1605,8 @@ packages:
       class-validator:
         optional: true
 
-  '@nestjs/core@12.6.1':
-    resolution: {integrity: sha512-vj/j0UV3PR+zyjRBz48agMsMmztFRN3W9eo1VtGRk0oJa9M8Mu9QlSfTk4R8rfxf5m8qx2jk6fdUe4tITSVlVA==}
+  '@nestjs/core@12.6.2':
+    resolution: {integrity: sha512-WcY8hk9PI0JdgK5k9gZZ6khSCJOkraV/bLtCuK8UYbeGLLoM3xkAWm62aRB65ZaWMEgFqaoTsnmdQzh9V88J6A==}
     engines: {node: '>= 20'}
     peerDependencies:
       '@nestjs/common': ^12.0.0
@@ -2049,12 +2049,6 @@ packages:
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
-
-  '@opentelemetry/instrumentation@0.300.0':
-    resolution: {integrity: sha512-8ugx3X75uK2+rFZ9pX252ruDRELE2F7T3Zwazyll21aXksm+d2JLc9Np9SPS48K4ohGeaaXXHSX4ghxuNQ/gMg==}
-    engines: {node: '>=22.15.0'}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.10.0 <1.11.0'
 
   '@opentelemetry/instrumentation@0.301.2':
     resolution: {integrity: sha512-14ZUepvK+YiMfhy3Hugh4UuY5THEfVOcsY0+L+DertoVmdh4MTR5H0JvD1IT2jGLKPZiIg+apDCM2CTuGh6UzQ==}
@@ -9219,11 +9213,11 @@ snapshots:
   '@fastify/accept-negotiator@2.1.2':
     optional: true
 
-  '@fastify/otel@1.0.1(@opentelemetry/api@1.10.0)':
+  '@fastify/otel@1.0.2(@opentelemetry/api@1.10.0)':
     dependencies:
       '@opentelemetry/api': 1.10.0
       '@opentelemetry/core': 3.1.1(@opentelemetry/api@1.10.0)
-      '@opentelemetry/instrumentation': 0.300.0(@opentelemetry/api@1.10.0)
+      '@opentelemetry/instrumentation': 0.301.2(@opentelemetry/api@1.10.0)
       '@opentelemetry/semantic-conventions': 1.45.0
       minimatch: 11.0.9
     transitivePeerDependencies:
@@ -9742,7 +9736,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.5
     optional: true
 
-  '@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       file-type: 22.3.0
@@ -9757,9 +9751,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nestjs/core@12.6.1(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
+  '@nestjs/core@12.6.2(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)':
     dependencies:
-      '@nestjs/common': 12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/common': 12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
       path-to-regexp: 8.4.2
@@ -9768,10 +9762,10 @@ snapshots:
       tslib: 2.9.1
       uid: 2.0.2
 
-  '@nestjs/schedule@12.0.4(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.6.1(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))':
+  '@nestjs/schedule@12.0.4(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.6.2(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2))':
     dependencies:
-      '@nestjs/common': 12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      '@nestjs/core': 12.6.1(@nestjs/common@12.6.1(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/common': 12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 12.6.2(@nestjs/common@12.6.2(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       cron: 4.4.0
 
   '@nodable/entities@3.1.0': {}
@@ -11167,14 +11161,6 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.10.0
       '@opentelemetry/api-logs': 0.222.0
-      import-in-the-middle: 3.7.0
-      require-in-the-middle: 8.0.1
-    transitivePeerDependencies:
-      - supports-color
-
-  '@opentelemetry/instrumentation@0.300.0(@opentelemetry/api@1.10.0)':
-    dependencies:
-      '@opentelemetry/api': 1.10.0
       import-in-the-middle: 3.7.0
       require-in-the-middle: 8.0.1
     transitivePeerDependencies:
