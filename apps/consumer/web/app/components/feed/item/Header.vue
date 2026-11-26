@@ -84,7 +84,7 @@
     <Inline v-else gap="xs" class="min-w-0 flex-1 text-muted">
       <Time v-if="!isPinned" :value="item.sort_time" format="relative" class="shrink-0" />
     </Inline>
-    <DropdownMenu label="动态操作" align="end">
+    <DropdownMenu label="更多操作" align="end">
       <IconButton
         label="更多"
         :tooltip="false"

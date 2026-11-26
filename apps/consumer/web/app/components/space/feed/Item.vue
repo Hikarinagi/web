@@ -4,7 +4,7 @@
   import { Eye, Heart, MessageSquare } from '@lucide/vue'
   import { timeFromNow } from '#imports'
   import { workPath, workTypeLabel } from '#shared/utils/work'
-  import { statusVerb, type BackendFeedItem } from '~/features/feed/feed'
+  import { feedTypeLabel, statusVerb, type BackendFeedItem } from '~/features/feed/feed'
 
   defineOptions({ name: 'SpaceFeedItem' })
 
@@ -28,7 +28,7 @@
     const item = props.item
     switch (item.type) {
       case 'post':
-        return '发布动态'
+        return `发布${feedTypeLabel(item)}`
       case 'article':
         return item.is_review ? '写了长评' : '发布文章'
       case 'galgame_status':

@@ -13,7 +13,7 @@
   <HikariImage
     v-if="covers.length === 1"
     :src="covers[0]!.media"
-    alt="帖子配图"
+    alt="图文配图"
     class="max-h-125 w-full overflow-hidden rounded-xl"
     :ratio="coverAspect"
     image-class="size-full object-cover"

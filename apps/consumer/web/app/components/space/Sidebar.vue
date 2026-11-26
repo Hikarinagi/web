@@ -32,7 +32,7 @@
   const infoRows = computed(() => [
     { label: '加入天数', value: props.statistics.join_days },
     { label: '发布文章', value: props.statistics.created_article_count },
-    { label: '发布动态', value: props.statistics.created_post_count },
+    { label: '发布图文', value: props.statistics.created_post_count },
     { label: '游玩作品', value: props.statistics.played_galgame_count },
     { label: '看过作品', value: props.statistics.read_light_novel_count },
     { label: '收藏作品', value: favoriteTotal.value },

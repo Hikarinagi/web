@@ -16,7 +16,7 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   REVIEW_ADD: '长评',
   CONTRIBUTION_ADD: 'wiki 贡献',
   READING_ADD: '读完一卷',
-  POST_ADD: '发帖',
+  POST_ADD: '发布图文',
   ARTICLE_ADD: '发文章',
   COMMENT_ADD: '评论',
   TRANSLATION_ADD: '共建定稿',

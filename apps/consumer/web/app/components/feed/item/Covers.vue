@@ -34,7 +34,7 @@
   >
     <HikariImage
       :src="covers[0]!"
-      alt="帖子配图"
+      alt="图文配图"
       class="w-full"
       :ratio="single.aspect"
       :image-class="`size-full ${single.imageClass}`"
@@ -57,7 +57,7 @@
       v-for="(cover, index) in covers"
       :key="cover.id"
       :src="cover"
-      :alt="`帖子配图 ${index + 1}`"
+      :alt="`图文配图 ${index + 1}`"
       class="aspect-square"
       image-class="size-full object-cover"
       :processing="CELL"
@@ -71,7 +71,7 @@
   >
     <HikariImage
       :src="covers[0]!"
-      alt="帖子配图 1"
+      alt="图文配图 1"
       class="aspect-square"
       image-class="size-full object-cover"
       :processing="CELL"
@@ -82,7 +82,7 @@
         v-for="(cover, index) in covers.slice(1)"
         :key="cover.id"
         :src="cover"
-        :alt="`帖子配图 ${index + 2}`"
+        :alt="`图文配图 ${index + 2}`"
         class="size-full"
         image-class="size-full object-cover"
         :processing="CELL"
@@ -98,7 +98,7 @@
     <Stack v-for="(cover, index) in covers" :key="cover.id" gap="none" class="relative">
       <HikariImage
         :src="cover"
-        :alt="`帖子配图 ${index + 1}`"
+        :alt="`图文配图 ${index + 1}`"
         class="aspect-3/2"
         image-class="size-full object-cover"
         :processing="CELL"

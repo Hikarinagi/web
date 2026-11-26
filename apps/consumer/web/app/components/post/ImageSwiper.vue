@@ -49,7 +49,7 @@
             v-for="(c, i) in covers"
             :key="i"
             :src="c.media"
-            :alt="`帖子配图 ${i + 1}`"
+            :alt="`图文配图 ${i + 1}`"
             class="shrink-0 rounded-xl"
             image-class="size-full object-cover"
             :style="slideStyle(c)"
