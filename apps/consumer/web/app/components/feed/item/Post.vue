@@ -14,8 +14,12 @@
 
 <template>
   <Stack gap="none" class="gap-3">
-    <Text v-if="showTitle" as="p" weight="semibold" class="leading-snug">{{ title }}</Text>
-    <Text v-if="body" as="p" class="leading-relaxed whitespace-pre-wrap">{{ body }}</Text>
+    <Text v-if="showTitle" as="p" weight="semibold" class="leading-snug wrap-anywhere">{{
+      title
+    }}</Text>
+    <Text v-if="body" as="p" class="leading-relaxed wrap-anywhere whitespace-pre-wrap">{{
+      body
+    }}</Text>
     <FeedItemCovers :covers="item.covers" :total="item.cover_count" />
     <FeedWorkRefList :works="item.work_refs" :to="`/posts/${item.id}`" />
     <Stack v-if="item.poll" gap="none" class="relative z-1">

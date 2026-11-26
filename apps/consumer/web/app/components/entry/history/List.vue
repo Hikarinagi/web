@@ -70,12 +70,7 @@
             <Text v-if="batch.label" size="xs" tone="muted" class="bg-subtle px-4 py-2 sm:px-5">
               {{ batch.label }}
             </Text>
-            <Stack
-              gap="none"
-              :class="
-                cn('divide-y divide-line', batch.label && 'ms-4 border-s-2 border-line sm:ms-5')
-              "
-            >
+            <Stack gap="none" class="divide-y divide-line">
               <EntryHistoryRow
                 v-for="(row, index) in batch.rows"
                 :key="row.revision ?? `old-${batch.key}-${index}`"
