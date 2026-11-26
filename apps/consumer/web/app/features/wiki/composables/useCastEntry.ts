@@ -1,7 +1,6 @@
 import type { MaybeRefOrGetter } from 'vue'
 import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
 import { emptyValue, isBlank, type ValueDraft } from '~/features/wiki/editor/draft'
-import { ENTRY_PAGE } from '~/features/wiki/editor/page'
 
 type Field = 'LABEL' | 'CREDIT'
 type Fact = 'CAST_ROLE' | 'PROTAGONIST' | 'CAPTURABLE'
@@ -30,13 +29,7 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
       created.value ||
       (['LABEL', 'CREDIT', 'CAST_ROLE', 'PROTAGONIST', 'CAPTURABLE'] as const).some(touched),
   )
-  const page = inject(ENTRY_PAGE, null)
-  const hinted = computed(
-    () =>
-      (page?.hints.value ?? []).filter(
-        hint => (hint.proposal ?? hint.statement)?.entry_id === id.value,
-      ).length,
-  )
+  const deleted = computed(() => id.value in editor.draft.value.deleted)
 
   function write(property: Tracked, current: { id: number } | null, next: ValueDraft) {
     if (current) {
@@ -107,7 +100,8 @@ export function useCastEntry(appearance: MaybeRefOrGetter<number>) {
     created,
     touched,
     dirty,
-    hinted,
+    deleted,
+    erase: (on: boolean) => editor.erase(id.value, on),
     name,
     setVoice,
     setVersions,

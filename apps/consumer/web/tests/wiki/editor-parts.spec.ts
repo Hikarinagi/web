@@ -86,22 +86,6 @@ describe('editorPath', () => {
     expect(editorPath('GAME', [], { panel: 'unknown' })).toMatchObject({ panel: null })
   })
 
-  it('reads the suggestion being dismissed', () => {
-    expect(editorPath('GAME', ['releases', '61022'], { panel: 'dismiss', hint: '9' })).toEqual({
-      part: 'releases',
-      selection: [61022],
-      panel: 'dismiss',
-      suggestion: 9,
-      edit: null,
-      segments: ['releases', '61022'],
-    })
-    expect(editorPath('GAME', [], { panel: 'dismiss' })).toMatchObject({
-      panel: 'dismiss',
-      suggestion: null,
-    })
-    expect(editorPath('GAME', [], { hint: '9' })).toMatchObject({ panel: null, suggestion: null })
-  })
-
   it('reads the edit being undone', () => {
     expect(editorPath('GAME', ['cast'], { panel: 'undo', edit: '535' })).toMatchObject({
       part: 'cast',

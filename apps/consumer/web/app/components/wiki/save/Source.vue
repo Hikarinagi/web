@@ -4,33 +4,41 @@
 
   defineOptions({ name: 'WikiSaveSource' })
 
-  const props = defineProps<{ id: number }>()
+  const props = defineProps<{ id?: number; entry?: number }>()
   const editor = inject(ENTRY_EDITOR)!
+  const key = computed(() => (props.entry === undefined ? `${props.id}` : `entry-${props.entry}`))
   const source = computed(
-    () => editor.draft.value.contradicting[props.id] ?? { url: '', excerpt: '' },
+    () =>
+      (props.entry === undefined
+        ? editor.draft.value.contradicting[props.id!]
+        : editor.draft.value.deleted[props.entry]) ?? { url: '', excerpt: '' },
   )
+  function update(next: { url: string; excerpt: string }) {
+    if (props.entry === undefined) editor.contradict(props.id!, next)
+    else editor.refute(props.entry, next)
+  }
 </script>
 
 <template>
   <Stack gap="xs">
-    <FormField :name="`${id}.url`">
+    <FormField :name="`${key}.url`">
       <Input
         :model-value="source.url"
         type="url"
         inputmode="url"
         placeholder="来源网址"
         aria-label="来源网址"
-        @update:model-value="value => editor.contradict(id, { ...source, url: String(value) })"
+        @update:model-value="value => update({ ...source, url: String(value) })"
       />
     </FormField>
-    <FormField :name="`${id}.excerpt`">
+    <FormField :name="`${key}.excerpt`">
       <Textarea
         :model-value="source.excerpt"
         :rows="2"
         autosize
         placeholder="摘录"
         aria-label="来源摘录"
-        @update:model-value="value => editor.contradict(id, { ...source, excerpt: value ?? '' })"
+        @update:model-value="value => update({ ...source, excerpt: value ?? '' })"
       />
     </FormField>
   </Stack>

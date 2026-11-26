@@ -4,8 +4,7 @@ import type { EditableEntry } from './draft'
 
 const PANELS = [
   'protect',
-  'delete',
-  'dismiss',
+  'restore',
   'preview',
   'undo',
   'relation',
@@ -43,7 +42,6 @@ export function editorPath(type: EditableEntry['type'], segments: string[], quer
     part,
     selection,
     panel,
-    suggestion: panel === 'dismiss' ? idOf(query.hint) : null,
     edit: panel === 'undo' ? idOf(query.edit) : null,
     segments,
   }

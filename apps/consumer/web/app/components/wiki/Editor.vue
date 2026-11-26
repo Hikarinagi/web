@@ -7,7 +7,6 @@
   import { ENTRY_PAGE, type EntryPage } from '~/features/wiki/editor/page'
   import { changedParts } from '~/features/wiki/editor/parts'
   import { editorPath, partsOf } from '~/features/wiki/editor/route'
-  import type { WikiHint } from '~/features/wiki/hints'
   import type { ReferenceGroup } from '~/features/wiki/references'
 
   defineOptions({ name: 'WikiEditor' })
@@ -20,14 +19,12 @@
     owner: Ref | null
     versions: Ref[]
     definitions: EntryDefinition[]
-    hints: WikiHint[]
     history: EntryPage['history']['value']
     references: ReferenceGroup[]
     watched: boolean
   }>()
   const emit = defineEmits<{ saved: [] }>()
   provide(ENTRY_PAGE, {
-    hints: computed(() => props.hints),
     history: computed(() => props.history),
     references: computed(() => props.references),
     watched: computed(() => props.watched),
@@ -135,12 +132,7 @@
         :totals="totals"
       />
     </template>
-    <WikiEditorPanels
-      :entry="entry"
-      :panel="path.panel"
-      :suggestion="path.suggestion"
-      @changed="emit('saved')"
-    />
+    <WikiEditorPanels :entry="entry" :panel="path.panel" @changed="emit('saved')" />
     <WikiEditorNotices :base="base" />
     <Stack gap="lg" :inert="readonly || undefined">
       <WikiEditorBody
@@ -152,13 +144,7 @@
       />
     </Stack>
     <template #side>
-      <WikiEditorSide
-        :entry="entry.id"
-        :type="entry.type"
-        :definitions="definitions"
-        :base="base"
-        @changed="emit('saved')"
-      />
+      <WikiEditorSide :type="entry.type" :definitions="definitions" />
     </template>
     <template v-if="!readonly" #footer><WikiEditorSaveBar /></template>
   </WikiEditorFrame>

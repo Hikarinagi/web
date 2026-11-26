@@ -55,13 +55,18 @@
   }))
   const evidence = computed<EvidenceValues>(() => {
     const draft = editor.draft.value
-    return Object.fromEntries(
-      Object.entries(draft.removed).flatMap(([id, reason]): [string, EvidenceValues[string]][] =>
-        reason === 'CONTRADICTED' || reason === 'WRONG_ENTRY'
-          ? [[id, { reason, ...(draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }) }]]
-          : [],
+    return Object.fromEntries([
+      ...Object.entries(draft.removed).flatMap(
+        ([id, reason]): [string, EvidenceValues[string]][] =>
+          reason === 'CONTRADICTED' || reason === 'WRONG_ENTRY'
+            ? [[id, { reason, ...(draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }) }]]
+            : [],
       ),
-    )
+      ...Object.entries(draft.deleted).map(([id, source]): [string, EvidenceValues[string]] => [
+        `entry-${id}`,
+        { reason: 'DELETED', ...source },
+      ]),
+    ])
   })
   const blocked = computed(
     () =>

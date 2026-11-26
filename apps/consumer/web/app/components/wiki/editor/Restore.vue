@@ -1,16 +1,17 @@
 <script setup lang="ts">
   import { Button, Dialog, Form, FormField, Textarea, toast } from '@hina-ui/vue'
-  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
+  import type { EditableEntry } from '~/features/wiki/editor/draft'
   import { reasonSchema } from '~/features/wiki/schemas/governance.schema'
 
-  defineOptions({ name: 'WikiEditorDismiss' })
+  defineOptions({ name: 'WikiEditorRestore' })
 
-  const props = defineProps<{ suggestion: number | null }>()
+  const props = defineProps<{ entry: EditableEntry }>()
+  const emit = defineEmits<{ done: [] }>()
   const open = defineModel<boolean>('open', { required: true })
   const form = useTemplateRef<InstanceType<typeof Form>>('form')
   const values = reactive({ reason: '' })
   const submitting = ref(false)
-  const page = inject(ENTRY_PAGE)!
+  const bus = useWikiSavedBus()
 
   watch(open, next => {
     if (!next) return
@@ -19,17 +20,25 @@
   })
 
   async function submit() {
-    if (props.suggestion === null) return
     submitting.value = true
     try {
-      await hikariRequest('/api/v3/wiki/todos/{id}/dismissal', {
+      const result = await hikariRequest('/api/v3/wiki/edits', {
         method: 'POST',
-        path: { id: props.suggestion },
-        body: { reason: values.reason.trim() },
+        body: {
+          operations: [{ op: 'restore_entry', entry: props.entry.id }],
+          base: [{ entry_id: props.entry.id, revision: props.entry.revision }],
+          note: values.reason.trim(),
+        },
       })
-      toast.success('已驳回')
+      bus.emit(result.entries)
+      toast.success('已恢复条目', {
+        action: {
+          label: '查看本次修改',
+          onClick: () => void navigateTo(`/create/wiki/changes/${result.edit_id}`),
+        },
+      })
       open.value = false
-      page.refresh()
+      emit('done')
     } finally {
       submitting.value = false
     }
@@ -37,7 +46,7 @@
 </script>
 
 <template>
-  <Dialog v-model:open="open" title="驳回建议" size="sm" :locked="submitting">
+  <Dialog v-model:open="open" title="恢复条目" size="sm" :locked="submitting">
     <template #content>
       <Form
         ref="form"
@@ -55,7 +64,7 @@
       <Button variant="ghost" tone="neutral" :disabled="submitting" @click="open = false">
         取消
       </Button>
-      <Button tone="danger" :loading="submitting" @click="form?.submit()">驳回</Button>
+      <Button :loading="submitting" @click="form?.submit()">恢复</Button>
     </template>
   </Dialog>
 </template>

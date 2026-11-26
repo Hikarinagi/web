@@ -13,10 +13,10 @@
     Text,
   } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
-  import { Ellipsis, History, Lightbulb } from '@lucide/vue'
+  import { Ellipsis, History } from '@lucide/vue'
   import { NuxtLink } from '#components'
+  import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditableEntry, ValueDraft } from '~/features/wiki/editor/draft'
-  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { readerPath } from '~/features/wiki/entries'
   import { cn } from '~/utils/cn'
 
@@ -29,14 +29,14 @@
     image: ValueDraft['media']
     stacked: boolean
   }>()
-  const route = useRoute()
   const nav = usePageNav()
-  const { canAny } = useCreatorPermissions()
-  const patrol = computed(() => canAny(WIKI_PERMISSIONS.PATROL))
+  const { can } = useCreatorPermissions()
+  const patrol = computed(() => can(WIKI_PERMISSIONS.PATROL))
+  const deletable = computed(() => can(WIKI_PERMISSIONS.DELETE))
+  const editor = inject(ENTRY_EDITOR)!
+  const marked = computed(() => props.entry.id in editor.draft.value.deleted)
   const reader = computed(() => readerPath(props.entry.resource))
   const portrait = computed(() => props.entry.type === 'GAME' || props.entry.type === 'SERIES')
-  const page = inject(ENTRY_PAGE)!
-  const count = computed(() => page.hints.value.length)
   const PAGES: Partial<Record<EditableEntry['type'], string>> = {
     GAME: '查看游戏页',
     SERIES: '查看作品页',
@@ -95,17 +95,6 @@
       </Stack>
     </Inline>
     <Inline gap="sm" align="center" :wrap="false">
-      <Button
-        v-if="count && !stacked"
-        :as="NuxtLink"
-        :to="{ query: { ...route.query, side: 'hints' } }"
-        variant="outline"
-        tone="neutral"
-        size="sm"
-      >
-        <template #icon><Lightbulb /></template>
-        建议 {{ count }}
-      </Button>
       <WikiEditorWatch :entry="entry.id" />
       <Button
         :as="NuxtLink"
@@ -132,16 +121,19 @@
           <DropdownMenuItem @select="nav.push(`/entries/${entry.id}/merge`)">
             与重复的条目合并
           </DropdownMenuItem>
-          <template v-if="patrol">
-            <DropdownMenuSeparator />
-            <DropdownMenuItem @select="nav.query({ panel: 'protect' })">
-              {{ entry.protection ? '解除锁定' : '锁定' }}
+          <DropdownMenuSeparator v-if="patrol || deletable" />
+          <DropdownMenuItem v-if="patrol" @select="nav.query({ panel: 'protect' })">
+            {{ entry.protection ? '解除锁定' : '锁定' }}
+          </DropdownMenuItem>
+          <template v-if="deletable">
+            <DropdownMenuItem v-if="entry.deleted" @select="nav.query({ panel: 'restore' })">
+              恢复此条目
             </DropdownMenuItem>
-            <DropdownMenuItem
-              :tone="entry.deleted ? undefined : 'danger'"
-              @select="nav.query({ panel: 'delete' })"
-            >
-              {{ entry.deleted ? '恢复此条目' : '删除此条目' }}
+            <DropdownMenuItem v-else-if="marked" @select="editor.erase(entry.id, false)">
+              撤销删除
+            </DropdownMenuItem>
+            <DropdownMenuItem v-else tone="danger" @select="editor.erase(entry.id, true)">
+              删除此条目
             </DropdownMenuItem>
           </template>
         </template>

@@ -19,7 +19,7 @@ export type SaveValues = v.InferOutput<typeof saveSchema>
 export const evidenceSchema = v.record(
   v.string('作废依据应为文本'),
   v.object({
-    reason: v.picklist(['CONTRADICTED', 'WRONG_ENTRY'], '作废原因不正确'),
+    reason: v.picklist(['CONTRADICTED', 'WRONG_ENTRY', 'DELETED'], '作废原因不正确'),
     url: v.pipe(
       v.string('网址应为文本'),
       v.trim(),

@@ -2,6 +2,7 @@ export const PERMISSION_WILDCARD = '*'
 
 export const WIKI_PERMISSIONS = {
   PATROL: 'wiki.patrol',
+  DELETE: 'wiki.delete',
 } as const
 
 export const ACCESS_PERMISSIONS = {

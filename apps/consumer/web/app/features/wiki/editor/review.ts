@@ -70,7 +70,13 @@ export function reviewOf(
         return rows
       }),
     }))
-    .filter(group => group.created || group.rows.length || draft.detached.includes(group.id))
+    .filter(
+      group =>
+        group.created ||
+        group.rows.length ||
+        draft.detached.includes(group.id) ||
+        group.id in draft.deleted,
+    )
 }
 
 export function castOrderRows(groups: ReviewGroup[], root: EntryType | undefined): ReviewRow[] {
@@ -87,7 +93,10 @@ export function reviewCount(groups: ReviewGroup[], draft: EditorDraft, root?: En
   return (
     groups.reduce(
       (sum, group) =>
-        sum + (group.created ? 1 : group.rows.length) + (draft.detached.includes(group.id) ? 1 : 0),
+        sum +
+        (group.id in draft.deleted
+          ? 1
+          : (group.created ? 1 : group.rows.length) + (draft.detached.includes(group.id) ? 1 : 0)),
       0,
     ) -
     orders +

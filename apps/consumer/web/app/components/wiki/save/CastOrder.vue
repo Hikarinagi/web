@@ -18,7 +18,10 @@
   const changed = computed(() => {
     const facts = editor.members.value
       .filter(
-        member => member.type === 'APPEARANCE' && !editor.draft.value.detached.includes(member.id),
+        member =>
+          member.type === 'APPEARANCE' &&
+          !editor.draft.value.detached.includes(member.id) &&
+          !(member.id in editor.draft.value.deleted),
       )
       .map(member => castFacts(editor, member.id))
     const before = castGroups(facts, props.game, 'before')

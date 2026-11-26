@@ -108,7 +108,8 @@ export function useEntryEditor(page: {
         ) ||
         stored.restored.some(id => !kept.has(id)) ||
         Object.keys(stored.rated).some(id => !media.has(Number(id))) ||
-        stored.detached.some(id => !owners.has(id))
+        stored.detached.some(id => !owners.has(id)) ||
+        Object.keys(stored.deleted).some(id => !owners.has(Number(id)))
       if (!stale) return
       store.update(key.value, { title: toValue(page.title), path: route.fullPath }, current => {
         const known = (map: Record<number, unknown>) =>
@@ -124,6 +125,9 @@ export function useEntryEditor(page: {
           Object.entries(current.rated).filter(([id]) => media.has(Number(id))),
         )
         current.detached = current.detached.filter(id => owners.has(id))
+        current.deleted = Object.fromEntries(
+          Object.entries(current.deleted).filter(([id]) => owners.has(Number(id))),
+        )
       })
     },
     { immediate: true },
@@ -326,6 +330,16 @@ export function useEntryEditor(page: {
           ? [...current.detached.filter(item => item !== entry), entry]
           : current.detached.filter(item => item !== entry)
       })
+    },
+    erase(entry: number, on: boolean) {
+      edit(entry, current => {
+        current.deleted = on
+          ? { ...current.deleted, [entry]: current.deleted[entry] ?? { url: '', excerpt: '' } }
+          : omit(current.deleted, entry)
+      })
+    },
+    refute(entry: number, source: EditorDraft['deleted'][number]) {
+      edit(entry, current => (current.deleted[entry] = source))
     },
     rate(
       id: number,

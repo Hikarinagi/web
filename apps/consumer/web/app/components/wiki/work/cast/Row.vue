@@ -9,9 +9,11 @@
     Stack,
     TableCell,
     TableRow,
+    Tag,
     Text,
   } from '@hina-ui/vue'
-  import { ChevronRight, GripVertical, Lightbulb, X } from '@lucide/vue'
+  import { ChevronRight, GripVertical, Trash2, Undo2, X } from '@lucide/vue'
+  import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
   import { NuxtLink } from '#components'
   import { codeLabel } from '~/features/wiki/values'
   import { cn } from '~/utils/cn'
@@ -27,8 +29,9 @@
     flash: boolean
   }>()
   const emit = defineEmits<{ step: [delta: -1 | 1] }>()
-  const route = useRoute()
   const cast = useCastEntry(() => props.appearance)
+  const { can } = useCreatorPermissions()
+  const deletable = computed(() => can(WIKI_PERMISSIONS.DELETE))
   const roles = computed(() =>
     (cast.field('CAST_ROLE')?.codes ?? []).map(value => ({
       value,
@@ -59,7 +62,9 @@
     :class="
       cn(
         'transition-colors duration-700 [&_input]:w-full',
-        cast.dirty.value && (cast.created.value ? 'bg-success-soft' : 'bg-accent-soft'),
+        cast.deleted.value
+          ? 'bg-danger-soft'
+          : cast.dirty.value && (cast.created.value ? 'bg-success-soft' : 'bg-accent-soft'),
         flash && 'bg-accent-soft',
       )
     "
@@ -83,7 +88,7 @@
     </TableCell>
     <TableCell class="py-2.5 align-top">
       <Stack gap="xs">
-        <Inline gap="md" align="center" :wrap="false">
+        <Inline gap="md" align="center" :wrap="false" :inert="cast.deleted.value || undefined">
           <WikiWorkCastAvatar :image="cast.image.value" :name="cast.name.value" />
           <Input
             v-model="cast.name.value"
@@ -93,14 +98,15 @@
             class="min-w-40 flex-1"
           />
         </Inline>
+        <Tag v-if="cast.deleted.value" tone="danger" class="ml-11 self-start">将删除</Tag>
         <WikiWorkCastNotes :appearance="appearance" :twins="twins" class="pl-11" />
       </Stack>
     </TableCell>
     <TableCell class="py-2.5 align-top">
-      <WikiWorkCastVoices :appearance="appearance" />
+      <WikiWorkCastVoices :appearance="appearance" :inert="cast.deleted.value || undefined" />
     </TableCell>
     <TableCell class="py-2.5 align-top">
-      <Stack gap="xs">
+      <Stack gap="xs" :inert="cast.deleted.value || undefined">
         <Select
           :model-value="cast.role.value"
           :options="roles"
@@ -141,17 +147,6 @@
     <TableCell class="py-2.5 align-top">
       <Inline gap="none" justify="end" align="center" :wrap="false">
         <IconButton
-          v-if="cast.hinted.value"
-          :as="NuxtLink"
-          :to="{ query: { ...route.query, side: 'hints', focus: `${appearance}|` } }"
-          :label="`${cast.hinted.value} 条建议`"
-          variant="ghost"
-          tone="accent"
-          size="sm"
-        >
-          <Lightbulb />
-        </IconButton>
-        <IconButton
           v-if="cast.created.value"
           label="取消添加"
           variant="ghost"
@@ -160,6 +155,26 @@
           @click="cast.editor.uncreate(appearance)"
         >
           <X />
+        </IconButton>
+        <IconButton
+          v-else-if="cast.deleted.value"
+          label="撤销删除"
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          @click="cast.erase(false)"
+        >
+          <Undo2 />
+        </IconButton>
+        <IconButton
+          v-else-if="deletable"
+          label="删除出场角色"
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          @click="cast.erase(true)"
+        >
+          <Trash2 />
         </IconButton>
         <IconButton
           :as="NuxtLink"

@@ -47,10 +47,12 @@
           <Text size="sm" weight="semibold">
             {{ index ? '之后' : '之前' }}：{{ revisionTime(side.created_at) }} 的修订
           </Text>
-          <Inline gap="sm" align="center" :wrap="false">
-            <Avatar :user="side.editor" class="size-5!" />
-            <UserName :user="side.editor" class="min-w-0 text-sm" />
-            <Text as="span" size="sm" tone="muted" truncate>{{ side.summary }}</Text>
+          <Inline gap="sm" align="center" :wrap="false" class="min-w-0 text-sm">
+            <Avatar :user="side.editor" size="sm" />
+            <UserName :user="side.editor" class="shrink-0" />
+            <Text as="span" size="sm" tone="muted" truncate class="min-w-0 flex-1">
+              {{ side.summary }}
+            </Text>
           </Inline>
         </Stack>
       </Grid>

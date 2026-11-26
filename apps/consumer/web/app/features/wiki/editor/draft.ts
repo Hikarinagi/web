@@ -65,6 +65,7 @@ export interface EditorDraft {
   positions: Record<number, number>
   rated: Record<number, { sexual: number; violence: number }>
   detached: number[]
+  deleted: Record<number, { url: string; excerpt: string }>
   borrowed?: number[]
   note: string
   basis: { url: string; media: NonNullable<ValueDraft['media']>[] }
@@ -83,6 +84,7 @@ export function emptyDraft(): EditorDraft {
     positions: {},
     rated: {},
     detached: [],
+    deleted: {},
     note: '',
     basis: { url: '', media: [] },
   }
@@ -122,8 +124,9 @@ export function entryState(
   draft: EditorDraft,
   owner: (statement: number) => number | undefined,
   id: number,
-): 'created' | 'changed' | null {
+): 'created' | 'changed' | 'deleted' | null {
   if (draft.created.some(entry => entry.id === id)) return 'created'
+  if (id in draft.deleted) return 'deleted'
   const touched = [draft.changed, draft.removed, draft.moved, draft.positions]
     .flatMap(record => Object.keys(record).map(Number))
     .concat(draft.restored)
@@ -223,7 +226,8 @@ export function changeCount(draft: EditorDraft): number {
     Object.keys(draft.moved).length +
     Object.keys(draft.positions).filter(key => !(key in draft.changed)).length +
     Object.keys(draft.rated).length +
-    draft.detached.length
+    draft.detached.length +
+    Object.keys(draft.deleted).length
   )
 }
 
@@ -313,6 +317,12 @@ export function operationsOf(
   for (const [key, rating] of Object.entries(draft.rated))
     operations.push({ op: 'rate', media: Number(key), ...rating })
   for (const entry of draft.detached) operations.push({ op: 'detach', entry })
+  for (const [key, source] of Object.entries(draft.deleted))
+    operations.push({
+      op: 'delete_entry',
+      entry: Number(key),
+      citations: [{ method: 'EXCERPT', url: source.url.trim(), excerpt: source.excerpt.trim() }],
+    })
   return operations
 }
 
@@ -325,6 +335,7 @@ export function contradictingErrors(
       const [, index, part] =
         field.match(/^operations\.(\d+)\.citations\.\d+\.(url|excerpt)$/) ?? []
       const operation = operations[Number(index)]
+      if (operation?.op === 'delete_entry') return [[`entry-${operation.entry}.${part}`, message]]
       return operation?.op === 'deprecate' ? [[`${operation.statement}.${part}`, message]] : []
     }),
   )

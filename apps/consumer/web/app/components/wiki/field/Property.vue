@@ -9,13 +9,11 @@
     TagsInput,
     Text,
   } from '@hina-ui/vue'
-  import { Lightbulb, Plus } from '@lucide/vue'
-  import { NuxtLink } from '#components'
+  import { Plus } from '@lucide/vue'
   import { LANGUAGE_LABELS } from '~/features/galgame/labels'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { emptyValue, type PropertyDefinition } from '~/features/wiki/editor/draft'
   import type { QualifierKind } from '~/features/wiki/editor/inputs'
-  import { ENTRY_PAGE } from '~/features/wiki/editor/page'
   import { codeLabel } from '~/features/wiki/values'
   import { cn } from '~/utils/cn'
 
@@ -28,7 +26,6 @@
     bare?: boolean
   }>()
   const editor = inject(ENTRY_EDITOR)!
-  const route = useRoute()
   const name = computed(() => props.label ?? props.definition.label)
   const view = computed(() => editor.property(props.entry, props.definition.property))
   const live = computed(() =>
@@ -77,14 +74,6 @@
       seen.set(key(item.value), [...(seen.get(key(item.value)) ?? []), item.id])
     return new Set([...seen.values()].filter(ids => ids.length > 1).flat())
   })
-  const page = inject(ENTRY_PAGE, null)
-  const hinted = computed(
-    () =>
-      (page?.hints.value ?? []).filter(hint => {
-        const value = hint.proposal ?? hint.statement
-        return value?.entry_id === props.entry && value.property === props.definition.property
-      }).length,
-  )
 
   function sync(next: string[], field: 'text' | 'code') {
     const current = live.value.map(item => item.value[field] ?? '')
@@ -199,17 +188,6 @@
         :definition="definition"
         :entry="entry"
       />
-      <Button
-        v-if="hinted"
-        :as="NuxtLink"
-        :to="{ query: { ...route.query, side: 'hints', focus: `${entry}|${definition.property}` } }"
-        size="sm"
-        variant="ghost"
-        class="self-start"
-      >
-        <template #icon><Lightbulb /></template>
-        {{ hinted }} 条建议
-      </Button>
     </Stack>
   </component>
 </template>

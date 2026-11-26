@@ -25,18 +25,7 @@ const GROUPS: [RegExp, (match: RegExpExecArray) => string][] = [
   [/^\/create\/wiki\/rules(?:\/|$)/, () => 'rules'],
 ]
 
-const TRANSIENT = [
-  'panel',
-  'edit',
-  'hint',
-  'save',
-  'discard',
-  'move',
-  'focus',
-  'saved',
-  'later',
-  'undone',
-]
+const TRANSIENT = ['panel', 'edit', 'save', 'discard', 'move', 'focus', 'saved', 'later', 'undone']
 
 export function resourceKey(path: string): string {
   const bare = path.split(/[?#]/)[0]!.replace(/\/+$/, '') || '/'

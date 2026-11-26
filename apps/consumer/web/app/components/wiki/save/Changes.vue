@@ -24,7 +24,15 @@
       .map(group => ({ ...group, rows: group.rows.filter(row => !merged.has(row)) }))
       .filter(
         group =>
-          group.created || group.rows.length || editor.draft.value.detached.includes(group.id),
+          group.created ||
+          group.rows.length ||
+          editor.draft.value.detached.includes(group.id) ||
+          group.id in editor.draft.value.deleted,
+      )
+      .map(group =>
+        group.id in editor.draft.value.deleted
+          ? { ...group, rows: [] as ReviewGroup['rows'] }
+          : group,
       )
   })
   const nameOf = (group: ReviewGroup) => {
@@ -37,6 +45,7 @@
   }
   const titleOf = (group: ReviewGroup) => {
     const type = editor.definitions.value.get(group.type)?.label ?? ''
+    if (group.id in editor.draft.value.deleted) return `删除${type}：${nameOf(group)}`
     return group.created ? `新建${type}：${nameOf(group)}` : `${type}：${nameOf(group)}`
   }
 </script>
@@ -57,8 +66,24 @@
         >
           取消新建
         </Button>
+        <Button
+          v-else-if="group.id in editor.draft.value.deleted"
+          size="xs"
+          variant="ghost"
+          tone="neutral"
+          @click="editor.erase(group.id, false)"
+        >
+          撤销删除
+        </Button>
       </Inline>
-      <Stack gap="none" class="rounded-md border border-line">
+      <Stack
+        v-if="group.id in editor.draft.value.deleted"
+        gap="xs"
+        class="rounded-md border border-line px-4 py-3"
+      >
+        <WikiSaveSource :entry="group.id" />
+      </Stack>
+      <Stack v-else gap="none" class="rounded-md border border-line">
         <Text
           v-if="editor.draft.value.detached.includes(group.id)"
           size="sm"

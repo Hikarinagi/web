@@ -5,10 +5,10 @@ import { useCreatorTabsStore } from '~/stores/creator-tabs'
 
 describe('tabPath', () => {
   it('drops the dialogs a tab had open and keeps where it was', () => {
-    expect(tabPath('/entries/1/edit/cast?side=hints&save=1&focus=4')).toBe(
-      '/entries/1/edit/cast?side=hints',
+    expect(tabPath('/entries/1/edit/cast?side=refs&save=1&focus=4')).toBe(
+      '/entries/1/edit/cast?side=refs',
     )
-    expect(tabPath('/entries/1/edit?panel=undo&edit=4&discard=1&hint=2')).toBe('/entries/1/edit')
+    expect(tabPath('/entries/1/edit?panel=undo&edit=4&discard=1')).toBe('/entries/1/edit')
     expect(tabPath('/create/wiki/rules/A.7.1#A.7.1')).toBe('/create/wiki/rules/A.7.1#A.7.1')
   })
 })

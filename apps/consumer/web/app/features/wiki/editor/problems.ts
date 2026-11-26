@@ -66,6 +66,7 @@ export function problemsOf(
 ): Problem[] {
   const problems: Problem[] = []
   for (const { id, type, entry } of entries) {
+    if (id in draft.deleted) continue
     const created = id < 0
     for (const definition of definitions.get(type)?.properties ?? []) {
       const view = propertyOf(entry, id, definition.property, draft, statements)

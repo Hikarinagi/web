@@ -57,7 +57,6 @@
     :owner="data.owner"
     :versions="data.versions"
     :definitions="data.definitions"
-    :hints="data.hints"
     :history="data.history"
     :references="data.references"
     :watched="data.watched"
