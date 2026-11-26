@@ -1241,8 +1241,8 @@ packages:
   '@iconify-json/simple-icons@1.2.104':
     resolution: {integrity: sha512-WBozLa9oBsb6XuY+lnH7maIiYmabee0k276PvVVw+34oGAXNRnfJeilEOB4iQs2wFNU/8M/vQFVy66SHGJaDRw==}
 
-  '@iconify/collections@1.0.769':
-    resolution: {integrity: sha512-NReVg/aSN7A4VHdqYVpp7a9VptVX1WhB68wt6ZGPA4mQs3YZM2eEGNHwUF0FHBArKA7XdmNE6wcvKoqF3JZcuw==}
+  '@iconify/collections@1.0.770':
+    resolution: {integrity: sha512-+sCpHxSI25IQlsZVBwK9VQz2o2vz6/vovbCoa3afLZGc0uLPdG4HqnWO1zNhVPAW+VwCx3OatRaCU4/gXiutfQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -9318,7 +9318,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/collections@1.0.769':
+  '@iconify/collections@1.0.770':
     dependencies:
       '@iconify/types': 2.0.0
 
@@ -10118,7 +10118,7 @@ snapshots:
 
   '@nuxt/icon@2.6.3(@nuxt/schema@4.7.0)(confbox@0.3.2)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.5)(nitropack@2.14.0(@vercel/blob@2.9.0)(acorn@8.19.0)(bare-buffer@3.7.3)(ioredis@5.11.1)(oxc-parser@0.141.0)(rolldown@1.2.19)(srvx@1.0.8)(vite@8.3.8(@types/node@22.20.7)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1)))(oxc-parser@0.141.0)(rolldown@1.2.19)(unplugin@3.7.0(esbuild@0.27.7)(rolldown@1.2.19)(rollup@4.68.8)(vite@8.3.8(@types/node@22.20.7)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1)))(vite@8.3.8(@types/node@22.20.7)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.51.4)(yaml@2.9.1))(vue@3.5.46(typescript@6.0.3))':
     dependencies:
-      '@iconify/collections': 1.0.769
+      '@iconify/collections': 1.0.770
       '@iconify/types': 2.0.0
       '@iconify/utils': 3.1.7
       '@iconify/vue': 5.0.5(vue@3.5.46(typescript@6.0.3))

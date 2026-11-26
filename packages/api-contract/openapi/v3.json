@@ -32284,11 +32284,6 @@
             "description": "The entry already had the value and the cited source was added to it",
             "type": "boolean"
           },
-          "edit_id": {
-            "description": "Edit the item was written with",
-            "nullable": true,
-            "type": "number"
-          },
           "entry": {
             "allOf": [
               {
@@ -32387,8 +32382,7 @@
           "quote",
           "result",
           "cited",
-          "reason",
-          "edit_id"
+          "reason"
         ],
         "type": "object"
       },

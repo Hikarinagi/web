@@ -24275,8 +24275,6 @@ export interface components {
             call_id: number;
             /** @description The entry already had the value and the cited source was added to it */
             cited: boolean;
-            /** @description Edit the item was written with */
-            edit_id: number | null;
             /** @description Entry the item is for */
             entry: components["schemas"]["LookupEntryDto"] | null;
             /** @description Address of a submitted image, or of the image the quote was read from */
