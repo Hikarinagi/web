@@ -61,7 +61,7 @@
     <Stack as="article" gap="none">
       <PostImages :covers="data.post.covers" />
 
-      <Heading v-if="data.post.title" :level="1" class="mt-6 leading-snug">
+      <Heading v-if="data.post.title" :level="1" class="mt-6 leading-snug wrap-anywhere">
         {{ data.post.title }}
       </Heading>
 

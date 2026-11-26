@@ -18,7 +18,9 @@
     />
 
     <Stack gap="none" class="gap-5">
-      <Heading :level="1" size="2xl" class="leading-tight font-bold">{{ article.title }}</Heading>
+      <Heading :level="1" size="2xl" class="leading-tight font-bold wrap-anywhere">
+        {{ article.title }}
+      </Heading>
 
       <ArticleAuthorBar
         v-if="article.creator"
