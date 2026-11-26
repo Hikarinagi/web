@@ -186,16 +186,18 @@ describe('operationsOf', () => {
     ])
   })
 
-  it('sends the places searched with a value deleted as unverifiable', () => {
+  it('sends the source that shows a value belongs to another entry', () => {
     const draft = emptyDraft()
-    draft.removed[11] = 'BAD_SOURCE'
-    draft.searched[11] = ' 官网、Steam 商店页与发售公告均无此名称 '
+    draft.removed[11] = 'WRONG_ENTRY'
+    draft.contradicting[11] = { url: 'https://www.omuroke.com/', excerpt: ' 劇場アニメ『大室家』 ' }
     expect(operationsOf(draft, index)).toEqual([
       {
         op: 'deprecate',
         statement: 11,
-        reason: 'BAD_SOURCE',
-        note: '官网、Steam 商店页与发售公告均无此名称',
+        reason: 'WRONG_ENTRY',
+        citations: [
+          { method: 'EXCERPT', url: 'https://www.omuroke.com/', excerpt: '劇場アニメ『大室家』' },
+        ],
       },
     ])
   })

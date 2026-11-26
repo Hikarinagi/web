@@ -39,7 +39,7 @@
       : null
   })
   const reasons = Object.entries(DEPRECATION_REASONS)
-    .filter(([value]) => value !== 'REVERTED')
+    .filter(([value]) => value !== 'REVERTED' && value !== 'BAD_SOURCE')
     .map(([value, label]) => ({ value, label }))
   function choose(value: string | number | null | undefined) {
     if (value) editor.reason(props.row.id, String(value) as DeprecationReason)
@@ -93,11 +93,9 @@
         @update:model-value="choose"
       />
       <WikiSaveSource
-        v-if="row.state === 'removed' && row.reason === 'CONTRADICTED'"
-        :id="row.id"
-      />
-      <WikiSaveSearched
-        v-else-if="row.state === 'removed' && row.reason === 'BAD_SOURCE'"
+        v-if="
+          row.state === 'removed' && (row.reason === 'CONTRADICTED' || row.reason === 'WRONG_ENTRY')
+        "
         :id="row.id"
       />
     </Stack>

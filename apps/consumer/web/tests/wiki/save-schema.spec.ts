@@ -21,9 +21,10 @@ describe('evidenceSchema', () => {
     ).toEqual([['11.url', '网址应以 http:// 或 https:// 开头']])
   })
 
-  it('asks where a value deleted as unverifiable was looked for', () => {
-    expect(issues({ 12: { reason: 'BAD_SOURCE', searched: '  ' } })).toEqual([
-      ['12.searched', '请写明查过哪些地方'],
+  it('asks for the source that shows a value belongs to another entry', () => {
+    expect(issues({ 12: { reason: 'WRONG_ENTRY', url: '', excerpt: '' } })).toEqual([
+      ['12.url', '请填写来源网址'],
+      ['12.excerpt', '请填写摘录'],
     ])
   })
 
@@ -35,7 +36,11 @@ describe('evidenceSchema', () => {
           url: 'https://project-navel.com/tsukiniyorisou/outline.html',
           excerpt: '略称は「つり乙」',
         },
-        12: { reason: 'BAD_SOURCE', searched: '官网、Steam 商店页与发售公告均无此名称' },
+        12: {
+          reason: 'WRONG_ENTRY',
+          url: 'https://www.omuroke.com/',
+          excerpt: '劇場アニメ『大室家』',
+        },
       }),
     ).toEqual([])
     expect(issues({})).toEqual([])

@@ -57,11 +57,9 @@
     const draft = editor.draft.value
     return Object.fromEntries(
       Object.entries(draft.removed).flatMap(([id, reason]): [string, EvidenceValues[string]][] =>
-        reason === 'CONTRADICTED'
+        reason === 'CONTRADICTED' || reason === 'WRONG_ENTRY'
           ? [[id, { reason, ...(draft.contradicting[Number(id)] ?? { url: '', excerpt: '' }) }]]
-          : reason === 'BAD_SOURCE'
-            ? [[id, { reason, searched: draft.searched[Number(id)] ?? '' }]]
-            : [],
+          : [],
       ),
     )
   })
