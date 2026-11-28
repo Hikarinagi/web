@@ -2,7 +2,7 @@
   import { Card, Inline, Ripple, Stack, Text } from '@hina-ui/vue'
   import { Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { creditRoleLabel } from '~/features/entry/labels'
   import { KIND_PATHS, peopleNames, today, type OrgWork } from '~/features/org/works'
 
@@ -32,7 +32,8 @@
       />
       <Stack gap="xs" class="min-w-0 flex-1 py-0.5">
         <Text size="xs" :tone="upcoming ? 'accent' : 'muted'" class="tabular-nums">
-          {{ work.date ? dayText(work.date) : '日期不详' }}{{ upcoming ? ' 发售' : '' }}
+          {{ work.date ? dateText(work.date, work.precision) : '日期不详'
+          }}{{ upcoming ? ' 发售' : '' }}
         </Text>
         <Text weight="semibold" class="line-clamp-2 leading-snug">{{ work.title }}</Text>
         <Text v-if="work.original !== work.title" size="xs" tone="muted" truncate lang="ja">

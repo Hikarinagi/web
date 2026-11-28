@@ -10,7 +10,7 @@
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { creditRoleLabel } from '~/features/entry/labels'
 
   defineOptions({ name: 'LightNovelFacts' })
@@ -22,6 +22,8 @@
     producers: LightNovelPageData['producers']
   }>()
 
+  const { t } = useLocaleText()
+  const ORGANIZATION_ROLES = ['PUBLISHER', 'CHINESE_PUBLISHER', 'LABEL', 'MAGAZINE']
   const COLLAPSED = 2
   const allAliases = ref(false)
   const aliases = computed(() =>
@@ -29,26 +31,35 @@
       ? props.lightNovel.other_names
       : props.lightNovel.other_names.slice(0, COLLAPSED),
   )
+  const roleLabel = (code: string) =>
+    code === 'PUBLISHER' ? t('book.facts.publisher') : creditRoleLabel(code)
   const groups = computed(() => {
-    const map = new Map<string, { id: number; name: string }[]>()
+    const map = new Map<string, { id: number | null; name: string }[]>()
     for (const item of props.people) {
-      const label = getLightNovelPersonRelationLabel(item.relation)
+      const label = roleLabel(item.code)
       map.set(label, [...(map.get(label) ?? []), item.person])
+    }
+    for (const item of props.lightNovel.credit_names) {
+      if (ORGANIZATION_ROLES.includes(item.code)) continue
+      const label = roleLabel(item.code)
+      map.set(label, [...(map.get(label) ?? []), { id: null, name: item.name }])
     }
     return [...map].map(([label, people]) => ({ label, people }))
   })
   const organizations = computed(() => {
-    const map = new Map<string, { id: number; name: string; to: string }[]>()
+    const map = new Map<string, { id: number | null; name: string; to: string | null }[]>()
     for (const item of props.producers) {
-      const label =
-        item.code === 'CHINESE_PUBLISHER'
-          ? creditRoleLabel(item.code)
-          : getLightNovelProducerRelationLabel(item.relation ?? 'other')
+      const label = roleLabel(item.code)
       const to =
-        item.relation === 'bunko'
+        item.code === 'LABEL'
           ? `/light-novels/bunko/${item.producer.id}`
           : `/producers/${item.producer.id}`
       map.set(label, [...(map.get(label) ?? []), { ...item.producer, to }])
+    }
+    for (const item of props.lightNovel.credit_names) {
+      if (!ORGANIZATION_ROLES.includes(item.code)) continue
+      const label = roleLabel(item.code)
+      map.set(label, [...(map.get(label) ?? []), { id: null, name: item.name, to: null }])
     }
     return [...map].map(([label, items]) => ({ label, items }))
   })
@@ -59,14 +70,17 @@
   const last = computed(() =>
     several.value ? undefined : props.volumes.findLast(volume => volume.publication_date),
   )
-  const status = computed(() =>
-    [
-      props.lightNovel.novel_status ? getNovelStatusLabel(props.lightNovel.novel_status) : '',
+  const status = computed(() => {
+    const code = props.lightNovel.publication_status
+    return [
+      code === 'ONGOING' || code === 'COMPLETED' || code === 'HIATUS'
+        ? t(`book.status.${code}`)
+        : '',
       props.volumes.length && !several.value ? `全 ${props.volumes.length} 卷` : '',
     ]
       .filter(Boolean)
-      .join('，'),
-  )
+      .join('，')
+  })
 </script>
 
 <template>
@@ -78,17 +92,19 @@
       <DescriptionTerm>{{ group.label }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
-            v-for="person in group.people"
-            :key="person.id"
-            :as="NuxtLink"
-            :to="`/people/${person.id}`"
-            tone="neutral"
-            class="self-start"
-            lang="ja"
-          >
-            {{ person.name }}
-          </Link>
+          <template v-for="person in group.people" :key="person.id ?? person.name">
+            <Link
+              v-if="person.id !== null"
+              :as="NuxtLink"
+              :to="`/people/${person.id}`"
+              tone="neutral"
+              class="self-start"
+              lang="ja"
+            >
+              {{ person.name }}
+            </Link>
+            <Text v-else as="span" size="sm" lang="ja">{{ person.name }}</Text>
+          </template>
         </Stack>
       </DescriptionDetails>
     </template>
@@ -96,22 +112,24 @@
       <DescriptionTerm>{{ group.label }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
-            v-for="item in group.items"
-            :key="item.id"
-            :as="NuxtLink"
-            :to="item.to"
-            tone="neutral"
-            class="self-start"
-            lang="ja"
-          >
-            {{ item.name }}
-          </Link>
+          <template v-for="item in group.items" :key="item.id ?? item.name">
+            <Link
+              v-if="item.to"
+              :as="NuxtLink"
+              :to="item.to"
+              tone="neutral"
+              class="self-start"
+              lang="ja"
+            >
+              {{ item.name }}
+            </Link>
+            <Text v-else as="span" size="sm" lang="ja">{{ item.name }}</Text>
+          </template>
         </Stack>
       </DescriptionDetails>
     </template>
     <template v-if="status">
-      <DescriptionTerm>状态</DescriptionTerm>
+      <DescriptionTerm>{{ t('book.facts.status') }}</DescriptionTerm>
       <DescriptionDetails>{{ status }}</DescriptionDetails>
     </template>
     <template v-if="several">
@@ -123,13 +141,13 @@
     <template v-if="first">
       <DescriptionTerm>首卷</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">
-        {{ dayText(first.publication_date) }}
+        {{ dateText(first.publication_date, first.publication_date_precision) }}
       </DescriptionDetails>
     </template>
     <template v-if="last">
       <DescriptionTerm>最新卷</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">
-        {{ dayText(last.publication_date) }}
+        {{ dateText(last.publication_date, last.publication_date_precision) }}
       </DescriptionDetails>
     </template>
     <template v-if="lightNovel.read_times">

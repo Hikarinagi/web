@@ -21,7 +21,7 @@
   import { ArrowDownUp, BookOpen } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { LightNovelPageData } from '~~/server/api/pages/light-novels/[id].get'
-  import { dayText, monthText } from '~/features/entry/date'
+  import { dateText, monthText } from '~/features/entry/date'
   import type { VolumeGroup } from '~/features/volume-set/sets'
   import { TRANSLATION_QUALITY_LABEL } from '~/features/workbench/labels'
   import { getLightNovelVolumeLabel, getLightNovelVolumeTitle } from '~/utils/media/light-novel'
@@ -135,7 +135,7 @@
                 label(volume)
               }}</Text>
               <Text size="xs" tone="muted" class="tabular-nums">
-                {{ monthText(volume.publication_date) }}
+                {{ monthText(volume.publication_date, volume.publication_date_precision) }}
               </Text>
             </Stack>
             <IconButton
@@ -195,7 +195,7 @@
                 </Inline>
               </TableCell>
               <TableCell class="whitespace-nowrap tabular-nums">
-                {{ dayText(volume.publication_date) }}
+                {{ dateText(volume.publication_date, volume.publication_date_precision) }}
               </TableCell>
               <TableCell align="end" class="tabular-nums">{{ volume.pages ?? '' }}</TableCell>
               <TableCell class="tabular-nums">{{ volume.isbn }}</TableCell>

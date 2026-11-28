@@ -22307,7 +22307,7 @@ export interface components {
             work_refs: components["schemas"]["FeedWorkRefDto"][];
         };
         FeedVolumeRefDto: {
-            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
@@ -23538,6 +23538,8 @@ export interface components {
             covers: components["schemas"]["LightNovelCoverRelationDto"][];
             /** Format: date-time */
             created_at: string;
+            /** @description Credits of the series and its original books recorded only as a name */
+            credit_names: components["schemas"]["WorkCreditNameDto"][];
             download_times: number;
             /** @description 条目 ID */
             entry_id: number;
@@ -24041,7 +24043,7 @@ export interface components {
             ref: components["schemas"]["LandingRefDto"];
         };
         LightNovelStageVolumeDto: {
-            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             intro: string | null;
@@ -24136,7 +24138,7 @@ export interface components {
             tag: components["schemas"]["TagPreviewDto"];
         };
         LightNovelVolumeBriefDto: {
-            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             /** @description 卷号原文 */
@@ -24153,7 +24155,7 @@ export interface components {
             nsfw: boolean;
             publication_date: string | null;
             series_name: string | null;
-            /** @description 本卷的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             top_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             volume_label: string | null;
             volume_number: number | null;
@@ -24167,7 +24169,7 @@ export interface components {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
             /** Format: date-time */
             created_at: string;
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             download_times: number;
             /** @description 条目 ID */
@@ -24176,6 +24178,8 @@ export interface components {
             epub_provider: components["schemas"]["UserRefDto"] | null;
             id: number;
             isbn: string | null;
+            /** @description Labels of the original book of this volume */
+            labels: components["schemas"]["WorkProducerRefDto"][];
             name: string | null;
             name_cn: string | null;
             online_reading_available: boolean;
@@ -24193,6 +24197,8 @@ export interface components {
             /** Format: date-time */
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
+            /** @description Publishers of the original book of this volume */
+            publishers: components["schemas"]["WorkProducerRefDto"][];
             read_times: number;
             relation: string;
             /** Format: date-time */
@@ -24228,7 +24234,7 @@ export interface components {
         };
         LightNovelVolumeListItemDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             has_epub: boolean;
             id: number;
@@ -24259,7 +24265,7 @@ export interface components {
         };
         LightNovelVolumeRelationDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             isbn: string | null;
@@ -24313,7 +24319,7 @@ export interface components {
         };
         LightNovelVolumeSummaryDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
@@ -24335,7 +24341,7 @@ export interface components {
         };
         LightNovelVolumeWantedDto: {
             covers: components["schemas"]["LightNovelVolumeCoverRelationDto"][];
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             name: string | null;
@@ -25217,6 +25223,8 @@ export interface components {
             covers: components["schemas"]["MangaCoverRelationDto"][];
             /** Format: date-time */
             created_at: string;
+            /** @description Credits of the series and its original books recorded only as a name */
+            credit_names: components["schemas"]["WorkCreditNameDto"][];
             editions: components["schemas"]["MangaEditionDto"][] | null;
             /** @description 条目 ID */
             entry_id: number;
@@ -26412,12 +26420,14 @@ export interface components {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /** Format: date-time */
             created_at: string;
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             /** @description 条目 ID */
             entry_id: number;
             id: number;
             isbn: string | null;
+            /** @description Labels of the original book of this volume */
+            labels: components["schemas"]["WorkProducerRefDto"][];
             manga: components["schemas"]["MangaSummaryDto"];
             name: string | null;
             name_cn: string | null;
@@ -26431,6 +26441,8 @@ export interface components {
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
             publisher: string | null;
+            /** @description Publishers of the original book of this volume */
+            publishers: components["schemas"]["WorkProducerRefDto"][];
             read_times: number;
             /** Format: date-time */
             revised_at: string | null;
@@ -26443,11 +26455,13 @@ export interface components {
             /** Format: date-time */
             updated_at: string;
             views: number;
+            /** @description Volume number as recorded, such as 3, 8.5 or a word for the first or last part */
+            volume_label: string | null;
             volume_number: number | null;
         };
         MangaVolumeRelationDto: {
             cover: components["schemas"]["RatedMediaAssetDto"] | null;
-            /** @description 显示用的封面，本卷没有封面时为所属系列的封面 */
+            /** @description Cover of this volume itself; empty when the volume has none */
             display_cover: components["schemas"]["RatedMediaAssetDto"] | null;
             id: number;
             isbn: string | null;
@@ -26458,6 +26472,8 @@ export interface components {
             publication_date: string | null;
             publication_date_precision: components["schemas"]["DatePrecision"] | null;
             sort_key: number;
+            /** @description Volume number as recorded, such as 3, 8.5 or a word for the first or last part */
+            volume_label: string | null;
             volume_number: number | null;
         };
         MangaVolumeSetDto: {
@@ -30100,7 +30116,7 @@ export interface components {
             width: number | null;
         };
         SearchHitDto: {
-            /** @description 轻小说卷没有封面时为所属系列的封面 */
+            /** @description Cover of a light novel volume itself; empty when the volume has none */
             cover: components["schemas"]["SearchCoverDto"] | null;
             /** @description 开发厂商，仅 galgame 命中携带 */
             developer: string | null;
@@ -32803,6 +32819,12 @@ export interface components {
             work_type: "GALGAME" | "LIGHT_NOVEL" | "MANGA";
             year: number | null;
         };
+        WorkCreditNameDto: {
+            /** @description Role code of the credit */
+            code: string;
+            /** @description Name as recorded, for a credit not linked to any entry */
+            name: string;
+        };
         WorkGroupDto: {
             /** @description 游戏按职责分组，书不分 */
             code: string | null;
@@ -32819,6 +32841,11 @@ export interface components {
             code: string;
             name: string;
             person_id: number;
+        };
+        WorkProducerRefDto: {
+            /** @description Producer id */
+            id: number;
+            name: string;
         };
         WorkRatingDto: {
             average: number | null;

@@ -10,14 +10,9 @@
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { creditRoleLabel } from '~/features/entry/labels'
-  import {
-    MANGA_AUDIENCE_LABELS,
-    MANGA_READING_MODE_LABELS,
-    mangaSerialStatusLabel,
-    mangaStaffRoleLabel,
-  } from '~/features/manga/labels'
+  import { MANGA_AUDIENCE_LABELS, MANGA_READING_MODE_LABELS } from '~/features/manga/labels'
 
   defineOptions({ name: 'MangaFacts' })
   const props = defineProps<{
@@ -28,31 +23,49 @@
     sets: MangaPageData['sets']
   }>()
 
+  const { t } = useLocaleText()
+  const ORGANIZATION_ROLES = ['PUBLISHER', 'CHINESE_PUBLISHER', 'MAGAZINE', 'LABEL']
   const COLLAPSED = 3
   const allAliases = ref(false)
   const aliases = computed(() =>
     allAliases.value ? props.manga.other_names : props.manga.other_names.slice(0, COLLAPSED),
   )
+  const named = (code: string) =>
+    props.manga.credit_names
+      .filter(item => item.code === code)
+      .map(item => ({ id: null, name: item.name }))
   const groups = computed(() => {
-    const map = new Map<string, { id: number; name: string }[]>()
+    const map = new Map<string, { id: number | null; name: string }[]>()
     for (const item of props.people) {
-      const label = item.note || mangaStaffRoleLabel(item.role)
+      const label = item.note || creditRoleLabel(item.code)
       map.set(label, [...(map.get(label) ?? []), item.person])
+    }
+    for (const item of props.manga.credit_names) {
+      if (ORGANIZATION_ROLES.includes(item.code)) continue
+      const label = creditRoleLabel(item.code)
+      map.set(label, [...(map.get(label) ?? []), { id: null, name: item.name }])
     }
     return [...map].map(([label, people]) => ({ label, people }))
   })
-  const magazines = computed(() =>
-    props.producers.filter(item => item.role === 'MAGAZINE').map(item => item.producer),
-  )
+  const organizations = (code: string) => [
+    ...props.producers
+      .filter(item => item.code === code)
+      .map(item => ({ id: item.producer.id as number | null, name: item.producer.name })),
+    ...named(code),
+  ]
+  const magazines = computed(() => organizations('MAGAZINE'))
   const publishers = computed(() =>
     [
-      { label: '出版社', items: props.producers.filter(item => item.role === 'PUBLISHER') },
-      {
-        label: creditRoleLabel('CHINESE_PUBLISHER'),
-        items: props.producers.filter(item => item.code === 'CHINESE_PUBLISHER'),
-      },
+      { label: t('book.facts.publisher'), items: organizations('PUBLISHER') },
+      { label: creditRoleLabel('CHINESE_PUBLISHER'), items: organizations('CHINESE_PUBLISHER') },
     ].filter(group => group.items.length),
   )
+  const status = computed(() => {
+    const code = props.manga.publication_status
+    return code === 'ONGOING' || code === 'COMPLETED' || code === 'HIATUS'
+      ? t(`book.status.${code}`)
+      : null
+  })
   const book = computed(() =>
     [
       props.manga.pages ? `${props.manga.pages} 页` : '',
@@ -77,17 +90,19 @@
       <DescriptionTerm>{{ group.label }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
-            v-for="person in group.people"
-            :key="person.id"
-            :as="NuxtLink"
-            :to="`/people/${person.id}`"
-            tone="neutral"
-            class="self-start"
-            lang="ja"
-          >
-            {{ person.name }}
-          </Link>
+          <template v-for="person in group.people" :key="person.id ?? person.name">
+            <Link
+              v-if="person.id !== null"
+              :as="NuxtLink"
+              :to="`/people/${person.id}`"
+              tone="neutral"
+              class="self-start"
+              lang="ja"
+            >
+              {{ person.name }}
+            </Link>
+            <Text v-else as="span" size="sm" lang="ja">{{ person.name }}</Text>
+          </template>
         </Stack>
       </DescriptionDetails>
     </template>
@@ -95,17 +110,19 @@
       <DescriptionTerm>连载</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
-            v-for="magazine in magazines"
-            :key="magazine.id"
-            :as="NuxtLink"
-            :to="`/mangas/magazine/${magazine.id}`"
-            tone="neutral"
-            class="self-start"
-            lang="ja"
-          >
-            {{ magazine.name }}
-          </Link>
+          <template v-for="magazine in magazines" :key="magazine.id ?? magazine.name">
+            <Link
+              v-if="magazine.id !== null"
+              :as="NuxtLink"
+              :to="`/mangas/magazine/${magazine.id}`"
+              tone="neutral"
+              class="self-start"
+              lang="ja"
+            >
+              {{ magazine.name }}
+            </Link>
+            <Text v-else as="span" size="sm" lang="ja">{{ magazine.name }}</Text>
+          </template>
         </Stack>
       </DescriptionDetails>
     </template>
@@ -113,34 +130,31 @@
       <DescriptionTerm>{{ group.label }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
-            v-for="item in group.items"
-            :key="item.producer.id"
-            :as="NuxtLink"
-            :to="`/producers/${item.producer.id}`"
-            tone="neutral"
-            class="self-start"
-            lang="ja"
-          >
-            {{ item.producer.name }}
-          </Link>
+          <template v-for="item in group.items" :key="item.id ?? item.name">
+            <Link
+              v-if="item.id !== null"
+              :as="NuxtLink"
+              :to="`/producers/${item.id}`"
+              tone="neutral"
+              class="self-start"
+              lang="ja"
+            >
+              {{ item.name }}
+            </Link>
+            <Text v-else as="span" size="sm" lang="ja">{{ item.name }}</Text>
+          </template>
         </Stack>
       </DescriptionDetails>
     </template>
     <template v-if="manga.publication_date">
-      <DescriptionTerm>{{ manga.publication_end_date ? '连载期间' : '开始连载' }}</DescriptionTerm>
+      <DescriptionTerm>{{ t('book.facts.firstVolume') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">
-        <Stack gap="none">
-          <Text as="span" size="sm">{{ dayText(manga.publication_date) }}</Text>
-          <Text v-if="manga.publication_end_date" as="span" size="sm">
-            至 {{ dayText(manga.publication_end_date) }}
-          </Text>
-        </Stack>
+        {{ dateText(manga.publication_date, manga.publication_date_precision) }}
       </DescriptionDetails>
     </template>
-    <template v-if="manga.serial_status">
-      <DescriptionTerm>状态</DescriptionTerm>
-      <DescriptionDetails>{{ mangaSerialStatusLabel(manga.serial_status) }}</DescriptionDetails>
+    <template v-if="status">
+      <DescriptionTerm>{{ t('book.facts.status') }}</DescriptionTerm>
+      <DescriptionDetails>{{ status }}</DescriptionDetails>
     </template>
     <template v-if="volumes.length || sets.length > 1">
       <DescriptionTerm>单行本</DescriptionTerm>

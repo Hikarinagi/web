@@ -102,7 +102,8 @@
             全 {{ shown.length }} 卷
           </Text>
           <Text v-if="first && last" size="sm" tone="muted" class="hidden tabular-nums sm:inline">
-            {{ monthText(first.publication_date) }}至 {{ monthText(last.publication_date) }}
+            {{ monthText(first.publication_date, first.publication_date_precision) }}至
+            {{ monthText(last.publication_date, last.publication_date_precision) }}
           </Text>
         </Inline>
         <Heading :level="1" class="text-3xl leading-tight font-bold tracking-tight lg:text-5xl">

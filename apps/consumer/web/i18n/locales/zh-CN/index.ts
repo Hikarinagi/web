@@ -1,5 +1,6 @@
 import { SHARED_MESSAGES } from '@hikarinagi/shared'
 import article from './article'
+import book from './book'
 import common from './common'
 import contribute from './contribute'
 import download from './download'
@@ -20,6 +21,7 @@ import workbench from './workbench'
 
 export default {
   article,
+  book,
   common,
   contribute,
   download,

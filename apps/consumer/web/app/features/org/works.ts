@@ -14,6 +14,7 @@ export interface OrgWork {
   original: string
   cover: Cover | null
   date: string | null
+  precision: string | null
   roles: string[]
   rating: { average: number | null; count: number }
   volumes: number | null
@@ -45,6 +46,7 @@ export function orgWork(
       original: item.galgame.origin_title,
       cover: topVotedMedia(item.galgame.covers),
       date: dayOf(item.galgame.release_date),
+      precision: item.galgame.release_date_precision,
       roles: item.codes,
       rating: item.rating,
       volumes: null,
@@ -60,6 +62,7 @@ export function orgWork(
       original: item.light_novel.name,
       cover: topVotedMedia(item.light_novel.covers),
       date: dayOf(item.light_novel.publication_date),
+      precision: item.light_novel.publication_date_precision,
       roles: item.codes,
       rating: item.rating,
       volumes,
@@ -75,6 +78,7 @@ export function orgWork(
       original: item.manga.name,
       cover: topVotedMedia(item.manga.covers),
       date: dayOf(item.manga.publication_date),
+      precision: item.manga.publication_date_precision,
       roles: item.codes,
       rating: item.rating,
       volumes,

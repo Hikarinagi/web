@@ -3,7 +3,7 @@
   import { ChevronLeft, ChevronRight } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { mangaStaffRoleLabel } from '~/features/manga/labels'
   import type { HikariImageSource } from '~/utils/media/image'
   import { getMangaVolumeTitle } from '~/utils/media/manga'
@@ -141,7 +141,7 @@
             </Inline>
           </Inline>
           <Text v-if="volume.publication_date" size="sm" tone="muted" class="tabular-nums">
-            {{ dayText(volume.publication_date) }}发售
+            {{ dateText(volume.publication_date, volume.publication_date_precision) }}发售
           </Text>
         </Stack>
 

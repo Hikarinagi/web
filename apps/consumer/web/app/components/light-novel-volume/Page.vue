@@ -94,7 +94,6 @@
           :volume="data.volume"
           :light-novel="data.light_novel"
           :people="data.people"
-          :producers="data.producers"
         />
         <EntryMeta
           :contributors="data.contributors"

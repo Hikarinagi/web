@@ -3,7 +3,7 @@
   import { NuxtLink } from '#components'
   import type { EntryRating } from '~/components/entry/RatingCard.vue'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { contentsStatus, contentsUnits } from '~/features/manga/contents'
   import { mangaSerialStatusLabel, mangaStaffRoleLabel } from '~/features/manga/labels'
   import { getMangaCover, getMangaTitle } from '~/utils/media/manga'
@@ -111,7 +111,7 @@
             tone="muted"
             class="hidden tabular-nums sm:inline"
           >
-            {{ dayText(manga.latest_chapter_at) }}
+            {{ dateText(manga.latest_chapter_at) }}
           </Text>
         </Inline>
         <Heading :level="1" class="text-3xl leading-tight font-bold tracking-tight lg:text-5xl">

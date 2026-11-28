@@ -1,6 +1,6 @@
 import type { SelectItems } from '@hina-ui/vue'
 import { volumeSetName } from '@hikarinagi/shared'
-import { getMangaVolumeLabel } from '~/utils/media/manga'
+import { getMangaVolumeLabel, getMangaVolumeTitle } from '~/utils/media/manga'
 
 export function useVolumeOptions(seriesId: MaybeRefOrGetter<number | null>) {
   const options = shallowRef<SelectItems>([])
@@ -27,7 +27,10 @@ export function useVolumeOptions(seriesId: MaybeRefOrGetter<number | null>) {
               }).catch(() => [])
       if (toValue(seriesId) !== id) return
       const choices = (list: typeof volumes) =>
-        list.map(volume => ({ value: volume.id, label: getMangaVolumeLabel(volume) }))
+        list.map(volume => ({
+          value: volume.id,
+          label: getMangaVolumeLabel(volume) ?? getMangaVolumeTitle(volume),
+        }))
       options.value =
         sets.length > 1
           ? sets.map(set => ({ label: volumeSetName(set), options: choices(set.volumes) }))

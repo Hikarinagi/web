@@ -2,9 +2,9 @@
   import { DescriptionDetails, DescriptionList, DescriptionTerm, Link, Stack } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { MangaVolumePageData } from '~~/server/api/pages/manga-volumes/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
+  import { creditRoleLabel } from '~/features/entry/labels'
   import { volumePrice } from '~/features/light-novel-volume/price'
-  import { mangaStaffRoleLabel } from '~/features/manga/labels'
   import { getMangaVolumeLabel } from '~/utils/media/manga'
 
   defineOptions({ name: 'MangaVolumeFacts' })
@@ -14,25 +14,30 @@
     producers: MangaVolumePageData['producers']
   }>()
 
+  const { t } = useLocaleText()
   const label = computed(() => getMangaVolumeLabel(props.volume))
   const price = computed(() => volumePrice(props.volume))
   const groups = computed(() => {
     const map = new Map<string, { id: number; name: string }[]>()
     for (const item of props.people) {
-      const key = item.note || mangaStaffRoleLabel(item.role)
+      const key = item.note || creditRoleLabel(item.code)
       map.set(key, [...(map.get(key) ?? []), item.person])
     }
     return [...map].map(([key, people]) => ({ key, people }))
   })
-  const byRole = (role: string) => [
+  const organizations = computed(() =>
+    [
+      { key: t('book.facts.publisher'), items: props.volume.publishers },
+      { key: t('book.facts.label'), items: props.volume.labels },
+    ].filter(group => group.items.length),
+  )
+  const magazines = computed(() => [
     ...new Map(
       props.producers
-        .filter(item => item.role === role)
+        .filter(item => item.code === 'MAGAZINE')
         .map(item => [item.producer.id, item.producer]),
     ).values(),
-  ]
-  const publishers = computed(() => byRole('PUBLISHER'))
-  const magazines = computed(() => byRole('MAGAZINE'))
+  ])
 </script>
 
 <template>
@@ -47,13 +52,13 @@
       </Link>
     </DescriptionDetails>
     <template v-if="label">
-      <DescriptionTerm>卷次</DescriptionTerm>
+      <DescriptionTerm>{{ t('book.facts.volumeNumber') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ label }}</DescriptionDetails>
     </template>
     <template v-if="volume.publication_date">
       <DescriptionTerm>发售日</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">
-        {{ dayText(volume.publication_date) }}
+        {{ dateText(volume.publication_date, volume.publication_date_precision) }}
       </DescriptionDetails>
     </template>
     <template v-if="volume.page_count">
@@ -68,23 +73,22 @@
       <DescriptionTerm>ISBN</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ volume.isbn }}</DescriptionDetails>
     </template>
-    <template v-if="publishers.length || volume.publisher">
-      <DescriptionTerm>出版社</DescriptionTerm>
+    <template v-for="group in organizations" :key="group.key">
+      <DescriptionTerm>{{ group.key }}</DescriptionTerm>
       <DescriptionDetails>
-        <Stack v-if="publishers.length" gap="none">
+        <Stack gap="none">
           <Link
-            v-for="publisher in publishers"
-            :key="publisher.id"
+            v-for="item in group.items"
+            :key="item.id"
             :as="NuxtLink"
-            :to="`/producers/${publisher.id}`"
+            :to="`/producers/${item.id}`"
             tone="neutral"
             class="self-start"
             lang="ja"
           >
-            {{ publisher.name }}
+            {{ item.name }}
           </Link>
         </Stack>
-        <template v-else>{{ volume.publisher }}</template>
       </DescriptionDetails>
     </template>
     <template v-if="magazines.length">

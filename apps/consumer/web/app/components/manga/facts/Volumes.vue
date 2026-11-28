@@ -2,7 +2,7 @@
   import { Button as HnButton, Stack, Text } from '@hina-ui/vue'
   import { volumeSetName } from '@hikarinagi/shared'
   import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
-  import { dayText } from '~/features/entry/date'
+  import { dateText } from '~/features/entry/date'
   import { effectiveVolumeNumber } from '~/features/manga/volumes'
   import { volumeDrawerMeta, volumeSetLabel } from '~/features/volume-set/sets'
 
@@ -23,7 +23,7 @@
       : [{ key: 0, label: `${props.volumes.length} 卷`, name: '', volumes: props.volumes }],
   )
   const latest = (volumes: MangaPageData['volumes']) =>
-    volumes.findLast(volume => volume.publication_date)?.publication_date ?? null
+    volumes.findLast(volume => volume.publication_date)
   const open = ref(false)
   const shownKey = ref<number | null>(null)
   const chosen = computed(() => groups.value.find(group => group.key === shownKey.value))
@@ -55,7 +55,13 @@
         {{ group.label }}
       </HnButton>
       <Text v-if="latest(group.volumes)" as="span" size="sm" tone="muted" class="tabular-nums">
-        最新一卷 {{ dayText(latest(group.volumes)) }}
+        最新一卷
+        {{
+          dateText(
+            latest(group.volumes)?.publication_date,
+            latest(group.volumes)?.publication_date_precision,
+          )
+        }}
       </Text>
     </Stack>
     <EntryVolumeDrawer

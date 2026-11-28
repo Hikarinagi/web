@@ -15,9 +15,9 @@
 
   const area = useTemplateRef<InstanceType<typeof ScrollArea>>('area')
   const today = new Date().toISOString().slice(0, 10)
-  const dateLine = (date: string | null | undefined) => {
+  const dateLine = (date: string | null | undefined, precision: string | null) => {
     if (!date) return ''
-    return date.slice(0, 10) > today ? '未发售' : monthText(date)
+    return date.slice(0, 10) > today ? '未发售' : monthText(date, precision)
   }
 
   watch(
@@ -72,7 +72,7 @@
             {{ label(volume) }}
           </Text>
           <Text size="xs" tone="muted" class="tabular-nums">
-            {{ dateLine(volume.publication_date) }}
+            {{ dateLine(volume.publication_date, volume.publication_date_precision) }}
           </Text>
         </Stack>
       </NuxtLink>

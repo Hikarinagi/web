@@ -1,4 +1,5 @@
 import type { MangaPageData } from '~~/server/api/pages/mangas/[id].get'
+import { translate } from '~/utils/i18n'
 import { topVotedMedia } from './image'
 
 type MangaDetail = MangaPageData['manga']
@@ -12,19 +13,22 @@ export function getMangaCover(manga: MangaDetail): MangaCover | null {
   return topVotedMedia(manga.covers)
 }
 
-export function getMangaVolumeLabel(chapter: {
-  volume_number?: number | null
-  name?: string | null
-  name_cn?: string | null
-}) {
-  if (chapter.volume_number != null) return `第 ${chapter.volume_number} 卷`
-  return chapter.name_cn || chapter.name || '单行本'
+type MangaVolumeNumber = { volume_label?: string | null; volume_number?: number | null }
+
+export function getMangaVolumeLabel(volume: MangaVolumeNumber) {
+  const label = volume.volume_label?.trim() || null
+  if (label && !/^\d+(\.\d+)?$/.test(label)) return label
+  const number = label ?? volume.volume_number
+  return number != null ? translate('book.volume.number', { number }) : null
 }
 
-export function getMangaVolumeTitle(chapter: {
-  volume_number?: number | null
-  name?: string | null
-  name_cn?: string | null
-}) {
-  return chapter.name_cn || chapter.name || getMangaVolumeLabel(chapter)
+export function getMangaVolumeTitle(
+  volume: MangaVolumeNumber & { name?: string | null; name_cn?: string | null },
+) {
+  return (
+    volume.name_cn ||
+    volume.name ||
+    getMangaVolumeLabel(volume) ||
+    translate('book.volume.untitled')
+  )
 }

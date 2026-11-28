@@ -23566,7 +23566,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -28342,6 +28342,13 @@
             "format": "date-time",
             "type": "string"
           },
+          "credit_names": {
+            "description": "Credits of the series and its original books recorded only as a name",
+            "items": {
+              "$ref": "#/components/schemas/WorkCreditNameDto"
+            },
+            "type": "array"
+          },
           "download_times": {
             "type": "number"
           },
@@ -28456,6 +28463,7 @@
           "novel_status",
           "publication_status",
           "total_volumes",
+          "credit_names",
           "summary",
           "summary_cn",
           "summary_en",
@@ -30183,7 +30191,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -30534,7 +30542,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -30605,7 +30613,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "本卷的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -30668,7 +30676,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -30695,6 +30703,13 @@
           "isbn": {
             "nullable": true,
             "type": "string"
+          },
+          "labels": {
+            "description": "Labels of the original book of this volume",
+            "items": {
+              "$ref": "#/components/schemas/WorkProducerRefDto"
+            },
+            "type": "array"
           },
           "name": {
             "nullable": true,
@@ -30749,6 +30764,13 @@
               }
             ],
             "nullable": true
+          },
+          "publishers": {
+            "description": "Publishers of the original book of this volume",
+            "items": {
+              "$ref": "#/components/schemas/WorkProducerRefDto"
+            },
+            "type": "array"
           },
           "read_times": {
             "type": "number"
@@ -30830,6 +30852,8 @@
           "price_amount",
           "price_currency",
           "price_tax_included",
+          "publishers",
+          "labels",
           "publication_date",
           "publication_date_precision",
           "pages",
@@ -30923,7 +30947,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -31056,7 +31080,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -31262,7 +31286,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -31362,7 +31386,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -34862,6 +34886,13 @@
             "format": "date-time",
             "type": "string"
           },
+          "credit_names": {
+            "description": "Credits of the series and its original books recorded only as a name",
+            "items": {
+              "$ref": "#/components/schemas/WorkCreditNameDto"
+            },
+            "type": "array"
+          },
           "editions": {
             "items": {
               "$ref": "#/components/schemas/MangaEditionDto"
@@ -35037,6 +35068,7 @@
           "price_amount",
           "price_currency",
           "pages",
+          "credit_names",
           "editions",
           "summary",
           "summary_cn",
@@ -39397,7 +39429,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -39411,6 +39443,13 @@
           "isbn": {
             "nullable": true,
             "type": "string"
+          },
+          "labels": {
+            "description": "Labels of the original book of this volume",
+            "items": {
+              "$ref": "#/components/schemas/WorkProducerRefDto"
+            },
+            "type": "array"
           },
           "manga": {
             "$ref": "#/components/schemas/MangaSummaryDto"
@@ -39462,6 +39501,13 @@
             "nullable": true,
             "type": "string"
           },
+          "publishers": {
+            "description": "Publishers of the original book of this volume",
+            "items": {
+              "$ref": "#/components/schemas/WorkProducerRefDto"
+            },
+            "type": "array"
+          },
           "read_times": {
             "type": "number"
           },
@@ -39500,6 +39546,11 @@
           "views": {
             "type": "number"
           },
+          "volume_label": {
+            "description": "Volume number as recorded, such as 3, 8.5 or a word for the first or last part",
+            "nullable": true,
+            "type": "string"
+          },
           "volume_number": {
             "nullable": true,
             "type": "number"
@@ -39511,6 +39562,7 @@
           "bangumi_book_id",
           "series_id",
           "volume_number",
+          "volume_label",
           "sort_key",
           "name",
           "name_cn",
@@ -39520,6 +39572,8 @@
           "price_currency",
           "price_tax_included",
           "publisher",
+          "publishers",
+          "labels",
           "chapter_count",
           "summary",
           "summary_cn",
@@ -39555,7 +39609,7 @@
                 "$ref": "#/components/schemas/RatedMediaAssetDto"
               }
             ],
-            "description": "显示用的封面，本卷没有封面时为所属系列的封面",
+            "description": "Cover of this volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -39594,6 +39648,11 @@
           "sort_key": {
             "type": "number"
           },
+          "volume_label": {
+            "description": "Volume number as recorded, such as 3, 8.5 or a word for the first or last part",
+            "nullable": true,
+            "type": "string"
+          },
           "volume_number": {
             "nullable": true,
             "type": "number"
@@ -39602,6 +39661,7 @@
         "required": [
           "id",
           "volume_number",
+          "volume_label",
           "name",
           "name_cn",
           "cover",
@@ -53510,7 +53570,7 @@
                 "$ref": "#/components/schemas/SearchCoverDto"
               }
             ],
-            "description": "轻小说卷没有封面时为所属系列的封面",
+            "description": "Cover of a light novel volume itself; empty when the volume has none",
             "nullable": true,
             "type": "object"
           },
@@ -64333,6 +64393,23 @@
         ],
         "type": "object"
       },
+      "WorkCreditNameDto": {
+        "properties": {
+          "code": {
+            "description": "Role code of the credit",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name as recorded, for a credit not linked to any entry",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object"
+      },
       "WorkGroupDto": {
         "properties": {
           "code": {
@@ -64393,6 +64470,22 @@
         "required": [
           "code",
           "person_id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "WorkProducerRefDto": {
+        "properties": {
+          "id": {
+            "description": "Producer id",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
           "name"
         ],
         "type": "object"

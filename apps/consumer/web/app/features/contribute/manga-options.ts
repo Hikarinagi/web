@@ -1,6 +1,6 @@
 import { mangaChapterNumber } from '@hikarinagi/shared'
 import { belongsTo } from '~/features/manga/volumes'
-import { getMangaVolumeLabel } from '~/utils/media/manga'
+import { getMangaVolumeLabel, getMangaVolumeTitle } from '~/utils/media/manga'
 import type { MangaTargetChapter, MangaTargetClaim, MangaTargetVolume } from './manga-target'
 
 export interface TargetOption {
@@ -25,7 +25,7 @@ export function volumeOptions(
   const claimed = claims.filter(claim => claim.scope === 'VOLUME')
   const uploaded = (context.published ?? []).filter(project => project.scope === 'VOLUME')
   return volumes.map(volume => {
-    const label = getMangaVolumeLabel(volume)
+    const label = getMangaVolumeLabel(volume) ?? getMangaVolumeTitle(volume)
     const range = volume.chapters
       ? volume.chapters.first === volume.chapters.last
         ? `第 ${mangaChapterNumber(volume.chapters.first)} 话`

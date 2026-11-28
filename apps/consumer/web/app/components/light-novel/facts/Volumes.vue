@@ -11,10 +11,12 @@
   const props = defineProps<{ sets: LightNovelPageData['sets'] }>()
 
   const span = (set: VolumeSet) => {
-    const first = set.volumes.find(volume => volume.publication_date)?.publication_date
-    const last = set.volumes.findLast(volume => volume.publication_date)?.publication_date
+    const first = set.volumes.find(volume => volume.publication_date)
+    const last = set.volumes.findLast(volume => volume.publication_date)
     if (!first || !last) return ''
-    return first === last ? monthText(first) : `${monthText(first)}至 ${monthText(last)}`
+    const from = monthText(first.publication_date, first.publication_date_precision)
+    const to = monthText(last.publication_date, last.publication_date_precision)
+    return from === to ? from : `${from}至 ${to}`
   }
   const open = ref(false)
   const shownId = ref<number | null>(null)

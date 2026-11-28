@@ -45,7 +45,7 @@
       id: work.id,
       title: work.title,
       authors: work.authors,
-      period: work.date ? `${monthText(work.date)}起` : '日期不详',
+      period: work.date ? `${monthText(work.date, work.precision)}起` : '日期不详',
     })),
   )
 </script>
