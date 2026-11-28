@@ -10,9 +10,13 @@
   const pageRequest = spacePageBffPath(id, readSpaceRouteQuery(route.query))
 
   const { data } = await useHikariApiData<SpacePageData>(pageRequest, { fatal: true })
+  const { t } = useLocaleText()
 
   useHikariSeoMeta({
-    title: () => [`${displayName(data.value?.profile)}的个人空间`, '个人空间'],
+    title: () => [
+      t('space.page.title', { name: displayName(data.value?.profile, t('common.anonymous')) }),
+      t('space.page.defaultTitle'),
+    ],
     description: () => [data.value?.profile.signature, data.value?.profile.bio],
     card: { type: 'user', id },
     type: 'profile',

@@ -17,6 +17,7 @@
 
   const route = useRoute()
   const navItems = useHeaderNav()
+  const { t } = useLocaleText()
 
   const navIconMap = {
     gamepad: GamepadDirectional,
@@ -41,7 +42,7 @@
     align="center"
     :wrap="false"
     class="hidden lg:flex"
-    aria-label="主导航"
+    :aria-label="t('layout.nav.desktop')"
   >
     <Inline
       gap="xs"
@@ -64,7 +65,7 @@
           <template #icon>
             <component :is="navIconMap[item.icon]" aria-hidden="true" />
           </template>
-          {{ item.label }}
+          {{ t(item.label) }}
         </NavLink>
       </LayoutHeaderNavBadge>
 

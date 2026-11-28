@@ -11,6 +11,7 @@
     hint: string
     shape: 'circle' | 'banner'
     buttonLabel: string
+    cropTitle: string
   }>()
   const model = defineModel<MediaValue | null>({ required: true })
 
@@ -20,7 +21,6 @@
   const picked = ref<MediaValue | null>(null)
 
   const isCircle = computed(() => props.shape === 'circle')
-  const cropTitle = computed(() => (isCircle.value ? '裁剪头像' : '裁剪个人主页封面'))
   const aspectRatio = computed(() => (isCircle.value ? 1 : 6))
   const outputSize = computed(() =>
     isCircle.value ? { width: 512, height: 512 } : { width: 1920, height: 320 },

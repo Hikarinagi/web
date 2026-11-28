@@ -4,13 +4,30 @@ export enum TimeFormatEnum {
   YYYY_MM_DD_HH_MM_SS = 'yyyy-MM-dd HH:mm:ss',
   YYYY_MM_DD_HH_MM = 'yyyy-MM-dd HH:mm',
   YYYY_MM_DD = 'yyyy-MM-dd',
-  YYYY_M_D_CN = 'yyyy 年 M 月 d 日',
-  YYYY_M_DD_CN = 'yyyy年M月dd日',
   YYYY_MM = 'yyyy-MM',
   MM_DD_HH_MM = 'MM-dd HH:mm',
   MM_DD = 'MM-dd',
-  M_D_CN = 'M 月 d 日',
   HH_MM = 'HH:mm',
+}
+
+export function formatDate(
+  value: TimeValue,
+  preset: 'date' | 'monthDay',
+  options: { timeZone?: string } = {},
+): string {
+  const date = parseTimeValue(value)
+  if (!date) return ''
+  const { year, month, day } = options.timeZone
+    ? partsInTimeZone(date, options.timeZone)
+    : { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() }
+  return translate(`time.${preset}`, { year, month, day })
+}
+
+export function formatDatePart(
+  value: string | null | undefined,
+  preset: 'date' | 'monthDay',
+): string {
+  return value ? formatDate(value.slice(0, 10), preset) : ''
 }
 
 const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
@@ -84,16 +101,17 @@ export function timeFromNow(value: TimeValue) {
   if (!date) return ''
 
   const diffSeconds = Math.round((Date.now() - date.getTime()) / 1000)
-  if (diffSeconds < 60) return '刚刚'
+  if (diffSeconds < 60) return translate('time.justNow')
 
+  const relative = new Intl.RelativeTimeFormat(currentLocale(), { numeric: 'always' })
   const diffMinutes = Math.floor(diffSeconds / 60)
-  if (diffMinutes < 60) return `${diffMinutes}分钟前`
+  if (diffMinutes < 60) return relative.format(-diffMinutes, 'minute')
 
   const diffHours = Math.floor(diffMinutes / 60)
-  if (diffHours < 24) return `${diffHours}小时前`
+  if (diffHours < 24) return relative.format(-diffHours, 'hour')
 
   const diffDays = Math.floor(diffHours / 24)
-  if (diffDays < 30) return `${diffDays}天前`
+  if (diffDays < 30) return relative.format(-diffDays, 'day')
 
   return timeFormat(date, TimeFormatEnum.YYYY_MM_DD)
 }

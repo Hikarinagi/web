@@ -9,11 +9,14 @@ export function normalizeToken(raw: string) {
 
 export const playgroundTokenSchema = v.object({
   token: v.pipe(
-    v.string('请粘贴 access token'),
-    v.check(value => normalizeToken(value).length > 0, '请粘贴 access token'),
+    v.string(issueMessage('validation.developer.tokenRequired')),
+    v.check(
+      value => normalizeToken(value).length > 0,
+      issueMessage('validation.developer.tokenRequired'),
+    ),
     v.check(
       value => HEADER_SAFE.test(normalizeToken(value)),
-      '令牌含有无法放进请求头的字符，请重新复制',
+      issueMessage('validation.developer.tokenCharset'),
     ),
   ),
 })

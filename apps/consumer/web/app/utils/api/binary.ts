@@ -1,3 +1,4 @@
+import { translate } from '~/utils/i18n'
 import { normalizeApiError } from './error'
 import { unwrapApiResponse } from './response'
 
@@ -17,7 +18,7 @@ export async function readApiBinary(
       throw normalizeApiError({ statusCode: response.status, data: body })
     }
     unwrapApiResponse(body)
-    throw new Error('文件响应格式不正确')
+    throw new Error(translate('error.badFile'))
   }
   if (response.status >= 400 || !stream) {
     await stream?.cancel().catch(() => {})

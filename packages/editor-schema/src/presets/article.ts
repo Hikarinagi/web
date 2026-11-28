@@ -45,6 +45,7 @@ const ARTICLE_NODES = [
   'galgame_rate_card',
   'light_novel_rate_card',
   'manga_rate_card',
+  'lottery_card',
 ]
 
 const ARTICLE_MARKS = ['bold', 'italic', 'strike', 'code', 'link', 'text_style', 'spoiler']
@@ -72,6 +73,7 @@ const ARTICLE_TOP_LEVEL_NODES = [
   'galgame_rate_card',
   'light_novel_rate_card',
   'manga_rate_card',
+  'lottery_card',
 ]
 
 export const ARTICLE_PRESET: PresetDefinition = {

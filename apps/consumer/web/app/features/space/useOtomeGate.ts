@@ -17,7 +17,7 @@ export function useOtomeGate(initial: boolean) {
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
       current.value = value
-      toast.success('已更新内容偏好')
+      toast.success(translate('setting.otome.saved'))
     } catch {
       enabled.value = current.value
     } finally {

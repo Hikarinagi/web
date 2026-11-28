@@ -18,6 +18,7 @@ export const ENTITY_CARD_TYPES = [
   'galgame_rate',
   'light_novel_rate',
   'manga_rate',
+  'lottery',
 ] as const
 
 export type EntityCardType = (typeof ENTITY_CARD_TYPES)[number]

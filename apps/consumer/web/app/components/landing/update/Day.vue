@@ -3,20 +3,25 @@
   import { BookOpen } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
-  import { chapterLabel, timeLabel } from '~/features/landing/labels'
+  import { chapterLabel } from '~/features/landing/labels'
   import { mangaWork } from '~/features/landing/works'
 
   type UpdateDay = ApiData<'/api/v3/landing/mangas', 'get'>['days'][number]
 
   defineOptions({ name: 'LandingUpdateDay' })
   const props = defineProps<{ day: UpdateDay; size: number }>()
+  const { t, d } = useLocaleText()
 
   const entries = computed(() =>
     props.day.items.map(item => ({
       item,
       work: mangaWork(item),
       chapter: chapterLabel(item.chapter),
-      time: item.chapter ? `${timeLabel(item.chapter.at)} 更新` : '',
+      time: item.chapter
+        ? t('landing.update.time', {
+            time: d(new Date(item.chapter.at), { key: 'time', timeZone: 'Asia/Shanghai' }),
+          })
+        : '',
     })),
   )
   const lead = computed(() => entries.value[0])
@@ -25,7 +30,7 @@
 </script>
 
 <template>
-  <Empty v-if="!lead" title="这一天没有更新" class="min-h-(--landing-feature-height)" />
+  <Empty v-if="!lead" :title="t('landing.update.empty')" class="min-h-(--landing-feature-height)" />
   <Grid v-else gap="lg" class="lg:grid-cols-12 lg:gap-x-6">
     <Stack gap="none" class="min-w-0 lg:relative lg:col-span-3">
       <Stack gap="md" class="min-w-0 flex-row lg:absolute lg:inset-0 lg:flex-col">
@@ -75,7 +80,7 @@
             class="self-start"
           >
             <template #icon><BookOpen /></template>
-            阅读{{ lead.chapter }}
+            {{ t('landing.update.read', { chapter: lead.chapter }) }}
           </Button>
         </Stack>
       </Stack>

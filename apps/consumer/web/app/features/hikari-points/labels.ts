@@ -22,6 +22,9 @@ export const POINT_REASON_LABELS: Record<PointRecord['reason'], string> = {
   TRANSLATION_ADD: '共建定稿',
   EPUB_ADD: '上传 EPUB',
   FIRST_TIME_ADD: '首次奖励',
+  get LOTTERY_ADD() {
+    return translate('lottery.pointsReason')
+  },
 }
 
 export function reasonLabel(reason: string): string {

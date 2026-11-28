@@ -40,6 +40,7 @@ const POST_NODES = [
   'galgame_rate_card',
   'light_novel_rate_card',
   'manga_rate_card',
+  'lottery_card',
 ]
 
 const POST_MARKS = ['bold', 'italic', 'strike', 'code', 'link', 'text_style', 'spoiler']
@@ -66,6 +67,7 @@ const POST_TOP_LEVEL_NODES = [
   'galgame_rate_card',
   'light_novel_rate_card',
   'manga_rate_card',
+  'lottery_card',
 ]
 
 export const POST_PRESET: PresetDefinition = {

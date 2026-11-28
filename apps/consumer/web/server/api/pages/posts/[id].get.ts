@@ -10,7 +10,7 @@ async function handler(event: H3Event) {
   const post = await fetchBackendData(event, '/api/v3/posts/{id}', { path: { id } })
   const authorId = post.creator?.id ?? null
 
-  const [author, sidebar, comments, favorite] = await Promise.all([
+  const [author, sidebar, comments, favorite, lottery] = await Promise.all([
     authorId
       ? fetchBackendData(event, '/api/v3/user/{id}', { path: { id: authorId } }).catch(() => null)
       : null,
@@ -28,9 +28,10 @@ async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/user/me/favorite/posts/{post_id}', {
       path: { post_id: id },
     }).catch(() => null),
+    fetchBackendData(event, '/api/v3/posts/{id}/lottery', { path: { id } }).catch(() => null),
   ])
 
-  return { post, author, sidebar, comments, favorite }
+  return { post, author, sidebar, comments, favorite, lottery }
 }
 
 export type PostPageData = Awaited<ReturnType<typeof handler>>

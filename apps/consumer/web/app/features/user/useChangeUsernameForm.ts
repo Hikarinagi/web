@@ -18,7 +18,7 @@ export function useChangeUsernameForm(onSuccess: () => void) {
         { method: 'PATCH', body: { username: values.username.trim() } },
       )
       auth.setUser(updated)
-      toast.success('用户名已修改')
+      toast.success(translate('setting.username.saved'))
       onSuccess()
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))

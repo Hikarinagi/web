@@ -4,19 +4,22 @@ const CHAPTER_TYPES = ['SERIALIZATION', 'EXTRA', 'ONESHOT'] as const
 const CHAPTER_NUMBER = /^\d+(\.\d+)?$/
 
 const chapterNumberField = v.pipe(
-  v.nullish(v.string('话数应为文本'), ''),
+  v.nullish(v.string(issueMessage('validation.workbench.manga.chapterNumberType')), ''),
   v.trim(),
-  v.maxLength(20, '话数不能超过 20 个字符'),
-  v.check(value => !value || CHAPTER_NUMBER.test(value), '话数只填数字，例如 12 或 12.5'),
+  v.maxLength(20, issueMessage('validation.workbench.manga.chapterNumberMax')),
+  v.check(
+    value => !value || CHAPTER_NUMBER.test(value),
+    issueMessage('validation.workbench.manga.chapterNumberFormat'),
+  ),
 )
 
 const chapterNameField = v.pipe(
-  v.nullish(v.string('标题应为文本'), ''),
+  v.nullish(v.string(issueMessage('validation.workbench.manga.chapterNameType')), ''),
   v.trim(),
-  v.maxLength(200, '标题不能超过 200 个字符'),
+  v.maxLength(200, issueMessage('validation.workbench.manga.chapterNameMax')),
 )
 
-const volumeIdField = v.nullish(v.number('单行本应为数字'))
+const volumeIdField = v.nullish(v.number(issueMessage('validation.workbench.manga.volumeType')))
 
 function serialNeedsNumber(input: { chapter_type?: string; chapter_number?: string | null }) {
   return input.chapter_type !== 'SERIALIZATION' || !!input.chapter_number?.trim()
@@ -27,23 +30,26 @@ function extraNeedsName(input: { chapter_type?: string; chapter_name?: string | 
 }
 
 const hintField = v.pipe(
-  v.nullish(v.string('卷号或话号应为文本'), ''),
+  v.nullish(v.string(issueMessage('validation.workbench.manga.hintType')), ''),
   v.trim(),
-  v.maxLength(40, '卷号或话号不能超过 40 个字符'),
+  v.maxLength(40, issueMessage('validation.workbench.manga.hintMax')),
 )
 
 export const createMangaProjectSchema = v.pipe(
   v.object({
-    mode: v.picklist(['UPLOAD', 'TRANSLATION'], '请选择投稿类型'),
+    mode: v.picklist(['UPLOAD', 'TRANSLATION'], issueMessage('validation.workbench.modeRequired')),
     hint: hintField,
-    source_lang: v.pipe(v.string('请选择原文语言'), v.nonEmpty('请选择原文语言')),
-    target_lang: v.nullish(v.string('译文语言应为文本'), ''),
+    source_lang: v.pipe(
+      v.string(issueMessage('validation.workbench.sourceLangRequired')),
+      v.nonEmpty(issueMessage('validation.workbench.sourceLangRequired')),
+    ),
+    target_lang: v.nullish(v.string(issueMessage('validation.workbench.targetLangType')), ''),
   }),
   v.forward(
     v.partialCheck(
       [['mode'], ['target_lang']],
       input => input.mode !== 'TRANSLATION' || !!input.target_lang,
-      '请选择译文语言',
+      issueMessage('validation.workbench.targetLangRequired'),
     ),
     ['target_lang'],
   ),
@@ -51,7 +57,7 @@ export const createMangaProjectSchema = v.pipe(
     v.partialCheck(
       [['mode'], ['source_lang'], ['target_lang']],
       input => input.mode !== 'TRANSLATION' || input.source_lang !== input.target_lang,
-      '译文语言不能与原文语言相同',
+      issueMessage('validation.workbench.targetLangSame'),
     ),
     ['target_lang'],
   ),
@@ -65,25 +71,37 @@ export type MangaHintValues = v.InferOutput<typeof mangaHintSchema>
 
 export const mangaChapterInfoSchema = v.pipe(
   v.object({
-    chapter_type: v.picklist(CHAPTER_TYPES, '请选择类型'),
+    chapter_type: v.picklist(
+      CHAPTER_TYPES,
+      issueMessage('validation.workbench.manga.chapterTypeRequired'),
+    ),
     chapter_number: chapterNumberField,
     chapter_name: chapterNameField,
     volume_id: volumeIdField,
   }),
   v.forward(
-    v.partialCheck([['chapter_type'], ['chapter_number']], serialNeedsNumber, '请填写话数'),
+    v.partialCheck(
+      [['chapter_type'], ['chapter_number']],
+      serialNeedsNumber,
+      issueMessage('validation.workbench.manga.chapterNumberRequired'),
+    ),
     ['chapter_number'],
   ),
-  v.forward(v.partialCheck([['chapter_type'], ['chapter_name']], extraNeedsName, '请填写标题'), [
-    'chapter_name',
-  ]),
+  v.forward(
+    v.partialCheck(
+      [['chapter_type'], ['chapter_name']],
+      extraNeedsName,
+      issueMessage('validation.workbench.manga.chapterNameRequired'),
+    ),
+    ['chapter_name'],
+  ),
 )
 
 export const mangaVolumeInfoSchema = v.object({
-  chapter_type: v.optional(v.string('类型应为文本')),
+  chapter_type: v.optional(v.string(issueMessage('validation.workbench.manga.chapterTypeType'))),
   chapter_number: chapterNumberField,
   chapter_name: chapterNameField,
-  volume_id: v.number('请选择单行本'),
+  volume_id: v.number(issueMessage('validation.workbench.manga.volumeRequired')),
 })
 
 export type MangaChapterInfoValues = v.InferOutput<typeof mangaChapterInfoSchema>
@@ -91,20 +109,23 @@ export type MangaChapterInfoValues = v.InferOutput<typeof mangaChapterInfoSchema
 export const importLabelPlusSchema = v.object({
   file: v.custom<File | null>(
     value => typeof File !== 'undefined' && value instanceof File,
-    '请选择要导入的翻译稿',
+    issueMessage('validation.workbench.manga.importFileRequired'),
   ),
-  target: v.picklist(['source', 'translation'], '请选择导入为原文还是译文'),
-  replace: v.boolean('清空重导应为开关'),
+  target: v.picklist(
+    ['source', 'translation'],
+    issueMessage('validation.workbench.manga.importTargetRequired'),
+  ),
+  replace: v.boolean(issueMessage('validation.workbench.manga.importReplaceType')),
 })
 
 export type ImportLabelPlusValues = v.InferOutput<typeof importLabelPlusSchema>
 
 export const mangaNoteSchema = v.object({
   content: v.pipe(
-    v.string('请输入批注'),
+    v.string(issueMessage('validation.workbench.manga.noteRequired')),
     v.trim(),
-    v.nonEmpty('请输入批注'),
-    v.maxLength(1000, '批注不能超过 1000 个字符'),
+    v.nonEmpty(issueMessage('validation.workbench.manga.noteRequired')),
+    v.maxLength(1000, issueMessage('validation.workbench.manga.noteMax')),
   ),
 })
 

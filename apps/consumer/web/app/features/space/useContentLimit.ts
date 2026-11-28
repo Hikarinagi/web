@@ -30,7 +30,7 @@ export function useContentLimit(initial: ContentLimits) {
       const user = await hikariRequest('/api/v3/user/me', { toast: false })
       auth.setUser(user)
       current.value = next
-      toast.success('已更新图片显示设置')
+      toast.success(translate('setting.contentLimit.saved'))
     } catch {
       selected.value = current.value
     } finally {

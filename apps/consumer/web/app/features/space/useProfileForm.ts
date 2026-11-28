@@ -52,7 +52,7 @@ export function useProfileForm(user: CurrentUser) {
         },
       })
       auth.setUser(updated)
-      toast.success('资料已更新')
+      toast.success(translate('setting.profile.saved'))
     } catch (error) {
       form.value?.setErrors(getFieldErrors(error))
     } finally {

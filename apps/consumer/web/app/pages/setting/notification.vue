@@ -2,7 +2,6 @@
   import { Stack } from '@hina-ui/vue'
 
   defineOptions({ name: 'PageSpaceSettingNotification' })
-  definePageMeta({ title: '消息提醒' })
 
   const { data } = await useHikariApiData('/api/pages/setting/notification', { fatal: true })
 </script>

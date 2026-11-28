@@ -19,6 +19,7 @@ export type MangaRateCardSummary = Schemas['MangaRateCardSummaryResDto']
 export type MentionUserSummary = Schemas['MentionUserSummaryResDto']
 export type CommentCardSummary = Schemas['CommentCardSummaryResDto']
 export type PollCardSummary = Schemas['PollResDto']
+export type LotteryCardSummary = Schemas['LotteryDto']
 
 interface SummaryIndex {
   galgames: Map<number, GalgameCardSummary>
@@ -36,6 +37,7 @@ interface SummaryIndex {
   mention_users: Map<number, MentionUserSummary>
   comments: Map<number, CommentCardSummary>
   polls: Map<string, PollCardSummary>
+  lotteries: Map<number, LotteryCardSummary>
 }
 
 const EMPTY_INDEX: SummaryIndex = {
@@ -54,6 +56,7 @@ const EMPTY_INDEX: SummaryIndex = {
   mention_users: new Map(),
   comments: new Map(),
   polls: new Map(),
+  lotteries: new Map(),
 }
 
 export const HIKARI_CONTENT_SUMMARIES_KEY: InjectionKey<ComputedRef<SummaryIndex>> = Symbol(
@@ -80,6 +83,7 @@ export function provideContentSummaries(source: () => EntitySummaries | null | u
       mention_users: byId(s.mention_users),
       comments: byId(s.comments),
       polls: new Map((s.polls ?? []).map(p => [p.poll_key, p])),
+      lotteries: byId(s.lotteries),
     }
   })
   provide(HIKARI_CONTENT_SUMMARIES_KEY, indexed)

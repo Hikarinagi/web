@@ -2,11 +2,14 @@ import * as v from 'valibot'
 import { EPUB_REPORT_REASON_VALUES } from '../epub-report'
 
 const baseEpubReportSchema = v.object({
-  reason: v.picklist(EPUB_REPORT_REASON_VALUES, '请选择问题类型'),
+  reason: v.picklist(
+    EPUB_REPORT_REASON_VALUES,
+    issueMessage('validation.lightNovelVolume.reasonRequired'),
+  ),
   description: v.pipe(
-    v.nullish(v.string('补充说明应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.lightNovelVolume.descriptionType')), ''),
     v.trim(),
-    v.maxLength(500, '补充说明不能超过 500 个字符'),
+    v.maxLength(500, issueMessage('validation.lightNovelVolume.descriptionMax')),
   ),
 })
 
@@ -15,7 +18,7 @@ export const epubReportSchema = v.pipe(
   v.forward(
     v.check(
       values => values.reason !== 'OTHER' || values.description.length > 0,
-      '选择「其他」时请填写补充说明',
+      issueMessage('validation.lightNovelVolume.descriptionRequired'),
     ),
     ['description'],
   ),

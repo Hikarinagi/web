@@ -7,6 +7,7 @@
 
   const { visible, item, close } = useNotificationDrawer()
   const narrow = useNarrow()
+  const { t } = useLocaleText()
 
   const detail = ref<SystemMessageDetail | null>(null)
   const loading = ref(false)
@@ -33,14 +34,19 @@
 </script>
 
 <template>
-  <Sheet v-if="narrow" v-model:open="visible" title="通知详情" class="h-[82dvh]">
+  <Sheet
+    v-if="narrow"
+    v-model:open="visible"
+    :title="t('inbox.detailTitle')"
+    class="h-notification-sheet"
+  >
     <template v-if="item" #title><NotificationsDetailTitle :item="item" /></template>
     <template #content>
       <NotificationsDetailBody :item="item" :detail="detail" :loading="loading" @navigate="close" />
     </template>
   </Sheet>
 
-  <Drawer v-else v-model:open="visible" side="end" size="lg" title="通知详情">
+  <Drawer v-else v-model:open="visible" side="end" size="lg" :title="t('inbox.detailTitle')">
     <template v-if="item" #title><NotificationsDetailTitle :item="item" /></template>
     <template #content>
       <NotificationsDetailBody :item="item" :detail="detail" :loading="loading" @navigate="close" />

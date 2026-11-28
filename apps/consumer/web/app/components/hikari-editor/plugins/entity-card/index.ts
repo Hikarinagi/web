@@ -7,6 +7,7 @@ import {
   LightNovelCardExtension,
   LightNovelRateCardExtension,
   LightNovelVolumeCardExtension,
+  LotteryCardExtension,
   MangaCardExtension,
   MangaRateCardExtension,
   PersonCardExtension,
@@ -40,12 +41,15 @@ const ENTITY_CARD_EXTENSIONS = [
   GalgameRateCardExtension.extend(NODE_VIEW),
   LightNovelRateCardExtension.extend(NODE_VIEW),
   MangaRateCardExtension.extend(NODE_VIEW),
+  LotteryCardExtension.extend(NODE_VIEW),
 ]
 
 const dropdownItems: ToolbarDropdownItem[] = ENTITY_CARD_TYPES.map(type => ({
   id: type,
   icon: ENTITY_CARD_META[type].icon,
-  label: ENTITY_CARD_META[type].label,
+  get label() {
+    return ENTITY_CARD_META[type].label
+  },
   onClick: (editor, ctx, trigger) => {
     if (entityCardsFull(editor, ctx.entityCardLimit)) return
     ctx.openOverlay('entity-card', trigger, {

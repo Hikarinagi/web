@@ -17,6 +17,7 @@
 
   const route = useRoute()
   const navItems = useHeaderNav()
+  const { t } = useLocaleText()
 
   const navIconMap = {
     gamepad: GamepadDirectional,
@@ -41,9 +42,15 @@
 </script>
 
 <template>
-  <Drawer v-model:open="open" title="菜单" side="start" size="sm" :header="false">
+  <Drawer
+    v-model:open="open"
+    :title="t('layout.header.menu')"
+    side="start"
+    size="sm"
+    :header="false"
+  >
     <template #content>
-      <Stack as="nav" gap="xs" aria-label="移动端菜单">
+      <Stack as="nav" gap="xs" :aria-label="t('layout.header.mobileMenu')">
         <NavLink
           v-for="item in navItems"
           :key="item.to"
@@ -55,9 +62,9 @@
           <template #icon>
             <component :is="navIconMap[item.icon]" aria-hidden="true" />
           </template>
-          {{ item.label }}
+          {{ t(item.label) }}
           <Tag v-if="item.badge" size="sm" :tone="item.badge.tone ?? 'accent'" class="ms-1.5">
-            {{ item.badge.label }}
+            {{ t(item.badge.label) }}
           </Tag>
         </NavLink>
 

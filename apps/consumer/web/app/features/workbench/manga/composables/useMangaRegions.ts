@@ -1,5 +1,5 @@
 import { toast } from '@hina-ui/vue'
-import { isApiError } from '~/utils/api/error'
+import { apiErrorMessage, isApiError } from '~/utils/api/error'
 import { sortKeyBetween, type Point } from '../geometry'
 import type { BackendMangaRegion, MangaRegionChange } from '../manga'
 
@@ -166,14 +166,14 @@ export function useMangaRegions(projectId: () => number, initial: BackendMangaRe
       return true
     } catch (error) {
       if (isApiError(error) && error.code === 'MANGA_TEXT_REGION_CONFLICT') {
-        toast.warning('此页面上的文本框已被另一位成员更改。最新内容已加载。')
+        toast.warning(translate('workbench.manga.regionConflict'))
         await reload(pageId, true)
       } else if (isApiError(error) && error.code === 'MANGA_TEXT_REGION_LOCKED') {
-        if (!locked.has(pageId)) toast.warning('其他成员正在编辑某些文本框。请稍后保存。')
+        if (!locked.has(pageId)) toast.warning(translate('workbench.manga.regionLocked'))
         locked.add(pageId)
         setTimeout(() => void flush(), LOCK_RETRY_MS)
       } else {
-        toast.danger(isApiError(error) ? error.message : '保存失败。请稍后重试。')
+        toast.danger(isApiError(error) ? apiErrorMessage(error) : translate('error.saveFailed'))
       }
       return false
     }
@@ -282,7 +282,7 @@ export function useMangaRegions(projectId: () => number, initial: BackendMangaRe
   onBeforeRouteLeave(async () => {
     if ((await save()) || !dirty.value || warned) return true
     warned = true
-    toast.warning('某些更改尚未保存。再次离开以丢弃它们。')
+    toast.warning(translate('workbench.manga.unsavedLeave'))
     return false
   })
   onBeforeUnmount(() => {

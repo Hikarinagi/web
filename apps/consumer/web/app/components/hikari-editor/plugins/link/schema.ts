@@ -4,12 +4,12 @@ const URL_PATTERN = /^(https?:\/\/|\/)/i
 
 export const linkSchema = v.object({
   url: v.pipe(
-    v.string('URL 应为文本'),
+    v.string(issueMessage('validation.editor.link.urlType')),
     v.trim(),
-    v.nonEmpty('请输入链接 URL'),
-    v.check(value => URL_PATTERN.test(value), '链接需以 http(s):// 或 / 开头'),
+    v.nonEmpty(issueMessage('validation.editor.link.urlRequired')),
+    v.check(value => URL_PATTERN.test(value), issueMessage('validation.editor.link.urlFormat')),
   ),
-  text: v.pipe(v.nullish(v.string('显示文字应为文本'), ''), v.trim()),
+  text: v.pipe(v.nullish(v.string(issueMessage('validation.editor.link.textType')), ''), v.trim()),
 })
 
 export type LinkValues = v.InferOutput<typeof linkSchema>

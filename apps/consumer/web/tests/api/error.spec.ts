@@ -2,9 +2,11 @@ import { describe, expect, it, vi } from 'vitest'
 import { toast } from '@hina-ui/vue'
 import {
   abortErrorOf,
+  apiErrorMessage,
   isAbortError,
   isMaintenanceError,
   normalizeApiError,
+  pageErrorMessage,
   showApiErrorToast,
 } from '../../app/utils/api/error'
 
@@ -22,6 +24,17 @@ describe('showApiErrorToast', () => {
 
     expect(danger).toHaveBeenCalledTimes(1)
     expect(danger).toHaveBeenCalledWith('服务暂时不可用，请稍后重试', { description: undefined })
+    danger.mockRestore()
+  })
+
+  it('shows the reason a failure outside the contract carries, and the generic line only without one', () => {
+    const danger = vi.spyOn(toast, 'danger').mockImplementation(() => '' as never)
+
+    showApiErrorToast(normalizeApiError(new Error('文件内容无法识别')))
+    showApiErrorToast(normalizeApiError({}))
+
+    expect(danger).toHaveBeenNthCalledWith(1, '文件内容无法识别', { description: undefined })
+    expect(danger).toHaveBeenNthCalledWith(2, '请求失败', { description: undefined })
     danger.mockRestore()
   })
 })
@@ -54,14 +67,10 @@ describe('normalizeApiError', () => {
       data: '<html>Bad Gateway</html>',
     })
 
-    expect(normalizeApiError(challenge)).toMatchObject({
-      status: 403,
-      message: '需要完成安全验证，请刷新页面',
-    })
-    expect(normalizeApiError(gateway)).toMatchObject({
-      status: 502,
-      message: '服务暂时不可用，请稍后重试',
-    })
+    expect(normalizeApiError(challenge)).toMatchObject({ status: 403, fallback: 'challenge' })
+    expect(apiErrorMessage(normalizeApiError(challenge))).toBe('需要完成安全验证，请刷新页面')
+    expect(normalizeApiError(gateway)).toMatchObject({ status: 502, fallback: 'network' })
+    expect(apiErrorMessage(normalizeApiError(gateway))).toBe('服务暂时不可用，请稍后重试')
   })
 
   it('still surfaces the message for a code the frontend does not recognize', () => {
@@ -100,6 +109,55 @@ describe('normalizeApiError', () => {
     })
     expect(isMaintenanceError(err)).toBe(true)
     expect(isMaintenanceError(normalizeApiError(fetchError(500, {})))).toBe(false)
+  })
+})
+
+describe('apiErrorMessage', () => {
+  it('shows the language pack text when the backend sent the default message for the code', () => {
+    const err = normalizeApiError(
+      fetchError(403, {
+        success: false,
+        error: { code: 'AUTH_FORBIDDEN', message: '没有权限执行该操作' },
+        request_id: 'r3',
+      }),
+    )
+    expect(apiErrorMessage(err)).toBe('没有权限执行该操作')
+  })
+
+  it('keeps a message the backend wrote for this one case', () => {
+    const err = normalizeApiError(
+      fetchError(400, {
+        success: false,
+        error: { code: 'COMMON_BAD_REQUEST', message: '高一档的处理不能比低一档宽松' },
+        request_id: 'r4',
+      }),
+    )
+    expect(apiErrorMessage(err)).toBe('高一档的处理不能比低一档宽松')
+  })
+
+  it('falls back to the language pack when the backend sent no message', () => {
+    const err = normalizeApiError(
+      fetchError(429, {
+        success: false,
+        error: { code: 'COMMON_RATE_LIMITED', message: '' },
+        request_id: 'r5',
+      }),
+    )
+    expect(apiErrorMessage(err)).toBe('请求过于频繁')
+  })
+
+  it('reads the same message back from a page error', () => {
+    expect(
+      pageErrorMessage({
+        data: { code: 'COMMON_SERVICE_UNAVAILABLE', message: '', fallback: 'network' },
+      }),
+    ).toBe('服务暂时不可用，请稍后重试')
+    expect(
+      pageErrorMessage({
+        data: { code: 'COMMON_UNEXPECTED_ERROR', message: '分片校验失败', fallback: 'unexpected' },
+      }),
+    ).toBe('分片校验失败')
+    expect(pageErrorMessage({ data: { message: '没有业务码' } })).toBe('')
   })
 })
 

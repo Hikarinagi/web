@@ -24,6 +24,7 @@
   const auth = useAuthStore()
   const { open: openLogout } = useLogout()
   const theme = useThemeMode()
+  const { t } = useLocaleText()
 
   const user = computed(() => auth.user)
   const roleLabel = computed(() => getUserRoleLabel(user.value?.role))
@@ -31,13 +32,19 @@
 </script>
 
 <template>
-  <DropdownMenu v-if="user" label="账号菜单" align="start" side="top" class="w-48">
+  <DropdownMenu
+    v-if="user"
+    :label="t('layout.header.userMenu')"
+    align="start"
+    side="top"
+    class="w-48"
+  >
     <Card
       v-tooltip="rail ? { content: displayName(user), side: 'right' } : null"
       as="button"
       type="button"
       :padded="false"
-      :aria-label="`${displayName(user)} 的账号菜单`"
+      :aria-label="t('layout.header.openUserMenu', { name: displayName(user) })"
       :class="
         cn(
           'hn-state-layer block w-full hn-interactive overflow-visible text-start hn-press-none',
@@ -62,31 +69,31 @@
     <template #content>
       <DropdownMenuItem @select="navigateTo(`/space/${user?.id}`)">
         <template #icon><UserRound /></template>
-        个人空间
+        {{ t('layout.userMenu.space') }}
       </DropdownMenuItem>
       <DropdownMenuItem @select="navigateTo('/setting')">
         <template #icon><Settings /></template>
-        账号设置
+        {{ t('layout.userMenu.account') }}
       </DropdownMenuItem>
-      <DropdownMenuSub label="主题">
+      <DropdownMenuSub :label="t('layout.userMenu.theme')">
         <template #icon><component :is="theme.current.value.icon" /></template>
         <DropdownMenuRadioGroup
           :model-value="theme.current.value.value"
           @update:model-value="theme.set"
         >
           <DropdownMenuRadioItem v-for="mode in theme.modes" :key="mode.value" :value="mode.value">
-            {{ mode.label }}
+            {{ t(mode.label) }}
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuSub>
       <DropdownMenuSeparator />
       <DropdownMenuItem @select="navigateTo('/')">
         <template #icon><House /></template>
-        返回首页
+        {{ t('common.home') }}
       </DropdownMenuItem>
       <DropdownMenuItem tone="danger" @select="openLogout">
         <template #icon><LogOut /></template>
-        退出登录
+        {{ t('layout.userMenu.logout') }}
       </DropdownMenuItem>
     </template>
   </DropdownMenu>

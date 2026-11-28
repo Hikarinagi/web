@@ -4,7 +4,6 @@
   import { workPath } from '#shared/utils/work'
   import {
     RATE_DIMENSION_LABELS,
-    rateDateLine,
     rateStatusLabel,
     type SpaceRateItem,
   } from '~/features/space/space'
@@ -14,7 +13,21 @@
   const props = defineProps<{ item: SpaceRateItem; isSelf: boolean; busy?: boolean }>()
   const emit = defineEmits<{ edit: [SpaceRateItem] }>()
 
+  const { t } = useLocaleText()
+
   const statusLabel = computed(() => rateStatusLabel(props.item.work_type, props.item.status))
+  const dateLine = computed(() => {
+    const at = props.item.last_activity_at
+    const sameYear = Number(at.slice(0, 4)) === new Date().getFullYear()
+    const date = formatDatePart(at, sameYear ? 'monthDay' : 'date')
+    if (props.item.status === 'COMPLETED') {
+      return t('space.rate.completedOn', { status: statusLabel.value ?? '', date })
+    }
+    if (statusLabel.value) {
+      return t('space.rate.updatedWithStatus', { status: statusLabel.value, date })
+    }
+    return t('space.rate.updated', { date })
+  })
   const dimensions = computed(() =>
     props.item.dimensions.map(d => ({
       label: RATE_DIMENSION_LABELS[d.key] ?? d.key,
@@ -50,7 +63,7 @@
           </template>
           <IconButton
             v-if="isSelf"
-            label="编辑标记"
+            :label="t('space.rate.edit')"
             size="sm"
             pill
             :loading="busy"
@@ -66,7 +79,7 @@
         “{{ item.rate_content }}”
       </Text>
 
-      <Text size="xs" tone="muted">{{ rateDateLine(item) }}</Text>
+      <Text size="xs" tone="muted">{{ dateLine }}</Text>
     </Stack>
   </NuxtLink>
 </template>

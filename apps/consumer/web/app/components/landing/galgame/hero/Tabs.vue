@@ -20,7 +20,7 @@
     props.items.map(item => ({
       item,
       title: item.work ? galgameWork(item.work).title : (item.title ?? ''),
-      shot: item.banner,
+      shot: item.banner ?? item.wall[0] ?? null,
     })),
   )
   const shotProcessing = { width: 240, quality: 82, fit: 'cover' } as const

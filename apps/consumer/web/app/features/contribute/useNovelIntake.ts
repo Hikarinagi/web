@@ -1,6 +1,6 @@
 import type { components } from '@hikarinagi/api-contract/v3'
 import { promiseTimeout } from '@vueuse/core'
-import { isApiError } from '~/utils/api/error'
+import { apiErrorMessage, isApiError } from '~/utils/api/error'
 import { isTerminalStatus, type EpubReview } from '~/features/light-novel-volume/epub-correction'
 import { readEpubMeta } from './epub-meta'
 
@@ -68,7 +68,7 @@ export function useNovelIntake() {
         patch(key, {
           stage: 'ready',
           verdict: 'unknown',
-          error: '自动识别暂不可用，请手动选择对应的卷。',
+          error: translate('contribute.intake.identifyUnavailable'),
         })
       }
       return
@@ -145,7 +145,7 @@ export function useNovelIntake() {
         }
         patch(item.key, {
           stage: 'failed',
-          error: isApiError(error) ? error.message : '上传失败，请稍后重试。',
+          error: isApiError(error) ? apiErrorMessage(error) : translate('error.uploadFailed'),
         })
         return
       }

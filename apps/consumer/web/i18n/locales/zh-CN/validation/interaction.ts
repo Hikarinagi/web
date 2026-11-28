@@ -1,0 +1,16 @@
+export default {
+  questionType: '问题应为文本',
+  questionRequired: '请填写问题',
+  questionMax: '问题最多 {requirement} 个字',
+  optionType: '选项应为文本',
+  optionMax: '选项最多 {requirement} 个字',
+  optionsType: '选项应为列表',
+  optionsMin: '至少填写两个选项',
+  allowMultipleType: '允许多选应为布尔值',
+  maxChoicesType: '最多可选应为数字',
+  maxChoicesInteger: '最多可选必须是整数',
+  maxChoicesMin: '最多可选不能少于 {requirement}',
+  publicType: '公开投票人应为布尔值',
+  allowChangeType: '允许修改投票应为布尔值',
+  closesAtType: '截止时间应为文本',
+}

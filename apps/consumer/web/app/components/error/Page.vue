@@ -5,6 +5,7 @@
   import { isRecord } from '#shared/utils/record'
   import page404Image from '~/assets/images/404/shion-page-404.webp'
   import pageErrorImage from '~/assets/images/error/shion-page-error.webp'
+  import { pageErrorMessage } from '~/utils/api/error'
   import { cn } from '~/utils/cn'
 
   const props = withDefaults(
@@ -19,23 +20,25 @@
     },
   )
 
+  const { t } = useLocaleText()
+
   const statusCode = computed(() => {
     const error = props.error as NuxtError
     return error.status ?? 500
   })
   const isNotFound = computed(() => statusCode.value === 404)
-  const title = computed(() => (isNotFound.value ? '什么都没有...' : '页面加载失败'))
+  const title = computed(() =>
+    isNotFound.value ? t('error.page.notFoundTitle') : t('error.page.failedTitle'),
+  )
   const description = computed(() =>
-    isNotFound.value
-      ? '这个地址没有匹配到可用页面，可能已经移动或被删除。'
-      : '当前页面遇到未处理错误，可以重新加载或返回首页。',
+    isNotFound.value ? t('error.page.notFoundDescription') : t('error.page.failedDescription'),
   )
   const image = computed(() => (isNotFound.value ? page404Image : pageErrorImage))
   const detail = computed(() => {
     const error = props.error as NuxtError
-    const raw = getMessage(error) || error.statusText || error.message || ''
-    const normalized = String(raw).trim()
-    return normalized
+    const raw =
+      pageErrorMessage(error) || getMessage(error) || error.statusText || error.message || ''
+    return String(raw).trim()
   })
   const requestId = computed(() => {
     const data = (props.error as NuxtError).data
@@ -89,7 +92,9 @@
       </Text>
 
       <Inline v-if="requestId" gap="sm" align="center" :wrap="false" class="mt-4 max-w-lg">
-        <Text as="span" size="xs" tone="muted" class="shrink-0">Request ID</Text>
+        <Text as="span" size="xs" tone="muted" class="shrink-0">
+          {{ t('error.page.requestId') }}
+        </Text>
         <Code class="truncate text-xs">{{ requestId }}</Code>
       </Inline>
 
@@ -108,13 +113,13 @@
           <template #icon>
             <Home aria-hidden="true" />
           </template>
-          返回首页
+          {{ t('common.home') }}
         </Button>
         <Button variant="outline" tone="neutral" @click="reloadPage">
           <template #icon>
             <RefreshCw aria-hidden="true" />
           </template>
-          重新加载
+          {{ t('error.page.reload') }}
         </Button>
       </Inline>
     </Stack>
@@ -128,7 +133,7 @@
     >
       <HikariImage
         :src="image"
-        :alt="isNotFound ? '什么都没有...' : '页面加载失败'"
+        :alt="title"
         class="relative aspect-square w-full overflow-visible"
         image-class="object-contain drop-shadow-hikari-art dark:drop-shadow-hikari-art-dark"
         :lazy="false"

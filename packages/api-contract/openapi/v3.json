@@ -951,6 +951,515 @@
         ],
         "type": "object"
       },
+      "AdminLotteryCheckDto": {
+        "properties": {
+          "key": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryCheckKey"
+              }
+            ]
+          },
+          "passed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "passed"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryDto": {
+        "properties": {
+          "announce_hours": {
+            "type": "number"
+          },
+          "announced_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "claim_days": {
+            "type": "number"
+          },
+          "condition_preset": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdminLotteryPresetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "condition_preset_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "drawn_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "draws_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "entry_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "min_account_days": {
+            "type": "number"
+          },
+          "organizer": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "organizer_id": {
+            "type": "number"
+          },
+          "post": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AdminLotteryPostDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "post_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "prize_count": {
+            "type": "number"
+          },
+          "prizes": {
+            "items": {
+              "$ref": "#/components/schemas/AdminLotteryPrizeDto"
+            },
+            "type": "array"
+          },
+          "published_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "refill": {
+            "type": "boolean"
+          },
+          "require_comment": {
+            "type": "boolean"
+          },
+          "require_follow": {
+            "type": "boolean"
+          },
+          "seed_hash": {
+            "nullable": true,
+            "type": "string"
+          },
+          "standby_count": {
+            "type": "number"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryStatus"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "starts_at",
+          "draws_at",
+          "post_id",
+          "organizer",
+          "entry_count",
+          "prize_count",
+          "updated_at",
+          "organizer_id",
+          "post",
+          "require_follow",
+          "require_comment",
+          "condition_preset_id",
+          "condition_preset",
+          "min_account_days",
+          "announce_hours",
+          "claim_days",
+          "standby_count",
+          "refill",
+          "contact",
+          "seed_hash",
+          "published_at",
+          "drawn_at",
+          "announced_at",
+          "prizes"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryEntryDto": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "exclusion": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryExclusion"
+              }
+            ],
+            "nullable": true
+          },
+          "id": {
+            "type": "number"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserRefDto"
+          }
+        },
+        "required": [
+          "id",
+          "user",
+          "exclusion",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryListItemDto": {
+        "properties": {
+          "draws_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "entry_count": {
+            "type": "number"
+          },
+          "id": {
+            "type": "number"
+          },
+          "organizer": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "post_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "prize_count": {
+            "type": "number"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryStatus"
+              }
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status",
+          "starts_at",
+          "draws_at",
+          "post_id",
+          "organizer",
+          "entry_count",
+          "prize_count",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryPostDto": {
+        "properties": {
+          "content_text": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "content_text"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryPresetDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryPrizeCodesDto": {
+        "properties": {
+          "codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "prize_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "prize_id",
+          "codes"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryPrizeDto": {
+        "properties": {
+          "account_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "code_count": {
+            "type": "number"
+          },
+          "decoration": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryPrizeKind"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "points": {
+            "nullable": true,
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "redeem_hint": {
+            "nullable": true,
+            "type": "string"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "value": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "tier",
+          "kind",
+          "name",
+          "quantity",
+          "value",
+          "note",
+          "image",
+          "points",
+          "decoration",
+          "account_label",
+          "redeem_hint",
+          "code_count"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryWinnerDto": {
+        "properties": {
+          "account": {
+            "nullable": true,
+            "type": "string"
+          },
+          "claim_by": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "claimed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "delivered_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "prize_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "revoke_note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "standby_rank": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryWinnerStatus"
+              }
+            ]
+          },
+          "user": {
+            "$ref": "#/components/schemas/AdminLotteryWinnerUserDto"
+          }
+        },
+        "required": [
+          "id",
+          "user",
+          "prize_id",
+          "standby_rank",
+          "status",
+          "account",
+          "claim_by",
+          "claimed_at",
+          "delivered_at",
+          "revoke_note"
+        ],
+        "type": "object"
+      },
+      "AdminLotteryWinnerUserDto": {
+        "properties": {
+          "avatar": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "description": "头像",
+            "nullable": true,
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "equipped_badges": {
+            "description": "当前佩戴的徽章",
+            "items": {
+              "$ref": "#/components/schemas/EquippedBadgeDto"
+            },
+            "type": "array"
+          },
+          "equipped_frame": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "description": "当前佩戴的头像框",
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "description": "用户 ID",
+            "type": "number"
+          },
+          "name": {
+            "description": "用户名",
+            "type": "string"
+          },
+          "nickname": {
+            "description": "昵称",
+            "nullable": true,
+            "type": "string"
+          },
+          "role": {
+            "description": "用户角色",
+            "enum": [
+              "USER",
+              "ADMIN",
+              "SUPER_ADMIN"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "nickname",
+          "avatar",
+          "role",
+          "equipped_frame",
+          "equipped_badges",
+          "created_at"
+        ],
+        "type": "object"
+      },
       "AdminMangaChapterRefDto": {
         "properties": {
           "chapter_number": {
@@ -4313,7 +4822,8 @@
               "FIRST_TIME_ADD",
               "TRANSLATION_ADD",
               "EPUB_ADD",
-              "AI_QUOTA_PURCHASE_SUBTRACT"
+              "AI_QUOTA_PURCHASE_SUBTRACT",
+              "LOTTERY_ADD"
             ],
             "type": "string"
           },
@@ -4675,6 +5185,14 @@
           "open_in_new": {
             "type": "boolean"
           },
+          "partner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoPartner"
+              }
+            ],
+            "nullable": true
+          },
           "position": {
             "type": "number"
           },
@@ -4704,6 +5222,7 @@
           "link",
           "open_in_new",
           "is_ad",
+          "partner",
           "duration_seconds",
           "position",
           "is_active",
@@ -9076,9 +9595,11 @@
       },
       "ApmAlertDto": {
         "properties": {
-          "message": {
-            "maxLength": 4000,
-            "type": "string"
+          "fault_rate": {
+            "$ref": "#/components/schemas/ApmFaultRateDto"
+          },
+          "new_fault": {
+            "$ref": "#/components/schemas/ApmNewFaultDto"
           },
           "recipient_ids": {
             "items": {
@@ -9089,8 +9610,11 @@
             "minItems": 1,
             "type": "array"
           },
-          "title": {
-            "maxLength": 200,
+          "rule": {
+            "enum": [
+              "fault_rate",
+              "new_fault"
+            ],
             "type": "string"
           },
           "url": {
@@ -9101,8 +9625,7 @@
         },
         "required": [
           "recipient_ids",
-          "title",
-          "message"
+          "rule"
         ],
         "type": "object"
       },
@@ -9146,6 +9669,74 @@
         ],
         "type": "object"
       },
+      "ApmFaultDto": {
+        "properties": {
+          "environment": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "occurrences": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "service": {
+            "maxLength": 200,
+            "type": "string"
+          }
+        },
+        "required": [
+          "service",
+          "environment",
+          "name",
+          "occurrences"
+        ],
+        "type": "object"
+      },
+      "ApmFaultRateDto": {
+        "properties": {
+          "baseline_rate": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "environment": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "faults": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "rate": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "service": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "total": {
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "service",
+          "environment",
+          "total",
+          "faults",
+          "rate",
+          "baseline_rate"
+        ],
+        "type": "object"
+      },
       "ApmIssueAssignedDto": {
         "properties": {
           "actor_id": {
@@ -9180,6 +9771,26 @@
           "fingerprint",
           "error_name",
           "url"
+        ],
+        "type": "object"
+      },
+      "ApmNewFaultDto": {
+        "properties": {
+          "count": {
+            "minimum": 1,
+            "type": "number"
+          },
+          "faults": {
+            "items": {
+              "$ref": "#/components/schemas/ApmFaultDto"
+            },
+            "maxItems": 50,
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "faults"
         ],
         "type": "object"
       },
@@ -15135,6 +15746,14 @@
           "open_in_new": {
             "type": "boolean"
           },
+          "partner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoPartner"
+              }
+            ],
+            "nullable": true
+          },
           "start_at": {
             "nullable": true,
             "type": "string"
@@ -16926,6 +17545,40 @@
         },
         "required": [
           "reason"
+        ],
+        "type": "object"
+      },
+      "DlsiteLinkDto": {
+        "properties": {
+          "code": {
+            "description": "DLsite product number, such as VJ01001234",
+            "type": "string"
+          },
+          "url": {
+            "description": "Product page, as an affiliate link once an affiliate id is set",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "url"
+        ],
+        "type": "object"
+      },
+      "DlsitePolicyDto": {
+        "properties": {
+          "affiliate_id": {
+            "nullable": true,
+            "type": "string"
+          },
+          "badge": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "affiliate_id",
+          "badge"
         ],
         "type": "object"
       },
@@ -19051,6 +19704,12 @@
             },
             "type": "array"
           },
+          "lotteries": {
+            "items": {
+              "$ref": "#/components/schemas/LotteryDto"
+            },
+            "type": "array"
+          },
           "manga_rates": {
             "items": {
               "$ref": "#/components/schemas/MangaRateCardSummaryResDto"
@@ -19109,7 +19768,8 @@
           "manga_rates",
           "mention_users",
           "comments",
-          "polls"
+          "polls",
+          "lotteries"
         ],
         "type": "object"
       },
@@ -22061,6 +22721,15 @@
           "liked": {
             "type": "boolean"
           },
+          "lottery": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "pinned": {
             "type": "boolean"
           },
@@ -22136,7 +22805,8 @@
           "favorited",
           "comment_count",
           "hot_comment",
-          "poll"
+          "poll",
+          "lottery"
         ],
         "type": "object"
       },
@@ -22758,6 +23428,15 @@
           "liked": {
             "type": "boolean"
           },
+          "lottery": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
           "pinned": {
             "type": "boolean"
           },
@@ -22810,7 +23489,8 @@
           "comment_count",
           "hot_comment",
           "work_refs",
-          "poll"
+          "poll",
+          "lottery"
         ],
         "type": "object"
       },
@@ -23533,6 +24213,27 @@
           "IN_DEVELOPMENT": "开发中",
           "RELEASED": "已发售"
         }
+      },
+      "GalgameDlsiteDto": {
+        "properties": {
+          "badge": {
+            "description": "Campaign mark on the purchase button, absent outside a campaign",
+            "nullable": true,
+            "type": "string"
+          },
+          "links": {
+            "description": "Releases on DLsite, Chinese ones first and English ones last",
+            "items": {
+              "$ref": "#/components/schemas/DlsiteLinkDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "badge",
+          "links"
+        ],
+        "type": "object"
       },
       "GalgameDownloadFileDto": {
         "properties": {
@@ -25817,7 +26518,8 @@
                 "$ref": "#/components/schemas/MediaAssetDto"
               }
             ],
-            "description": "横幅图：运营指定的图，或作品的第一张公开示例 CG"
+            "nullable": true,
+            "type": "object"
           },
           "description": {
             "description": "首屏文案：运营填写的文案，或作品简介的开头",
@@ -25854,10 +26556,24 @@
           "open_in_new": {
             "type": "boolean"
           },
+          "partner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoPartner"
+              }
+            ],
+            "nullable": true
+          },
           "title": {
             "description": "自定义轮播项的标题",
             "nullable": true,
             "type": "string"
+          },
+          "wall": {
+            "items": {
+              "$ref": "#/components/schemas/MediaAssetDto"
+            },
+            "type": "array"
           },
           "work": {
             "allOf": [
@@ -25875,13 +26591,15 @@
           "is_ad",
           "duration_seconds",
           "banner",
+          "wall",
           "description",
           "work",
           "title",
           "logo",
           "action_label",
           "link",
-          "open_in_new"
+          "open_in_new",
+          "partner"
         ],
         "type": "object"
       },
@@ -32443,6 +33161,504 @@
           "name"
         ],
         "type": "object"
+      },
+      "LotteryCheckKey": {
+        "enum": [
+          "PRIZES",
+          "CONTENT",
+          "CODES",
+          "VALUES",
+          "CAP",
+          "CARRIER",
+          "SCHEDULE",
+          "CONTACT"
+        ],
+        "type": "string"
+      },
+      "LotteryCodeDto": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "redeem_hint": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "redeem_hint"
+        ],
+        "type": "object"
+      },
+      "LotteryConditionDto": {
+        "properties": {
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryConditionKind"
+              }
+            ]
+          },
+          "met": {
+            "nullable": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kind",
+          "met"
+        ],
+        "type": "object"
+      },
+      "LotteryConditionKind": {
+        "enum": [
+          "FOLLOW",
+          "COMMENT",
+          "PRESET"
+        ],
+        "type": "string"
+      },
+      "LotteryDto": {
+        "properties": {
+          "announce_by": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "announce_hours": {
+            "type": "number"
+          },
+          "claim_days": {
+            "type": "number"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/LotteryConditionDto"
+            },
+            "type": "array"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "draws_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "min_account_days": {
+            "type": "number"
+          },
+          "organizer": {
+            "$ref": "#/components/schemas/UserRefDto"
+          },
+          "participant_count": {
+            "type": "number"
+          },
+          "phase": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryPhase"
+              }
+            ]
+          },
+          "post_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "preset_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "prizes": {
+            "items": {
+              "$ref": "#/components/schemas/LotteryPrizeDto"
+            },
+            "type": "array"
+          },
+          "published_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "refill": {
+            "type": "boolean"
+          },
+          "seed": {
+            "nullable": true,
+            "type": "string"
+          },
+          "seed_hash": {
+            "nullable": true,
+            "type": "string"
+          },
+          "standby_count": {
+            "type": "number"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "viewer": {
+            "$ref": "#/components/schemas/LotteryViewerDto"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "phase",
+          "organizer",
+          "post_id",
+          "published_at",
+          "starts_at",
+          "draws_at",
+          "announce_by",
+          "announce_hours",
+          "claim_days",
+          "standby_count",
+          "refill",
+          "min_account_days",
+          "contact",
+          "participant_count",
+          "seed_hash",
+          "seed",
+          "prizes",
+          "conditions",
+          "preset_label",
+          "viewer"
+        ],
+        "type": "object"
+      },
+      "LotteryExclusion": {
+        "enum": [
+          "INACTIVE",
+          "STAFF",
+          "NEW_ACCOUNT",
+          "NOT_FOLLOWING",
+          "NO_COMMENT",
+          "PRESET_UNMET"
+        ],
+        "type": "string"
+      },
+      "LotteryParticipantDto": {
+        "properties": {
+          "counted": {
+            "type": "boolean"
+          },
+          "user_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "user_id",
+          "counted"
+        ],
+        "type": "object"
+      },
+      "LotteryPhase": {
+        "enum": [
+          "SCHEDULED",
+          "OPEN",
+          "DRAWING",
+          "ANNOUNCED"
+        ],
+        "type": "string"
+      },
+      "LotteryPrizeDto": {
+        "properties": {
+          "account_label": {
+            "nullable": true,
+            "type": "string"
+          },
+          "decoration": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EquippedFrameDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "id": {
+            "type": "number"
+          },
+          "image": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MediaAssetDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryPrizeKind"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "points": {
+            "nullable": true,
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "value": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "tier",
+          "kind",
+          "name",
+          "quantity",
+          "value",
+          "note",
+          "image",
+          "points",
+          "decoration",
+          "account_label"
+        ],
+        "type": "object"
+      },
+      "LotteryPrizeInputDto": {
+        "properties": {
+          "account_label": {
+            "maxLength": 50,
+            "nullable": true,
+            "type": "string"
+          },
+          "codes": {
+            "items": {
+              "maxLength": 200,
+              "type": "string"
+            },
+            "maxItems": 10000,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "decoration_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "image_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryPrizeKind"
+              }
+            ]
+          },
+          "name": {
+            "maxLength": 100,
+            "type": "string"
+          },
+          "note": {
+            "maxLength": 300,
+            "type": "string"
+          },
+          "points": {
+            "minimum": 1,
+            "nullable": true,
+            "type": "number"
+          },
+          "quantity": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "number"
+          },
+          "redeem_hint": {
+            "maxLength": 300,
+            "nullable": true,
+            "type": "string"
+          },
+          "tier": {
+            "maxLength": 20,
+            "type": "string"
+          },
+          "value": {
+            "minimum": 0,
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "tier",
+          "kind",
+          "name",
+          "quantity"
+        ],
+        "type": "object"
+      },
+      "LotteryPrizeKind": {
+        "enum": [
+          "POINTS",
+          "DECORATION",
+          "CODE",
+          "ACCOUNT"
+        ],
+        "type": "string"
+      },
+      "LotteryResultDto": {
+        "properties": {
+          "claim_by": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "exclusion": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryExclusion"
+              }
+            ],
+            "nullable": true
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryResultKind"
+              }
+            ]
+          },
+          "prize_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "revoke_note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "standby_rank": {
+            "nullable": true,
+            "type": "number"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryWinnerStatus"
+              }
+            ],
+            "nullable": true
+          },
+          "winner_id": {
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "winner_id",
+          "prize_id",
+          "status",
+          "claim_by",
+          "standby_rank",
+          "exclusion",
+          "revoke_note"
+        ],
+        "type": "object"
+      },
+      "LotteryResultKind": {
+        "enum": [
+          "WON",
+          "STANDBY",
+          "LOST",
+          "EXCLUDED",
+          "REVOKED"
+        ],
+        "type": "string"
+      },
+      "LotteryStatus": {
+        "enum": [
+          "DRAFT",
+          "PUBLISHED",
+          "DRAWN",
+          "ANNOUNCED"
+        ],
+        "type": "string"
+      },
+      "LotteryViewerDto": {
+        "properties": {
+          "ineligible": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryExclusion"
+              }
+            ],
+            "nullable": true
+          },
+          "joined": {
+            "type": "boolean"
+          },
+          "result": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryResultDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          }
+        },
+        "required": [
+          "joined",
+          "ineligible",
+          "result"
+        ],
+        "type": "object"
+      },
+      "LotteryWinnerGroupDto": {
+        "properties": {
+          "prize_id": {
+            "type": "number"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "users": {
+            "items": {
+              "$ref": "#/components/schemas/UserRefDto"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "prize_id",
+          "tier",
+          "users"
+        ],
+        "type": "object"
+      },
+      "LotteryWinnerStatus": {
+        "enum": [
+          "STANDBY",
+          "PENDING",
+          "SUBMITTED",
+          "DONE",
+          "FORFEITED",
+          "REVOKED"
+        ],
+        "type": "string"
       },
       "MakeUpCardItemDto": {
         "properties": {
@@ -39965,6 +41181,86 @@
         ],
         "type": "object"
       },
+      "MyLotteryPrizeDto": {
+        "properties": {
+          "account": {
+            "nullable": true,
+            "type": "string"
+          },
+          "claim_by": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "claimed_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "delivered_at": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "lottery": {
+            "$ref": "#/components/schemas/MyLotteryRefDto"
+          },
+          "prize": {
+            "$ref": "#/components/schemas/LotteryPrizeDto"
+          },
+          "revoke_note": {
+            "nullable": true,
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LotteryWinnerStatus"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "claim_by",
+          "account",
+          "claimed_at",
+          "delivered_at",
+          "revoke_note",
+          "created_at",
+          "lottery",
+          "prize"
+        ],
+        "type": "object"
+      },
+      "MyLotteryRefDto": {
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "post_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "post_id"
+        ],
+        "type": "object"
+      },
       "MyPointRecordItemDto": {
         "properties": {
           "action": {
@@ -40007,7 +41303,8 @@
               "FIRST_TIME_ADD",
               "TRANSLATION_ADD",
               "EPUB_ADD",
-              "AI_QUOTA_PURCHASE_SUBTRACT"
+              "AI_QUOTA_PURCHASE_SUBTRACT",
+              "LOTTERY_ADD"
             ],
             "type": "string"
           }
@@ -45816,7 +47113,8 @@
               "FIRST_TIME_ADD",
               "TRANSLATION_ADD",
               "EPUB_ADD",
-              "AI_QUOTA_PURCHASE_SUBTRACT"
+              "AI_QUOTA_PURCHASE_SUBTRACT",
+              "LOTTERY_ADD"
             ],
             "type": "string"
           },
@@ -47865,6 +49163,12 @@
           "icon_only"
         ],
         "type": "object"
+      },
+      "PromoPartner": {
+        "enum": [
+          "DLSITE"
+        ],
+        "type": "string"
       },
       "PromoSlideKind": {
         "enum": [
@@ -50201,6 +51505,12 @@
             },
             "type": "array"
           },
+          "lottery_ids": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
           "manga_ids": {
             "items": {
               "type": "number"
@@ -51646,6 +52956,18 @@
           "version",
           "resource_type",
           "resource_id"
+        ],
+        "type": "object"
+      },
+      "RevokeLotteryWinnerDto": {
+        "properties": {
+          "note": {
+            "maxLength": 200,
+            "type": "string"
+          }
+        },
+        "required": [
+          "note"
         ],
         "type": "object"
       },
@@ -53637,6 +54959,18 @@
         ],
         "type": "object"
       },
+      "SubmitLotteryAccountDto": {
+        "properties": {
+          "account": {
+            "maxLength": 200,
+            "type": "string"
+          }
+        },
+        "required": [
+          "account"
+        ],
+        "type": "object"
+      },
       "SubmitReviewGroupApplicationDto": {
         "properties": {
           "homepage": {
@@ -53880,7 +55214,6 @@
             "type": "string"
           },
           "title": {
-            "nullable": true,
             "type": "string"
           },
           "type": {
@@ -53959,7 +55292,6 @@
             "type": "string"
           },
           "title": {
-            "nullable": true,
             "type": "string"
           },
           "type": {
@@ -58727,6 +60059,26 @@
         },
         "type": "object"
       },
+      "UpdateDlsitePolicyDto": {
+        "properties": {
+          "affiliate_id": {
+            "maxLength": 64,
+            "nullable": true,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "type": "string"
+          },
+          "badge": {
+            "maxLength": 6,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "affiliate_id",
+          "badge"
+        ],
+        "type": "object"
+      },
       "UpdateDownloadPolicyDto": {
         "properties": {
           "card_price": {
@@ -60543,6 +61895,14 @@
           "open_in_new": {
             "type": "boolean"
           },
+          "partner": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromoPartner"
+              }
+            ],
+            "nullable": true
+          },
           "start_at": {
             "nullable": true,
             "type": "string"
@@ -61479,6 +62839,89 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "UpsertLotteryDto": {
+        "properties": {
+          "announce_hours": {
+            "maximum": 168,
+            "minimum": 1,
+            "type": "number"
+          },
+          "claim_days": {
+            "maximum": 30,
+            "minimum": 1,
+            "type": "number"
+          },
+          "condition_preset_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "contact": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "draws_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "min_account_days": {
+            "maximum": 365,
+            "minimum": 0,
+            "type": "number"
+          },
+          "organizer_id": {
+            "type": "number"
+          },
+          "post_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "prizes": {
+            "items": {
+              "$ref": "#/components/schemas/LotteryPrizeInputDto"
+            },
+            "maxItems": 20,
+            "type": "array"
+          },
+          "refill": {
+            "type": "boolean"
+          },
+          "require_comment": {
+            "type": "boolean"
+          },
+          "require_follow": {
+            "type": "boolean"
+          },
+          "standby_count": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "number"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 60,
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "organizer_id",
+          "require_follow",
+          "require_comment",
+          "min_account_days",
+          "starts_at",
+          "draws_at",
+          "announce_hours",
+          "claim_days",
+          "standby_count",
+          "refill",
+          "contact",
+          "prizes"
+        ],
         "type": "object"
       },
       "UpsertMangaRateDto": {
@@ -67044,7 +68487,8 @@
                 "FIRST_TIME_ADD",
                 "TRANSLATION_ADD",
                 "EPUB_ADD",
-                "AI_QUOTA_PURCHASE_SUBTRACT"
+                "AI_QUOTA_PURCHASE_SUBTRACT",
+                "LOTTERY_ADD"
               ],
               "type": "string"
             }
@@ -68089,6 +69533,479 @@
         },
         "tags": [
           "admin/idp"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries": {
+      "get": {
+        "operationId": "AdminLotteryController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AdminLotteryListItemDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      },
+      "post": {
+        "operationId": "AdminLotteryController_create",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertLotteryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}": {
+      "delete": {
+        "operationId": "AdminLotteryController_remove",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      },
+      "get": {
+        "operationId": "AdminLotteryController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      },
+      "put": {
+        "operationId": "AdminLotteryController_update",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertLotteryDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/announce": {
+      "post": {
+        "operationId": "AdminLotteryController_announce",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/checks": {
+      "get": {
+        "operationId": "AdminLotteryController_checks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminLotteryCheckDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/codes": {
+      "get": {
+        "operationId": "AdminLotteryController_getCodes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminLotteryPrizeCodesDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/entries": {
+      "get": {
+        "operationId": "AdminLotteryController_getEntries",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/AdminLotteryEntryDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/publish": {
+      "post": {
+        "operationId": "AdminLotteryController_publish",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminLotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/winners": {
+      "get": {
+        "operationId": "AdminLotteryController_getWinners",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminLotteryWinnerDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/winners/{winnerId}/deliver": {
+      "post": {
+        "operationId": "AdminLotteryController_deliver",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "winnerId",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
+        ]
+      }
+    },
+    "/api/v3/admin/lotteries/{id}/winners/{winnerId}/revoke": {
+      "post": {
+        "operationId": "AdminLotteryController_revoke",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "path",
+            "name": "winnerId",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeLotteryWinnerDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/lotteries"
         ]
       }
     },
@@ -72668,6 +74585,56 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AdminPromoBannerDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      }
+    },
+    "/api/v3/admin/promotions/dlsite": {
+      "get": {
+        "operationId": "AdminDlsiteController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DlsitePolicyDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "admin/promotions"
+        ]
+      },
+      "put": {
+        "operationId": "AdminDlsiteController_update",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDlsitePolicyDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DlsitePolicyDto"
                 }
               }
             },
@@ -87861,6 +89828,36 @@
         ]
       }
     },
+    "/api/v3/galgames/{id}/dlsite": {
+      "get": {
+        "operationId": "GalgameDlsiteController_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalgameDlsiteDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "galgames"
+        ]
+      }
+    },
     "/api/v3/galgames/{id}/downloads": {
       "get": {
         "operationId": "GalgameDownloadController_getList",
@@ -92893,6 +94890,232 @@
         },
         "tags": [
           "LightNovel"
+        ]
+      }
+    },
+    "/api/v3/lotteries": {
+      "get": {
+        "operationId": "LotteryController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "maxLength": 60,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/LotteryDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
+        ]
+      }
+    },
+    "/api/v3/lotteries/{id}": {
+      "get": {
+        "operationId": "LotteryController_getById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
+        ]
+      }
+    },
+    "/api/v3/lotteries/{id}/entries": {
+      "post": {
+        "operationId": "LotteryController_join",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LotteryDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
+        ]
+      }
+    },
+    "/api/v3/lotteries/{id}/participants": {
+      "get": {
+        "operationId": "LotteryController_getParticipants",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/LotteryParticipantDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
+        ]
+      }
+    },
+    "/api/v3/lotteries/{id}/winners": {
+      "get": {
+        "operationId": "LotteryController_getWinners",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LotteryWinnerGroupDto"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
         ]
       }
     },
@@ -101859,6 +104082,43 @@
         ]
       }
     },
+    "/api/v3/posts/{id}/lottery": {
+      "get": {
+        "operationId": "LotteryController_byPost",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LotteryDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "lotteries"
+        ]
+      }
+    },
     "/api/v3/posts/{id}/publish": {
       "post": {
         "operationId": "PostController_publish",
@@ -109002,6 +111262,127 @@
         },
         "tags": [
           "hikari-points"
+        ]
+      }
+    },
+    "/api/v3/user/me/lottery/prizes": {
+      "get": {
+        "operationId": "UserLotteryController_getList",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": true,
+            "schema": {
+              "default": 1,
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": true,
+            "schema": {
+              "default": 10,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "items": {
+                      "items": {
+                        "$ref": "#/components/schemas/MyLotteryPrizeDto"
+                      },
+                      "type": "array"
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/PageMetaDto"
+                    }
+                  },
+                  "required": [
+                    "items",
+                    "meta"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "user/lottery"
+        ]
+      }
+    },
+    "/api/v3/user/me/lottery/prizes/{id}/account": {
+      "put": {
+        "operationId": "UserLotteryController_submitAccount",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitLotteryAccountDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "user/lottery"
+        ]
+      }
+    },
+    "/api/v3/user/me/lottery/prizes/{id}/code": {
+      "post": {
+        "operationId": "UserLotteryController_revealCode",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LotteryCodeDto"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "tags": [
+          "user/lottery"
         ]
       }
     },

@@ -2,15 +2,21 @@ import * as v from 'valibot'
 
 export const volumeRateSchema = v.object({
   rate: v.pipe(
-    v.nullish(v.number('给个评分'), null),
-    v.check(value => value !== null, '给个评分'),
-    v.check(value => value === null || Number.isInteger(value), '请打整数分'),
-    v.check(value => value === null || (value >= 1 && value <= 10), '评分需 1-10'),
+    v.nullish(v.number(issueMessage('validation.lightNovelVolume.rateRequired')), null),
+    v.check(value => value !== null, issueMessage('validation.lightNovelVolume.rateRequired')),
+    v.check(
+      value => value === null || Number.isInteger(value),
+      issueMessage('validation.lightNovelVolume.rateInteger'),
+    ),
+    v.check(
+      value => value === null || (value >= 1 && value <= 10),
+      issueMessage('validation.lightNovelVolume.rateRange'),
+    ),
   ),
   rate_content: v.pipe(
-    v.nullish(v.string('短评应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.lightNovelVolume.contentType')), ''),
     v.trim(),
-    v.maxLength(2000, '短评不能超过 2000 字'),
+    v.maxLength(2000, issueMessage('validation.lightNovelVolume.contentMax')),
   ),
   is_spoiler: v.optional(v.boolean(), false),
 })

@@ -6,11 +6,13 @@
   import { isRecord } from '#shared/utils/record'
   import logoUrl from '~/assets/images/wordmark.svg'
   import { SITE_CONFIG } from '~/config/site'
+  import { pageErrorMessage } from '~/utils/api/error'
 
   const props = defineProps<{
     error: NuxtError | Error
   }>()
 
+  const { t, d } = useLocaleText()
   const checking = ref(false)
   const nowMs = ref(Date.now())
 
@@ -20,14 +22,10 @@
     return {}
   })
 
-  const title = computed(() => details.value.title?.trim() || '站点维护中')
-  const message = computed(() => {
-    const data = (props.error as NuxtError).data
-    if (isRecord(data) && typeof data.message === 'string' && data.message.trim()) {
-      return data.message.trim()
-    }
-    return '正在进行服务升级，很快回来。'
-  })
+  const title = computed(() => details.value.title?.trim() || t('error.maintenance.title'))
+  const message = computed(
+    () => pageErrorMessage(props.error).trim() || t('error.maintenance.message'),
+  )
   const telegramUrl = computed(
     () => details.value.telegram_url?.trim() || 'https://t.me/hikari_nagi',
   )
@@ -37,19 +35,18 @@
     const targetMs = new Date(raw).getTime()
     if (Number.isNaN(targetMs)) return ''
     const diffMs = targetMs - nowMs.value
-    if (diffMs <= 0) return '即将恢复'
+    if (diffMs <= 0) return t('error.maintenance.soon')
 
     const target = new Date(targetMs)
     const now = new Date(nowMs.value)
-    const pad = (n: number) => String(n).padStart(2, '0')
-    const hhmm = `${pad(target.getHours())}:${pad(target.getMinutes())}`
+    const time = d(target, 'time')
     const sameDay =
       target.getFullYear() === now.getFullYear() &&
       target.getMonth() === now.getMonth() &&
       target.getDate() === now.getDate()
     return sameDay
-      ? `预计 ${hhmm} 恢复`
-      : `预计 ${target.getMonth() + 1}月${target.getDate()}日 ${hhmm} 恢复`
+      ? t('error.maintenance.etaToday', { time })
+      : t('error.maintenance.eta', { date: formatDate(target, 'monthDay'), time })
   })
 
   async function retryConnection() {
@@ -66,7 +63,7 @@
           reloadNuxtApp({ force: true })
           return
         }
-        toast.info('仍在维护中，请稍后再试')
+        toast.info(t('error.maintenance.stillDown'))
         return
       }
       reloadNuxtApp({ force: true })
@@ -126,7 +123,7 @@
         <Inline gap="md" justify="center" class="mt-9">
           <Button size="lg" pill :loading="checking" @click="retryConnection">
             <template #icon><RefreshCw /></template>
-            刷新试试
+            {{ t('error.maintenance.retry') }}
           </Button>
           <Button
             v-if="telegramUrl"
@@ -140,7 +137,7 @@
             pill
           >
             <template #icon><Send /></template>
-            Telegram 群组
+            {{ t('error.maintenance.telegram') }}
           </Button>
         </Inline>
       </Stack>

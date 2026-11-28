@@ -2,6 +2,7 @@
   import { Button as HnButton, Inline, Text } from '@hina-ui/vue'
   import { Download, ExternalLink, Pencil, Star } from '@lucide/vue'
   import { NuxtLink } from '#components'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
   import type { WorkStatusOption } from '~/components/work/StatusMenu.vue'
   import {
     GALGAME_STATUS_LABEL,
@@ -21,6 +22,7 @@
     favorited: boolean
     downloads: number
     website?: string
+    dlsite?: GalgamePageData['dlsite']
     compact?: boolean
   }>()
   defineEmits<{ rate: [] }>()
@@ -68,6 +70,7 @@
       >
         写个评分
       </Button>
+      <GalgameStageDlsite v-if="dlsite" :dlsite="dlsite" />
       <HnButton
         :as="NuxtLink"
         :to="`/galgames/${galgameId}/downloads`"

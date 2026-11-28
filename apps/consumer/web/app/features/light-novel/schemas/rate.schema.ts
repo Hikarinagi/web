@@ -2,38 +2,41 @@ import * as v from 'valibot'
 
 const dimension = v.nullish(
   v.pipe(
-    v.number('维度评分应为数字'),
-    v.integer('维度评分需为整数'),
-    v.minValue(1, '维度评分需 1-10'),
-    v.maxValue(10, '维度评分需 1-10'),
+    v.number(issueMessage('validation.lightNovel.dimensionType')),
+    v.integer(issueMessage('validation.lightNovel.dimensionInteger')),
+    v.minValue(1, issueMessage('validation.lightNovel.dimensionRange')),
+    v.maxValue(10, issueMessage('validation.lightNovel.dimensionRange')),
   ),
   null,
 )
 
 const hours = v.nullish(
   v.pipe(
-    v.number('时长应为数字'),
-    v.minValue(0, '时长不能为负'),
-    v.maxValue(9999, '时长不能超过 9999 小时'),
+    v.number(issueMessage('validation.lightNovel.hoursType')),
+    v.minValue(0, issueMessage('validation.lightNovel.hoursMin')),
+    v.maxValue(9999, issueMessage('validation.lightNovel.hoursMax')),
   ),
   null,
 )
 
 export const lightNovelRateSchema = v.object({
-  status: v.picklist(['GOING', 'COMPLETED', 'ON_HOLD', 'DROPPED'], '选个状态'),
+  status: v.picklist(
+    ['GOING', 'COMPLETED', 'ON_HOLD', 'DROPPED'],
+    issueMessage('validation.lightNovel.statusRequired'),
+  ),
   rate: v.nullish(
     v.pipe(
-      v.number('给个总分'),
-      v.integer('请打整数分'),
-      v.minValue(1, '总分需 1-10'),
-      v.maxValue(10, '总分需 1-10'),
+      v.number(issueMessage('validation.lightNovel.rateRequired')),
+      v.integer(issueMessage('validation.lightNovel.rateInteger')),
+      v.minValue(1, issueMessage('validation.lightNovel.rateRange')),
+      v.maxValue(10, issueMessage('validation.lightNovel.rateRange')),
     ),
     null,
   ),
   rate_content: v.pipe(
-    v.nullish(v.string('短评应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.lightNovel.contentType')), ''),
     v.trim(),
-    v.maxLength(2000, '短评不能超过 2000 字'),
+    v.maxLength(2000, issueMessage('validation.lightNovel.contentMax')),
   ),
   time_to_finish_hours: hours,
   is_spoiler: v.optional(v.boolean(), false),

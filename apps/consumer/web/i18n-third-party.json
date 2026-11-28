@@ -1,0 +1,7 @@
+[
+  {
+    "file": "server/utils/steam.ts",
+    "source": "Steam 商店 appdetails 接口（l=schinese）supported_languages 字段里的语言名，用来认出简体与繁体中文",
+    "literals": ["中文"]
+  }
+]

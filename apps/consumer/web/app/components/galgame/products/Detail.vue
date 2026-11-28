@@ -3,9 +3,13 @@
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { ageRatingLabel, releaseStatusLabel, versionKindLabel } from '~/features/entry/labels'
   import { getCoverMediaLayout } from '~/utils/media/layout'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameProductsDetail' })
-  const props = defineProps<{ product: ApiData<'/api/v3/products/{id}', 'get'> }>()
+  const props = defineProps<{
+    product: ApiData<'/api/v3/products/{id}', 'get'>
+    dlsite: GalgamePageData['dlsite']
+  }>()
 
   const ratio = computed(() => getCoverMediaLayout(props.product.cover).ratio)
   const wide = computed(() => ratio.value > 1)
@@ -55,7 +59,7 @@
         </Text>
         <Text size="sm" tone="muted" class="tabular-nums">{{ released }}</Text>
       </Inline>
-      <GalgameProductsStores :stores="product.stores" />
+      <GalgameProductsStores :stores="product.stores" :dlsite="dlsite" />
     </Stack>
 
     <GalgameProductsFacts :product="product" />

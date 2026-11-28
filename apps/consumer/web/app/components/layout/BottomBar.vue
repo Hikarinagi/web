@@ -19,6 +19,7 @@
   defineOptions({ name: 'LayoutBottomBar' })
 
   const route = useRoute()
+  const { t } = useLocaleText()
 
   const composeOpen = ref(false)
   const composeMenuStyle = {
@@ -78,7 +79,7 @@
         composeOpen && 'z-60',
       )
     "
-    aria-label="移动端主导航"
+    :aria-label="t('layout.nav.mobile')"
   >
     <Flex class="mx-auto h-(--app-bottombar-height) w-full max-w-md px-1">
       <Flex class="flex-1">
@@ -93,7 +94,7 @@
             <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
           </LayoutHeaderNavBadge>
           <Text as="span" size="xs" class="leading-none font-medium text-inherit">
-            {{ item.label }}
+            {{ t(item.label) }}
           </Text>
         </NuxtLink>
       </Flex>
@@ -101,7 +102,7 @@
       <Center class="shrink-0 px-3">
         <IconButton
           login-required
-          label="发布"
+          :label="t('layout.publish.label')"
           :tooltip="false"
           variant="solid"
           tone="accent"
@@ -133,7 +134,7 @@
             <component :is="navIconMap[item.icon]" class="size-5.5" aria-hidden="true" />
           </LayoutHeaderNavBadge>
           <Text as="span" size="xs" class="leading-none font-medium text-inherit">
-            {{ item.label }}
+            {{ t(item.label) }}
           </Text>
         </NuxtLink>
       </Flex>
@@ -161,7 +162,7 @@
           @click="go('/articles/new')"
         >
           <Ripple />
-          写文章
+          {{ t('layout.publish.article') }}
           <Center class="size-9 rounded-full bg-subtle text-accent-text">
             <FileText :size="17" />
           </Center>
@@ -174,7 +175,7 @@
           @click="go('/posts/new')"
         >
           <Ripple />
-          图文
+          {{ t('layout.publish.post') }}
           <Center class="size-9 rounded-full bg-subtle text-accent-text">
             <ImageIcon :size="17" />
           </Center>

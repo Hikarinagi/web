@@ -22,6 +22,7 @@
   const props = defineProps<{ initial: MessagesPageData }>()
   const emit = defineEmits<{ back: [] }>()
 
+  const { t } = useLocaleText()
   const { displayed, state, pending, update, reload } = useMessagesResults(props.initial)
   const { set: setUnread } = useUnread()
   const listScroll = useTemplateRef<{ viewport: HTMLElement | null }>('listScroll')
@@ -62,7 +63,7 @@
   >
     <Inline as="header" gap="sm" :wrap="false" class="h-14 shrink-0 border-b border-line px-3">
       <IconButton
-        label="返回"
+        :label="t('common.back')"
         :tooltip="false"
         pill
         class="shrink-0 lg:hidden"
@@ -71,10 +72,10 @@
         <ArrowLeft />
       </IconButton>
 
-      <TabsList label="消息分类" class="min-w-0 flex-1">
-        <TabsTrigger v-for="t in MESSAGE_TABS" :key="t.key" :value="t.key">
-          {{ t.label }}
-          <Tag v-if="tabBadge(t.key) > 0" tone="danger" size="sm">{{ tabBadge(t.key) }}</Tag>
+      <TabsList :label="t('inbox.tabs.label')" class="min-w-0 flex-1">
+        <TabsTrigger v-for="tab in MESSAGE_TABS" :key="tab.key" :value="tab.key">
+          {{ t(tab.label) }}
+          <Tag v-if="tabBadge(tab.key) > 0" tone="danger" size="sm">{{ tabBadge(tab.key) }}</Tag>
         </TabsTrigger>
       </TabsList>
 
@@ -88,7 +89,7 @@
         @click="markAll"
       >
         <template #icon><CheckCheck aria-hidden="true" /></template>
-        <Text as="span" size="sm" class="hidden sm:inline">全部已读</Text>
+        <Text as="span" size="sm" class="hidden sm:inline">{{ t('inbox.readAll') }}</Text>
       </Button>
     </Inline>
 
@@ -99,7 +100,7 @@
             <NotificationsItem v-for="m in page.items" :key="m.id" :item="m" />
             <LoadingOverlay :visible="pending" />
           </Stack>
-          <CreatorEmpty v-else :icon="BellOff" text="还没有消息" />
+          <CreatorEmpty v-else :icon="BellOff" :text="t('inbox.empty')" />
         </Stack>
       </ScrollArea>
     </TabsContent>

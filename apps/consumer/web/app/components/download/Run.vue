@@ -1,25 +1,37 @@
 <script setup lang="ts">
+  import type { HikariBizCode } from '@hikarinagi/shared'
   import { Inline, Progress, ScrollArea, Stack, Text } from '@hina-ui/vue'
   import type { RunSnapshot } from '~/features/download/engine/types'
   import { formatBytes, formatEta, formatSpeed } from '~/features/download/format'
+  import { apiErrorMessage } from '~/utils/api/error'
 
   defineOptions({ name: 'DownloadRun' })
 
   const props = defineProps<{ run: RunSnapshot }>()
+  const { t } = useLocaleText()
 
   const headline = computed(() => {
     switch (props.run.state) {
       case 'preparing':
-        return '正在准备'
+        return t('download.run.preparing')
       case 'saving':
-        return props.run.location ? `正在保存到「${props.run.location}」` : '正在保存'
+        return props.run.location
+          ? t('download.run.savingTo', { location: props.run.location })
+          : t('download.run.saving')
       case 'paused':
-        return '已暂停'
+        return t('download.state.paused')
       case 'done':
-        return '已保存'
+        return t('download.run.saved')
       default:
-        return '保存已中断'
+        return t('download.run.interrupted')
     }
+  })
+  const failure = computed(() => {
+    const error = props.run.error
+    if (!error) return null
+    if (error.fallback === 'status') return t('download.failure.status', { status: error.status })
+    if (error.fallback) return t(`download.failure.${error.fallback}`)
+    return apiErrorMessage({ code: error.code as HikariBizCode, message: error.message })
   })
   const percent = computed(() =>
     props.run.total ? Math.min(100, Math.round((props.run.written / props.run.total) * 100)) : 0,
@@ -33,13 +45,15 @@
   function label(file: RunSnapshot['files'][number]) {
     switch (file.state) {
       case 'waiting':
-        return file.written ? `${Math.round((file.written / file.bytes) * 100)}%` : '等待'
+        return file.written
+          ? `${Math.round((file.written / file.bytes) * 100)}%`
+          : t('download.run.waiting')
       case 'saving':
         return `${file.bytes ? Math.round((file.written / file.bytes) * 100) : 0}%`
       case 'done':
-        return '已保存'
+        return t('download.run.saved')
       case 'error':
-        return '出错'
+        return t('download.run.failed')
     }
   }
 </script>
@@ -55,11 +69,11 @@
         <Text v-if="run.state === 'saving'" size="sm" tone="muted">
           {{ formatSpeed(run.speed) }}
         </Text>
-        <Text v-if="eta" size="sm" tone="muted">剩余{{ eta }}</Text>
+        <Text v-if="eta" size="sm" tone="muted">{{ t('download.run.remaining', { eta }) }}</Text>
       </Inline>
     </Inline>
-    <Progress :value="percent" :aria-label="`${run.title} 的保存进度`" />
-    <Text v-if="run.error" size="sm" tone="danger">{{ run.error.message }}</Text>
+    <Progress :value="percent" :aria-label="t('download.progress', { title: run.title })" />
+    <Text v-if="failure" size="sm" tone="danger">{{ failure }}</Text>
     <ScrollArea v-if="run.files.length > 1" class="max-h-48">
       <Stack gap="xs">
         <Inline

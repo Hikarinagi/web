@@ -71,3 +71,4 @@ export const GalgameRateCardExtension = EXTENSIONS_BY_NAME.galgame_rate_card
 export const LightNovelRateCardExtension = EXTENSIONS_BY_NAME.light_novel_rate_card
 export const MangaRateCardExtension = EXTENSIONS_BY_NAME.manga_rate_card
 export const CommentCardExtension = EXTENSIONS_BY_NAME.comment_card
+export const LotteryCardExtension = EXTENSIONS_BY_NAME.lottery_card

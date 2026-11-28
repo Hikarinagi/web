@@ -18,10 +18,13 @@
     search.activeIndex >= 0 ? searchOptionId(search.activeIndex) : undefined,
   )
 
+  const { t } = useLocaleText()
   const mounted = useMounted()
-  const triggerLabel = computed(() =>
-    mounted.value ? `搜索（${/Mac/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl+K'}）` : '搜索',
-  )
+  const triggerLabel = computed(() => {
+    if (!mounted.value) return t('layout.search.label')
+    const key = /Mac/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl+K'
+    return t('layout.search.shortcut', { key })
+  })
 
   onKeyStroke(['k', 'K'], event => {
     if (event.repeat || event.defaultPrevented) return
@@ -43,7 +46,7 @@
   </IconButton>
 
   <Dialog
-    title="搜索"
+    :title="t('layout.search.label')"
     placement="top"
     size="lg"
     :header="false"
@@ -57,8 +60,8 @@
           variant="bare"
           size="lg"
           :loading="search.loading"
-          aria-label="搜索"
-          placeholder="搜索作品 / 角色 / 人物…"
+          :aria-label="t('layout.search.label')"
+          :placeholder="t('layout.search.placeholder')"
           role="combobox"
           aria-expanded="true"
           aria-autocomplete="list"

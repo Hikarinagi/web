@@ -10,7 +10,8 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./eslint/service-files": "./eslint/service-files.mjs"
+    "./eslint/service-files": "./eslint/service-files.mjs",
+    "./eslint/i18n": "./eslint/i18n.mjs"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",

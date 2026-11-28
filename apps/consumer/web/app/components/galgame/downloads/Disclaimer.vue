@@ -7,18 +7,23 @@
   const props = defineProps<{
     links: GalgameDownloadsPageData['galgame']['external_links']
     steamApps: GalgameDownloadsPageData['galgame']['steam_apps']
+    dlsite: GalgameDownloadsPageData['dlsite']
   }>()
 
-  const stores = computed(() =>
-    storeLinks([
+  const stores = computed(() => {
+    const sponsored = props.dlsite?.links[0]
+    return storeLinks([
+      ...(sponsored
+        ? [{ name: 'dlsite', label: 'DLsite', url: sponsored.url, sponsored: true }]
+        : []),
       ...props.links,
       ...props.steamApps.map(app => ({
         name: 'steam',
         label: 'Steam',
         url: `https://store.steampowered.com/app/${app.app_id}/`,
       })),
-    ]),
-  )
+    ])
+  })
 </script>
 
 <template>
@@ -31,7 +36,7 @@
         :key="store.url"
         :href="store.url"
         target="_blank"
-        rel="noreferrer"
+        :rel="'sponsored' in store ? 'sponsored noopener' : 'noreferrer'"
       >
         {{ store.label }}
       </Link>

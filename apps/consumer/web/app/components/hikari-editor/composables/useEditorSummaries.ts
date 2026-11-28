@@ -14,6 +14,7 @@ import type {
   GalgameRateCardSummary,
   LightNovelRateCardSummary,
   MangaRateCardSummary,
+  LotteryCardSummary,
 } from '~/components/hikari-content/composables/useContentSummaries'
 
 // ref 是显式参数而非 inject:Vue inject 不读 currentInstance 自己的 provides,
@@ -36,6 +37,7 @@ export function emptyEditorSummaries(): EntitySummaries {
     mention_users: [],
     comments: [],
     polls: [],
+    lotteries: [],
   }
 }
 
@@ -52,6 +54,7 @@ type EntitySummaryByKey = {
   galgame_rates: GalgameRateCardSummary
   light_novel_rates: LightNovelRateCardSummary
   manga_rates: MangaRateCardSummary
+  lotteries: LotteryCardSummary
 }
 
 export function useEditorSummariesMerge(summariesRef: Ref<EntitySummaries>) {

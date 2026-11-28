@@ -1,6 +1,5 @@
 import type { ApiData } from '@hikarinagi/api-contract/v3'
 import type { HikariImageSource } from '~/utils/media/image'
-import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
 
 export type SpaceRateItem = ApiData<'/api/v3/user/{id}/rates', 'get'>['items'][number]
 export type SpaceRatePage = ApiData<'/api/v3/user/{id}/rates', 'get'>
@@ -80,10 +79,6 @@ export function managedTypeLabel(item: ManagedContentItem): string {
 
 export function managedViewPath(item: ManagedContentItem): string {
   return item.content_type === 'post' ? `/posts/${item.id}` : `/articles/${item.id}`
-}
-
-export function formatMonthDay(iso: string): string {
-  return datePartFormat(iso, TimeFormatEnum.M_D_CN)
 }
 
 export const SPACE_TABS = [
@@ -205,22 +200,6 @@ export type SpaceRateStatusCounts = ApiData<
 
 export function rateStatusBuckets(counts: SpaceRateStatusCounts, work: RateWorkFilterKey) {
   return work === 'all' ? counts : counts.by_work_type[work]
-}
-
-function formatRateDate(iso: string): string {
-  const year = Number(iso.slice(0, 4))
-  const currentYear = new Date().getFullYear()
-  return datePartFormat(
-    iso,
-    year === currentYear ? TimeFormatEnum.M_D_CN : TimeFormatEnum.YYYY_M_D_CN,
-  )
-}
-
-export function rateDateLine(item: SpaceRateItem): string {
-  const date = formatRateDate(item.last_activity_at)
-  const label = rateStatusLabel(item.work_type, item.status)
-  if (item.status === 'COMPLETED') return `${label}于 ${date}`
-  return label ? `${label} · 更新于 ${date}` : `更新于 ${date}`
 }
 
 const RESOURCE_LABEL: Record<string, string> = {

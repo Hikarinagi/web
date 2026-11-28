@@ -12,6 +12,7 @@
   } = defineProps<{ current: string; intro?: string; dismissableMask?: boolean }>()
   const visible = defineModel<boolean>('visible', { required: true })
 
+  const { t } = useLocaleText()
   const { form, values, submitting, confirmed, submit, reset } = useChangeUsernameForm(() => {
     visible.value = false
   })
@@ -24,7 +25,7 @@
 <template>
   <Dialog
     v-model:open="visible"
-    title="修改用户名"
+    :title="t('setting.username.title')"
     size="md"
     :locked="!dismissableMask || submitting"
   >
@@ -38,29 +39,31 @@
       >
         <Text v-if="intro" size="sm" tone="muted">{{ intro }}</Text>
 
-        <Alert tone="warning">用户名只能修改一次，且无法撤销。请谨慎决定。</Alert>
+        <Alert tone="warning">{{ t('setting.username.warning') }}</Alert>
 
-        <FormField label="当前用户名">
+        <FormField :label="t('setting.username.current')">
           <Input :model-value="current" disabled />
         </FormField>
 
-        <FormField name="username" label="新用户名" required>
+        <FormField name="username" :label="t('setting.username.next')" required>
           <Input
             v-model="values.username"
             autocomplete="off"
-            placeholder="字母、数字、下划线，3-20 位"
+            :placeholder="t('setting.username.placeholder')"
           />
         </FormField>
 
-        <Checkbox v-model="confirmed">我已知晓用户名只能修改一次，确认后无法再次更改</Checkbox>
+        <Checkbox v-model="confirmed">{{ t('setting.username.confirm') }}</Checkbox>
       </Form>
     </template>
 
     <template #footer>
       <Button variant="ghost" tone="neutral" :disabled="submitting" @click="visible = false">
-        取消
+        {{ t('common.cancel') }}
       </Button>
-      <Button :loading="submitting" :disabled="!confirmed" @click="form?.submit()">确认修改</Button>
+      <Button :loading="submitting" :disabled="!confirmed" @click="form?.submit()">
+        {{ t('setting.username.submit') }}
+      </Button>
     </template>
   </Dialog>
 </template>

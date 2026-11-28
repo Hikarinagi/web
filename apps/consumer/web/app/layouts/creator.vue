@@ -15,8 +15,11 @@
   import { buildSeoTitle } from '~/utils/seo'
 
   const { state } = useCreatorSidebar()
+  const { t } = useLocaleText()
   const { currentRoute: route } = useRouter()
-  const title = computed(() => (route.value.meta.title as string | undefined) ?? '创作者中心')
+  const title = computed(
+    () => (route.value.meta.title as string | undefined) ?? t('common.section.creator'),
+  )
   const content = useTemplateRef<ComponentPublicInstance>('content')
   useTabRouter()
   useTabLinks()
@@ -31,7 +34,11 @@
 </script>
 
 <template>
-  <AppShell v-model:sidebar="state" mobile-title="创作者中心" restore-key="creator">
+  <AppShell
+    v-model:sidebar="state"
+    :mobile-title="t('common.section.creator')"
+    restore-key="creator"
+  >
     <template #sidebar><CreatorShellSidebar /></template>
     <template #header>
       <SidebarTrigger />

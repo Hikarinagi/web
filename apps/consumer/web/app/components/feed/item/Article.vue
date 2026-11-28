@@ -57,5 +57,8 @@
     <Stack v-if="item.poll" gap="none" class="relative z-1">
       <HikariContentNodesPollCard :poll="item.poll" />
     </Stack>
+    <Stack v-if="item.lottery" gap="none" class="relative z-1">
+      <LotteryCard :initial="item.lottery" />
+    </Stack>
   </Stack>
 </template>

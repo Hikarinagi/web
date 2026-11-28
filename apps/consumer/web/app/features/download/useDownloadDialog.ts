@@ -2,7 +2,7 @@ import { computed, ref, shallowRef, watch, type Ref } from 'vue'
 import { isApiError } from '~/utils/api/error'
 import type { DownloadFormat, DownloadKind, DownloadQuote } from './types'
 import { useDownloadCard } from './useDownloadCard'
-import { useDownloadEngine } from './useDownloadEngine'
+import { toastFailure, useDownloadEngine } from './useDownloadEngine'
 
 export type DownloadBlock = 'DAILY_LIMIT' | 'FILE_TOO_LARGE' | 'MEMORY_LIMIT'
 
@@ -130,6 +130,7 @@ export function useDownloadDialog(options: {
       engine.start({ task, manifest, sink: chosen, directory })
       taskId.value = task.id
     } catch (error) {
+      toastFailure(error)
       if (isApiError(error)) await refreshQuote()
     } finally {
       creating.value = false
@@ -143,7 +144,15 @@ export function useDownloadDialog(options: {
   async function resume() {
     const current = run.value
     if (!current) return
-    await engine.resume({ id: current.taskId, title: current.title, format: options.format.value })
+    try {
+      await engine.resume({
+        id: current.taskId,
+        title: current.title,
+        format: options.format.value,
+      })
+    } catch (error) {
+      toastFailure(error)
+    }
   }
 
   function background() {

@@ -2,9 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DownloadManifest } from '~/features/download/engine/types'
 import { fetchEntry } from '~/features/download/engine/fetcher'
 
+const decrypt = vi.hoisted(() =>
+  vi.fn(async (_aad: string, _key: string, encrypted: ArrayBuffer) => encrypted),
+)
+
 vi.mock('~/utils/media/file-crypto', () => ({
   createFileKey: () => 'key',
-  decryptFile: async (_aad: string, _key: string, encrypted: ArrayBuffer) => encrypted,
+  decryptFile: decrypt,
 }))
 
 const body = new TextEncoder().encode('page')
@@ -47,6 +51,7 @@ describe('fetchEntry', () => {
     vi.useRealTimers()
     vi.unstubAllGlobals()
     fetchMock.mockReset()
+    decrypt.mockReset()
   })
 
   it('waits as long as the server asks when rate limited, without spending the retry budget', async () => {
@@ -103,5 +108,76 @@ describe('fetchEntry', () => {
     await vi.advanceTimersByTimeAsync(7000)
     await settled
     expect(fetchMock).toHaveBeenCalledTimes(4)
+  })
+
+  it('keeps the code and message of an error the backend answered in JSON', async () => {
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({ error: { code: 'DOWNLOAD_TASK_NOT_FOUND', message: '下载任务不存在' } }),
+        { status: 404, headers: { 'content-type': 'application/json' } },
+      ),
+    )
+    const error = await fetchEntry(manifest, file, entry, new AbortController().signal, {
+      until: 0,
+    }).catch((reason: unknown) => reason)
+    expect(error).toMatchObject({ code: 'DOWNLOAD_TASK_NOT_FOUND', message: '下载任务不存在' })
+    expect(error).toHaveProperty('fallback', undefined)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('names the status of a failed response that is not JSON, without retrying a client error', async () => {
+    fetchMock.mockResolvedValue(
+      new Response('<html></html>', { status: 413, headers: { 'content-type': 'text/html' } }),
+    )
+    await expect(
+      fetchEntry(manifest, file, entry, new AbortController().signal, { until: 0 }),
+    ).rejects.toMatchObject({ code: 'HTTP_413', fallback: 'status', status: 413 })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('asks for a refresh when Cloudflare stops the request for a check', async () => {
+    fetchMock.mockResolvedValue(
+      new Response('', { status: 403, headers: { 'cf-mitigated': 'challenge' } }),
+    )
+    await expect(
+      fetchEntry(manifest, file, entry, new AbortController().signal, { until: 0 }),
+    ).rejects.toMatchObject({ code: 'HTTP_403', fallback: 'challenge' })
+  })
+
+  it('reports a dropped connection as a network failure once the retries run out', async () => {
+    fetchMock.mockRejectedValue(new TypeError('Failed to fetch'))
+    const result = fetchEntry(manifest, file, entry, new AbortController().signal, { until: 0 })
+    const settled = expect(result).rejects.toMatchObject({
+      code: 'NETWORK_FAILED',
+      fallback: 'network',
+    })
+    await vi.advanceTimersByTimeAsync(7000)
+    await settled
+    expect(fetchMock).toHaveBeenCalledTimes(4)
+  })
+
+  it('reports a file that fails to decrypt as an integrity failure once the retries run out', async () => {
+    fetchMock.mockImplementation(async () => ok())
+    decrypt.mockRejectedValue(new Error('tag mismatch'))
+    const result = fetchEntry(manifest, file, entry, new AbortController().signal, { until: 0 })
+    const settled = expect(result).rejects.toMatchObject({
+      code: 'INTEGRITY_FAILED',
+      fallback: 'integrity',
+    })
+    await vi.advanceTimersByTimeAsync(7000)
+    await settled
+    expect(decrypt).toHaveBeenCalledTimes(4)
+  })
+
+  it('passes an abort through untouched instead of reporting it as a network failure', async () => {
+    const controller = new AbortController()
+    fetchMock.mockImplementation(async () => {
+      controller.abort(new DOMException('paused', 'AbortError'))
+      throw controller.signal.reason
+    })
+    await expect(
+      fetchEntry(manifest, file, entry, controller.signal, { until: 0 }),
+    ).rejects.toMatchObject({ name: 'AbortError', message: 'paused' })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })

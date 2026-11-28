@@ -95,6 +95,11 @@ export const DECORATIONS_PERMISSIONS = {
   WRITE: 'decorations.write',
 } as const
 
+export const LOTTERY_PERMISSIONS = {
+  READ: 'lottery.read',
+  WRITE: 'lottery.write',
+} as const
+
 export const SEARCH_PERMISSIONS = {
   SETTINGS_READ: 'search.settings.read',
   SETTINGS_WRITE: 'search.settings.write',
@@ -179,6 +184,7 @@ export const DOMAIN_PERMISSION_KEYS: readonly string[] = [
   ...Object.values(READER_PERMISSIONS),
   ...Object.values(PROMOTIONS_PERMISSIONS),
   ...Object.values(DECORATIONS_PERMISSIONS),
+  ...Object.values(LOTTERY_PERMISSIONS),
   ...Object.values(SEARCH_PERMISSIONS),
   ...Object.values(TELEGRAM_PERMISSIONS),
   ...Object.values(MANGA_PERMISSIONS),
@@ -207,6 +213,7 @@ export type PermissionKey =
   | ValueOf<typeof PROMOTIONS_PERMISSIONS>
   | ValueOf<typeof RELEASE_NOTES_PERMISSIONS>
   | ValueOf<typeof DECORATIONS_PERMISSIONS>
+  | ValueOf<typeof LOTTERY_PERMISSIONS>
   | ValueOf<typeof SEARCH_PERMISSIONS>
   | ValueOf<typeof TELEGRAM_PERMISSIONS>
   | ValueOf<typeof MANGA_PERMISSIONS>

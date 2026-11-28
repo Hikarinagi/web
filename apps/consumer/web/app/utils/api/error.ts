@@ -1,12 +1,15 @@
 import {
+  DEFAULT_LOCALE,
   HIKARI_BIZ_CODE,
   HIKARI_BIZ_CODE_STATUS,
+  SHARED_MESSAGES,
   type ApiFailure,
   type ApiFieldError,
   type HikariBizCode,
 } from '@hikarinagi/shared'
 import { toast } from '@hina-ui/vue'
 import { isRecord } from '#shared/utils/record'
+import { formatList, translate, tryTranslate } from '~/utils/i18n'
 
 const HTTP_STATUS_MESSAGE: Partial<Record<number, string>> = {
   400: 'Bad Request',
@@ -29,6 +32,7 @@ interface HikariApiErrorInput {
   field_errors?: ApiFieldError[]
   details?: Record<string, unknown>
   retryable?: boolean
+  fallback?: 'network' | 'challenge' | 'unexpected'
   cause?: unknown
 }
 
@@ -39,6 +43,7 @@ export class HikariApiError extends Error {
   readonly field_errors?: ApiFieldError[]
   readonly details?: Record<string, unknown>
   readonly retryable: boolean
+  readonly fallback?: 'network' | 'challenge' | 'unexpected'
 
   constructor(input: HikariApiErrorInput) {
     super(input.message, { cause: input.cause })
@@ -49,7 +54,30 @@ export class HikariApiError extends Error {
     this.field_errors = input.field_errors
     this.details = input.details
     this.retryable = input.retryable ?? false
+    this.fallback = input.fallback
   }
+}
+
+export function apiErrorMessage(
+  error: Pick<HikariApiError, 'code' | 'message' | 'details' | 'fallback'>,
+): string {
+  const defaults: Partial<Record<string, string>> = SHARED_MESSAGES[DEFAULT_LOCALE].bizCode
+  if (error.message && error.message !== defaults[error.code]) return error.message
+  if (error.fallback) return translate(`error.${error.fallback}`)
+  return tryTranslate(`bizCode.${error.code}`, error.details) ?? error.message
+}
+
+export function pageErrorMessage(error: unknown): string {
+  const data = isRecord(error) ? error.data : undefined
+  if (!isRecord(data) || typeof data.code !== 'string') return ''
+  return apiErrorMessage({
+    code: data.code as HikariBizCode,
+    message: typeof data.message === 'string' ? data.message : '',
+    details: isRecord(data.details) ? data.details : undefined,
+    fallback: (['network', 'challenge', 'unexpected'] as const).find(
+      item => item === data.fallback,
+    ),
+  })
 }
 
 export function isApiError(error: unknown): error is HikariApiError {
@@ -79,7 +107,7 @@ function formatValue(value: unknown): string {
   if (value == null) return ''
   if (typeof value === 'string') return value
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
-  if (Array.isArray(value)) return value.map(formatValue).filter(Boolean).join('、')
+  if (Array.isArray(value)) return formatList(value.map(formatValue).filter(Boolean))
   return JSON.stringify(value)
 }
 
@@ -103,13 +131,14 @@ export function showApiErrorToast(error: HikariApiError) {
     return
   }
 
+  const message = apiErrorMessage(error)
   const detail = formatDetails(error.details)
-  const key = `${error.message}\n${detail}`
+  const key = `${error.code}\n${message}\n${detail}`
   const now = Date.now()
   if (now - (shownToasts.get(key) ?? 0) < 3000) return
   if (shownToasts.size > 50) shownToasts.clear()
   shownToasts.set(key, now)
-  toast.danger(error.message, { description: detail || undefined })
+  toast.danger(message, { description: detail || undefined })
 }
 
 export function isMaintenanceError(error: unknown): boolean {
@@ -153,6 +182,7 @@ export function toNuxtError(error: unknown, options: { fatal?: boolean } = {}) {
       field_errors: apiError.field_errors,
       details: apiError.details,
       retryable: apiError.retryable,
+      fallback: apiError.fallback,
     },
     cause: apiError,
   })
@@ -191,7 +221,8 @@ export function normalizeApiError(error: unknown) {
     return new HikariApiError({
       status: getErrorStatus(error, HIKARI_BIZ_CODE.COMMON_SERVICE_UNAVAILABLE),
       code: HIKARI_BIZ_CODE.COMMON_SERVICE_UNAVAILABLE,
-      message: challenged ? '需要完成安全验证，请刷新页面' : '服务暂时不可用，请稍后重试',
+      message: '',
+      fallback: challenged ? 'challenge' : 'network',
       cause: error,
       retryable: true,
     })
@@ -200,7 +231,8 @@ export function normalizeApiError(error: unknown) {
   return new HikariApiError({
     status: HIKARI_BIZ_CODE_STATUS[HIKARI_BIZ_CODE.COMMON_UNEXPECTED_ERROR],
     code: HIKARI_BIZ_CODE.COMMON_UNEXPECTED_ERROR,
-    message: getErrorMessage(error) ?? '请求失败',
+    message: getErrorMessage(error) ?? '',
+    fallback: 'unexpected',
     cause: error,
   })
 }

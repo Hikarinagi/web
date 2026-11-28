@@ -6,12 +6,13 @@
     contributionResourceLabel,
     type SpaceContribution,
   } from '~/features/space/space'
-  import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
+  import { formatDatePart } from '~/utils/time-format'
 
   defineOptions({ name: 'SpaceTabsContributionsRow' })
 
   const props = defineProps<{ item: SpaceContribution }>()
   const NuxtLink = resolveComponent('NuxtLink')
+  const { t } = useLocaleText()
 
   const isEntity = computed(() =>
     ['PERSON', 'CHARACTER', 'PRODUCER'].includes(props.item.resource_type),
@@ -65,10 +66,10 @@
     <Stack gap="xs" align="end" class="shrink-0">
       <Inline gap="xs" :wrap="false">
         <Tag size="sm">v{{ item.version }}</Tag>
-        <Tag size="sm" tone="accent">已合并</Tag>
+        <Tag size="sm" tone="accent">{{ t('space.contribution.merged') }}</Tag>
       </Inline>
       <Text as="span" size="xs" tone="muted">
-        {{ datePartFormat(item.created_at, TimeFormatEnum.M_D_CN) }}
+        {{ formatDatePart(item.created_at, 'monthDay') }}
       </Text>
     </Stack>
   </component>

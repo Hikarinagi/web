@@ -30,7 +30,7 @@ export function useUpdateNotify(kind: 'manga' | 'novel', initial: UpdateNotifySe
             })
       setting.value = { ...next, statuses: [...next.statuses] }
       current.value = { ...next, statuses: [...next.statuses] }
-      toast.success('已更新追更提醒')
+      toast.success(translate('setting.notify.saved'))
     } catch {
       setting.value = { ...current.value, statuses: [...current.value.statuses] }
     } finally {

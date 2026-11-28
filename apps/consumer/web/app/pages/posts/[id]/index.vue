@@ -21,6 +21,11 @@
   useViewPing('post', postId)
 
   const firstPoll = computed(() => data.value?.post.entity_summaries.polls[0] ?? null)
+  const carriedLottery = computed(() => {
+    const lottery = data.value?.lottery
+    const inBody = data.value?.post.entity_summaries.lotteries.some(l => l.id === lottery?.id)
+    return lottery && !inBody ? lottery : null
+  })
   const bodyDoc = computed(() => {
     const doc = data.value?.post.content_json
     if (!doc?.content) return doc
@@ -84,6 +89,8 @@
       />
 
       <HikariContentNodesPollCard v-if="firstPoll" :poll="firstPoll" />
+
+      <LotteryCard v-if="carriedLottery" :initial="carriedLottery" class="mt-5" />
 
       <PostRelatedWorks
         v-if="data.post.related_works.length"

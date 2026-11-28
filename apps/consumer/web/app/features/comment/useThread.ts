@@ -387,6 +387,7 @@ function emptySummaries(): CommentSummaries {
     mention_users: [],
     comments: [],
     polls: [],
+    lotteries: [],
   }
 }
 

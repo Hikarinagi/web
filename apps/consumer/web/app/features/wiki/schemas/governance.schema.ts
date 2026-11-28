@@ -1,15 +1,15 @@
 import * as v from 'valibot'
 
 const reason = v.pipe(
-  v.string('理由应为文本'),
+  v.string(issueMessage('validation.wiki.reasonType')),
   v.trim(),
-  v.nonEmpty('请写明理由'),
-  v.maxLength(500, '理由不能超过 500 字'),
+  v.nonEmpty(issueMessage('validation.wiki.reasonRequired')),
+  v.maxLength(500, issueMessage('validation.wiki.reasonMax')),
 )
 
 export const protectSchema = v.object({
   reason,
-  until: v.nullish(v.string('到期日应为文本'), null),
+  until: v.nullish(v.string(issueMessage('validation.wiki.untilType')), null),
 })
 
 export const reasonSchema = v.object({ reason })

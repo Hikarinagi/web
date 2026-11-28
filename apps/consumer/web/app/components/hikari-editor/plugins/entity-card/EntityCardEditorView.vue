@@ -11,6 +11,7 @@
   import HikariContentNodesEntityCardLightNovel from '~/components/hikari-content/nodes/entity-card/LightNovel.vue'
   import HikariContentNodesEntityCardLightNovelRate from '~/components/hikari-content/nodes/entity-card/LightNovelRate.vue'
   import HikariContentNodesEntityCardLightNovelVolume from '~/components/hikari-content/nodes/entity-card/LightNovelVolume.vue'
+  import HikariContentNodesEntityCardLottery from '~/components/hikari-content/nodes/entity-card/Lottery.vue'
   import HikariContentNodesEntityCardManga from '~/components/hikari-content/nodes/entity-card/Manga.vue'
   import HikariContentNodesEntityCardMangaRate from '~/components/hikari-content/nodes/entity-card/MangaRate.vue'
   import HikariContentNodesEntityCardPerson from '~/components/hikari-content/nodes/entity-card/Person.vue'
@@ -37,6 +38,7 @@
     galgame_rate_card: HikariContentNodesEntityCardGalgameRate,
     light_novel_rate_card: HikariContentNodesEntityCardLightNovelRate,
     manga_rate_card: HikariContentNodesEntityCardMangaRate,
+    lottery_card: HikariContentNodesEntityCardLottery,
   }
 
   const inner = computed(() => NODE_VIEW_MAP[props.node.type.name] ?? null)

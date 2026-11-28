@@ -3,6 +3,7 @@ import { decodeHTML } from 'entities'
 export interface SteamLanguage {
   name: string
   full_audio: boolean
+  chinese: boolean
 }
 
 export interface SteamAppSummary {
@@ -12,6 +13,7 @@ export interface SteamAppSummary {
   header_image: string
   short_description: string
   release_date: string
+  coming_soon: boolean
   developers: string[]
   publishers: string[]
   languages: SteamLanguage[]
@@ -71,13 +73,17 @@ function parseLanguages(input: string | undefined): SteamLanguage[] {
 
   return (input.split(/<br\s*\/?>/i)[0] ?? '')
     .split(',')
-    .map(part => ({
-      name: part
+    .map(part => {
+      const name = part
         .replace(/<[^>]*>/g, '')
         .replace(/\*/g, '')
-        .trim(),
-      full_audio: /<strong>\s*\*\s*<\/strong>/i.test(part),
-    }))
+        .trim()
+      return {
+        name,
+        full_audio: /<strong>\s*\*\s*<\/strong>/i.test(part),
+        chinese: name.includes('中文'),
+      }
+    })
     .filter(language => language.name.length > 0)
 }
 
@@ -134,7 +140,8 @@ const cachedApp = defineCachedFunction(
       short_description: decodeHTML((data.short_description ?? '').replace(/<[^>]*>/g, ' '))
         .replace(/\s+/g, ' ')
         .trim(),
-      release_date: data.release_date?.coming_soon ? '即将推出' : (data.release_date?.date ?? ''),
+      release_date: data.release_date?.date ?? '',
+      coming_soon: data.release_date?.coming_soon === true,
       developers: data.developers ?? [],
       publishers: data.publishers ?? [],
       languages: parseLanguages(data.supported_languages),

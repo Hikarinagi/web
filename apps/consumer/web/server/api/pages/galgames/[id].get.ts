@@ -21,6 +21,7 @@ export async function handler(event: H3Event) {
     my_rate,
     favorite,
     my_cover_vote,
+    dlsite,
   ] = await Promise.all([
     fetchBackendData(event, '/api/v3/galgames/{id}', { path: { id } }),
     fetchBackendData(event, '/api/v3/galgames/{id}/display', { path: { id } }),
@@ -47,6 +48,7 @@ export async function handler(event: H3Event) {
     fetchBackendData(event, '/api/v3/galgames/{id}/covers/vote', { path: { id } }).catch(
       () => null,
     ),
+    fetchBackendData(event, '/api/v3/galgames/{id}/dlsite', { path: { id } }).catch(() => null),
   ])
 
   const brandId = display.brands.find(brand => brand.producer_id)?.producer_id
@@ -73,6 +75,7 @@ export async function handler(event: H3Event) {
     my_rate,
     favorite,
     my_cover_vote,
+    dlsite,
     brand_works: brandId && brandWorks ? { id: brandId, list: brandWorks } : null,
   }
 }

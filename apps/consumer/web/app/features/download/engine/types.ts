@@ -36,6 +36,8 @@ export interface RunSnapshot {
 export interface DownloadFailure {
   code: string
   message: string
+  fallback?: 'network' | 'challenge' | 'status' | 'integrity' | 'outlet' | 'unexpected'
+  status?: number
   file: number | null
 }
 

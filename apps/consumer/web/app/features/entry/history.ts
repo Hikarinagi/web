@@ -1,5 +1,5 @@
 import type { BackendEntryHistory } from '~/features/entry/contract'
-import { TimeFormatEnum, timeFormat } from '~/utils/time-format'
+import { TimeFormatEnum, formatDate, timeFormat } from '~/utils/time-format'
 
 type Row = BackendEntryHistory['items'][number]
 
@@ -21,10 +21,7 @@ export function historyDays(rows: Row[]) {
       const sameYear = new Date(row.created_at).getFullYear() === year
       day = {
         key,
-        label: timeFormat(
-          row.created_at,
-          sameYear ? TimeFormatEnum.M_D_CN : TimeFormatEnum.YYYY_M_D_CN,
-        ),
+        label: formatDate(row.created_at, sameYear ? 'monthDay' : 'date'),
         batches: [],
       }
       days.push(day)

@@ -1,5 +1,7 @@
 import { computed, reactive } from 'vue'
 import type { ApiData } from '@hikarinagi/api-contract/v3'
+import { toast } from '@hina-ui/vue'
+import { isAbortError, isApiError } from '~/utils/api/error'
 import {
   directorySupported,
   memoryOutlet,
@@ -66,11 +68,12 @@ async function handle(event: WorkerEvent) {
             : memoryOutlet(event.name, run.mime)
         outlets.set(key(event.taskId, event.file), outlet)
         post({ type: 'opened', taskId: event.taskId, file: event.file })
-      } catch (error) {
+      } catch {
         post({ type: 'cancel', taskId: event.taskId })
         fail(run, {
           code: 'OUTLET_FAILED',
-          message: error instanceof Error ? error.message : '无法开始保存文件',
+          message: '',
+          fallback: 'outlet',
           file: event.file,
         })
       }
@@ -114,6 +117,14 @@ async function restore() {
   if (restored || import.meta.server) return
   restored = true
   for (const record of await listRuns()) interrupted.add(record.taskId)
+}
+
+export function toastFailure(error: unknown) {
+  if (isApiError(error) || isAbortError(error)) return
+  const denied =
+    error instanceof DOMException &&
+    (error.name === 'NotAllowedError' || error.name === 'SecurityError')
+  toast.danger(translate(denied ? 'download.failure.permission' : 'download.failure.unexpected'))
 }
 
 export function useDownloadEngine() {
@@ -195,7 +206,9 @@ export function useDownloadEngine() {
     let sink = preferredSink()
     if (record?.directory) {
       const permission = await record.directory.requestPermission({ mode: 'readwrite' })
-      if (permission !== 'granted') throw new Error('需要重新授权文件夹访问权限才能继续')
+      if (permission !== 'granted') {
+        throw new DOMException('folder access was not granted', 'NotAllowedError')
+      }
       directory = record.directory
       sink = 'fs'
     } else if (sink === 'fs') {

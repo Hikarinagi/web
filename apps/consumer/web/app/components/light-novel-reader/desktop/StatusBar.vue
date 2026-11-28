@@ -10,18 +10,18 @@
   const { quickToc } = shell
   const { phase } = engine
 
-  const label = computed(() => title.value || current.value?.label || '目录')
+  const { t, d } = useLocaleText()
+
+  const label = computed(() => title.value || current.value?.label || t('reader.status.toc'))
 
   const now = useNow({ interval: 30_000 })
-  const clock = computed(() =>
-    now.value.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false }),
-  )
+  const clock = computed(() => d(now.value, 'time'))
 
   const pages = computed(() => {
     const span = chapter.value
     if (!span) return ''
     const shown = span.from === span.to ? `${span.from}` : `${span.from}–${span.to}`
-    return `本章 ${shown} / ${span.total} 页`
+    return t('reader.status.chapterPages', { pages: shown, total: span.total })
   })
   const percent = computed(() =>
     laid.value && position.value ? Math.floor(position.value.progress * 100) : null,
@@ -30,7 +30,7 @@
     const span = book.value
     if (!span) return ''
     const shown = span.from === span.to ? `${span.from}` : `${span.from}–${span.to}`
-    return `${shown} / ${span.total} 页`
+    return t('reader.status.bookPages', { pages: shown, total: span.total })
   })
 </script>
 
@@ -48,7 +48,7 @@
       side="top"
       align="start"
       :padded="false"
-      aria-label="目录"
+      :aria-label="t('reader.status.toc')"
       class="w-80"
       @close-auto-focus.prevent
     >
@@ -73,14 +73,14 @@
       v-if="percent != null"
       :value="percent"
       size="sm"
-      aria-label="全书阅读进度"
+      :aria-label="t('reader.status.progress')"
       class="max-w-64 min-w-16 flex-1"
     />
     <Text size="xs" tone="muted" class="min-w-16 shrink-0 tabular-nums">
       {{ bookPages }}
     </Text>
     <Text v-if="minutesLeft" size="xs" tone="muted" class="ml-auto shrink-0 tabular-nums">
-      本章剩余约 {{ minutesLeft }} 分钟
+      {{ t('reader.status.minutesLeft', { minutes: minutesLeft }) }}
     </Text>
     <Text
       v-if="settings.device.value.showTime"

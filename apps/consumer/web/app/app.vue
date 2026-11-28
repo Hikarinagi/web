@@ -6,9 +6,12 @@
   import { SITE_CONFIG } from '~/config/site'
   import { TRANSITION } from '~/lib/motion'
 
+  useLocaleRoot()
+  const { t } = useLocaleText()
+
   useHikariSeoMeta({
-    title: SITE_CONFIG.title,
-    description: SITE_CONFIG.description,
+    title: () => t('layout.site.title'),
+    description: () => t('layout.site.description'),
     appendSiteName: false,
   })
 

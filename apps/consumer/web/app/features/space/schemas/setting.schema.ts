@@ -2,29 +2,29 @@ import * as v from 'valibot'
 
 export const profileSchema = v.object({
   nickname: v.pipe(
-    v.nullish(v.string('昵称应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.space.nicknameType')), ''),
     v.trim(),
-    v.maxLength(32, '昵称最多 32 个字'),
+    v.maxLength(32, issueMessage('validation.space.nicknameMax')),
   ),
   signature: v.pipe(
-    v.nullish(v.string('个性签名应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.space.signatureType')), ''),
     v.trim(),
-    v.maxLength(120, '个性签名最多 120 个字'),
+    v.maxLength(120, issueMessage('validation.space.signatureMax')),
   ),
   bio: v.pipe(
-    v.nullish(v.string('简介应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.space.bioType')), ''),
     v.trim(),
-    v.maxLength(500, '简介最多 500 个字'),
+    v.maxLength(500, issueMessage('validation.space.bioMax')),
   ),
 })
 export type ProfileValues = v.InferOutput<typeof profileSchema>
 
 export const nicknameSchema = v.object({
   nickname: v.pipe(
-    v.string('昵称应为文本'),
+    v.string(issueMessage('validation.space.nicknameType')),
     v.trim(),
-    v.nonEmpty('啊，你还什么都没有输入呢'),
-    v.maxLength(32, '昵称最多 32 个字'),
+    v.nonEmpty(issueMessage('validation.space.nicknameRequired')),
+    v.maxLength(32, issueMessage('validation.space.nicknameMax')),
   ),
 })
 export type NicknameValues = v.InferOutput<typeof nicknameSchema>

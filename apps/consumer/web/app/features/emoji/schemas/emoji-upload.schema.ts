@@ -4,19 +4,19 @@ import { EMOJI_MAX_FILE_BYTES, EMOJI_NAME_REGEX } from '../constants'
 const ALLOWED_MIME = ['image/webp', 'image/png', 'image/jpeg', 'image/gif']
 
 const fileField = v.pipe(
-  v.instance(File, '请选择图片文件'),
-  v.check(f => ALLOWED_MIME.includes(f.type), '仅支持 WebP / PNG / JPEG / GIF'),
+  v.instance(File, issueMessage('validation.emoji.fileRequired')),
+  v.check(f => ALLOWED_MIME.includes(f.type), issueMessage('validation.emoji.fileType')),
   v.check(
     f => f.size <= EMOJI_MAX_FILE_BYTES,
-    `文件大小不能超过 ${Math.round(EMOJI_MAX_FILE_BYTES / 1024)} KB`,
+    issueMessage('validation.emoji.fileSize', { size: Math.round(EMOJI_MAX_FILE_BYTES / 1024) }),
   ),
 )
 
 const nameField = v.pipe(
-  v.string('请输入贴纸名称'),
+  v.string(issueMessage('validation.emoji.nameRequired')),
   v.trim(),
-  v.nonEmpty('请输入贴纸名称'),
-  v.regex(EMOJI_NAME_REGEX, '贴纸名称必须为 1-32 个字母/数字/下划线/连字符'),
+  v.nonEmpty(issueMessage('validation.emoji.nameRequired')),
+  v.regex(EMOJI_NAME_REGEX, issueMessage('validation.emoji.nameFormat')),
 )
 
 export const emojiUploadSchema = v.object({ file: fileField, name: nameField })

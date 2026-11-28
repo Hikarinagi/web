@@ -6,6 +6,7 @@
   definePageMeta({ layout: 'default', middleware: 'auth' })
 
   const auth = useAuthStore()
+  const { t } = useLocaleText()
 
   const { data } = await useHikariApiData('/api/pages/setting', { fatal: true })
 
@@ -20,14 +21,14 @@
     },
   )
 
-  useHikariSeoMeta({ title: '设置', appendSiteName: true })
+  useHikariSeoMeta({ title: () => t('setting.title'), appendSiteName: true })
 </script>
 
 <template>
   <Stack v-if="data" gap="lg" class="py-8">
     <Stack as="header" gap="xs">
-      <Heading :level="1" size="2xl" class="font-bold">设置</Heading>
-      <Text size="sm" tone="muted">管理你的资料、账号安全与内容偏好</Text>
+      <Heading :level="1" size="2xl" class="font-bold">{{ t('setting.title') }}</Heading>
+      <Text size="sm" tone="muted">{{ t('setting.description') }}</Text>
     </Stack>
 
     <Flex direction="col" gap="lg" class="lg:flex-row lg:items-start lg:gap-8">

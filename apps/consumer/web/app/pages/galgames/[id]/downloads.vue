@@ -37,6 +37,7 @@
       <GalgameDownloadsDisclaimer
         :links="data.galgame.external_links"
         :steam-apps="data.galgame.steam_apps"
+        :dlsite="data.dlsite"
       />
 
       <GalgameDownloadsTabs :downloads="data.downloads" :patches="data.patches" />

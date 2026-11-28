@@ -27,36 +27,59 @@
     busy: number | null
   }>()
   const emit = defineEmits<{ resume: [task: Task]; pause: [task: Task]; remove: [task: Task] }>()
+  const { t, d } = useLocaleText()
 
   const filter = ref('')
 
   function state(task: Task) {
     const run = props.runs.get(task.id)
     const percent = run?.total ? Math.min(100, Math.round((run.written / run.total) * 100)) : 0
-    if (run?.state === 'preparing') return { kind: 'running' as const, label: '准备中', percent }
+    if (run?.state === 'preparing') {
+      return { kind: 'running' as const, label: t('download.state.preparing'), percent }
+    }
     if (run?.state === 'saving') return { kind: 'running' as const, label: `${percent}%`, percent }
-    if (run?.state === 'paused') return { kind: 'paused' as const, label: '已暂停', percent }
-    if (run?.state === 'error' || props.interrupted.has(task.id))
-      return { kind: 'error' as const, label: '已中断', percent }
-    if (task.updated) return { kind: 'updated' as const, label: '有更新', percent }
+    if (run?.state === 'paused') {
+      return { kind: 'paused' as const, label: t('download.state.paused'), percent }
+    }
+    if (run?.state === 'error' || props.interrupted.has(task.id)) {
+      return { kind: 'error' as const, label: t('download.state.interrupted'), percent }
+    }
+    if (task.updated) {
+      return { kind: 'updated' as const, label: t('download.state.updated'), percent }
+    }
     return { kind: 'idle' as const, label: '', percent }
   }
 
-  const columns: DataTableColumn<Task>[] = [
-    { key: 'title', label: '作品', field: 'title', sortable: true, truncate: true },
-    { key: 'format', label: '格式', field: 'format', sortable: true, filterable: false },
+  const columns = computed<DataTableColumn<Task>[]>(() => [
+    {
+      key: 'title',
+      label: t('download.table.title'),
+      field: 'title',
+      sortable: true,
+      truncate: true,
+    },
+    {
+      key: 'format',
+      label: t('download.table.format'),
+      field: 'format',
+      sortable: true,
+      filterable: false,
+    },
     {
       key: 'items',
-      label: '数量',
+      label: t('download.table.items'),
       accessor: row => row.items.length,
-      format: (value, row) => `${value} ${row.kind === 'MANGA' ? '话' : '卷'}`,
+      format: (value, row) =>
+        row.kind === 'MANGA'
+          ? t('download.table.chapters', { count: Number(value) })
+          : t('download.table.volumes', { count: Number(value) }),
       sortable: true,
       filterable: false,
       align: 'end',
     },
     {
       key: 'total_bytes',
-      label: '大小',
+      label: t('download.table.size'),
       field: 'total_bytes',
       format: value => formatBytes(Number(value)),
       sortable: true,
@@ -65,20 +88,26 @@
     },
     {
       key: 'created_at',
-      label: '时间',
+      label: t('download.table.time'),
       field: 'created_at',
-      format: value => new Date(String(value)).toLocaleDateString('zh-CN'),
+      format: value => d(new Date(String(value)), 'numeric'),
       sortable: true,
       filterable: false,
     },
     {
       key: 'status',
-      label: '状态',
+      label: t('download.table.status'),
       accessor: row => state(row).label,
       filterable: false,
     },
-    { key: 'actions', label: '操作', filterable: false, align: 'end', pin: 'end' },
-  ]
+    {
+      key: 'actions',
+      label: t('download.table.actions'),
+      filterable: false,
+      align: 'end',
+      pin: 'end',
+    },
+  ])
 </script>
 
 <template>
@@ -89,15 +118,15 @@
     row-key="id"
     pagination
     :page-size="20"
-    label="下载记录"
-    empty-text="暂无下载"
+    :label="t('download.table.label')"
+    :empty-text="t('download.table.empty')"
   >
     <template #toolbar>
       <SearchInput
         v-model="filter"
         size="sm"
-        placeholder="搜索作品"
-        aria-label="搜索作品"
+        :placeholder="t('download.table.search')"
+        :aria-label="t('download.table.search')"
         class="w-64 max-w-full"
       />
     </template>
@@ -113,12 +142,16 @@
           :value="state(row).percent"
           size="sm"
           class="flex-1"
-          :aria-label="`${row.title} 的保存进度`"
+          :aria-label="t('download.progress', { title: row.title })"
         />
         <Text size="xs" tone="muted" class="shrink-0 tabular-nums">{{ state(row).label }}</Text>
       </Inline>
-      <Tag v-else-if="state(row).kind === 'error'" tone="warning" size="sm">已中断</Tag>
-      <Tag v-else-if="state(row).kind === 'updated'" tone="info" size="sm">有更新</Tag>
+      <Tag v-else-if="state(row).kind === 'error'" tone="warning" size="sm">
+        {{ t('download.state.interrupted') }}
+      </Tag>
+      <Tag v-else-if="state(row).kind === 'updated'" tone="info" size="sm">
+        {{ t('download.state.updated') }}
+      </Tag>
       <Text v-else size="sm" tone="muted">—</Text>
     </template>
     <template #cell-actions="{ row }">
@@ -130,20 +163,24 @@
           size="sm"
           @click="emit('pause', row)"
         >
-          暂停
+          {{ t('download.action.pause') }}
         </Button>
         <template v-else>
           <Button size="sm" variant="soft" :loading="busy === row.id" @click="emit('resume', row)">
-            {{ state(row).kind === 'paused' || state(row).kind === 'error' ? '继续' : '再次保存' }}
+            {{
+              state(row).kind === 'paused' || state(row).kind === 'error'
+                ? t('download.action.resume')
+                : t('download.action.again')
+            }}
           </Button>
           <Popconfirm
-            title="移除这条下载记录？"
+            :title="t('download.action.removeConfirm')"
             tone="danger"
-            confirm-text="移除"
+            :confirm-text="t('download.action.remove')"
             @confirm="emit('remove', row)"
           >
             <IconButton
-              label="移除"
+              :label="t('download.action.remove')"
               variant="ghost"
               tone="neutral"
               size="sm"

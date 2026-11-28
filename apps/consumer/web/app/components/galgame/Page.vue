@@ -216,7 +216,7 @@
           </Stack>
           <WorkLongReviews :articles="data.articles" />
           <Stack gap="md">
-            <GalgameProducts :products="data.products" />
+            <GalgameProducts :products="data.products" :dlsite="data.dlsite" />
             <GalgameSteam
               v-if="data.galgame.steam_apps.length"
               :galgame-id="galgameId"

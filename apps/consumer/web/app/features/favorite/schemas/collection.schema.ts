@@ -2,17 +2,17 @@ import * as v from 'valibot'
 
 export const collectionSchema = v.object({
   name: v.pipe(
-    v.string('收藏夹名称应为文本'),
+    v.string(issueMessage('validation.favorite.nameType')),
     v.trim(),
-    v.nonEmpty('请输入收藏夹名称'),
-    v.maxLength(255, '收藏夹名称不能超过 255 个字符'),
+    v.nonEmpty(issueMessage('validation.favorite.nameRequired')),
+    v.maxLength(255, issueMessage('validation.favorite.nameMax')),
   ),
   description: v.pipe(
-    v.nullish(v.string('简介应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.favorite.descriptionType')), ''),
     v.trim(),
-    v.maxLength(2000, '简介不能超过 2000 个字符'),
+    v.maxLength(2000, issueMessage('validation.favorite.descriptionMax')),
   ),
-  is_private: v.nullish(v.boolean('设为私密应为布尔值'), false),
+  is_private: v.nullish(v.boolean(issueMessage('validation.favorite.privateType')), false),
 })
 
 export type CollectionValues = v.InferOutput<typeof collectionSchema>

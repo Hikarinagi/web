@@ -1,3 +1,5 @@
+import type { MessageKey } from '~~/i18n/keys'
+
 export type HeaderNavIcon =
   'gamepad' | 'bookOpen' | 'bookImage' | 'bookUp' | 'messagesSquare' | 'smartphone'
 
@@ -6,12 +8,12 @@ export type FeatureFlagKey = 'manga_section' | 'app_download'
 export type HeaderNavBadgeTone = 'accent' | 'neutral' | 'success' | 'warning' | 'danger' | 'info'
 
 export interface HeaderNavBadge {
-  label: string
+  label: MessageKey
   tone?: HeaderNavBadgeTone
 }
 
 export interface HeaderNavItem {
-  label: string
+  label: MessageKey
   to: string
   icon: HeaderNavIcon
   match: 'exact' | 'prefix'
@@ -30,57 +32,53 @@ export interface FooterSocialItem {
 
 export interface SiteConfig {
   name: string
-  title: string
-  description: string
   headerNav: readonly HeaderNavItem[]
   footerSocial: readonly FooterSocialItem[]
 }
 
 export const SITE_CONFIG = {
   name: 'Hikarinagi',
-  title: 'Hikarinagi - 你和同好的ACGN社区',
-  description: '你和同好的ACGN社区',
   headerNav: [
     {
-      label: '社区',
+      label: 'layout.nav.community',
       to: '/',
       icon: 'messagesSquare',
       match: 'exact',
     },
     {
-      label: 'Galgame',
+      label: 'layout.nav.galgame',
       to: '/galgames',
       icon: 'gamepad',
       match: 'prefix',
     },
     {
-      label: '轻小说',
+      label: 'layout.nav.lightNovel',
       to: '/light-novels',
       icon: 'bookOpen',
       match: 'prefix',
     },
     {
-      label: '漫画',
+      label: 'layout.nav.manga',
       to: '/mangas',
       icon: 'bookImage',
       match: 'prefix',
       flag: 'manga_section',
     },
     {
-      label: '投稿',
+      label: 'layout.nav.contribute',
       to: '/contribute',
       icon: 'bookUp',
       match: 'prefix',
       desktopOnly: true,
     },
     {
-      label: 'App',
+      label: 'layout.nav.app',
       to: '/app',
       icon: 'smartphone',
       match: 'prefix',
       flag: 'app_download',
       desktopOnly: true,
-      badge: { label: 'Beta', tone: 'accent' },
+      badge: { label: 'layout.nav.beta', tone: 'accent' },
     },
   ],
   footerSocial: [

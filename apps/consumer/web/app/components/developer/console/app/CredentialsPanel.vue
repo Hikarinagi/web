@@ -26,7 +26,8 @@
   const { confirm } = useHikariConfirm()
   const busy = ref(false)
 
-  const createdAt = computed(() => new Date(props.app.created_at).toLocaleDateString('zh-CN'))
+  const { d } = useLocaleText()
+  const createdAt = computed(() => d(new Date(props.app.created_at), 'numeric'))
   const confidential = computed(() => props.app.client_type === 'confidential')
   const authCodeEnabled = computed(() => props.app.grant_types.includes('authorization_code'))
 

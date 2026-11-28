@@ -16,6 +16,7 @@
     summariesRef: Ref<EntitySummaries>
   }>()
 
+  const { t } = useLocaleText()
   const { closeOverlay } = useEditorOverlays()
   const { mergeEntity } = useEditorSummariesMerge(props.summariesRef)
   const meta = computed(() => ENTITY_CARD_META[props.entityType])
@@ -29,7 +30,8 @@
     () =>
       props.entityType === 'galgame_rate' ||
       props.entityType === 'light_novel_rate' ||
-      props.entityType === 'manga_rate',
+      props.entityType === 'manga_rate' ||
+      props.entityType === 'lottery',
   )
 
   const state = computed<'idle' | 'loading' | 'results' | 'empty'>(() => {
@@ -41,6 +43,9 @@
 
   const emptyText = computed(() => {
     if (!browse.value) return '未找到，换个关键词试试'
+    if (props.entityType === 'lottery') {
+      return query.value.trim() ? t('lottery.picker.noMatch') : t('lottery.picker.empty')
+    }
     return query.value.trim() ? '没有匹配的作品' : '你还没有评分过的作品'
   })
 
@@ -130,6 +135,10 @@
         mergeEntity('manga_rates', item.summary)
         insertNode('manga_rate_card', 'manga_rate_id', item.entity_id)
         break
+      case 'lottery':
+        mergeEntity('lotteries', item.summary)
+        insertNode('lottery_card', 'lottery_id', item.entity_id)
+        break
       default: {
         const _exhaustive: never = item
         void _exhaustive
@@ -202,7 +211,13 @@
           @click="insertItem(item)"
           @mouseenter="activeIndex = idx"
         >
+          <LotteryPrizeImage
+            v-if="item.kind === 'lottery' && item.summary.prizes[0]"
+            :prize="item.summary.prizes[0]"
+            class="size-12"
+          />
           <HikariImage
+            v-else
             :src="item.display.cover ?? ''"
             alt=""
             preset="small"

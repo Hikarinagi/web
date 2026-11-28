@@ -2,7 +2,7 @@
   import { Inline, Stack, Text } from '@hina-ui/vue'
   import { Eye, FileText, Heart } from '@lucide/vue'
   import { contentPath, type SpaceContent } from '~/features/space/space'
-  import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
+  import { formatDatePart } from '~/utils/time-format'
 
   defineOptions({ name: 'SpaceContentList' })
 
@@ -37,7 +37,7 @@
             <Text as="span" size="xs" tone="muted">{{ item.like_count }}</Text>
           </Inline>
           <Text as="span" size="xs" tone="muted">
-            {{ datePartFormat(item.created_at, TimeFormatEnum.M_D_CN) }}
+            {{ formatDatePart(item.created_at, 'monthDay') }}
           </Text>
         </Inline>
       </Stack>

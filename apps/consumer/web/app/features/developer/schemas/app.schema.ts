@@ -2,28 +2,28 @@ import * as v from 'valibot'
 
 export const developerAppSchema = v.object({
   client_name: v.pipe(
-    v.string('请输入应用名称'),
+    v.string(issueMessage('validation.developer.clientNameRequired')),
     v.trim(),
-    v.nonEmpty('请输入应用名称'),
-    v.maxLength(64, '名称不能超过 64 字符'),
+    v.nonEmpty(issueMessage('validation.developer.clientNameRequired')),
+    v.maxLength(64, issueMessage('validation.developer.clientNameMax')),
   ),
-  form: v.picklist(['server', 'spa', 'native'], '请选择应用形态'),
+  form: v.picklist(['server', 'spa', 'native'], issueMessage('validation.developer.formRequired')),
 })
 export type DeveloperAppValues = v.InferOutput<typeof developerAppSchema>
 
 export const developerAppProfileSchema = v.object({
   client_name: v.pipe(
-    v.string('请输入应用名称'),
+    v.string(issueMessage('validation.developer.clientNameRequired')),
     v.trim(),
-    v.nonEmpty('请输入应用名称'),
-    v.maxLength(64, '名称不能超过 64 字符'),
+    v.nonEmpty(issueMessage('validation.developer.clientNameRequired')),
+    v.maxLength(64, issueMessage('validation.developer.clientNameMax')),
   ),
   client_uri: v.pipe(
-    v.nullish(v.string('主页地址应为文本'), ''),
+    v.nullish(v.string(issueMessage('validation.developer.clientUriType')), ''),
     v.trim(),
     v.check(
       value => !value || /^https:\/\/[^#\s]+$/i.test(value),
-      '请输入合法的 https:// 地址（不含 #fragment）',
+      issueMessage('validation.developer.clientUriFormat'),
     ),
   ),
 })
@@ -31,11 +31,17 @@ export type DeveloperAppProfileValues = v.InferOutput<typeof developerAppProfile
 
 export const developerAppRedirectSchema = v.object({
   uri: v.pipe(
-    v.string('请输入回调地址'),
+    v.string(issueMessage('validation.developer.redirectUriRequired')),
     v.trim(),
-    v.nonEmpty('请输入回调地址'),
-    v.check(value => !value.includes('#'), '回调地址不能包含 #fragment'),
-    v.check(value => /^[a-z][a-z0-9+.-]*:/i.test(value), '回调地址必须包含协议'),
+    v.nonEmpty(issueMessage('validation.developer.redirectUriRequired')),
+    v.check(
+      value => !value.includes('#'),
+      issueMessage('validation.developer.redirectUriFragment'),
+    ),
+    v.check(
+      value => /^[a-z][a-z0-9+.-]*:/i.test(value),
+      issueMessage('validation.developer.redirectUriScheme'),
+    ),
   ),
 })
 export type DeveloperAppRedirectValues = v.InferOutput<typeof developerAppRedirectSchema>

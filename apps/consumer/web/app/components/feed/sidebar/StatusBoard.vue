@@ -3,7 +3,7 @@
   import { NuxtLink } from '#components'
   import { workPath as toWorkPath, workTypeLabel } from '#shared/utils/work'
   import type { SidebarRateItem } from '~/features/feed/sidebar'
-  import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
+  import { formatDatePart } from '~/utils/time-format'
 
   defineProps<{ items: SidebarRateItem[] }>()
 
@@ -11,9 +11,12 @@
 
   const typeLabel = (item: SidebarRateItem) => workTypeLabel(item.work_type)
 
+  const { t } = useLocaleText()
+
   const activity = (item: SidebarRateItem) => {
-    const verb = item.work_type === 'GALGAME' ? '最近在玩' : '最近在读'
-    return `${verb} · ${datePartFormat(item.last_activity_at, TimeFormatEnum.M_D_CN)}`
+    const date = formatDatePart(item.last_activity_at, 'monthDay')
+    if (item.work_type === 'GALGAME') return t('feed.sidebar.playing', { date })
+    return t('feed.sidebar.reading', { date })
   }
 </script>
 

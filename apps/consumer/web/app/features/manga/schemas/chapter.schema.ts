@@ -4,26 +4,32 @@ const CHAPTER_NUMBER = /^\d+(\.\d+)?$/
 
 export const mangaChapterEditSchema = v.pipe(
   v.object({
-    chapter_type: v.picklist(['SERIALIZATION', 'EXTRA', 'VOLUME'], '请选择类型'),
+    chapter_type: v.picklist(
+      ['SERIALIZATION', 'EXTRA', 'VOLUME'],
+      issueMessage('validation.manga.chapterTypeRequired'),
+    ),
     chapter_number: v.pipe(
-      v.nullish(v.string('话数应为文本'), ''),
+      v.nullish(v.string(issueMessage('validation.manga.chapterNumberType')), ''),
       v.trim(),
-      v.maxLength(20, '话数不能超过 20 个字符'),
-      v.check(value => !value || CHAPTER_NUMBER.test(value), '话数只填数字，例如 12 或 12.5'),
+      v.maxLength(20, issueMessage('validation.manga.chapterNumberMax')),
+      v.check(
+        value => !value || CHAPTER_NUMBER.test(value),
+        issueMessage('validation.manga.chapterNumberFormat'),
+      ),
     ),
     title: v.pipe(
-      v.nullish(v.string('标题应为文本'), ''),
+      v.nullish(v.string(issueMessage('validation.manga.titleType')), ''),
       v.trim(),
-      v.maxLength(300, '标题不能超过 300 个字符'),
+      v.maxLength(300, issueMessage('validation.manga.titleMax')),
     ),
-    volume_id: v.nullish(v.number('单行本应为数字')),
-    publication_date: v.nullish(v.string('发表日期应为文本'), ''),
+    volume_id: v.nullish(v.number(issueMessage('validation.manga.volumeType'))),
+    publication_date: v.nullish(v.string(issueMessage('validation.manga.publicationDateType')), ''),
   }),
   v.forward(
     v.partialCheck(
       [['chapter_type'], ['chapter_number']],
       input => input.chapter_type !== 'SERIALIZATION' || !!input.chapter_number?.trim(),
-      '请填写话数',
+      issueMessage('validation.manga.chapterNumberRequired'),
     ),
     ['chapter_number'],
   ),
@@ -31,7 +37,7 @@ export const mangaChapterEditSchema = v.pipe(
     v.partialCheck(
       [['chapter_type'], ['title']],
       input => input.chapter_type !== 'EXTRA' || !!input.title?.trim(),
-      '请填写标题',
+      issueMessage('validation.manga.titleRequired'),
     ),
     ['title'],
   ),
@@ -39,7 +45,7 @@ export const mangaChapterEditSchema = v.pipe(
     v.partialCheck(
       [['chapter_type'], ['volume_id']],
       input => input.chapter_type !== 'VOLUME' || input.volume_id != null,
-      '请选择单行本',
+      issueMessage('validation.manga.volumeRequired'),
     ),
     ['volume_id'],
   ),

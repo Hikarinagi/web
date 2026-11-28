@@ -13,16 +13,17 @@ import {
 } from '@lucide/vue'
 import HikariPoint from '~/components/ui/HikariPoint.vue'
 import { useDownloadEngine } from '~/features/download/useDownloadEngine'
+import type { MessageKey } from '~~/i18n/keys'
 
 export interface UserMenuItem {
   key?: string
-  label?: string
+  label?: MessageKey
   iconComponent?: Component
   command?: () => void
   danger?: boolean
   separator?: boolean
   balance?: number
-  modeLabel?: string
+  modeLabel?: MessageKey
   trailing?: string
 }
 
@@ -32,6 +33,7 @@ export function useUserMenu() {
   const checkin = useCheckin()
   const ledger = useHikariPointLedger()
   const theme = useThemeMode()
+  const { t } = useLocaleText()
 
   const user = computed(() => auth.user)
   const roleLabel = computed(() => getUserRoleLabel(user.value?.role))
@@ -41,7 +43,9 @@ export function useUserMenu() {
     const total = engine.active.value.reduce((sum, run) => sum + run.total, 0)
     if (!engine.active.value.length || !total) return undefined
     const written = engine.active.value.reduce((sum, run) => sum + run.written, 0)
-    return `正在保存 ${Math.min(100, Math.round((written / total) * 100))}%`
+    return t('layout.userMenu.downloading', {
+      percent: Math.min(100, Math.round((written / total) * 100)),
+    })
   })
 
   onMounted(() => {
@@ -53,77 +57,77 @@ export function useUserMenu() {
     return [
       {
         key: 'hikari-points',
-        label: '光点',
+        label: 'layout.userMenu.points',
         balance: checkin.status.value?.points ?? 0,
         iconComponent: HikariPoint,
         command: () => void ledger.open(),
       },
       {
         key: 'checkin',
-        label: checkedInToday.value ? '签到日历' : '签到',
+        label: checkedInToday.value ? 'layout.userMenu.checkinCalendar' : 'layout.userMenu.checkin',
         iconComponent: checkedInToday.value ? CalendarCheck : Calendar,
         command: () => void checkin.open(),
       },
       {
         key: 'profile',
-        label: '个人空间',
+        label: 'layout.userMenu.space',
         iconComponent: UserRound,
         command: () => void navigateTo(`/space/${id}`),
       },
       {
         key: 'account',
-        label: '账号设置',
+        label: 'layout.userMenu.account',
         iconComponent: Settings,
         command: () => void navigateTo('/setting'),
       },
       {
         key: 'decoration',
-        label: '我的装扮',
+        label: 'layout.userMenu.decoration',
         iconComponent: Shirt,
         command: () => void navigateTo('/me/decoration'),
       },
       {
         key: 'items',
-        label: '我的道具',
+        label: 'layout.userMenu.items',
         iconComponent: Package,
         command: () => void navigateTo('/me/items'),
       },
       {
         key: 'downloads',
-        label: '下载中心',
+        label: 'layout.userMenu.downloads',
         iconComponent: Download,
         trailing: downloading.value,
         command: () => void navigateTo('/me/downloads'),
       },
       {
         key: 'site',
-        label: '偏好设置',
+        label: 'layout.userMenu.preference',
         iconComponent: Palette,
         command: () => void navigateTo('/setting/preference'),
       },
       {
         key: 'theme',
-        label: '外观',
+        label: 'layout.userMenu.theme',
         modeLabel: theme.current.value.label,
         iconComponent: theme.current.value.icon,
         command: () => theme.cycle(),
       },
       {
         key: 'creator',
-        label: '创作者中心',
+        label: 'common.section.creator',
         iconComponent: LayoutDashboard,
         command: () => void navigateTo('/create', { open: { target: '_blank' } }),
       },
       {
         key: 'developers',
-        label: '开发者平台',
+        label: 'common.section.developers',
         iconComponent: Terminal,
         command: () => void navigateTo('/developers'),
       },
       { separator: true },
       {
         key: 'logout',
-        label: '退出登录',
+        label: 'layout.userMenu.logout',
         iconComponent: LogOut,
         danger: true,
         command: openLogout,

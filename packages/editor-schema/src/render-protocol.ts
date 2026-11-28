@@ -20,6 +20,7 @@ export const ENTITY_CARD_SPECS = [
   },
   { nodeName: 'manga_rate_card', idKey: 'manga_rate_id', dataCardType: 'manga_rate' },
   { nodeName: 'comment_card', idKey: 'comment_id', dataCardType: 'comment' },
+  { nodeName: 'lottery_card', idKey: 'lottery_id', dataCardType: 'lottery' },
 ] as const
 
 export type EntityCardSpec = (typeof ENTITY_CARD_SPECS)[number]
@@ -74,10 +75,10 @@ export const RENDERER_OUTPUT_DATA_ATTRS: readonly RenderedDataAttr[] = [
 ]
 
 export const SAFE_INTERNAL_LINK_REGEX =
-  /^\/(?:articles|posts|galgames|light-novels|light-novel-volumes|mangas|manga-volumes|people|producers|characters|tags|users|sections|topics)(?:\/|$|\?|#)/i
+  /^\/(?:articles|posts|galgames|light-novels|light-novel-volumes|mangas|manga-volumes|people|producers|characters|tags|users|sections|topics|lotteries)(?:\/|$|\?|#)/i
 
 export const ALLOWED_LINK_URI_REGEXP =
-  /^(?:https:\/\/|\/(?:articles|posts|galgames|light-novels|light-novel-volumes|mangas|manga-volumes|people|producers|characters|tags|users|sections|topics))/i
+  /^(?:https:\/\/|\/(?:articles|posts|galgames|light-novels|light-novel-volumes|mangas|manga-volumes|people|producers|characters|tags|users|sections|topics|lotteries))/i
 
 export const FORBIDDEN_MEDIA_SRC_SCHEME_REGEX = /^(?:javascript|data|vbscript|file):/i
 

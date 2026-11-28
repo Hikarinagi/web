@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { Inline, Panel, Text, toast } from '@hina-ui/vue'
-  import { useDownloadEngine } from '~/features/download/useDownloadEngine'
+  import { Inline, Panel, Text } from '@hina-ui/vue'
+  import { toastFailure, useDownloadEngine } from '~/features/download/useDownloadEngine'
   import { formatBytes } from '~/features/download/format'
   import type { DownloadsPageData } from '~~/server/api/pages/me/downloads.get'
 
@@ -8,6 +8,7 @@
 
   const props = defineProps<{ data: DownloadsPageData; refresh: () => Promise<void> }>()
   const engine = useDownloadEngine()
+  const { t } = useLocaleText()
   const busy = ref<number | null>(null)
 
   type Task = DownloadsPageData['tasks'][number]
@@ -24,7 +25,7 @@
     try {
       await engine.resume(task, task.update_required_cards ?? 0)
     } catch (error) {
-      if (error instanceof Error && error.message) toast.danger(error.message)
+      toastFailure(error)
     } finally {
       busy.value = null
     }
@@ -52,14 +53,16 @@
 </script>
 
 <template>
-  <Panel title="下载记录">
+  <Panel :title="t('download.table.label')">
     <template #actions>
       <Inline gap="lg" :wrap="false">
         <Text size="sm" class="tabular-nums">
-          <Text as="span" tone="muted">今日剩余</Text> {{ remaining }}
+          <Text as="span" tone="muted">{{ t('download.center.remaining') }}</Text>
+          {{ remaining }}
         </Text>
         <Text size="sm" class="tabular-nums">
-          <Text as="span" tone="muted">下载卡</Text> {{ data.cards.available }} 张
+          <Text as="span" tone="muted">{{ t('download.center.cards') }}</Text>
+          {{ t('download.center.cardCount', { count: data.cards.available }) }}
         </Text>
       </Inline>
     </template>

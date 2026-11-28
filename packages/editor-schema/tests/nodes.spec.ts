@@ -13,6 +13,7 @@ import {
   LightNovelRateCardExtension,
   LightNovelVolumeCardExtension,
   LinkMark,
+  LotteryCardExtension,
   MangaCardExtension,
   MangaRateCardExtension,
   MentionUserExtension,
@@ -37,8 +38,8 @@ describe('custom nodes/marks', () => {
     expect(EmojiInlineExtension.config.atom).toBe(true)
   })
 
-  it('13 种 entity card 都是 block atom 且名称匹配', () => {
-    expect(ENTITY_CARD_EXTENSIONS).toHaveLength(13)
+  it('14 种 entity card 都是 block atom 且名称匹配', () => {
+    expect(ENTITY_CARD_EXTENSIONS).toHaveLength(14)
     expect(GalgameCardExtension.name).toBe('galgame_card')
     expect(LightNovelCardExtension.name).toBe('light_novel_card')
     expect(LightNovelVolumeCardExtension.name).toBe('light_novel_volume_card')
@@ -52,6 +53,7 @@ describe('custom nodes/marks', () => {
     expect(LightNovelRateCardExtension.name).toBe('light_novel_rate_card')
     expect(MangaRateCardExtension.name).toBe('manga_rate_card')
     expect(CommentCardExtension.name).toBe('comment_card')
+    expect(LotteryCardExtension.name).toBe('lottery_card')
     for (const ext of ENTITY_CARD_EXTENSIONS) {
       expect(ext.config.group).toBe('block')
       expect(ext.config.atom).toBe(true)
@@ -59,7 +61,7 @@ describe('custom nodes/marks', () => {
   })
 
   it('ENTITY_CARD_NODE_TYPES 与 ENTITY_CARD_ID_KEY 形态对得上 typed FK', () => {
-    expect(ENTITY_CARD_NODE_TYPES.size).toBe(13)
+    expect(ENTITY_CARD_NODE_TYPES.size).toBe(14)
     expect(ENTITY_CARD_ID_KEY.galgame_card).toBe('galgame_id')
     expect(ENTITY_CARD_ID_KEY.light_novel_card).toBe('light_novel_id')
     expect(ENTITY_CARD_ID_KEY.light_novel_volume_card).toBe('light_novel_volume_id')
@@ -73,6 +75,7 @@ describe('custom nodes/marks', () => {
     expect(ENTITY_CARD_ID_KEY.light_novel_rate_card).toBe('light_novel_rate_id')
     expect(ENTITY_CARD_ID_KEY.manga_rate_card).toBe('manga_rate_id')
     expect(ENTITY_CARD_ID_KEY.comment_card).toBe('comment_id')
+    expect(ENTITY_CARD_ID_KEY.lottery_card).toBe('lottery_id')
   })
 
   it('LinkMark 关闭 autolink 并限制 https 协议', () => {

@@ -8,11 +8,13 @@
     defineProps<{ badge?: HeaderNavBadge; placement?: 'top-end' | 'top-start' }>(),
     { badge: undefined, placement: 'top-end' },
   )
+
+  const { t } = useLocaleText()
 </script>
 
 <template>
   <Badge
-    :content="props.badge?.label ?? null"
+    :content="props.badge ? t(props.badge.label) : null"
     :tone="props.badge?.tone ?? 'accent'"
     :placement="props.placement"
     size="sm"

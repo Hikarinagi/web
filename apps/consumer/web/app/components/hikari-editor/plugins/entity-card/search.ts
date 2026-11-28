@@ -7,6 +7,7 @@ import type {
   LightNovelCardSummary,
   LightNovelRateCardSummary,
   LightNovelVolumeCardSummary,
+  LotteryCardSummary,
   MangaCardSummary,
   MangaRateCardSummary,
   PersonCardSummary,
@@ -50,6 +51,7 @@ export type PickedEntity =
   | PickedEntityShape<'galgame_rate', GalgameRateCardSummary>
   | PickedEntityShape<'light_novel_rate', LightNovelRateCardSummary>
   | PickedEntityShape<'manga_rate', MangaRateCardSummary>
+  | PickedEntityShape<'lottery', LotteryCardSummary>
 
 function yearOf(date: string | null | undefined): string | null {
   if (!date) return null
@@ -320,6 +322,22 @@ function mangaRateMap(raw: Schemas['MangaRateCardSummaryResDto']): PickedFor<'ma
   }
 }
 
+function lotteryMap(raw: LotteryCardSummary): PickedFor<'lottery'> {
+  const lead = raw.prizes[0] ?? null
+  const total = raw.prizes.reduce((sum, prize) => sum + prize.quantity, 0)
+  return {
+    kind: 'lottery',
+    entity_id: raw.id,
+    display: {
+      title: raw.title,
+      subtitle: lead ? translate('lottery.prize.summary', { name: lead.name, total }) : null,
+      cover: lead?.image?.src ?? lead?.decoration?.image.src ?? null,
+      meta: translate('lottery.name'),
+    },
+    summary: raw,
+  }
+}
+
 export async function searchEntities(
   type: EntityCardType,
   keyword: string,
@@ -373,6 +391,12 @@ export async function searchEntities(
     case 'manga_rate': {
       const res = await hikariRequest('/api/v3/user/me/rates/manga/cards', { query })
       return res.items.map(mangaRateMap)
+    }
+    case 'lottery': {
+      const res = await hikariRequest('/api/v3/lotteries', {
+        query: { ...(keyword ? { q: keyword } : {}), page: 1, page_size: SEARCH_PAGE_SIZE },
+      })
+      return res.items.map(lotteryMap)
     }
   }
 }

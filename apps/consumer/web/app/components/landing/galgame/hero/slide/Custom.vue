@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { Button, Heading, Stack, Text } from '@hina-ui/vue'
+  import { Button, Heading, Inline, Stack, Text } from '@hina-ui/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { NuxtLink } from '#components'
+  import wordmarkUrl from '~/assets/images/wordmark.svg'
   import { cn } from '~/utils/cn'
 
   type Slide = ApiData<'/api/v3/landing/galgames', 'get'>['slides'][number]
@@ -18,6 +19,25 @@
 
 <template>
   <Stack gap="sm" class="min-w-0">
+    <Inline
+      v-if="item.partner === 'DLSITE'"
+      gap="sm"
+      align="center"
+      :wrap="false"
+      role="img"
+      aria-label="Hikarinagi × DLsite"
+    >
+      <HikariImage
+        :src="wordmarkUrl"
+        alt=""
+        :lazy="false"
+        :skeleton="false"
+        class="aspect-792/191 h-6 w-auto shrink-0 lg:h-8"
+        image-class="object-contain"
+      />
+      <Text as="span" size="lg" tone="muted">×</Text>
+      <DlsiteLogo class="h-4.5 lg:h-6" />
+    </Inline>
     <HikariImage
       v-if="item.logo"
       :src="item.logo"

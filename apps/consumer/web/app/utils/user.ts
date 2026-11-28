@@ -5,7 +5,9 @@ export interface NamedUser {
   nickname?: string | null
 }
 
-export function displayName(user: NamedUser | null | undefined, fallback = '匿名用户'): string {
+export function displayName(user: NamedUser): string
+export function displayName(user: NamedUser | null | undefined, fallback: string): string
+export function displayName(user: NamedUser | null | undefined, fallback = ''): string {
   return user ? user.nickname || user.name : fallback
 }
 

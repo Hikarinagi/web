@@ -110,11 +110,18 @@ export class TaskRunner {
 
   private failure(error: unknown): DownloadFailure {
     if (error instanceof EntryError) {
-      return { code: error.code, message: error.message, file: this.currentFile }
+      return {
+        code: error.code,
+        message: error.message,
+        fallback: error.fallback,
+        status: error.status,
+        file: this.currentFile,
+      }
     }
     return {
       code: 'DOWNLOAD_FAILED',
-      message: error instanceof Error ? error.message : String(error),
+      message: '',
+      fallback: 'unexpected',
       file: this.currentFile,
     }
   }

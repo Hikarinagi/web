@@ -25,11 +25,13 @@ async function activeWorker() {
   const registration = await navigator.serviceWorker.register(SW_URL, { scope: SW_SCOPE })
   if (registration.active) return registration.active
   const pending = registration.installing ?? registration.waiting
-  if (!pending) throw new Error('下载服务不可用')
+  if (!pending) throw new Error('download service worker is unavailable')
   await new Promise<void>((resolve, reject) => {
     const check = () => {
       if (pending.state === 'activated') resolve()
-      else if (pending.state === 'redundant') reject(new Error('下载服务不可用'))
+      else if (pending.state === 'redundant') {
+        reject(new Error('download service worker is unavailable'))
+      }
     }
     pending.addEventListener('statechange', check)
     check()

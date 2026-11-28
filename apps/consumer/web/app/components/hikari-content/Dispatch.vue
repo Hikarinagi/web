@@ -53,6 +53,7 @@
   />
   <HikariContentNodesEntityCardMangaRate v-else-if="node.type === 'manga_rate_card'" :node="node" />
   <HikariContentNodesEntityCardComment v-else-if="node.type === 'comment_card'" :node="node" />
+  <HikariContentNodesEntityCardLottery v-else-if="node.type === 'lottery_card'" :node="node" />
   <HikariContentNodesPollCard v-else-if="node.type === 'poll'" :node="node" />
   <Text v-else as="span" class="hikari-content-unknown-node" :data-node-type="node.type">
     [?{{ node.type }}]

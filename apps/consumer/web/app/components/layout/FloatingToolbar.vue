@@ -32,6 +32,7 @@
 
   const route = useRoute()
   const router = useRouter()
+  const { t } = useLocaleText()
   const { y } = useWindowScroll()
   const { actions, topHandlers, activeTop, elevated } = useFloatingToolbar()
 
@@ -47,7 +48,7 @@
   const defaultItems = computed<ToolbarItem[]>(() => [
     {
       id: 'scroll-top',
-      label: activeTop.value?.label ?? '回到顶部',
+      label: activeTop.value?.label ?? t('layout.toolbar.top'),
       icon: activeTop.value?.icon ?? ChevronUp,
       order: 0,
       visible: showTop.value,
@@ -55,7 +56,7 @@
     },
     {
       id: 'back',
-      label: '返回',
+      label: t('common.back'),
       icon: ArrowLeft,
       order: 10,
       visible: showBack.value,
@@ -140,7 +141,7 @@
       :initial="{ opacity: 1 }"
       :animate="{ opacity: 1 }"
       :transition="TRANSITION"
-      aria-label="页面工具栏"
+      :aria-label="t('layout.toolbar.label')"
     >
       <LayoutGroup id="floating-toolbar">
         <AnimatePresence :initial="false" mode="popLayout">

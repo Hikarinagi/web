@@ -4,6 +4,7 @@ import {
   BookOpen,
   Building2,
   GamepadDirectional,
+  Gift,
   MessageSquareText,
   Newspaper,
   Star,
@@ -47,5 +48,14 @@ export const ENTITY_CARD_META: Record<EntityCardType, EntityCardMeta> = {
     label: '漫画评分',
     icon: Star,
     searchPlaceholder: '搜索你评分过的漫画...',
+  },
+  lottery: {
+    get label() {
+      return translate('lottery.name')
+    },
+    icon: Gift,
+    get searchPlaceholder() {
+      return translate('lottery.picker.search')
+    },
   },
 }

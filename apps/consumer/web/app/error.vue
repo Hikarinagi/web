@@ -8,13 +8,16 @@
     error: NuxtError
   }>()
 
+  useLocaleRoot()
+  const { t } = useLocaleText()
+
   const statusCode = computed(() => props.error.status ?? 500)
   const isMaintenance = computed(
     () => isRecord(props.error.data) && props.error.data.code === HIKARI_BIZ_CODE.SITE_MAINTENANCE,
   )
   const title = computed(() => {
-    if (isMaintenance.value) return '正在停机维护'
-    return statusCode.value === 404 ? '什么都没有...' : '页面加载失败'
+    if (isMaintenance.value) return t('error.maintenance.pageTitle')
+    return statusCode.value === 404 ? t('error.page.notFoundTitle') : t('error.page.failedTitle')
   })
 
   useHikariSeoMeta({

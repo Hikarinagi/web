@@ -5,13 +5,16 @@ export function purchaseSchema(maxQuantity: number, price: number, balance: numb
     v.pipe(
       v.object({
         quantity: v.pipe(
-          v.number('请输入购买数量'),
-          v.integer('购买数量须为整数'),
-          v.minValue(1, '购买数量不能小于 1'),
-          v.maxValue(maxQuantity, `购买数量不能超过 ${maxQuantity}`),
+          v.number(issueMessage('validation.purchase.quantityRequired')),
+          v.integer(issueMessage('validation.purchase.quantityInteger')),
+          v.minValue(1, issueMessage('validation.purchase.quantityMin')),
+          v.maxValue(maxQuantity, issueMessage('validation.purchase.quantityMax')),
         ),
       }),
-      v.check(values => values.quantity * price <= balance, '光点不足'),
+      v.check(
+        values => values.quantity * price <= balance,
+        issueMessage('validation.purchase.balanceInsufficient'),
+      ),
     ),
     { abortPipeEarly: true },
   )

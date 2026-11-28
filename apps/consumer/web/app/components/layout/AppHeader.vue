@@ -15,6 +15,7 @@
   const route = useRoute()
   const router = useRouter()
   const auth = useAuthStore()
+  const { t } = useLocaleText()
   const { loginTo, registerTo } = useAuthReturn()
   const { toLogin } = useAuthGate()
   const { y } = useScroll(() => (import.meta.client ? window : null))
@@ -64,7 +65,7 @@
       <Inline gap="lg" align="center" :wrap="false" class="min-w-0">
         <IconButton
           v-if="!showMobileTitle"
-          label="菜单"
+          :label="t('layout.header.menu')"
           :tooltip="false"
           pill
           aria-haspopup="dialog"
@@ -83,7 +84,13 @@
           :wrap="false"
           class="min-w-0 gap-1 lg:hidden"
         >
-          <IconButton label="返回" :tooltip="false" pill class="-ml-1.5" @click="goBack">
+          <IconButton
+            :label="t('common.back')"
+            :tooltip="false"
+            pill
+            class="-ml-1.5"
+            @click="goBack"
+          >
             <ArrowLeft aria-hidden="true" />
           </IconButton>
           <AnimatePresence mode="wait" :initial="false">
@@ -127,7 +134,7 @@
         </template>
         <template v-else-if="auth.loaded && !auth.loading">
           <IconButton
-            label="登录"
+            :label="t('layout.header.login')"
             :tooltip="false"
             pill
             class="lg:hidden"
@@ -136,8 +143,10 @@
             <LogIn aria-hidden="true" />
           </IconButton>
           <Inline gap="sm" class="hidden lg:flex lg:gap-4">
-            <Button :as="NuxtLink" :to="loginTo" variant="ghost" tone="neutral">登录</Button>
-            <Button :as="NuxtLink" :to="registerTo">注册</Button>
+            <Button :as="NuxtLink" :to="loginTo" variant="ghost" tone="neutral">
+              {{ t('layout.header.login') }}
+            </Button>
+            <Button :as="NuxtLink" :to="registerTo">{{ t('layout.header.register') }}</Button>
           </Inline>
         </template>
         <Space v-else size="xs" class="size-9 lg:w-37" />

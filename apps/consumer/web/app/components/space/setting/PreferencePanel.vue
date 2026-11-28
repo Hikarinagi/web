@@ -10,6 +10,7 @@
     hideOtome: boolean
   }>()
 
+  const { t } = useLocaleText()
   const {
     enabled: otomeHidden,
     saving: otomeSaving,
@@ -26,16 +27,16 @@
   <Stack gap="lg">
     <SpaceSettingContentLimitPanel :limits="limits" />
 
-    <Panel title="乙女 / BL 内容" description="在浏览、图鉴、首页与社区动态中隐藏乙女 / BL 作品">
+    <Panel :title="t('setting.otome.title')" :description="t('setting.otome.description')">
       <Switch
         :model-value="otomeHidden"
-        description="隐藏Tag中包含“乙女”或者“BL”关键词的条目。因为是通过关键词筛选，可能会存在少量误伤。"
+        :description="t('setting.otome.hint')"
         control-placement="end"
         block
         :disabled="otomeSaving"
         @update:model-value="onOtome"
       >
-        隐藏乙女 / BL 作品
+        {{ t('setting.otome.toggle') }}
       </Switch>
     </Panel>
   </Stack>

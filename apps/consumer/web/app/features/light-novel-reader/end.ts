@@ -1,22 +1,23 @@
-import { TimeFormatEnum, timeFormat } from '~/utils/time-format'
+import { formatDate } from '~/utils/time-format'
 
 export function readTime(ms: number) {
   const minutes = Math.floor(ms / 60_000)
-  if (minutes < 1) return '不足 1 分钟'
+  if (minutes < 1) return translate('reader.end.underMinute')
   const hours = Math.floor(minutes / 60)
   const rest = minutes % 60
-  if (!hours) return `${minutes} 分钟`
-  return rest ? `${hours} 小时 ${rest} 分` : `${hours} 小时`
+  if (!hours) return translate('reader.end.minutes', { minutes })
+  return rest
+    ? translate('reader.end.hoursMinutes', { hours, minutes: rest })
+    : translate('reader.end.hours', { hours })
 }
 
 export function readSpan(startedAt: string, now = new Date()) {
   const start = new Date(startedAt)
   const day = (value: Date) =>
     new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime()
-  const date = timeFormat(
-    start,
-    start.getFullYear() === now.getFullYear() ? TimeFormatEnum.M_D_CN : TimeFormatEnum.YYYY_M_D_CN,
-  )
+  const date = formatDate(start, start.getFullYear() === now.getFullYear() ? 'monthDay' : 'date')
   const days = Math.round((day(now) - day(start)) / 86_400_000) + 1
-  return days > 1 ? `自 ${date}起，历时 ${days} 天` : `${date}开始阅读，当天读完`
+  return days > 1
+    ? translate('reader.end.span', { date, days })
+    : translate('reader.end.sameDay', { date })
 }

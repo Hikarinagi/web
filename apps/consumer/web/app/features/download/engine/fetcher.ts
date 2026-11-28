@@ -1,5 +1,5 @@
 import { createFileKey, decryptFile } from '~/utils/media/file-crypto'
-import type { DownloadManifest, ManifestEntry, ManifestFile } from './types'
+import type { DownloadFailure, DownloadManifest, ManifestEntry, ManifestFile } from './types'
 
 const RETRY_DELAYS = [1000, 2000, 4000]
 const RATE_LIMIT_WAITS = 30
@@ -11,6 +11,8 @@ export class EntryError extends Error {
     message: string,
     readonly retryable: boolean,
     readonly retryAfter: number | null = null,
+    readonly fallback?: DownloadFailure['fallback'],
+    readonly status?: number,
   ) {
     super(message)
     this.name = 'EntryError'
@@ -36,23 +38,21 @@ async function failure(response: Response): Promise<EntryError> {
     response.status === 429
       ? Number(response.headers.get('retry-after')) * 1000 || RETRY_DELAYS[0]!
       : null
-  if (response.headers.get('content-type')?.includes('application/json')) {
-    const body = (await response.json().catch(() => null)) as {
-      error?: { code?: string; message?: string }
-    } | null
-    const code = body?.error?.code ?? `HTTP_${response.status}`
-    return new EntryError(
-      code,
-      body?.error?.message ?? `请求失败（${response.status}）`,
-      retryable,
-      retryAfter,
-    )
+  const body = response.headers.get('content-type')?.includes('application/json')
+    ? ((await response.json().catch(() => null)) as {
+        error?: { code?: string; message?: string }
+      } | null)
+    : null
+  if (body?.error?.code) {
+    return new EntryError(body.error.code, body.error.message ?? '', retryable, retryAfter)
   }
   return new EntryError(
     `HTTP_${response.status}`,
-    `请求失败（${response.status}）`,
+    '',
     retryable,
     retryAfter,
+    response.headers.get('cf-mitigated') === 'challenge' ? 'challenge' : 'status',
+    response.status,
   )
 }
 
@@ -63,18 +63,28 @@ async function once(
   signal: AbortSignal,
 ): Promise<Uint8Array> {
   const key = createFileKey()
-  const response = await fetch(url, {
+  const encrypted = await fetch(url, {
     method: 'POST',
     credentials: 'include',
     headers: { 'content-type': 'application/json', accept: 'application/octet-stream' },
     body: JSON.stringify({ p: key }),
     signal,
   })
-  if (!response.ok) throw await failure(response)
-  const encrypted = await response.arrayBuffer()
-  const plain = new Uint8Array(await decryptFile(aad, key, encrypted))
+    .then(async response => {
+      if (!response.ok) throw await failure(response)
+      return response.arrayBuffer()
+    })
+    .catch((error: unknown) => {
+      if (signal.aborted || error instanceof EntryError) throw error
+      throw new EntryError('NETWORK_FAILED', '', true, null, 'network')
+    })
+  const plain = new Uint8Array(
+    await decryptFile(aad, key, encrypted).catch(() => {
+      throw new EntryError('INTEGRITY_FAILED', '', true, null, 'integrity')
+    }),
+  )
   if (plain.byteLength !== expected) {
-    throw new EntryError('DOWNLOAD_CONTENT_CHANGED', '文件内容与清单不一致', false)
+    throw new EntryError('DOWNLOAD_CONTENT_CHANGED', '', false)
   }
   return plain
 }
@@ -89,7 +99,7 @@ export async function fetchEntry(
   if (entry.kind === 'text') {
     const data = encoder.encode(entry.data ?? '')
     if (data.byteLength !== entry.bytes) {
-      throw new EntryError('DOWNLOAD_CONTENT_CHANGED', '清单文档大小不一致', false)
+      throw new EntryError('DOWNLOAD_CONTENT_CHANGED', '', false)
     }
     return data
   }

@@ -10,7 +10,7 @@ export default defineNuxtRouteMiddleware(async to => {
   if (!can(required)) {
     if (import.meta.client) {
       const { toast } = await import('@hina-ui/vue')
-      toast.warning('没有权限访问该页面')
+      toast.warning(translate('error.forbiddenPage'))
     }
     return navigateTo('/create')
   }

@@ -3,8 +3,10 @@
   import { useMediaQuery } from '@vueuse/core'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { titleText } from '~/features/entry/labels'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameProductsDrawer' })
+  defineProps<{ dlsite: GalgamePageData['dlsite'] }>()
 
   const route = useRoute()
   const router = useRouter()
@@ -54,7 +56,7 @@
         <Skeleton class="h-36 w-full" />
         <Skeleton class="h-48 w-full" />
       </Stack>
-      <GalgameProductsDetail v-else :product="detail" />
+      <GalgameProductsDetail v-else :product="detail" :dlsite="dlsite" />
     </template>
   </component>
 </template>

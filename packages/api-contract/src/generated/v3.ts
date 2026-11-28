@@ -1637,6 +1637,166 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/admin/lotteries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_getList"];
+        put?: never;
+        post: operations["AdminLotteryController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_getById"];
+        put: operations["AdminLotteryController_update"];
+        post?: never;
+        delete: operations["AdminLotteryController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/announce": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLotteryController_announce"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/checks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_checks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_getCodes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_getEntries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLotteryController_publish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/winners": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminLotteryController_getWinners"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/winners/{winnerId}/deliver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLotteryController_deliver"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/admin/lotteries/{id}/winners/{winnerId}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AdminLotteryController_revoke"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/admin/manga/backfill": {
         parameters: {
             query?: never;
@@ -3203,6 +3363,22 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["AdminPromoBannerController_update"];
+        trace?: never;
+    };
+    "/api/v3/admin/promotions/dlsite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AdminDlsiteController_get"];
+        put: operations["AdminDlsiteController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v3/admin/promotions/nav-items": {
@@ -8213,6 +8389,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/galgames/{id}/dlsite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GalgameDlsiteController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/galgames/{id}/downloads": {
         parameters: {
             query?: never;
@@ -10125,6 +10317,86 @@ export interface paths {
             cookie?: never;
         };
         get: operations["LightNovelController_getVolumes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/lotteries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LotteryController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/lotteries/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LotteryController_getById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/lotteries/{id}/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["LotteryController_join"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/lotteries/{id}/participants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LotteryController_getParticipants"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/lotteries/{id}/winners": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LotteryController_getWinners"];
         put?: never;
         post?: never;
         delete?: never;
@@ -12934,6 +13206,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/posts/{id}/lottery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LotteryController_byPost"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/posts/{id}/publish": {
         parameters: {
             query?: never;
@@ -15112,6 +15400,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/user/me/lottery/prizes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserLotteryController_getList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/lottery/prizes/{id}/account": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["UserLotteryController_submitAccount"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v3/user/me/lottery/prizes/{id}/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UserLotteryController_revealCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v3/user/me/media": {
         parameters: {
             query?: never;
@@ -16448,6 +16784,131 @@ export interface components {
             verification_code_ttl_seconds: number;
             verification_ticket_ttl_seconds: number;
         };
+        AdminLotteryCheckDto: {
+            key: components["schemas"]["LotteryCheckKey"];
+            passed: boolean;
+        };
+        AdminLotteryDto: {
+            announce_hours: number;
+            /** Format: date-time */
+            announced_at: string | null;
+            claim_days: number;
+            condition_preset: components["schemas"]["AdminLotteryPresetDto"] | null;
+            condition_preset_id: number | null;
+            contact: string;
+            /** Format: date-time */
+            drawn_at: string | null;
+            /** Format: date-time */
+            draws_at: string;
+            entry_count: number;
+            id: number;
+            min_account_days: number;
+            organizer: components["schemas"]["UserRefDto"];
+            organizer_id: number;
+            post: components["schemas"]["AdminLotteryPostDto"] | null;
+            post_id: number | null;
+            prize_count: number;
+            prizes: components["schemas"]["AdminLotteryPrizeDto"][];
+            /** Format: date-time */
+            published_at: string | null;
+            refill: boolean;
+            require_comment: boolean;
+            require_follow: boolean;
+            seed_hash: string | null;
+            standby_count: number;
+            /** Format: date-time */
+            starts_at: string;
+            status: components["schemas"]["LotteryStatus"];
+            title: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        AdminLotteryEntryDto: {
+            /** Format: date-time */
+            created_at: string;
+            exclusion: components["schemas"]["LotteryExclusion"] | null;
+            id: number;
+            user: components["schemas"]["UserRefDto"];
+        };
+        AdminLotteryListItemDto: {
+            /** Format: date-time */
+            draws_at: string;
+            entry_count: number;
+            id: number;
+            organizer: components["schemas"]["UserRefDto"];
+            post_id: number | null;
+            prize_count: number;
+            /** Format: date-time */
+            starts_at: string;
+            status: components["schemas"]["LotteryStatus"];
+            title: string;
+            /** Format: date-time */
+            updated_at: string;
+        };
+        AdminLotteryPostDto: {
+            content_text: string;
+            id: number;
+            title: string;
+        };
+        AdminLotteryPresetDto: {
+            id: number;
+            name: string;
+        };
+        AdminLotteryPrizeCodesDto: {
+            codes: string[];
+            prize_id: number;
+        };
+        AdminLotteryPrizeDto: {
+            account_label: string | null;
+            code_count: number;
+            decoration: components["schemas"]["EquippedFrameDto"] | null;
+            id: number;
+            image: components["schemas"]["MediaAssetDto"] | null;
+            kind: components["schemas"]["LotteryPrizeKind"];
+            name: string;
+            note: string;
+            points: number | null;
+            quantity: number;
+            redeem_hint: string | null;
+            tier: string;
+            value: number | null;
+        };
+        AdminLotteryWinnerDto: {
+            account: string | null;
+            /** Format: date-time */
+            claim_by: string | null;
+            /** Format: date-time */
+            claimed_at: string | null;
+            /** Format: date-time */
+            delivered_at: string | null;
+            id: number;
+            prize_id: number | null;
+            revoke_note: string | null;
+            standby_rank: number | null;
+            status: components["schemas"]["LotteryWinnerStatus"];
+            user: components["schemas"]["AdminLotteryWinnerUserDto"];
+        };
+        AdminLotteryWinnerUserDto: {
+            /** @description 头像 */
+            avatar: components["schemas"]["MediaAssetDto"] | null;
+            /** Format: date-time */
+            created_at: string;
+            /** @description 当前佩戴的徽章 */
+            equipped_badges: components["schemas"]["EquippedBadgeDto"][];
+            /** @description 当前佩戴的头像框 */
+            equipped_frame: components["schemas"]["EquippedFrameDto"] | null;
+            /** @description 用户 ID */
+            id: number;
+            /** @description 用户名 */
+            name: string;
+            /** @description 昵称 */
+            nickname: string | null;
+            /**
+             * @description 用户角色
+             * @enum {string}
+             */
+            role: "USER" | "ADMIN" | "SUPER_ADMIN";
+        };
         AdminMangaChapterRefDto: {
             chapter_number: string | null;
             chapter_type: components["schemas"]["MangaChapterType"];
@@ -17211,7 +17672,7 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT" | "LOTTERY_ADD";
             user: components["schemas"]["PointRecordUserDto"];
         };
         AdminPromoBannerDto: {
@@ -17302,6 +17763,7 @@ export interface components {
             /** @description 作品轮播项缺的资料：标题徽标、横幅图、文案；缺任一项时不在首页显示 */
             missing: ("LOGO" | "IMAGE" | "INTRO")[];
             open_in_new: boolean;
+            partner: components["schemas"]["PromoPartner"] | null;
             position: number;
             /** Format: date-time */
             start_at: string | null;
@@ -18438,9 +18900,11 @@ export interface components {
             rybbit_site_id: string | null;
         };
         ApmAlertDto: {
-            message: string;
+            fault_rate?: components["schemas"]["ApmFaultRateDto"];
+            new_fault?: components["schemas"]["ApmNewFaultDto"];
             recipient_ids: number[];
-            title: string;
+            /** @enum {string} */
+            rule: "fault_rate" | "new_fault";
             /** Format: uri */
             url?: string;
         };
@@ -18454,6 +18918,21 @@ export interface components {
         ApmAssigneesDto: {
             items: components["schemas"]["ApmAssigneeDto"][];
         };
+        ApmFaultDto: {
+            environment: string;
+            message?: string;
+            name: string;
+            occurrences: number;
+            service: string;
+        };
+        ApmFaultRateDto: {
+            baseline_rate: number;
+            environment: string;
+            faults: number;
+            rate: number;
+            service: string;
+            total: number;
+        };
         ApmIssueAssignedDto: {
             actor_id: number;
             assignee_id: number;
@@ -18462,6 +18941,10 @@ export interface components {
             message?: string;
             /** Format: uri */
             url: string;
+        };
+        ApmNewFaultDto: {
+            count: number;
+            faults: components["schemas"]["ApmFaultDto"][];
         };
         ApmNotifyQueuedDto: {
             queued: boolean;
@@ -19946,6 +20429,7 @@ export interface components {
             /** @description 自定义轮播项的标题图 */
             logo_id?: number | null;
             open_in_new?: boolean;
+            partner?: components["schemas"]["PromoPartner"] | null;
             start_at?: string | null;
             title?: string | null;
         };
@@ -20422,6 +20906,16 @@ export interface components {
         };
         DismissTodoDto: {
             reason: string;
+        };
+        DlsiteLinkDto: {
+            /** @description DLsite product number, such as VJ01001234 */
+            code: string;
+            /** @description Product page, as an affiliate link once an affiliate id is set */
+            url: string;
+        };
+        DlsitePolicyDto: {
+            affiliate_id: string | null;
+            badge: string | null;
         };
         DownloadCardsDto: {
             available: number;
@@ -20913,6 +21407,7 @@ export interface components {
             light_novel_rates: components["schemas"]["LightNovelRateCardSummaryResDto"][];
             light_novel_volumes: components["schemas"]["LightNovelVolumeCardSummaryResDto"][];
             light_novels: components["schemas"]["LightNovelCardSummaryResDto"][];
+            lotteries: components["schemas"]["LotteryDto"][];
             manga_rates: components["schemas"]["MangaRateCardSummaryResDto"][];
             mangas: components["schemas"]["MangaCardSummaryResDto"][];
             mention_users: components["schemas"]["MentionUserSummaryResDto"][];
@@ -21621,6 +22116,7 @@ export interface components {
             is_review: boolean;
             like_count: number;
             liked: boolean;
+            lottery: components["schemas"]["LotteryDto"] | null;
             pinned: boolean;
             poll: components["schemas"]["PollResDto"] | null;
             review_rate: number | null;
@@ -21787,6 +22283,7 @@ export interface components {
             id: number;
             like_count: number;
             liked: boolean;
+            lottery: components["schemas"]["LotteryDto"] | null;
             pinned: boolean;
             poll: components["schemas"]["PollResDto"] | null;
             /** Format: date-time */
@@ -21973,6 +22470,12 @@ export interface components {
          * @enum {string}
          */
         GalgameDevStatus: "RELEASED" | "IN_DEVELOPMENT" | "CANCELLED";
+        GalgameDlsiteDto: {
+            /** @description Campaign mark on the purchase button, absent outside a campaign */
+            badge: string | null;
+            /** @description Releases on DLsite, Chinese ones first and English ones last */
+            links: components["schemas"]["DlsiteLinkDto"][];
+        };
         GalgameDownloadFileDto: {
             file_hash: string | null;
             file_name: string;
@@ -22571,8 +23074,7 @@ export interface components {
         GalgameSlideDto: {
             /** @description 自定义轮播项的按钮文字 */
             action_label: string | null;
-            /** @description 横幅图：运营指定的图，或作品的第一张公开示例 CG */
-            banner: components["schemas"]["MediaAssetDto"];
+            banner: components["schemas"]["MediaAssetDto"] | null;
             /** @description 首屏文案：运营填写的文案，或作品简介的开头 */
             description: string | null;
             /** @description 这一项停留的秒数；为空时按首屏的默认时长 */
@@ -22585,8 +23087,10 @@ export interface components {
             /** @description 自定义轮播项的标题图 */
             logo: components["schemas"]["MediaAssetDto"] | null;
             open_in_new: boolean;
+            partner: components["schemas"]["PromoPartner"] | null;
             /** @description 自定义轮播项的标题 */
             title: string | null;
+            wall: components["schemas"]["MediaAssetDto"][];
             /** @description 作品轮播项的作品 */
             work: components["schemas"]["GalgameSlideWorkDto"] | null;
         };
@@ -24317,6 +24821,110 @@ export interface components {
             id: number;
             name: string;
         };
+        /** @enum {string} */
+        LotteryCheckKey: "PRIZES" | "CONTENT" | "CODES" | "VALUES" | "CAP" | "CARRIER" | "SCHEDULE" | "CONTACT";
+        LotteryCodeDto: {
+            code: string;
+            redeem_hint: string | null;
+        };
+        LotteryConditionDto: {
+            kind: components["schemas"]["LotteryConditionKind"];
+            met: boolean | null;
+        };
+        /** @enum {string} */
+        LotteryConditionKind: "FOLLOW" | "COMMENT" | "PRESET";
+        LotteryDto: {
+            /** Format: date-time */
+            announce_by: string;
+            announce_hours: number;
+            claim_days: number;
+            conditions: components["schemas"]["LotteryConditionDto"][];
+            contact: string;
+            /** Format: date-time */
+            draws_at: string;
+            id: number;
+            min_account_days: number;
+            organizer: components["schemas"]["UserRefDto"];
+            participant_count: number;
+            phase: components["schemas"]["LotteryPhase"];
+            post_id: number | null;
+            preset_label: string | null;
+            prizes: components["schemas"]["LotteryPrizeDto"][];
+            /** Format: date-time */
+            published_at: string | null;
+            refill: boolean;
+            seed: string | null;
+            seed_hash: string | null;
+            standby_count: number;
+            /** Format: date-time */
+            starts_at: string;
+            title: string;
+            viewer: components["schemas"]["LotteryViewerDto"];
+        };
+        /** @enum {string} */
+        LotteryExclusion: "INACTIVE" | "STAFF" | "NEW_ACCOUNT" | "NOT_FOLLOWING" | "NO_COMMENT" | "PRESET_UNMET";
+        LotteryParticipantDto: {
+            counted: boolean;
+            user_id: number;
+        };
+        /** @enum {string} */
+        LotteryPhase: "SCHEDULED" | "OPEN" | "DRAWING" | "ANNOUNCED";
+        LotteryPrizeDto: {
+            account_label: string | null;
+            decoration: components["schemas"]["EquippedFrameDto"] | null;
+            id: number;
+            image: components["schemas"]["MediaAssetDto"] | null;
+            kind: components["schemas"]["LotteryPrizeKind"];
+            name: string;
+            note: string;
+            points: number | null;
+            quantity: number;
+            tier: string;
+            value: number | null;
+        };
+        LotteryPrizeInputDto: {
+            account_label?: string | null;
+            codes?: string[];
+            decoration_id?: number | null;
+            image_id?: number | null;
+            kind: components["schemas"]["LotteryPrizeKind"];
+            name: string;
+            note?: string;
+            points?: number | null;
+            quantity: number;
+            redeem_hint?: string | null;
+            tier: string;
+            value?: number | null;
+        };
+        /** @enum {string} */
+        LotteryPrizeKind: "POINTS" | "DECORATION" | "CODE" | "ACCOUNT";
+        LotteryResultDto: {
+            /** Format: date-time */
+            claim_by: string | null;
+            exclusion: components["schemas"]["LotteryExclusion"] | null;
+            kind: components["schemas"]["LotteryResultKind"];
+            prize_id: number | null;
+            revoke_note: string | null;
+            standby_rank: number | null;
+            status: components["schemas"]["LotteryWinnerStatus"] | null;
+            winner_id: number | null;
+        };
+        /** @enum {string} */
+        LotteryResultKind: "WON" | "STANDBY" | "LOST" | "EXCLUDED" | "REVOKED";
+        /** @enum {string} */
+        LotteryStatus: "DRAFT" | "PUBLISHED" | "DRAWN" | "ANNOUNCED";
+        LotteryViewerDto: {
+            ineligible: components["schemas"]["LotteryExclusion"] | null;
+            joined: boolean;
+            result: components["schemas"]["LotteryResultDto"] | null;
+        };
+        LotteryWinnerGroupDto: {
+            prize_id: number;
+            tier: string;
+            users: components["schemas"]["UserRefDto"][];
+        };
+        /** @enum {string} */
+        LotteryWinnerStatus: "STANDBY" | "PENDING" | "SUBMITTED" | "DONE" | "FORFEITED" | "REVOKED";
         MakeUpCardItemDto: {
             created_at: string;
             expires_at: string;
@@ -26264,6 +26872,27 @@ export interface components {
             /** @description Values the edit added or changed that a later edit withdrew and that stay withdrawn */
             withdrawn: number;
         };
+        MyLotteryPrizeDto: {
+            account: string | null;
+            /** Format: date-time */
+            claim_by: string | null;
+            /** Format: date-time */
+            claimed_at: string | null;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            delivered_at: string | null;
+            id: number;
+            lottery: components["schemas"]["MyLotteryRefDto"];
+            prize: components["schemas"]["LotteryPrizeDto"];
+            revoke_note: string | null;
+            status: components["schemas"]["LotteryWinnerStatus"];
+        };
+        MyLotteryRefDto: {
+            id: number;
+            post_id: number | null;
+            title: string;
+        };
         MyPointRecordItemDto: {
             /** @enum {string} */
             action: "ADD" | "SUBTRACT";
@@ -26273,7 +26902,7 @@ export interface components {
             created_at: string;
             id: number;
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT" | "LOTTERY_ADD";
         };
         MyTranslationTeamDto: {
             avatar: components["schemas"]["MediaAssetDto"] | null;
@@ -27935,7 +28564,7 @@ export interface components {
         };
         PointReasonTotalDto: {
             /** @enum {string} */
-            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
+            reason: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT" | "LOTTERY_ADD";
             total: number;
         };
         PointRecordUserDto: {
@@ -28411,6 +29040,8 @@ export interface components {
             link: string;
             open_in_new: boolean;
         };
+        /** @enum {string} */
+        PromoPartner: "DLSITE";
         /** @enum {string} */
         PromoSlideKind: "GALGAME" | "CUSTOM";
         ProofreadMangaTranslationDto: {
@@ -28971,6 +29602,7 @@ export interface components {
             light_novel_ids?: number[];
             light_novel_rate_ids?: number[];
             light_novel_volume_ids?: number[];
+            lottery_ids?: number[];
             manga_ids?: number[];
             manga_rate_ids?: number[];
             media_asset_ids?: number[];
@@ -29325,6 +29957,9 @@ export interface components {
             revision_id: number;
             /** @description The new monotonic version number of the resource. */
             version: number;
+        };
+        RevokeLotteryWinnerDto: {
+            note: string;
         };
         RewriteSiteNoteDto: {
             text: string;
@@ -29800,6 +30435,9 @@ export interface components {
             note?: string;
             operations: components["schemas"]["EditOperationDto"][];
         };
+        SubmitLotteryAccountDto: {
+            account: string;
+        };
         SubmitReviewGroupApplicationDto: {
             homepage?: string;
             images?: number[];
@@ -29854,7 +30492,7 @@ export interface components {
             sent_at: string;
             target: components["schemas"]["SystemMessageTargetDto"] | null;
             template_key: string | null;
-            title: string | null;
+            title: string;
             /** @enum {string} */
             type: "SYSTEM" | "NOTIFICATION" | "INTERACTION";
         };
@@ -29869,7 +30507,7 @@ export interface components {
             sent_at: string;
             target: components["schemas"]["SystemMessageTargetDto"] | null;
             template_key: string | null;
-            title: string | null;
+            title: string;
             /** @enum {string} */
             type: "SYSTEM" | "NOTIFICATION" | "INTERACTION";
         };
@@ -31026,6 +31664,10 @@ export interface components {
             /** @description cron 表达式，含秒字段 */
             schedule?: string;
         };
+        UpdateDlsitePolicyDto: {
+            affiliate_id: string | null;
+            badge: string | null;
+        };
         UpdateDownloadPolicyDto: {
             card_price: number;
             daily_bytes_limit: number;
@@ -31515,6 +32157,7 @@ export interface components {
             /** @description 自定义轮播项的标题图 */
             logo_id?: number | null;
             open_in_new?: boolean;
+            partner?: components["schemas"]["PromoPartner"] | null;
             start_at?: string | null;
             title?: string | null;
         };
@@ -31761,6 +32404,25 @@ export interface components {
             is_spoiler?: boolean;
             rate?: number | null;
             rate_content?: string;
+        };
+        UpsertLotteryDto: {
+            announce_hours: number;
+            claim_days: number;
+            condition_preset_id?: number | null;
+            contact: string;
+            /** Format: date-time */
+            draws_at: string;
+            min_account_days: number;
+            organizer_id: number;
+            post_id?: number | null;
+            prizes: components["schemas"]["LotteryPrizeInputDto"][];
+            refill: boolean;
+            require_comment: boolean;
+            require_follow: boolean;
+            standby_count: number;
+            /** Format: date-time */
+            starts_at: string;
+            title: string;
         };
         UpsertMangaRateDto: {
             /** @description 短评是否含剧透 */
@@ -34657,7 +35319,7 @@ export interface operations {
         parameters: {
             query: {
                 owner_id?: number;
-                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT";
+                reason?: "CHECK_IN_ADD" | "CHECK_IN_MILESTONE_ADD" | "CHECK_IN_MAKE_UP_SUBTRACT" | "DECORATION_PURCHASE_SUBTRACT" | "MAKE_UP_CARD_PURCHASE_SUBTRACT" | "DOWNLOAD_CARD_PURCHASE_SUBTRACT" | "SYSTEM_ADD" | "SYSTEM_SUBTRACT" | "RATE_ADD" | "REVIEW_ADD" | "CONTRIBUTION_ADD" | "READING_ADD" | "POST_ADD" | "ARTICLE_ADD" | "COMMENT_ADD" | "FIRST_TIME_ADD" | "TRANSLATION_ADD" | "EPUB_ADD" | "AI_QUOTA_PURCHASE_SUBTRACT" | "LOTTERY_ADD";
                 action?: "ADD" | "SUBTRACT";
                 from?: string;
                 to?: string;
@@ -35281,6 +35943,295 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["AdminSigningKeyDto"];
                 };
+            };
+        };
+    };
+    AdminLotteryController_getList: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AdminLotteryListItemDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminLotteryController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertLotteryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryDto"];
+                };
+            };
+        };
+    };
+    AdminLotteryController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryDto"];
+                };
+            };
+        };
+    };
+    AdminLotteryController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertLotteryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryDto"];
+                };
+            };
+        };
+    };
+    AdminLotteryController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLotteryController_announce: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryDto"];
+                };
+            };
+        };
+    };
+    AdminLotteryController_checks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryCheckDto"][];
+                };
+            };
+        };
+    };
+    AdminLotteryController_getCodes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryPrizeCodesDto"][];
+                };
+            };
+        };
+    };
+    AdminLotteryController_getEntries: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["AdminLotteryEntryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    AdminLotteryController_publish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryDto"];
+                };
+            };
+        };
+    };
+    AdminLotteryController_getWinners: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminLotteryWinnerDto"][];
+                };
+            };
+        };
+    };
+    AdminLotteryController_deliver: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                winnerId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AdminLotteryController_revoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                winnerId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RevokeLotteryWinnerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -37991,6 +38942,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminPromoBannerDto"];
+                };
+            };
+        };
+    };
+    AdminDlsiteController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DlsitePolicyDto"];
+                };
+            };
+        };
+    };
+    AdminDlsiteController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDlsitePolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DlsitePolicyDto"];
                 };
             };
         };
@@ -46720,6 +47713,27 @@ export interface operations {
             };
         };
     };
+    GalgameDlsiteController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalgameDlsiteDto"];
+                };
+            };
+        };
+    };
     GalgameDownloadController_getList: {
         parameters: {
             query?: never;
@@ -49645,6 +50659,122 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LightNovelVolumeRelationDto"][];
+                };
+            };
+        };
+    };
+    LotteryController_getList: {
+        parameters: {
+            query: {
+                q?: string;
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LotteryDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    LotteryController_getById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LotteryDto"];
+                };
+            };
+        };
+    };
+    LotteryController_join: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LotteryDto"];
+                };
+            };
+        };
+    };
+    LotteryController_getParticipants: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["LotteryParticipantDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    LotteryController_getWinners: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LotteryWinnerGroupDto"][];
                 };
             };
         };
@@ -54719,6 +55849,27 @@ export interface operations {
             };
         };
     };
+    LotteryController_byPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LotteryDto"] | null;
+                };
+            };
+        };
+    };
     PostController_publish: {
         parameters: {
             query?: never;
@@ -58878,6 +60029,75 @@ export interface operations {
                         items: components["schemas"]["MyPointRecordItemDto"][];
                         meta: components["schemas"]["PageMetaDto"];
                     };
+                };
+            };
+        };
+    };
+    UserLotteryController_getList: {
+        parameters: {
+            query: {
+                page: number;
+                page_size: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items: components["schemas"]["MyLotteryPrizeDto"][];
+                        meta: components["schemas"]["PageMetaDto"];
+                    };
+                };
+            };
+        };
+    };
+    UserLotteryController_submitAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitLotteryAccountDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UserLotteryController_revealCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LotteryCodeDto"];
                 };
             };
         };

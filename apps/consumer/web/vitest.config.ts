@@ -10,7 +10,23 @@ const h3 = dirname(dirname(createRequire(fileURLToPath(import.meta.resolve('nuxt
 export default defineConfig({
   plugins: [
     vue(),
-    AutoImport({ imports: ['vue', '@vueuse/core'], dts: false }),
+    AutoImport({
+      imports: [
+        'vue',
+        '@vueuse/core',
+        {
+          '~/utils/i18n': [
+            'translate',
+            'tryTranslate',
+            'issueMessage',
+            'formatList',
+            'currentLocale',
+          ],
+        },
+        { '~/composables/useLocaleText': ['useLocaleText'] },
+      ],
+      dts: false,
+    }),
     {
       name: 'nuxt-env-flags',
       transform: code =>
@@ -32,6 +48,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     include: ['tests/**/*.spec.ts'],
+    setupFiles: ['tests/stubs/i18n.ts'],
     globals: true,
   },
 })

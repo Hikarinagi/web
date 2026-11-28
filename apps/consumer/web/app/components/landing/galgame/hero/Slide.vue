@@ -37,6 +37,7 @@
     >
       <Ripple v-if="to" />
       <HikariImage
+        v-if="item.banner"
         :src="item.banner"
         alt=""
         :lazy="false"
@@ -44,6 +45,7 @@
         class="absolute inset-0"
         image-class="size-full object-cover"
       />
+      <LandingGalgameHeroWall v-else :covers="item.wall" />
       <Stack
         gap="none"
         class="absolute inset-0 bg-linear-to-t from-canvas via-canvas/80 via-50% to-transparent to-85% sm:bg-linear-to-r sm:from-canvas/90 sm:via-canvas/40 sm:via-35% sm:to-transparent sm:to-60%"

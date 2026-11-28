@@ -12,7 +12,6 @@
   import { Ellipsis, Eye, Heart, Pencil, Trash2 } from '@lucide/vue'
   import { NuxtLink } from '#components'
   import {
-    formatMonthDay,
     managedEditLabel,
     managedStatusBadge,
     managedTypeLabel,
@@ -27,6 +26,8 @@
     edit: [item: ManagedContentItem]
     remove: [item: ManagedContentItem]
   }>()
+
+  const { t } = useLocaleText()
 
   const badge = computed(() => managedStatusBadge(props.item.status))
 </script>
@@ -44,8 +45,10 @@
     <Stack gap="xs" class="min-w-0 flex-1">
       <Inline align="center" gap="sm" :wrap="false" class="min-w-0">
         <Tag v-if="badge" :tone="badge.tone" size="sm" class="shrink-0">{{ badge.label }}</Tag>
-        <Tag v-if="item.visible === 'PRIVATE'" tone="neutral" size="sm" class="shrink-0">私密</Tag>
-        <Text weight="medium" truncate>{{ item.title || '未命名草稿' }}</Text>
+        <Tag v-if="item.visible === 'PRIVATE'" tone="neutral" size="sm" class="shrink-0">
+          {{ t('space.manage.private') }}
+        </Tag>
+        <Text weight="medium" truncate>{{ item.title || t('space.manage.untitled') }}</Text>
       </Inline>
       <Inline align="center" gap="md" :wrap="false">
         <Text size="xs" tone="muted">{{ managedTypeLabel(item) }}</Text>
@@ -57,7 +60,7 @@
           <Heart class="size-3.5 text-muted" />
           <Text size="xs" tone="muted" class="tabular-nums">{{ item.like_count }}</Text>
         </Inline>
-        <Text size="xs" tone="muted">{{ formatMonthDay(item.updated_at) }}</Text>
+        <Text size="xs" tone="muted">{{ formatDatePart(item.updated_at, 'monthDay') }}</Text>
       </Inline>
     </Stack>
 
@@ -73,14 +76,16 @@
         tone="neutral"
         size="sm"
       >
-        查看
+        {{ t('common.view') }}
       </Button>
-      <Button variant="ghost" tone="danger" size="sm" @click="emit('remove', item)">删除</Button>
+      <Button variant="ghost" tone="danger" size="sm" @click="emit('remove', item)">
+        {{ t('common.delete') }}
+      </Button>
     </Inline>
 
-    <DropdownMenu label="内容操作" align="end" class="w-40">
+    <DropdownMenu :label="t('space.manage.actions')" align="end" class="w-40">
       <IconButton
-        label="更多操作"
+        :label="t('space.manage.more')"
         variant="ghost"
         tone="neutral"
         size="sm"
@@ -98,11 +103,11 @@
           @select="navigateTo(managedViewPath(item))"
         >
           <template #icon><Eye /></template>
-          查看
+          {{ t('common.view') }}
         </DropdownMenuItem>
         <DropdownMenuItem tone="danger" @select="emit('remove', item)">
           <template #icon><Trash2 /></template>
-          删除
+          {{ t('common.delete') }}
         </DropdownMenuItem>
       </template>
     </DropdownMenu>

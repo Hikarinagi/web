@@ -47,6 +47,7 @@ const ENTITY_CARD_COMMANDS: Record<EntityCardType, string> = {
   galgame_rate: '/galgame-rate',
   light_novel_rate: '/ln-rate',
   manga_rate: '/manga-rate',
+  lottery: '/lottery',
 }
 
 const ENTITY_CARD_KEYWORDS: Record<EntityCardType, readonly string[]> = {
@@ -62,6 +63,9 @@ const ENTITY_CARD_KEYWORDS: Record<EntityCardType, readonly string[]> = {
   galgame_rate: ['rate', 'score', '评分', '打分', '我的评分', 'gal 评分'],
   light_novel_rate: ['rate', 'score', '评分', '打分', '我的评分', 'ln 评分'],
   manga_rate: ['rate', 'score', '评分', '打分', '我的评分', '漫画评分'],
+  get lottery() {
+    return ['lottery', 'giveaway', translate('lottery.name'), translate('lottery.prize.heading')]
+  },
 }
 
 function normalize(value: string): string {

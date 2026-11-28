@@ -5,9 +5,12 @@
   import { SITE_CONFIG } from '~/config/site'
 
   const flags = useFeatureFlags()
+  const { t } = useLocaleText()
   const year = new Date().getFullYear()
   const { appVersion, buildTime } = useRuntimeConfig().public
-  const buildLabel = buildTime ? `Built ${buildTime}` : 'Local build'
+  const buildLabel = computed(() =>
+    buildTime ? t('layout.footer.built', { time: buildTime }) : t('layout.footer.localBuild'),
+  )
   const changelogOpen = ref(false)
 </script>
 
@@ -28,13 +31,13 @@
             :skeleton="false"
           />
         </NuxtLink>
-        <Text as="p" size="sm" tone="muted">{{ SITE_CONFIG.description }}</Text>
+        <Text as="p" size="sm" tone="muted">{{ t('layout.site.description') }}</Text>
       </Stack>
 
       <Flex direction="col" gap="md" class="md:flex-row md:items-center md:gap-5">
         <Stack gap="xs" class="order-2 md:order-1 md:items-end">
           <Text as="p" size="sm" tone="muted">
-            © {{ year }} {{ SITE_CONFIG.name }} · Some Rights Reserved ·
+            {{ t('layout.footer.copyright', { year, name: SITE_CONFIG.name }) }}
             <Button
               v-tooltip="buildLabel"
               variant="link"
@@ -55,7 +58,7 @@
               :underline="false"
               class="w-fit text-sm text-muted"
             >
-              下载 App
+              {{ t('layout.footer.downloadApp') }}
             </Link>
             <Link
               :as="NuxtLink"
@@ -64,7 +67,7 @@
               :underline="false"
               class="w-fit text-sm text-muted"
             >
-              开发者平台
+              {{ t('common.section.developers') }}
             </Link>
           </Inline>
         </Stack>

@@ -6,13 +6,14 @@
   defineOptions({ name: 'SpaceSettingNav' })
 
   const route = useRoute()
+  const { t } = useLocaleText()
 
   const items = [
-    { label: '个人资料', icon: User, to: '/setting' },
-    { label: '账号安全', icon: ShieldCheck, to: '/setting/account' },
-    { label: '内容偏好', icon: SlidersHorizontal, to: '/setting/preference' },
-    { label: '消息提醒', icon: Bell, to: '/setting/notification' },
-  ]
+    { label: 'setting.nav.profile', icon: User, to: '/setting' },
+    { label: 'setting.nav.account', icon: ShieldCheck, to: '/setting/account' },
+    { label: 'setting.nav.preference', icon: SlidersHorizontal, to: '/setting/preference' },
+    { label: 'setting.nav.notification', icon: Bell, to: '/setting/notification' },
+  ] as const
 </script>
 
 <template>
@@ -22,12 +23,12 @@
       :key="item.to"
       :as="NuxtLink"
       :to="item.to"
-      :label="item.label"
+      :label="t(item.label)"
       :active="route.path === item.to"
       class="shrink-0"
     >
       <template #icon><component :is="item.icon" /></template>
-      {{ item.label }}
+      {{ t(item.label) }}
     </NavLink>
   </Flex>
 </template>

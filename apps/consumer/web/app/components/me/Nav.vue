@@ -1,15 +1,17 @@
 <script setup lang="ts">
   import { Flex, NavLink } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { Download, Package, Shirt } from '@lucide/vue'
+  import { Download, Gift, Package, Shirt } from '@lucide/vue'
 
   defineOptions({ name: 'MeNav' })
 
   const route = useRoute()
+  const { t } = useLocaleText()
 
   const items = [
     { label: '我的装扮', icon: Shirt, to: '/me/decoration' },
     { label: '我的道具', icon: Package, to: '/me/items' },
+    { label: t('lottery.myPrizes'), icon: Gift, to: '/me/prizes' },
     { label: '下载中心', icon: Download, to: '/me/downloads' },
   ]
 </script>

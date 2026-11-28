@@ -12,11 +12,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  app: {
-    head: { htmlAttrs: { lang: 'zh-CN' } },
-  },
-
   modules: [
+    '@nuxtjs/i18n',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxtjs/color-mode',
@@ -31,6 +28,15 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@hikarinagi/apm-browser/nuxt',
   ],
+
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'zh-CN',
+    locales: [{ code: 'zh-CN', language: 'zh-CN', file: 'zh-CN/index.ts' }],
+    detectBrowserLanguage: false,
+    autoDeclare: false,
+    vueI18n: './i18n.config.ts',
+  },
 
   site: { url: 'https://www.hikarinagi.org', name: 'Hikarinagi' },
 

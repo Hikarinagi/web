@@ -1,12 +1,13 @@
 import { Moon, Sun, SunMoon } from '@lucide/vue'
+import type { MessageKey } from '~~/i18n/keys'
 
 type ThemePreference = 'system' | 'light' | 'dark'
 
 const THEME_MODES = [
-  { value: 'system', label: '跟随系统', icon: SunMoon },
-  { value: 'light', label: '浅色模式', icon: Sun },
-  { value: 'dark', label: '深色模式', icon: Moon },
-] as const satisfies readonly { value: ThemePreference; label: string; icon: typeof SunMoon }[]
+  { value: 'system', label: 'layout.theme.system', icon: SunMoon },
+  { value: 'light', label: 'layout.theme.light', icon: Sun },
+  { value: 'dark', label: 'layout.theme.dark', icon: Moon },
+] as const satisfies readonly { value: ThemePreference; label: MessageKey; icon: typeof SunMoon }[]
 
 export function useThemeMode() {
   const colorMode = useColorMode()

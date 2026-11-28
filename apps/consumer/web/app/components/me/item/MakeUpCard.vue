@@ -21,8 +21,7 @@
   const soldOut = computed(() => props.card.purchased >= props.card.purchase_limit)
   const item = computed(() => makeUpCardItem(props.card, props.card.window_days))
 
-  const expiryLabel = (value: string) =>
-    new Date(value).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+  const expiryLabel = (value: string) => formatDate(value, 'date')
 
   const expiryGroups = computed(() => {
     const counts = new Map<string, number>()

@@ -5,12 +5,14 @@
 
   defineOptions({ name: 'GalgameSteamCard' })
   const props = defineProps<{ app: GalgameSteamData['apps'][number] }>()
+  const { t, n } = useLocaleText()
 
   const credit = computed(() => {
     const publishers = props.app.publishers.filter(name => !props.app.developers.includes(name))
-    return [props.app.release_date, props.app.developers.join('、'), publishers.join('、')]
+    const released = props.app.coming_soon ? t('galgame.steam.comingSoon') : props.app.release_date
+    return [released, formatList(props.app.developers), formatList(publishers)]
       .filter(Boolean)
-      .join('　')
+      .join(t('galgame.steam.creditSeparator'))
   })
 
   const reviewTone = computed(() => {
@@ -23,15 +25,17 @@
   const tags = computed(() => {
     const plain = [
       ...props.app.platforms,
-      props.app.achievements > 0 ? `${props.app.achievements} 个成就` : '',
-      props.app.has_demo ? '有体验版' : '',
+      props.app.achievements > 0
+        ? t('galgame.steam.achievements', { count: props.app.achievements })
+        : '',
+      props.app.has_demo ? t('galgame.steam.demo') : '',
     ].filter(Boolean)
 
     return [
       ...props.app.languages.map(language => ({
         key: `language-${language.name}`,
         label: language.name,
-        highlight: language.name.includes('中文'),
+        highlight: language.chinese,
         audio: language.full_audio,
       })),
       ...plain.map(label => ({ key: label, label, highlight: false, audio: false })),
@@ -53,7 +57,7 @@
         <Inline gap="none" align="start" justify="between" :wrap="false" class="gap-3">
           <Heading :level="4" size="base" class="min-w-0">{{ app.name }}</Heading>
           <Inline gap="sm" align="center" :wrap="false" class="shrink-0">
-            <Tag v-if="app.region_locked" tone="warning">国区不可用</Tag>
+            <Tag v-if="app.region_locked" tone="warning">{{ t('galgame.steam.regionLocked') }}</Tag>
             <template v-else-if="app.is_free || app.price">
               <Tag v-if="app.price && app.price.discount_percent > 0" tone="success">
                 -{{ app.price.discount_percent }}%
@@ -68,7 +72,7 @@
                 {{ app.price.original }}
               </Text>
               <Text as="span" size="sm" weight="semibold">
-                {{ app.price ? app.price.final : '免费' }}
+                {{ app.price ? app.price.final : t('galgame.steam.free') }}
               </Text>
             </template>
           </Inline>
@@ -91,7 +95,7 @@
           class="mt-auto self-start"
         >
           <template #icon><ExternalLink /></template>
-          在 Steam 上查看
+          {{ t('galgame.steam.open') }}
         </Button>
       </Stack>
     </Inline>
@@ -110,12 +114,12 @@
         <Inline v-if="tags.length" gap="xs" wrap>
           <Tag v-for="tag in tags" :key="tag.key" :tone="tag.highlight ? 'accent' : 'neutral'">
             {{ tag.label }}
-            <Volume2 v-if="tag.audio" v-tooltip="'含完整语音'" :size="11" />
+            <Volume2 v-if="tag.audio" v-tooltip="t('galgame.steam.fullAudio')" :size="11" />
           </Tag>
         </Inline>
 
         <Text v-if="app.review" as="p" size="xs" tone="muted">
-          {{ app.review.total.toLocaleString('zh-CN') }} 条评价
+          {{ t('galgame.steam.reviews', { count: n(app.review.total) }) }}
         </Text>
       </Inline>
     </Stack>

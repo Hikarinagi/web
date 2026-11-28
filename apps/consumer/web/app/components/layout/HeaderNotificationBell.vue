@@ -5,13 +5,16 @@
   import { useUnread } from '~/features/notifications/useUnread'
 
   const { unreadCount } = useUnread()
+  const { t } = useLocaleText()
   const mounted = useMounted()
   const open = ref(false)
   const recent = ref<SystemMessageItem[]>([])
   const loadingRecent = ref(false)
   const showCount = computed(() => mounted.value && unreadCount.value > 0)
   const bellLabel = computed(() =>
-    showCount.value ? `消息通知，${unreadCount.value} 条未读` : '消息通知',
+    showCount.value
+      ? t('layout.header.notificationsUnread', { count: unreadCount.value })
+      : t('layout.header.notifications'),
   )
 
   async function load() {

@@ -41,6 +41,9 @@
   --color-hikari-cyan-hover: #009999;
   --color-hikari-shiori: #f59e0b;
 
+  --color-dlsite-ink: #0a2a82;
+  --color-dlsite-dot: #fbc600;
+
   --color-hikari-surface-0: #ffffff;
   --color-hikari-surface-50: #f8fafc;
   --color-hikari-surface-100: #f1f5f9;
@@ -106,6 +109,7 @@
 
   --spacing-hikari-node: 0.8em;
   --spacing-manga-sheet: 85dvh;
+  --spacing-notification-sheet: 82dvh;
 
   --aspect-make-up-card: 366 / 512;
 
@@ -316,6 +320,8 @@ html.dark {
   --landing-feature-height: 19rem;
   --landing-rank-cover: 4.5rem;
   --landing-text-fade: linear-gradient(to bottom, #000 calc(100% - 2lh), transparent);
+  --landing-wall-fade-x: linear-gradient(to right, transparent, #000 40%);
+  --landing-wall-fade-y: linear-gradient(to bottom, #000 35%, transparent 70%);
   --landing-tile: 8.5rem;
   --landing-tile-lg: 10.5rem;
   --landing-tile-wide: 15rem;
@@ -392,6 +398,7 @@ html.dark {
 }
 
 html.dark {
+  --color-dlsite-ink: currentColor;
   --stage-veil: var(--tone-deep);
   --row-bg-l: 13%;
   --row-line-l: 21%;

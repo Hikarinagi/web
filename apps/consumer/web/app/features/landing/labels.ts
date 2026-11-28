@@ -10,13 +10,6 @@ type NovelReading = ApiData<'/api/v3/reader/me/reading', 'get'>['items'][number]
 
 export type LandingKind = 'galgame' | 'light_novel' | 'manga'
 
-const TIME = new Intl.DateTimeFormat('zh-CN', {
-  timeZone: 'Asia/Shanghai',
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-})
-
 const ACCLAIMED: Record<LandingKind, string> = {
   galgame: '高分作品',
   light_novel: '已完结，全卷可读',
@@ -39,10 +32,6 @@ export function daysBetween(from: string, to: string) {
 export function relativeDay(date: string, today: string) {
   const diff = daysBetween(date, today)
   return diff === 0 ? '今天' : diff === 1 ? '昨天' : dayLabel(date)
-}
-
-export function timeLabel(at: string) {
-  return TIME.format(new Date(at))
 }
 
 export function yenLabel(amount: string) {

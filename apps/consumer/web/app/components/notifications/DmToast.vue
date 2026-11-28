@@ -5,6 +5,7 @@
 
   defineOptions({ name: 'NotificationsDmToast' })
   const props = defineProps<{ peer: DmPeer; toastId?: number | string }>()
+  const { t } = useLocaleText()
 
   function openChat() {
     void navigateTo(`/messages?peer=${props.peer.id}`)
@@ -17,8 +18,8 @@
     <Avatar :user="peer" class="size-9! shrink-0" />
     <Inline as="p" gap="xs" align="baseline" class="min-w-0 flex-1 text-sm">
       <Text as="span" weight="semibold" truncate>{{ displayName(peer) }}</Text>
-      <Text as="span" class="shrink-0">给你发了一条私信</Text>
+      <Text as="span" class="shrink-0">{{ t('inbox.dmToast') }}</Text>
     </Inline>
-    <Button size="sm" class="shrink-0" @click="openChat">查看</Button>
+    <Button size="sm" class="shrink-0" @click="openChat">{{ t('common.view') }}</Button>
   </Inline>
 </template>

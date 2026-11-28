@@ -1,6 +1,6 @@
 import { unzipSync } from 'fflate'
 import { epubImageEntries } from '~/features/workbench/manga/epub-pages'
-import { isApiError } from '~/utils/api/error'
+import { apiErrorMessage, isApiError } from '~/utils/api/error'
 
 const IMAGE_FILE = /\.(jpe?g|png|webp|avif|gif|bmp)$/i
 const ARCHIVE_FILE = /\.(zip|cbz|epub)$/i
@@ -58,7 +58,7 @@ export function usePageUpload(projectId: MaybeRefOrGetter<number>) {
           failed.value.push(image.name)
           if (isApiError(error) && FATAL_STATUS.has(error.status)) {
             failed.value.push(...images.slice(index + 1).map(rest => rest.name))
-            stopped.value = error.message
+            stopped.value = apiErrorMessage(error)
             break
           }
         }

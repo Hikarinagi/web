@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { Inline, Stack, Tag, Text } from '@hina-ui/vue'
-  import { TimeFormatEnum, datePartFormat } from '~/utils/time-format'
+  import { formatDatePart } from '~/utils/time-format'
 
   defineOptions({ name: 'ChangelogEntry' })
 
@@ -27,7 +27,7 @@
     <Inline gap="sm" align="baseline">
       <Tag pill class="tabular-nums">{{ version }}</Tag>
       <Text as="span" size="xs" tone="muted">
-        {{ datePartFormat(releasedAt, TimeFormatEnum.YYYY_M_D_CN) }}
+        {{ formatDatePart(releasedAt, 'date') }}
       </Text>
     </Inline>
 

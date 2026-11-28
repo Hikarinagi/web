@@ -50,7 +50,8 @@ export function usePlayground(operation: () => ReferenceOperation, base: () => s
     const errors: Record<string, string> = {}
     for (const param of operation().params) {
       if (param.in !== 'path' && !param.required) continue
-      if (!toQueryValue((data[param.name] ?? '') as PlaygroundValue)) errors[param.name] = '必填'
+      if (!toQueryValue((data[param.name] ?? '') as PlaygroundValue))
+        errors[param.name] = translate('validation.developer.paramRequired')
     }
     if (acceptsBody.value) {
       const raw = String(data[BODY_FIELD] ?? '').trim()
@@ -58,7 +59,7 @@ export function usePlayground(operation: () => ReferenceOperation, base: () => s
         try {
           JSON.parse(raw)
         } catch {
-          errors[BODY_FIELD] = '不是合法的 JSON'
+          errors[BODY_FIELD] = translate('validation.developer.bodyJson')
         }
       }
     }

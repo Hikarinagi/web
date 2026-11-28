@@ -10,6 +10,7 @@
   defineOptions({ name: 'MessagesLayout' })
 
   const route = useRoute()
+  const { t } = useLocaleText()
 
   const peer = Number(route.query.peer)
   const dmUrl = (
@@ -64,8 +65,12 @@
                 </Center>
               </Badge>
               <Stack gap="none" class="min-w-0 flex-1 gap-0.5">
-                <Text as="span" size="sm" weight="semibold" truncate>通知</Text>
-                <Text as="p" size="xs" tone="muted" truncate>互动、系统消息</Text>
+                <Text as="span" size="sm" weight="semibold" truncate>
+                  {{ t('common.section.notification') }}
+                </Text>
+                <Text as="p" size="xs" tone="muted" truncate>
+                  {{ t('layout.messages.subtitle') }}
+                </Text>
               </Stack>
             </Card>
           </MessagesDmList>

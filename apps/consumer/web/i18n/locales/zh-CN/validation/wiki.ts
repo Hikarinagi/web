@@ -1,0 +1,17 @@
+export default {
+  reasonType: '理由应为文本',
+  reasonRequired: '请写明理由',
+  reasonMax: '理由不能超过 {requirement} 字',
+  untilType: '到期日应为文本',
+  noteType: '编辑说明应为文本',
+  noteMax: '编辑说明不能超过 {requirement} 字',
+  evidenceType: '作废依据应为文本',
+  evidenceReason: '作废原因不正确',
+  urlType: '网址应为文本',
+  urlRequired: '请填写来源网址',
+  urlMax: '网址不能超过 {requirement} 个字符',
+  urlProtocol: '网址应以 http:// 或 https:// 开头',
+  excerptType: '摘录应为文本',
+  excerptRequired: '请填写摘录',
+  excerptMax: '摘录不能超过 {requirement} 字',
+}

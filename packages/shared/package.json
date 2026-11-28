@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./notification": {
+      "types": "./dist/notification/index.d.ts",
+      "default": "./dist/notification/index.js"
     }
   },
   "scripts": {
@@ -17,6 +21,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@formatjs/icu-messageformat-parser": "2.11.4",
+    "intl-messageformat": "10.7.18",
     "valibot": "^1.4.0"
   },
   "devDependencies": {

@@ -365,6 +365,7 @@ export function useComposer(
       hot_comment: null,
       work_refs: [],
       poll: post.entity_summaries?.polls?.[0] ?? null,
+      lottery: null,
     }
   }
 

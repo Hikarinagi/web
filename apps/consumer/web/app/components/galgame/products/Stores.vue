@@ -3,12 +3,28 @@
   import { ExternalLink } from '@lucide/vue'
   import type { ApiData } from '@hikarinagi/api-contract/v3'
   import { channelLabel } from '~/features/entry/labels'
+  import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameProductsStores' })
-  const props = defineProps<{ stores: ApiData<'/api/v3/products/{id}', 'get'>['stores'] }>()
+  const props = defineProps<{
+    stores: ApiData<'/api/v3/products/{id}', 'get'>['stores']
+    dlsite: GalgamePageData['dlsite']
+  }>()
 
   const items = computed(() =>
-    props.stores.map(store => ({ ...store, label: channelLabel(store.channel) })),
+    props.stores.map(store => {
+      const code = store.code.trim().toUpperCase()
+      const sponsored =
+        store.channel === 'DLSITE'
+          ? props.dlsite?.links.find(link => link.code === code)?.url
+          : undefined
+      return {
+        ...store,
+        label: channelLabel(store.channel),
+        url: sponsored ?? store.url,
+        rel: sponsored ? 'sponsored noopener' : 'noopener noreferrer',
+      }
+    }),
   )
 </script>
 
@@ -20,7 +36,7 @@
         as="a"
         :href="store.url"
         target="_blank"
-        rel="noopener noreferrer"
+        :rel="store.rel"
         size="sm"
         variant="soft"
         tone="neutral"

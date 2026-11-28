@@ -114,6 +114,7 @@
             :favorited="data.favorite?.favorited ?? false"
             :downloads="data.galgame.download_resource_count"
             :website="website"
+            :dlsite="data.dlsite"
             @rate="$emit('rate')"
           />
         </Stack>

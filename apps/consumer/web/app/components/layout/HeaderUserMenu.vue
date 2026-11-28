@@ -10,12 +10,13 @@
   import { displayName } from '~/utils/user'
 
   const { user, roleLabel, menuItems, logoutPending } = useUserMenu()
+  const { t } = useLocaleText()
 </script>
 
 <template>
-  <DropdownMenu v-if="user" label="用户菜单" align="end" class="w-60">
+  <DropdownMenu v-if="user" :label="t('layout.header.userMenu')" align="end" class="w-60">
     <IconButton
-      :label="`打开 ${displayName(user)} 的用户菜单`"
+      :label="t('layout.header.openUserMenu', { name: displayName(user) })"
       :tooltip="false"
       :disabled="logoutPending"
       pill
@@ -37,7 +38,7 @@
           <template #icon>
             <component :is="item.iconComponent" aria-hidden="true" />
           </template>
-          {{ item.label }}
+          {{ item.label ? t(item.label) : '' }}
           <template v-if="item.key === 'hikari-points'" #trailing>
             <Text as="span" size="sm" weight="semibold" class="text-accent-text">
               {{ item.balance }}
@@ -45,7 +46,9 @@
             <ChevronRight aria-hidden="true" />
           </template>
           <template v-else-if="item.key === 'theme'" #trailing>
-            <Text as="span" size="xs" tone="muted">{{ item.modeLabel }}</Text>
+            <Text as="span" size="xs" tone="muted">
+              {{ item.modeLabel ? t(item.modeLabel) : '' }}
+            </Text>
           </template>
           <template v-else-if="item.trailing" #trailing>
             <Text as="span" size="xs" class="text-accent-text">{{ item.trailing }}</Text>

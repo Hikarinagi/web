@@ -1,15 +1,20 @@
-import { usernameError } from '@hikarinagi/shared'
+import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH, usernameIssue } from '@hikarinagi/shared'
 import * as v from 'valibot'
 
-// One rule, shared with the API and the IdP; the message comes from the first failing check.
 export const usernameSchema = v.object({
   username: v.pipe(
-    v.string('用户名应为文本'),
+    v.string(issueMessage('validation.user.usernameType')),
     v.trim(),
     v.rawCheck(({ dataset, addIssue }) => {
       if (!dataset.typed) return
-      const message = usernameError(dataset.value)
-      if (message) addIssue({ message })
+      const issue = usernameIssue(dataset.value)
+      if (!issue) return
+      addIssue({
+        message: translate(`validation.user.username.${issue}`, {
+          min: USERNAME_MIN_LENGTH,
+          max: USERNAME_MAX_LENGTH,
+        }),
+      })
     }),
   ),
 })

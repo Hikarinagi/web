@@ -3,7 +3,7 @@
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
 
   defineOptions({ name: 'GalgameProducts' })
-  defineProps<{ products: GalgamePageData['products'] }>()
+  defineProps<{ products: GalgamePageData['products']; dlsite: GalgamePageData['dlsite'] }>()
 
   const route = useRoute()
   const router = useRouter()
@@ -19,5 +19,5 @@
     </template>
   </Card>
   <Card v-else><Empty title="尚未记录发行版本" size="sm" /></Card>
-  <GalgameProductsDrawer />
+  <GalgameProductsDrawer :dlsite="dlsite" />
 </template>

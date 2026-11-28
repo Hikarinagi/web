@@ -29,6 +29,7 @@ export {
   LightNovelRateCardExtension,
   MangaRateCardExtension,
   CommentCardExtension,
+  LotteryCardExtension,
   ENTITY_CARD_EXTENSIONS,
   ENTITY_CARD_NODE_TYPES,
   ENTITY_CARD_ID_KEY,

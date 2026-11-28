@@ -17,6 +17,7 @@
   }>()
   const emit = defineEmits<{ navigate: [] }>()
 
+  const { t } = useLocaleText()
   const hasBody = computed(() => {
     const content = (props.detail?.content_json as { content?: unknown[] } | null)?.content
     return Array.isArray(content) && content.length > 0
@@ -48,7 +49,7 @@
       size="sm"
       @click="emit('navigate')"
     >
-      前往
+      {{ t('common.goTo') }}
       <template #trailing><ArrowRight aria-hidden="true" /></template>
     </Button>
     <Button
@@ -60,7 +61,7 @@
       size="sm"
       @click="emit('navigate')"
     >
-      查看主页
+      {{ t('inbox.viewProfile') }}
     </Button>
   </Stack>
 </template>

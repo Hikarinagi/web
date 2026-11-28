@@ -7,7 +7,8 @@
 
   const props = defineProps<{ app: DevelopersConsolePageData['apps'][number] }>()
 
-  const createdAt = computed(() => new Date(props.app.created_at).toLocaleDateString('zh-CN'))
+  const { d } = useLocaleText()
+  const createdAt = computed(() => d(new Date(props.app.created_at), 'numeric'))
 </script>
 
 <template>
