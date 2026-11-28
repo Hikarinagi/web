@@ -3,6 +3,7 @@
     DescriptionDetails,
     DescriptionList,
     DescriptionTerm,
+    Inline,
     Link,
     Stack,
     Text,
@@ -12,6 +13,8 @@
 
   defineOptions({ name: 'PersonFacts' })
   defineProps<{ person: PeoplePageData['person']; years: string | null }>()
+
+  const { t } = useLocaleText()
 </script>
 
 <template>
@@ -19,14 +22,14 @@
     orientation="horizontal"
     class="gap-x-4 gap-y-2 text-sm [&_dd]:text-fg [&_dt]:text-muted"
   >
-    <DescriptionTerm>名字</DescriptionTerm>
+    <DescriptionTerm>{{ t('entity.person.name') }}</DescriptionTerm>
     <DescriptionDetails lang="ja">{{ person.name }}</DescriptionDetails>
     <template v-if="person.trans_name">
-      <DescriptionTerm>中文名</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.person.chineseName') }}</DescriptionTerm>
       <DescriptionDetails>{{ person.trans_name }}</DescriptionDetails>
     </template>
     <template v-if="person.aliases.length">
-      <DescriptionTerm>别名</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.person.aliases') }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
           <Text v-for="alias in person.aliases" :key="alias" as="span" size="sm" lang="ja">
@@ -36,28 +39,38 @@
       </DescriptionDetails>
     </template>
     <template v-if="person.gender">
-      <DescriptionTerm>性别</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.person.gender') }}</DescriptionTerm>
       <DescriptionDetails>{{ person.gender }}</DescriptionDetails>
     </template>
     <template v-if="years">
-      <DescriptionTerm>作品年份</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.person.years') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ years }}</DescriptionDetails>
     </template>
     <template v-if="person.websites.length">
-      <DescriptionTerm>官网</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.person.websites') }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
-          <Link
+          <Inline
             v-for="site in person.websites"
             :key="site.url"
-            as="a"
-            :href="site.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="self-start"
+            gap="xs"
+            align="baseline"
+            :wrap="false"
+            class="min-w-0"
           >
-            {{ websiteLabel(site.code) }}
-          </Link>
+            <Text as="span" size="sm" tone="muted" class="shrink-0">
+              {{ websiteLabel(site.code) }}
+            </Text>
+            <Link
+              as="a"
+              :href="site.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="truncate"
+            >
+              {{ site.name }}
+            </Link>
+          </Inline>
         </Stack>
       </DescriptionDetails>
     </template>

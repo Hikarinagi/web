@@ -1,4 +1,5 @@
 import type { components } from '@hikarinagi/api-contract/v3'
+import { APPEARANCE_PATHS } from '~/features/character/appearances'
 import { creditRoleLabel } from '~/features/entry/labels'
 import { topVotedMedia } from '~/utils/media/image'
 
@@ -86,11 +87,26 @@ export const personWorks = (items: Schemas['EntityWorkDto'][]) =>
   items.flatMap(item => personWork(item) ?? [])
 
 export function voiceRoles(items: Schemas['PersonCharacterRelationDto'][]) {
-  return items.map(({ character, galgames }) => ({
+  return items.map(({ character, galgames, series }) => ({
     id: character.id,
     name: character.trans_name || character.name,
     image: character.image,
-    works: [...galgames].sort((a, b) => (b.release_date ?? '').localeCompare(a.release_date ?? '')),
+    works: [
+      ...galgames.map(game => ({
+        kind: 'galgame' as const,
+        id: game.id,
+        title: game.trans_title || game.origin_title,
+        date: game.release_date,
+        rating: game.rating,
+      })),
+      ...series.map(item => ({
+        kind: item.medium === 'LIGHT_NOVEL' ? ('light-novel' as const) : ('manga' as const),
+        id: item.id,
+        title: item.trans_title || item.origin_title,
+        date: item.start_date,
+        rating: { average: null, count: 0 },
+      })),
+    ].sort((a, b) => (b.date ?? '').localeCompare(a.date ?? '')),
   }))
 }
 
@@ -144,14 +160,14 @@ export function knownWorks(works: PersonWork[], voices: VoiceRole[]) {
     return [
       {
         count: top.rating.count,
-        date: top.release_date ?? '',
+        date: top.date ?? '',
         item: {
           key: `v${voice.id}`,
-          to: `/galgames/${top.id}`,
+          to: `/${APPEARANCE_PATHS[top.kind]}/${top.id}`,
           image: voice.image,
           title: voice.name,
-          sub: top.trans_title || top.origin_title,
-          year: yearOf(top.release_date),
+          sub: top.title,
+          year: yearOf(top.date),
           rating: top.rating,
           portrait: true,
           book: false,

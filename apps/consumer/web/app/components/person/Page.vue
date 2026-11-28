@@ -40,13 +40,7 @@
 
 <template>
   <Stack gap="none" class="min-h-screen bg-canvas">
-    <PersonHero
-      :person="data.person"
-      :roles="roles"
-      :known="known"
-      :voiced="data.stats.voices > 0"
-      @role="pick"
-    />
+    <PersonHero :person="data.person" :roles="roles" :known="known" @role="pick" />
     <Stack
       gap="xl"
       class="mx-auto w-full max-w-(--entry-container) px-4 py-10 lg:grid lg:grid-cols-[minmax(0,1fr)_var(--rail-right)] lg:items-start lg:gap-10 lg:px-6"

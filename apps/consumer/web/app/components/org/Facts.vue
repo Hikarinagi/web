@@ -1,5 +1,12 @@
 <script setup lang="ts">
-  import { DescriptionDetails, DescriptionList, DescriptionTerm, Link, Stack } from '@hina-ui/vue'
+  import {
+    DescriptionDetails,
+    DescriptionList,
+    DescriptionTerm,
+    Link,
+    Stack,
+    Text,
+  } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
   import { producerRelationLabel } from '~/features/entity/labels'
@@ -12,6 +19,7 @@
     years: string | null
   }>()
 
+  const { t } = useLocaleText()
   const groups = computed(() => {
     const map = new Map<string, { id: number; name: string }[]>()
     for (const item of props.relations ?? []) {
@@ -22,6 +30,9 @@
   })
   const established = computed(() =>
     establishedText(props.producer.established, props.producer.established_precision),
+  )
+  const ended = computed(() =>
+    establishedText(props.producer.ended, props.producer.ended_precision),
   )
   const host = computed(() =>
     props.producer.website?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
@@ -51,20 +62,42 @@
         </Stack>
       </DescriptionDetails>
     </template>
+    <template v-if="producer.members.length">
+      <DescriptionTerm>{{ t('entity.org.members') }}</DescriptionTerm>
+      <DescriptionDetails>
+        <Stack gap="none">
+          <Link
+            v-for="member in producer.members"
+            :key="member.id"
+            :as="NuxtLink"
+            :to="`/people/${member.id}`"
+            tone="neutral"
+            class="self-start"
+            lang="ja"
+          >
+            {{ member.name }}
+          </Link>
+        </Stack>
+      </DescriptionDetails>
+    </template>
     <template v-if="established">
-      <DescriptionTerm>成立日期</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.org.established') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ established }}</DescriptionDetails>
     </template>
+    <template v-if="ended">
+      <DescriptionTerm>{{ t('entity.org.ended') }}</DescriptionTerm>
+      <DescriptionDetails class="tabular-nums">{{ ended }}</DescriptionDetails>
+    </template>
     <template v-if="producer.location">
-      <DescriptionTerm>所在地</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.org.location') }}</DescriptionTerm>
       <DescriptionDetails>{{ producer.location }}</DescriptionDetails>
     </template>
     <template v-if="years">
-      <DescriptionTerm>作品年份</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.org.years') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ years }}</DescriptionDetails>
     </template>
     <template v-if="producer.website">
-      <DescriptionTerm>官网</DescriptionTerm>
+      <DescriptionTerm>{{ t('entity.org.website') }}</DescriptionTerm>
       <DescriptionDetails>
         <Link
           as="a"
@@ -79,8 +112,14 @@
       </DescriptionDetails>
     </template>
     <template v-if="producer.aliases.length">
-      <DescriptionTerm>别名</DescriptionTerm>
-      <DescriptionDetails lang="ja">{{ producer.aliases.join('、') }}</DescriptionDetails>
+      <DescriptionTerm>{{ t('entity.org.aliases') }}</DescriptionTerm>
+      <DescriptionDetails>
+        <Stack gap="none">
+          <Text v-for="alias in producer.aliases" :key="alias" as="span" size="sm" lang="ja">
+            {{ alias }}
+          </Text>
+        </Stack>
+      </DescriptionDetails>
     </template>
   </DescriptionList>
 </template>

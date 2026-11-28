@@ -22,8 +22,7 @@ export interface Appearance {
   protagonist: boolean
   capturable: boolean
   image: Schemas['RatedMediaAssetDto'] | null
-  intro: string | null
-  trans_intro: string | null
+  shown_intro: Schemas['ShownTextDto'] | null
   profile: Profile
   voices: Schemas['CharacterVoiceDto'][]
 }
@@ -46,7 +45,7 @@ export const KIND_LABELS: Record<AppearanceKind, string> = {
   manga: '漫画',
 }
 
-const KIND_PATHS: Record<AppearanceKind, string> = {
+export const APPEARANCE_PATHS: Record<AppearanceKind, string> = {
   galgame: 'galgames',
   'light-novel': 'light-novels',
   manga: 'mangas',
@@ -61,16 +60,16 @@ export function appearancesOf(data: Lists): Appearance[] {
     key: `${kind}:${id}`,
     kind,
     id,
-    path: `/${KIND_PATHS[kind]}/${id}`,
+    path: `/${APPEARANCE_PATHS[kind]}/${id}`,
     label: item.label,
     group: item.group,
     cast_role: item.cast_role,
     protagonist: item.protagonist,
     capturable: item.capturable,
     image: item.image,
-    intro: item.intro,
-    trans_intro: item.trans_intro,
+    shown_intro: item.shown_intro,
     profile: item.profile,
+    voices: item.voices,
   })
   const list: Appearance[] = [
     ...(data.galgames?.items ?? []).map(item => ({
@@ -78,21 +77,18 @@ export function appearancesOf(data: Lists): Appearance[] {
       title: item.galgame.trans_title || item.galgame.origin_title,
       cover: topVotedMedia(item.galgame.covers),
       date: item.galgame.release_date,
-      voices: item.voices,
     })),
     ...(data.light_novels?.items ?? []).map(item => ({
       ...facts(item, 'light-novel', item.light_novel.id),
       title: item.light_novel.name_cn || item.light_novel.name,
       cover: topVotedMedia(item.light_novel.covers),
       date: item.light_novel.publication_date,
-      voices: [],
     })),
     ...(data.mangas?.items ?? []).map(item => ({
       ...facts(item, 'manga', item.manga.id),
       title: item.manga.name_cn || item.manga.name,
       cover: topVotedMedia(item.manga.covers),
       date: item.manga.publication_date,
-      voices: [],
     })),
   ]
   return list.sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''))
@@ -144,15 +140,14 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
   const from = work ? time(work) : 0
   const distance = (item: Appearance) =>
     time(item) <= from ? from - time(item) : (time(item) - from) * 2
-  const told = (item: Appearance) => item.trans_intro || item.intro
-  const near =
-    work && told(work) ? null : list.filter(told).sort((a, b) => distance(a) - distance(b))[0]
-  const source = work && told(work) ? work : (near ?? character)
+  const near = work?.shown_intro
+    ? null
+    : list.filter(item => item.shown_intro).sort((a, b) => distance(a) - distance(b))[0]
+  const source = work?.shown_intro ? work : (near ?? character)
   return {
     image: work?.image ?? character.image,
     profile,
-    intro: source.trans_intro || source.intro,
-    original: !source.trans_intro,
+    intro: source.shown_intro,
     introFrom: near ?? null,
   }
 }

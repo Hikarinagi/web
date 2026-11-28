@@ -11927,6 +11927,16 @@
             "nullable": true,
             "type": "string"
           },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
+          },
           "status": {
             "enum": [
               "PENDING",
@@ -11971,6 +11981,7 @@
           "intro",
           "trans_intro",
           "en_intro",
+          "shown_intro",
           "image",
           "gender",
           "gender_label",
@@ -12063,6 +12074,16 @@
               "SUPPORTING": "配角"
             }
           },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
+          },
           "trans_intro": {
             "nullable": true,
             "type": "string"
@@ -12084,9 +12105,10 @@
           "image",
           "intro",
           "trans_intro",
+          "shown_intro",
           "profile",
-          "actors",
           "voices",
+          "actors",
           "galgame"
         ],
         "type": "object"
@@ -12153,9 +12175,25 @@
               "SUPPORTING": "配角"
             }
           },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
+          },
           "trans_intro": {
             "nullable": true,
             "type": "string"
+          },
+          "voices": {
+            "items": {
+              "$ref": "#/components/schemas/CharacterVoiceDto"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -12168,7 +12206,9 @@
           "image",
           "intro",
           "trans_intro",
+          "shown_intro",
           "profile",
+          "voices",
           "light_novel"
         ],
         "type": "object"
@@ -12235,9 +12275,25 @@
               "SUPPORTING": "配角"
             }
           },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
+          },
           "trans_intro": {
             "nullable": true,
             "type": "string"
+          },
+          "voices": {
+            "items": {
+              "$ref": "#/components/schemas/CharacterVoiceDto"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -12250,7 +12306,9 @@
           "image",
           "intro",
           "trans_intro",
+          "shown_intro",
           "profile",
+          "voices",
           "manga"
         ],
         "type": "object"
@@ -19822,13 +19880,18 @@
             "description": "网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT",
             "type": "string"
           },
+          "name": {
+            "description": "Name that tells this site apart from the others of the person: the site and, for an account, the account handle",
+            "type": "string"
+          },
           "url": {
             "type": "string"
           }
         },
         "required": [
           "code",
-          "url"
+          "url",
+          "name"
         ],
         "type": "object"
       },
@@ -46628,11 +46691,54 @@
               "$ref": "#/components/schemas/PersonCharacterGalgameDto"
             },
             "type": "array"
+          },
+          "series": {
+            "description": "Light novels and manga in which the person voices the character, newest first",
+            "items": {
+              "$ref": "#/components/schemas/PersonCharacterSeriesDto"
+            },
+            "type": "array"
           }
         },
         "required": [
           "character",
-          "galgames"
+          "galgames",
+          "series"
+        ],
+        "type": "object"
+      },
+      "PersonCharacterSeriesDto": {
+        "properties": {
+          "id": {
+            "description": "Id of the light novel or the manga",
+            "type": "number"
+          },
+          "medium": {
+            "enum": [
+              "LIGHT_NOVEL",
+              "MANGA"
+            ],
+            "type": "string"
+          },
+          "origin_title": {
+            "type": "string"
+          },
+          "start_date": {
+            "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          },
+          "trans_title": {
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "medium",
+          "id",
+          "origin_title",
+          "trans_title",
+          "start_date"
         ],
         "type": "object"
       },
@@ -46690,6 +46796,16 @@
             "nullable": true,
             "type": "string"
           },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
+          },
           "status": {
             "enum": [
               "PENDING",
@@ -46730,6 +46846,7 @@
           "aliases",
           "intro",
           "trans_intro",
+          "shown_intro",
           "image",
           "gender",
           "status",
@@ -48237,6 +48354,19 @@
             "nullable": true,
             "type": "string"
           },
+          "ended": {
+            "description": "Date the organization stopped its activity, cut to the year or month by ended_precision",
+            "nullable": true,
+            "type": "string"
+          },
+          "ended_precision": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DatePrecision"
+              }
+            ],
+            "nullable": true
+          },
           "established": {
             "description": "成立日期，按 established_precision 截到年或月",
             "nullable": true,
@@ -48277,6 +48407,13 @@
             "nullable": true,
             "type": "object"
           },
+          "members": {
+            "description": "Members of a circle or group",
+            "items": {
+              "$ref": "#/components/schemas/PersonPreviewDto"
+            },
+            "type": "array"
+          },
           "name": {
             "type": "string"
           },
@@ -48294,6 +48431,16 @@
             "format": "date-time",
             "nullable": true,
             "type": "string"
+          },
+          "shown_intro": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ShownTextDto"
+              }
+            ],
+            "description": "Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other",
+            "nullable": true,
+            "type": "object"
           },
           "status": {
             "enum": [
@@ -48344,9 +48491,13 @@
           "intro",
           "trans_intro",
           "en_intro",
+          "shown_intro",
           "country",
           "established",
           "established_precision",
+          "ended",
+          "ended_precision",
+          "members",
           "website",
           "logo",
           "status",
@@ -53956,6 +54107,23 @@
         },
         "required": [
           "role"
+        ],
+        "type": "object"
+      },
+      "ShownTextDto": {
+        "properties": {
+          "language": {
+            "description": "Language of the text; empty for the original language",
+            "nullable": true,
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "language"
         ],
         "type": "object"
       },

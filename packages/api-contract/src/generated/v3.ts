@@ -19511,6 +19511,8 @@ export interface components {
             reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             trans_intro: string | null;
@@ -19541,6 +19543,8 @@ export interface components {
             /** @description 记为这部作品的主人公 */
             protagonist: boolean;
             role: components["schemas"]["CharacterRole"];
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             trans_intro: string | null;
             voices: components["schemas"]["CharacterVoiceDto"][];
         };
@@ -19563,7 +19567,10 @@ export interface components {
             /** @description 记为这部作品的主人公 */
             protagonist: boolean;
             role: components["schemas"]["CharacterRole"];
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             trans_intro: string | null;
+            voices: components["schemas"]["CharacterVoiceDto"][];
         };
         CharacterMangaRelationDto: {
             /** @description 记为在这部作品的某个版本中可攻略 */
@@ -19584,7 +19591,10 @@ export interface components {
             /** @description 记为这部作品的主人公 */
             protagonist: boolean;
             role: components["schemas"]["CharacterRole"];
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             trans_intro: string | null;
+            voices: components["schemas"]["CharacterVoiceDto"][];
         };
         CharacterPreviewDto: {
             id: number;
@@ -21432,6 +21442,8 @@ export interface components {
         EntityWebsiteDto: {
             /** @description 网址种类，如 OFFICIAL_SITE、OFFICIAL_ACCOUNT */
             code: string;
+            /** @description Name that tells this site apart from the others of the person: the site and, for an account, the account handle */
+            name: string;
             url: string;
         };
         EntityWorkDto: {
@@ -28450,6 +28462,18 @@ export interface components {
         PersonCharacterRelationDto: {
             character: components["schemas"]["CharacterPreviewDto"];
             galgames: components["schemas"]["PersonCharacterGalgameDto"][];
+            /** @description Light novels and manga in which the person voices the character, newest first */
+            series: components["schemas"]["PersonCharacterSeriesDto"][];
+        };
+        PersonCharacterSeriesDto: {
+            /** @description Id of the light novel or the manga */
+            id: number;
+            /** @enum {string} */
+            medium: "LIGHT_NOVEL" | "MANGA";
+            origin_title: string;
+            /** Format: date-time */
+            start_date: string | null;
+            trans_title: string | null;
         };
         PersonDetailDto: {
             aliases: string[];
@@ -28466,6 +28490,8 @@ export interface components {
             reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             trans_intro: string | null;
@@ -28837,6 +28863,9 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             en_intro: string | null;
+            /** @description Date the organization stopped its activity, cut to the year or month by ended_precision */
+            ended: string | null;
+            ended_precision: components["schemas"]["DatePrecision"] | null;
             /** @description 成立日期，按 established_precision 截到年或月 */
             established: string | null;
             established_precision: components["schemas"]["DatePrecision"] | null;
@@ -28846,6 +28875,8 @@ export interface components {
             /** @description 所在地，照录 */
             location: string | null;
             logo: components["schemas"]["MediaAssetDto"] | null;
+            /** @description Members of a circle or group */
+            members: components["schemas"]["PersonPreviewDto"][];
             name: string;
             /** @description 组织类型，取值为新的类型编码 */
             organization_type: string | null;
@@ -28853,6 +28884,8 @@ export interface components {
             reading: string | null;
             /** Format: date-time */
             revised_at: string | null;
+            /** @description Introduction to show: Simplified Chinese, the original, Traditional Chinese, English, then any other */
+            shown_intro: components["schemas"]["ShownTextDto"] | null;
             /** @enum {string} */
             status: "PENDING" | "PUBLISHED" | "REJECTED" | "DRAFT";
             trans_intro: string | null;
@@ -30219,6 +30252,11 @@ export interface components {
         SetUserRoleDto: {
             /** @enum {string} */
             role: "USER" | "ADMIN" | "SUPER_ADMIN";
+        };
+        ShownTextDto: {
+            /** @description Language of the text; empty for the original language */
+            language: string | null;
+            text: string;
         };
         SidebarTopicDto: {
             id: number;

@@ -10,6 +10,9 @@ export default {
   modify: '修改',
   delete: '删除',
   retry: '重试',
+  expand: '展开',
+  collapse: '收起',
+  share: '分享',
   anonymous: '匿名用户',
   section: {
     creator: '创作者中心',

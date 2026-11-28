@@ -3,6 +3,7 @@ import article from './article'
 import common from './common'
 import contribute from './contribute'
 import download from './download'
+import entity from './entity'
 import error from './error'
 import feed from './feed'
 import galgame from './galgame'
@@ -22,6 +23,7 @@ export default {
   common,
   contribute,
   download,
+  entity,
   error,
   feed,
   galgame,

@@ -30,7 +30,8 @@
 
   const loaded = ref<HikariImageSize | null>(null)
   const ratio = computed(() => logoRatio(props.producer.logo, loaded.value))
-  const intro = computed(() => props.producer.trans_intro || props.producer.intro)
+  const { t } = useLocaleText()
+  const intro = computed(() => props.producer.shown_intro)
 </script>
 
 <template>
@@ -46,7 +47,7 @@
       >
         <HikariImage
           :src="producer.logo"
-          :alt="`${producer.name}的标志`"
+          :alt="t('entity.org.logo', { name: producer.name })"
           :processing="LOGO_PROCESSING"
           fit="contain"
           class="size-full"
@@ -77,7 +78,9 @@
             </Text>
           </Link>
           <Inline v-if="newest" gap="xs" align="baseline" :wrap="false" class="min-w-0">
-            <Text as="span" size="sm" tone="muted" class="shrink-0">最新</Text>
+            <Text as="span" size="sm" tone="muted" class="shrink-0">
+              {{ t('entity.org.newest') }}
+            </Text>
             <Link
               :as="NuxtLink"
               :to="`/${KIND_PATHS[newest.kind]}/${newest.id}`"
@@ -91,7 +94,7 @@
             </Text>
           </Inline>
           <Inline v-if="score" gap="xs" align="center" :wrap="false">
-            <Text as="span" size="sm" tone="muted">均分</Text>
+            <Text as="span" size="sm" tone="muted">{{ t('entity.org.average') }}</Text>
             <Star class="size-3.5 fill-current text-warning" />
             <Text as="span" size="sm" weight="semibold" class="tabular-nums">
               {{ score.toFixed(1) }}
@@ -101,13 +104,17 @@
         <LineClamp
           v-if="intro"
           :lines="2"
-          expand-label="展开"
-          collapse-label="收起"
+          :expand-label="t('common.expand')"
+          :collapse-label="t('common.collapse')"
           class="max-w-3xl"
         >
-          <Text size="sm" tone="muted" class="leading-relaxed whitespace-pre-line">{{
-            intro
-          }}</Text>
+          <Text
+            size="sm"
+            tone="muted"
+            class="leading-relaxed whitespace-pre-line"
+            :lang="intro.language ?? 'ja'"
+            >{{ intro.text }}</Text
+          >
         </LineClamp>
       </Stack>
 
@@ -123,9 +130,9 @@
           size="sm"
         >
           <template #icon><ExternalLink /></template>
-          官网
+          {{ t('entity.org.website') }}
         </HnButton>
-        <ShareButton :to="`/producers/${producer.id}`" tooltip="分享" size="sm" />
+        <ShareButton :to="`/producers/${producer.id}`" :tooltip="t('common.share')" size="sm" />
       </Inline>
     </Stack>
   </Section>

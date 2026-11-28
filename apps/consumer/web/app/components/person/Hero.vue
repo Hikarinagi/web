@@ -19,13 +19,11 @@
     person: PeoplePageData['person']
     roles: { code: string; label: string; count: number }[]
     known: KnownItem[]
-    voiced: boolean
   }>()
   defineEmits<{ role: [code: string] }>()
 
-  const intro = computed(() => props.person.trans_intro || props.person.intro)
-  const original = computed(() => !props.person.trans_intro && Boolean(props.person.intro))
-  const avatar = computed(() => (props.voiced ? null : props.person.image))
+  const { t } = useLocaleText()
+  const intro = computed(() => props.person.shown_intro)
 </script>
 
 <template>
@@ -37,9 +35,9 @@
       <Stack gap="lg" class="min-w-0">
         <Inline gap="lg" align="center" :wrap="false">
           <HikariImage
-            v-if="avatar"
-            :src="avatar"
-            :alt="`${person.name}的头像`"
+            v-if="person.image"
+            :src="person.image"
+            :alt="t('entity.person.avatar', { name: person.name })"
             :ratio="1"
             preset="thumbnail"
             image-class="object-cover"
@@ -50,7 +48,7 @@
               {{ person.name }}
             </Heading>
             <Inline v-if="person.gender" gap="xs" align="baseline" :wrap="false">
-              <Text as="span" size="sm" tone="muted">性别</Text>
+              <Text as="span" size="sm" tone="muted">{{ t('entity.person.gender') }}</Text>
               <Text as="span" size="sm">{{ person.gender }}</Text>
             </Inline>
           </Stack>
@@ -74,17 +72,17 @@
         <LineClamp
           v-if="intro"
           :lines="3"
-          expand-label="展开"
-          collapse-label="收起"
+          :expand-label="t('common.expand')"
+          :collapse-label="t('common.collapse')"
           class="max-w-2xl"
         >
           <Text
             size="sm"
             tone="muted"
             class="leading-relaxed whitespace-pre-line"
-            :lang="original ? 'ja' : undefined"
+            :lang="intro.language ?? 'ja'"
           >
-            {{ intro }}
+            {{ intro.text }}
           </Text>
         </LineClamp>
 
@@ -92,6 +90,7 @@
           <HnButton
             v-for="site in person.websites"
             :key="site.url"
+            v-tooltip="websiteLabel(site.code)"
             as="a"
             :href="site.url"
             target="_blank"
@@ -101,9 +100,9 @@
             size="sm"
           >
             <template #icon><ExternalLink /></template>
-            {{ websiteLabel(site.code) }}
+            {{ site.name }}
           </HnButton>
-          <ShareButton :to="`/people/${person.id}`" tooltip="分享" size="sm" />
+          <ShareButton :to="`/people/${person.id}`" :tooltip="t('common.share')" size="sm" />
         </Inline>
       </Stack>
 

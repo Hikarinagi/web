@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { Card, Inline, Link, SimpleGrid, Stack, Text } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
-  import { characterPath } from '~/features/character/appearances'
+  import { APPEARANCE_PATHS, characterPath } from '~/features/character/appearances'
   import { ENTITY_FALLBACK_IMAGE } from '~/features/entity/entity'
   import { yearOf, type VoiceRole } from '~/features/person/works'
 
   defineOptions({ name: 'PersonWorksVoices' })
   defineProps<{ voices: VoiceRole[] }>()
+
+  const { t } = useLocaleText()
 </script>
 
 <template>
@@ -26,12 +28,7 @@
         <Stack gap="none" class="min-w-0">
           <Link
             :as="NuxtLink"
-            :to="
-              characterPath(
-                voice.id,
-                voice.works[0] ? { kind: 'galgame', id: voice.works[0].id } : null,
-              )
-            "
+            :to="characterPath(voice.id, voice.works[0] ?? null)"
             tone="neutral"
             class="truncate font-medium"
             lang="ja"
@@ -41,18 +38,18 @@
           <Link
             v-if="voice.works[0]"
             :as="NuxtLink"
-            :to="`/galgames/${voice.works[0].id}`"
+            :to="`/${APPEARANCE_PATHS[voice.works[0].kind]}/${voice.works[0].id}`"
             tone="neutral"
             class="truncate text-sm text-muted hover:text-fg"
           >
-            {{ voice.works[0].trans_title || voice.works[0].origin_title }}
+            {{ voice.works[0].title }}
           </Link>
           <Inline gap="sm" :wrap="false">
             <Text size="xs" tone="muted" class="tabular-nums">
-              {{ yearOf(voice.works[0]?.release_date) }}
+              {{ yearOf(voice.works[0]?.date) }}
             </Text>
             <Text v-if="voice.works.length > 1" size="xs" tone="muted" class="tabular-nums">
-              另有 {{ voice.works.length - 1 }} 部
+              {{ t('entity.person.otherWorks', { count: voice.works.length - 1 }) }}
             </Text>
           </Inline>
         </Stack>

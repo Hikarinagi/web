@@ -132,12 +132,9 @@
             <Text v-if="view.introFrom" size="xs" tone="muted">
               出自《{{ view.introFrom.title }}》
             </Text>
-            <LineClamp :key="view.intro" :lines="6" expand-label="展开" collapse-label="收起">
-              <Text
-                class="leading-relaxed whitespace-pre-line"
-                :lang="view.original ? 'ja' : undefined"
-              >
-                {{ view.intro }}
+            <LineClamp :key="view.intro.text" :lines="6" expand-label="展开" collapse-label="收起">
+              <Text class="leading-relaxed whitespace-pre-line" :lang="view.intro.language ?? 'ja'">
+                {{ view.intro.text }}
               </Text>
             </LineClamp>
           </Stack>
