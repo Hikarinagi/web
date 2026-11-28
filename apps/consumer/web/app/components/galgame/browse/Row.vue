@@ -2,7 +2,7 @@
   import { Tag, Text } from '@hina-ui/vue'
   import type { GalgameSummary } from '~/features/galgame/explore'
   import { platformLabel } from '~/features/galgame/platforms'
-  import { dateText } from '~/features/wiki/values'
+  import { dateText } from '~/features/entry/date'
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'GalgameBrowseRow' })

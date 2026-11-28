@@ -32,7 +32,6 @@
   "app/components/changelog/List.vue",
   "app/components/character/Appearances.vue",
   "app/components/character/Cast.vue",
-  "app/components/character/Profile.vue",
   "app/components/character/Stage.vue",
   "app/components/checkin/Calendar.vue",
   "app/components/checkin/Dialog.vue",

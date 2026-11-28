@@ -15,10 +15,10 @@
       props.data.display.original_title !== props.title,
   )
   const subtitle = computed(() => {
-    const { display, galgame } = props.data
+    const { display } = props.data
     if (translated.value && display.original_title)
       return { text: display.original_title, lang: 'ja' }
-    return galgame.en_title ? { text: galgame.en_title, lang: 'en' } : null
+    return display.english_title ? { text: display.english_title, lang: 'en' } : null
   })
   const shown = computed(() => stageLogo(props.data.galgame.logos, props.data.galgame.origin_lang))
   const logo = computed(() => shown.value.logo)

@@ -153,14 +153,6 @@ export function workMonth(date: string | null) {
     : `${year} 年 ${Number(month)} 月发售`
 }
 
-export function establishedText(value: string | null, precision: string | null) {
-  if (!value) return null
-  const [year, month, day] = value.slice(0, 10).split('-')
-  if (precision === 'YEAR' || !month) return `${year} 年`
-  if (precision === 'MONTH' || !day) return `${year} 年 ${Number(month)} 月`
-  return `${year} 年 ${Number(month)} 月 ${Number(day)} 日`
-}
-
 export const peopleNames = (work: OrgWork, code: string) =>
   work.people
     .filter(person => person.code === code)

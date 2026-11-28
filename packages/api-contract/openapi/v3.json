@@ -11774,12 +11774,21 @@
             "nullable": true,
             "type": "string"
           },
+          "shown": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterProfileShownDto"
+              }
+            ],
+            "description": "The recorded birthday, height, weight and measurements read into numbers when they are written plainly; null where the text is to be shown as recorded"
+          },
           "weight": {
             "nullable": true,
             "type": "string"
           }
         },
         "required": [
+          "shown",
           "age",
           "birthday",
           "height",
@@ -11788,6 +11797,21 @@
           "gender",
           "gender_label",
           "blood_type"
+        ],
+        "type": "object"
+      },
+      "CharacterBirthdayDto": {
+        "properties": {
+          "day": {
+            "type": "number"
+          },
+          "month": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "month",
+          "day"
         ],
         "type": "object"
       },
@@ -12313,6 +12337,30 @@
         ],
         "type": "object"
       },
+      "CharacterMeasurementsDto": {
+        "properties": {
+          "bust": {
+            "type": "number"
+          },
+          "cup": {
+            "nullable": true,
+            "type": "string"
+          },
+          "hips": {
+            "type": "number"
+          },
+          "waist": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "bust",
+          "cup",
+          "waist",
+          "hips"
+        ],
+        "type": "object"
+      },
       "CharacterPreviewDto": {
         "properties": {
           "id": {
@@ -12361,13 +12409,61 @@
             "nullable": true,
             "type": "string"
           },
+          "shown": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterProfileShownDto"
+              }
+            ],
+            "description": "The recorded birthday, height, weight and measurements read into numbers when they are written plainly; null where the text is to be shown as recorded"
+          },
           "weight": {
             "nullable": true,
             "type": "string"
           }
         },
         "required": [
+          "shown",
           "age",
+          "birthday",
+          "height",
+          "weight",
+          "measurements"
+        ],
+        "type": "object"
+      },
+      "CharacterProfileShownDto": {
+        "properties": {
+          "birthday": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterBirthdayDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "height": {
+            "description": "Height in centimetres",
+            "nullable": true,
+            "type": "number"
+          },
+          "measurements": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CharacterMeasurementsDto"
+              }
+            ],
+            "nullable": true,
+            "type": "object"
+          },
+          "weight": {
+            "description": "Weight in kilograms",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
           "birthday",
           "height",
           "weight",
@@ -27133,6 +27229,11 @@
             },
             "type": "array"
           },
+          "english_title": {
+            "description": "English title of the game",
+            "nullable": true,
+            "type": "string"
+          },
           "intros": {
             "items": {
               "$ref": "#/components/schemas/FactDto"
@@ -27173,6 +27274,7 @@
         "required": [
           "title",
           "original_title",
+          "english_title",
           "release",
           "brands",
           "publishers",

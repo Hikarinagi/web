@@ -2,7 +2,6 @@ import { createError, getRouterParam, type H3Event } from 'h3'
 import { MATCHING_CODES } from '~/features/wiki/codes'
 import type { EditableEntry } from '~/features/wiki/editor/draft'
 import type { ReferenceGroup } from '~/features/wiki/references'
-import { codeLabel, dateText } from '~/features/wiki/values'
 import { fetchBackendData } from '~~/server/utils/backend-api'
 import { definePageBffHandler } from '~~/server/utils/page-bff'
 
@@ -45,7 +44,9 @@ async function handler(event: H3Event) {
           .flatMap(group =>
             group.items.map(item => ({
               ...item.entry,
-              label: item.entry.label || '未命名的发行版本',
+              platforms: [] as string[],
+              date: null as string | null,
+              precision: null as string | null,
             })),
           )
       : parts
@@ -53,19 +54,15 @@ async function handler(event: H3Event) {
           .map(item => {
             const live = item.statements.filter(statement => statement.status !== 'DEPRECATED')
             const date = live.find(statement => statement.property === 'RELEASE_DATE')
-            const facts = [
-              ...live.flatMap(statement =>
-                statement.property === 'PLATFORM' && statement.code
-                  ? [codeLabel('PLATFORM', statement.code)]
-                  : [],
-              ),
-              date?.date ? dateText(date.date, date.date_precision) : '',
-            ].filter(Boolean)
-            const fallback = item.type === 'PRODUCT' ? '未命名的发行版本' : '未命名的出版版本'
             return {
               id: item.id,
               type: item.type,
-              label: item.label || facts.join('，') || fallback,
+              label: item.label,
+              platforms: live.flatMap(statement =>
+                statement.property === 'PLATFORM' && statement.code ? [statement.code] : [],
+              ),
+              date: date?.date ?? null,
+              precision: date?.date_precision ?? null,
             }
           })
   return {

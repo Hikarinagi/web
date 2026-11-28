@@ -2,7 +2,7 @@
   import { Inline, Text } from '@hina-ui/vue'
   import { BookOpen } from '@lucide/vue'
   import { statusText, type LightNovelSummary } from '~/features/light-novel/explore'
-  import { dateText } from '~/features/wiki/values'
+  import { dateText } from '~/features/entry/date'
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'LightNovelBrowseRow' })

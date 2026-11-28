@@ -112,20 +112,6 @@ export const characterPath = (id: number, work?: { kind: AppearanceKind; id: num
 
 export const yearOf = (date: string | null) => (date ? date.slice(0, 4) : '年份不详')
 
-const KANA = /^[\p{Script=Hiragana}\p{Script=Katakana}ー・\s]+$/u
-const compact = (text: string) => text.replace(/\s/g, '')
-const words = (text: string) => text.trim().split(/\s+/).length
-
-export function namesOf(character: Pick<CharacterDetail, 'name' | 'reading' | 'aliases'>) {
-  const aliases = character.aliases.filter(alias => compact(alias) !== compact(character.name))
-  const kana = aliases.filter(
-    alias =>
-      KANA.test(alias) && !KANA.test(character.name) && words(alias) === words(character.name),
-  )
-  const reading = character.reading ?? (kana.length === 1 ? (kana[0] ?? null) : null)
-  return { reading, aliases: aliases.filter(alias => alias !== reading) }
-}
-
 export function viewOf(character: CharacterDetail, list: Appearance[], work: Appearance | null) {
   const base: Profile = {
     ...character.profile,
@@ -133,9 +119,18 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
     gender_label: character.gender_label,
     blood_type: character.blood_type,
   }
-  const profile = Object.fromEntries(
-    Object.entries(base).map(([key, value]) => [key, work?.profile[key as keyof Profile] || value]),
-  ) as Profile
+  const sourceOf = (key: keyof Profile) => (work?.profile[key] ? work.profile : base)
+  const profile = {
+    ...(Object.fromEntries(
+      Object.keys(base).map(key => [key, sourceOf(key as keyof Profile)[key as keyof Profile]]),
+    ) as Profile),
+    shown: {
+      birthday: sourceOf('birthday').shown.birthday,
+      height: sourceOf('height').shown.height,
+      weight: sourceOf('weight').shown.weight,
+      measurements: sourceOf('measurements').shown.measurements,
+    },
+  }
   const time = (item: Appearance) => (item.date ? Date.parse(item.date) : 0)
   const from = work ? time(work) : 0
   const distance = (item: Appearance) =>
@@ -150,18 +145,6 @@ export function viewOf(character: CharacterDetail, list: Appearance[], work: App
     intro: source.shown_intro,
     introFrom: near ?? null,
   }
-}
-
-export function profileRows(profile: Profile) {
-  return [
-    { label: '性别', value: profile.gender_label },
-    { label: '生日', value: profile.birthday?.replace(/^(\d+)月(\d+)日$/, '$1 月 $2 日') },
-    { label: '年龄', value: profile.age },
-    { label: '身高', value: profile.height?.replace(/(\d+)cm$/, '$1 cm') },
-    { label: '体重', value: profile.weight?.replace(/(\d+)kg$/, '$1 kg') },
-    { label: '三围', value: profile.measurements?.replace(/\//g, ' ') },
-    { label: '血型', value: profile.blood_type },
-  ].flatMap(row => (row.value ? [{ label: row.label, value: row.value }] : []))
 }
 
 export function voiceSummary(list: Appearance[]) {

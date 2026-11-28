@@ -18,7 +18,8 @@
   import { useEditorParts } from '~/features/wiki/composables/useEditorParts'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import { entryState, type EditableEntry } from '~/features/wiki/editor/draft'
-  import { codeLabel, dateText } from '~/features/wiki/values'
+  import { dateText } from '~/features/entry/date'
+  import { codeLabel } from '~/features/wiki/values'
 
   defineOptions({ name: 'WikiGameReleases' })
 

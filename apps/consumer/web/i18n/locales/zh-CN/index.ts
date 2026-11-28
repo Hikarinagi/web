@@ -17,6 +17,7 @@ import setting from './setting'
 import space from './space'
 import time from './time'
 import validation from './validation'
+import wiki from './wiki'
 import workbench from './workbench'
 
 export default {
@@ -38,6 +39,7 @@ export default {
   space,
   time,
   validation,
+  wiki,
   workbench,
   bizCode: SHARED_MESSAGES['zh-CN'].bizCode,
 }

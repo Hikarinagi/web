@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { Text } from '@hina-ui/vue'
   import { statusText, type MangaListItem } from '~/features/manga/explore'
-  import { dateText } from '~/features/wiki/values'
+  import { dateText } from '~/features/entry/date'
   import { topVotedMedia } from '~/utils/media/image'
 
   defineOptions({ name: 'MangaBrowseRow' })

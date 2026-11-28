@@ -3,7 +3,6 @@
   import { NuxtLink } from '#components'
   import type { CharacterPageData } from '~~/server/api/pages/characters/[id].get'
   import {
-    namesOf,
     voiceSummary,
     yearOf,
     type Appearance,
@@ -23,7 +22,6 @@
   }>()
   const selected = defineModel<string>({ required: true })
 
-  const names = computed(() => namesOf(props.character))
   const voices = computed(() => voiceSummary(props.appearances))
   const single = computed(() => props.appearances.length === 1)
   const options = computed(() =>
@@ -89,14 +87,14 @@
           </Inline>
 
           <Stack gap="xs">
-            <Text v-if="names.reading" size="sm" tone="muted" lang="ja" class="tracking-wider">
-              {{ names.reading }}
+            <Text v-if="character.reading" size="sm" tone="muted" lang="ja" class="tracking-wider">
+              {{ character.reading }}
             </Text>
             <Heading :level="1" lang="ja" class="text-4xl leading-tight font-semibold lg:text-5xl">
               {{ character.name }}
             </Heading>
-            <Text v-if="names.aliases.length" size="sm" tone="muted" lang="ja">
-              {{ names.aliases.join('、') }}
+            <Text v-if="character.aliases.length" size="sm" tone="muted" lang="ja">
+              {{ formatList(character.aliases) }}
             </Text>
           </Stack>
 

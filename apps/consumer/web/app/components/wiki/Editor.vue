@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import { Stack } from '@hina-ui/vue'
   import { WIKI_PERMISSIONS } from '@hikarinagi/shared'
+  import type { EditorPageData } from '~~/server/api/pages/entries/[id]/edit.get'
   import { editKey } from '~/features/creator/tabs'
+  import { dateText } from '~/features/entry/date'
+  import { platformLabel } from '~/features/galgame/platforms'
   import { ENTRY_EDITOR } from '~/features/wiki/composables/useEntryEditor'
   import type { EditableEntry, EntryDefinition, ValueDraft } from '~/features/wiki/editor/draft'
   import { ENTRY_PAGE, type EntryPage } from '~/features/wiki/editor/page'
@@ -17,7 +20,7 @@
     entry: EditableEntry
     parts: EditableEntry[]
     owner: Ref | null
-    versions: Ref[]
+    versions: EditorPageData['versions']
     definitions: EntryDefinition[]
     history: EntryPage['history']['value']
     references: ReferenceGroup[]
@@ -31,12 +34,25 @@
     refresh: () => emit('saved'),
   })
   const route = useRoute()
+  const { t } = useLocaleText()
+  const versions = computed<Ref[]>(() =>
+    props.versions.map(({ id, type, label, platforms, date, precision }) => ({
+      id,
+      type,
+      label:
+        label ||
+        [...platforms.map(platformLabel), dateText(date, precision)]
+          .filter(Boolean)
+          .join(t('wiki.version.separator')) ||
+        t(type === 'BOOK' ? 'wiki.version.untitledBook' : 'wiki.version.untitledProduct'),
+    })),
+  )
   const editor = useEntryEditor({
     key: () => editKey(props.entry.id),
     title: () => props.entry.label || '未命名',
     entries: () => [props.entry, ...props.parts],
     definitions: () => props.definitions,
-    versions: () => props.versions,
+    versions: () => versions.value,
     root: props.entry.id,
   })
   provide(ENTRY_EDITOR, editor)

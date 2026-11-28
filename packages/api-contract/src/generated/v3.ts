@@ -19473,7 +19473,13 @@ export interface components {
             gender_label: "女" | "男" | "其他" | null;
             height: string | null;
             measurements: string | null;
+            /** @description The recorded birthday, height, weight and measurements read into numbers when they are written plainly; null where the text is to be shown as recorded */
+            shown: components["schemas"]["CharacterProfileShownDto"];
             weight: string | null;
+        };
+        CharacterBirthdayDto: {
+            day: number;
+            month: number;
         };
         CharacterCardSummaryResDto: {
             id: number;
@@ -19596,6 +19602,12 @@ export interface components {
             trans_intro: string | null;
             voices: components["schemas"]["CharacterVoiceDto"][];
         };
+        CharacterMeasurementsDto: {
+            bust: number;
+            cup: string | null;
+            hips: number;
+            waist: number;
+        };
         CharacterPreviewDto: {
             id: number;
             image: components["schemas"]["RatedMediaAssetDto"] | null;
@@ -19607,7 +19619,17 @@ export interface components {
             birthday: string | null;
             height: string | null;
             measurements: string | null;
+            /** @description The recorded birthday, height, weight and measurements read into numbers when they are written plainly; null where the text is to be shown as recorded */
+            shown: components["schemas"]["CharacterProfileShownDto"];
             weight: string | null;
+        };
+        CharacterProfileShownDto: {
+            birthday: components["schemas"]["CharacterBirthdayDto"] | null;
+            /** @description Height in centimetres */
+            height: number | null;
+            measurements: components["schemas"]["CharacterMeasurementsDto"] | null;
+            /** @description Weight in kilograms */
+            weight: number | null;
         };
         /** @enum {string} */
         CharacterRole: "MAIN" | "PRIMARY" | "SUPPORTING" | "GUEST";
@@ -23210,6 +23232,8 @@ export interface components {
         };
         GameDisplayDto: {
             brands: components["schemas"]["ProductCreditDto"][];
+            /** @description English title of the game */
+            english_title: string | null;
             intros: components["schemas"]["FactDto"][];
             /** @description Original title when the title differs */
             original_title: string | null;

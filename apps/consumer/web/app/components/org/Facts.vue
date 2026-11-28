@@ -10,7 +10,7 @@
   import { NuxtLink } from '#components'
   import type { ProducerPageData } from '~~/server/api/pages/producers/[id].get'
   import { producerRelationLabel } from '~/features/entity/labels'
-  import { establishedText } from '~/features/org/works'
+  import { dateText } from '~/features/entry/date'
 
   defineOptions({ name: 'OrgFacts' })
   const props = defineProps<{
@@ -29,11 +29,9 @@
     return [...map].map(([label, items]) => ({ label, items }))
   })
   const established = computed(() =>
-    establishedText(props.producer.established, props.producer.established_precision),
+    dateText(props.producer.established, props.producer.established_precision),
   )
-  const ended = computed(() =>
-    establishedText(props.producer.ended, props.producer.ended_precision),
-  )
+  const ended = computed(() => dateText(props.producer.ended, props.producer.ended_precision))
   const host = computed(() =>
     props.producer.website?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
   )
