@@ -21282,7 +21282,7 @@ export interface components {
             /** @enum {string} */
             property: "TITLE" | "READING" | "CHINESE_TITLE" | "ENGLISH_TITLE" | "ALIAS" | "ORIGINAL_INTRO" | "CHINESE_INTRO" | "INTRO" | "GENRE_TEXT" | "SAMPLE_IMAGE" | "TITLE_LOGO" | "WEBSITE" | "JAN" | "ISBN" | "PRODUCT_CODE" | "CHANNEL_CODE" | "PLATFORM" | "LANGUAGE" | "PRICE" | "RELEASE_DATE" | "RELEASE_STATUS" | "AGE_RATING" | "BONUS" | "SPECIFICATION" | "COVER" | "MEDIUM" | "PUBLICATION_STATUS" | "VOLUME_NUMBER" | "VOLUME_COUNT" | "ORDER" | "BOOK_FORMAT" | "EDITION" | "PAGE_COUNT" | "TRIM_SIZE" | "NAME" | "IDENTIFIER" | "GENDER" | "ORGANIZATION_TYPE" | "LOCATION" | "END_DATE" | "FOUNDED_DATE" | "LABEL" | "LABEL_NUMBER" | "OFFICIAL_INTRO" | "IMAGE" | "AGE" | "BIRTHDAY" | "HEIGHT" | "WEIGHT" | "MEASUREMENTS" | "BLOOD_TYPE" | "SITE_GROUP" | "CAST_ROLE" | "PROTAGONIST" | "CAPTURABLE" | "SERIES" | "VOLUME_SET" | "INCLUDED_VOLUME" | "INCLUDED_GAME" | "WORK" | "CHARACTER" | "CREDIT" | "PARENT" | "MEMBER" | "GAME_RELATION" | "SERIES_RELATION" | "ADAPTATION" | "APPEARANCE_RELATION" | "EXTERNAL_LINK";
             /** @enum {string} */
-            reason: "required" | "single" | "period_overlap" | "duplicate" | "incomplete" | "relation_pair" | "version_scope" | "set_series";
+            reason: "required" | "single" | "period_overlap" | "duplicate" | "repeated" | "incomplete" | "relation_pair" | "version_scope" | "set_series";
             statement_id?: number;
         };
         EditableEntryDto: {
@@ -24802,8 +24802,6 @@ export interface components {
             reason: string | null;
             /** @description written, present, suggested or not_written; null while the call is running */
             result: string | null;
-            /** @description The bot marked the item as one it is unsure of */
-            unsure: boolean;
             /** @description The submitted value as one line of text; empty when the quote is the value */
             value: string;
         };

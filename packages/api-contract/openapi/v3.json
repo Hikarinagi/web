@@ -19181,6 +19181,7 @@
               "single",
               "period_overlap",
               "duplicate",
+              "repeated",
               "incomplete",
               "relation_pair",
               "version_scope",
@@ -33075,10 +33076,6 @@
             "nullable": true,
             "type": "string"
           },
-          "unsure": {
-            "description": "The bot marked the item as one it is unsure of",
-            "type": "boolean"
-          },
           "value": {
             "description": "The submitted value as one line of text; empty when the quote is the value",
             "type": "string"
@@ -33094,7 +33091,6 @@
           "value",
           "original",
           "image",
-          "unsure",
           "page",
           "lines",
           "quote",
