@@ -23202,8 +23202,29 @@ export interface components {
             /** @description Original title when the title differs */
             original_title: string | null;
             platforms: string[];
+            /** @description Publisher of the original release first, then the publishers of the other releases with what they published */
+            publishers: components["schemas"]["GamePublisherDto"][];
             release: components["schemas"]["GameReleaseDto"] | null;
             title: string;
+        };
+        GamePublisherDto: {
+            code: string;
+            /** @description Languages of the other releases it published that the original release lacks; empty for the original publisher */
+            languages: string[];
+            /** @description Publisher of the release the game takes its publisher from (rule A.4.5.6) */
+            original: boolean;
+            person_id: number | null;
+            /** @description Platforms of the other releases it published; empty for the original publisher */
+            platforms: string[];
+            producer_id: number | null;
+            /** @description Role as printed */
+            role: string | null;
+            /** @description Song title, for song credits */
+            song: string | null;
+            /** @description THEME or INSERT, for song credits */
+            song_kind: string | null;
+            /** @description Name as printed */
+            text: string;
         };
         GameReleaseDto: {
             date: string | null;

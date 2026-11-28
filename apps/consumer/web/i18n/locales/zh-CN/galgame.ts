@@ -1,4 +1,16 @@
 export default {
+  facts: {
+    developer: '开发',
+    publisher: '发行',
+    release: '首发',
+    genre: '类型',
+    platform: '平台',
+    language: '语言',
+    website: '官网',
+    alias: '别名',
+    collapse: '收起',
+    moreAliases: '另有 {count} 个',
+  },
   steam: {
     creditSeparator: '　',
     comingSoon: '即将推出',

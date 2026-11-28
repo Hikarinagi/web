@@ -10,6 +10,7 @@
   } from '@hina-ui/vue'
   import { NuxtLink } from '#components'
   import type { GalgamePageData } from '~~/server/api/pages/galgames/[id].get'
+  import { langLabel } from '~/features/galgame/labels'
   import { platformLabel } from '~/features/galgame/platforms'
 
   defineOptions({ name: 'GalgameFacts' })
@@ -19,15 +20,12 @@
     languages: string[]
   }>()
 
+  const { t } = useLocaleText()
   const values = (property: string) =>
     props.data.facts.find(fact => fact.property === property)?.values ?? []
-  const publishers = computed(() => {
-    const seen = new Map<string, { text: string; producer_id: number | null }>()
-    for (const product of props.data.products)
-      for (const credit of product.publishers) seen.set(credit.text, credit)
-    return [...seen.values()]
-  })
-  const genre = computed(() => values('GENRE_TEXT')[0]?.text ?? props.data.galgame.adv_type)
+  const scopeOf = (publisher: GalgamePageData['display']['publishers'][number]) =>
+    formatList([...publisher.platforms.map(platformLabel), ...publisher.languages.map(langLabel)])
+  const genre = computed(() => values('GENRE_TEXT')[0]?.text)
   const aliases = computed(() => values('ALIAS').map(value => value.text))
   const allAliases = ref(false)
   const shownAliases = computed(() =>
@@ -42,7 +40,7 @@
     class="gap-x-4 gap-y-2 text-sm [&_dd]:text-fg [&_dt]:text-muted"
   >
     <template v-if="data.display.brands.length">
-      <DescriptionTerm>开发</DescriptionTerm>
+      <DescriptionTerm>{{ t('galgame.facts.developer') }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
           <template v-for="brand in data.display.brands" :key="brand.text">
@@ -61,11 +59,15 @@
         </Stack>
       </DescriptionDetails>
     </template>
-    <template v-if="publishers.length">
-      <DescriptionTerm>发行</DescriptionTerm>
+    <template v-if="data.display.publishers.length">
+      <DescriptionTerm>{{ t('galgame.facts.publisher') }}</DescriptionTerm>
       <DescriptionDetails>
-        <Stack gap="none">
-          <template v-for="publisher in publishers" :key="publisher.text">
+        <Stack gap="xs">
+          <Stack
+            v-for="publisher in data.display.publishers"
+            :key="`${publisher.producer_id ?? ''}|${publisher.text}`"
+            gap="none"
+          >
             <Link
               v-if="publisher.producer_id"
               :as="NuxtLink"
@@ -77,20 +79,25 @@
               {{ publisher.text }}
             </Link>
             <Text v-else as="span" size="sm" lang="ja">{{ publisher.text }}</Text>
-          </template>
+            <Text v-if="!publisher.original && scopeOf(publisher)" as="span" size="xs" tone="muted">
+              {{ scopeOf(publisher) }}
+            </Text>
+          </Stack>
         </Stack>
       </DescriptionDetails>
     </template>
     <template v-if="data.display.release?.text">
-      <DescriptionTerm>首发</DescriptionTerm>
+      <DescriptionTerm>{{ t('galgame.facts.release') }}</DescriptionTerm>
       <DescriptionDetails class="tabular-nums">{{ data.display.release?.text }}</DescriptionDetails>
     </template>
     <template v-if="genre">
-      <DescriptionTerm>类型</DescriptionTerm>
-      <DescriptionDetails lang="ja">{{ genre }}</DescriptionDetails>
+      <DescriptionTerm>{{ t('galgame.facts.genre') }}</DescriptionTerm>
+      <DescriptionDetails :lang="data.galgame.origin_lang || undefined">{{
+        genre
+      }}</DescriptionDetails>
     </template>
     <template v-if="data.display.platforms.length">
-      <DescriptionTerm>平台</DescriptionTerm>
+      <DescriptionTerm>{{ t('galgame.facts.platform') }}</DescriptionTerm>
       <DescriptionDetails>
         <Stack gap="none">
           <Text v-for="code in data.display.platforms" :key="code" as="span" size="sm">
@@ -100,11 +107,11 @@
       </DescriptionDetails>
     </template>
     <template v-if="languages.length">
-      <DescriptionTerm>语言</DescriptionTerm>
-      <DescriptionDetails>{{ languages.join('、') }}</DescriptionDetails>
+      <DescriptionTerm>{{ t('galgame.facts.language') }}</DescriptionTerm>
+      <DescriptionDetails>{{ formatList(languages) }}</DescriptionDetails>
     </template>
     <template v-if="website">
-      <DescriptionTerm>官网</DescriptionTerm>
+      <DescriptionTerm>{{ t('galgame.facts.website') }}</DescriptionTerm>
       <DescriptionDetails class="min-w-0">
         <Link
           as="a"
@@ -119,7 +126,7 @@
       </DescriptionDetails>
     </template>
     <template v-if="aliases.length">
-      <DescriptionTerm>别名</DescriptionTerm>
+      <DescriptionTerm>{{ t('galgame.facts.alias') }}</DescriptionTerm>
       <DescriptionDetails class="wrap-anywhere">
         <Stack gap="none">
           <Text v-for="alias in shownAliases" :key="alias" as="span" size="sm">{{ alias }}</Text>
@@ -130,7 +137,11 @@
             class="self-start"
             @click="allAliases = !allAliases"
           >
-            {{ allAliases ? '收起' : `另有 ${aliases.length - 3} 个` }}
+            {{
+              allAliases
+                ? t('galgame.facts.collapse')
+                : t('galgame.facts.moreAliases', { count: aliases.length - 3 })
+            }}
           </HnButton>
         </Stack>
       </DescriptionDetails>

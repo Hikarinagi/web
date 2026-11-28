@@ -27087,6 +27087,13 @@
             },
             "type": "array"
           },
+          "publishers": {
+            "description": "Publisher of the original release first, then the publishers of the other releases with what they published",
+            "items": {
+              "$ref": "#/components/schemas/GamePublisherDto"
+            },
+            "type": "array"
+          },
           "release": {
             "allOf": [
               {
@@ -27105,8 +27112,74 @@
           "original_title",
           "release",
           "brands",
+          "publishers",
           "platforms",
           "intros"
+        ],
+        "type": "object"
+      },
+      "GamePublisherDto": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "languages": {
+            "description": "Languages of the other releases it published that the original release lacks; empty for the original publisher",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "original": {
+            "description": "Publisher of the release the game takes its publisher from (rule A.4.5.6)",
+            "type": "boolean"
+          },
+          "person_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "platforms": {
+            "description": "Platforms of the other releases it published; empty for the original publisher",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "producer_id": {
+            "nullable": true,
+            "type": "number"
+          },
+          "role": {
+            "description": "Role as printed",
+            "nullable": true,
+            "type": "string"
+          },
+          "song": {
+            "description": "Song title, for song credits",
+            "nullable": true,
+            "type": "string"
+          },
+          "song_kind": {
+            "description": "THEME or INSERT, for song credits",
+            "nullable": true,
+            "type": "string"
+          },
+          "text": {
+            "description": "Name as printed",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "text",
+          "role",
+          "song",
+          "song_kind",
+          "person_id",
+          "producer_id",
+          "original",
+          "platforms",
+          "languages"
         ],
         "type": "object"
       },

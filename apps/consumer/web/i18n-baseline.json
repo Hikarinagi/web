@@ -192,7 +192,6 @@
   "app/components/galgame/BrandWorks.vue",
   "app/components/galgame/Cast.vue",
   "app/components/galgame/Crew.vue",
-  "app/components/galgame/Facts.vue",
   "app/components/galgame/Intro.vue",
   "app/components/galgame/Page.vue",
   "app/components/galgame/Products.vue",
