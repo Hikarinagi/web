@@ -132,7 +132,8 @@ export function showApiErrorToast(error: HikariApiError) {
   }
 
   const message = apiErrorMessage(error)
-  const detail = formatDetails(error.details)
+  const fields = (error.field_errors ?? []).map(item => item.message).filter(Boolean)
+  const detail = fields.length ? fields.join('\n') : formatDetails(error.details)
   const key = `${error.code}\n${message}\n${detail}`
   const now = Date.now()
   if (now - (shownToasts.get(key) ?? 0) < 3000) return
